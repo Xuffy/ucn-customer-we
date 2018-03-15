@@ -1,4 +1,4 @@
-# ucn-tailorx-store
+# UCN 采购商系统
 
 > 一套基于`vue.js` `iview`的网站管理系统     
 
