@@ -47,7 +47,6 @@ ajax.interceptors.request.use(config => {
     cancel = c;
   });
 
-  cancel('撒大声地');
   console.log(config)*/
 
 
