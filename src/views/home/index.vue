@@ -1,19 +1,25 @@
 <template>
   <div>
-    home pageasfa
+    {{$tc('page.workbench')}}
+    <v-table></v-table>
   </div>
 </template>
 
 <script>
+  import VTable from 'components/common/table/table';
 
   export default {
     name: 'home',
+    components:{
+      VTable
+    },
     data () {
       return {
         url: ''
       }
     },
     mounted(){
+
     }
   }
 </script>
