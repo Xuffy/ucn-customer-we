@@ -1,14 +1,19 @@
 <template>
   <div>
-    settings page
-      aa
+    <!--settings page-->
+      <v-logs></v-logs>
   </div>
 </template>
 
 <script>
 
+    import VLogs from '../logs/logMessage'
+
   export default {
     name: 'settings',
+      components:{
+          VLogs
+      },
     data() {
       return {}
     },
