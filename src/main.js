@@ -2,31 +2,40 @@ import Vue from 'vue'
 import App from './App'
 import router from 'service/router'
 import ajax from 'service/ajax'
-import config from  'service/config';
+import config from 'service/config';
 import * as filters from 'service/filters.js'
-import api from  'service/api';
-import util from  'service/util';
+import api from 'service/api';
+import util from 'service/util';
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 import 'assets/style/main.less';
+import VueI18n from 'vue-i18n'
+import lang from 'lib/lang'
+import locale from 'iview/dist/locale/en-US';
 
-Vue.use(iView);
+Vue.use(iView, {locale});
 Vue.use(api);
 Vue.use(util);
-
-Vue.config.productionTip = false;
+Vue.use(VueI18n);
 
 Vue.prototype.ajax = ajax;
-
-window.TxConfig = config; // 嵌套项目配置 todo 重构完删除
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 });
 
+
+const i18n = new VueI18n({
+  locale: 'en',
+  // locale: Vue.prototype.$sessionStore.get('language') || 'en',
+  // locale: 'zh',
+  messages: lang
+});
+
 new Vue({
   el: '#app',
   router,
+  i18n,
   template: '<App/>',
   components: {App}
 });
