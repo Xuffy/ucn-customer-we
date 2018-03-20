@@ -121,24 +121,6 @@
                 if(this.selected.length >= 1) return this.isLabelBox = true;
                 this.isLabelBox = false;
             },
-            FuzzySearch(item, text) {
-                if(!item) return;
-                if(item.title === text) item.checked = false;
-                item.forEach((items) => {
-                    if(items.title === text) items.checked = false;
-                    this.closeDataFil();
-                });
-            },
-            vague() {
-                // let len = this.list.length,
-                //     arr = [],
-                // for(let i=0;i<len;i++){
-                //     if(this.list[i].match(reg)){
-                //         arr.push(list[i]);
-                //     }
-                // }
-                // return arr;
-            },
             dataHandle(data) {
                 data.forEach((item) => {
                     if(item.title.indexOf(this.val) >= 0 && item.isActive) this.screen.push(item.title);
