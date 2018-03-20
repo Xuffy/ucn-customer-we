@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--settings page-->
-      <v-logs></v-logs>
+      <v-logs :columnConfig="config"></v-logs>
   </div>
 </template>
 
@@ -15,7 +15,11 @@
           VLogs
       },
     data() {
-      return {}
+      return {
+          config:{
+
+          }
+      }
     },
     created() {
     },
