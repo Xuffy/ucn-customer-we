@@ -6,12 +6,12 @@
 </template>
 
 <script>
-  import VTable from 'components/common/table/table';
+	import { VTable } from '@/components/index';
 
   export default {
     name: 'home',
     components:{
-      VTable
+			VTable
     },
     data () {
       return {
