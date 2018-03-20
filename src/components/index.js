@@ -1,9 +1,5 @@
-import DropDown from './common/table/dropDown';
-import FilterValue from './common/table/filterValue';
-import Table from './common/table/table';
+import DropDown from './Layout/dropDown';
 
 export {
     DropDown,
-    FilterValue,
-    Table
 }
