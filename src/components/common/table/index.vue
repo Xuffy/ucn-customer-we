@@ -1,5 +1,6 @@
 <template>
   <div class="ucn-table">
+
     <Table border :columns="columns6" :data="data5">
     </Table>
     <br>
@@ -8,6 +9,15 @@
 </template>
 
 <script>
+  /**
+   * 表格组件
+   * @desc 组件描述
+   * @author xuffy
+   * @param {Object} [title]    - 参数说明
+   * @param {String} [columns] - 参数说明
+   * @example
+   *  <v-table></v-table>
+   */
   import VFilterValue from './filterValue'
 
   export default {

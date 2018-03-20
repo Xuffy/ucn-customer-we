@@ -98,13 +98,10 @@
         checkAllGroup: [],
         sortType: ''
       }
-    }
-    ,
-    watch: {}
-    ,
+    },
+    watch: {},
     created() {
-    }
-    ,
+    },
     methods: {
       handleCheckAll() {
         if (this.indeterminate) {
