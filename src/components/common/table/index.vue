@@ -18,6 +18,7 @@
    * @example
    *  <v-table></v-table>
    */
+
   import VFilterValue from './filterValue'
 
   export default {
