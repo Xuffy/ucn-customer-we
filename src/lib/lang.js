@@ -1,6 +1,5 @@
-import en from './en/en'
+import en from './en/index'
 
 export default {
   en,
-
 }

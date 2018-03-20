@@ -1,9 +1,5 @@
-import DropDown from './common/table/dropDown';
-import FilterValue from './common/table/filterValue';
-import Table from './common/table/table';
+import VTable from './common/table/index';
 
 export {
-    DropDown,
-    FilterValue,
-    Table
+    VTable
 }
