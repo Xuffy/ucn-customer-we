@@ -1,5 +1,6 @@
 <template>
   <div>
+		<v-drop-down></v-drop-down>
     {{$tc('page.workbench')}}
     <v-table></v-table>
   </div>
@@ -7,11 +8,12 @@
 
 <script>
   import VTable from 'components/common/table/table';
-
+	import { DropDown } from '@/components/index';
   export default {
     name: 'home',
     components:{
-      VTable
+			VTable,
+			'v-drop-down':DropDown
     },
     data () {
       return {
