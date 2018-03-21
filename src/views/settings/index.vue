@@ -1,30 +1,23 @@
 <template>
   <div>
-    <!--settings page-->
-      <v-logs :columnConfig="config"></v-logs>
+    settings page
   </div>
 </template>
 
 <script>
-
-    import VLogs from '../logs/logMessage'
-
   export default {
     name: 'settings',
-      components:{
-          VLogs
-      },
     data() {
       return {
-          config:{
 
-          }
+
       }
     },
     created() {
     },
     methods: {
-    }
+
+    },
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
