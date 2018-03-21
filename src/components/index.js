@@ -1,5 +1,7 @@
-import VTable from './common/table/index';
+import VSimpleTable from './common/table/simple';
+import VComplexTable from './common/table/complex';
 
 export {
-    VTable
+  VSimpleTable,
+  VComplexTable
 }

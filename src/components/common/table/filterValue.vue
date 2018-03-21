@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <Poptip placement="bottom">
+  <section class="filter-value">
+    <Poptip placement="bottom" style="width: 100%">
       <p class="title">name &nbsp;
         <Icon type="navicon-round" style="vertical-align: middle;font-size: 14px"></Icon>
       </p>
@@ -98,13 +98,10 @@
         checkAllGroup: [],
         sortType: ''
       }
-    }
-    ,
-    watch: {}
-    ,
+    },
+    watch: {},
     created() {
-    }
-    ,
+    },
     methods: {
       handleCheckAll() {
         if (this.indeterminate) {
@@ -136,7 +133,6 @@
   }
 </script>
 
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .content-box {
@@ -163,5 +159,17 @@
 
   .sort:first-child {
     border-right: solid 1px #CCCCCC;
+  }
+
+  .filter-value {
+    text-align: left;
+  }
+
+</style>
+
+<style>
+  .filter-value .ivu-poptip-rel{
+    text-align: center;
+    width: 100%
   }
 </style>
