@@ -13,7 +13,7 @@
         <div class="drop-down-menu" :style="`width: ${w}px`" v-show="isActive">
             <Input v-model="val" icon="search" :placeholder="ScreenPlaceholder" @on-focus="onFocus" @on-blur="onBlur" @on-enter="onEnter" @on-change="onChange" @on-keyup="onKeyup" @on-keydown="onKeydown" @on-click="iconClick" />
             <div class="list" v-if="list" :style="`max-height: ${h}px`">
-                <Tree :data="list" show-checkbox multiple @on-check-change="boxChange"></Tree>
+                <Tree :data="treeData" :empty-text="noData" show-checkbox multiple @on-check-change="boxChange" ref="tree"></Tree>
             </div>
         </div>
     </div>
@@ -28,6 +28,7 @@
      * @param { scrolH } -隐藏显示框高度
      * @param { scrolW } -隐藏显示框宽度
      * @param { list } -树形选择 list 格式 请参照ivie https://www.iviewui.com/components/tree
+     * @param { noData } -树形选择 没有数据时提示
      * @param { ScreenPlaceholder } -搜索框提升文字 默认 
      * @param { DownPlaceholder } -选择input 提示文字默认 
      * @param { @onFocus } -获取焦点 返回input val
@@ -48,7 +49,27 @@
                 val:'',
                 selected:[],
                 isLabelBox:false,
-                screen: []
+                screen: [],
+                data:[]
+            }
+        },
+        computed: {
+            treeData() {
+                let result = JSON.parse(JSON.stringify(this.list));
+                const getVisiableNodes = (nodes, keyword) => {
+                    nodes.forEach((node, index) => {
+                        if (!nodeHasSpecialStr(node, keyword, nodes)) {
+                            nodes.splice(index, 1)
+                        }
+                        node.children && getVisiableNodes(node.children, keyword)
+                    })  
+                }
+
+                const nodeHasSpecialStr = (node, target) => {
+                    return node.title.indexOf(target) > -1 || (node.children && node.children.some(child => nodeHasSpecialStr(child, target)))
+                }
+                getVisiableNodes(result, this.val)
+                return  result;
             }
         },
         props: {
@@ -71,13 +92,21 @@
                 default: 11
             },
             DownPlaceholder: {
+                type:String,
                 default: 'Please choose'
             },
             ScreenPlaceholder: {
+                type:String,
                 default: 'Please search here'
             },
-            list: '',
-            border:''
+            list: {
+                type:Array,
+                default: []
+            },
+            noData: {
+                type:String,
+                default: 'no data'
+            }
         },
         created() {
             this.$nextTick(() => {
@@ -85,6 +114,7 @@
                     this.isActive = false;
                 };
             });
+            this.data = this.list;
         },
         methods: {
             onFocus() {
@@ -99,7 +129,6 @@
             onChange() {
                 this.$emit('onChange', this.val);
                 this.screen = [];
-                this.dataHandle(this.list, this.val);
             },
             onKeyup() {
                 this.$emit('onKeyup', this.val)
@@ -121,22 +150,66 @@
                 if(this.selected.length >= 1) return this.isLabelBox = true;
                 this.isLabelBox = false;
             },
-            dataHandle(data) {
-                data.forEach((item) => {
-                    if(item.title.indexOf(this.val) >= 0 && item.isActive) this.screen.push(item.title);
-                    if(!item.children) return;
-                    item.children.forEach((items) => {
-                        if(items.title.indexOf(this.val) >= 0 && items.isActive) this.screen.push(items.title);
-                        items.HandleActive = false;
-                        this.dataHandle(items.children);
-                    });
-                });
-                console.log(this.screen)
+            filter(item) {
+                item.checked = !item.checked;
+                this.inputBoxHover();
             }
         }
     }
+    
+   /**
+    * list 格式
+    * data: [
+        {
+            title: 'parent 1',
+            expand: true,
+            selected: true,
+            children: [
+                {
+                    title: 'parent 1-1',
+                    expand: true,
+                    children: [
+                        {
+                            title: 'leaf 1-1-1',
+                            checked:true,
+                            isActive:true,
+                            disabled: false
+                        },
+                        {
+                            title: 'leaf 1-1-2',
+                            isActive:true,
+                            disabled: false
+                        }
+                    ]
+                },
+                {
+                    title: 'parent 1-2',
+                    expand: true,
+                    children: [
+                        {
+                            title: 'leaf 1-2-1',
+                            isActive:true,
+                            checked: false
+                        },
+                        {
+                            isActive:true,
+                            title: 'leaf 1-2-2'
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+   */
 </script>
 <style scoped lang="less">
+    ul{
+        padding:0;
+        margin:0;
+        li {
+            list-style: none;
+        }
+    }
     .drop-down {
         position: relative;
         &.active {
