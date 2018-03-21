@@ -1,10 +1,11 @@
 <template>
     <div class="input-email">
         <div class="inputBox center">
-            <label for="icon"><Icon type="checkmark-circled"></Icon></label>Dear xxxxx，we ahave sent you an email , pleasr follow the instruction to reset your password
+            <label for="icon"><Icon type="checkmark-circled"></Icon></label>Dear xxxxx，<span v-if="$route.name === 'Identify'">we ahave sent you an email , pleasr follow the instruction to reset your password</span><span v-else>you have reset your password, please remember your new password</span>
         </div>
         <div class="inputBox">
-            <button @click="sendOut">Re - send mail</button>
+            <button @click="sendOut" v-if="$route.name === 'Identify'">Re - send mail</button>
+            <router-link to="/login" v-else>Go sign in now>></router-link>
         </div>
     </div>
 </template>

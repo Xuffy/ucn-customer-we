@@ -32,5 +32,8 @@ storePrefix = () => {
 localStore.addPlugin(storePrefix);
 sessionStore.addPlugin(storePrefix);
 
-export {localStore, sessionStore};
+export {
+  localStore, 
+  sessionStore
+};
 

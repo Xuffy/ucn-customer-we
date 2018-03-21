@@ -2,18 +2,19 @@
     <div class="input-email">
         <div class="inputBox center">
             <div class="form-input">
-                <label for="Email：">New password:</label><Input v-model="oldPass" placeholder="Please input the email" clearable style="width: 200px" type="password" />
+                <label for="Email：">New password:</label><Input v-model="oldPass" placeholder="please input" clearable style="width: 200px" type="password" />
             </div>
             <div class="form-input">
-                <label for="Email：">Repeat the password：</label><Input v-model="newPass" placeholder="Please input the email" clearable style="width: 200px" type="password" />
+                <label for="Email：">Repeat the password：</label><Input v-model="newPass" placeholder="please input" clearable style="width: 200px" type="password" />
             </div>
         </div>
         <div class="inputBox btn">
-            <Button type="primary" @click="Next">submit</Button>
+            <Button type="primary" @click="Next">Submit</Button>
         </div>
     </div>
 </template>
 <script>
+    let bFlage = true;
     export default {
         name: 'inputEmail',
         data() {
@@ -24,7 +25,17 @@
         },
         methods: {
             Next() {
-                this.$router.push('Identify')
+                if(!bFlage) return;
+                bFlage = false;
+                const msg = this.$Message.loading({
+                    content: 'Mail delivery...',
+                    duration: 0
+                });
+                setTimeout(() => {
+                    setTimeout(msg, 30);
+                    this.$router.push('Finish')
+                    bFlage = true;
+                }, 3000)
             }
         }
     }
@@ -43,10 +54,11 @@
                 width:100%;
                 display:flex;
                 align-items: center;
-                margin-top:10px;
+                margin-top:30px;
             }
             &.btn {
                 text-align: center;
+                padding:0;
             }
             label {
                 width: 40%;
