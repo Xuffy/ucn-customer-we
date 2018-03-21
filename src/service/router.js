@@ -46,9 +46,17 @@ export const routerMap = [
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/product/index.vue')
-        }
+          path: '',
+          component: () => import('../views/product/sourcing.vue'),
+          name:''
+        },
+
+          {
+              path:'detail',
+              component: () => import('../views/product/detail.vue'),
+              name:'detail'
+          },
+
       ]
     },
     {
