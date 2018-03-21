@@ -55,8 +55,6 @@
       }
     },
     created() {
-      this.onKeyDown();
-
       this.$localStore.clearAll();
       this.$sessionStore.clearAll();
     },
@@ -69,14 +67,6 @@
             this.$Message.warning('请输入正确的用户名密码！');
           }
         })
-      },
-      onKeyDown() {
-        document.onkeydown = event => {
-          let e = event || window.event;
-          if (e && e.keyCode === 13) {
-            this.handleSubmit('formInline');
-          }
-        };
       },
       submitLogin(){
         this.loginLoading = true;

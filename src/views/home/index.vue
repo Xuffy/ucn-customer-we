@@ -1,24 +1,26 @@
 <template>
   <div>
-    {{$tc('page.workbench')}}
-    <v-table></v-table>
+    <!--{{$tc('page.workbench')}}-->
+    <v-complex-table></v-complex-table>
+    <v-simple-table></v-simple-table>
   </div>
 </template>
 
 <script>
-	import { VTable } from '@/components/index';
+  import {VSimpleTable, VComplexTable} from '@/components/index';
 
   export default {
     name: 'home',
-    components:{
-			VTable
+    components: {
+      VSimpleTable,
+      VComplexTable
     },
-    data () {
+    data() {
       return {
         url: ''
       }
     },
-    mounted(){
+    mounted() {
 
     }
   }
