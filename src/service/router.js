@@ -167,8 +167,18 @@ export const routerMap = [
           path:'ResetPassword',
           name:'ResetPassword',
           component: () => import('../views/login/ResetPassword')
+        },
+        {
+          path:'Finish',
+          name:'Finish',
+          component: () => import('../views/login/Identify')
         }
       ]
+    },
+    {
+      path: '/signUp',
+      name:'signUp',
+      component: () => import('../views/login/signUp')
     }
   ]
 ;

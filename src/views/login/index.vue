@@ -27,7 +27,7 @@
                     style="width: 100%">Login in
             </Button>
             <div class="login-link active">
-              <router-link to="/">No account? Sign up now>></router-link>
+              <router-link to="/signUp">No account? Sign up now>></router-link>
             </div>
           </FormItem>
         </Form>
