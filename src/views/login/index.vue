@@ -10,20 +10,25 @@
         <Form ref="formInline" :model="formInline" :rules="ruleInline">
           <FormItem prop="username">
             <Input type="text" v-model="formInline.username" placeholder="Email">
-            <Icon type="iphone" slot="prepend" style="font-size: 26px"></Icon>
+              <Icon type="iphone" slot="prepend" style="font-size: 26px"></Icon>
             </Input>
           </FormItem>
           <FormItem prop="password">
             <Input type="password" v-model="formInline.password" placeholder="Password">
-            <Icon type="ios-locked-outline" slot="prepend" style="font-size: 20px"></Icon>
+              <Icon type="ios-locked-outline" slot="prepend" style="font-size: 20px"></Icon>
             </Input>
           </FormItem>
           <FormItem style="padding-left: 40px;margin-top: 2px">
-
-            <Checkbox>&nbsp;&nbsp;Remenber me</Checkbox>
+            <div class="login-link">
+              <Checkbox>&nbsp;&nbsp;Remenber me</Checkbox>
+              <router-link to="/forgetPassword">forget password?</router-link>
+            </div>
             <Button type="primary" size="large" :loading="loginLoading" @click="handleSubmit('formInline')"
                     style="width: 100%">Login in
             </Button>
+            <div class="login-link active">
+              <router-link to="/">No account? Sign up now>></router-link>
+            </div>
           </FormItem>
         </Form>
       </div>
@@ -98,7 +103,16 @@
     }
   }
 </script>
-<style>
+<style lang="less">
+  .login {
+    .login-link {
+      display:flex;
+      justify-content: space-between;
+      &.active {
+        justify-content: center;
+      }
+    }
+  }
   .login .ivu-input-group-prepend {
     background-color: #ffffff;
     border: none;
