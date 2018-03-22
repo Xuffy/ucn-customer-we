@@ -1,44 +1,11 @@
 <template>
-    <section class="signUp">
-        <div class="container">
-            <div class="form-box active">
-                <h4 class="hd">User Information</h4>
-                <div class="form-wrap">
-                    <div class="form item heavy">
-                        <label for="Invitation code">Invitation code</label>
-                        <div class="ivu-input-wrapper ivu-input-type"> 
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Please input your Invitation code" class="ivu-input">
-                        </div>
-                    </div>
-                    <div class="form item">
-                        <router-link to="/getInvitationCode">Go Submit a Request>></router-link>
-                    </div>
-                    <div class="form item heavy">
-                        <label for="Invitation code">User Name</label>
-                        <Input type="text" placeholder="Input your username" clearable />
-                    </div>
-                    <div class="form item heavy">
-                        <label for="Invitation code">Email</label>
-                        <Input type="email" placeholder="xxxx@xxx.com" clearable />
-                    </div>
-                    <div class="form item heavy">
-                        <label for="Invitation code">Password</label>
-                        <Input type="password" placeholder="Input your password" clearable />
-                    </div>
-                    <div class="form item">
-                        <label for="Invitation code">tel</label>
-                        <div class="ivu-input-wrapper ivu-input-type">
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Please input your contact number" class="ivu-input">
-                        </div>
-                    </div>
-                    <div class="form item">
-                        <label for="Invitation code"></label>
-                        <Input type="password" placeholder="Input your password again" clearable />
-                    </div>
-                </div>
+    <section class="get-invitation-code">
+        <div class="contianer">
+            <div class="hd">
+                <h4>Request to Get Invitation Code</h4>
+                <p>Please submit your company infomation, and we will contact you soon, if you have any question, feel free to contact us：email-xxx@xxx.com; tel-123456789</p>
             </div>
             <div class="form-box">
-                <h4 class="hd">Company  Information</h4>
                 <div class="form-wrap">
                     <div class="form item heavy">
                         <label for="Invitation code">Company Name</label>
@@ -73,11 +40,8 @@
                 </div>
             </div>
             <div class="bottom-btn">
-                <div class="choice">
-                    <Checkbox v-model="single">I have readed "xxx"</Checkbox>
-                </div>
                 <div class="btn-wrap">
-                    <Button type="primary">ok</Button>
+                    <Button type="primary">Submit</Button>
                     <Button>Cancel</Button>
                 </div>
             </div>
@@ -86,6 +50,7 @@
 </template>
 <script>
     export default {
+        name:'',
         data() {
             return {
                 company:'',
@@ -159,34 +124,48 @@
                     }
                 ],
             }
-        },
-        name:'signUp'
+        }
     }
 </script>
 <style lang="less" scoped>
-    .signUp {
-        padding:20px;
-        background:#f4f4f4;
+    .get-invitation-code {
+        display:flex;
         width:100%;
         min-height:100vh;
-        box-sizing: border-box;
-        .container {
-            min-height:100%;
-            width:100%;
-            background: #fff;
-            border-radius: 5px;
-            padding:10px 40px;
+        background:#f4f4f4;
+        padding:20px;
+        .contianer {
+            padding:40px;
+            flex:1;
+            background:#fff;
+            display:flex;
+            flex-direction:column;
+            .hd {
+                display:flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border-bottom:1px solid #f4f4f4;
+                text-align: center;
+                p, h4 {
+                    padding-bottom:15px;
+                }
+                h4 {
+                    font-size:16px;
+                    color:#72777e;
+                }
+                p {
+                    font-size:14px;
+                    line-height:18px;
+                }
+            }
             .form-box {
                 padding-bottom:50px;
+                padding-top:20px;
+                flex:2;
+                box-sizing: border-box;
                 &.active {
                     padding-bottom:100px;
-                }
-                .hd {
-                    font-weight: normal;
-                    font-size:15px;
-                    height: 40px;
-                    line-height:40px;
-                    border-bottom:1px solid #efefef;
                 }
                 .form-wrap {
                     display:flex;
@@ -220,7 +199,6 @@
                 }
             }
             .bottom-btn {
-                border-top:1px solid #f4f4f4;
                 .choice {
                     padding:0 100px;
                     height: 80px;
@@ -229,7 +207,6 @@
                 }
                 .btn-wrap {
                     width: 300px;
-                    padding-bottom:20px;
                     margin:0 auto;
                     display:flex;
                     align-items: center;
