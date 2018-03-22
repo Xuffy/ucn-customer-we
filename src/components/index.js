@@ -1,5 +1,9 @@
-import VTable from './common/table/index';
+import VSimpleTable from './common/table/simple';
+import VComplexTable from './common/table/complex';
+import dropDown from './Layout/dropDown';
 
 export {
-    VTable
+  VSimpleTable,
+  VComplexTable,
+  dropDown
 }

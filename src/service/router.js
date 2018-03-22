@@ -16,17 +16,13 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
       children: [{
         path: 'home',
-        component: resolve => {
-          require(['../views/home/index.vue'], resolve)
-        }
+        component: () => import('../views/home/index.vue')
       }]
     },
     {
       path: '/login',
       hidden: true,
-      component: resolve => {
-        require(['../views/login/index.vue'], resolve)
-      }
+      component: () => import('../views/login/index.vue')
     },
 
     {
@@ -38,9 +34,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/workbench/index.vue'], resolve)
-          }
+          component: () => import('../views/workbench/index.vue')
         }
       ]
     },
@@ -52,11 +46,17 @@ export const routerMap = [
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: resolve => {
-            require(['../views/product/index.vue'], resolve)
-          }
-        }
+          path: '',
+          component: () => import('../views/product/sourcing.vue'),
+          name:''
+        },
+
+          {
+              path:'detail',
+              component: () => import('../views/product/detail.vue'),
+              name:'detail'
+          },
+
       ]
     },
     {
@@ -68,16 +68,12 @@ export const routerMap = [
         {
           path: 'sourcing',
           name: 'Sourcing',
-          component: resolve => {
-            require(['../views/supplier/sourcing.vue'], resolve)
-          }
+          component: () => import('../views/supplier/sourcing.vue')
         },
         {
           path: 'bookmark',
           name: 'Bookmark',
-          component: resolve => {
-            require(['../views/supplier/bookmark.vue'], resolve)
-          }
+          component: () => import('../views/supplier/bookmark.vue')
         }
       ]
     },
@@ -90,9 +86,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/negotiation/index.vue'], resolve)
-          }
+          component: () => import('../views/negotiation/index.vue')
         }
       ]
     },
@@ -105,9 +99,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/order/index.vue'], resolve)
-          }
+          component: () => import('../views/order/index.vue')
         }
       ]
     },
@@ -120,9 +112,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/warehouse/index.vue'], resolve)
-          }
+          component: () => import('../views/warehouse/index.vue')
         }
       ]
     },
@@ -135,9 +125,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/logistic/index.vue'], resolve)
-          }
+          component: () => import('../views/logistic/index.vue')
         }
       ]
     },
@@ -150,9 +138,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/payment/index.vue'], resolve)
-          }
+          component: () => import('../views/payment/index.vue')
         }
       ]
     },
@@ -165,11 +151,54 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/settings/index.vue'], resolve)
-          }
+          component: () => import('../views/settings/index.vue')
         }
       ]
+    },
+    {
+      path: '/forgetPassword',
+      name:'forgetPassword',
+      hidden: true,
+      component: () => import('../views/login/forgetPassword'),
+      redirect: '/forgetPassword/inputEmail',
+      children: [
+        {
+          path:'inputEmail',
+          name:'inputEmail',
+          hidden: true,
+          component: () => import('../views/login/inputEmail')
+        },
+        {
+          path:'Identify',
+          name:'Identify',
+          hidden: true,
+          component: () => import('../views/login/Identify')
+        },
+        {
+          path:'ResetPassword',
+          name:'ResetPassword',
+          hidden: true,
+          component: () => import('../views/login/ResetPassword')
+        },
+        {
+          path:'Finish',
+          name:'Finish',
+          hidden: true,
+          component: () => import('../views/login/Identify')
+        }
+      ]
+    },
+    {
+      path: '/signUp',
+      name:'signUp',
+      hidden: true,
+      component: () => import('../views/login/signUp')
+    },
+    {
+      path:'/getInvitationCode',
+      name:'getInvitationCode',
+      hidden: true,
+      component: () => import('../views/login/getInvitationCode')
     }
   ]
 ;
