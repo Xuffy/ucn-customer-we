@@ -38,7 +38,6 @@
 
 <script>
   import config from  'service/config';
-
   export default {
     name: 'login',
     data() {

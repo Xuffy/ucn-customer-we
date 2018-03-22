@@ -1,13 +1,10 @@
 <template>
-    <div class="drop-down" :class="{'active':isActive}" :style="{ 'z-index':zIndex, 'width':w+'px' }" @click.stop  @mousemove="inputBoxHover" @mouseout="isLabelBox = false">
-        <div class="AnalogInputBox ivu-input" :style="`width: ${w}px`" @click="dropSwitch">
+    <div class="drop-down" :class="{'active':isActive}" :style="{ 'z-index':zIndex, 'width':w+'px' }" @click.stop>
+        <div class="AnalogInputBox" :style="`width: ${w}px`" @click="dropSwitch">
             <div class="label">
                 <div class="placeholder" v-show="selected.length <= 0">{{DownPlaceholder}}</div>
-                <span v-for="(item) in selected" :key="item.id" @click.stop v-if="item.isActive">{{item.title}}</span>
-            </div>
-            <i class="ivu-icon ivu-icon-chevron-down ivu-input-icon ivu-input-icon-normal"></i>
-            <div class="label-box" :style="{'width':scrolW+'px', 'height':scrolH+'px', 'right':`-${scrolW + 1}px`}" v-show="isLabelBox">
-                <span v-for="(item) in selected" :key="item.id" @click.stop v-if="item.isActive">{{item.title}}</span>
+                <span v-for="(item, index) in selected" :key="item.id" @click.stop="clone(item, index)" v-if="item.isActive">{{item.title}}</span>
+                <i class="ivu-icon ivu-icon-chevron-down ivu-input-icon ivu-input-icon-normal"></i>
             </div>
         </div>
         <div class="drop-down-menu" :style="`width: ${w}px`" v-show="isActive">
@@ -56,20 +53,7 @@
         computed: {
             treeData() {
                 let result = JSON.parse(JSON.stringify(this.list));
-                const getVisiableNodes = (nodes, keyword) => {
-                    nodes.forEach((node, index) => {
-                        if (!nodeHasSpecialStr(node, keyword, nodes)) {
-                            nodes.splice(index, 1)
-                        }
-                        node.children && getVisiableNodes(node.children, keyword)
-                    })  
-                }
-
-                const nodeHasSpecialStr = (node, target) => {
-                    return node.title.indexOf(target) > -1 || (node.children && node.children.some(child => nodeHasSpecialStr(child, target)))
-                }
-                getVisiableNodes(result, this.val)
-                return  result;
+                return this.getVisiableNodes(result, this.val);
             }
         },
         props: {
@@ -117,6 +101,18 @@
             this.data = this.list;
         },
         methods: {
+            getVisiableNodes(nodes, keyword) {
+                nodes.forEach((node, index) => {
+                    if (!this.nodeHasSpecialStr(node, keyword, nodes)) {
+                        nodes.splice(index, 1)
+                    }
+                    node.children && this.getVisiableNodes(node.children, keyword)
+                });
+                return nodes;
+            },
+            nodeHasSpecialStr(node, target) {
+                return node.title.indexOf(target) > -1 || (node.children && node.children.some(child => this.nodeHasSpecialStr(child, target)))
+            },
             onFocus() {
                 this.$emit('onFocus', this.val)
             },
@@ -144,63 +140,12 @@
             },
             boxChange(getSelectedNodes) {
                 this.selected = getSelectedNodes;
-                this.inputBoxHover();
             },
-            inputBoxHover() {
-                if(this.selected.length >= 1) return this.isLabelBox = true;
-                this.isLabelBox = false;
-            },
-            filter(item) {
-                item.checked = !item.checked;
-                this.inputBoxHover();
+            clone(item, index) {
+                
             }
         }
     }
-    
-   /**
-    * list 格式
-    * data: [
-        {
-            title: 'parent 1',
-            expand: true,
-            selected: true,
-            children: [
-                {
-                    title: 'parent 1-1',
-                    expand: true,
-                    children: [
-                        {
-                            title: 'leaf 1-1-1',
-                            checked:true,
-                            isActive:true,
-                            disabled: false
-                        },
-                        {
-                            title: 'leaf 1-1-2',
-                            isActive:true,
-                            disabled: false
-                        }
-                    ]
-                },
-                {
-                    title: 'parent 1-2',
-                    expand: true,
-                    children: [
-                        {
-                            title: 'leaf 1-2-1',
-                            isActive:true,
-                            checked: false
-                        },
-                        {
-                            isActive:true,
-                            title: 'leaf 1-2-2'
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-   */
 </script>
 <style scoped lang="less">
     ul{
@@ -222,9 +167,28 @@
             }
         }
         .AnalogInputBox {
+            &:hover {
+                border-color: #57a3f3;
+            }
             padding:0;
             display:flex;
+            min-height:32px;
+            line-height: 1.5;
+            padding: 4px 7px;
+            font-size: 12px;
+            border: 1px solid #dddee1;
+            border-radius: 4px;
+            color: #495060;
+            background-color: #fff;
+            background-image: none;
+            position: relative;
+            cursor: text;
+            -webkit-transition: border .2s ease-in-out,background .2s ease-in-out,-webkit-box-shadow .2s ease-in-out;
+            transition: border .2s ease-in-out,background .2s ease-in-out,-webkit-box-shadow .2s ease-in-out;
+            transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
+            transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out,-webkit-box-shadow .2s ease-in-out;
             .label {
+                position: relative;
                 padding:3px;
                 height:100%;
                 flex:1;
@@ -247,6 +211,12 @@
                     padding:2px 5px;
                     box-sizing: border-box;
                     border-radius:5px;
+                }
+                .ivu-input-icon {
+                    position:absolute;
+                    right:0;
+                    top:50%;
+                    margin-top:-16px;
                 }
             }
         }
@@ -286,7 +256,6 @@
         .drop-down-menu {
             position:absolute;
             left:0;
-            top:32px;
             box-shadow: 0 0 5px #ccc;
             border-radius: 5px;
             padding:3px;
