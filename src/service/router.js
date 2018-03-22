@@ -6,7 +6,6 @@ import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
 
-
 export const routerMap = [
     {
       path: '/',
@@ -18,6 +17,11 @@ export const routerMap = [
         path: 'home',
         component: () => import('../views/home/index.vue')
       }]
+    },
+    {
+      path:'/dome',
+      hidden: true,
+      component: () => import('../views/dome')
     },
     {
       path: '/login',
@@ -164,7 +168,7 @@ export const routerMap = [
       children: [
         {
           path:'inputEmail',
-          name:'inputEmail',
+          name:'  ',
           hidden: true,
           component: () => import('../views/login/inputEmail')
         },

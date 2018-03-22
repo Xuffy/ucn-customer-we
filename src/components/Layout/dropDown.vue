@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-down" :class="{'active':isActive}" :style="{ 'z-index':zIndex, 'width':w+'px' }" @click.stop  @mousemove="inputBoxHover" @mouseout="isLabelBox = false">
+    <div class="drop-down" :class="{'active':isActive}" :style="{ 'z-index':zIndex, 'width':w+'px' }" @click.stop>
         <div class="AnalogInputBox" :style="`width: ${w}px`" @click="dropSwitch">
             <div class="label">
                 <div class="placeholder" v-show="selected.length <= 0">{{DownPlaceholder}}</div>
@@ -140,66 +140,12 @@
             },
             boxChange(getSelectedNodes) {
                 this.selected = getSelectedNodes;
-                this.inputBoxHover();
-            },
-            inputBoxHover() {
-                if(this.selected.length >= 1) return this.isLabelBox = true;
-                this.isLabelBox = false;
-            },
-            filter(item) {
-                item.checked = !item.checked;
-                this.inputBoxHover();
             },
             clone(item, index) {
                 
             }
         }
     }
-    
-   /**
-    * list 格式
-    * data: [
-        {
-            title: 'parent 1',
-            expand: true,
-            selected: true,
-            children: [
-                {
-                    title: 'parent 1-1',
-                    expand: true,
-                    children: [
-                        {
-                            title: 'leaf 1-1-1',
-                            checked:false,
-                            isActive:true,
-                            disabled: false
-                        },
-                        {
-                            title: 'leaf 1-1-2',
-                            isActive:true,
-                            disabled: false
-                        }
-                    ]
-                },
-                {
-                    title: 'parent 1-2',
-                    expand: true,
-                    children: [
-                        {
-                            title: 'leaf 1-2-1',
-                            isActive:true,
-                            checked: false
-                        },
-                        {
-                            isActive:true,
-                            title: 'leaf 1-2-2'
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-   */
 </script>
 <style scoped lang="less">
     ul{
