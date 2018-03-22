@@ -11,22 +11,22 @@
                     <Carousel autoplay :autoplay-speed="2500" arrow="always" v-model="value1" loop>
                         <CarouselItem>
                             <div class="carousel-img">
-                                <img src="../../assets/images/login-back.jpg" alt="">
+                                <img src="../../../assets/images/login-back.jpg" alt="">
                             </div>
                         </CarouselItem>
                         <CarouselItem>
                             <div class="carousel-img">
-                                <img src="../../assets/images/login-back.jpg" alt="">
+                                <img src="../../../assets/images/login-back.jpg" alt="">
                             </div>
                         </CarouselItem>
                         <CarouselItem>
                             <div class="carousel-img">
-                                <img src="../../assets/images/login-back.jpg" alt="">
+                                <img src="../../../assets/images/login-back.jpg" alt="">
                             </div>
                         </CarouselItem>
                         <CarouselItem>
                             <div class="carousel-img">
-                                <img src="../../assets/images/login-back.jpg" alt="">
+                                <img src="../../../assets/images/login-back.jpg" alt="">
                             </div>
                         </CarouselItem>
                     </Carousel>
@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="body">
-            <Tabs value="name1" type="card">
+            <Tabs value="name1" type="card" :animated="false">
                 <TabPane label="Basic Info" name="name1">
                     <Row>
                         <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
@@ -184,7 +184,7 @@
                         <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
                         报关英文品名 : XXXXXX
                         </Col>
-                        <Col class="list" :xs="24" :sm="24" :md="24" :lg="24">
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
                         中文商标 : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                         </Col>
                         <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
@@ -227,25 +227,228 @@
                 </TabPane>
                 <TabPane label="Price Info" name="name3">
                     <Table border :columns="columnsPrice" :data="dataPrice"></Table>
+                    <br>
+                    <Page :total="100" show-elevator show-sizer show-total></Page>
                 </TabPane>
-                <TabPane label="PackingInfo" name="name4">标签一的内容</TabPane>
-                <TabPane label="Logistic" name="name5">标签二的内容</TabPane>
-                <TabPane label="Other Info" name="name6">标签三的内容</TabPane>
+                <TabPane label="Packing Info" name="name4">
+                    <Row>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        重量单位 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        长度单位 : XXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        体积单位 : XXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品长 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品宽 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品高 : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品净重 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品体积 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品包装方式CN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品包装方式EN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包单位 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包商品数 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包长 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包宽 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包高 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包净重 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包毛重 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包体积 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包描述 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包包装方式CN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        中包包装方式EN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱单位 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱描述 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱中包数 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱商品数 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱长 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱宽 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱高 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱净重 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱毛重 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外箱体积 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外包装方式CN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        外包装方式EN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        可否贴牌 : XXXXXX
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane label="Logistic" name="name5">
+                    <Row>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        20GP产品数量 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        40GP产品数量 : XXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        40HQ产品数量 : XXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        托盘尺寸 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        每托盘产品数量 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        特殊运输要求 : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        库存成本计算方式 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        默认仓库 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        库存数量 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        安全库存 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        最低库存量 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        最大批次量 : XXXXXX
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane label="Other Info" name="name6">
+                    <Row>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        主销国家 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        主销区域 : XXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        开发时间 : XXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        质量标准 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        上市年份 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        是否展示盒包装 : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        展示盒内产品数 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        展示盒长宽高 : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        其他包装信息CN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        其他包装信息EN : XXXXXX
+                        </Col>
+                        <Col class="list" :xs="24" :sm="12" :md="12" :lg="12">
+                        产品或包装可否调整 : XXXXXX
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane label="Attachment" name="name7">
+
+                </TabPane>
+                <TabPane label="History" name="name8">
+                    <Table border :columns="columnsHistory" :data="dataPrice"></Table>
+                    <br>
+                    <Page :total="100" show-elevator show-sizer show-total></Page>
+                </TabPane>
+                <TabPane label="Remark" name="name9">
+                    <add-table></add-table>
+                </TabPane>
             </Tabs>
         </div>
+
+        <compare-list></compare-list>
     </div>
 </template>
 
 <script>
+
+    import addTable from '../addlineTable'
+    import compareList from '../compareList'
+
     export default {
         name: "detail",
+        components:{
+            addTable,
+            compareList
+        },
         data(){
             return{
                 value1: 0,
                 columnsPrice: [
                     {
                         title: 'FOB币种',
-                        key: 'FOB币种',
+                        key: 'ax',
                         sortable: true
                     },
                     {
@@ -282,9 +485,102 @@
                         key: '其他价格条款币种'
                     },
                 ],
+                columnsHistory:[
+                    {
+                        title: '客户询价单号',
+                        key: 'InquiryNo',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '客户合同号',
+                        key: 'InquiryCreateDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '供应商合同号',
+                        key: 'InquiryNo',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '合同日期',
+                        key: 'Quantity',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '价格条款',
+                        key: 'Qty',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '价格条款区域',
+                        key: 'InquiryConfrimDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '采购币种',
+                        key: 'price',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '采购单价',
+                        key: 'PONo',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '采购总价',
+                        key: 'POCreateDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '总数量',
+                        key: 'Quantity',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '交货日期',
+                        key: 'POConfirmDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '验货日期',
+                        key: 'POConfirmDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '发运日期',
+                        key: 'POConfirmDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '发运数量',
+                        key: 'POConfirmDate',
+                        width:150,
+                        align:'center',
+                    },
+                    {
+                        title: '合同数量',
+                        key: 'POConfirmDate',
+                        width:150,
+                        align:'center',
+                    },
+
+                ],
                 dataPrice:[
                     {
-                        name: 'John Brown',
+                        ax: 'John Brown',
                         age: 18,
                         address: 'New York No. 1 Lake Park',
                         date: '2016-10-03'

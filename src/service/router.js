@@ -47,16 +47,31 @@ export const routerMap = [
       children: [
         {
           path: '',
-          component: () => import('../views/product/sourcing.vue'),
-          name:''
+          component: () => import('../views/product/sourcing/sourcing.vue'),
+          name:'sourcings',
         },
-
-          {
-              path:'detail',
-              component: () => import('../views/product/detail.vue'),
-              name:'detail'
-          },
-
+        {
+          path:'detail',
+          component: () => import('../views/product/sourcing/detail.vue'),
+          name:'detail'
+        },
+        {
+          path:'bookmark',
+          component: () => import('../views/product/bookmark/index.vue'),
+          name:'bookmark',
+          children:[
+                {
+                    path:'',
+                    component: () => import('../views/product/bookmark/bookmark.vue'),
+                    name:'',
+                },
+                {
+                    path:'detail',
+                    component: () => import('../views/product/bookmark/detail.vue'),
+                    name:'detail',
+                },
+            ]
+        },
       ]
     },
     {
