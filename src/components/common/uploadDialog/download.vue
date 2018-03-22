@@ -3,7 +3,7 @@
      <div>
          Template : 
          <span class="filename">我是文件格式的名字哈</span>
-         <Icon type="ios-cloud-download" size='24'></Icon>
+         <Icon type="ios-cloud-download" size='24' @click='download'></Icon>
      </div>
   </div>
 </template>
@@ -13,11 +13,19 @@
     export default {
         name: 'download',
         data() {
-            return {}
+            return {
+
+            }
         },
-        watch: {},
-        created() {},
-        methods: {}
+        watch: {
+
+        },
+        created() {
+
+        },
+        methods: {
+            download() {}
+        }
     }
 
 </script>

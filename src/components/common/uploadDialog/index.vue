@@ -2,7 +2,6 @@
   <div class='uploadDialog'>  
      <div class='address'>
          Address&nbsp :&nbsp 
-<!--        <input type='text' />-->
          <upload></upload>
      </div>   
      <download class='download'></download>

@@ -1,6 +1,6 @@
 <template>
   <div class='upload'>
-    <Upload action="//jsonplaceholder.typicode.com/posts/"
+    <Upload action=""
             :max-size="maxsize"  
             :format="format"
             :on-exceeded-size="handleMaxSize"
@@ -9,6 +9,7 @@
             :show-upload-list="uploadList"
             :on-progress='handleProgress'
             :on-error='handleError'
+            :before-upload='handelBefore'
             >
         <Button type="ghost" icon="android-upload"  :loading="loadingStatus">{{ loadingStatus ? 'Uploading' : 'Upload files' }}</Button>
     </Upload>  
@@ -28,6 +29,11 @@
             format: {
                 type: [Array, String]
             },
+            //文件地址
+            action: {
+                type: String,
+                default: '//jsonplaceholder.typicode.com/posts/'
+            }
         },
         components: {
 
@@ -35,7 +41,8 @@
         data() {
             return {
                 uploadList: false,
-                loadingStatus: false
+                loadingStatus: false,
+                fileName: ''
             }
         },
         created() {
@@ -54,21 +61,23 @@
                     desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
                 });
             },
-            handleSuccess(file) {
+            handleSuccess() {
                 this.$Notice.success({
-                    title: 'The file format is success',
-                    desc: 'File format of ' + file.name + ' is success'
+                    title: 'success',
+                    desc: 'File format of ' + this.fileName + ' is success'
                 });
                 this.loadingStatus = false
             },
-            handleProgress() {
+            handleProgress(file) {
                 this.loadingStatus = true;
-
+            },
+            handelBefore(file) {
+                this.fileName = file.name
             },
             handleError(file) {
                 this.$Notice.warning({
-                    title: 'The file format is failed',
-                    desc: 'File format of ' + file.name + ' is failed'
+                    title: 'failed',
+                    desc: 'File format of ' + this.fileName + ' is failed'
                 });
                 this.loadingStatus = false
             },
