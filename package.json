@@ -1,5 +1,5 @@
 {
-  "name": "iview-demo",
+  "name": "demo",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "xuffy <d.xuffy@qq.com>",
@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "dateformat": "^3.0.3",
-    "iview": "^2.3.2",
+    "element-ui": "^2.2.2",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "nprogress": "^0.2.0",

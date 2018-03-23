@@ -1,11 +1,11 @@
 <template>
   <div class="nav-bar-box">
-    <Breadcrumb separator=">">
-      <BreadcrumbItem v-for="(item,index) in navBarList" :key="item.path"
-                      :href="index === navBarList.length - 1 ? null : (item.redirect||item.path)">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item  v-for="(item,index) in navBarList" :key="index"
+                           :to="{path:index === navBarList.length - 1 ? null : (item.redirect||item.path)}">
         {{item.name}}
-      </BreadcrumbItem>
-    </Breadcrumb>
+      </el-breadcrumb-item>
+    </el-breadcrumb>
   </div>
 </template>
 
@@ -53,17 +53,21 @@
     z-index: 905;
     padding-left: 15px;
   }
+  .el-breadcrumb{
+    height: 40px;
+    line-height: 40px;
+  }
 
 </style>
 <style>
-  .nav-bar-box .ivu-breadcrumb a {
+  .nav-bar-box .el-breadcrumb__inner,
+  .nav-bar-box .el-breadcrumb__inner a{
+
+    font-weight: 400;
     color: #9f9f9f;
   }
-
-  .nav-bar-box .ivu-breadcrumb a:hover,
-  .nav-bar-box .ivu-breadcrumb > span:last-child {
+  .nav-bar-box .el-breadcrumb__inner a:hover,
+  .nav-bar-box .el-breadcrumb__inner:hover{
     color: #666666;
-    font-weight: 400;
   }
-
 </style>

@@ -3,7 +3,7 @@ import Qs from 'qs'
 import router from './router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css';
-import {Message} from 'iview';
+import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from  'service/store';
 
@@ -27,9 +27,11 @@ const ajax = axios.create({
    },*/
 });
 
+/*
 Message.config({
   duration: 3
 });
+*/
 
 NProgress.configure({
   // showSpinner: false

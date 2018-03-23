@@ -1,28 +1,27 @@
 <template>
   <div class="menu ucn-menu" :class="{hideMenu:hideMenu}">
     <div class="fold-box" @click="changeHideMenu">
-      <Icon type="chevron-left" v-show="!hideMenu"></Icon>
-      <Icon type="chevron-right" v-show="hideMenu"></Icon>
+      <!--<Icon type="chevron-left" v-show="!hideMenu"></Icon>-->
+      <!--<Icon type="chevron-right" v-show="hideMenu"></Icon>-->
     </div>
 
-    <Menu theme="dark">
-      <MenuItem name="1">
-        <Icon type="ios-paper"></Icon>
-        Quick Link
-      </MenuItem>
-      <MenuItem name="1">
-        <Icon type="ios-paper"></Icon>
-        Order OverviewOrder OverviewOrder Overview
-      </MenuItem>
-      <MenuItem name="1">
-        <Icon type="ios-paper"></Icon>
-        Pages
-      </MenuItem>
-      <MenuItem name="1">
-        <Icon type="ios-paper"></Icon>
-        Actions
-      </MenuItem>
-    </Menu>
+    <el-menu default-active="1" class="el-menu-vertical-demo" style="width: 220px">
+      <el-menu-item-group>
+        <span slot="title">分组一</span>
+        <el-menu-item index="1-1">选项1</el-menu-item>
+        <el-menu-item index="1-2">选项2</el-menu-item>
+      </el-menu-item-group>
+      <el-menu-item-group>
+        <span slot="title">分组一</span>
+        <el-menu-item index="1-1">选项1</el-menu-item>
+        <el-menu-item index="1-2">选项2</el-menu-item>
+      </el-menu-item-group>
+    </el-menu>
+
+    <!--<el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+      <el-radio-button :label="false">展开</el-radio-button>
+      <el-radio-button :label="true">收起</el-radio-button>
+    </el-radio-group>-->
   </div>
 </template>
 
@@ -164,9 +163,27 @@
   .menu.hideMenu {
     transform: translate(-100%, 0);
   }
+
+  .el-menu {
+    border: none;
+    background-color: inherit;
+  }
+
+  .el-menu-item,
+  .el-submenu__title {
+    line-height: 40px;
+    height: 40px;
+    font-size: 14px;
+    color: #FFFFFF;
+    background-color: inherit!important;
+  }
+
+  .el-menu-item:focus,
+  .el-menu-item:hover {
+  }
 </style>
 <style>
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover,
+  /*.menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover,
   .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover {
     color: #fff;
     background-color: #262626 !important;
@@ -174,7 +191,7 @@
 
   .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened {
     background-color: #292929;
-    /*background-color: #333333;*/
+    !*background-color: #333333;*!
   }
 
   .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title {
@@ -198,5 +215,5 @@
     color: rgba(255, 255, 255, .7);
     border: none;
     background-color: #3f3f3f;
-  }
+  }*/
 </style>
