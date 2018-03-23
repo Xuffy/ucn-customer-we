@@ -157,9 +157,6 @@
                         if (node.title === target.title) {
                             return node
                         };
-                        if (node.children && node.children.length) {
-                            return findSelectedNodeInTreeData(node.children, target)
-                        };
                         if(node.children && node.children.length) {
                             const targetNode = findSelectedNodeInTreeData(node.children, target)
                             if(targetNode) return targetNode;
