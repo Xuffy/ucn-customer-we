@@ -65,7 +65,7 @@
    * 表格组件
    * @desc 组件描述
    * @author xuffy
-   * @param {Object} [title]    - 参数说明
+   * @param {Array} [value]    - 参数说明
    * @param {String} [columns] - 参数说明
    * @example
    *  <v-table></v-table>
@@ -80,7 +80,9 @@
     props: {
       value: {
         type: Array,
-        default: []
+        default: function () {
+          return []
+        }
       }
     },
     components: {
