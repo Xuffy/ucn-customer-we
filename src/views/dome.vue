@@ -27,6 +27,16 @@
                                         title: 'leaf 1-1-2',
                                         isActive:true,
                                         disabled: false
+                                    },
+                                    {
+                                        title: 'leaf 1-1-3',
+                                        isActive:true,
+                                        disabled: false
+                                    },
+                                    {
+                                        title: 'leaf 1-1-4',
+                                        isActive:true,
+                                        disabled: false
                                     }
                                 ]
                             },
@@ -42,6 +52,21 @@
                                     {
                                         isActive:true,
                                         title: 'leaf 1-2-2'
+                                    }
+                                ]
+                            },
+                            {
+                                title: 'parent 1-3',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-3-1',
+                                        isActive:true,
+                                        checked: false
+                                    },
+                                    {
+                                        isActive:true,
+                                        title: 'leaf 1-3-2'
                                     }
                                 ]
                             }
