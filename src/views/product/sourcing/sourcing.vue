@@ -4,24 +4,45 @@
             Product Sourcing
             <Button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</Button>
         </div>
-        <div class="body" :class="{hide:hideBody}">
+        <div>
             <Form ref="formItem" :model="formItem" :label-width="180">
                 <Row>
                     <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Category" prop="Category">
-                            <Input v-model="formItem.Category" placeholder="Enter something..."></Input>
-                        </FormItem>
+                    <FormItem class="form-spelist" label="Category" prop="Category">
+                        <drop-down :list="dataList"></drop-down>
+                    </FormItem>
                     </Col>
                     <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Name" prop="SKUName">
-                            <Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>
-                        </FormItem>
+                    <FormItem class="form-list" label="SKU Name" prop="SKUName">
+                        <Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>
+                    </FormItem>
                     </Col>
                     <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">
-                            <Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>
-                        </FormItem>
+                    <FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">
+                        <Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>
+                    </FormItem>
                     </Col>
+                </Row>
+            </Form>
+        </div>
+        <div class="body" :class="{hide:hideBody}">
+            <Form ref="formItem" :model="formItem" :label-width="180">
+                <Row>
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                        <!--<FormItem class="form-list" label="Category" prop="Category">-->
+                            <!--<drop-down :list="dataList"></drop-down>-->
+                        <!--</FormItem>-->
+                    <!--</Col>-->
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                        <!--<FormItem class="form-list" label="SKU Name" prop="SKUName">-->
+                            <!--<Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>-->
+                        <!--</FormItem>-->
+                    <!--</Col>-->
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                        <!--<FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">-->
+                            <!--<Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>-->
+                        <!--</FormItem>-->
+                    <!--</Col>-->
                     <Col :xs="24" :sm="12" :md="8" :lg="8">
                         <FormItem class="form-list" label="SKU Code" prop="SKUCode">
                             <Input v-model="formItem.SKUCode" placeholder="Enter something..."></Input>
@@ -102,13 +123,20 @@
         <div class="btn-group">
             <Button @click="search" type="primary" class="search">Search</Button>
             <Button @click="clear('formItem')">Clear</Button>
+            <Button type="error" @click="$router.push('/product/bookmark')">Bookmark</Button>
         </div>
     </div>
 </template>
 
 <script>
+
+    import {dropDown} from '@/components/index'
+
     export default {
-        name: "bookmark",
+        name: "sourcing",
+        components:{
+            dropDown
+        },
         props:{
 
         },
@@ -137,7 +165,50 @@
                     MOQ:'',
                     SKUDescription:'',
                     VendorSKUDescription:''
-                }
+                },
+
+
+                dataList:[
+                    {
+                        title: 'parent 1',
+                        expand: true,
+                        selected: true,
+                        children: [
+                            {
+                                title: 'parent 1-1',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-1-1',
+                                        checked:true,
+                                        isActive:true,
+                                        disabled: false
+                                    },
+                                    {
+                                        title: 'leaf 1-1-2',
+                                        isActive:true,
+                                        disabled: false
+                                    }
+                                ]
+                            },
+                            {
+                                title: 'parent 1-2',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1',
+                                        isActive:true,
+                                        checked: false
+                                    },
+                                    {
+                                        isActive:true,
+                                        title: 'leaf 1-2-2'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         },
         methods:{
@@ -153,8 +224,9 @@
 
             //搜查
             search(){
-                console.log(this.formItem)
-                this.$router.push('/product/detail');
+                console.log(this.dataList)
+                // this.$router.push('/product/detail');
+                window.open('http://192.168.51.228:8080/#/product');
             },
         },
         created(){
@@ -173,6 +245,7 @@
 </script>
 
 <style scoped>
+
     .bookmark{
         padding-right: 20px;
     }
@@ -192,19 +265,23 @@
     }
 
     .body{
-        margin-top: 10px;
         overflow: hidden;
         max-height: 1400px;
         display: block;
         transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
     }
     .hide{
-        max-height: 43px;
+        max-height: 0;
 
     }
-    /*.show{*/
-    /*height: auto;*/
-    /*}*/
+
+    .form-spelist{
+        margin-bottom: 10px !important;
+    }
+    .form-spelist >>> .ivu-form-item-content{
+        line-height: normal;
+    }
+
     .form-list{
         margin-bottom: 10px;
     }

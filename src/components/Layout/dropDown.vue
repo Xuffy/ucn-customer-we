@@ -45,15 +45,19 @@
                 isActive:false,
                 val:'',
                 selected:[],
-                isLabelBox:false,
                 screen: [],
                 data:[]
             }
         },
         computed: {
-            treeData() {
-                let result = JSON.parse(JSON.stringify(this.list));
-                return this.getVisiableNodes(result, this.val);
+            treeData: {
+                get() {
+                    let result = JSON.parse(JSON.stringify(this.list));
+                    return this.getVisiableNodes(result, this.val);
+                },
+                set(result) {
+                    
+                }
             }
         },
         props: {
@@ -139,6 +143,33 @@
                 this.isActive = !this.isActive;
             },
             boxChange(getSelectedNodes) {
+                const treeData = this.list;
+                function resetListToCheckedFalse(list) { //clear
+                    list.forEach((item) => {
+                        item.checked = false;
+                        if(item.children && item.children.length) resetListToCheckedFalse(item.children);
+                    })
+                }
+
+                function findSelectedNodeInTreeData(list, target) {
+                    for(let i = 0; i < list.length; i++) {
+                        const node = list[i];
+                        if (node.title === target.title) {
+                            return node
+                        };
+                        if(node.children && node.children.length) {
+                            const targetNode = findSelectedNodeInTreeData(node.children, target)
+                            if(targetNode) return targetNode;
+                        }
+                    }         
+                }
+                resetListToCheckedFalse(treeData)
+                getSelectedNodes.forEach(selectedNode => {
+                    const targetNode = findSelectedNodeInTreeData(treeData, selectedNode);
+                    targetNode && (targetNode.checked = true)
+                })
+
+                this.treeData = [...treeData]        
                 this.selected = getSelectedNodes;
             },
             clone(item, index) {
