@@ -100,6 +100,19 @@ export const routerMap = [
       ]
     },
     {
+      path: '/message',
+      component: Layout,
+      redirect: '/message',
+      name: 'Message',
+      noDropdown: true,
+      children: [
+          {
+              path: 'index',
+              component: () => import('../views/message/message.vue')
+          }
+      ]
+    },
+    {
       path: '/supplier',
       component: Layout,
       redirect: '/supplier/picture',

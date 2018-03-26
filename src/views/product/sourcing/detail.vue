@@ -52,7 +52,7 @@
                 <div class="btns">
                     <el-button type="primary">Create Inquiry</el-button>
                     <el-button type="primary">Create Order</el-button>
-                    <el-button type="primary">Add to Compare</el-button>
+                    <el-button @click="addCompare" type="primary">Add to Compare</el-button>
                     <el-button round>Add to Bookmark</el-button>
                 </div>
             </div>
@@ -550,6 +550,9 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
+
+        <compare-list :config="compareConfig"></compare-list>
+
     </div>
 </template>
 
@@ -591,7 +594,12 @@
                         address: '上海市普陀区金沙江路 1516 弄'
                     }
                 ],
-                currentPage1:1
+                currentPage1:1,
+
+                //compareList配置
+                compareConfig:{
+                    showCompareList:false,      //是否显示比较列表
+                },
             }
         },
         methods:{
@@ -603,6 +611,11 @@
             },
             handleClick(){
                 //切换tab页
+            },
+
+            //添加比较
+            addCompare(){
+                this.compareConfig.showCompareList=true;
             },
         }
     }
@@ -660,7 +673,7 @@
 
     .Details .body{
         margin-top: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 35px;
         background-color: #FFFFFF;
     }
     .Details .body .list{

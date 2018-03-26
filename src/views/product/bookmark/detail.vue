@@ -52,7 +52,7 @@
                 <div class="btns" v-if="noEdit">
                     <el-button type="primary">Create Inquiry</el-button>
                     <el-button type="primary">Create Order</el-button>
-                    <el-button type="primary">Add to Compare</el-button>
+                    <el-button @click="addCompare" type="primary">Add to Compare</el-button>
                     <el-button class="roundBtn" @click="editBookmark" round> Edit </el-button>
                     <el-button class="roundBtn" round> Remove </el-button>
                 </div>
@@ -625,7 +625,7 @@
             </el-tabs>
         </div>
 
-        <compare-list></compare-list>
+        <compare-list :config="compareConfig"></compare-list>
 
     </div>
 </template>
@@ -672,6 +672,9 @@
                 noEdit:true,                //是否处在非编辑状态
 
                 labelPosition:'left',
+                compareConfig:{
+                    showCompareList:false,      //是否显示比较列表
+                },
             }
         },
         methods:{
@@ -700,7 +703,13 @@
             cancelEdit(){
                 this.noEdit=true;
             },
-        }
+
+            //添加比较
+            addCompare(){
+                this.compareConfig.showCompareList=true;
+            },
+        },
+
     }
 </script>
 
@@ -757,7 +766,7 @@
 
     .Details .body{
         margin-top: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 35px;
         background-color: #FFFFFF;
     }
     .Details .body .list{
