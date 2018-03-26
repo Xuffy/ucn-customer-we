@@ -9,6 +9,7 @@ import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
+import selectSearch from './common/fnCompon/selectSearch';
 
 export {
   VSimpleTable,
@@ -21,5 +22,6 @@ export {
   UploadDialog,
   Download,
   Layout,
-  messageBoard
+  messageBoard,
+  selectSearch
 }

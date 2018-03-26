@@ -90,6 +90,7 @@
                         placeholder="input here"
                         v-model="InquirySequance"
                         clearable
+                        style="max-width:203px;"
                         />
                 </div>
                 <div class="select-item">
@@ -99,6 +100,7 @@
                         v-model="InquirySequance1"
                         clearable
                         :disabled="true"
+                        style="max-width:203px;"
                         />
                 </div>
                 <div class="select-item">
@@ -111,37 +113,101 @@
                         :value="item.id" />
                     </el-select>
                 </div>
+                <div class="select-item">
+                    <span>Quotation Validity：</span>
+                    <el-select v-model="quotation" placeholder="Please select">
+                        <el-option
+                        v-for="item in quotationOptions"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.id" />
+                    </el-select>
+                </div>
+                <div class="select-item">
+                    <span>Destination Port：</span>
+                    <el-select v-model="Destination" placeholder="Please select">
+                        <el-option
+                        v-for="item in DestinationOptions"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.id" />
+                    </el-select>
+                </div>
+                <div class="select-item">
+                    <span>Inquiry Data：</span>
+                    <el-date-picker
+                    v-model="date"
+                    align="right"
+                    type="date"
+                    placeholder="Please choose the date"
+                    :picker-options="pickerOptions"
+                    />
+                </div>
+                <div class="select-item">
+                    <span>My Inquiry ID：</span>
+                    <el-input
+                        placeholder="input here"
+                        v-model="MyInquiryID"
+                        clearable
+                        :disabled="true"
+                        style="max-width:203px;"
+                        />
+                </div>
+                <div class="select-item textarea">
+                    <span>Remarks：</span>
+                    <el-input
+                        type="textarea"
+                        :rows="3"
+                        placeholder="Please enter the content"
+                        v-model="textarea"
+                        style="max-width:203px"
+                        clearable
+                        />
+                </div>
+                <div class="select-item">
+                    <span>Attachment：</span>
+                    <el-button type="primary">add</el-button>
+                </div>
             </div>
+        </div>
+        <h4 class="content-hd">Product Info</h4>
+        <div class="status">
+            <div class="btn-wrap">
+                <el-button type="info">Add Product</el-button>
+                <el-button type="info">Remove</el-button>
+            </div>
+            <div class="select-wrap">
+                <div class="select">
+                    <el-select v-model="value" placeholder="select" @change="selectChange">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.id" />
+                    </el-select>
+                </div>
+                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
+                <div class="set">
+                    <i class="el-icon-setting"></i>
+                </div>
+            </div>
+        </div>
+        <!--form-->
+        <div class="bom-btn-wrap">
+            <el-button type="primary">Submit</el-button>
+            <el-button type="primary">Save as Draft</el-button>
         </div>
     </div>
 </template>
 <script>
-    /**
-     * @param shippingOptions -Shipping method 原始数据 Array
-     * @param shipping -Shipping method 选中数据 
-     * @param PaymentOptions - Payment Term 原始数据 Array
-     * @param Payment -Payment Term 选中数据
-     * @param departureOptions - Departure Country 原始数据 Array
-     * @param departure - Departure Country 选中数据
-     * @param portOptions - Departure Port 原始数据 Array
-     * @param port - Departure Port 选中数据
-     * @param incotermOptions -Incoterm  原始数据 Array
-     * @param incoterm - Incoterm 选中数据
-     * @param currencyOptions - currency 原始数据 Array
-     * @param currency - currency 选中数据
-     * @param inquiryDataOptions - inquiryData 原始数据 Array
-     * @param inquiryDatas - inquiryData 选中数据
-     * @param InquiryStatusOptions - InquiryStatus 原始数据 Array
-     * @param InquiryStatus - InquiryStatusOptions 选中数据
-     * @param InquirySequance -Inquiry Sequance
-     * @param InquirySequance1 - Inquiry Sequance 2
-     * @param destinationCountryOptions - destinationCountry 原始数据 Array
-     * @param destinationCountry        
-    */
     export default {
         name:'createInquiry',
         data() {
             return {
+                InquirySequance1:'',
+                InquirySequance:'',
+                DestinationOptions:[],
+                Destination:'',
                 PaymentOptions:[],
                 Payment:'',
                 departureOptions:[],
@@ -153,6 +219,42 @@
                 inquiryDataOptions:[],
                 inquiryData:'',
                 InquirySequance:'',
+                InquiryStatusOptions:[],
+                InquiryStatus:'',
+                destinationCountryOptions:[],
+                destinationCountry:'',
+                currencyOptions:[],
+                currency:'',
+                quotationOptions:[],
+                quotation:'',
+                MyInquiryID:'',
+                textarea:'',
+                pickerOptions:{
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [{
+                    text: 'Today',
+                    onClick(picker) {
+                    picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: 'Yesterday',
+                    onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', date);
+                    }
+                }, {
+                    text: 'A week ago',
+                    onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', date);
+                    }
+                }]
+                },
+                date:'',
                 shippingOptions:[{
                     id: '1',
                     label: '黄金糕'
@@ -181,6 +283,62 @@
             font-size:14px;
             line-height:40px;
             padding-left:20px;
+        }
+        .status {
+            display:flex;
+            height: 60px;
+            box-sizing: border-box;
+            padding-left:25px;
+            padding-right:25px;
+            align-items: center;
+            justify-content:space-between;
+            .btn-wrap {
+                display:flex;
+                align-items: center;
+                span {
+                    font-size:14px;
+                }
+            }
+            .select-wrap {
+                display:flex;
+                align-items:center;
+                .select {
+                    width: 110px;
+                    margin-right:5px;
+                }
+                .set {
+                    cursor: pointer;
+                    padding-left:18px;
+                    color:#999;
+                    i {
+                        font-size:25px;
+                    }
+                }
+            }
+        }
+        .select-main {
+            display:flex;
+            align-items: center;
+            flex-wrap:wrap;
+            height:300px;
+            overflow-y: auto;
+            .select-item {
+                width:50%;
+                display:flex;
+                margin-bottom:20px;
+                span {
+                    line-height:32px;
+                    width:200px;
+                    text-align: right;
+                    padding-right:5px;
+                    box-sizing: border-box;
+                    font-size:14px;
+                    color:#666;
+                }
+            }
+        }
+        .bom-btn-wrap {
+            padding-left:25px;
         }
     }
 </style>
