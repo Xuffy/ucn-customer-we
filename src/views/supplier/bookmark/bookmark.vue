@@ -1,7 +1,7 @@
 <template>
-    <div class="SupplierSourcing">
+    <div class="SupplierBookmark">
         <div class="title">
-            Supplier Sourcing
+            Supplier Bookmark
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
@@ -58,12 +58,14 @@
              <div class="btnline">
                   <el-button  type="primary" >Create Inquiry</el-button>
                   <el-button  type="primary" >Create Order</el-button>
-                  <el-button  type="primary" >Compare</el-button>
-                  <el-button  type="primary" >Add to Bookmark</el-button>
+                  <el-button  type="primary" >Compare</el-button>             
                   <el-button  type="primary" >Download the Selected Supplier</el-button>
+<!--                  remove按钮-->
+                   <el-button  type="info" :disabled='disabled' >Remove</el-button>
               </div>  
               <div>
                   这块表格
+                
               </div>          
         </div>
     </div>
@@ -92,6 +94,8 @@
                     SkuCode: '',
                     VendorSkuCode: '',
                 },
+                //                remove
+                disabled: true,
             }
         },
         methods: {
@@ -120,7 +124,7 @@
                 } else {
                     this.btnInfo = 'Hide the Advance';
                 }
-            }
+            },
         }
     }
 
@@ -136,6 +140,7 @@
         font-size: 18px;
         height: 32px;
         line-height: 32px;
+        color: #666666;
     }
 
     .title-btn {
@@ -169,9 +174,11 @@
     .form-list {
         margin-bottom: 10px;
     }
-    .el-input{
-/*        width:200px;*/
+
+    .el-input {
+        /*        width:200px;*/
     }
+
     .btn-group {
         text-align: center;
         margin-top: 10px;
@@ -187,7 +194,7 @@
         border-top: 1px solid black;
     }
 
-    .btnline .el-button{
+    .btnline .el-button {
         margin-right: 8px;
         margin-top: 20px;
     }

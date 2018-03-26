@@ -51,17 +51,17 @@ export const routerMap = [
       children: [
         {
           path: '',
-          component: () => import('../views/product/sourcing/sourcing.vue'),
+          component: () => import('../views/product/sourcing/sourcing'),
           name:'sourcing',
         },
         {
           path:'detail',
-          component: () => import('../views/product/sourcing/detail.vue'),
+          component: () => import('../views/product/sourcing/detail'),
           name:'detail'
         },
         {
           path:'bookmark',
-          component: () => import('../views/product/bookmark/bookmark.vue'),
+          component: () => import('../views/product/bookmark/bookmark'),
           name:'bookmark'
         },
         {
@@ -111,20 +111,33 @@ export const routerMap = [
       ]
     },
     {
-      path: '/supplier',
-      component: Layout,
-      redirect: '/supplier/picture',
-      name: 'Supplier',
-      children: [
-        {
-          path: 'sourcing',
-          name: 'Sourcing',
-          component: () => import('../views/supplier/sourcing.vue')
+        path: '/supplier',
+        component: Layout,
+        redirect: '/supplier/picture',
+        name: 'Supplier',
+        noDropdown: true,
+        children: [
+            {
+                path: 'sourcing',
+                name: 'Sourcing',
+                component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
+
         },
-        {
-          path: 'bookmark',
-          name: 'Bookmark',
-          component: () => import('../views/supplier/bookmark.vue')
+            {
+                path: 'bookmark',
+                name: 'Bookmark',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmark.vue')
+        },
+            {
+                path: 'bookmarkDetail',
+                name: 'bookmarkDetail',
+                component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        },
+            {
+                path: 'sourcingDetail',
+                name: 'sourcingDetail',
+                component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
         }
       ]
     },
@@ -149,19 +162,50 @@ export const routerMap = [
           path: 'createInquiry',
           name: 'createInquiry',
           component: () => import('../views/negotiation/createInquiry')
+        },
+        {
+          path: 'compareOverview',
+          name: 'compareOverview',
+          component: () => import('../views/negotiation/compareOverview')
+        },
+        {
+          path: 'compare',
+          name: 'compare',
+          component: () => import('../views/negotiation/compare')
         }
       ]
     },
     {
-      path: '/order',
+      path: '/logistic',
+      name: 'logistic',
       component: Layout,
-      redirect: '/order',
-      name: 'Order',
-      noDropdown: true,
+      redirect: '/logistic/logisticPlanOverview',
       children: [
         {
-          path: 'index',
-          component: () => import('../views/order/index.vue')
+          path: 'logisticPlanOverview',
+          name: 'logisticPlanOverview',
+          component: () => import('../views/logistic/logisticPlanOverview')
+        }
+      ]
+      
+    },
+    {
+        path: '/order',
+        component: Layout,
+        redirect: '/order',
+        name: 'Order',
+        noDropdown: true,
+        children: [
+            {
+                path: 'index',
+                component: () =>import ('../views/order/index.vue')
+        },
+            {
+                path: 'creatOrder',
+                component: () =>import ('../views/order/creatOrder/creatOrder.vue')
+        }, {
+                path: 'poDetail',
+                component: () =>import ('../views/order/poDetail/index.vue')
         }
       ]
     },
