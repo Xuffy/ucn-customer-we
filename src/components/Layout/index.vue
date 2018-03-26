@@ -4,11 +4,11 @@
     <v-menu></v-menu>
     <div class="main-container" :class="{fullBox:fullBox}">
       <nav-bar></nav-bar>
-      <!--<section class="app-main" style="min-height: 100%">
-        <transition name="fade" mode="out-in">
+      <section class="app-main" style="min-height: 100%">
+        <!--<transition name="fade" mode="out-in">-->
           <router-view :key="key"></router-view>
-        </transition>
-      </section>-->
+        <!--</transition>-->
+      </section>
     </div>
 
 
@@ -56,6 +56,7 @@
     padding-top: 70px;
     /*padding-bottom: 50px;*/
     transition: all .4s;
+    box-sizing: border-box;
   }
 
   .app-main {

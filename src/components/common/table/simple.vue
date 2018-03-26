@@ -1,62 +1,37 @@
 <template>
   <div class="ucn-table">
-    <Row>
-      <Col span="16">
-      12</Col>
-      <Col span="8" style="text-align: right;cursor: pointer">
-      <v-filter-colum></v-filter-colum>
-      </Col>
-    </Row>
-    <Table :columns="columns6" :data="data5" size="small">
-      <!--<div slot="footer">123</div>-->
-    </Table>
-
-    <!--<CheckboxGroup>
-      <table style="width: 100%">
-        <tr>
-          <th>
-            <v-filter-value></v-filter-value>
-          </th>
-          <th>132</th>
-          <th>132</th>
-          <th>132</th>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-      </table>
-    </CheckboxGroup>-->
+    <el-row>
+      <el-col :span="16">12</el-col>
+      <el-col :span="8" style="text-align: right;cursor: pointer">
+        <v-filter-column></v-filter-column>
+      </el-col>
+    </el-row>
+    <el-table
+      :data="dataList">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        type="index">
+      </el-table-column>
+      <el-table-column v-for="(item,index) in dataColumns" :key="index"
+                       :prop="item.prop"
+                       :label="item.label"
+                       :render-header="item.renderHeader"
+                       width="180">
+      </el-table-column>
+    </el-table>
 
     <br>
-    <Page :total="100" show-sizer show-elevator style="display: inline-block;vertical-align: middle"></Page>
-    <span style="display: inline-block;vertical-align: middle">View 123,432 Products</span>
+    <el-pagination
+      background
+      :current-page="4"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="prev, pager, next,sizes, jumper,total"
+      :total="400">
+    </el-pagination>
   </div>
 </template>
 
@@ -72,7 +47,7 @@
    */
 
   import VFilterValue from './filterValue'
-  import VFilterColum from './filterColumn'
+  import VFilterColumn from './filterColumn'
 
   export default {
     name: 'VSimpleTable',
@@ -83,43 +58,29 @@
     },
     components: {
       VFilterValue,
-      VFilterColum
+      VFilterColumn
     },
     data() {
       return {
         checkValue: [],
-        columns6: [
+        dataColumns: [
           {
-            type: 'selection',
-            width: 34,
-            fixed: 'left',
-            align: 'center'
-          },
-          {
-            type: 'index',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: 'Date',
-            key: 'date',
-            width: 200,
+            label: 'Date',
+            prop: 'date',
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            title: 'Name',
-            key: 'name',
-            width: 200,
+            label: 'Name',
+            prop: 'name',
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            title: 'Age',
-            key: 'age',
-            width: 200,
+            label: 'Age',
+            prop: 'age',
             filters: [
               {
                 label: 'Greater than 25',
@@ -140,9 +101,8 @@
             }
           },
           {
-            title: 'Address',
-            key: 'address',
-            width: 200,
+            label: 'Address',
+            prop: 'address',
             filters: [
               {
                 label: 'New York',
@@ -163,7 +123,7 @@
             }
           }
         ],
-        data5: [
+        dataList: [
           {
             name: 'John Brown',
             age: 18,
