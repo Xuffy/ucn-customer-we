@@ -11,7 +11,6 @@
         Expand, 
         FilterColumn, 
         FilterValue, 
-        Messagelist,
         Upload,
         UploadDialog,
         Download,
@@ -26,7 +25,6 @@
             'expand':Expand,
             'filter-column':FilterColumn,
             'filter-value':FilterValue,
-            'message-list':Messagelist,
             'upload':Upload,
             'download':Download,
             'layout':Layout
