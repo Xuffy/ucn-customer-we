@@ -4,9 +4,11 @@
     <v-menu></v-menu>
     <div class="main-container" :class="{fullBox:fullBox}">
       <nav-bar></nav-bar>
-      <section class="app-main" style="min-height: 100%">
+      <section class="app-main">
         <transition name="fade" mode="out-in">
-          <router-view :key="key"></router-view>
+          <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
+            <router-view :key="key"></router-view>
+          </div>
         </transition>
       </section>
     </div>
