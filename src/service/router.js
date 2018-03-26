@@ -79,6 +79,17 @@ export const routerMap = [
           component: () => import('../views/product/compare/compare.vue'),
           name:'compare'
         },
+        {
+          path:'message',
+          component: () => import('../views/message/message.vue'),
+          name:'message'
+        },
+        {
+          path:'messageManagement',
+          component: () => import('../views/message/messageManagement.vue'),
+          name:'messageManagement'
+        },
+
 
         // {
         //   path:'bookmark',
@@ -97,19 +108,6 @@ export const routerMap = [
         //         },
         //     ]
         // },
-      ]
-    },
-    {
-      path: '/message',
-      component: Layout,
-      redirect: '/message',
-      name: 'Message',
-      noDropdown: true,
-      children: [
-          {
-              path: 'index',
-              component: () => import('../views/message/message.vue')
-          }
       ]
     },
     {
@@ -168,8 +166,12 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: () => import('../views/warehouse/index.vue')
-        }
+          component: () => import('../views/warehouse/warehouseOverview.vue')
+        },
+        {
+          path: 'qcDetail',
+          component: () => import('../views/warehouse/qcDetail.vue')
+        },
       ]
     },
     {
