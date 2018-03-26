@@ -2,140 +2,164 @@
     <div class="bookmark">
         <div class="title">
             Product Sourcing
-            <Button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</Button>
+            <el-button class="title-btn"
+                       @click="switchDisplay"
+                       type="text">{{btnInfo}}
+            </el-button>
+            <!--<Button  class="title-btn" type="text">{{btnInfo}}</Button>-->
         </div>
         <div>
-            <Form ref="formItem" :model="formItem" :label-width="180">
-                <Row>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                    <FormItem class="form-spelist" label="Category" prop="Category">
-                        <drop-down :list="dataList"></drop-down>
-                    </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                    <FormItem class="form-list" label="SKU Name" prop="SKUName">
-                        <Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>
-                    </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                    <FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">
-                        <Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>
-                    </FormItem>
-                    </Col>
-                </Row>
-            </Form>
+            <el-form ref="form" :model="form" label-width="180px">
+                <el-row>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Category">
+                            <el-col :span="15">
+                                <el-input v-model="form.name"></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="SKU Name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Readily Available">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <!--<Form ref="formItem" :model="formItem" :label-width="180">-->
+                <!--<Row>-->
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                    <!--<FormItem class="form-spelist" label="Category" prop="Category">-->
+                        <!--<drop-down :list="dataList"></drop-down>-->
+                    <!--</FormItem>-->
+                    <!--</Col>-->
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                    <!--<FormItem class="form-list" label="SKU Name" prop="SKUName">-->
+                        <!--<Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>-->
+                    <!--</FormItem>-->
+                    <!--</Col>-->
+                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
+                    <!--<FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">-->
+                        <!--<Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>-->
+                    <!--</FormItem>-->
+                    <!--</Col>-->
+                <!--</Row>-->
+            <!--</Form>-->
         </div>
         <div class="body" :class="{hide:hideBody}">
-            <Form ref="formItem" :model="formItem" :label-width="180">
-                <Row>
-                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
-                        <!--<FormItem class="form-list" label="Category" prop="Category">-->
-                            <!--<drop-down :list="dataList"></drop-down>-->
-                        <!--</FormItem>-->
-                    <!--</Col>-->
-                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
-                        <!--<FormItem class="form-list" label="SKU Name" prop="SKUName">-->
-                            <!--<Input v-model="formItem.SKUName" placeholder="Enter something..."></Input>-->
-                        <!--</FormItem>-->
-                    <!--</Col>-->
-                    <!--<Col :xs="24" :sm="12" :md="8" :lg="8">-->
-                        <!--<FormItem class="form-list" label="Readily Available" prop="ReadilyAvailable">-->
-                            <!--<Input v-model="formItem.ReadilyAvailable" placeholder="Enter something..."></Input>-->
-                        <!--</FormItem>-->
-                    <!--</Col>-->
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Code" prop="SKUCode">
-                            <Input v-model="formItem.SKUCode" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="EXW Price">
-                            <InputNumber :min="1" v-model="formItem.minEXWPrice"></InputNumber>
-                            ~
-                            <InputNumber :min="1" v-model="formItem.maxEXWPrice"></InputNumber>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Vendor SKU Code" prop="VendorSKUCode">
-                            <Input v-model="formItem.VendorSKUCode" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Vendor SKU Name" prop="VendorSKUName">
-                            <Input v-model="formItem.VendorSKUName" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Incoterm Price">
-                            <InputNumber :min="1" v-model="formItem.minIncotermPrice"></InputNumber>
-                            ~
-                            <InputNumber :min="1" v-model="formItem.maxIncotermPrice"></InputNumber>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Materials" prop="SKUMaterials">
-                            <Input v-model="formItem.SKUMaterials" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Country" prop="Country">
-                            <Input v-model="formItem.Country" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Supplier Name" prop="SupplierName">
-                            <Input v-model="formItem.SupplierName" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Package Type" prop="PackageType">
-                            <Input v-model="formItem.PackageType" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Product Package Type" prop="ProductPackageType">
-                            <Input v-model="formItem.ProductPackageType" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Delivery Days" prop="DeliveryDays">
-                            <Input v-model="formItem.DeliveryDays" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="MOQ" prop="MOQ">
-                            <Input v-model="formItem.MOQ" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Description" prop="SKUDescription">
-                            <Input v-model="formItem.SKUDescription" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Vendor SKU Description" prop="VendorSKUDescription">
-                            <Input v-model="formItem.VendorSKUDescription" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                </Row>
-            </Form>
+            <el-form ref="form" :model="form" label-width="180px">
+                <el-row>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="SKU Code">
+                            <el-col :span="15">
+                                <el-input v-model="form.name"></el-input>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="EXW Price">
+                            <el-col :span="11">
+                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0" ></el-input-number>
+                            </el-col>
+                            <el-col class="line" :span="2">-</el-col>
+                            <el-col :span="11">
+                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0"></el-input-number>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Vendor SKU Code">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Vendor SKU Name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Incoterm Price">
+                            <el-col :span="11">
+                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0" ></el-input-number>
+                            </el-col>
+                            <el-col class="line" :span="2">-</el-col>
+                            <el-col :span="11">
+                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0"></el-input-number>
+                            </el-col>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="SKU Materials">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Country">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Supplier Name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Package Type">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Product Package Type">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Delivery Days">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="MOQ">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="SKU Description">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="Vendor SKU Description">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+            </el-form>
         </div>
         <div class="btn-group">
-            <Button @click="search" type="primary" class="search">Search</Button>
-            <Button @click="clear('formItem')">Clear</Button>
-            <Button type="error" @click="$router.push('/product/bookmark')">Bookmark</Button>
+            <el-button @click="search" type="primary">Search</el-button>
+            <el-button @click="clear" type="info" plain>Clear</el-button>
+            <el-button @click="$router.push('/product/bookmark')" type="danger">Bookmark</el-button>
+            <el-button @click="$router.push('/product/compareOverview')" type="danger">Compare</el-button>
         </div>
     </div>
 </template>
 
 <script>
 
-    import {dropDown} from '@/components/index'
+    // import {dropDown} from '@/components/index'
 
     export default {
         name: "sourcing",
         components:{
-            dropDown
+            // dropDown
         },
         props:{
 
@@ -166,6 +190,20 @@
                     SKUDescription:'',
                     VendorSKUDescription:''
                 },
+
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+
+                number:'',
+
 
 
                 dataList:[
@@ -219,15 +257,20 @@
 
             //清除填写的表格数据
             clear(name){
-                this.$refs[name].resetFields();
+                console.log(1)
             },
 
             //搜查
             search(){
                 console.log(this.dataList)
-                // this.$router.push('/product/detail');
-                window.open('http://192.168.51.228:8080/#/product');
+                this.$router.push('/product/detail');
+                // window.open('http://192.168.51.228、:8080/#/product');
             },
+
+
+            handleChange(value) {
+                console.log(value);
+            }
         },
         created(){
 
@@ -255,13 +298,11 @@
         font-size: 18px;
         height: 32px;
         line-height: 32px;
+        color:#666666;
     }
     .title-btn{
         float: right;
         margin-right: 5px;
-    }
-    .title-btn >>> span{
-        color:#118ee9;
     }
 
     .body{

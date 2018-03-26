@@ -1,82 +1,72 @@
 <template>
     <div>
-        <drop-down :list="dropData" />
+        <drop-down :list="dropData" ref="dropDown" />
     </div>
 </template>
 <script>
-    import { dropDown } from '@/components/index';
+    import { 
+        VSimpleTable, 
+        VComplexTable, 
+        dropDown, 
+        Expand, 
+        FilterColumn, 
+        FilterValue, 
+        Upload,
+        UploadDialog,
+        Download,
+        Layout
+    } from '@/components/index';
+
     export default {
+        components: {
+            'v-simple-table':VSimpleTable,
+            'v-complex-table':VComplexTable,
+            'drop-down':dropDown,
+            'expand':Expand,
+            'filter-column':FilterColumn,
+            'filter-value':FilterValue,
+            'upload':Upload,
+            'download':Download,
+            'layout':Layout
+        },
         data(){
             return {
-                dropData:[
-                    {
-                        title: 'parent 1',
-                        expand: true,
-                        selected: true,
-                        children: [
-                            {
-                                title: 'parent 1-1',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-1-1',
-                                        isActive:true,
-                                        disabled: false
-                                    },
-                                    {
-                                        title: 'leaf 1-1-2',
-                                        isActive:true,
-                                        disabled: false
-                                    },
-                                    {
-                                        title: 'leaf 1-1-3',
-                                        isActive:true,
-                                        disabled: false
-                                    },
-                                    {
-                                        title: 'leaf 1-1-4',
-                                        isActive:true,
-                                        disabled: false
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'parent 1-2',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-2-1',
-                                        isActive:true,
-                                        checked: false
-                                    },
-                                    {
-                                        isActive:true,
-                                        title: 'leaf 1-2-2'
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'parent 1-3',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-3-1',
-                                        isActive:true,
-                                        checked: false
-                                    },
-                                    {
-                                        isActive:true,
-                                        title: 'leaf 1-3-2'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+                dropData:[{
+                id: 1,
+                label: '一级 1',
+                children: [{
+                    id: 4,
+                    label: '二级 1-1',
+                    children: [{
+                    id: 9,
+                    label: '三级 1-1-1'
+                    }, {
+                    id: 10,
+                    label: '三级 1-1-2'
+                    }]
+                }]
+                }, {
+                id: 2,
+                label: '一级 2',
+                children: [{
+                    id: 5,
+                    label: '二级 2-1'
+                }, {
+                    id: 6,
+                    label: '二级 2-2'
+                }]
+                }, {
+                id: 3,
+                label: '一级 3',
+                children: [{
+                    id: 7,
+                    label: '二级 3-1'
+                }, {
+                    id: 8,
+                    label: '二级 3-2'
+                }]
+                }],
             }
-        },
-        components: {
-            'drop-down':dropDown
         }
     }
 </script>

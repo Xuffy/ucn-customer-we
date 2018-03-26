@@ -2,7 +2,7 @@
   <div class='uploadDialog'>  
      <div class='address'>
          Address&nbsp :&nbsp 
-         <upload></upload>
+         <upload :accept='image/jpeg' ></upload>
      </div>   
      <download class='download'></download>
      <div class="uploadDialog_text">
@@ -27,7 +27,9 @@
         },
         watch: {},
         created() {},
-        methods: {}
+        methods: {
+
+        }
     }
 
 </script>
@@ -39,7 +41,6 @@
         width: 400px;
         word-wrap: break-word;
         font-size: 13px;
-
     }
 
     .uploadDialog_text {

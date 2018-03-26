@@ -5,9 +5,9 @@
     <div class="main-container" :class="{fullBox:fullBox}">
       <nav-bar></nav-bar>
       <section class="app-main" style="min-height: 100%">
-        <!--<transition name="fade" mode="out-in">-->
+        <transition name="fade" mode="out-in">
           <router-view :key="key"></router-view>
-        <!--</transition>-->
+        </transition>
       </section>
     </div>
 
@@ -68,9 +68,6 @@
   .main-container.fullBox {
     padding-left: 0!important;
   }
-
-
-
 
   .layout{
     border: 1px solid #d7dde4;

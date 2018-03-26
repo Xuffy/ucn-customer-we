@@ -9,40 +9,52 @@
                 <div class="form-wrap">
                     <div class="form item heavy">
                         <label for="Invitation code">Company Name</label>
-                        <Input type="text" placeholder="Input company name" clearable />
+                        <el-input placeholder="Input company name" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Company Type</label>
-                        <Select v-model="company" clearable placeholder="Please select">
-                            <Option v-for="item in SiteSelection" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
+                        <el-select v-model="company" placeholder="Please select">
+                            <el-option
+                                v-for="item in SiteSelection"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Website</label>
-                        <Input type="url" placeholder="Input company website" clearable />
+                        <el-input type="url" placeholder="Input company website" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Country</label>
-                        <Select v-model="Country" clearable placeholder="Please select">
-                            <Option v-for="item in TypeOfCompany" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
+                        <el-select v-model="Country" placeholder="Please select">
+                            <el-option
+                                v-for="item in TypeOfCompany"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Contact Number</label>
-                        <div class="ivu-input-wrapper ivu-input-type">
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Input company name" class="ivu-input">
-                        </div>
+                        <el-input placeholder="Input company name" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Adderss</label>
-                        <Cascader :data="AdderssData" style="width:100%;" placeholder="Please select"></Cascader>
+                        <el-cascader
+                            :options="AdderssData"
+                            v-model="selectedOptions"
+                            @change="handleChange"
+                            />
                     </div>
                 </div>
             </div>
             <div class="bottom-btn">
                 <div class="btn-wrap">
-                    <Button type="primary">Submit</Button>
-                    <Button>Cancel</Button>
+                    <el-button type="primary">Submit</el-button>
+                    <el-button>Cancel</el-button>
                 </div>
             </div>
         </div>
@@ -56,6 +68,7 @@
                 company:'',
                 Country:'',
                 single:false,
+                selectedOptions:[],
                 AdderssData: [{
                     value: 'beijing',
                     label: '北京',
@@ -123,6 +136,11 @@
                         label: 'London'
                     }
                 ],
+            }
+        },
+        methods: {
+            handleChange() {
+
             }
         }
     }

@@ -15,6 +15,7 @@ import lang from 'lib/lang'
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import store from './store';
 
 Vue.use(ElementUI, { size: 'small' });
 // Vue.use(iView, {locale});
@@ -39,6 +40,7 @@ const i18n = new VueI18n({
 
 new Vue({
   el: '#app',
+  store,
   router,
   // i18n,
   template: '<App/>',

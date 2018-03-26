@@ -1,24 +1,28 @@
 <template>
   <div class="messagelist">
-     <div class='list'>
-        <div class='list_item' v-for='item in list'>
-            <p class='list_item_title'>
+     <div class="list">
+        <div class="list_item" v-for="item in list" :key="item.id">
+            <p class="list_item_title">
              <span>{{item.name}}</span>
              <span>{{item.time}}</span>
             </p>
             <p>
                 {{item.content}}
-                <img :src='item.src'/>
+                <img :src="item.src" v-if="item.src">
             </p>          
         </div>     
      </div>
-     <upload 
-       style='display:flex; justify-content: flex-end;margin-top:20px;margin-right:5%;' 
-      :format="['jpg','jpeg','png']"
-     ></upload>
+     <upload class="messagelist_upload"></upload>
      <div class="form">       
-          <textarea class="text_enter" placeholder="Add..." v-model='addtext'></textarea>
-           <Button type="primary" @click='sub'>submit</Button>          
+             <el-input
+                  type="textarea"
+                  :rows="3"
+                  placeholder="Add"
+                  class="text_enter"
+                  v-model="textarea">
+            </el-input>
+<!--          <textarea class="text_enter" placeholder="Add..." v-model='addtext'></textarea>-->
+           <el-button type="primary" @click='sub'>submit</el-button>          
      </div>
   </div>
 </template>
@@ -31,10 +35,15 @@
             upload
         },
         //传送的数据
-        props: ['list'],
+        props: {
+            list: {
+                type: Array,
+                default: []
+            }
+        },
         data() {
             return {
-                addtext: ''
+                textarea: ''
             }
         },
         watch: {
@@ -46,9 +55,9 @@
         methods: {
             //提交文字输入内容 
             sub() {
-                if (this.addtext != '') {
-                    this.$emit('sub', this.addtext)
-                    this.addtext = ''
+                if (this.textarea != '') {
+                    this.$emit('sub', this.textarea)
+                    this.textarea = ''
                 }
 
             }
@@ -98,10 +107,7 @@
 
     .text_enter {
         width: 90%;
-        height: 80px;
         margin: auto;
-        border-radius: 5px;
-        padding-left: 5px
     }
 
     .text_enter::-webkit-input-placeholder {
@@ -113,6 +119,13 @@
         width: 40%;
         margin: auto;
         margin-top: 10px;
+    }
+
+    .messagelist_upload {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        margin-right: 5%;
     }
 
 </style>

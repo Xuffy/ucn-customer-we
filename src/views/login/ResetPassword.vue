@@ -2,14 +2,16 @@
     <div class="input-email">
         <div class="inputBox center">
             <div class="form-input">
-                <label for="Email：">New password:</label><Input v-model="oldPass" placeholder="please input" clearable style="width: 200px" type="password" />
+                <label for="Email：">New password:</label>
+                <el-input v-model="oldPass" type="password" style="width:200px;" placeholder="please input"></el-input>
             </div>
             <div class="form-input">
-                <label for="Email：">Repeat the password：</label><Input v-model="newPass" placeholder="please input" clearable style="width: 200px" type="password" />
+                <label for="Email：">Repeat the password：</label>
+                <el-input v-model="newPass" type="password" style="width:200px;" placeholder="please input"></el-input>
             </div>
         </div>
         <div class="inputBox btn">
-            <Button type="primary" @click="Next">Submit</Button>
+            <el-button type="primary" @click="Next">Submit</el-button>
         </div>
     </div>
 </template>
@@ -27,15 +29,17 @@
             Next() {
                 if(!bFlage) return;
                 bFlage = false;
-                const msg = this.$Message.loading({
-                    content: 'Mail delivery...',
-                    duration: 0
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
                 });
                 setTimeout(() => {
-                    setTimeout(msg, 30);
+                    loading.close();
                     this.$router.push('Finish')
                     bFlage = true;
-                }, 3000)
+                }, 2000);
             }
         }
     }

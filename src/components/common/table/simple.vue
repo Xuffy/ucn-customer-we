@@ -22,7 +22,6 @@
                        width="180">
       </el-table-column>
     </el-table>
-
     <br>
     <el-pagination
       background

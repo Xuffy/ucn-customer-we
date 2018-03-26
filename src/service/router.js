@@ -52,7 +52,7 @@ export const routerMap = [
         {
           path: '',
           component: () => import('../views/product/sourcing/sourcing.vue'),
-          name:'sourcings',
+          name:'sourcing',
         },
         {
           path:'detail',
@@ -61,21 +61,42 @@ export const routerMap = [
         },
         {
           path:'bookmark',
-          component: () => import('../views/product/bookmark/index.vue'),
-          name:'bookmark',
-          children:[
-                {
-                    path:'',
-                    component: () => import('../views/product/bookmark/bookmark.vue'),
-                    name:'',
-                },
-                {
-                    path:'detail',
-                    component: () => import('../views/product/bookmark/detail.vue'),
-                    name:'detail',
-                },
-            ]
+          component: () => import('../views/product/bookmark/bookmark.vue'),
+          name:'bookmark'
         },
+        {
+          path:'bookmarkDetail',
+          component: () => import('../views/product/bookmark/detail.vue'),
+          name:'bookmarkDetail'
+        },
+        {
+          path:'compareOverview',
+          component: () => import('../views/product/compare/overview.vue'),
+          name:'compareOverview'
+        },
+        {
+          path:'compare',
+          component: () => import('../views/product/compare/compare.vue'),
+          name:'compare'
+        },
+
+        // {
+        //   path:'bookmark',
+        //   component: () => import('../views/product/bookmark/index.vue'),
+        //   name:'bookmark',
+        //   children:[
+        //         {
+        //             path:'',
+        //             component: () => import('../views/product/bookmark/bookmark.vue'),
+        //             name:'',
+        //         },
+        //         {
+        //             path:'detail',
+        //             component: () => import('../views/product/bookmark/detail.vue'),
+        //             name:'detail',
+        //         },
+        //     ]
+        // },
       ]
     },
     {
@@ -99,13 +120,24 @@ export const routerMap = [
     {
       path: '/negotiation',
       component: Layout,
-      redirect: '/negotiation',
-      name: 'Negotiation',
+      redirect: '/negotiation/inquiryOverview',
+      name: 'negotiation',
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/negotiation/index.vue')
+          path: 'inquiryOverview',
+          name:'inquiryOverview',
+          component: () => import('../views/negotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'inquiryDetail',
+          component: () => import('../views/negotiation/inquiryDetail')
+        },
+        {
+          path: 'createInquiry',
+          name: 'createInquiry',
+          component: () => import('../views/negotiation/createInquiry')
         }
       ]
     },
@@ -135,19 +167,7 @@ export const routerMap = [
         }
       ]
     },
-    {
-      path: '/logistic',
-      component: Layout,
-      redirect: '/logistic',
-      name: 'Logistic',
-      noDropdown: true,
-      children: [
-        {
-          path: 'index',
-          component: () => import('../views/logistic/index.vue')
-        }
-      ]
-    },
+   
     {
       path: '/payment',
       component: Layout,
@@ -183,7 +203,7 @@ export const routerMap = [
       children: [
         {
           path:'inputEmail',
-          name:'  ',
+          name:'inputEmail',
           hidden: true,
           component: () => import('../views/login/inputEmail')
         },
