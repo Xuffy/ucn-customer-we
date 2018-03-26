@@ -198,14 +198,14 @@ export const routerMap = [
         children: [
             {
                 path: 'index',
-                component: () =>import ('../views/order/index.vue')
+                component: () =>import('../views/order/index.vue')
         },
             {
                 path: 'creatOrder',
-                component: () =>import ('../views/order/creatOrder/creatOrder.vue')
+                component: () =>import('../views/order/creatOrder/creatOrder.vue')
         }, {
                 path: 'poDetail',
-                component: () =>import ('../views/order/poDetail/index.vue')
+                component: () =>import('../views/order/poDetail/index.vue')
         }
       ]
     },
