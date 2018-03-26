@@ -51,7 +51,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
   .main-container {
-    width: 100%;
+    // width: 100%;
     padding-left: 220px;
     padding-top: 70px;
     /*padding-bottom: 50px;*/
@@ -60,9 +60,8 @@
 
   .app-main {
     padding-top: 40px;
-    padding-left: 15px;
-    // padding-left: 15px;
-    padding-right: 15px;
+    //padding-left: 15px;
+    //padding-right: 15px;
   }
 
   .main-container.fullBox {
