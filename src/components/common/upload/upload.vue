@@ -70,7 +70,7 @@
                     duration: 1000
                 });
                 this.loadingStatus = false
-                this.isuploadsuccess = true
+                this.$refs.isuploadsuccess.value = true
             },
             handleProgress(file) {
                 this.loadingStatus = true;

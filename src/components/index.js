@@ -22,6 +22,7 @@ export {
   UploadDialog,
   Download,
   Layout,
+  messageBoard
   messageBoard,
   selectSearch
 }
