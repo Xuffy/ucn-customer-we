@@ -2,11 +2,6 @@
     <div class="compare-overview">
         <div class="title">
             Compare
-            <el-button class="title-btn"
-                       @click="switchDisplay"
-                       type="text">{{btnInfo}}
-            </el-button>
-            <!--<Button  class="title-btn" type="text">{{btnInfo}}</Button>-->
         </div>
     </div>
 </template>

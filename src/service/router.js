@@ -79,6 +79,17 @@ export const routerMap = [
           component: () => import('../views/product/compare/compare.vue'),
           name:'compare'
         },
+        {
+          path:'message',
+          component: () => import('../views/message/message.vue'),
+          name:'message'
+        },
+        {
+          path:'messageManagement',
+          component: () => import('../views/message/messageManagement.vue'),
+          name:'messageManagement'
+        },
+
 
         // {
         //   path:'bookmark',
@@ -100,20 +111,36 @@ export const routerMap = [
       ]
     },
     {
-      path: '/supplier',
-      component: Layout,
-      redirect: '/supplier/picture',
-      name: 'Supplier',
-      children: [
-        {
-          path: 'sourcing',
-          name: 'Sourcing',
-          component: () => import('../views/supplier/sourcing.vue')
+        path: '/supplier',
+        component: Layout,
+        redirect: '/supplier/picture',
+        name: 'Supplier',
+        noDropdown: true,
+        children: [
+            {
+                path: 'sourcing',
+                name: 'Sourcing',
+                component: () =>
+                    import ('../views/supplier/sourcing/sourcing.vue'),
+
         },
-        {
-          path: 'bookmark',
-          name: 'Bookmark',
-          component: () => import('../views/supplier/bookmark.vue')
+            {
+                path: 'bookmark',
+                name: 'Bookmark',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmark.vue')
+        },
+            {
+                path: 'bookmarkDetail',
+                name: 'bookmarkDetail',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        },
+            {
+                path: 'sourcingDetail',
+                name: 'sourcingDetail',
+                component: () =>
+                    import ('../views/supplier/sourcing/sourcingDetail.vue')
         }
       ]
     },
@@ -166,15 +193,25 @@ export const routerMap = [
       
     },
     {
-      path: '/order',
-      component: Layout,
-      redirect: '/order',
-      name: 'Order',
-      noDropdown: true,
-      children: [
-        {
-          path: 'index',
-          component: () => import('../views/order/index.vue')
+        path: '/order',
+        component: Layout,
+        redirect: '/order',
+        name: 'Order',
+        noDropdown: true,
+        children: [
+            {
+                path: 'index',
+                component: () =>
+                    import ('../views/order/index.vue')
+        },
+            {
+                path: 'creatOrder',
+                component: () =>
+                    import ('../views/order/creatOrder/creatOrder.vue')
+        }, {
+                path: 'poDetail',
+                component: () =>
+                    import ('../views/order/poDetail/index.vue')
         }
       ]
     },
@@ -187,8 +224,12 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: () => import('../views/warehouse/index.vue')
-        }
+          component: () => import('../views/warehouse/warehouseOverview.vue')
+        },
+        {
+          path: 'qcDetail',
+          component: () => import('../views/warehouse/qcDetail.vue')
+        },
       ]
     },
    

@@ -148,6 +148,7 @@
             <el-button @click="clear" type="info" plain>Clear</el-button>
             <el-button @click="$router.push('/product/bookmark')" type="danger">Bookmark</el-button>
             <el-button @click="$router.push('/product/compareOverview')" type="danger">Compare</el-button>
+            <el-button @click="$router.push('/product/message')" type="success">Message</el-button>
         </div>
     </div>
 </template>
