@@ -165,8 +165,32 @@ export const routerMap = [
           path: 'createInquiry',
           name: 'createInquiry',
           component: () => import('../views/negotiation/createInquiry')
+        },
+        {
+          path: 'compareOverview',
+          name: 'compareOverview',
+          component: () => import('../views/negotiation/compareOverview')
+        },
+        {
+          path: 'compare',
+          name: 'compare',
+          component: () => import('../views/negotiation/compare')
         }
       ]
+    },
+    {
+      path: '/logistic',
+      name: 'logistic',
+      component: Layout,
+      redirect: '/logistic/logisticPlanOverview',
+      children: [
+        {
+          path: 'logisticPlanOverview',
+          name: 'logisticPlanOverview',
+          component: () => import('../views/logistic/logisticPlanOverview')
+        }
+      ]
+      
     },
     {
         path: '/order',
