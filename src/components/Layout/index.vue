@@ -61,6 +61,7 @@
   .app-main {
     padding-top: 40px;
     padding-left: 15px;
+    // padding-left: 15px;
     padding-right: 15px;
   }
 

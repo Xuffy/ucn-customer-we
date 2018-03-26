@@ -6,34 +6,30 @@
                 <div class="form-wrap">
                     <div class="form item heavy">
                         <label for="Invitation code">Invitation code</label>
-                        <div class="ivu-input-wrapper ivu-input-type"> 
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Please input your Invitation code" class="ivu-input">
-                        </div>
+                        <el-input placeholder="Please input your Invitation code" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <router-link to="/getInvitationCode">Go Submit a Request>></router-link>
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">User Name</label>
-                        <Input type="text" placeholder="Input your username" clearable />
+                        <el-input placeholder="nput your username" type="text" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Email</label>
-                        <Input type="email" placeholder="xxxx@xxx.com" clearable />
+                        <el-input placeholder="xxxx@xxx.com" type="email" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Password</label>
-                        <Input type="password" placeholder="Input your password" clearable />
+                        <el-input placeholder="Input your password" type="password" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code">tel</label>
-                        <div class="ivu-input-wrapper ivu-input-type">
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Please input your contact number" class="ivu-input">
-                        </div>
+                        <el-input placeholder="IPlease input your contact number" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code"></label>
-                        <Input type="password" placeholder="Input your password again" clearable />
+                        <el-input placeholder="Input your password again" type="password" clearable style="max-width:200px" />
                     </div>
                 </div>
             </div>
@@ -42,43 +38,55 @@
                 <div class="form-wrap">
                     <div class="form item heavy">
                         <label for="Invitation code">Company Name</label>
-                        <Input type="text" placeholder="Input company name" clearable />
+                        <el-input placeholder="Input company name" type="text" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Company Type</label>
-                        <Select v-model="company" clearable placeholder="Please select">
-                            <Option v-for="item in SiteSelection" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
+                        <el-select v-model="company" placeholder="Please select">
+                            <el-option
+                                v-for="item in SiteSelection"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Website</label>
-                        <Input type="url" placeholder="Input company website" clearable />
+                        <el-input placeholder="Input company website" type="url" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Country</label>
-                        <Select v-model="Country" clearable placeholder="Please select">
-                            <Option v-for="item in TypeOfCompany" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
+                        <el-select v-model="Country" placeholder="Please select">
+                            <el-option
+                                v-for="item in TypeOfCompany"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
                     </div>
                     <div class="form item heavy">
                         <label for="Invitation code">Contact Number</label>
-                        <div class="ivu-input-wrapper ivu-input-type">
-                            <input autocomplete="off" spellcheck="false" type="number" placeholder="Input company name" class="ivu-input">
-                        </div>
+                        <el-input placeholder="Input company name" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
                         <label for="Invitation code">Adderss</label>
-                        <Cascader :data="AdderssData" style="width:100%;" placeholder="Please select"></Cascader>
+                        <el-cascader
+                            :options="AdderssData"
+                            v-model="selectedOptions"
+                            @change="handleChange"
+                            />
                     </div>
                 </div>
             </div>
             <div class="bottom-btn">
                 <div class="choice">
-                    <Checkbox v-model="single">I have readed "xxx"</Checkbox>
+                    <el-checkbox v-model="single">I have readed "xxx"</el-checkbox>
                 </div>
                 <div class="btn-wrap">
-                    <Button type="primary">ok</Button>
-                    <Button>Cancel</Button>
+                    <el-button type="primary">ok</el-button>
+                    <el-button>Cancel</el-button>
                 </div>
             </div>
         </div>
@@ -86,6 +94,7 @@
 </template>
 <script>
     export default {
+        name:'signUp',
         data() {
             return {
                 company:'',
@@ -158,9 +167,14 @@
                         label: 'London'
                     }
                 ],
+                selectedOptions: []
             }
         },
-        name:'signUp'
+        methods: {
+            handleChange() {
+
+            }
+        }
     }
 </script>
 <style lang="less" scoped>
@@ -196,6 +210,12 @@
                         margin-top:20px;
                         display:flex;
                         align-items: center;
+                        a {
+                            color:#3182bd;
+                            &:hover {
+                                opacity: .8;
+                            }
+                        }
                         &.heavy {
                             label {
                                 position: relative;
