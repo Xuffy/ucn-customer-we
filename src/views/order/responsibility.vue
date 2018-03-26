@@ -1,12 +1,12 @@
 <template>
-  <div class="orderOverview">
+  <div class="responsibility">
     order page
   </div>
 </template>
 
 <script>
     export default {
-        name: 'order',
+        name: 'responsibility',
         data() {
             return {}
         },

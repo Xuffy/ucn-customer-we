@@ -1,12 +1,12 @@
 <template>
-  <div class="orderOverview">
-    order page
+  <div class="poDetail">
+   poDetail
   </div>
 </template>
 
 <script>
     export default {
-        name: 'order',
+        name: 'poDetail',
         data() {
             return {}
         },

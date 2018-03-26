@@ -1,7 +1,7 @@
 <template>
-    <div class="SupplierBookmark">
+    <div class="SupplierSourcing">
         <div class="title">
-            Supplier Bookmark
+            Supplier Sourcing
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
@@ -58,25 +58,22 @@
              <div class="btnline">
                   <el-button  type="primary" >Create Inquiry</el-button>
                   <el-button  type="primary" >Create Order</el-button>
-                  <el-button  type="primary" >Compare</el-button>             
+                  <el-button  type="primary" >Compare</el-button>
+                  <el-button  type="primary" >Add to Bookmark</el-button>
                   <el-button  type="primary" >Download the Selected Supplier</el-button>
-<!--                  remove按钮-->
-                   <el-button  type="info" :disabled='disabled' >Remove</el-button>
               </div>  
               <div>
                   这块表格
-                  <upload></upload>
               </div>          
         </div>
     </div>
 </template>
 
 <script>
-    import upload from '@/components/common/messageBoard/index.vue'
     export default {
         name: "SupplierSourcing",
         components: {
-            upload
+
         },
         props: {
 
@@ -95,8 +92,6 @@
                     SkuCode: '',
                     VendorSkuCode: '',
                 },
-                //                remove
-                disabled: true,
             }
         },
         methods: {
@@ -125,7 +120,7 @@
                 } else {
                     this.btnInfo = 'Hide the Advance';
                 }
-            },
+            }
         }
     }
 
@@ -141,6 +136,7 @@
         font-size: 18px;
         height: 32px;
         line-height: 32px;
+        color: #666666;
     }
 
     .title-btn {

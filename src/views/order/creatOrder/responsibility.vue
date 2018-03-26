@@ -1,14 +1,16 @@
 <template>
-  <div class="orderOverview">
-    order page
+  <div class="responsibility">
+   poDetail
   </div>
 </template>
 
 <script>
     export default {
-        name: 'order',
+        name: 'responsibility',
         data() {
-            return {}
+            return {
+                
+            }
         },
         created() {},
         methods: {}

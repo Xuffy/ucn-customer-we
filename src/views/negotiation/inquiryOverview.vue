@@ -90,6 +90,8 @@
             height: 60px;
             align-items: center;
             justify-content:space-between;
+            padding:0 15px;
+            box-sizing: border-box;
             .btn-wrap {
                 display:flex;
                 align-items: center;
@@ -121,10 +123,10 @@
             }
         }
         .fn {
-            padding-top:20px;
             display:flex;
             justify-content:space-between;
-            padding-bottom:10px;
+            padding:10px 15px;
+            box-sizing: border-box;
             .viewBy {
                 display:flex;
                 align-items: center;

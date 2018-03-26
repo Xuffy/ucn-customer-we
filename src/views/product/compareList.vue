@@ -1,22 +1,45 @@
 <template>
-    <div class="compare-list">
-        <i class="el-icon-d-arrow-right"></i>
+    <div v-if="config.showCompareList" class="compare-list">
+        <i @click="hideList" class="el-icon-d-arrow-right"></i>
         <el-tag
                 v-for="tag in tags"
                 :key="tag.name"
                 closable
-                :type="tag.type">
+                :type="tag.type"
+                @close="handleClose(tag)">
             {{tag.name}}
         </el-tag>
-        <el-button class="btn" type="primary" size="mini">Go Compare</el-button>
-        <!--<Button class="btn" type="primary" size="small">Go Compare</Button>-->
-        <!--<i class="ivu-icon ivu-icon-checkmark"></i>-->
+        <el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>
     </div>
 </template>
 
 <script>
+
+
+    /** CompareList
+     *  author LiuSx
+     *  Time 2018-03-26
+     *  @param { config }  -组件配置
+     *
+     *  {
+     *      showCompareList:false,          //是否显示对比列表，默认为false
+     *  }
+     *
+     *  @param { tags }  -对比列表的内容
+     *
+     * */
+
+
     export default {
         name: "compare-list",
+        props:{
+            config:{
+                type:Object,
+                default:{
+                    showCompareList:false
+                }
+            }
+        },
         data(){
             return{
                 show:true,
@@ -30,7 +53,19 @@
             }
         },
         methods:{
+            hideList(){
+                this.config.showCompareList=false;
+            },
 
+            //前往比较页面开始比较
+            startCompare(){
+                this.$router.push('/product/compare');
+            },
+
+            //删除所选中的项
+            handleClose(tag){
+                this.tags.splice(this.tags.indexOf(tag), 1);
+            },
         }
     }
 </script>
@@ -59,7 +94,7 @@
     /*}*/
     .compare-list .btn{
         float: right;
-        margin-top: 3px;
+        margin-top: 4px;
         margin-right: 20px;
     }
     .compare-list .el-tag{
