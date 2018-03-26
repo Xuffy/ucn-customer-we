@@ -1,10 +1,11 @@
 <template>
     <div class="input-email">
         <div class="inputBox center">
-            <label for="Email：">Email：</label><Input v-model="val" type="email" placeholder="Please input the email" clearable style="width: 200px" />
+            <label for="Email：">Email：</label>
+            <el-input v-model="val" type="email" placeholder="Please input the email" style="width: 200px"></el-input>
         </div>
         <div class="inputBox">
-            <Button type="primary" @click="Next">submit</Button>
+            <el-button type="primary" @click="Next">submit</el-button>
         </div>
     </div>
 </template>

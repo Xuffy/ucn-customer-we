@@ -1,7 +1,7 @@
 <template>
     <div class="input-email">
         <div class="inputBox center">
-            <label for="icon"><Icon type="checkmark-circled"></Icon></label>Dear xxxxx，<span v-if="$route.name === 'Identify'">we ahave sent you an email , pleasr follow the instruction to reset your password</span><span v-else>you have reset your password, please remember your new password</span>
+            <label for="icon"><i class="el-icon-success"></i></label>Dear xxxxx，<span v-if="$route.name === 'Identify'">we ahave sent you an email , pleasr follow the instruction to reset your password</span><span v-else>you have reset your password, please remember your new password</span>
         </div>
         <div class="inputBox">
             <button @click="sendOut" v-if="$route.name === 'Identify'">Re - send mail</button>
@@ -15,23 +15,24 @@
         name: 'inputEmail',
         data() {
             return {
-                val:''
+                val:'',
             }
         },
         methods: {
             sendOut() {
                 if(!bFlage) return;
                 bFlage = false;
-                const msg = this.$Message.loading({
-                    content: 'Mail delivery...',
-                    duration: 0
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
                 });
                 setTimeout(() => {
-                    this.$Message.success('Verification success!');
-                    setTimeout(msg, 30);
-                    this.$router.push('ResetPassword');
+                    this.$router.push('ResetPassword')
+                    loading.close();
                     bFlage = true;
-                }, 3000)
+                }, 2000);
             }
         }
     }
@@ -55,7 +56,7 @@
                     font-size:25px;
                 }
             }
-            button {
+            button, a {
                 border:none;
                 background:none;
                 color:#2d8cf0;

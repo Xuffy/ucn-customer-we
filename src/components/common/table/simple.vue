@@ -1,8 +1,7 @@
 <template>
   <div class="ucn-table">
     <Row>
-      <Col span="16">
-      12</Col>
+      <Col span="16">12</Col>
       <Col span="8" style="text-align: right;cursor: pointer">
       <v-filter-colum></v-filter-colum>
       </Col>
