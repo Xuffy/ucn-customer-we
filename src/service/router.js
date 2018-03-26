@@ -52,7 +52,7 @@ export const routerMap = [
         {
           path: '',
           component: () => import('../views/product/sourcing/sourcing.vue'),
-          name:'sourcings',
+          name:'sourcing',
         },
         {
           path:'detail',
@@ -61,21 +61,42 @@ export const routerMap = [
         },
         {
           path:'bookmark',
-          component: () => import('../views/product/bookmark/index.vue'),
-          name:'bookmark',
-          children:[
-                {
-                    path:'',
-                    component: () => import('../views/product/bookmark/bookmark.vue'),
-                    name:'',
-                },
-                {
-                    path:'detail',
-                    component: () => import('../views/product/bookmark/detail.vue'),
-                    name:'detail',
-                },
-            ]
+          component: () => import('../views/product/bookmark/bookmark.vue'),
+          name:'bookmark'
         },
+        {
+          path:'bookmarkDetail',
+          component: () => import('../views/product/bookmark/detail.vue'),
+          name:'bookmarkDetail'
+        },
+        {
+          path:'compareOverview',
+          component: () => import('../views/product/compare/overview.vue'),
+          name:'compareOverview'
+        },
+        {
+          path:'compare',
+          component: () => import('../views/product/compare/compare.vue'),
+          name:'compare'
+        },
+
+        // {
+        //   path:'bookmark',
+        //   component: () => import('../views/product/bookmark/index.vue'),
+        //   name:'bookmark',
+        //   children:[
+        //         {
+        //             path:'',
+        //             component: () => import('../views/product/bookmark/bookmark.vue'),
+        //             name:'',
+        //         },
+        //         {
+        //             path:'detail',
+        //             component: () => import('../views/product/bookmark/detail.vue'),
+        //             name:'detail',
+        //         },
+        //     ]
+        // },
       ]
     },
     {

@@ -1,18 +1,18 @@
 <template>
   <div class='upload'>
-    <Upload action=""
-            :max-size="maxsize"  
-            :format="format"
-            :on-exceeded-size="handleMaxSize"
-            :on-format-error="handleFormatError"
-            :on-success="handleSuccess"
-            :show-upload-list="uploadList"
-            :on-progress='handleProgress'
-            :on-error='handleError'
-            :before-upload='handelBefore'
+    <el-upload 
+             :action="action" 
+             :accept="accept"
+             :maxsize='maxsize'  
+             :on-progress='handleProgress'
+             :on-success="handleSuccess"
+             :on-error='handleError'
+             :show-file-list="uploadList"              
+             :before-upload='handelBefore'
             >
-        <Button type="ghost" icon="android-upload"  :loading="loadingStatus">{{ loadingStatus ? 'Uploading' : 'Upload files' }}</Button>
-    </Upload>  
+        <el-button size="small" type="primary" :loading="loadingStatus">
+        <i class="el-icon-upload2"></i>{{ loadingStatus ? 'Uploading' : 'Upload files' }}</el-button>
+    </el-upload>  
   </div>
 </template>
 
@@ -25,15 +25,16 @@
                 type: Number,
                 default: 2048
             },
-            //格式
-            format: {
-                type: [Array, String]
+            //格式 (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet xlsl,image/jpeg img)
+            accept: {
+                type: String,
+                default: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg'
             },
-            //文件地址
+            // 文件地址
             action: {
                 type: String,
-                default: '//jsonplaceholder.typicode.com/posts/'
-            }
+                default: 'https://jsonplaceholder.typicode.com/posts/'
+            },
         },
         components: {
 
@@ -42,46 +43,48 @@
             return {
                 uploadList: false,
                 loadingStatus: false,
-                fileName: ''
+                fileName: '',
+                isuploadsuccess: false //是否上传成功
             }
         },
         created() {
 
         },
         methods: {
-            handleMaxSize(file) {
-                this.$Notice.warning({
-                    title: 'Exceeding file size limit',
-                    desc: 'File  ' + file.name + ' is too large, no more than ' + this.maxsize
-                });
-            },
-            handleFormatError(file) {
-                this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-                });
+            handelBefore(file) {
+                this.fileName = file.name
+                const isType = this.accept.indexOf(file.type) != -1;
+                const isSize = file.size / 1024 / 1024 < this.maxsize;
+                if (!isType) {
+                    this.$message.error('上传格式不对!');
+                }
+                if (!isSize) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isType && isSize;
             },
             handleSuccess() {
-                this.$Notice.success({
+                this.$notify.success({
                     title: 'success',
-                    desc: 'File format of ' + this.fileName + ' is success'
+                    message: 'File format of ' + this.fileName + ' is success',
+                    duration: 1000
                 });
                 this.loadingStatus = false
+                this.isuploadsuccess = true
             },
             handleProgress(file) {
                 this.loadingStatus = true;
             },
-            handelBefore(file) {
-                this.fileName = file.name
-            },
             handleError(file) {
-                this.$Notice.warning({
+                this.$notify.warning({
                     title: 'failed',
-                    desc: 'File format of ' + this.fileName + ' is failed'
+                    message: 'File format of ' + this.fileName + ' is failed',
+                    duration: 1000
                 });
                 this.loadingStatus = false
             },
-        }
+        },
+        mounted() {},
     }
 
 </script>

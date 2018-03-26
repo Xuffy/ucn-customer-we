@@ -1,79 +1,82 @@
 <template>
-    <div class="SuPPlierBookmark">
+    <div class="SupplierBookmark">
         <div class="title">
-            Supplier Sourcing
-            <Button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</Button>
+            Supplier Bookmark
+            <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
         <div class="body" :class="{hide:hideBody}">
-            <Form ref="formItem" :model="formItem" :label-width="180">
-                <Row>
-                      <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Sku Name" prop="SkuName">
-                            <Input v-model="formItem.SkuName" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
+            <el-form ref="formItem" :model="formItem" label-width="140px">
+                <el-row>
+                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="Sku Name" prop="SkuName">
+                            <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                     </el-col>
 <!--                    下拉选择Category-->
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Category" prop="Category">
-                            <Input v-model="formItem.Category" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="Category" prop="Category">
+                            <el-input v-model="formItem.Category" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
 <!--                    下拉选择SupplierType-->
-                  <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Supplier Type" prop="SupplierType">
-                            <Input v-model="formItem.SupplierType" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                      <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Business Scope" prop="businessScope">
-                            <Input v-model="formItem.businessScope" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Name" prop="skuName">
-                            <Input v-model="formItem.skuName" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="SKU Code" prop="SKUCode">
-                            <Input v-model="formItem.SKUCode" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="8">
-                        <FormItem class="form-list" label="Vendor SKU Code" prop="VendorSkuCode">
-                            <Input v-model="formItem.VendorSkuCode" placeholder="Enter something..."></Input>
-                        </FormItem>
-                    </Col>
-                </Row>
-            </Form>
+                  <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="Supplier Type" prop="SupplierType">
+                            <el-input v-model="formItem.SupplierType" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
+                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="Business Scope" prop="businessScope">
+                            <el-input v-model="formItem.businessScope" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="SKU Name" prop="skuName">
+                            <el-input v-model="formItem.skuName" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="SKU Code" prop="SKUCode">
+                            <el-input v-model="formItem.SKUCode" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                        <el-form-item class="form-list" label="Vendor SKU Code" prop="VendorSkuCode">
+                            <el-input v-model="formItem.VendorSkuCode" placeholder="Enter something..."></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
         <div class="btn-group">
-            <Button @click="search" type="primary" class="search">Search</Button>
-            <Button @click="clear('formItem')">Clear</Button>
+            <el-button @click="search" type="primary" class="search">Search</el-button>
+            <el-button @click="clear('formItem')">Clear</el-button>
         </div>
 <!--      搜索结果  -->
         <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <Button  type="primary" >Create Inquiry</Button>
-                  <Button  type="primary" >Create Order</Button>
-                  <Button  type="primary" >Compare</Button>
-                  <Button  type="primary" >Download the Selected Supplier</Button>
-                  <Button  type="primary" :disabled='disabled' >Remove</Button>
+                  <el-button  type="primary" >Create Inquiry</el-button>
+                  <el-button  type="primary" >Create Order</el-button>
+                  <el-button  type="primary" >Compare</el-button>             
+                  <el-button  type="primary" >Download the Selected Supplier</el-button>
+<!--                  remove按钮-->
+                   <el-button  type="info" :disabled='disabled' >Remove</el-button>
               </div>  
               <div>
                   这块表格
+                  <upload></upload>
               </div>          
         </div>
     </div>
 </template>
 
 <script>
+    import upload from '@/components/common/messageBoard/index.vue'
     export default {
-        name: "SuPPlierBookmark",
+        name: "SupplierSourcing",
         components: {
-
+            upload
         },
         props: {
 
@@ -92,7 +95,8 @@
                     SkuCode: '',
                     VendorSkuCode: '',
                 },
-                disabled: true //切换remove按钮disable状态
+                //                remove
+                disabled: true,
             }
         },
         methods: {
@@ -110,7 +114,6 @@
             search() {
                 this.$router.push('/product/detail');
             },
-
         },
         created() {
 
@@ -122,14 +125,14 @@
                 } else {
                     this.btnInfo = 'Hide the Advance';
                 }
-            }
+            },
         }
     }
 
 </script>
 
 <style scoped>
-    .SuPPlierBookmark {
+    .SupplierSourcing {
         padding-right: 20px;
     }
 
@@ -172,6 +175,10 @@
         margin-bottom: 10px;
     }
 
+    .el-input {
+        /*        width:200px;*/
+    }
+
     .btn-group {
         text-align: center;
         margin-top: 10px;
@@ -187,7 +194,7 @@
         border-top: 1px solid black;
     }
 
-    .btnline button {
+    .btnline .el-button {
         margin-right: 8px;
         margin-top: 20px;
     }
