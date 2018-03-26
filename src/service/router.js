@@ -101,11 +101,14 @@ export const routerMap = [
       component: Layout,
       redirect: '/negotiation',
       name: 'Negotiation',
+      redirect: '/negotiation/inquiryOverview',
+      name: 'negotiation',
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/negotiation/index.vue')
+          path: 'inquiryOverview',
+          name:'inquiryOverview',
+          component: () => import('../views/negotiation/inquiryOverview')
         }
       ]
     },
