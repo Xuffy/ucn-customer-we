@@ -1,18 +1,18 @@
 <template>
   <div class="messagelist">
-     <div class='list'>
-        <div class='list_item' v-for='item in list'>
-            <p class='list_item_title'>
+     <div class="list">
+        <div class="list_item" v-for="item in list" :key="item.id">
+            <p class="list_item_title">
              <span>{{item.name}}</span>
              <span>{{item.time}}</span>
             </p>
             <p>
                 {{item.content}}
-                <img :src='item.src'/>
+                <img :src="item.src" v-if="item.src">
             </p>          
         </div>     
      </div>
-     <upload class='messagelist_upload'></upload>
+     <upload class="messagelist_upload"></upload>
      <div class="form">       
              <el-input
                   type="textarea"
@@ -35,7 +35,12 @@
             upload
         },
         //传送的数据
-        props: ['list'],
+        props: {
+            list: {
+                type: Array,
+                default: []
+            }
+        },
         data() {
             return {
                 textarea: ''

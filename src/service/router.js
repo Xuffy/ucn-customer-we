@@ -120,8 +120,6 @@ export const routerMap = [
     {
       path: '/negotiation',
       component: Layout,
-      redirect: '/negotiation',
-      name: 'Negotiation',
       redirect: '/negotiation/inquiryOverview',
       name: 'negotiation',
       noDropdown: true,
@@ -130,6 +128,16 @@ export const routerMap = [
           path: 'inquiryOverview',
           name:'inquiryOverview',
           component: () => import('../views/negotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'inquiryDetail',
+          component: () => import('../views/negotiation/inquiryDetail')
+        },
+        {
+          path: 'createInquiry',
+          name: 'createInquiry',
+          component: () => import('../views/negotiation/createInquiry')
         }
       ]
     },
@@ -159,19 +167,7 @@ export const routerMap = [
         }
       ]
     },
-    {
-      path: '/logistic',
-      component: Layout,
-      redirect: '/logistic',
-      name: 'Logistic',
-      noDropdown: true,
-      children: [
-        {
-          path: 'index',
-          component: () => import('../views/logistic/index.vue')
-        }
-      ]
-    },
+   
     {
       path: '/payment',
       component: Layout,

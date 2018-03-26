@@ -8,6 +8,7 @@ import Upload from './common/upload/upload';
 import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
+import messageBoard from './common/messageBoard/index';
 
 export {
   VSimpleTable,
@@ -20,4 +21,5 @@ export {
   UploadDialog,
   Download,
   Layout,
+  messageBoard
 }
