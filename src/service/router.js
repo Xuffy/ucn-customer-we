@@ -111,20 +111,36 @@ export const routerMap = [
       ]
     },
     {
-      path: '/supplier',
-      component: Layout,
-      redirect: '/supplier/picture',
-      name: 'Supplier',
-      children: [
-        {
-          path: 'sourcing',
-          name: 'Sourcing',
-          component: () => import('../views/supplier/sourcing.vue')
+        path: '/supplier',
+        component: Layout,
+        redirect: '/supplier/picture',
+        name: 'Supplier',
+        noDropdown: true,
+        children: [
+            {
+                path: 'sourcing',
+                name: 'Sourcing',
+                component: () =>
+                    import ('../views/supplier/sourcing/sourcing.vue'),
+
         },
-        {
-          path: 'bookmark',
-          name: 'Bookmark',
-          component: () => import('../views/supplier/bookmark.vue')
+            {
+                path: 'bookmark',
+                name: 'Bookmark',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmark.vue')
+        },
+            {
+                path: 'bookmarkDetail',
+                name: 'bookmarkDetail',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        },
+            {
+                path: 'sourcingDetail',
+                name: 'sourcingDetail',
+                component: () =>
+                    import ('../views/supplier/sourcing/sourcingDetail.vue')
         }
       ]
     },
@@ -153,15 +169,25 @@ export const routerMap = [
       ]
     },
     {
-      path: '/order',
-      component: Layout,
-      redirect: '/order',
-      name: 'Order',
-      noDropdown: true,
-      children: [
-        {
-          path: 'index',
-          component: () => import('../views/order/index.vue')
+        path: '/order',
+        component: Layout,
+        redirect: '/order',
+        name: 'Order',
+        noDropdown: true,
+        children: [
+            {
+                path: 'index',
+                component: () =>
+                    import ('../views/order/index.vue')
+        },
+            {
+                path: 'creatOrder',
+                component: () =>
+                    import ('../views/order/creatOrder/creatOrder.vue')
+        }, {
+                path: 'poDetail',
+                component: () =>
+                    import ('../views/order/poDetail/index.vue')
         }
       ]
     },
