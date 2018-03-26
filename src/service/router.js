@@ -51,17 +51,17 @@ export const routerMap = [
       children: [
         {
           path: '',
-          component: () => import('../views/product/sourcing/sourcing.vue'),
+          component: () => import('../views/product/sourcing/sourcing'),
           name:'sourcing',
         },
         {
           path:'detail',
-          component: () => import('../views/product/sourcing/detail.vue'),
+          component: () => import('../views/product/sourcing/detail'),
           name:'detail'
         },
         {
           path:'bookmark',
-          component: () => import('../views/product/bookmark/bookmark.vue'),
+          component: () => import('../views/product/bookmark/bookmark'),
           name:'bookmark'
         },
         {
@@ -120,8 +120,7 @@ export const routerMap = [
             {
                 path: 'sourcing',
                 name: 'Sourcing',
-                component: () =>
-                    import ('../views/supplier/sourcing/sourcing.vue'),
+                component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
 
         },
             {
@@ -133,14 +132,12 @@ export const routerMap = [
             {
                 path: 'bookmarkDetail',
                 name: 'bookmarkDetail',
-                component: () =>
-                    import ('../views/supplier/bookmark/bookmarkDetail.vue')
+                component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
             {
                 path: 'sourcingDetail',
                 name: 'sourcingDetail',
-                component: () =>
-                    import ('../views/supplier/sourcing/sourcingDetail.vue')
+                component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
         }
       ]
     },
@@ -201,17 +198,14 @@ export const routerMap = [
         children: [
             {
                 path: 'index',
-                component: () =>
-                    import ('../views/order/index.vue')
+                component: () =>import ('../views/order/index.vue')
         },
             {
                 path: 'creatOrder',
-                component: () =>
-                    import ('../views/order/creatOrder/creatOrder.vue')
+                component: () =>import ('../views/order/creatOrder/creatOrder.vue')
         }, {
                 path: 'poDetail',
-                component: () =>
-                    import ('../views/order/poDetail/index.vue')
+                component: () =>import ('../views/order/poDetail/index.vue')
         }
       ]
     },

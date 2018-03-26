@@ -10,7 +10,8 @@
                     :value="item.id" />
                 </el-select>
             </div>
-            <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="max-width:150px;" @change="inputChange" @keyup="inputEnter" />
+            <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="max-width:150px;" @change="inputChange" @keyup="inputEnter"
+            @keyup.enter.native="inputEnter" />
             <div class="set">
                 <i class="el-icon-setting"></i>
             </div>
