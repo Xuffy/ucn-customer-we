@@ -1,31 +1,6 @@
 <template>
   <section class="filter-value">
-
-    <el-popover
-      popper-class="filter-value-popper"
-      placement="bottom"
-      trigger="click">
-      <i class="el-icon-circle-plus-outline" slot="reference">列名</i>
-
-      <el-checkbox-group v-model="sortType" size="mini" @change="changeSortType">
-        <el-checkbox-button label="1">升序</el-checkbox-button>
-        <el-checkbox-button label="2">降序</el-checkbox-button>
-      </el-checkbox-group>
-
-      <el-input placeholder="请输入内容" size="mini"></el-input>
-
-      <div class="content-box">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-        <br/>
-
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox class="checkbox-item" v-for="city in cities" :label="city" :key="city"
-                       style="">{{city}}
-          </el-checkbox>
-        </el-checkbox-group>
-      </div>
-    </el-popover>
-    <!--<Poptip placement="bottom" style="width: 100%">
+    <Poptip placement="bottom" style="width: 100%">
       <p class="title">name &nbsp;
         <Icon type="navicon-round" style="vertical-align: middle;font-size: 14px"></Icon>
       </p>
@@ -108,7 +83,7 @@
           <br>
         </CheckboxGroup>
       </div>
-    </Poptip>-->
+    </Poptip>
   </section>
 </template>
 
@@ -116,33 +91,43 @@
 
   export default {
     name: 'VFilterValue',
-    props: {},
     data() {
       return {
-        sortType: [],
+        indeterminate: true,
         checkAll: false,
-        checkedCities: ['上海', '北京'],
-        cities: ['上海', '北京', '广州', '深圳'],
-        isIndeterminate: true
+        checkAllGroup: [],
+        sortType: ''
       }
     },
     watch: {},
     created() {
     },
     methods: {
-      changeSortType(val) {
-        if (val.length > 1) {
-          val.shift();
+      handleCheckAll() {
+        if (this.indeterminate) {
+          this.checkAll = false;
+        } else {
+          this.checkAll = !this.checkAll;
+        }
+        this.indeterminate = false;
+
+        if (this.checkAll) {
+          this.checkAllGroup = ['香蕉', '苹果', '西瓜'];
+        } else {
+          this.checkAllGroup = [];
         }
       },
-      handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      checkAllGroupChange(data) {
+        if (data.length === 3) {
+          this.indeterminate = false;
+          this.checkAll = true;
+        } else if (data.length > 0) {
+          this.indeterminate = true;
+          this.checkAll = false;
+        } else {
+          this.indeterminate = false;
+          this.checkAll = false;
+        }
       }
     }
   }
@@ -150,35 +135,41 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .checkbox-item {
-    display: block;
-    margin-left: 0;
-    margin-top: 5px;
+  .content-box {
+    padding: 10px;
+    max-height: 300px;
   }
 
-  .content-box {
-    margin-top: 10px;
+  .checkbox-box {
+    border-bottom: 1px solid #e9e9e9;
+    padding-bottom: 5px;
+    padding-top: 5px;
   }
+
+  .sort {
+    /*font-size: 14px;*/
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .sort.active {
+    color: #2d8cf0;
+  }
+
+  .sort:first-child {
+    border-right: solid 1px #CCCCCC;
+  }
+
+  .filter-value {
+    text-align: left;
+  }
+
 </style>
 
 <style>
-
-  .filter-value-popper .el-checkbox__label {
-    font-size: 12px;
-
-  }
-
-  .filter-value-popper .el-checkbox-button__inner {
-    border: none;
-    border-color: inherit!important;
-    border-left: none !important;
-  }
-
-  .filter-value-popper .el-checkbox-button.is-checked .el-checkbox-button__inner {
-    background-color: inherit;
-    color: #409EFF;
-  }
-  .filter-value-popper .el-checkbox-button, .el-checkbox-button__inner{
-    width: 50%;
+  .filter-value .ivu-poptip-rel{
+    text-align: center;
+    width: 100%
   }
 </style>

@@ -1,23 +1,15 @@
 <template>
   <section class="filter-column">
-
-    <el-popover
-      placement="bottom-end"
-      trigger="click">
-      <i slot="reference" class="el-icon-setting">Set Filed</i>
-      <el-input v-model="filterText" placeholder="请输入内容" size="mini"></el-input>
-      <el-checkbox v-model="checkAll">全选</el-checkbox>
-      <el-tree
-        show-checkbox
-        default-expand-all
-        class="filter-tree"
-        node-key="id"
-        :data="dataList"
-        :props="{children: 'children',label: 'label'}"
-        :filter-node-method="filterNode"
-        ref="columnTree">
-      </el-tree>
-    </el-popover>
+    <Poptip placement="bottom-end" style="text-align: left">
+      <p class="title">
+        Set Filed&nbsp;<Icon type="funnel"></Icon>
+      </p>
+      <div slot="content" class="content-box">
+        <Input placeholder="Please select" clearable></Input><br>
+        <!--<Checkbox :value="checkAll" @click.prevent.native="changeCheck">全选</Checkbox>-->
+        <Tree :data="column" show-checkbox></Tree>
+      </div>
+    </Poptip>
   </section>
 </template>
 
@@ -28,60 +20,44 @@
     data() {
       return {
         checkAll: false,
-        filterText: '',
-        dataList: [{
-          id: 1,
-          label: '一级 1',
-          children: [{
-            id: 4,
-            label: '二级 1-1',
-            children: [{
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }]
-          }]
-        }, {
-          id: 2,
-          label: '一级 2',
-          children: [{
-            id: 5,
-            label: '二级 2-1'
-          }, {
-            id: 6,
-            label: '二级 2-2'
-          }]
-        }, {
-          id: 3,
-          label: '一级 3',
-          children: [{
-            id: 7,
-            label: '二级 3-1'
-          }, {
-            id: 8,
-            label: '二级 3-2'
-          }]
-        }],
+        column: [
+          {
+            title: 'all(80/60)',
+            expand: true,
+            children: [
+              {
+                title: 'parent 1',
+                expand: true,
+                children: [
+                  {
+                    title: 'parent 1-1',
+                    expand: true
+                  },
+                  {
+                    title: 'parent 1-2',
+                    expand: true
+                  }
+                ]
+              }
+            ]
+
+          }
+
+        ]
       }
     },
-    watch: {
-      filterText(val) {
-        this.$refs.columnTree.filter(val);
-      },
-      checkAll(val) {
-        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.dataList, 'id'))
-          : this.$refs.columnTree.setCheckedKeys([]);
-      }
-    },
+    watch: {},
     created() {
     },
     methods: {
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      }
+      /*changeCheck(type) {
+        this.checkAll = !this.checkAll;
+
+        console.log(_.map(this.column, val => {
+          val.checked = this.checkAll;
+          return val
+        }));
+      }*/
     }
   }
 </script>

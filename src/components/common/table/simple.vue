@@ -24,16 +24,63 @@
                        width="180">
       </el-table-column>
     </el-table>
+    <Row>
+      <Col span="16">
+      12</Col>
+      <Col span="8" style="text-align: right;cursor: pointer">
+      <v-filter-colum></v-filter-colum>
+      </Col>
+    </Row>
+    <Table :columns="columns6" :data="data5" size="small">
+      <!--<div slot="footer">123</div>-->
+    </Table>
+
+    <!--<CheckboxGroup>
+      <table style="width: 100%">
+        <tr>
+          <th>
+            <v-filter-value></v-filter-value>
+          </th>
+          <th>132</th>
+          <th>132</th>
+          <th>132</th>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+        </tr>
+        <tr>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+        </tr>
+      </table>
+    </CheckboxGroup>-->
 
     <br>
-    <el-pagination
-      background
-      :current-page="4"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="100"
-      layout="prev, pager, next,sizes, jumper,total"
-      :total="400">
-    </el-pagination>
+    <Page :total="100" show-sizer show-elevator style="display: inline-block;vertical-align: middle"></Page>
+    <span style="display: inline-block;vertical-align: middle">View 123,432 Products</span>
   </div>
 </template>
 
@@ -49,7 +96,7 @@
    */
 
   import VFilterValue from './filterValue'
-  import VFilterColumn from './filterColumn'
+  import VFilterColum from './filterColumn'
 
   export default {
     name: 'VSimpleTable',
@@ -60,29 +107,43 @@
     },
     components: {
       VFilterValue,
-      VFilterColumn
+      VFilterColum
     },
     data() {
       return {
         checkValue: [],
-        dataColumns: [
+        columns6: [
           {
-            label: 'Date',
-            prop: 'date',
+            type: 'selection',
+            width: 34,
+            fixed: 'left',
+            align: 'center'
+          },
+          {
+            type: 'index',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: 'Date',
+            key: 'date',
+            width: 200,
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            label: 'Name',
-            prop: 'name',
+            title: 'Name',
+            key: 'name',
+            width: 200,
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            label: 'Age',
-            prop: 'age',
+            title: 'Age',
+            key: 'age',
+            width: 200,
             filters: [
               {
                 label: 'Greater than 25',
@@ -103,8 +164,9 @@
             }
           },
           {
-            label: 'Address',
-            prop: 'address',
+            title: 'Address',
+            key: 'address',
+            width: 200,
             filters: [
               {
                 label: 'New York',
@@ -125,7 +187,7 @@
             }
           }
         ],
-        dataList: [
+        data5: [
           {
             name: 'John Brown',
             age: 18,
