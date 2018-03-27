@@ -1,6 +1,5 @@
-import page from './page.js'
+import workbench from './workbench/index.js'
 
 export default {
-  page: page,
-  message: {}
+  workbench
 }

@@ -1,67 +1,5 @@
 <template>
   <div class="ucn-table">
-<<<<<<< HEAD
-    <Row>
-      <Col span="16">
-      12</Col>
-      <Col span="8" style="text-align: right;cursor: pointer">
-      <v-filter-column></v-filter-column>
-      </Col>
-    </Row>
-    <Table :columns="columns6" :data="data5" size="small">
-      <!--<div slot="footer">123</div>-->
-    </Table>
-
-    <!--<CheckboxGroup>
-      <table style="width: 100%">
-        <tr>
-          <th>
-            <v-filter-value></v-filter-value>
-          </th>
-          <th>132</th>
-          <th>132</th>
-          <th>132</th>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-      </table>
-    </CheckboxGroup>-->
-
-    <br>
-    <Page :total="100" show-sizer show-elevator style="display: inline-block;vertical-align: middle"></Page>
-    <span style="display: inline-block;vertical-align: middle">View 123,432 Products</span>
-  </div>
-</template>
-
-=======
     <el-row>
       <el-col :span="16">12</el-col>
       <el-col :span="8" style="text-align: right;cursor: pointer">
@@ -106,7 +44,6 @@
 </template>
 
 
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
 <script>
   /**
    * 表格组件
@@ -140,31 +77,6 @@
     data() {
       return {
         checkValue: [],
-<<<<<<< HEAD
-        columns6: [
-          {
-            type: 'selection',
-            width: 34,
-            fixed: 'left',
-            align: 'center'
-          },
-          {
-            type: 'expand',
-            width: 30,
-            render: (h, params) => {
-              return h(VExpand)
-            }
-          },
-          {
-            type: 'index',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: 'Date',
-            key: 'date',
-            width: 200,
-=======
         dataColumns: [
           {
             label: 'Date',
@@ -218,33 +130,20 @@
           {
             label: 'Name',
             prop: 'name',
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-<<<<<<< HEAD
-            title: 'Name',
-            key: 'name',
-            width: 200,
-=======
             label: 'Name',
             prop: 'name',
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-<<<<<<< HEAD
-            title: 'Age',
-            key: 'age',
-            width: 200,
-=======
             label: 'Age',
             prop: 'age',
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             filters: [
               {
                 label: 'Greater than 25',
@@ -265,14 +164,8 @@
             }
           },
           {
-<<<<<<< HEAD
-            title: 'Address',
-            key: 'address',
-            width: 200,
-=======
             label: 'Address',
             prop: 'address',
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             filters: [
               {
                 label: 'New York',
@@ -293,11 +186,7 @@
             }
           }
         ],
-<<<<<<< HEAD
-        data5: [
-=======
         dataList: [
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
           {
             name: 'John Brown',
             age: 18,

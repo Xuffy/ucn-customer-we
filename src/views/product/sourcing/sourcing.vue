@@ -301,10 +301,7 @@
         line-height: 32px;
         color:#666666;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
     .title-btn{
         float: right;
         margin-right: 5px;
