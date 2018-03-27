@@ -1,10 +1,9 @@
 <template>
     <div class="paymentTable">
         <el-table
-                :data="tableData6"
+                :data="data"
                 border
                 height="200"
-                :summary-method="getSummaries"
                 show-summary
                 style="width: 100%; margin-top: 20px">
             <el-table-column
@@ -45,56 +44,25 @@
 <script>
     export default {
         name: "payment-table",
+        props:{
+            data:{
+                type:Array,
+                default:[]
+            }
+        },
         data(){
             return{
-                tableData6: [
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                    {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
-                    },
-                ],
+                currentPage:1
             }
         },
         methods:{
+            handleSizeChange(){
 
+            },
+
+            handleCurrentChange(){
+
+            },
         }
     }
 </script>

@@ -185,6 +185,11 @@ export const routerMap = [
           path: 'logisticPlanOverview',
           name: 'logisticPlanOverview',
           component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          component: () => import('../views/logistic/placeLogisticPlan')
         }
       ]
       

@@ -84,10 +84,10 @@
                         <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             <div>
                                 货物付款
-                                <el-button type="primary" size="mini">申请付款</el-button>
+                                <el-button @click="payment" type="primary" size="mini">申请付款</el-button>
                             </div>
                             <div>
-                                <pay-table></pay-table>
+                                <pay-table :data="payData"></pay-table>
                             </div>
                         </el-col>
                         <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -97,7 +97,7 @@
                             </div>
                             <div>
                                 <el-table
-                                        :data="tableData"
+                                        :data="payData"
                                         style="width: 100%"
                                         height="250">
                                     <el-table-column
@@ -364,38 +364,15 @@
                         waitReceive:'2222'
                     },
                 ],
-                tableData6: [
+                payData: [
                     {
-                    id: '12987122',
-                    name: '王小虎',
-                    amount1: '234',
-                    amount2: '3.2',
-                    amount3: 10
-                }, {
-                    id: '12987123',
-                    name: '王小虎',
-                    amount1: '165',
-                    amount2: '4.43',
-                    amount3: 12
-                }, {
-                    id: '12987124',
-                    name: '王小虎',
-                    amount1: '324',
-                    amount2: '1.9',
-                    amount3: 9
-                }, {
-                    id: '12987125',
-                    name: '王小虎',
-                    amount1: '621',
-                    amount2: '2.2',
-                    amount3: 17
-                }, {
-                    id: '12987126',
-                    name: '王小虎',
-                    amount1: '539',
-                    amount2: '4.1',
-                    amount3: 15
-                }],
+                        id: '12987122',
+                        name: '王小虎',
+                        amount1: '234',
+                        amount2: '3.2',
+                        amount3: 10
+                    }
+                ],
                 textarea:'',
                 currentPage:1,
                 formInline: {
@@ -416,6 +393,17 @@
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+            },
+
+            //申请付款
+            payment(){
+                this.payData.push({
+                    id: '12987122',
+                    name: '王小虎',
+                    amount1: '234',
+                    amount2: '3.2',
+                    amount3: 10
+                });
             },
         }
     }

@@ -27,9 +27,7 @@
             'select-search':selectSearch
         },
         methods: {
-            selectChange() {
-
-            }
+            
         }
     }
 </script>
