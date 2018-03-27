@@ -275,7 +275,7 @@ export const routerMap = [
         {
           path: 'index',
           component: () => import('../views/settings/index.vue')
-        }
+        },
       ]
     },
     {
