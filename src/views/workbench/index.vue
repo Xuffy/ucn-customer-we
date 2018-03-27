@@ -24,6 +24,7 @@
       VTableData,
     },
     created() {
+      console.log()
     },
     methods: {}
   }

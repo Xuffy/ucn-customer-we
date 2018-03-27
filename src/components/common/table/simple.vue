@@ -1,7 +1,32 @@
 <template>
   <div class="ucn-table">
+    <el-row>
+      <el-col :span="16">12</el-col>
+      <el-col :span="8" style="text-align: right;cursor: pointer">
+        <v-filter-column></v-filter-column>
+      </el-col>
+    </el-row>
+
+    <el-table
+      :data="dataList">
+      <el-table-column
+        type="selection">
+      </el-table-column>
+
+      <el-table-column
+        type="index">
+      </el-table-column>
+
+      <el-table-column v-for="(item,index) in dataColumns" :key="index"
+                       :prop="item.prop"
+                       :label="item.label"
+                       :render-header="item.renderHeader"
+                       width="180">
+      </el-table-column>
+    </el-table>
     <Row>
-      <Col span="16">12</Col>
+      <Col span="16">
+      12</Col>
       <Col span="8" style="text-align: right;cursor: pointer">
       <v-filter-colum></v-filter-colum>
       </Col>

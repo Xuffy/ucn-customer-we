@@ -1,7 +1,7 @@
 <template>
   <div class="dataDashboard">
 
-    <h3 class="ucn-content-title" style="display: inline-block">Data Dashboard</h3>
+    <h3 class="ucn-content-title inline">Data Dashboard</h3>
     <div class="block" style="display: inline-block;margin-left: 80px">
       <span class="demonstration">Time：</span>
       <el-date-picker
