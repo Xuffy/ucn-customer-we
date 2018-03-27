@@ -7,25 +7,22 @@
         <span class="title">Sign in</span>
       </div>
       <div class="login-form">
-        <Form ref="formInline" :model="formInline" :rules="ruleInline">
-          <FormItem prop="username">
-            <Input type="text" v-model="formInline.username" placeholder="Email">
-            <Icon type="iphone" slot="prepend" style="font-size: 26px"></Icon>
-            </Input>
-          </FormItem>
-          <FormItem prop="password">
-            <Input type="password" v-model="formInline.password" placeholder="Password">
-            <Icon type="ios-locked-outline" slot="prepend" style="font-size: 20px"></Icon>
-            </Input>
-          </FormItem>
-          <FormItem style="padding-left: 40px;margin-top: 2px">
-
-            <Checkbox>&nbsp;&nbsp;Remenber me</Checkbox>
-            <Button type="primary" size="large" :loading="loginLoading" @click="handleSubmit('formInline')"
-                    style="width: 100%">Login in
-            </Button>
-          </FormItem>
-        </Form>
+        <div class="from">
+          <div class="from-item">
+            <span>UserName</span><el-input v-model="formInline.username" placeholder="Email" ></el-input>
+          </div>
+          <div class="from-item">
+            <span>password</span><el-input v-model="formInline.password" placeholder="Password" ></el-input>
+          </div>
+          <div class="login-link" style="margin-top:50px;">
+            <el-checkbox v-model="checked">Remenber me</el-checkbox>
+            <router-link to="/forgetPassword">forget password?</router-link>
+          </div>
+          <el-button type="primary" @click="handleSubmit('formInline')" style="width:100%;margin:10px 0;">Login in</el-button>
+          <div class="login-link active">
+            <router-link to="/signUp">No account? Sign up now>></router-link>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -33,12 +30,12 @@
 
 <script>
   import config from  'service/config';
-
   export default {
     name: 'login',
     data() {
       return {
         loginLoading: false,
+        checked:false,
         formInline: {
           username: '',
           password: ''
@@ -55,8 +52,6 @@
       }
     },
     created() {
-      this.onKeyDown();
-
       this.$localStore.clearAll();
       this.$sessionStore.clearAll();
     },
@@ -69,14 +64,6 @@
             this.$Message.warning('请输入正确的用户名密码！');
           }
         })
-      },
-      onKeyDown() {
-        document.onkeydown = event => {
-          let e = event || window.event;
-          if (e && e.keyCode === 13) {
-            this.handleSubmit('formInline');
-          }
-        };
       },
       submitLogin(){
         this.loginLoading = true;
@@ -108,7 +95,23 @@
     }
   }
 </script>
-<style>
+<style scoped lang="less">
+  .login {
+    .login-link {
+      display:flex;
+      justify-content: space-between;
+      &.active {
+        justify-content: center;
+      }
+      a {
+        color:#409EFF;
+        font-size:14px;
+        &:hover {
+          opacity: .6;
+        }
+      }
+    }
+  }
   .login .ivu-input-group-prepend {
     background-color: #ffffff;
     border: none;
@@ -147,7 +150,7 @@
   }
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
   .login-top {
     position: absolute;
     width: 100%;
@@ -193,6 +196,20 @@
     margin-top: 10px;
     width: 100%;
     box-sizing: border-box;
+    .from {
+      .from-item {
+        display:flex;
+        align-items:center;
+        margin-bottom:10px;
+        span {
+          width: 100px;
+          font-size:12px;
+          color:#666;
+          text-align:right;
+          padding-right:10px;
+        }
+      }
+    }
   }
 
 

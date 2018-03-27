@@ -1,23 +1,31 @@
 <template>
   <div>
-    home page
+    <!--{{$tc('page.workbench')}}-->
+    <v-complex-table></v-complex-table>
+    <v-simple-table></v-simple-table>
   </div>
 </template>
 
 <script>
+  import { VSimpleTable, VComplexTable } from '@/components/index';
 
   export default {
     name: 'home',
-    data () {
+    components: {
+      VSimpleTable,
+      VComplexTable
+    },
+    data() {
       return {
-        url: ''
+        url: '',
       }
     },
-    mounted(){
+    mounted() {
+
     }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 </style>

@@ -27,10 +27,13 @@ storePrefix = () => {
       return super_fn(config.STORE_PREFIX + key);
     }
   }
-}
+};
 
 localStore.addPlugin(storePrefix);
 sessionStore.addPlugin(storePrefix);
 
-export {localStore, sessionStore};
+export {
+  localStore, 
+  sessionStore
+};
 

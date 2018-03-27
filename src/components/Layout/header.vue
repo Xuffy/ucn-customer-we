@@ -4,6 +4,81 @@
       <img class="c5-icon logo" src="../../assets/images/logo.png" @click="$router.push('/')">
 
       <div class="ucn-header-menu" v-if="routerList.length">
+        <el-menu :default-active="activeName" class="el-menu-demo" mode="horizontal">
+
+
+          <template v-for="(item,index) in routerList">
+
+            <el-menu-item v-if="item.children.length&&item.noDropdown&&!item.hidden&&checkAuth(item.auth)"
+                          :index="index + ''">
+              <router-link
+                :to="item.path+'/'+item.children[0].path">
+                {{item.name}}
+              </router-link>
+            </el-menu-item>
+
+
+            <el-submenu v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :index="index + ''">
+              <template slot="title">
+                <span v-text="item.name"></span>
+              </template>
+
+              <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
+                        v-for="(cItem,cIndex) in item.children">
+                <el-menu-item v-if="!cItem.hidden&&checkAuth(cItem.auth)" :index="index +'-'+cIndex">
+                  <router-link :to="item.path+'/'+cItem.path">
+                    {{cItem.name}}
+                  </router-link>
+                </el-menu-item>
+              </template>
+            </el-submenu>
+          </template>
+
+        </el-menu>
+      </div>
+      <div class="header-right" style="color: #999999!important;">
+        <div style="display: inline-block">
+          <a href="javascript:void(0)">
+            {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
+          </a>
+          <a href="javascript:void(0)" @click="logout">
+            Sign out
+          </a>
+        </div>
+
+        <el-dropdown type="primary">
+          <a href="javascript:void(0)">
+            <i class="el-icon-goods"></i>
+          </a>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>User name</el-dropdown-item>
+            <el-dropdown-item>Sign out</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+
+        <!--<Dropdown trigger="click" class="mobile-hide-lg">
+
+          <a href="javascript:void(0)">
+            {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
+          </a>
+          <a href="javascript:void(0)" @click="logout">
+            Sign out
+          </a>
+        </Dropdown>
+
+        <Dropdown class="mobile-show-lg user-box">
+          <a href="javascript:void(0)">
+            <Icon type="person"></Icon>
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem>User name</DropdownItem>
+            <DropdownItem divided>Sign out</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>-->
+      </div>
+
+      <!--<div class="ucn-header-menu" v-if="routerList.length">
         <Menu theme="dark" mode="horizontal" :active-name="activeName" :open-names="activeOpen"
               :accordion="true">
           <template v-for="(item,index) in routerList">
@@ -34,27 +109,7 @@
         </Menu>
       </div>
 
-      <div class="header-right">
-        <Dropdown trigger="click" class="mobile-hide-lg">
-
-          <a href="javascript:void(0)">
-            {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
-          </a>
-          <a href="javascript:void(0)" @click="logout">
-            Sign out
-          </a>
-        </Dropdown>
-
-        <Dropdown class="mobile-show-lg user-box">
-          <a href="javascript:void(0)">
-            <Icon type="person"></Icon>
-          </a>
-          <DropdownMenu slot="list">
-            <DropdownItem>User name</DropdownItem>
-            <DropdownItem divided>Sign out</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
+      -->
     </div>
   </div>
 </template>
@@ -93,14 +148,15 @@
     },
     methods: {
       logout() {
-        this.$Modal.confirm({
-          title: '系统提示',
-          content: '是否确认退出登录',
-          onOk: () => {
-            this.$localStore.clearAll();
-            this.$localStore.clearAll();
-            this.$router.push('/login');
-          }
+        this.$confirm('是否确认退出登录', '系统提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$localStore.clearAll();
+          this.$localStore.clearAll();
+          this.$router.push('/login');
+        }).catch(() => {
         });
       },
       updateMenuActive() {
@@ -205,17 +261,49 @@
     right: 20px;
     top: 0;
   }
-  .user-box{
+
+  .user-box {
     vertical-align: middle;
   }
-  .user-box .ivu-icon-person{
+
+  .user-box .ivu-icon-person {
     font-size: 20px;
+  }
+
+  .el-menu--horizontal {
+    border: none;
+  }
+
+  .el-menu--horizontal {
+    background-color: initial;
+  }
+
+  .el-menu-item {
+    padding: 0 10px;
+  }
+
+  .el-menu-item:hover,
+  .el-menu--horizontal > .el-menu-item.is-active,
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    background-color: inherit !important;
+    color: #FFFFFF !important;
   }
 </style>
 <style>
 
-  .ucn-header-menu .ivu-menu-submenu-title {
-    /*color: #FFFFFF!important;*/
+
+  .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+    background-color: inherit !important;
+    color: #FFFFFF !important;
+  }
+
+  .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
+    color: #909399;
+  }
+
+  /*.ucn-header-menu .ivu-menu-submenu-title {
+    !*color: #FFFFFF!important;*!
   }
 
   .ucn-header-menu:after {
@@ -226,5 +314,5 @@
   .ucn-header-menu .ivu-menu-horizontal .ivu-menu-submenu {
     padding: 0;
     padding-left: 3vw;
-  }
+  }*/
 </style>

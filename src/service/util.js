@@ -11,20 +11,20 @@ export default{
      * @param param
      * @returns {boolean}
      */
-    Vue.prototype.$alert = function (param) {
-      if (alertShow) return false;
-
-      if (_.isString(param)) {
-        param = {content: param};
-      }
-
-      param.onClose = () => {
-        alertShow = false;
-      };
-
-      this.$Message.warning(param);
-      alertShow = true;
-    };
+    // Vue.prototype.$alert = function (param) {
+    //   if (alertShow) return false;
+    //
+    //   if (_.isString(param)) {
+    //     param = {content: param};
+    //   }
+    //
+    //   param.onClose = () => {
+    //     alertShow = false;
+    //   };
+    //
+    //   this.$Message.warning(param);
+    //   alertShow = true;
+    // };
 
     /**
      * 本地永久缓存

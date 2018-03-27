@@ -6,7 +6,6 @@ import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
 
-
 export const routerMap = [
     {
       path: '/',
@@ -16,17 +15,18 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
       children: [{
         path: 'home',
-        component: resolve => {
-          require(['../views/home/index.vue'], resolve)
-        }
+        component: () => import('../views/home/index.vue')
       }]
+    },
+    {
+      path:'/dome',
+      hidden: true,
+      component: () => import('../views/dome')
     },
     {
       path: '/login',
       hidden: true,
-      component: resolve => {
-        require(['../views/login/index.vue'], resolve)
-      }
+      component: () => import('../views/login/index.vue')
     },
 
     {
@@ -38,9 +38,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/workbench/index.vue'], resolve)
-          }
+          component: () => import('../views/workbench/index.vue')
         }
       ]
     },
@@ -52,62 +50,167 @@ export const routerMap = [
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: resolve => {
-            require(['../views/product/index.vue'], resolve)
-          }
-        }
+          path: '',
+          component: () => import('../views/product/sourcing/sourcing'),
+          name:'sourcing',
+        },
+        {
+          path:'detail',
+          component: () => import('../views/product/sourcing/detail'),
+          name:'detail'
+        },
+        {
+          path:'bookmark',
+          component: () => import('../views/product/bookmark/bookmark'),
+          name:'bookmark'
+        },
+        {
+          path:'bookmarkDetail',
+          component: () => import('../views/product/bookmark/detail.vue'),
+          name:'bookmarkDetail'
+        },
+        {
+          path:'compareOverview',
+          component: () => import('../views/product/compare/overview.vue'),
+          name:'compareOverview'
+        },
+        {
+          path:'compare',
+          component: () => import('../views/product/compare/compare.vue'),
+          name:'compare'
+        },
+        {
+          path:'message',
+          component: () => import('../views/message/message.vue'),
+          name:'message'
+        },
+        {
+          path:'messageManagement',
+          component: () => import('../views/message/messageManagement.vue'),
+          name:'messageManagement'
+        },
+
+
+        // {
+        //   path:'bookmark',
+        //   component: () => import('../views/product/bookmark/index.vue'),
+        //   name:'bookmark',
+        //   children:[
+        //         {
+        //             path:'',
+        //             component: () => import('../views/product/bookmark/bookmark.vue'),
+        //             name:'',
+        //         },
+        //         {
+        //             path:'detail',
+        //             component: () => import('../views/product/bookmark/detail.vue'),
+        //             name:'detail',
+        //         },
+        //     ]
+        // },
       ]
     },
     {
-      path: '/supplier',
-      component: Layout,
-      redirect: '/supplier/picture',
-      name: 'Supplier',
-      children: [
-        {
-          path: 'sourcing',
-          name: 'Sourcing',
-          component: resolve => {
-            require(['../views/supplier/sourcing.vue'], resolve)
-          }
+        path: '/supplier',
+        component: Layout,
+        redirect: '/supplier/picture',
+        name: 'Supplier',
+        noDropdown: true,
+        children: [
+            {
+                path: 'sourcing',
+                name: 'Sourcing',
+                component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
+
         },
-        {
-          path: 'bookmark',
-          name: 'Bookmark',
-          component: resolve => {
-            require(['../views/supplier/bookmark.vue'], resolve)
-          }
+            {
+                path: 'bookmark',
+                name: 'Bookmark',
+                component: () =>
+                    import ('../views/supplier/bookmark/bookmark.vue')
+        },
+            {
+                path: 'bookmarkDetail',
+                name: 'bookmarkDetail',
+                component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        },
+            {
+                path: 'sourcingDetail',
+                name: 'sourcingDetail',
+                component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
         }
       ]
     },
     {
       path: '/negotiation',
       component: Layout,
-      redirect: '/negotiation',
-      name: 'Negotiation',
+      redirect: '/negotiation/inquiryOverview',
+      name: 'negotiation',
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: resolve => {
-            require(['../views/negotiation/index.vue'], resolve)
-          }
+          path: 'inquiryOverview',
+          name:'inquiryOverview',
+          component: () => import('../views/negotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'inquiryDetail',
+          component: () => import('../views/negotiation/inquiryDetail')
+        },
+        {
+          path: 'createInquiry',
+          name: 'createInquiry',
+          component: () => import('../views/negotiation/createInquiry')
+        },
+        {
+          path: 'compareOverview',
+          name: 'compareOverview',
+          component: () => import('../views/negotiation/compareOverview')
+        },
+        {
+          path: 'compare',
+          name: 'compare',
+          component: () => import('../views/negotiation/compare')
         }
       ]
     },
     {
-      path: '/order',
+      path: '/logistic',
+      name: 'logistic',
       component: Layout,
-      redirect: '/order',
-      name: 'Order',
-      noDropdown: true,
+      redirect: '/logistic/logisticPlanOverview',
       children: [
         {
-          path: 'index',
-          component: resolve => {
-            require(['../views/order/index.vue'], resolve)
-          }
+          path: 'logisticPlanOverview',
+          name: 'logisticPlanOverview',
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          component: () => import('../views/logistic/placeLogisticPlan')
+        }
+      ]
+      
+    },
+    {
+        path: '/order',
+        component: Layout,
+        redirect: '/order',
+        name: 'Order',
+        noDropdown: true,
+        children: [
+            {
+                path: 'index',
+                component: () =>import('../views/order/index.vue')
+        },
+            {
+                path: 'creatOrder',
+                component: () =>import('../views/order/creatOrder/creatOrder.vue')
+        }, {
+                path: 'poDetail',
+                component: () =>import('../views/order/poDetail/index.vue')
         }
       ]
     },
@@ -120,27 +223,15 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/warehouse/index.vue'], resolve)
-          }
-        }
-      ]
-    },
-    {
-      path: '/logistic',
-      component: Layout,
-      redirect: '/logistic',
-      name: 'Logistic',
-      noDropdown: true,
-      children: [
+          component: () => import('../views/warehouse/warehouseOverview.vue')
+        },
         {
-          path: 'index',
-          component: resolve => {
-            require(['../views/logistic/index.vue'], resolve)
-          }
-        }
+          path: 'qcDetail',
+          component: () => import('../views/warehouse/qcDetail.vue')
+        },
       ]
     },
+   
     {
       path: '/payment',
       component: Layout,
@@ -150,9 +241,7 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/payment/index.vue'], resolve)
-          }
+          component: () => import('../views/payment/index.vue')
         }
       ]
     },
@@ -165,11 +254,54 @@ export const routerMap = [
       children: [
         {
           path: 'index',
-          component: resolve => {
-            require(['../views/settings/index.vue'], resolve)
-          }
+          component: () => import('../views/settings/index.vue')
         }
       ]
+    },
+    {
+      path: '/forgetPassword',
+      name:'forgetPassword',
+      hidden: true,
+      component: () => import('../views/login/forgetPassword'),
+      redirect: '/forgetPassword/inputEmail',
+      children: [
+        {
+          path:'inputEmail',
+          name:'inputEmail',
+          hidden: true,
+          component: () => import('../views/login/inputEmail')
+        },
+        {
+          path:'Identify',
+          name:'Identify',
+          hidden: true,
+          component: () => import('../views/login/Identify')
+        },
+        {
+          path:'ResetPassword',
+          name:'ResetPassword',
+          hidden: true,
+          component: () => import('../views/login/ResetPassword')
+        },
+        {
+          path:'Finish',
+          name:'Finish',
+          hidden: true,
+          component: () => import('../views/login/Identify')
+        }
+      ]
+    },
+    {
+      path: '/signUp',
+      name:'signUp',
+      hidden: true,
+      component: () => import('../views/login/signUp')
+    },
+    {
+      path:'/getInvitationCode',
+      name:'getInvitationCode',
+      hidden: true,
+      component: () => import('../views/login/getInvitationCode')
     }
   ]
 ;

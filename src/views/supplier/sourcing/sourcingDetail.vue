@@ -1,0 +1,200 @@
+<template>
+    <div class="souringDetail">
+        <div class="head">
+            <div class="title">
+                <img src='../../../assets/images/logo.jpg'/> 
+                <span>name</span>
+            </div>
+            <div class="detail">             
+                   <el-row>             
+                        <el-row class="right">
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                Supplier Code：xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                Supplier company name :xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                Supplier type: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                country: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                city: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                Provide incoterm: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                Export license: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                business scope: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                category: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                币种: xxxx
+                            </el-col>
+                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                付款方式: xxxx
+                            </el-col>
+                        </el-row>
+
+                </el-row>
+                <div class="btns" v-if="noEdit">
+                    <el-button type="primary">Create Inquiry</el-button>
+                    <el-button type="primary">Create Order</el-button>
+                    <el-button type="primary">Add to Compare</el-button>
+                    <el-button type="primary">Supplier's Products</el-button>
+                    <el-button > Add To Bookmark </el-button>
+                </div>
+                <div class="btns" v-else>
+                    <el-button @click="finishEdit" type="primary">Finish</el-button>
+                    <el-button @click="cancelEdit" type="info">Cancel</el-button>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="Address" name="Address">
+                   
+                </el-tab-pane>
+                <el-tab-pane label="Account Info" name="Account Info">
+                   
+                </el-tab-pane>
+                <el-tab-pane label="Contact Info" name="Contact Info">
+                    
+                </el-tab-pane>
+                <el-tab-pane label="Trade Info" name="Trade History">
+                   
+                </el-tab-pane>
+                <el-tab-pane label="Inquiry History" name="Inquiry History">
+                 
+                </el-tab-pane>
+                <el-tab-pane label="Remark" name="Remark">
+                            
+                </el-tab-pane>
+                <el-tab-pane label="Attachment" name="Attachment">
+
+                </el-tab-pane>
+
+            </el-tabs>
+        </div>
+
+
+
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "souringDetail",
+        components: {
+
+        },
+        data() {
+            return {
+                noEdit: true,
+                tabName: 'Address' //默认打开的tab
+            }
+        },
+        methods: {}
+    }
+
+</script>
+
+<style scoped>
+    .title img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .detail {
+        padding-top: 20px;
+    }
+
+    .souringDetail {
+        background-color: #f4f4f4;
+    }
+
+    .souringDetail .head {
+        background-color: #FFFFFF;
+        padding: 0 20px;
+
+    }
+
+    .souringDetail .head .title {
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        font-weight: bold;
+        font-size: 18px;
+        color: #666666;
+    }
+
+    .souringDetail .head .title .title-btn {
+        float: right;
+    }
+
+    .souringDetail .head .detail {
+        margin-top: 8px;
+    }
+
+    .souringDetail .head .detail .carousel-img {
+        height: 170px;
+    }
+
+    .souringDetail .head .detail .carousel-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .souringDetail .head .detail .right {
+        /*padding-top: 10px;*/
+    }
+
+    .souringDetail .head .detail .list {
+        padding-left: 30px;
+        font-size: 14px;
+        line-height: 2.5;
+        border-bottom: 1px dotted #e0e0e0;
+    }
+
+    .souringDetail .head .detail .btns {
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .souringDetail .head .detail .btns>Button {
+        margin-right: 10px;
+    }
+
+    .souringDetail .body {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        background-color: #FFFFFF;
+    }
+
+    .souringDetail .body .list {
+        line-height: 30px;
+        font-size: 13px;
+    }
+
+    .speForm .el-form-item--small.el-form-item {
+        margin-bottom: 0;
+    }
+
+    .speForm .el-row .list .el-input {
+        width: 80%;
+    }
+
+</style>
