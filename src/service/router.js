@@ -251,7 +251,6 @@ export const routerMap = [
         },
       ]
     },
-   
     {
       path: '/payment',
       component: Layout,
@@ -273,9 +272,9 @@ export const routerMap = [
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/settings/index.vue')
-        },
+          path: 'departmentSetting',
+          component: () => import('../views/settings/departmentSetting.vue')
+        }
       ]
     },
     {

@@ -54,11 +54,24 @@
                             验货状态 : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            服务金额 : XXXXXX
+                            Service Price :
+                            <span v-if="!isModify">xxxxx</span>
+                            <el-input-number
+                                    v-else
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="input"
+                                    :min="0"
+                                    label="请输入"
+                                    align="left"
+                                    :controls="false">
+                            </el-input-number>
                         </el-col>
                         <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             Order Remark :
+                            <div style="line-height: normal" v-if="!isModify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad blanditiis culpa cum facere harum id labore magni, mollitia nulla omnis optio reiciendis reprehenderit repudiandae sit sunt ullam veniam, voluptas.</div>
                             <el-input
+                                v-else
                                 type="textarea"
                                 :rows="2"
                                 placeholder="请输入内容"
@@ -80,97 +93,93 @@
             <div class="section">
                 <div class="head">Payment</div>
                 <div class="content">
-                    <el-row>
-                        <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <div>
-                                货物付款
-                                <el-button @click="payment" type="primary" size="mini">申请付款</el-button>
-                            </div>
-                            <div>
-                                <pay-table :data="payData"></pay-table>
-                            </div>
-                        </el-col>
-                        <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <div>
-                                服务付款
-                                <el-button type="primary" size="mini">申请付款</el-button>
-                            </div>
-                            <div>
-                                <el-table
-                                        :data="payData"
-                                        style="width: 100%"
-                                        height="250">
-                                    <el-table-column
-                                            label="#"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.$index+1}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="编号"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.code}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="日期"
-                                            width="100"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.date}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="款项类型"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.type}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="付款金额"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.pay}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="收款金额"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.receive}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="待付金额"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.waitPay}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column
-                                            label="待收金额"
-                                            align="center">
-                                        <template slot-scope="scope">
-                                            {{scope.row.waitReceive}}
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </div>
-                        </el-col>
-                    </el-row>
+                    <!--<el-row>-->
+                        <!--<el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">-->
+                            <!--<pay-table :data="payData"></pay-table>-->
+                        <!--</el-col>-->
+                        <!--<el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">-->
+                            <!--<div>-->
+                                <!--服务付款-->
+                                <!--<el-button type="primary" size="mini">申请付款</el-button>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<el-table-->
+                                        <!--:data="payData"-->
+                                        <!--style="width: 100%"-->
+                                        <!--height="250">-->
+                                    <!--<el-table-column-->
+                                            <!--label="#"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.$index+1}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="编号"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.code}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="日期"-->
+                                            <!--width="100"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.date}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="款项类型"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.type}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="付款金额"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.pay}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="收款金额"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.receive}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="待付金额"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.waitPay}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                    <!--<el-table-column-->
+                                            <!--label="待收金额"-->
+                                            <!--align="center">-->
+                                        <!--<template slot-scope="scope">-->
+                                            <!--{{scope.row.waitReceive}}-->
+                                        <!--</template>-->
+                                    <!--</el-table-column>-->
+                                <!--</el-table>-->
+                            <!--</div>-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
+                    <pay-table :data="payData"></pay-table>
+                    <pay-table :data="payData1"></pay-table>
                 </div>
             </div>
             <div class="section">
                 <div class="head">Calculate</div>
-                <div class="content">
+                <div class="content" style="margin-top: 10px">
                     <el-form label-width="320px"  :model="formInline" class="demo-form-inline">
                         <el-row>
                             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                                 <el-form-item label="Total Quantity of Qualified Products">
-                                    <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+                                    <el-input disabled v-model="formInline.user" placeholder=""></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -236,8 +245,15 @@
         </div>
 
         <div class="handler">
-            <el-button type="primary" size="mini">Modify</el-button>
-            <el-button size="mini">Cancel QC</el-button>
+            <el-button v-if="!isModify" @click="modifyDetail" type="primary" size="mini">Modify</el-button>
+            <el-button v-if="!isModify" size="mini">Cancel QC</el-button>
+
+
+
+            <el-button v-if="isModify" @click="submitDetail" type="primary" size="mini">Submit</el-button>
+            <el-button @click="cancelModify" v-if="isModify" size="mini">Cancel</el-button>
+
+
             <el-button size="mini">Delete QC</el-button>
         </div>
     </div>
@@ -366,11 +382,42 @@
                 ],
                 payData: [
                     {
-                        id: '12987122',
-                        name: '王小虎',
-                        amount1: '234',
-                        amount2: '3.2',
-                        amount3: 10
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
+                    },
+                    {
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
+                    }
+                ],
+                payData1: [
+                    {
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
+                    },
+                    {
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
                     }
                 ],
                 textarea:'',
@@ -379,7 +426,8 @@
                     user: '',
                     region: ''
                 },
-                input:''
+                input:'',
+                isModify:false,             //是否处在modify状态，默认为false
             }
         },
         methods:{
@@ -395,16 +443,22 @@
                 console.log(`当前页: ${val}`);
             },
 
-            //申请付款
-            payment(){
-                this.payData.push({
-                    id: '12987122',
-                    name: '王小虎',
-                    amount1: '234',
-                    amount2: '3.2',
-                    amount3: 10
-                });
+
+            //修改qc详情
+            modifyDetail(){
+                this.isModify=true;
             },
+
+            //取消修改
+            cancelModify(){
+                this.isModify=false;
+            },
+
+            //提交修改的qc单内容
+            submitDetail(){
+                this.isModify=false;
+            }
+
         }
     }
 </script>
@@ -447,6 +501,12 @@
     }
     .section .content .noBorder{
         border: none;
+    }
+    .section .speInput{
+        width: auto;
+    }
+    .section .speInput >>> .el-input__inner{
+        text-align: left;
     }
 
     .handler{
