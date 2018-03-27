@@ -30,7 +30,8 @@
                                     node-key="id"
                                     default-expand-all
                                     :expand-on-click-node="false"
-                                    :render-content="renderContent">
+                                    :render-content="renderContent"
+                                    @node-click="clickNode">
                             </el-tree>
                         </div>
                     </div>
@@ -50,41 +51,34 @@
     export default {
         name: "department-setting",
         data() {
-            const data = [{
-                id: 1,
-                label: '一级 1',
-                children: [{
-                    id: 4,
-                    label: '二级 1-1',
-                    children: [{
-                        id: 9,
-                        label: '三级 1-1-1'
-                    }, {
-                        id: 10,
-                        label: '三级 1-1-2'
-                    }]
-                }]
-            }, {
-                id: 2,
-                label: '一级 2',
-                children: [{
-                    id: 5,
-                    label: '二级 2-1'
-                }, {
-                    id: 6,
-                    label: '二级 2-2'
-                }]
-            }, {
-                id: 3,
-                label: '一级 3',
-                children: [{
-                    id: 7,
-                    label: '二级 3-1'
-                }, {
-                    id: 8,
-                    label: '二级 3-2'
-                }]
-            }];
+            const data = [
+                {
+                    id: 1,
+                    label: '全部',
+                    children: [
+                        {
+                            id: 1,
+                            label: '二级 1-1',
+                            isShowBtn:false,
+                        },
+                        {
+                            id: 2,
+                            label: '二级 1-1',
+                            isShowBtn:false,
+                        },
+                        {
+                            id: 3,
+                            label: '二级 1-1',
+                            isShowBtn:false,
+                        },
+                        {
+                            id: 4,
+                            label: '二级 1-1',
+                            isShowBtn:false,
+                        },
+                    ]
+                },
+            ];
             return {
                 data4: JSON.parse(JSON.stringify(data)),
 
@@ -99,16 +93,30 @@
 
         },
         methods: {
+            //render按钮
             renderContent(h, { node, data, store }) {
+                console.log(data)
                 return (
                     <span class="custom-tree-node">
-                    <span>{node.label}</span>
-                <span>
-                <el-button size="mini" type="text" on-click={ () => this.append(data) }>Append</el-button>
-                <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>Delete</el-button>
-                </span>
-                </span>);
-            }
+                        <span>{node.label}</span>
+                        <span>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                on-click={ () => this.append(data) } v-show={node.data.isShowBtn}>Append</el-button>
+                            <el-button
+                                size="mini"
+                                type="text"
+                                on-click={ () => this.remove(node, data) } v-show={node.data.isShowBtn}>Delete</el-button>
+                        </span>
+                    </span>
+                );
+            },
+
+            //点击节点
+            clickNode(){
+                console.log(1)
+            },
         }
     }
 </script>
@@ -147,5 +155,16 @@
     .body .card .list{
         height: 306px;
         overflow-y: scroll;
+    }
+
+
+
+    >>> .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
     }
 </style>
