@@ -1,24 +1,24 @@
 <template>
     <div class="place-logistic-plan">
-        <div class="hd-top">Place New Logistic Plan</div>
+        <div class="hd-top">Logistic Plan No.HDAMC18005</div>
         <div class="hd">Basic Information</div>
         <el-row :gutter="10">
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
                     <span>logistics plan No</span>
-                    <el-input placeholder="请输入内容"></el-input>
-                </div>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                <div class="input-item">
-                    <span>logistics plan No</span>
-                    <el-select v-model="depature" placeholder="请选择">
+                    <el-select v-model="logistics" placeholder="请选择">
                         <el-option
-                        v-for="item in depatureOptions"
+                        v-for="item in logisticsOptions"
                         :key="item.id"
                         :label="item.label"
                         :value="item.id" />
                     </el-select>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <div class="input-item">
+                    <span>Est depature date</span>
+                    <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -34,10 +34,10 @@
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
-                    <span>Container type</span>
-                    <el-select v-model="Container" placeholder="请选择">
+                    <span>Container type2</span>
+                    <el-select v-model="Container2" placeholder="请选择">
                         <el-option
-                        v-for="item in ContainerOptions"
+                        v-for="item in ContainerOptions2"
                         :key="item.id"
                         :label="item.label"
                         :value="item.id" />
@@ -50,16 +50,10 @@
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
                     <span>Carrier</span>
-                    <el-select v-model="Carrier" placeholder="请选择">
-                        <el-option
-                        v-for="item in CarrierOptions"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
+                    <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -94,13 +88,7 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
                     <span>Bill type</span>
-                    <el-select v-model="BillType" placeholder="请选择">
-                        <el-option
-                        v-for="item in BillTypeOptions"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
+                    <el-input placeholder="请输入内容" :disabled="true"></el-input>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -130,12 +118,13 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
                     <span>CommoditInspectioy</span>
-                    <el-date-picker
-                    v-model="CommoditInspectioy"
-                    align="right"
-                    type="date"
-                    placeholder="选择日期"
-                    :picker-options="CarrierOptions" />
+                    <el-select v-model="CarrierOptions" placeholder="请选择">
+                        <el-option
+                        v-for="item in CarrierOptionsOptions"
+                        :key="item.id"
+                        :label="item.label"
+                        :value="item.id" />
+                    </el-select>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -168,24 +157,24 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
                     <span>运输公司</span>
-                    <el-input placeholder="请输入内容"></el-input>
-                </div>
-            </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
-                <div class="input-item">
-                    <span>航船次号</span>
-                    <el-select v-model="ShipNumber" placeholder="请选择">
+                    <el-select v-model="company" placeholder="请选择">
                         <el-option
-                        v-for="item in ShipNumberOptions"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
+                            v-for="item in companyOptions"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.id" />
                     </el-select>
                 </div>
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
-                    <span>Country of origin</span>
+                    <span>航船次号</span>
+                    <el-input placeholder="请输入"/>
+                </div>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+                <div class="input-item">
+                    <span>起运国</span>
                     <el-select v-model="CountryOfOrigin" placeholder="请选择">
                         <el-option
                         v-for="item in CountryOfOriginOptions"
@@ -197,7 +186,7 @@
             </el-col>
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
                 <div class="input-item">
-                    <span>DestinationCountry</span>
+                    <span>目的国</span>
                     <el-select v-model="DestinationCountry" placeholder="请选择">
                         <el-option
                         v-for="item in DestinationCountryOptions"
@@ -242,8 +231,9 @@
         </div>
         <!--from-->
         <div class="fix-btn">
-            <el-button type="primary">Save</el-button>
+            <el-button type="primary">Modify</el-button>
             <el-button type="primary">Sent as Order</el-button>
+            <el-button type="primary">Copy</el-button>
             <el-button>Delete</el-button>
         </div>
         <div class="fix-btn-station"></div>
@@ -281,36 +271,35 @@
                     }]
                 },
                 DateOfArrival:'',
-                depatureOptions: [{
+                logisticsOptions: [{
                     id:'1',
-                    label:'dadada'
+                    label:'OKAMC18009'
                 }],
-                ContainerOptions: [],
-                CarrierOptions: [],
+                logistics: '',
+                date: '',
+                ContainerOptions2:[],
+                Container2:'',
+                DateOfArrival: '',
                 departureOptions: [],
-                BillTypeOptions: [],
+                departure: '',
                 ContainerOptions1: [],
-                ContainerOptions3:[],
-                IncotermOptions:[],
-                ShipNumberOptions:[],
-                CountryOfOriginOptions:[],
-                DestinationCountryOptions:[],
-                shipmentOptions:[],
-                destinationOptions:[],
-                destination:'',
-                shipment:'',
-                DestinationCountry:'',
-                CountryOfOrigin:'',
-                ShipNumber:'',
-                Incoterm:'',
-                CommoditInspectioy:'',
-                Container3:'',
-                Container1:'',
-                BillType:'',
-                Carrier:'',
-                Container: '',
-                depature:'',
-                departure:''
+                Container1: '',
+                ContainerOptions3: [],
+                Container3: '',
+                CarrierOptionsOptions: [],
+                CarrierOptions: '',
+                IncotermOptions: [],
+                Incoterm: '',
+                companyOptions: [],
+                company: '',
+                CountryOfOriginOptions: [],
+                CountryOfOrigin: '',
+                DestinationCountryOptions: [],
+                DestinationCountry: '',
+                shipmentOptions: [],
+                shipment: '',
+                destinationOptions: [],
+                destination: ''
             }
         }
     }
