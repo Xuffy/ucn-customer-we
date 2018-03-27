@@ -1,13 +1,6 @@
 <template>
     <div class="logistic-plan-overview">
-        <div class="status">
-            <div class="btn-wrap">
-                <span>Status:</span>
-                <button>TBC by Customer</button>
-                <button>TBC by Supplier</button>
-                <button>Finish</button>
-                <button>Canceled</button>
-            </div>
+        <div class="hd">
             <div class="select-search-wrap">
                 <select-search :options="options" />
             </div>
@@ -57,6 +50,14 @@
 </script>
 <style lang="less" scoped>
     .logistic-plan-overview {
+        .hd {
+            display:flex;
+            justify-content: flex-end;
+            padding:20px;
+            .select-search-wrap {
+                width: 260px;
+            }
+        }
         .btn-wrap {
             padding:10px;
             display:flex;
@@ -70,43 +71,6 @@
                 }
                 button {
                     padding:3px 5px;
-                }
-            }
-        }
-        .status {
-            display:flex;
-            height: 60px;
-            align-items: center;
-            justify-content:space-between;
-            padding:0 15px;
-            box-sizing: border-box;
-            .btn-wrap {
-                display:flex;
-                align-items: center;
-                span {
-                    font-size:14px;
-                }
-                button {
-                    padding:2px 5px;
-                    cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
-                    }
-                }
-            }
-            .select-wrap {
-                display:flex;
-                align-items:center;
-                .select {
-                    width: 110px;
-                    margin-right:5px;
-                    input {}
                 }
             }
         }
