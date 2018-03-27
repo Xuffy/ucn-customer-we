@@ -13,7 +13,8 @@
                 height="300"
                 show-summary
                 style="width: 100%; margin-top: 20px"
-                :summary-method="getSummaries">
+                :summary-method="getSummaries"
+                @selection-change="handleSelectionChange">
             <el-table-column
                     label="#"
                     align="center"
@@ -77,11 +78,12 @@
             <el-table-column
                     label="付款金额"
                     align="center"
-
+                    width="150"
                     prop="payMoney">
                 <template slot-scope="scope">
                     <div v-if="scope.row.isNew">
                         <el-input-number
+                                class="payMoney"
                                 size="mini"
                                 v-model="scope.row.payMoney"
                                 @change="handleChange"
@@ -169,11 +171,23 @@
             }
         },
         methods:{
+            //表格选择的时间
+            handleSelectionChange(e){
+
+            },
+
+
+
             handleSizeChange(){
 
             },
 
             handleCurrentChange(){
+
+            },
+
+            //数字输入框变化方法
+            handleChange(){
 
             },
 

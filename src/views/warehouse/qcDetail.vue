@@ -169,7 +169,7 @@
                         <!--</el-col>-->
                     <!--</el-row>-->
                     <pay-table :data="payData"></pay-table>
-                    <pay-table :data="payData"></pay-table>
+                    <pay-table :data="payData1"></pay-table>
                 </div>
             </div>
             <div class="section">
@@ -381,6 +381,26 @@
                     },
                 ],
                 payData: [
+                    {
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
+                    },
+                    {
+                        id: '124124',
+                        date: '1992-02-02',
+                        moneyType: '预付款',
+                        payMoney: '1241',
+                        receiveMoney: '',
+                        waitPayMoney:'',
+                        waitReceiveMoney:'',
+                    }
+                ],
+                payData1: [
                     {
                         id: '124124',
                         date: '1992-02-02',
