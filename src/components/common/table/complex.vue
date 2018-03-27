@@ -1,5 +1,6 @@
 <template>
   <div class="ucn-table">
+<<<<<<< HEAD
     <Row>
       <Col span="16">
       12</Col>
@@ -60,6 +61,52 @@
   </div>
 </template>
 
+=======
+    <el-row>
+      <el-col :span="16">12</el-col>
+      <el-col :span="8" style="text-align: right;cursor: pointer">
+        <v-filter-column></v-filter-column>
+      </el-col>
+    </el-row>
+    <el-table
+      max-height="250"
+      :data="dataList">
+      <el-table-column
+        fixed
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        type="index">
+      </el-table-column>
+      <el-table-column v-for="(item,index) in dataColumns" :key="index"
+                       :prop="item.prop"
+                       :label="item.label"
+                       :render-header="item.renderHeader"
+                       width="180">
+      </el-table-column>
+
+      <el-table-column label="action" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini">delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <br>
+    <el-pagination
+      background
+      :current-page="4"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="prev, pager, next,sizes, jumper,total"
+      :total="400">
+    </el-pagination>
+  </div>
+</template>
+
+
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
 <script>
   /**
    * 表格组件
@@ -93,6 +140,7 @@
     data() {
       return {
         checkValue: [],
+<<<<<<< HEAD
         columns6: [
           {
             type: 'selection',
@@ -116,22 +164,87 @@
             title: 'Date',
             key: 'date',
             width: 200,
+=======
+        dataColumns: [
+          {
+            label: 'Date',
+            prop: 'date',
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+            label: 'Name',
+            prop: 'name',
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
+            renderHeader: (h, params) => {
+              return h(VFilterValue);
+            }
+          },
+          {
+<<<<<<< HEAD
             title: 'Name',
             key: 'name',
             width: 200,
+=======
+            label: 'Name',
+            prop: 'name',
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
+<<<<<<< HEAD
             title: 'Age',
             key: 'age',
             width: 200,
+=======
+            label: 'Age',
+            prop: 'age',
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             filters: [
               {
                 label: 'Greater than 25',
@@ -152,9 +265,14 @@
             }
           },
           {
+<<<<<<< HEAD
             title: 'Address',
             key: 'address',
             width: 200,
+=======
+            label: 'Address',
+            prop: 'address',
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
             filters: [
               {
                 label: 'New York',
@@ -175,7 +293,11 @@
             }
           }
         ],
+<<<<<<< HEAD
         data5: [
+=======
+        dataList: [
+>>>>>>> e82850f348684bcfd908e6c0b5e1b4332733c59b
           {
             name: 'John Brown',
             age: 18,
