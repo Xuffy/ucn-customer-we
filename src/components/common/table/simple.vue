@@ -6,15 +6,17 @@
         <v-filter-column></v-filter-column>
       </el-col>
     </el-row>
+
     <el-table
       :data="dataList">
       <el-table-column
-        type="selection"
-        width="55">
+        type="selection">
       </el-table-column>
+
       <el-table-column
         type="index">
       </el-table-column>
+
       <el-table-column v-for="(item,index) in dataColumns" :key="index"
                        :prop="item.prop"
                        :label="item.label"
@@ -22,6 +24,7 @@
                        width="180">
       </el-table-column>
     </el-table>
+
     <br>
     <el-pagination
       background

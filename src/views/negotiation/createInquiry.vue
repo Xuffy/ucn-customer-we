@@ -176,21 +176,7 @@
                 <el-button type="info">Add Product</el-button>
                 <el-button type="info">Remove</el-button>
             </div>
-            <div class="select-wrap">
-                <div class="select">
-                    <el-select v-model="value" placeholder="select" @change="selectChange">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
-                </div>
-                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-                <div class="set">
-                    <i class="el-icon-setting"></i>
-                </div>
-            </div>
+            <select-search :options="options" />
         </div>
         <!--form-->
         <div class="bom-btn-wrap">
@@ -200,10 +186,15 @@
     </div>
 </template>
 <script>
+    import { selectSearch } from '@/components/index';
     export default {
         name:'createInquiry',
         data() {
             return {
+                options:[{
+                    id:'1',
+                    label:'dada'
+                }],
                 InquirySequance1:'',
                 InquirySequance:'',
                 DestinationOptions:[],
@@ -267,6 +258,9 @@
                 }],
                 shipping:''
             }
+        },
+        components: {
+            'select-search':selectSearch
         }
     }
 </script>

@@ -195,6 +195,31 @@ export const routerMap = [
           path: 'logisticPlanOverview',
           name: 'logisticPlanOverview',
           component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          component: () => import('../views/logistic/placeLogisticPlan')
+        },
+        {
+          path: 'logisticPlanDetail',
+          name: 'logisticPlanDetail',
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
+          path: 'logisticOrderOverview',
+          name: 'logisticOrderOverview',
+          component: () => import('../views/logistic/logisticOrderOverview')
+        },
+        {
+          path: 'placeLogisticOrder',
+          name: 'placeLogisticOrder',
+          component: () => import('../views/logistic/placeLogisticOrder')
+        },
+        {
+          path: 'logisticOrderDetail',
+          name: 'logisticOrderDetail',
+          component: () => import('../views/logistic/logisticOrderDetail')
         }
       ]
       
@@ -239,7 +264,6 @@ export const routerMap = [
         },
       ]
     },
-   
     {
       path: '/payment',
       component: Layout,
@@ -261,8 +285,8 @@ export const routerMap = [
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/settings/index.vue')
+          path: 'departmentSetting',
+          component: () => import('../views/settings/departmentSetting.vue')
         }
       ]
     },

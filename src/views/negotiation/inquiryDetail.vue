@@ -33,21 +33,7 @@
                             <el-button type="info">Add Product</el-button>
                             <el-button type="info">Remove</el-button>
                         </div>
-                        <div class="select-wrap">
-                            <div class="select">
-                                <el-select v-model="value" placeholder="select" @change="selectChange">
-                                    <el-option
-                                    v-for="item in options"
-                                    :key="item.id"
-                                    :label="item.label"
-                                    :value="item.id" />
-                                </el-select>
-                            </div>
-                            <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-                            <div class="set">
-                                <i class="el-icon-setting"></i>
-                            </div>
-                        </div>
+                        <select-search :options="options" />
                     </div>
                     <!--form-->
                     <div class="form-wrap"></div>
@@ -85,7 +71,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard } from '@/components/index';
+    import { messageBoard, selectSearch } from '@/components/index';
     import { getData } from '@/service/base';
     export default {
         name:'inquiryDetail',
@@ -111,7 +97,8 @@
             }
         },
         components: {
-            'message-board':messageBoard
+            'message-board':messageBoard,
+            'select-search':selectSearch
         },
         methods: {
             selectChange(val) {

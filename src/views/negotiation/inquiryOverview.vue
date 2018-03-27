@@ -9,18 +9,7 @@
                 <button>Finish</button>
                 <button>Canceled</button>
             </div>
-            <div class="select-wrap">
-                <div class="select">
-                    <el-select v-model="value" placeholder="select" @change="selectChange">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
-                </div>
-                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-            </div>
+            <select-search :options="options" :setting="false" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
@@ -48,6 +37,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
     */
+    import { selectSearch } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -68,6 +58,9 @@
                     label: '询价单号（客户）'
                 }]
             }
+        },
+        components: {
+            'select-search': selectSearch
         },
         methods: {
             selectChange(val) {
