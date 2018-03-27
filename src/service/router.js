@@ -274,6 +274,10 @@ export const routerMap = [
         {
           path: 'departmentSetting',
           component: () => import('../views/settings/departmentSetting.vue')
+        },
+        {
+          path: 'CategorySetting',
+          component: () => import('../views/settings/CategorySetting')
         }
       ]
     },
