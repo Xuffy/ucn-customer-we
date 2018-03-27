@@ -24,63 +24,16 @@
                        width="180">
       </el-table-column>
     </el-table>
-    <Row>
-      <Col span="16">
-      12</Col>
-      <Col span="8" style="text-align: right;cursor: pointer">
-      <v-filter-colum></v-filter-colum>
-      </Col>
-    </Row>
-    <Table :columns="columns6" :data="data5" size="small">
-      <!--<div slot="footer">123</div>-->
-    </Table>
-
-    <!--<CheckboxGroup>
-      <table style="width: 100%">
-        <tr>
-          <th>
-            <v-filter-value></v-filter-value>
-          </th>
-          <th>132</th>
-          <th>132</th>
-          <th>132</th>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-        <tr>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-          <td>132</td>
-        </tr>
-      </table>
-    </CheckboxGroup>-->
 
     <br>
-    <Page :total="100" show-sizer show-elevator style="display: inline-block;vertical-align: middle"></Page>
-    <span style="display: inline-block;vertical-align: middle">View 123,432 Products</span>
+    <el-pagination
+      background
+      :current-page="4"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="prev, pager, next,sizes, jumper,total"
+      :total="400">
+    </el-pagination>
   </div>
 </template>
 

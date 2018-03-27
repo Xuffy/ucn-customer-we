@@ -7,6 +7,7 @@
       </el-col>
     </el-row>
     <el-table
+      max-height="250"
       :data="dataList">
       <el-table-column
         fixed

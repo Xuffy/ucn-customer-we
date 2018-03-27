@@ -1,15 +1,23 @@
 <template>
   <section class="filter-column">
-    <Poptip placement="bottom-end" style="text-align: left">
-      <p class="title">
-        Set Filed&nbsp;<Icon type="funnel"></Icon>
-      </p>
-      <div slot="content" class="content-box">
-        <Input placeholder="Please select" clearable></Input><br>
-        <!--<Checkbox :value="checkAll" @click.prevent.native="changeCheck">全选</Checkbox>-->
-        <Tree :data="column" show-checkbox></Tree>
-      </div>
-    </Poptip>
+
+    <el-popover
+      placement="bottom-end"
+      trigger="click">
+      <i slot="reference" class="el-icon-setting">Set Filed</i>
+      <el-input v-model="filterText" placeholder="请输入内容" size="mini"></el-input>
+      <el-checkbox v-model="checkAll">全选</el-checkbox>
+      <el-tree
+        show-checkbox
+        default-expand-all
+        class="filter-tree"
+        node-key="id"
+        :data="dataList"
+        :props="{children: 'children',label: 'label'}"
+        :filter-node-method="filterNode"
+        ref="columnTree">
+      </el-tree>
+    </el-popover>
   </section>
 </template>
 
