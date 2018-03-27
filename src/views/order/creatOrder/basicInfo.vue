@@ -1,8 +1,5 @@
 <template>
-  <div class="creatOrder">
-        <div class="title">New Order No.1121</div>
-<!--         basicinfo-->
-         <div class="basicinfo">
+    <div class="basicinfo">
              <div class="basicinfo_title">Basic Info</div>
              <div class="basicinfo_form">
                   <el-form ref="formItem" :model="formItem" label-width="180px">
@@ -271,39 +268,16 @@
                          </el-col>
                     </el-row>
                 </el-form>
-                  <div class="basicinfo_other">
-    <!--                order remark-->
-                    <el-row>
-                          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                             <div class="order_remark">
-                                 <div class='order_remark_title'>Order Remark</div>
-                                 <div>
-                                     <el-input
-                                          type="textarea"
-                                          :rows="4"
-                                          placeholder="请输入内容"
-                                          v-model="textarea">
-                                        </el-input>
-                                 </div>
-                                </div>  
-                         </el-col>
-    <!--                 attchment         -->
-                          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                             <div class="attchment">
-                                <div class="order_remark_title">Attchment</div>
-                            </div>
-                           </el-col>
-                    </el-row>
-                   </div>
              </div>
-         </div>       
-  </div>
+         </div>  
 </template>
-
 <script>
     export default {
-        name: 'creatOrder',
-        data() {
+        name:'basicinfo',
+        components: {
+
+        },
+        data(){
             return {
                 formItem: {
                     SupplierName: '',
@@ -318,26 +292,12 @@
                     value: '选项3',
                     label: '蚵仔煎'
                 }],
-                textarea: "" //orderremark输入内容
             }
-        },
-        created() {},
-        methods: {}
+        }
     }
-
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .title {
-        font-weight: bold;
-        font-size: 18px;
-        height: 32px;
-        line-height: 32px;
-        color: #666666;
-        border-bottom: 1px solid #BEBEBE
-    }
-
-    .basicinfo_title {
+  .basicinfo_title {
         font-size: 14px;
         height: 32px;
         line-height: 32px;
@@ -348,16 +308,5 @@
         padding-top: 20px;
     }
 
-    .order_remark {
-        width: 400px;
-    }
-
-    .order_remark_title {
-        margin-bottom: 20px;
-    }
-
-    .basicinfo_other {
-        margin-left: 80px;
-    }
 
 </style>

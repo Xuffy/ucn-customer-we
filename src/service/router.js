@@ -138,6 +138,16 @@ export const routerMap = [
                 path: 'sourcingDetail',
                 name: 'sourcingDetail',
                 component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
+        },
+               {
+                path: 'Compare',
+                name: 'Compare',
+                component: () =>import ('../views/supplier/Compare/Compare.vue')
+        },
+                {
+                path: 'CompareOverview',
+                name: 'CompareOverview',
+                component: () =>import ('../views/supplier/Compare/Overview.vue')
         }
       ]
     },
@@ -222,15 +232,18 @@ export const routerMap = [
         noDropdown: true,
         children: [
             {
-                path: 'index',
-                component: () =>import('../views/order/index.vue')
+                path: 'overView',
+                component: () =>import('../views/order/overView.vue')
         },
             {
                 path: 'creatOrder',
-                component: () =>import('../views/order/creatOrder/creatOrder.vue')
+                component: () =>import('../views/order/creatOrder/index.vue')
         }, {
                 path: 'poDetail',
                 component: () =>import('../views/order/poDetail/index.vue')
+        }, {
+                path: 'draftOverview',
+                component: () =>import('../views/order/draftOverview.vue')
         }
       ]
     },
