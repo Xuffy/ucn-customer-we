@@ -1,6 +1,6 @@
 <template>
   <div class="quickLink">
-    <h3 class="ucn-content-title" style="display: inline-block">Quick Link</h3>
+    <h3 class="ucn-content-title inline">Quick Link</h3>
     <el-button size="mini" type="primary" icon="el-icon-plus"
                style="display: inline-block;margin-left: 30px!important;"
                @click="dialogAdd.show = true"></el-button>

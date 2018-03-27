@@ -1,9 +1,8 @@
-import DateFormat from  'dateformat';
-import {localStore, sessionStore} from  'service/store';
+import DateFormat from 'dateformat';
+import {localStore, sessionStore} from 'service/store';
 
-export default{
-  install(Vue, options)
-  {
+export default {
+  install(Vue, options) {
     let alertShow = false;
 
     /**
@@ -43,11 +42,24 @@ export default{
 
 
     /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    Vue.prototype.$getI18n = function () {
+      // this.$i18n.
+      // let data = this.$i18n.getLocaleMessage(this.$i18n.locale);
+      // console.log([
+      //   {p:'',b:''}
+      // ])
+    }
+
+    /**
      * text转换html 替换<br>、&nbsp;
      * @param value
      * @returns {string}
      */
-    Vue.prototype.$textToHtml = function (value) {
+    /*Vue.prototype.$textToHtml = function (value) {
       let val_array, val_num = 0, val_new = '';
 
       if (!_.isString(value)) {
@@ -67,7 +79,7 @@ export default{
       });
 
       return val_new;
-    };
+    };*/
 
 
     /**
@@ -75,12 +87,12 @@ export default{
      * @param value
      * @returns {string}
      */
-    Vue.prototype.$htmlToText = function (value) {
+    /*Vue.prototype.$htmlToText = function (value) {
       if (!_.isString(value)) {
         return '';
       }
       return value.replace(/<br\/>/g, '\n').replace(/&nbsp;/g, ' ');
-    }
+    }*/
 
   }
 }
