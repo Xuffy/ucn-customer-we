@@ -190,26 +190,6 @@ export const routerMap = [
           path: 'placeLogisticPlan',
           name: 'placeLogisticPlan',
           component: () => import('../views/logistic/placeLogisticPlan')
-        },
-        {
-          path: 'logisticPlanDetail',
-          name: 'logisticPlanDetail',
-          component: () => import('../views/logistic/logisticPlanDetail')
-        },
-        {
-          path: 'logisticOrderOverview',
-          name: 'logisticOrderOverview',
-          component: () => import('../views/logistic/logisticOrderOverview')
-        },
-        {
-          path: 'placeLogisticOrder',
-          name: 'placeLogisticOrder',
-          component: () => import('../views/logistic/placeLogisticOrder')
-        },
-        {
-          path: 'logisticOrderDetail',
-          name: 'logisticOrderDetail',
-          component: () => import('../views/logistic/logisticOrderDetail')
         }
       ]
       
