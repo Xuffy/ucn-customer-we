@@ -1,6 +1,31 @@
 <template>
   <section class="filter-value">
-    <Poptip placement="bottom" style="width: 100%">
+
+    <el-popover
+      popper-class="filter-value-popper"
+      placement="bottom"
+      trigger="click">
+      <i class="el-icon-circle-plus-outline" slot="reference">列名</i>
+
+      <el-checkbox-group v-model="sortType" size="mini" @change="changeSortType">
+        <el-checkbox-button label="1">升序</el-checkbox-button>
+        <el-checkbox-button label="2">降序</el-checkbox-button>
+      </el-checkbox-group>
+
+      <el-input placeholder="请输入内容" size="mini"></el-input>
+
+      <div class="content-box">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <br/>
+
+        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+          <el-checkbox class="checkbox-item" v-for="city in cities" :label="city" :key="city"
+                       style="">{{city}}
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+    </el-popover>
+    <!--<Poptip placement="bottom" style="width: 100%">
       <p class="title">name &nbsp;
         <Icon type="navicon-round" style="vertical-align: middle;font-size: 14px"></Icon>
       </p>
