@@ -28,44 +28,60 @@
     data() {
       return {
         checkAll: false,
-        column: [
-          {
-            title: 'all(80/60)',
-            expand: true,
-            children: [
-              {
-                title: 'parent 1',
-                expand: true,
-                children: [
-                  {
-                    title: 'parent 1-1',
-                    expand: true
-                  },
-                  {
-                    title: 'parent 1-2',
-                    expand: true
-                  }
-                ]
-              }
-            ]
-
-          }
-
-        ]
+        filterText: '',
+        dataList: [{
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1-1',
+            children: [{
+              id: 9,
+              label: '三级 1-1-1'
+            }, {
+              id: 10,
+              label: '三级 1-1-2'
+            }]
+          }]
+        }, {
+          id: 2,
+          label: '一级 2',
+          children: [{
+            id: 5,
+            label: '二级 2-1'
+          }, {
+            id: 6,
+            label: '二级 2-2'
+          }]
+        }, {
+          id: 3,
+          label: '一级 3',
+          children: [{
+            id: 7,
+            label: '二级 3-1'
+          }, {
+            id: 8,
+            label: '二级 3-2'
+          }]
+        }],
       }
     },
-    watch: {},
+    watch: {
+      filterText(val) {
+        this.$refs.columnTree.filter(val);
+      },
+      checkAll(val) {
+        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.dataList, 'id'))
+          : this.$refs.columnTree.setCheckedKeys([]);
+      }
+    },
     created() {
     },
     methods: {
-      /*changeCheck(type) {
-        this.checkAll = !this.checkAll;
-
-        console.log(_.map(this.column, val => {
-          val.checked = this.checkAll;
-          return val
-        }));
-      }*/
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      }
     }
   }
 </script>

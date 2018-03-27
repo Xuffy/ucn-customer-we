@@ -49,7 +49,7 @@
    */
 
   import VFilterValue from './filterValue'
-  import VFilterColum from './filterColumn'
+  import VFilterColumn from './filterColumn'
 
   export default {
     name: 'VSimpleTable',
@@ -60,43 +60,29 @@
     },
     components: {
       VFilterValue,
-      VFilterColum
+      VFilterColumn
     },
     data() {
       return {
         checkValue: [],
-        columns6: [
+        dataColumns: [
           {
-            type: 'selection',
-            width: 34,
-            fixed: 'left',
-            align: 'center'
-          },
-          {
-            type: 'index',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: 'Date',
-            key: 'date',
-            width: 200,
+            label: 'Date',
+            prop: 'date',
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            title: 'Name',
-            key: 'name',
-            width: 200,
+            label: 'Name',
+            prop: 'name',
             renderHeader: (h, params) => {
               return h(VFilterValue);
             }
           },
           {
-            title: 'Age',
-            key: 'age',
-            width: 200,
+            label: 'Age',
+            prop: 'age',
             filters: [
               {
                 label: 'Greater than 25',
@@ -117,9 +103,8 @@
             }
           },
           {
-            title: 'Address',
-            key: 'address',
-            width: 200,
+            label: 'Address',
+            prop: 'address',
             filters: [
               {
                 label: 'New York',
@@ -140,7 +125,7 @@
             }
           }
         ],
-        data5: [
+        dataList: [
           {
             name: 'John Brown',
             age: 18,
