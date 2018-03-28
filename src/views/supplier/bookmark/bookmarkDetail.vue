@@ -18,47 +18,42 @@
                    <el-row>             
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier Code：xxxx
+                                {{$t('supplier.detail.supplierName')}}：xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier type :xxxx
+                                {{$t('supplier.detail.SupplierCode')}} :xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier phase: xxxx
+                                {{$t('supplier.detail.supplierType')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Rigister address: xxxx
+                                {{$t('supplier.detail.country')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Taxpayer qualification: xxxx
+                                {{$t('supplier.detail.city')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Provide category: xxxx
+                                {{$t('supplier.detail.provideIncoterm')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier company name: xxxx
+                                {{$t('supplier.detail.exportLicense')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier rank: xxxx
+                                {{$t('supplier.detail.mainBusinessScope')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Provide incoterm: xxxx
+                                {{$t('supplier.detail.category')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Office address: xxxx
+                                {{$t('supplier.detail.currency')}}: xxxx
                             </el-col>
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier sourcing from: xxxx
+                                {{$t('supplier.detail.paymentItem')}}: xxxx
                             </el-col>                     
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Export license: xxxx
+                               {{$t('supplier.detail.description')}}: xxxx
                             </el-col>
-                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                               Representative: xxxx
-                            </el-col>
-                              <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                                Remark：XXXXXXXX
-                            </el-col>
+                            
                         </el-row>
 
                 </el-row>

@@ -42,7 +42,7 @@
                   <el-button type='primary'>Remove</el-button>
              </div>
              <div class="pro_table">
-                 这块表格
+                
              </div>
          </div>
 <!--         底部固定按钮区域-->
@@ -98,7 +98,7 @@
     import attchment from './attchment'
     export default {
         name: 'creatOrder',
-        components:{
+        components: {
             responsibility,
             basicinfo,
             FromNewSearch,
@@ -107,36 +107,36 @@
         },
         data() {
             return {
-                textarea: "" ,//order remark输入内容
-                checked:true ,//底部单选 mark as important
-                dialogQuickcreate: false,// 弹出框quickcreate弹窗区域
-                dialogAddproduct:false,//弹窗框 addproduct弹窗区域
-                 TabsAddproduct: 'FromNewSearch', //tab
-                 value:'',
-                keyWord:'',
+                textarea: "", //order remark输入内容
+                checked: true, //底部单选 mark as important
+                dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
+                dialogAddproduct: false, //弹窗框 addproduct弹窗区域
+                TabsAddproduct: 'FromNewSearch', //tab
+                value: '',
+                keyWord: '',
                 options: [{
                     id: '1',
                     label: 'Order No'
                 }, {
                     id: '2',
                     label: 'Sku Code'
-                },],
-                 gridData: [{
-                  date: '2016-05-02',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1518 弄'
+                }, ],
+                gridData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 }, {
-                  date: '2016-05-04',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1518 弄'
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 }, {
-                  date: '2016-05-01',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1518 弄'
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 }, {
-                  date: '2016-05-03',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1518 弄'
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 }],
             }
         },
@@ -153,59 +153,67 @@
         height: 50px;
         line-height: 50px;
         color: #666666;
-        border-bottom: 1px solid #BEBEBE
+        border-bottom: 1px solid #ccc;
     }
-      .pro_title {
-        font-size: 14px;
-        height: 32px;
-        line-height: 32px;
-        border-bottom: 1px solid black
-    }
+
     .order_remark {
         width: 372px;
     }
 
     .order_remark_title {
         margin-bottom: 20px;
+        font-size: 16px;
     }
 
     .basicinfo_other {
         margin-left: 80px;
-/*
+        /*
         display: flex;
         justify-content:space-between;
 */
     }
-    .attchment{
-/*        width: 400px;*/
-/*        margin-left: 20px;*/
+
+    .attchment {
+        /*        width: 400px;*/
+        /*        margin-left: 20px;*/
     }
-    .pro_button{
+
+    .pro_button {
         margin-top: 10px;
     }
-    .pro_table{
-         margin-top: 10px;
+
+    .pro_table {
+        margin-top: 10px;
         padding-bottom: 60px;
     }
-    .footer{
-        width:100%;
+
+    .pro_title {
+        font-size: 14px;
+        height: 60px;
+        line-height: 60px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .footer {
+        width: 100%;
         height: 60px;
         background-color: white;
-        position: fixed;      
-        bottom:0;
+        position: fixed;
+        bottom: 0;
         line-height: 60px;
     }
-     .select-wrap {
-            display:flex;
-            height: 60px;
-            align-items: center;
-            justify-content:flex-end;
-            box-sizing: border-box;
+
+    .select-wrap {
+        display: flex;
+        height: 60px;
+        align-items: center;
+        justify-content: flex-end;
+        box-sizing: border-box;
     }
-   .select {
-            width: 110px;
-            margin-right:5px;
-                }
-            
-        
+
+    .select {
+        width: 110px;
+        margin-right: 5px;
+    }
+
 </style>
