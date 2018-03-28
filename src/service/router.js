@@ -280,7 +280,7 @@ export const routerMap = [
     {
       path: '/settings',
       component: Layout,
-      redirect: '/settings',
+      redirect: '/settings/departmentSetting',
       name: 'Settings',
       noDropdown: true,
       children: [

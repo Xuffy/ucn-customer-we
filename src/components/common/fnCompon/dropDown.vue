@@ -1,5 +1,5 @@
 <template>
-    <div class="dropDown" @click.stop>
+    <div class="dropDown" @click.stop @mouseenter="mouseEnter" @mouseleave="mouseLave">
         <div class="checkInputBox" @click="theeSwitch" :class="{'active':theeStatus}">
 			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
             <div class="dataBox" @click.stop>
@@ -7,12 +7,15 @@
 			</div>
 			<i class="el-icon-arrow-up"></i>
         </div>
-        <div class="deepBox" v-if="theeStatus" :style="{'height':treeHeight}">
+		<div class="data-box-active" @click.stop v-show="dropDownMouse" :style="`right:${dropDownRight}`">
+			<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
+		</div>
+        <div class="deepBox" v-if="theeStatus">
 			<el-input
 				:placeholder="searchPlaceholder"
 				v-model="filterText">
 			</el-input>
-			<div class="deep">
+			<div class="deep" :style="{'height':treeHeight}">
 				<el-tree
 					:data="list"
 					show-checkbox
@@ -52,7 +55,8 @@
 					label: 'label'
 				},
 				data:[],
-				theeStatus: false
+				theeStatus: false,
+				dropDownMouse: false
 			};
 		},
 		mounted() {
@@ -82,6 +86,10 @@
 			treeHeight: {
 				type: String,
 				default: '200px'
+			},
+			dropDownRight: {
+				type: String,
+				default: '-231px'
 			}
 		},
 		computed: {
@@ -99,6 +107,7 @@
 			},
 			getChecked() {
 				this.selectedList = this.$refs.tree.getCheckedNodes(true);
+				this.mouseEnter();
 			},
 			del(item, index) {
 				this.selectedList.splice(index, 1);
@@ -112,20 +121,54 @@
 			},
 			theeSwitch() {
 				this.theeStatus = !this.theeStatus;
+			},
+			mouseEnter() {
+				if(this.selectedList.length <= 0) return;
+				this.dropDownMouse = true;
+			},
+			mouseLave() {
+				this.dropDownMouse = false;
 			}
 		}
 	};
 </script>
 <style scoped lang="less">
 	.dropDown {
+		position: relative;
+		min-width:188px;
 		.deepBox {
 			padding:10px;
 			border-radius: 5px;
 			box-shadow: 0 0 5px #ccc;
+			background:#fff;
 			.deep {
 				margin-top:10px;
 				max-height:200px;
 				overflow-y: auto;
+			}
+		}
+		.data-box-active {
+			width:230px;
+			padding:10px;
+			box-sizing: border-box;
+			border-radius: 5px;
+			box-shadow: 0 0 5px #ccc;
+			position:absolute;
+			right:-232px;
+			top:0;
+			background:#fff;
+			span {
+				background:#f4f4f4;
+				color:#94979a;
+				padding:8px 8px;
+				margin:5px 5px 5px 0;
+				border-radius: 5px;
+				display:inline-block;
+				font-size:12px;
+				i {
+					font-size:14px;
+					cursor: pointer;
+				}
 			}
 		}
 		.checkInputBox {
@@ -145,15 +188,20 @@
 			padding: 0 15px;
 			-webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 			transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+			i {
+				transition: all .5s ease;
+			}
 			&.active {
 				border-color:#409eff;
-				.el-icon-close {
+				i {
 					color:#409eff;
 					transform: rotate(180deg);
 				}
 			}
 			width: 100%;
 			.dataBox {
+				max-height:40px;
+				overflow: hidden;
 				span {
 					background:#f4f4f4;
 					color:#94979a;
