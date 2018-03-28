@@ -85,14 +85,23 @@
                 switchStatus:false,
                 options: [{
                     id: '1',
-                    label: 'SKU Code'
+                    label: 'SKU code'
                 }, {
                     id: '2',
                     label: 'SKU Name'
                 }, {
                     id: '3',
-                    label: 'SKU descr'
-                },],
+                    label: 'SKU description'
+                }, {
+                    id: '4',
+                    label: 'Vendor SKU code'
+                }, {
+                    id: '5',
+                    label: 'Vendor SKU name'
+                }, {
+                    id: '6',
+                    label: 'Vendor SKU description'
+                }],
                 list:[]
             }
         },
