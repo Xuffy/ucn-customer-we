@@ -67,8 +67,11 @@
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             {{$t('product.page.skuNo')}} : XXXXXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             {{$t('product.page.skuEnglishName')}} : XXXXXXXXXXXXXXXXXXXXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.skuNameInCustomerLanguage')}} : XXXXXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             {{$t('product.page.skuEnglishDescription')}} : XXXXXX
@@ -76,9 +79,7 @@
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             {{$t('product.page.skuDescriptionInCustomerLanguage')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            {{$t('product.page.skuNameInCustomerLanguage')}} : XXXXXXXXXXXX
-                        </el-col>
+
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             {{$t('product.page.skuCode')}} : XXXXXX
                         </el-col>
@@ -142,7 +143,7 @@
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             {{$t('product.page.unexpirationDate')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             {{$t('product.page.explain')}} : XXXXXX
                         </el-col>
                     </el-row>

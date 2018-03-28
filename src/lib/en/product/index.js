@@ -78,8 +78,6 @@ const btn={
     addToCompare:'Add to Compare',
     addToBookmark:'Add to Bookmark'
 
-
-
 };
 
 
