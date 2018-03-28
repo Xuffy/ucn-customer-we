@@ -1,27 +1,27 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd">inquiry Overview</h3>
+        <h3 class="hd"> {{ $t('NEGOTIATION.INQUIRYOVERVIEW.INDEX') }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>Status:</span>
-                <button>TBC by Customer</button>
-                <button>TBC by Supplier</button>
-                <button>Finish</button>
-                <button>Canceled</button>
+                <span>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.INDEX') }}:</span>
+                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.TBCBYCUSTOMER') }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.TBCBYSUPPLIER') }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.FINISH') }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.CANCEL') }}</el-button>
             </div>
             <select-search :options="options" :setting="false" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">Compare</el-button>
-                <el-button type="primary">Create New Inquiry</el-button>
-                <el-button>Cancel the Inquiry</el-button>
-                <el-button>Delete</el-button>
+                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.COMPARE')  }}</el-button>
+                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.CREATENEWINQUIRY')  }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.CANCELTHEINQUIRY')  }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.DELETE')  }}</el-button>
             </div>
             <div class="viewBy">
-                <span>View by:</span>
-                <button>Inquiry</button>
-                <button class="active">SKU</button>
+                <span>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.INDEX')  }}:</span>
+                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.INQUIRY') }}</el-button>
+                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.SKU') }}</el-button>
                 <div class="set">
                     <i class="el-icon-setting"></i>
                 </div>
@@ -85,6 +85,9 @@
             justify-content:space-between;
             padding:0 15px;
             box-sizing: border-box;
+            span {
+                padding-right:5px;
+            }
             .btn-wrap {
                 display:flex;
                 align-items: center;
@@ -93,16 +96,6 @@
                 }
                 button {
                     padding:2px 5px;
-                    cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
-                    }
                 }
             }
             .select-wrap {
@@ -129,16 +122,7 @@
                 }
                 button {
                     cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
                     padding:2px 5px;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
-                    }
                 }
                 .set {
                     cursor: pointer;
