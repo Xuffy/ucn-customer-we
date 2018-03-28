@@ -7,12 +7,12 @@
 			</div>
 			<i class="el-icon-arrow-up"></i>
         </div>
-        <div class="deepBox" v-if="theeStatus" :style="{'height':treeHeight}">
+        <div class="deepBox" v-if="theeStatus">
 			<el-input
 				:placeholder="searchPlaceholder"
 				v-model="filterText">
 			</el-input>
-			<div class="deep">
+			<div class="deep" :style="{'height':treeHeight}">
 				<el-tree
 					:data="list"
 					show-checkbox
@@ -122,11 +122,11 @@
 			padding:10px;
 			border-radius: 5px;
 			box-shadow: 0 0 5px #ccc;
-			overflow-y: auto;
 			background:#fff;
 			.deep {
 				margin-top:10px;
 				max-height:200px;
+				overflow-y: auto;
 			}
 		}
 		.checkInputBox {
