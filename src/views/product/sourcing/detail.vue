@@ -2,7 +2,7 @@
     <div class="Details">
         <div class="head">
             <div class="title">
-                Workbenchware（SKU name)
+                {{$t('product.title.Workbenchware')}}（SKU name)
             </div>
             <div class="detail">
                 <el-row>
@@ -16,144 +16,138 @@
                     <el-col :span="18">
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                品名：xxxx
+                                {{$t('product.page.skuEnglishName')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                工厂货号 :xxxx
+                                {{$t('product.page.skuStatus')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                颜色: xxxx
+                                {{$t('product.page.vendorSKUCode')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                价格: xxxx
+                                {{$t('product.page.color')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                价格条款: xxxx
+                                {{$t('product.page.incoterm')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                价格条款区域: xxxx
+                                {{$t('product.page.incotermArea')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                数量单位: xxxx
+                                {{$t('product.page.incotermPrice')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                MOQ: xxxx
+                                {{$t('product.page.unitofMeasurement')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                供应商名称: xxxx
+                                {{$t('product.page.supplierName')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                描述: xxxx
+                                {{$t('product.page.skuEnglishDescription')}} : xxxx
                             </el-col>
                         </el-row>
 
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button type="primary">Create Inquiry</el-button>
-                    <el-button type="primary">Create Order</el-button>
-                    <el-button @click="addCompare" type="primary">Add to Compare</el-button>
-                    <el-button round>Add to Bookmark</el-button>
+                    <el-button type="primary">{{$t('product.btn.createInquiry')}}</el-button>
+                    <el-button type="primary">{{$t('product.btn.createOrder')}}</el-button>
+                    <el-button @click="addCompare" type="primary">{{$t('product.btn.addToCompare')}}</el-button>
+                    <el-button round>{{$t('product.btn.addToBookmark')}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="Basic Info" name="Basic Info">
+                <el-tab-pane :label="$t('product.page.basicInformation')" name="Basic Info">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            产品条码 : XXXXXX
+                            {{$t('product.page.skuStatus')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            英文品名 : XXXXXXXXX
+                            {{$t('product.page.skuNo')}} : XXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            产品英文描述 : XXXXXXXXXXXXXXXXXXXXXXXX
+                            {{$t('product.page.skuEnglishName')}} : XXXXXXXXXXXXXXXXXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            客户语言品名 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            客户货号 : XXXXXX
+                            {{$t('product.page.skuEnglishDescription')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            客户语言描述 : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            供应商编号 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            供应商简称 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            供应商货号 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            计量单位 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            产品组成 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            英文材质 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            英文颜色 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            起订量 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            交货期 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            产品设计 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            一级分类名称 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            二级分类名称 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            三级分类名称 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            四级分类名称 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            FOB币种 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            FOB单价 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            FOB港口 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            EXW单价 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            EXW币种 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            不可销售国家 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            适用年龄 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            保质期 : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            保质期单位 : XXXXXX
+                            {{$t('product.page.skuDescriptionInCustomerLanguage')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                            说明 : XXXXXXXXXXXXXXXXXXXXXXXX
+                            {{$t('product.page.skuNameInCustomerLanguage')}} : XXXXXXXXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.skuCode')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.vendorSkuCode')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.supplierName')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.supplierCode')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.unitofMeasurement')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.productFormation')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.textureEnglish')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.colourEnglish')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.minimumOrderQuantity')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.deliveryDate')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.productDesign')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.categoryLevel1')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.categoryLevel2')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.categoryLevel3')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.categoryLevel4')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.readilyAvailable')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.skuAvailable')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.restrictedSellingCountry')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.applicableAge')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.expirationDate')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.unexpirationDate')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                            {{$t('product.page.explain')}} : XXXXXX
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Customer Info" name="Customer Info">
+                <el-tab-pane :label="$t('product.page.price')" name="Customer Info">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             增值税率% : XXXXXX
@@ -205,7 +199,7 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Price Info" name="Price Info">
+                <el-tab-pane :label="$t('product.page.customInformation')" name="Price Info">
                     <el-table
                             :data="tableData"
                             border
@@ -267,7 +261,7 @@
                             :total="400">
                     </el-pagination>
                 </el-tab-pane>
-                <el-tab-pane label="Packing Info" name="Packing Info">
+                <el-tab-pane :label="$t('product.page.packingInfo')" name="Packing Info">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             重量单位 : XXXXXX
@@ -373,7 +367,7 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Logistic" name="Logistic">
+                <el-tab-pane :label="$t('product.page.logisticInfo')" name="Logistic">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             20GP产品数量 : XXXXXX
@@ -413,7 +407,7 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Other Info" name="Other Info">
+                <el-tab-pane :label="$t('product.page.otherInfo')" name="Other Info">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             主销国家 : XXXXXX
@@ -450,10 +444,10 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Attachment" name="Attachment">
+                <el-tab-pane :label="$t('product.page.attachment')" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane label="History" name="History">
+                <el-tab-pane :label="$t('product.page.tradeHistory')" name="History">
                     <el-table
                             :data="tableData"
                             border
@@ -545,7 +539,7 @@
                             :total="400">
                     </el-pagination>
                 </el-tab-pane>
-                <el-tab-pane label="Remark" name="Remark">
+                <el-tab-pane :label="$t('product.page.remark')" name="Remark">
                     <add-table></add-table>
                 </el-tab-pane>
             </el-tabs>

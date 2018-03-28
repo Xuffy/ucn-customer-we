@@ -8,12 +8,32 @@
             </el-button>
         </div>
         <div>
+
+            <!--<el-row class="outGroup">-->
+                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+                    <!--<div class="label">-->
+                        <!--{{$t('product.page.category')}}-->
+                    <!--</div>-->
+                    <!--<div style="margin-left: 190px">-->
+                        <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
+                    <!--</div>-->
+                <!--</el-col>-->
+                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+                    <!--asf-->
+                <!--</el-col>-->
+                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+                    <!--asf-->
+                <!--</el-col>-->
+            <!--</el-row>-->
+
+            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
+
             <el-form ref="form" :model="form" label-width="190px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                         <el-form-item :label="$t('product.page.category')">
                             <!--<el-input v-model="form.name"></el-input>-->
-                            <drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -321,10 +341,22 @@
 
 <style scoped>
     .speDropdown{
-        position: absolute;
-        width: 100%;
-        height: 32px;
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*height: 32px;*/
+        /*background-color: #ffffff;*/
+        /*z-index: 2000;*/
     }
+    /*.speDropdown >>> .checkInputBox{*/
+        /*height: 32px;*/
+        /*line-height: 32px;*/
+        /*min-height: 32px !important;*/
+    /*}*/
+    /*.speDropdown >>> .checkInputBox .checkInputBoxPl{*/
+        /*height: 32px;*/
+        /*line-height: 32px;*/
+    /*}*/
+
     .bookmark{
         padding-right: 20px;
     }
@@ -340,6 +372,14 @@
     .title-btn{
         float: right;
         margin-right: 5px;
+    }
+
+    .outGroup{
+
+    }
+    .outGroup .label{
+        width: 190px;
+        float: left;
     }
 
     .body{
