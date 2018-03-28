@@ -160,7 +160,10 @@
                         padding-left:15px;
                         box-sizing: border-box;
                         h5 {
-                            font-size:16px;
+                            font-size:14px;
+                        }
+                        .el-checkbox__label {
+                            font-size:12px;
                         }
                     }
                     .status {
@@ -199,6 +202,9 @@
                     }
                     .bom-btn-wrap {
                         padding-top:20px;
+                        button {
+                            margin-bottom:10px;
+                        }
                     }
                 }
             }
