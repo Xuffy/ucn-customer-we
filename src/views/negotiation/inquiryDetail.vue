@@ -1,20 +1,20 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">Inquiry No.1273</h4>
+            <h4 class="title">{{ $t('NEGOTIATION.INQUIRYDETAIL.TITLE') }}</h4>
             <el-checkbox-group v-model="checkList">
-                <el-checkbox label="Hide the Same"></el-checkbox>
-                <el-checkbox label="Highlight the Different"></el-checkbox>
+                <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
+                <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
             </el-checkbox-group>
         </div>
         <div class="container">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>Basic Info</h5>
+                        <h5>{{ $t('NEGOTIATION.INQUIRYDETAIL.BASICINFO') }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox label="Hide the Same"></el-checkbox>
-                            <el-checkbox label="Highlight the Different"></el-checkbox>
+                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
+                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <!--form-->
@@ -22,36 +22,36 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>Product Info</h5>
+                        <h5>{{$t('NEGOTIATION.INQUIRYDETAIL.PRODUCTINFO')}}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox label="Hide the Same"></el-checkbox>
-                            <el-checkbox label="Highlight the Different"></el-checkbox>
+                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
+                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button type="info">Add Product</el-button>
-                            <el-button type="info">Remove</el-button>
+                            <el-button type="info">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ADDPRODUCT')}}</el-button>
+                            <el-button type="info">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.REMOVE')}}</el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <!--form-->
                     <div class="form-wrap"></div>
                     <div class="bom-btn-wrap">
-                        <el-button type="primary">Accept</el-button>
-                        <el-button type="primary">Create Order</el-button>
-                        <el-button type="primary">Add to Compare</el-button>
-                        <el-button type="primary">Copy</el-button>
-                        <el-button type="primary">Modify</el-button>
-                        <el-button type="primary">Create Inquiry</el-button>
-                        <el-button>Cancel</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ACCEPT')}}</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CREATEORDER')}}</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ADDROCOMPARE')}}</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.COPY')}}</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.MODIFY')}}</el-button>
+                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CREATEINQUIRY')}}</el-button>
+                        <el-button>{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CANCEL')}}</el-button>
                     </div>
                 </div>
             </div>
             <div class="message-board-wrap" :class="{'active':switchStatus}">
                 <div class="con"><message-board :list="list" @sub="submit" /></div>
                 <div class="switch-btn" @click="boardSwitch">
-                    Message board
+                    {{$t('NEGOTIATION.INQUIRYDETAIL.MESSAGEBOARD')}}
                     <i class="el-icon-arrow-left"></i>
                 </div>
             </div>
@@ -129,6 +129,7 @@
             .title {
                 padding-left:15px;
                 color:#666;
+                font-size:18px;
             }
         }
         .container {
@@ -149,6 +150,9 @@
                         padding-right:30px;
                         padding-left:15px;
                         box-sizing: border-box;
+                        h5 {
+                            font-size:16px;
+                        }
                     }
                     .status {
                         display:flex;

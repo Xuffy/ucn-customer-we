@@ -122,6 +122,7 @@
 			padding:10px;
 			border-radius: 5px;
 			box-shadow: 0 0 5px #ccc;
+			overflow: hidden;
 			.deep {
 				margin-top:10px;
 				max-height:200px;
