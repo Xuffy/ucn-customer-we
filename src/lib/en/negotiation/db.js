@@ -30,8 +30,22 @@ const VIEWBYSKU = {
 }
 
 const BASICINFO = {
-    INQUIRYNO: "Inquiry No."
+    INQUIRYNO: "Inquiry No.",
+    QUOTATIONNO: "Quotation No.",
+    TIME: "Time",
+    SHIPPINGMETHOD: "Shipping method",
+    PAYMENTTERM: "Payment Term",
+    DESTINATIONCOUNTRY: "Destination Country",
+    DEPARTURECOUNTRY: "Departure Country",
+    INCOTERM: "Incoterm",
+    CURRENCY: "Currency",
+    DISCOUNTRATE: "discount rate",
+    PORT: "Port",
+    SUPPLIERNAME: "supplier name",
+    SUPPLIERTYPE: "supplier type",
+    EXPORTLICENSE: "export license"
 }
+
 export {
     VIEWBYINQUIRY,
     VIEWBYSKU

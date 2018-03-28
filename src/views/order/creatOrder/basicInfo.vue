@@ -2,71 +2,57 @@
     <div class="basicinfo">
              <div class="basicinfo_title">Basic Info</div>
              <div class="basicinfo_form">
-                  <el-form ref="formItem" :model="formItem" label-width="180px">
+                  <el-form ref="formItem" :model="formItem" label-width="210px">
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="供应商合同号" prop="SupplierName">
-                                <el-input v-model="formItem.SupplierName" placeholder="Enter something..."></el-input>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.orderNumber')" prop="orderNumber">
+                                <el-input v-model="formItem.orderNumber" placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                         <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="合同确认序号" prop="SupplierName">
-                                <el-input v-model="formItem.SupplierName" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                         </el-col>
-                         <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="合同日期" prop="SupplierName">
-                                <el-input v-model="formItem.SupplierName" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                         </el-col>
-                         <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户合同" prop="SupplierName">
-                                <el-input v-model="formItem.SupplierName" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                         </el-col>
-<!--                        下拉选择                      -->
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="供应商简称" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list":label=" $t('order.basicinfo.orderDate')" prop="orderDate">
+                                <el-input v-model="formItem.orderDate" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.purchaseOrderNumber')" prop="purchaseOrderNumber">
+                                <el-input v-model="formItem.purchaseOrderNumber" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerShortName')" prop="customerShortName">
+                                <el-input v-model="formItem.customerShortName" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerSerialNumber')" prop="customerSerialNumber">
+                                 <el-input v-model="formItem.customerSerialNumber" placeholder="select">
+                                  </el-input>
                             </el-form-item>
                          </el-col>                 
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="合同状态" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.salesOrderNumber')" prop="salesOrderNumber">
+                                 <el-input v-model="formItem.salesOrderNumber" placeholder="select">
+                                  </el-input>
                             </el-form-item>
                          </el-col>
-                         
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户确认日期" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.supplierShortName')" prop="supplierShortName">
+                                 <el-input v-model="formItem.supplierShortName" placeholder="select">
+                                  </el-input>
                             </el-form-item>
                          </el-col>              
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="公司抬头" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.supplierSerialNumber')" prop="supplierSerialNumber">
+                                 <el-input v-model="formItem.supplierSerialNumber" placeholder="please enter">
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.referencesInquiryID')" prop="referencesInquiryID">
+                                 <el-select v-model="formItem.referencesInquiryID" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in referencesInquiryID"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -75,10 +61,10 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户编号" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.orderStatus')" prop="orderStatus">
+                                 <el-select v-model="formItem.orderStatus" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in orderStatus"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -87,10 +73,22 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户简称" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.estDeliveryDate')" prop="estDeliveryDate">
+                                 <el-input v-model="formItem.estDeliveryDate" placeholder="please enter">
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.actDeliveryDate')" prop="actDeliveryDate">
+                                 <el-input v-model="formItem.actDeliveryDate" placeholder="please enter">
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.priceTerms')" prop="priceTerms">
+                                 <el-select v-model="formItem.priceTerms" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in priceTerms"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -99,10 +97,56 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="价格条款" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.incortermAea')" prop="incortermAea">
+                                 <el-input v-model="formItem.incortermAea" placeholder="select">                               
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentMethod')" prop="paymentMethod">
+                                 <el-input v-model="formItem.paymentMethod" placeholder="select">
+                                    
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.lcNumber')"prop="lcNumber">
+                                 <el-input v-model="formItem.lcNumber" placeholder="select">
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.countryofShipmentOrigin')" prop="countryofShipmentOrigin">
+                                 <el-input v-model="formItem.countryofShipmentOrigin" placeholder="select">
+                                   
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.portofLoading')" prop="portofLoading">
+                                 <el-input v-model="formItem.portofLoading" placeholder="select">
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.destinationCountry')" prop="destinationCountry">
+                                 <el-input v-model="formItem.destinationCountry" placeholder="Please enter">
+                                   
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.destinationPort')" prop="destinationPort">
+                                 <el-input v-model="formItem.destinationPort" placeholder="select">
+                                   
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.transportationWay')" prop="transportationWay">
+                                 <el-select v-model="formItem.transportationWay" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in transportationWay"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -111,10 +155,24 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="付款方式" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerAgreementID')" prop="customerAgreementID">
+                                 <el-input v-model="formItem.customerAgreementID" placeholder="select">
+                                   
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerAgreementDate')" prop="customerAgreementDate">
+                                 <el-input v-model="formItem.customerAgreementDate" placeholder="select">
+
+                                  </el-input>
+                            </el-form-item>
+                         </el-col>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.batchForLogistics')" prop="batchForLogistics">
+                                 <el-select v-model="formItem.batchForLogistics" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in batchForLogistics"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -123,10 +181,10 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="信用证号" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentCondition')" prop="paymentCondition">
+                                 <el-select v-model="formItem.paymentCondition" placeholder="select">
                                     <el-option
-                                      v-for="item in options"
+                                      v-for="item in paymentCondition"
                                       :key="item.value"
                                       :label="item.label"
                                       :value="item.value">
@@ -135,135 +193,18 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="起运国" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.agreeOnDateInterval')" prop="agreeOnDateInterval">
+                                <el-input v-model="formItem.agreeOnDateInterval" placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="出运口岸" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                         <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="目的国" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentStatus')" prop="paymentStatus">
+                                <el-input v-model="formItem.paymentStatus" placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="目的口岸" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="运输方式" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="币种" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户协议号" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="客户协议日期" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="可否分批" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="外销员" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
-                            </el-form-item>
-                         </el-col>
-                         <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" label="参考客户询价单号码" prop="SupplierName">
-                                 <el-select v-model="formItem.SupplierName" placeholder="请选择">
-                                    <el-option
-                                      v-for="item in options"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                  </el-select>
+                            <el-form-item class="form-list" :label=" $t('order.basicinfo.comments')" prop="comments">
+                                <el-input v-model="formItem.comments" placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
                     </el-row>
@@ -273,40 +214,99 @@
 </template>
 <script>
     export default {
-        name:'basicinfo',
+        name: 'basicinfo',
         components: {
 
         },
-        data(){
+        data() {
             return {
                 formItem: {
-                    SupplierName: '',
+                    orderNumber: '',
+                    orderDate: '',
+                    purchaseOrderNumber: '',
+                    customerShortName: '',
+                    customerSerialNumber: '',
+                    salesOrderNumber: '',
+                    supplierShortName: '',
+                    supplierSerialNumber: '',
+                    referencesInquiryID: '', //referencesInquiryID下拉框值
+                    orderStatus: '', //orderStatus下拉框值
+                    estDeliveryDate: '',
+                    actDeliveryDate: '',
+                    priceTerms: '', //下拉框值
+                    incortermAea: '',
+                    paymentMethod: '',
+                    lcNumber: '',
+                    countryofShipmentOrigin: '',
+                    portofLoading: '',
+                    destinationCountry: '',
+                    destinationPort: '',
+                    transportationWay: '', //transportationWay下拉框值
+                    customerAgreementID: '',
+                    customerAgreementDate: '',
+                    batchForLogistics: '', //batchForLogistics下拉框值
+                    paymentCondition: '', //paymentCondition下拉框值
+                    agreeOnDateInterval: '',
+                    paymentStatus: '',
+                    comments: '',
                 },
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
+                referencesInquiryID: [{
+                    value: this.$t('order.basicinfo.TBCByCustomer'),
+                    label: this.$t('order.basicinfo.TBCByCustomer')
                 }, {
-                    value: '选项2',
-                    label: '双皮奶'
+                    value: this.$t('order.basicinfo.TBCBySupplier'),
+                    label: this.$t('order.basicinfo.TBCBySupplier')
+                }],
+                 orderStatus: [{
+                    value: this.$t('order.basicinfo.Process'),
+                    label: this.$t('order.basicinfo.Process')
                 }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
+                    value: this.$t('order.basicinfo.Finished'),
+                    label: this.$t('order.basicinfo.Finished')
+                }, {
+                    value: this.$t('order.basicinfo.Cancled'),
+                    label: this.$t('order.basicinfo.Cancled')
+                }],
+                 priceTerms: [{
+                    value: this.$t('order.basicinfo.fob'),
+                    label: this.$t('order.basicinfo.fob')
+                }, {
+                    value: this.$t('order.basicinfo.exw'),
+                    label: this.$t('order.basicinfo.exw')
+                }],
+                 transportationWay: [{
+                    value: this.$t('order.basicinfo.海运'),
+                    label: this.$t('order.basicinfo.海运')
+                }],
+                 batchForLogistics: [{
+                    value: this.$t('order.basicinfo.Yes'),
+                    label: this.$t('order.basicinfo.Yes')
+                }, {
+                    value: this.$t('order.basicinfo.No'),
+                    label: this.$t('order.basicinfo.No')
+                }],
+                  paymentCondition: [{
+                    value: this.$t('order.basicinfo.paySinceBL'),
+                    label: this.$t('order.basicinfo.paySinceBL')
+                }, {
+                    value: this.$t('order.basicinfo.paySinceLCNumber'),
+                    label: this.$t('order.basicinfo.paySinceLCNumber')
                 }],
             }
         }
     }
+
 </script>
 <style scoped>
-  .basicinfo_title {
+    .basicinfo_title {
         font-size: 14px;
-        height: 32px;
-        line-height: 32px;
-        border-bottom: 1px solid black
+        height: 60px;
+        line-height: 60px;
+        border-bottom: 1px solid #ccc;
     }
 
     .basicinfo_form {
         padding-top: 20px;
     }
-
 
 </style>

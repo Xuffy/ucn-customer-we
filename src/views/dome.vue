@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width:300px;">
         <drop-down :list="dropData" ref="dropDown" />
     </div>
 </template>

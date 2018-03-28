@@ -69,9 +69,9 @@
 <style scoped>
      .r_title {
         font-size: 14px;
-        height: 32px;
-        line-height: 32px;
-        border-bottom: 1px solid black
+        height: 60px;
+        line-height: 60px;
+        border-bottom:1px solid #ccc;
     }
 
 </style>

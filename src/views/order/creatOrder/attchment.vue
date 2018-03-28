@@ -41,7 +41,7 @@
         width: 450px;
         height:86px;
         border: 1px solid #BEBEBE;
-        overflow-y: scroll;
+        overflow:auto;
         display: flex;
         flex-wrap: wrap;
     }
