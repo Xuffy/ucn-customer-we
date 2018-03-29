@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <el-button @click="createRemark" type="primary" plain size="mini">新增</el-button>
+            <el-button @click="createRemark" type="primary" plain size="mini">{{$t('product.page.add')}}</el-button>
         </div>
         <br>
         <el-table
@@ -10,22 +10,22 @@
                 style="width: 100%">
             <el-table-column
                     prop="time"
-                    label="Time"
+                    :label="$t('product.tableData.remark')"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="remark"
-                    label="Remark"
+                    :label="$t('product.tableData.submiter')"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="submiter"
-                    label="Submiter"
+                    :label="$t('product.tableData.time')"
                     align="center">
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    label="操作"
+                    :label="$t('product.tableData.action')"
                     align="center">
                 <template slot-scope="scope">
                     <el-button @click="checkRemark" type="text" size="small">查看</el-button>

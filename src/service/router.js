@@ -60,6 +60,11 @@ export const routerMap = [
           name:'detail'
         },
         {
+          path:'logs',
+          component: () => import('../views/product/sourcing/logs'),
+          name:'logs'
+        },
+        {
           path:'bookmark',
           component: () => import('../views/product/bookmark/bookmark'),
           name:'bookmark'
