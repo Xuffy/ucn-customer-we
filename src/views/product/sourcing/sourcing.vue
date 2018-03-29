@@ -384,7 +384,7 @@
 
     .body{
         overflow: hidden;
-        max-height: 1400px;
+        max-height: 320px;
         display: block;
         transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
     }
@@ -397,7 +397,6 @@
     }
     .hide{
         max-height: 0;
-
     }
 
     .form-spelist{
