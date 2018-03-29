@@ -1,49 +1,53 @@
 import * as db from './db';
 
-const INQUIRYOVERVIEW = {
-    INDEX:"inquiryOverview",
-    STATUS: {
-        INDEX: "Status",
-        TBCBYCUSTOMER: "TBC by Customer",
-        TBCBYSUPPLIER: "TBC by Supplier",
-        FINISH: "finish",
-        CANCEL: "cancel"
-    },
-    BTN: {
-        COMPARE: "Compare",
-        CREATENEWINQUIRY: "Create New Inquiry",
-        CANCELTHEINQUIRY: "Cancel the Inquiry",
-        DELETE: "Delete"
-    },
-    VIEWBY: {
-        INDEX: "View by",
-        INQUIRY: "Inquiry",
-        SKU: "SKU"
-    }
+const status = { 
+    index: "Status",
+    TBCByCustomer: "TBC by Customer",
+    TBCBySupplier: "TBC by Supplier",
+    finish: "finish",
+    cancel: "cancel"
 };
 
-const INQUIRYDETAIL = {
-    TITLE: "Inquiry No.1273",
-    BASICINFO: "Basic Info",
-    HIDETHESAME: "Hide the Same",
-    HIGHLIGHTTHEDIFFERENT: "Highlight the Different",
-    PRODUCTINFO: "Product Info",
-    MESSAGEBOARD: "Message board",
-    BTN: {
-        ADDPRODUCT: "Add Product",
-        REMOVE: "Remove",
-        ACCEPT: "Accept",
-        CREATEORDER: "Create Order",
-        ADDROCOMPARE: "Add to Compare",
-        COPY: "Copy",
-        MODIFY: "Modify",
-        CREATEINQUIRY: "Create Inquiry",
-        CANCEL: "Cancel"
-    }
+const btn = {
+    Compare: "Compare",
+    createNewInquiry: "Create New Inquiry",
+    cancelTheInquiry: "Cancel the Inquiry",
+    Delete: "Delete",
+    addProduct: "Add Product",
+    remove: "Remove",
+    accept: "Accept",
+    createOrder: "Create Order",
+    addToCompare: "Add to Compare",
+    copy: "Copy",
+    modify: "Modify",
+    createInquiry: "Create Inquiry",
+    cancel: "Cancel"
+};
+
+const viewBy = {
+    index: "View by",
+    inquiry: "Inquiry",
+    SKU: "SKU"
+};
+
+const title = {
+    inquiryOverview: "inquiryOverview",
+    inquiryDetail: "Inquiry No.1273"
+};
+
+const basicInfo = {
+    index: "Basic Info",
+    hideTheSame: "Hide the Same",
+    highlightTheDifferent: "Highlight the Different",
+    productInfo: "Product Info",
+    messageBoard: "Message board"
 };
 
 export default {
-    INQUIRYOVERVIEW,
-    INQUIRYDETAIL,
-    db
+    status,
+    btn,
+    viewBy,
+    title,
+    basicInfo,
+    ...db
 }
