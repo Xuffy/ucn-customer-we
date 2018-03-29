@@ -1,20 +1,20 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $t('NEGOTIATION.INQUIRYDETAIL.TITLE') }}</h4>
+            <h4 class="title">{{ $t('negotiation.title.inquiryDetail') }}</h4>
             <el-checkbox-group v-model="checkList">
-                <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
-                <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
             </el-checkbox-group>
         </div>
         <div class="container">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $t('NEGOTIATION.INQUIRYDETAIL.BASICINFO') }}</h5>
+                        <h5>{{ $t('negotiation.basicInfo.index') }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
-                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <!--form-->
@@ -22,37 +22,37 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{$t('NEGOTIATION.INQUIRYDETAIL.PRODUCTINFO')}}</h5>
+                        <h5>{{$t('negotiation.basicInfo.productInfo')}}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIDETHESAME')"></el-checkbox>
-                            <el-checkbox :label="$t('NEGOTIATION.INQUIRYDETAIL.HIGHLIGHTTHEDIFFERENT')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button type="info">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ADDPRODUCT')}}</el-button>
-                            <el-button type="info">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.REMOVE')}}</el-button>
+                            <el-button type="info">{{$t('negotiation.btn.addProduct')}}</el-button>
+                            <el-button type="info">{{$t('negotiation.btn.remove')}}</el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <!--form-->
                     <div class="form-wrap"></div>
                     <div class="bom-btn-wrap">
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ACCEPT')}}</el-button>
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CREATEORDER')}}</el-button>
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.ADDROCOMPARE')}}</el-button>
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.COPY')}}</el-button>
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.MODIFY')}}</el-button>
-                        <el-button type="primary">{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CREATEINQUIRY')}}</el-button>
-                        <el-button>{{$t('NEGOTIATION.INQUIRYDETAIL.BTN.CANCEL')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.accept')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.createOrder')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.addToCompare')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.copy')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.modify')}}</el-button>
+                        <el-button type="primary">{{$t('negotiation.btn.createInquiry')}}</el-button>
+                        <el-button>{{$t('negotiation.btn.cancel')}}</el-button>
                     </div>
                 </div>
             </div>
             <div class="message-board-wrap" :class="{'active':switchStatus}">
                 <div class="con"><message-board :list="list" @sub="submit" /></div>
                 <div class="switch-btn" @click="boardSwitch">
-                    {{$t('NEGOTIATION.INQUIRYDETAIL.MESSAGEBOARD')}}
-                    <i class="el-icon-arrow-left"></i>
+                    {{$t('negotiation.basicInfo.messageBoard')}}
+                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
         </div>
@@ -126,6 +126,12 @@
         }
     }
 </script>
+<style scoped>
+    .inquiryDetail >>> .el-checkbox-group .el-checkbox__label {
+        font-size:12px;
+    }
+</style>
+
 <style lang="less" scoped>
     .inquiryDetail {
         .hd {
@@ -161,9 +167,6 @@
                         box-sizing: border-box;
                         h5 {
                             font-size:14px;
-                        }
-                        .el-checkbox__label {
-                            font-size:12px;
                         }
                     }
                     .status {
@@ -210,14 +213,13 @@
             }
             .message-board-wrap {
                 position:relative;
-                .con {
-                    transition: all .5s ease;
-                    overflow: hidden;
-                }
+                max-width:302px;
+                transition: max-width .5s cubic-bezier(.445,.05,.55,.95);
                 &.active {
-                    .con {                    
-                        width:0;
-                    }
+                    max-width:0;
+                }
+                .con {
+                    overflow: hidden;
                 }
                 .switch-btn {
                     width: 30px;
@@ -237,6 +239,7 @@
                     padding-bottom: 10px;
                     border-radius: 0 5px 0 0;
                     i {
+                        transition: all .5s ease;
                         position:absolute;
                         left:50%;
                         top:50%;

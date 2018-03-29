@@ -1,27 +1,27 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $t('NEGOTIATION.INQUIRYOVERVIEW.INDEX') }}</h3>
+        <h3 class="hd"> {{ $t('negotiation.title.inquiryOverview') }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.INDEX') }}:</span>
-                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.TBCBYCUSTOMER') }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.TBCBYSUPPLIER') }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.FINISH') }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.STATUS.CANCEL') }}</el-button>
+                <span>{{ $t('negotiation.status.index') }}:</span>
+                <el-button type="primary">{{ $t('negotiation.status.TBCByCustomer') }}</el-button>
+                <el-button>{{ $t('negotiation.status.TBCBySupplier') }}</el-button>
+                <el-button>{{ $t('negotiation.status.finish') }}</el-button>
+                <el-button>{{ $t('negotiation.status.cancel') }}</el-button>
             </div>
             <select-search :options="options" :setting="false" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.COMPARE')  }}</el-button>
-                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.CREATENEWINQUIRY')  }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.CANCELTHEINQUIRY')  }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.BTN.DELETE')  }}</el-button>
+                <el-button type="primary">{{ $t('negotiation.btn.Compare')  }}</el-button>
+                <el-button type="primary">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
+                <el-button>{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
+                <el-button>{{ $t('negotiation.btn.Delete')  }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.INDEX')  }}:</span>
-                <el-button type="primary">{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.INQUIRY') }}</el-button>
-                <el-button>{{ $t('NEGOTIATION.INQUIRYOVERVIEW.VIEWBY.SKU') }}</el-button>
+                <span>{{ $t('negotiation.viewBy.index')  }}:</span>
+                <el-button type="primary">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
+                <el-button>{{ $t('negotiation.viewBy.SKU') }}</el-button>
                 <div class="set">
                     <i class="el-icon-setting"></i>
                 </div>
