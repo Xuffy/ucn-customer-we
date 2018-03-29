@@ -10,6 +10,12 @@ var plugins = [],
     _: resolve('node_modules/underscore/underscore.js')
   };
 
+
+// 只在本地环境和mock环境加载mock文件
+// if ((process.env.NODE_ENV === 'local' || process.env.NODE_ENV === 'mock')) {
+//   providePlugin.MockData = resolve('static/mock/init.js');
+// }
+
 plugins.push(new webpack.ProvidePlugin(providePlugin));
 process.env.NODE_ENV !== 'local' && plugins.push(new BundleAnalyzerPlugin());
 /*plugins.push(new webpack.optimize.UglifyJsPlugin({

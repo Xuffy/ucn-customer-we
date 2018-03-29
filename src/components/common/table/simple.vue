@@ -1,39 +1,60 @@
 <template>
   <div class="ucn-table">
     <el-row>
-      <el-col :span="16">12</el-col>
+      <el-col :span="16">&nbsp;</el-col>
       <el-col :span="8" style="text-align: right;cursor: pointer">
         <v-filter-column></v-filter-column>
       </el-col>
     </el-row>
-
     <el-table
-      :data="dataList">
+      :max-height="maxHeight"
+      :data="showData">
       <el-table-column
+        v-if="columnList.length"
+        width="40"
+        fixed="left"
         type="selection">
       </el-table-column>
 
       <el-table-column
+        v-if="columnList.length"
+        align="center"
         type="index">
       </el-table-column>
 
-      <el-table-column v-for="(item,index) in dataColumns" :key="index"
+      <el-table-column v-for="(item,index) in columnList" :key="index"
+                       align="center"
                        :prop="item.prop"
                        :label="item.label"
                        :render-header="item.renderHeader"
-                       width="180">
+                       :width="item.width || 80">
+      </el-table-column>
+      <el-table-column v-if="columnList.length"
+                       label="Actions"
+                       align="center"
+                       fixed="right"
+                       width="80">
+
+        <template slot-scope="scope">
+          <el-button type="text">detail</el-button>
+        </template>
       </el-table-column>
     </el-table>
 
     <br>
-    <el-pagination
+    <!--<el-pagination
       background
       :current-page="4"
       :page-sizes="[10, 20, 30, 40]"
       :page-size="100"
       layout="prev, pager, next,sizes, jumper,total"
       :total="400">
-    </el-pagination>
+    </el-pagination>-->
+    <el-pagination
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="10"
+      layout="prev, pager, next,sizes, jumper,total"
+      :total="400"></el-pagination>
   </div>
 </template>
 
@@ -53,108 +74,67 @@
 
   export default {
     name: 'VSimpleTable',
-    props: {
-      border: {
-        type: Boolean,
-      }
-    },
     components: {
       VFilterValue,
       VFilterColumn
     },
+    props: {
+      data: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      column: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      maxHeight: {
+        type: Number,
+        default: 400,
+      },
+    },
     data() {
       return {
-        checkValue: [],
-        dataColumns: [
-          {
-            label: 'Date',
-            prop: 'date',
-            renderHeader: (h, params) => {
-              return h(VFilterValue);
-            }
-          },
-          {
-            label: 'Name',
-            prop: 'name',
-            renderHeader: (h, params) => {
-              return h(VFilterValue);
-            }
-          },
-          {
-            label: 'Age',
-            prop: 'age',
-            filters: [
-              {
-                label: 'Greater than 25',
-                value: 1
-              },
-              {
-                label: 'Less than 25',
-                value: 2
-              }
-            ],
-            filterMultiple: false,
-            filterMethod(value, row) {
-              if (value === 1) {
-                return row.age > 25;
-              } else if (value === 2) {
-                return row.age < 25;
-              }
-            }
-          },
-          {
-            label: 'Address',
-            prop: 'address',
-            filters: [
-              {
-                label: 'New York',
-                value: 'New York'
-              },
-              {
-                label: 'London',
-                value: 'London'
-              },
-              {
-                label: 'Sydney',
-                value: 'Sydney'
-              }
-            ],
-            fixed: 'right',
-            filterMethod(value, row) {
-              return row.address.indexOf(value) > -1;
-            }
-          }
-        ],
-        dataList: [
-          {
-            name: 'John Brown',
-            age: 18,
-            address: 'New York No. 1 Lake Park',
-            date: '2016-10-03'
-          },
-          {
-            name: 'Jim Green',
-            age: 24,
-            address: 'London No. 1 Lake Park',
-            date: '2016-10-01'
-          },
-          {
-            name: 'Joe Black',
-            age: 30,
-            address: 'Sydney No. 1 Lake Park',
-            date: '2016-10-02'
-          },
-          {
-            name: 'Jon Snow',
-            age: 26,
-            address: 'Ottawa No. 2 Lake Park',
-            date: '2016-10-04'
-          }
-        ],
+        showData: [],
+        columnList: [],
+        // checkValue: [],
       }
     },
-    watch: {},
+    watch: {
+      data(value) {
+        if (!_.isEmpty(value)) {
+          this.showData = _.filter(value, val => {
+            return !val._isHide;
+          });
+        }
+      },
+      column(columns) {
+        if (columns.length) {
+          this.columnList = _.map(columns, val => {
+            val.renderHeader = (h, params) => {
+              return h(VFilterValue, {
+                props: {
+                  dataKey: val.prop,
+                  data: this.data,
+                  label: params.column.label
+                },
+                on: {
+                  'update:data': val => {
+                    this.$emit('update:data', val);
+                  }
+                }
+              });
+            };
+            return val;
+          });
+        }
+      }
+    },
     created() {
+      // this.$emit('update:column', [])
     },
     methods: {
       /**
@@ -208,5 +188,9 @@
 
   .ucn-table .ivu-table-fixed-body {
     background-color: #f8f8f9;
+  }
+
+  .ucn-table .el-table .cell {
+    line-height: 16px;
   }
 </style>

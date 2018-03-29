@@ -2,21 +2,34 @@
   <section class="filter-column">
 
     <el-popover
+      :width="200"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="el-icon-setting">Set Filed</i>
-      <el-input v-model="filterText" placeholder="请输入内容" size="mini"></el-input>
+      <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
+                size="mini" style="margin-bottom: 10px"></el-input>
       <el-checkbox v-model="checkAll">全选</el-checkbox>
-      <el-tree
-        show-checkbox
-        default-expand-all
-        class="filter-tree"
-        node-key="id"
-        :data="dataList"
-        :props="{children: 'children',label: 'label'}"
-        :filter-node-method="filterNode"
-        ref="columnTree">
-      </el-tree>
+      <div style="max-height: 200px;overflow: auto">
+        <el-tree
+          show-checkbox
+          default-expand-all
+          class="filter-tree"
+          node-key="id"
+          :data="dataList"
+          :props="{children: 'children',label: 'label'}"
+          :filter-node-method="filterNode"
+          ref="columnTree">
+        </el-tree>
+      </div>
+      <br/>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-button size="mini" style="width: 100%">确定</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button size="mini" style="width: 100%">取消</el-button>
+        </el-col>
+      </el-row>
     </el-popover>
   </section>
 </template>
