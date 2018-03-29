@@ -1,18 +1,21 @@
 <template>
-    <div class="dropDown" @click.stop>
-        <div class="checkInputBox" @click="theeSwitch" :class="{'active':theeStatus}">
+    <div class="dropDown" @click.stop @mouseenter="mouseEnter" @mouseleave="mouseLave">
+        <div class="checkInputBox" @click="theeSwitch" :class="{'active':status}">
 			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
             <div class="dataBox" @click.stop>
 				<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
 			</div>
 			<i class="el-icon-arrow-up"></i>
         </div>
-        <div class="deepBox" v-if="theeStatus" :style="{'height':treeHeight}">
+		<div class="data-box-active" @click.stop v-show="dropDownMouse" :style="`right:${dropDownRight}`">
+			<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
+		</div>
+        <div class="deepBox" v-show="status">
 			<el-input
 				:placeholder="searchPlaceholder"
 				v-model="filterText">
 			</el-input>
-			<div class="deep">
+			<div class="deep" :style="{'height':treeHeight}">
 				<el-tree
 					:data="list"
 					show-checkbox
@@ -38,7 +41,7 @@
 	 * @param { searchPlaceholder } - 搜索框提示文字
 	 * @param { checkInputBoxPl } - 操作框提示文字
 	 * @param { list } - 树型组件数组
-	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.theeStatus 取值
+	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.status 取值
 	 * @param { getChecked } -methods 当复选框被点击的时候触发 返回值getChecked 
 	 * @param { treeHeight } - 树高度 默认 200
 	*/ 
@@ -52,13 +55,15 @@
 					label: 'label'
 				},
 				data:[],
-				theeStatus: false
+				status: false,
+				dropDownMouse: false
 			};
 		},
 		mounted() {
 			this.$nextTick(() => {
 				document.onclick = () => {
-					this.theeStatus = false;
+					this.status = false;
+					console.log(this.list)
 				}
 			})
 		},
@@ -82,6 +87,10 @@
 			treeHeight: {
 				type: String,
 				default: '200px'
+			},
+			dropDownRight: {
+				type: String,
+				default: '-231px'
 			}
 		},
 		computed: {
@@ -99,6 +108,7 @@
 			},
 			getChecked() {
 				this.selectedList = this.$refs.tree.getCheckedNodes(true);
+				this.mouseEnter();
 			},
 			del(item, index) {
 				this.selectedList.splice(index, 1);
@@ -111,21 +121,55 @@
 				ergodic(item, this.list);
 			},
 			theeSwitch() {
-				this.theeStatus = !this.theeStatus;
+				this.status = !this.status;
+			},
+			mouseEnter() {
+				if(this.selectedList.length <= 0) return;
+				this.dropDownMouse = true;
+			},
+			mouseLave() {
+				this.dropDownMouse = false;
 			}
 		}
 	};
 </script>
 <style scoped lang="less">
 	.dropDown {
+		position: relative;
+		min-width:188px;
 		.deepBox {
 			padding:10px;
 			border-radius: 5px;
 			box-shadow: 0 0 5px #ccc;
+			background:#fff;
 			.deep {
 				margin-top:10px;
 				max-height:200px;
 				overflow-y: auto;
+			}
+		}
+		.data-box-active {
+			width:230px;
+			padding:10px;
+			box-sizing: border-box;
+			border-radius: 5px;
+			box-shadow: 0 0 5px #ccc;
+			position:absolute;
+			right:-232px;
+			top:0;
+			background:#fff;
+			span {
+				background:#f4f4f4;
+				color:#94979a;
+				padding:8px 8px;
+				margin:5px 5px 5px 0;
+				border-radius: 5px;
+				display:inline-block;
+				font-size:12px;
+				i {
+					font-size:14px;
+					cursor: pointer;
+				}
 			}
 		}
 		.checkInputBox {
@@ -145,15 +189,21 @@
 			padding: 0 15px;
 			-webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 			transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+			i.el-icon-arrow-up {
+				transition: all .5s ease;
+				cursor: pointer;
+			}
 			&.active {
 				border-color:#409eff;
-				.el-icon-close {
+				i {
 					color:#409eff;
 					transform: rotate(180deg);
 				}
 			}
 			width: 100%;
 			.dataBox {
+				max-height:40px;
+				overflow: hidden;
 				span {
 					background:#f4f4f4;
 					color:#94979a;

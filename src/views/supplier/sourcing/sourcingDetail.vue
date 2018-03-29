@@ -9,47 +9,50 @@
                    <el-row>             
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier Code：xxxx
+                                {{$t('supplier.detail.supplierName')}}:xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier company name :xxxx
+                                 {{$t('supplier.detail.SupplierCode')}}:xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier type: xxxx
+                                 {{$t('supplier.detail.supplierType')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                country: xxxx
+                                 {{$t('supplier.detail.country')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                city: xxxx
+                                 {{$t('supplier.detail.city')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Provide incoterm: xxxx
+                                 {{$t('supplier.detail.provideIncoterm')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Export license: xxxx
+                                 {{$t('supplier.detail.exportLicense')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                business scope: xxxx
+                                 {{$t('supplier.detail.mainBusinessScope')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                category: xxxx
+                                 {{$t('supplier.detail.category')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                币种: xxxx
+                                 {{$t('supplier.detail.currency')}}: xxxx
                             </el-col>
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                付款方式: xxxx
+                                 {{$t('supplier.detail.paymentItem')}}: xxxx
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                 {{$t('supplier.detail.description')}}: xxxx
                             </el-col>
                         </el-row>
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary">Create Inquiry</el-button>
-                    <el-button type="primary">Create Order</el-button>
-                    <el-button type="primary">Add to Compare</el-button>
-                    <el-button type="primary">Supplier's Products</el-button>
-                    <el-button > Add To Bookmark </el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
@@ -59,28 +62,28 @@
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="Address" name="Address">
+                
+                <el-tab-pane :label="$t('supplier.detail.adress')" name="adress">
                    
                 </el-tab-pane>
-                <el-tab-pane label="Account Info" name="Account Info">
-                   
-                </el-tab-pane>
-                <el-tab-pane label="Contact Info" name="Contact Info">
+                <el-tab-pane :label="$t('supplier.detail.accountInfo')"  name="accountInfo">
                     
                 </el-tab-pane>
-                <el-tab-pane label="Trade Info" name="Trade History">
+                <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
                    
                 </el-tab-pane>
-                <el-tab-pane label="Inquiry History" name="Inquiry History">
+                <el-tab-pane :label="$t('supplier.detail.tradeHistory')"  name="tradeHistory">
                  
                 </el-tab-pane>
-                <el-tab-pane label="Remark" name="Remark">
+                <el-tab-pane :label="$t('supplier.detail.inquireHistory')"  name="inquireHistory">
                             
                 </el-tab-pane>
-                <el-tab-pane label="Attachment" name="Attachment">
+                <el-tab-pane :label="$t('supplier.detail.remark')" name="remark">
 
                 </el-tab-pane>
-
+                <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
+                   
+                </el-tab-pane>
             </el-tabs>
         </div>
 
@@ -98,7 +101,7 @@
         data() {
             return {
                 noEdit: true,
-                tabName: 'Address' //默认打开的tab
+                tabName: 'adress' //默认打开的tab
             }
         },
         methods: {}

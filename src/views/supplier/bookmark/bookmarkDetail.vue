@@ -10,7 +10,7 @@
                     </span> 
                 </el-col>  
                  <el-col  :xs="6" :sm="6" :md="6" :lg="6" :xl="6">      
-                     <el-button>Remove</el-button>
+                     <el-button>{{$t('supplier.buttonname.remove')}}</el-button>
                 </el-col>
                 </el-row>  
             </div>
@@ -18,74 +18,69 @@
                    <el-row>             
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier Code：xxxx
+                                {{$t('supplier.detail.supplierName')}}:xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier type :xxxx
+                                {{$t('supplier.detail.SupplierCode')}}:xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier phase: xxxx
+                                {{$t('supplier.detail.supplierType')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Rigister address: xxxx
+                                {{$t('supplier.detail.country')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Taxpayer qualification: xxxx
+                                {{$t('supplier.detail.city')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Provide category: xxxx
+                                {{$t('supplier.detail.provideIncoterm')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier company name: xxxx
+                                {{$t('supplier.detail.exportLicense')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier rank: xxxx
+                                {{$t('supplier.detail.mainBusinessScope')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Provide incoterm: xxxx
+                                {{$t('supplier.detail.category')}}: xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Office address: xxxx
+                                {{$t('supplier.detail.currency')}}: xxxx
                             </el-col>
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Supplier sourcing from: xxxx
+                                {{$t('supplier.detail.paymentItem')}}: xxxx
                             </el-col>                     
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                Export license: xxxx
+                               {{$t('supplier.detail.description')}}: xxxx
                             </el-col>
-                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                               Representative: xxxx
-                            </el-col>
-                              <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                                Remark：XXXXXXXX
-                            </el-col>
+                            
                         </el-row>
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary">Create Inquiry</el-button>
-                    <el-button type="primary">Create Order</el-button>
-                    <el-button type="primary">Add to Compare</el-button>
-                    <el-button type="primary">Supplier's Products</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button type="primary">{{$t('supplier.buttonname.supplierProducts')}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">Finish</el-button>
-                    <el-button @click="cancelEdit" type="info">Cancel</el-button>
+                    <el-button @click="finishEdit" type="primary">{{$t('supplier.buttonname.finish')}}</el-button>
+                    <el-button @click="cancelEdit" type="info">{{$t('supplier.buttonname.cancel')}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="Factory Address" name="FactoryAddress">
+                <el-tab-pane :label="$t('supplier.detail.factoryAddress')" name="factoryAddress">
                    
                 </el-tab-pane>
-                <el-tab-pane label="Account Info" name="AccountInfo">
+                <el-tab-pane :label="$t('supplier.detail.accountInfo')" name="accountInfo">
                    
                 </el-tab-pane>
-                <el-tab-pane label="Contact Info" name="ContactInfo">
+                <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
                     
                 </el-tab-pane>
-                <el-tab-pane label="Trade History" name="TradeHistory">
+                <el-tab-pane :label="$t('supplier.detail.tradeHistory')" name="tradeHistory">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             Inquiry qty : XXXXXX
@@ -110,7 +105,7 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="Remark" name="Remark">
+                <el-tab-pane :label="$t('supplier.detail.remark')" name="Remark">
                             
                 </el-tab-pane>
             </el-tabs>
@@ -130,7 +125,7 @@
         data() {
             return {
                 noEdit: true,
-                tabName: 'FactoryAddress' //默认打开的tab
+                tabName: 'factoryAddress' //默认打开的tab
             }
         },
         methods: {}

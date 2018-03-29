@@ -1,6 +1,6 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">Draft Overview</h3>
+        <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
         <div class="status">
             <div class="select-wrap">
                 <div class="select">
@@ -17,8 +17,8 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">Send</el-button>
-                <el-button type="primary">Delete</el-button>
+                <el-button type="primary">{{$t('order.buttonname.send')}}</el-button>
+                <el-button type="primary">{{$t('order.buttonname.delete')}}</el-button>
             </div>
             <div class="viewBy">
                 <div class="set">
@@ -35,20 +35,20 @@
      * @param keyWord search框 值
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
-    */
+     */
     export default {
-        name:'',
+        name: '',
         data() {
             return {
-                value:'',
-                keyWord:'',
+                value: '',
+                keyWord: '',
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: this.$t('order.buttonname.orderNo')
                 }, {
                     id: '2',
-                    label: 'Sku Code'
-                },]
+                    label: this.$t('order.buttonname.skuCode')
+                }, ]
             }
         },
         methods: {
@@ -57,87 +57,92 @@
             }
         }
     }
+
 </script>
 <style lang="less" scoped>
     .orderOverview {
         .hd {
-            padding-left:15px;
             height: 50px;
-            line-height:50px;
-            color:#666;
-            border-bottom:1px solid #ccc;
+            line-height: 50px;
+            color: #666;
+            border-bottom: 1px solid #ccc;
+            font-size: 18px;
+            color: #666666;
         }
         .status {
-            display:flex;
+            display: flex;
             height: 60px;
             align-items: center;
-            justify-content:flex-end;
-            padding:0 15px;
+            justify-content: flex-end;
+            padding: 0 15px;
             box-sizing: border-box;
             .btn-wrap {
-                display:flex;
+                display: flex;
                 align-items: center;
                 span {
-                    font-size:14px;
+                    font-size: 14px;
                 }
                 button {
-                    padding:2px 5px;
+                    padding: 2px 5px;
                     cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
+                    border: 1px solid #108ee9;
+                    background-color: #fff;
+                    margin-left: 10px;
                     border-radius: 5px;
                     transition: all .5s ease;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
+                    &:hover,
+                    &.active {
+                        background-color: #108ee9;
+                        color: #fff;
                     }
                 }
             }
             .select-wrap {
-                display:flex;
-                align-items:center;
+                display: flex;
+                align-items: center;
                 .select {
                     width: 110px;
-                    margin-right:5px;
+                    margin-right: 5px;
                     input {}
                 }
             }
         }
         .fn {
-            display:flex;
-            justify-content:space-between;
-            padding:10px 15px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
             box-sizing: border-box;
             .viewBy {
-                display:flex;
+                display: flex;
                 align-items: center;
                 span {
-                    font-size:14px;
-                    color:#666;
+                    font-size: 14px;
+                    color: #666;
                 }
                 button {
                     cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
+                    border: 1px solid #108ee9;
+                    background-color: #fff;
+                    margin-left: 10px;
                     border-radius: 5px;
                     transition: all .5s ease;
-                    padding:2px 5px;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
+                    padding: 2px 5px;
+                    &:hover,
+                    &.active {
+                        background-color: #108ee9;
+                        color: #fff;
                     }
                 }
                 .set {
                     cursor: pointer;
-                    padding-left:18px;
-                    color:#999;
+                    padding-left: 18px;
+                    color: #999;
                     i {
-                        font-size:25px;
+                        font-size: 25px;
                     }
                 }
             }
         }
     }
+
 </style>

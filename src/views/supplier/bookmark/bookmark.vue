@@ -1,70 +1,76 @@
 <template>
     <div class="SupplierBookmark">
         <div class="title">
-            Supplier Bookmark
+             {{$t("supplier.title.supplierBookmark")}}
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
-        <div class="body" :class="{hide:hideBody}">
+       <div>
             <el-form ref="formItem" :model="formItem" label-width="140px">
                 <el-row>
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="Sku Name" prop="SkuName">
+                        <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
                             <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
                         </el-form-item>
                      </el-col>
-<!--                    下拉选择Category-->
+<!--                    下拉选择businessScope-->
                     <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="Category" prop="Category">
-                            <el-input v-model="formItem.Category" placeholder="Enter something..."></el-input>
-                        </el-form-item>
+                        <el-form-item class="form-list" :label="$t('supplier.input.businessScope')"  prop="businessScope">
+                            <el-select v-model="formItem.businessScope" placeholder="Enter something..."></el-select>
+                           </el-form-item>
                     </el-col>
-<!--                    下拉选择SupplierType-->
+<!--                    下拉选择category-->
                   <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="Supplier Type" prop="SupplierType">
-                            <el-input v-model="formItem.SupplierType" placeholder="Enter something..."></el-input>
+                        <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
+                              <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
+                    </el-row>
+</el-form>
+            </div>
+            <div class="body" :class="{hide:hideBody}">
+                     <el-form ref="formItem" :model="formItem" label-width="140px">
+                     <el-row>
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="Business Scope" prop="businessScope">
-                            <el-input v-model="formItem.businessScope" placeholder="Enter something..."></el-input>
+                        <el-form-item class="form-list" :label="$t('supplier.input.supplierType')" prop="supplierType">
+                            <el-select v-model="formItem.supplierType" placeholder="Enter something..."></el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="SKU Name" prop="skuName">
-                            <el-input v-model="formItem.skuName" placeholder="Enter something..."></el-input>
+                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUname')" prop="vendorSKUname">
+                            <el-input v-model="formItem.vendorSKUname" placeholder="Enter something..."></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="SKU Code" prop="SKUCode">
-                            <el-input v-model="formItem.SKUCode" placeholder="Enter something..."></el-input>
+                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUcode')" prop="vendorSKUcode">
+                            <el-input v-model="formItem.vendorSKUcode" placeholder="Enter something..."></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" label="Vendor SKU Code" prop="VendorSkuCode">
-                            <el-input v-model="formItem.VendorSkuCode" placeholder="Enter something..."></el-input>
+                        <el-form-item class="form-list" :label="$t('supplier.input.description')" prop="description">
+                            <el-input v-model="formItem.description" placeholder="Enter something..."></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary" class="search">Search</el-button>
-            <el-button @click="clear('formItem')">Clear</el-button>
+            <el-button @click="search" type="primary" class="search">{{$t('supplier.buttonname.search')}}</el-button>
+            <el-button @click="clear('formItem')">{{$t('supplier.buttonname.clear')}}</el-button>
         </div>
 <!--      搜索结果  -->
         <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" >Create Inquiry</el-button>
-                  <el-button  type="primary" >Create Order</el-button>
-                  <el-button  type="primary" >Compare</el-button>             
-                  <el-button  type="primary" >Download the Selected Supplier</el-button>
+                  <el-button  type="primary" >{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button  type="primary" >{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button  type="primary" >{{$t('supplier.buttonname.compare')}}</el-button>             
+                  <el-button  type="primary" >{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
 <!--                  remove按钮-->
-                   <el-button  type="info" :disabled='disabled' >Remove</el-button>
+                   <el-button  type="info" :disabled='disabled' >{{$t('supplier.buttonname.remove')}}</el-button>
               </div>  
               <div>
-                  这块表格
+                 
                 
               </div>          
         </div>
@@ -72,10 +78,13 @@
 </template>
 
 <script>
+    import {
+        dropDown
+    } from '@/components/index'
     export default {
         name: "SupplierSourcing",
         components: {
-
+            dropDown
         },
         props: {
 
@@ -87,12 +96,12 @@
                 btnInfo: 'Show the Advance',
                 formItem: {
                     SupplierName: '',
-                    Category: '',
-                    SupplierType: '',
-                    BusinessScope: '',
-                    SkuName: '',
-                    SkuCode: '',
-                    VendorSkuCode: '',
+                    businessScope: '',
+                    category: '',
+                    supplierType: '',
+                    vendorSKUname: '',
+                    vendorSKUcode: '',
+                    description: '',
                 },
                 //                remove
                 disabled: true,
@@ -153,7 +162,7 @@
     }
 
     .body {
-        margin-top: 10px;
+        /*        margin-top: 10px;*/
         overflow: hidden;
         max-height: 1400px;
         display: block;
@@ -161,7 +170,7 @@
     }
 
     .hide {
-        max-height: 43px;
+        max-height: 0px;
 
     }
 

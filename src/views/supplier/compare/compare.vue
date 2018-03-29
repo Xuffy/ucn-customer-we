@@ -1,88 +1,110 @@
 <template>
-    <div class="compare-overview">
-        <h3 class="hd">Compare</h3>
+    <div class="compare">
+        <h3 class="hd">{{$t("supplier.title.compareDetail")}}</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary">Create Order</el-button>
-                 <el-button type="primary">Accept</el-button>
+                <el-button type="primary">{{$t("supplier.buttonname.createOrder")}}</el-button>
+                 <el-button type="primary">{{$t("supplier.buttonname.accept")}}</el-button>
                 <el-checkbox-group v-model="checkList">
-                    <el-checkbox label="Hide the Same"></el-checkbox>
-                    <el-checkbox label="Highlight the Different"></el-checkbox>
+                    <el-checkbox :label='$t("supplier.buttonname.hideTheSame")'></el-checkbox>
+                    <el-checkbox :label='$t("supplier.buttonname.hightlightTheDifferent")'></el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-                <span>Compare by：</span>
-                <el-button type="primary">Inquiry</el-button>
-                <el-button type="primary">SKU</el-button>
+                <i class="el-icon-setting" @click='hiddenDropDown'></i>
+                <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
             </div>
-            <div class="filedSelect">
-                <span>Set Filed</span>
-                <el-select v-model="Filed" placeholder="Please select">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.id" />
-                </el-select>
-            </div>
-            <el-button type="text">Compare History</el-button>
+
+           
         </div>
         <!--from-->
     </div>
 </template>
 <script>
+    import {
+        dropDown
+    } from '@/components/index'
     export default {
-        name:'compareOverview',
+        name: 'compare',
+        components: {
+            dropDown
+        },
         data() {
             return {
                 checkList: [],
-                options:[{
-                    label:'wwww.baidu.com',
-                    id:'1'
+                options: [{
+                    label: 'wwww.baidu.com',
+                    id: '1'
                 }],
-                Filed:''
+                Filed: '',
+                showdropDown: false
+            }
+        },
+        methods: {
+            hiddenDropDown() {
+                this.showdropDown = !this.showdropDown
             }
         }
     }
+
 </script>
 <style lang="less" scoped>
-    .compare-overview {
+    .compare {
         .hd {
-            height:50px;
-            line-height:50px;
-            color:#666;
-            padding:0 20px;
+            height: 50px;
+            line-height: 50px;
+            color: #666;
+            padding: 0 20px;
+            font-size: 18px;
         }
         .fn {
-            display:flex;
-            flex-wrap:wrap;
+            display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            justify-content:space-between;
-            padding:0 20px;
+            justify-content: space-between;
+            padding: 0 20px;
             .box-l {
-                display:flex;
+                display: flex;
                 align-items: center;
-                margin:10px 0;
+                margin: 10px 0;
                 button {
-                    margin-right:10px;
+                    margin-right: 10px;
                 }
                 .el-checkbox__label {
-                    font-size:12px;
+                    font-size: 12px;
                 }
                 .el-checkbox+.el-checkbox {
-                    margin-left:15px;
+                    margin-left: 15px;
                 }
             }
+            .el-icon-setting {
+                font-size: 26px;
+            }
+            .speDropdown {
+                position: absolute;
+                right: 40px;
+                background-color: #ffffff;
+                z-index: 2000;
+                display: none
+            }
+            .speDropdownshow {
+                position: absolute;
+                right: 40px;
+                background-color: #ffffff;
+                z-index: 2000;
+
+            }
             span {
-                font-size:12px;
-                color:#999;
+                font-size: 12px;
+                color: #999;
             }
             button {
-                padding:5px 5px !important;
+                padding: 5px 5px !important;
             }
             .filedSelect {
-                margin-left:10px;
+                margin-left: 10px;
             }
         }
     }
+
 </style>
