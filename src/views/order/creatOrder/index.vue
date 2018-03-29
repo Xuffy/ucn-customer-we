@@ -8,7 +8,7 @@
                     <el-row>
                           <el-col :xs="24" :sm="24" :md="24" :lg="12">
                              <div class="order_remark">
-                                 <div class='order_remark_title'>Order Remark</div>
+                                 <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
                                  <div>
                                      <el-input
                                           type="textarea"
@@ -22,7 +22,7 @@
     <!--                 attchment         -->
                           <el-col :xs="24" :sm="24" :md="24" :lg="12">
                              <div class="attchment">
-                                <div class="order_remark_title">Attchment</div>
+                                <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                 <div>
                                     <attchment></attchment>
                                 </div>
@@ -35,11 +35,11 @@
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 Product Info
+                 {{$t('order.productinfo.productInfo')}}
              </div>
              <div class="pro_button">
-                  <el-button type='primary' @click="dialogAddproduct = true">Add Product</el-button>
-                  <el-button type='primary'>Remove</el-button>
+                  <el-button type='primary' @click="dialogAddproduct = true">{{$t('order.buttonname.addProduct')}}</el-button>
+                  <el-button type='primary'>{{$t('order.buttonname.remove')}}</el-button>
              </div>
              <div class="pro_table">
                 
@@ -48,14 +48,14 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button type='primary'>Send</el-button>
-                 <el-button type='primary'>Save As Draft</el-button>
-                 <el-button type='primary' @click="dialogQuickcreate = true">Quick Create</el-button>
-                 <el-checkbox v-model="checked">Mark As Important</el-checkbox>
+                 <el-button type='primary'>{{$t('order.buttonname.send')}}</el-button>
+                 <el-button type='primary'>{{$t('order.buttonname.saveAsDraft')}}</el-button>
+                 <el-button type='primary' @click="dialogQuickcreate = true">{{$t('order.buttonname.quickCreate')}}</el-button>
+                 <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog title="Quick Create" :visible.sync="dialogQuickcreate">
+          <el-dialog :title="$t('order.buttonname.quickCreate')" :visible.sync="dialogQuickcreate">
                 <div class="status">
                     <div class="select-wrap">
                         <div class="select">
@@ -77,12 +77,12 @@
               </el-table>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog title="Add Product" :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$t('order.buttonname.addProduct')"  :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane label="From New Search" name="FromNewSearch">
+                        <el-tab-pane :label="$t('order.buttonname.fromNewSearch')" name="FromNewSearch">
                             <FromNewSearch></FromNewSearch>
                         </el-tab-pane>
-                        <el-tab-pane label="From My Bookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$t('order.buttonname.fromMyBookmark')" name="FromMyBookmark">
                             <FromBookmark></FromBookmark>
                         </el-tab-pane>
                       </el-tabs>

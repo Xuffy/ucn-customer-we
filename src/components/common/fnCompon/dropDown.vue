@@ -1,6 +1,6 @@
 <template>
     <div class="dropDown" @click.stop @mouseenter="mouseEnter" @mouseleave="mouseLave">
-        <div class="checkInputBox" @click="theeSwitch" :class="{'active':theeStatus}">
+        <div class="checkInputBox" @click="theeSwitch" :class="{'active':status}">
 			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
             <div class="dataBox" @click.stop>
 				<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
@@ -10,7 +10,7 @@
 		<div class="data-box-active" @click.stop v-show="dropDownMouse" :style="`right:${dropDownRight}`">
 			<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
 		</div>
-        <div class="deepBox" v-if="theeStatus">
+        <div class="deepBox" v-show="status">
 			<el-input
 				:placeholder="searchPlaceholder"
 				v-model="filterText">
@@ -41,7 +41,7 @@
 	 * @param { searchPlaceholder } - 搜索框提示文字
 	 * @param { checkInputBoxPl } - 操作框提示文字
 	 * @param { list } - 树型组件数组
-	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.theeStatus 取值
+	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.status 取值
 	 * @param { getChecked } -methods 当复选框被点击的时候触发 返回值getChecked 
 	 * @param { treeHeight } - 树高度 默认 200
 	*/ 
@@ -55,14 +55,15 @@
 					label: 'label'
 				},
 				data:[],
-				theeStatus: false,
+				status: false,
 				dropDownMouse: false
 			};
 		},
 		mounted() {
 			this.$nextTick(() => {
 				document.onclick = () => {
-					this.theeStatus = false;
+					this.status = false;
+					console.log(this.list)
 				}
 			})
 		},
@@ -120,7 +121,7 @@
 				ergodic(item, this.list);
 			},
 			theeSwitch() {
-				this.theeStatus = !this.theeStatus;
+				this.status = !this.status;
 			},
 			mouseEnter() {
 				if(this.selectedList.length <= 0) return;
@@ -188,8 +189,9 @@
 			padding: 0 15px;
 			-webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 			transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-			i {
+			i.el-icon-arrow-up {
 				transition: all .5s ease;
+				cursor: pointer;
 			}
 			&.active {
 				border-color:#409eff;

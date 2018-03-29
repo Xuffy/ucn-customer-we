@@ -14,7 +14,7 @@ $--color-transition-base: color .2s cubic-bezier(.645,.045,.355,1) !default;
 $--color-white: #fff !default;
 $--color-black: #000 !default;
 
-$--color-primary: #3f3f3f !default;
+$--color-primary: #409EFF !default;
 $--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
 $--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
 $--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
@@ -90,7 +90,7 @@ $--font-line-height-primary: 24px !default;
 
 /* Size
 -------------------------- */
-$--size-base: 14px !default;
+$--size-base: 12px !default;
 
 /* z-index
 -------------------------- */
@@ -111,7 +111,7 @@ $--icon-color-base: $--color-info !default;
 
 /* Checkbox
 -------------------------- */
-$--checkbox-font-size: 14px !default;
+$--checkbox-font-size: 12px !default;
 $--checkbox-font-weight: $--font-weight-primary !default;
 $--checkbox-color: $--color-text-regular !default;
 $--checkbox-input-height: 14px !default;
@@ -161,7 +161,7 @@ $--checkbox-button-checked-border-color: $--color-primary !default;
 
 /* Radio
 -------------------------- */
-$--radio-font-size: 14px !default;
+$--radio-font-size: 12px !default;
 $--radio-font-weight: $--font-weight-primary !default;
 $--radio-color: $--color-text-regular !default;
 $--radio-input-height: 14px !default;
@@ -218,7 +218,7 @@ $--select-close-hover-color: $--color-text-secondary !default;
 $--select-input-color: $--color-text-placeholder !default;
 $--select-multiple-input-color: #666 !default;
 $--select-input-focus-background: $--color-primary !default;
-$--select-input-font-size: 14px !default;
+$--select-input-font-size: 12px !default;
 
 $--select-option-color: $--color-text-regular !default;
 $--select-option-disabled-color: $--color-text-placeholder !default;
@@ -300,7 +300,7 @@ $--notification-close-font-size: $--message-close-size !default;
 $--notification-group-margin: 13px !default;
 $--notification-font-size: $--font-size-base !default;
 $--notification-color: $--color-text-regular !default;
-$--notification-title-font-size: 16px !default;
+$--notification-title-font-size: 14px !default;
 $--notification-title-color: $--color-text-primary !default;
 
 $--notification-close-color: $--color-text-secondary !default;
@@ -339,7 +339,7 @@ $--input-disabled-border: $--disabled-border-base !default;
 $--input-disabled-color: $--disabled-color-base !default;
 $--input-disabled-placeholder-color: $--color-text-placeholder !default;
 
-$--input-medium-font-size: 14px !default;
+$--input-medium-font-size: 12px !default;
 $--input-medium-height: 36px !default;
 
 $--input-small-font-size: 13px !default;
@@ -393,13 +393,13 @@ $--tab-vertical-header-count-fill: $--color-text-secondary !default;
 
 /* Button
 -------------------------- */
-$--button-font-size: 14px !default;
+$--button-font-size: 12px !default;
 $--button-font-weight: $--font-weight-primary !default;
 $--button-border-radius: $--border-radius-base !default;
 $--button-padding-vertical: 12px !default;
 $--button-padding-horizontal: 20px !default;
 
-$--button-medium-font-size: 14px !default;
+$--button-medium-font-size: 12px !default;
 $--button-medium-border-radius: $--border-radius-base !default;
 $--button-medium-padding-vertical: 10px !default;
 $--button-medium-padding-horizontal: 20px !default;
@@ -461,7 +461,7 @@ $--switch-font-size: $--font-size-base !default;
 $--switch-core-border-radius: 10px !default;
 $--switch-width: 40px !default;
 $--switch-height: 20px !default;
-$--switch-button-size: 16px !default;
+$--switch-button-size: 14px !default;
 
 /* Dialog
 -------------------------- */
@@ -469,7 +469,7 @@ $--dialog-background-color: $--color-primary-light-4 !default;
 $--dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !default;
 $--dialog-close-hover-color: $--color-primary !default;
 $--dialog-title-font-size: $--font-size-large !default;
-$--dialog-font-size: 14px !default;
+$--dialog-font-size: 12px !default;
 $--dialog-line-height: $--font-line-height-primary !default;
 $--dialog-padding-primary: 20px !default;
 
@@ -506,7 +506,7 @@ $--popover-border-color: $--border-color-lighter !default;
 $--popover-arrow-size: 6px !default;
 $--popover-padding: 12px !default;
 $--popover-padding-large: 18px 20px !default;
-$--popover-title-font-size: 16px !default;
+$--popover-title-font-size: 14px !default;
 $--popover-title-color: $--color-text-primary !default;
 
 /* Tooltip
@@ -584,7 +584,7 @@ $--slider-disable-color: $--color-text-placeholder !default;
 $--slider-margin: 16px 0 !default;
 $--slider-border-radius: 3px !default;
 $--slider-height: 6px !default;
-$--slider-button-size: 16px !default;
+$--slider-button-size: 14px !default;
 $--slider-button-wrapper-size: 36px !default;
 $--slider-button-wrapper-offset: -15px !default;
 

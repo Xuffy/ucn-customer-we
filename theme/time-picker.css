@@ -525,19 +525,19 @@
   line-height: 1; }
 
 .el-range-editor.is-active {
-  border-color: #3f3f3f; }
+  border-color: #409EFF; }
   .el-range-editor.is-active:hover {
-    border-color: #3f3f3f; }
+    border-color: #409EFF; }
 
 .el-range-editor--medium.el-input__inner {
   height: 36px; }
 
 .el-range-editor--medium .el-range-separator {
   line-height: 28px;
-  font-size: 14px; }
+  font-size: 12px; }
 
 .el-range-editor--medium .el-range-input {
-  font-size: 14px; }
+  font-size: 12px; }
 
 .el-range-editor--medium .el-range__icon,
 .el-range-editor--medium .el-range__close-icon {
@@ -742,7 +742,7 @@
   line-height: 30px;
   cursor: pointer; }
   .el-time-spinner__arrow:hover {
-    color: #3f3f3f; }
+    color: #409EFF; }
   .el-time-spinner__arrow.el-icon-arrow-up {
     top: 10px; }
   .el-time-spinner__arrow.el-icon-arrow-down {
@@ -956,7 +956,7 @@
     color: #303133; }
     .el-time-panel__btn.confirm {
       font-weight: 800;
-      color: #3f3f3f; }
+      color: #409EFF; }
 
 /* BEM support Func
  -------------------------- */
@@ -1221,7 +1221,7 @@
       border-color: #c0c4cc; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: #3f3f3f; }
+      border-color: #409EFF; }
   .el-textarea.is-disabled .el-textarea__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -1296,7 +1296,7 @@
       border-color: #c0c4cc; }
     .el-input__inner:focus {
       outline: none;
-      border-color: #3f3f3f; }
+      border-color: #409EFF; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -1335,7 +1335,7 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: #3f3f3f; }
+    border-color: #409EFF; }
   .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -1356,7 +1356,7 @@
   .el-input--prefix .el-input__inner {
     padding-left: 30px; }
   .el-input--medium {
-    font-size: 14px; }
+    font-size: 12px; }
     .el-input--medium .el-input__inner {
       height: 36px;
       line-height: 36px; }

@@ -238,7 +238,7 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  background-color: #3f3f3f;
+  background-color: #409EFF;
   z-index: 1;
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   transition: -webkit-transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -264,7 +264,7 @@
     -webkit-transform: scale(0.8, 0.8);
     transform: scale(0.8, 0.8); }
   .el-tabs__new-tab:hover {
-    color: #3f3f3f; }
+    color: #409EFF; }
 
 .el-tabs__nav-wrap {
   overflow: hidden;
@@ -342,9 +342,9 @@
       background-color: #c0c4cc;
       color: #fff; }
   .el-tabs__item.is-active {
-    color: #3f3f3f; }
+    color: #409EFF; }
   .el-tabs__item:hover {
-    color: #3f3f3f;
+    color: #409EFF;
     cursor: pointer; }
   .el-tabs__item.is-disabled {
     color: #c0c4cc;
@@ -421,12 +421,12 @@
     margin: -1px -1px 0;
     color: #909399; }
     .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
-      color: #3f3f3f;
+      color: #409EFF;
       background-color: #fff;
       border-right-color: #dcdfe6;
       border-left-color: #dcdfe6; }
     .el-tabs--border-card > .el-tabs__header .el-tabs__item:hover {
-      color: #3f3f3f; }
+      color: #409EFF; }
 
 .el-tabs--top .el-tabs__item.is-top:nth-child(2),
 .el-tabs--top .el-tabs__item.is-bottom:nth-child(2), .el-tabs--bottom .el-tabs__item.is-top:nth-child(2),

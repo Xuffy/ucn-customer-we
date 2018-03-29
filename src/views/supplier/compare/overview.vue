@@ -1,24 +1,26 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">Compare Overview</h3>
+        <h3 class="hd">{{$t("supplier.title.compareOverview")}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">Download Selected Compare</el-button>
-                <el-button type="info">Delete</el-button>
+                <el-button type="primary">{{$t("supplier.buttonname.downloadSelectedCompare")}}</el-button>
+                <el-button type="info">{{$t("supplier.buttonname.delete")}}</el-button>
             </div>
-<!--            <select-search :options="options" />-->
-       <div class="select-wrap">
-                <div class="select">
-                    <el-select v-model="value" placeholder="select" @change="selectChange">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
+
+       <div class="select-wrap">       
+                <el-select v-model="value" placeholder="select" @change="selectChange">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.label"
+                    :value="item.id" />
+                </el-select>               
+                <el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>
+                <div>
+                <i class="el-icon-setting" @click='hiddenDropDown'>
+                </i>
+                <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
                 </div>
-                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-                <i class="el-icon-setting"></i>
             </div>
         </div>
         <!--from-->
@@ -26,24 +28,31 @@
 </template>
 <script>
     import {
-        selectSearch
-    } from '@/components/index';
+        dropDown
+    } from '@/components/index'
     export default {
         name: '',
         data() {
             return {
                 options: [{
                     id: '1',
-                    label: 'dada'
-                }]
+                    label: this.$t("supplier.compare.compareName")
+                }, {
+                    id: '1',
+                    label: this.$t("supplier.compare.compareItem")
+                }],
+                showdropDown: false
             }
         },
         components: {
-            'select-search': selectSearch
+            dropDown
         },
         methods: {
             selectChange() {
 
+            },
+            hiddenDropDown() {
+                this.showdropDown = !this.showdropDown
             }
         }
     }
@@ -81,10 +90,22 @@
                 margin-right: 5px;
             }
             .el-icon-setting {
-                cursor: pointer;
-                padding-left: 18px;
-                color: #999;
-                font-size: 25px;
+                padding-left: 30px;
+                font-size: 26px;
+                /*                line-height: 60px;*/
+            }
+            .speDropdown {
+                position: absolute;
+                right: 40px;
+                background-color: #ffffff;
+                z-index: 2000;
+                display: none
+            }
+            .speDropdownshow {
+                position: absolute;
+                right: 40px;
+                background-color: #ffffff;
+                z-index: 2000;
 
             }
         }

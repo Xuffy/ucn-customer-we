@@ -44,8 +44,7 @@
         return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date();
       },
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 
@@ -53,7 +52,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
   .main-container {
-    // width: 100%;
+    width: 100%;
     padding-left: 220px;
     padding-top: 70px;
     /*padding-bottom: 50px;*/
@@ -63,42 +62,45 @@
 
   .app-main {
     padding-top: 40px;
-    //padding-left: 15px;
-    //padding-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
   }
 
   .main-container.fullBox {
-    padding-left: 0!important;
+    padding-left: 0 !important;
   }
 
-
-
-
-  .layout{
+  .layout {
     border: 1px solid #d7dde4;
     background: #f5f7f9;
     position: relative;
     border-radius: 4px;
     overflow: hidden;
   }
-  .layout-header-bar{
+
+  .layout-header-bar {
     height: 40px;
     line-height: 40px;
   }
-  .layout-logo-left{
+
+  .layout-logo-left {
     width: 90%;
     height: 30px;
     background: #5b6270;
     border-radius: 3px;
     margin: 15px auto;
   }
-  .menu-icon{
+
+  .menu-icon {
     transition: all .3s;
   }
-  .rotate-icon{
+
+  .rotate-icon {
     transform: rotate(-90deg);
   }
-  .menu-item span{
+
+  .menu-item span {
     display: inline-block;
     overflow: hidden;
     width: 69px;
@@ -107,17 +109,20 @@
     vertical-align: bottom;
     transition: width .2s ease .2s;
   }
-  .menu-item i{
+
+  .menu-item i {
     transform: translateX(0px);
     transition: font-size .2s ease, transform .2s ease;
     vertical-align: middle;
     font-size: 16px;
   }
-  .collapsed-menu span{
+
+  .collapsed-menu span {
     width: 0px;
     transition: width .2s ease;
   }
-  .collapsed-menu i{
+
+  .collapsed-menu i {
     transform: translateX(5px);
     transition: font-size .2s ease .2s, transform .2s ease .2s;
     vertical-align: middle;

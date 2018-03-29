@@ -1,8 +1,5 @@
 //...................supplier sourcing//
-//页面大标题
-const title = {
-    supplierSourcing: 'Supplier Sourcing'
-}
+
 //表格数据属性
 const tableData = {
     SupplierCode: 'Supplier Code',
@@ -40,15 +37,19 @@ const detail = {
     currency: 'currency',
     paymentItem: 'payment item',
     description: 'Description',
+    //..............................Address
+    adress: 'Adress',
+    factoryAddress: 'Factory Address',
     //.............factory info
     factoryName: 'Factory name',
     factoryAddress: 'Factory address',
     exportPort: 'Export port',
     contacctPerson1: 'Contacct person1',
-    contactPhoneNo: 'Contact phone No.',
+    //    contactPhoneNo: 'Contact phone No.',
     contacctPerson2: 'Contacct person2',
     contactPhoneNo: 'Contact phone No',
     //.............account info
+    accountInfo: 'Account Info',
     BeneficiaryName: 'Beneficiary name',
     BeneficiaryAccount: 'Beneficiary account',
     BeneficiaryBankName: 'Beneficiary bank name',
@@ -57,6 +58,7 @@ const detail = {
     AccountType: 'Account Type',
     Currency: 'Currency',
     //..............contact info
+    contactInfo: 'Contact Info',
     name: 'name',
     department: 'department',
     gender: 'gender',
@@ -68,6 +70,7 @@ const detail = {
     skype: 'skype',
     qq: 'QQ',
     //.................TARDE HISTORY
+    tradeHistory: 'Trade History',
     contractNumber: 'contract number',
     documentType: 'document type',
     contractStatus: 'constract status',
@@ -87,6 +90,7 @@ const detail = {
     totalGw: 'total GW',
     totalVolume: 'total volume',
     // ................inquire history
+    inquireHistory: 'Inquire History',
     inquiryDate: 'inquiry date',
     inquireNumber: 'inquire number',
     tradeTerm: 'trade term',
@@ -101,7 +105,9 @@ const detail = {
     remark: 'remark',
     date: 'Date',
     operater: 'operater',
-    action: 'action'
+    action: 'action',
+    //....................attachment
+    attchment: 'Attachment'
 }
 //...................compare
 const compare = {
@@ -112,11 +118,12 @@ const compare = {
     provideIncoterm: 'provide incoterm',
     exportLicense: 'Export license',
     mainBusinessScope: 'main bussiness scope',
-    category: 'category'
+    category: 'category',
+    compareName: 'Compare Name',
+    compareItem: 'Compare Item'
 }
 export {
     input,
-    title,
     tableData,
     detail,
     compare

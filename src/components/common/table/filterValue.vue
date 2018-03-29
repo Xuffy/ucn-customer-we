@@ -4,111 +4,41 @@
     <el-popover
       popper-class="filter-value-popper"
       placement="bottom"
+      v-model="visible"
       trigger="click">
-      <i class="el-icon-circle-plus-outline" slot="reference">列名</i>
+      <i class="el-icon-circle-plus-outline" slot="reference">{{label}}</i>
 
       <el-checkbox-group v-model="sortType" size="mini" @change="changeSortType">
-        <el-checkbox-button label="1">升序</el-checkbox-button>
-        <el-checkbox-button label="2">降序</el-checkbox-button>
+        <el-checkbox-button label="asc">升序</el-checkbox-button>
+        <el-checkbox-button label="des">降序</el-checkbox-button>
       </el-checkbox-group>
 
-      <el-input placeholder="请输入内容" size="mini"></el-input>
+      <el-input placeholder="请输入内容" size="mini" prefix-icon="el-icon-search"
+                clearable
+                v-model="filterValue"></el-input>
 
       <div class="content-box">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="changeAllChecked">全选</el-checkbox>
         <br/>
 
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <el-checkbox class="checkbox-item" v-for="city in cities" :label="city" :key="city"
-                       style="">{{city}}
+        <el-checkbox-group v-model="checkedDataList" @change="changeChecked">
+          <el-checkbox class="checkbox-item" v-for="(item,index) in dataList"
+                       :label="item"
+                       :key="index"
+                       style="">{{item[dataKey]}}
           </el-checkbox>
         </el-checkbox-group>
       </div>
+      <br/>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-button size="mini" style="width: 100%" @click="clickFilter">确定</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button size="mini" style="width: 100%" @click="visible = false">取消</el-button>
+        </el-col>
+      </el-row>
     </el-popover>
-    <!--<Poptip placement="bottom" style="width: 100%">
-      <p class="title">name &nbsp;
-        <Icon type="navicon-round" style="vertical-align: middle;font-size: 14px"></Icon>
-      </p>
-      <div slot="content" class="content-box">
-        {{sortType}}
-        <Row>
-          <Col span="12" class="sort" :class="{active:sortType === 'asc'}"
-               @click="sortType = 'asc'">
-          <Icon type="arrow-up-c"></Icon>
-          升序
-          </Col>
-          <Col span="12" class="sort" :class="{active:sortType === 'esc'}"
-               @click="sortType = 'esc'">
-          <Icon type="arrow-down-c"></Icon>
-          升序
-          </Col>
-        </Row>
-        <Input placeholder="Please select" clearable></Input>
-        <div class="checkbox-box">
-          <Checkbox
-            :indeterminate="indeterminate"
-            :value="checkAll"
-            @click.prevent.native="handleCheckAll">all(70/80)
-          </Checkbox>
-        </div>
-        <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-          <Checkbox label="香蕉"></Checkbox>
-          <br>
-          <Checkbox label="苹果"></Checkbox>
-          <br>
-          <Checkbox label="西瓜"></Checkbox>
-          <br>
-        </CheckboxGroup>
-      </div>
-    </Poptip>-->
   </section>
 </template>
 
@@ -116,33 +46,104 @@
 
   export default {
     name: 'VFilterValue',
-    props: {},
+    props: {
+      data: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      label: {
+        type: String,
+        default: '',
+      },
+      dataKey: {
+        type: String,
+        default: '',
+      },
+    },
     data() {
       return {
+        visible: false,
         sortType: [],
         checkAll: false,
-        checkedCities: ['上海', '北京'],
-        cities: ['上海', '北京', '广州', '深圳'],
+        dataList: [],
+        filterValue: '',
+        checkedDataList: [],
         isIndeterminate: true
       }
     },
-    watch: {},
-    created() {
-    },
-    methods: {
-      changeSortType(val) {
-        if (val.length > 1) {
-          val.shift();
+    watch: {
+      data(value) {
+        if (value.length) {
+          this.getFilterValue(this.filterValue);
         }
       },
-      handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
+      filterValue(value) {
+        this.getFilterValue(value)
+      }
+    },
+    created() {
+      this.getFilterValue(this.filterValue);
+      this.checkedDataList = this.dataList;
+    },
+    methods: {
+      uniqueData(value) {
+        let dl = [];
+        // 去除重复值
+        _.map(value, val => {
+          let data = val[this.dataKey];
+          if (data && _.indexOf(_.pluck(dl, this.dataKey), data) < 0) {
+            dl.push(val);
+          }
+        });
+        return dl;
+      },
+      getFilterValue(value) {
+        let dl = [];
+        this.dataList = this.uniqueData(this.data);
+
+        this.checkedDataList = _.where(this.dataList, {_isHide: false});
+
+        if (value) {
+          _.map(this.dataList, val => {
+            let data = val[this.dataKey];
+            if (!_.isUndefined(data) && data.toString().indexOf(value) > -1) {
+              val._isHide = false;
+              dl.push(val);
+            }
+          });
+          this.dataList = dl;
+          this.checkedDataList = dl;
+        }
+      },
+      changeSortType(val) {
+        // @onSort
+        if (val.length > 1) {
+          val.shift();
+          this.$emit('onSort', val[0]);
+        }
+
+      },
+      changeAllChecked(val) {
+        this.checkedDataList = val ? this.dataList : [];
         this.isIndeterminate = false;
       },
-      handleCheckedCitiesChange(value) {
+      changeChecked(value) {
         let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+        this.checkAll = checkedCount === this.dataList.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.dataList.length;
+      },
+      clickFilter() {
+        let data = [];
+        _.map(this.data, val => {
+          val._isHide = (_.indexOf(_.pluck(this.checkedDataList, this.dataKey), val[this.dataKey]) < 0);
+          data.push(val);
+        });
+
+        this.$emit('update:data', data);
+
+        this.visible = false;
       }
     }
   }
@@ -158,6 +159,8 @@
 
   .content-box {
     margin-top: 10px;
+    max-height: 200px;
+    overflow: auto;
   }
 </style>
 
@@ -170,15 +173,17 @@
 
   .filter-value-popper .el-checkbox-button__inner {
     border: none;
-    border-color: inherit!important;
+    border-color: inherit !important;
     border-left: none !important;
+    box-shadow: none !important;
   }
 
   .filter-value-popper .el-checkbox-button.is-checked .el-checkbox-button__inner {
     background-color: inherit;
     color: #409EFF;
   }
-  .filter-value-popper .el-checkbox-button, .el-checkbox-button__inner{
+
+  .filter-value-popper .el-checkbox-button, .el-checkbox-button__inner {
     width: 50%;
   }
 </style>

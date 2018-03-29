@@ -5,11 +5,11 @@
             <div class="btn-wrap">
                 <span>Status:</span>
                       <el-radio-group v-model="status_buttons">
-                            <el-radio-button label="TBC by Customer">TBC by Customer</el-radio-button>
-                            <el-radio-button label="TBC by Supplier">TBC by Supplier</el-radio-button>
-                            <el-radio-button label="Process">Process</el-radio-button>
-                            <el-radio-button label="Finished">Finished</el-radio-button>
-                            <el-radio-button label="Canceled">Canceled</el-radio-button>
+                            <el-radio-button label="TBCByCustomer">{{$t('order.buttonname.TBCByCustomer')}}</el-radio-button>
+                            <el-radio-button label="TBCBySupplier">{{$t('order.buttonname.TBCBySupplier')}}</el-radio-button>
+                            <el-radio-button label="process">{{$t('order.buttonname.process')}}</el-radio-button>
+                            <el-radio-button label="finish">{{$t('order.buttonname.finish')}}</el-radio-button>
+                            <el-radio-button label="cancel">{{$t('order.buttonname.cancel')}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -27,20 +27,21 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">Download Selected</el-button>
-                <el-button type="primary">Accept</el-button>
-                <el-button>Copy</el-button>
-                <el-button>Cancel</el-button>
-                <el-button>Delete</el-button>
+                <el-button type="primary">{{$t('order.buttonname.downloadSelected')}}</el-button>
+                <el-button type="primary">{{$t('order.buttonname.accept')}}</el-button>
+                <el-button>{{$t('order.buttonname.copy')}}</el-button>
+                <el-button>{{$t('order.buttonname.cancel')}}</el-button>
+                <el-button>{{$t('order.buttonname.delete')}}</el-button>
             </div>
             <div class="viewBy">
-                <span>View by:</span>
+                <span>View by : </span>
                    <el-radio-group v-model="viewBy_buttons">
-                            <el-radio-button label="Inquiry">Inquiry</el-radio-button>
-                            <el-radio-button label="SKU">SKU</el-radio-button>
+                            <el-radio-button label="Inquiry">{{$t('order.buttonname.order')}}</el-radio-button>
+                            <el-radio-button label="SKU">{{$t('order.buttonname.SKU')}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
-                    <i class="el-icon-setting"></i>
+                    <i class="el-icon-setting" @click='hiddenDropDown'></i>
+                    <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
                 </div>
             </div>
         </div>
@@ -54,21 +55,28 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
+    import {
+        dropDown
+    } from '@/components/index'
     export default {
-        name: '',
+        name: 'orderOverview',
+        components: {
+            dropDown
+        },
         data() {
             return {
                 value: '',
                 keyWord: '',
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: this.$t('order.buttonname.orderNo')
                 }, {
                     id: '2',
-                    label: 'Sku Code'
+                    label: this.$t('order.buttonname.skuCode')
                 }, ],
-                status_buttons: 'TBC by Customer', //status的按钮组
+                status_buttons: 'TBCByCustomer', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
+                showdropDown: false
             }
         },
         methods: {
@@ -76,6 +84,9 @@
             selectChange(val) {
                 console.log(val)
             },
+            hiddenDropDown() {
+                this.showdropDown = !this.showdropDown
+            }
         }
     }
 
@@ -136,30 +147,32 @@
             .viewBy {
                 display: flex;
                 align-items: center;
+
                 span {
                     font-size: 14px;
                     color: #666;
                 }
-                button {
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    padding: 2px 5px;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
+
                 .set {
                     cursor: pointer;
-                    padding-left: 18px;
-                    color: #999;
+                    padding-left: 40px;
+                    /*                    color: #999;*/
                     i {
                         font-size: 25px;
+                    }
+                    .speDropdown {
+                        position: absolute;
+                        right: 40px;
+                        background-color: #ffffff;
+                        z-index: 2000;
+                        display: none
+                    }
+                    .speDropdownshow {
+                        position: absolute;
+                        right: 40px;
+                        background-color: #ffffff;
+                        z-index: 2000;
+
                     }
                 }
             }

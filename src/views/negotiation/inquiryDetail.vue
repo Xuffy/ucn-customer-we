@@ -13,7 +13,7 @@
                     <div class="basesic-hd">
                         <h5>{{ $t('negotiation.basicInfo.index') }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="$t('Nnegotiation.basicInfo.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
                             <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
@@ -24,7 +24,7 @@
                     <div class="basesic-hd">
                         <h5>{{$t('negotiation.basicInfo.productInfo')}}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="$t('Nnegotiation.basicInfo.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
                             <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
@@ -48,15 +48,13 @@
                     </div>
                 </div>
             </div>
-            <transition>
-                <div class="message-board-wrap" :class="{'active':switchStatus}">
-                    <div class="con"><message-board :list="list" @sub="submit" /></div>
-                    <div class="switch-btn" @click="boardSwitch">
-                        {{$t('negotiation.basicInfo.messageBoard')}}
-                        <i class="el-icon-arrow-left"></i>
-                    </div>
+            <div class="message-board-wrap" :class="{'active':switchStatus}">
+                <div class="con"><message-board :list="list" @sub="submit" /></div>
+                <div class="switch-btn" @click="boardSwitch">
+                    {{$t('negotiation.basicInfo.messageBoard')}}
+                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
-            </transition>
+            </div>
         </div>
     </div>
 </template>
@@ -215,13 +213,13 @@
             }
             .message-board-wrap {
                 position:relative;
+                max-width:302px;
+                transition: max-width .5s cubic-bezier(.445,.05,.55,.95);
+                &.active {
+                    max-width:0;
+                }
                 .con {
                     overflow: hidden;
-                }
-                &.active {
-                    .con {                    
-                        width:0;
-                    }
                 }
                 .switch-btn {
                     width: 30px;
@@ -241,6 +239,7 @@
                     padding-bottom: 10px;
                     border-radius: 0 5px 0 0;
                     i {
+                        transition: all .5s ease;
                         position:absolute;
                         left:50%;
                         top:50%;

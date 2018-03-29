@@ -67,6 +67,7 @@ const tableData = {
 }
 //............................................................po detail
 const basicinfo = {
+    basicInfo: 'Basic Info',
     orderNumber: 'Order Number',
     orderDate: 'Order Date',
     purchaseOrderNumber: 'Purchase Order Number',
@@ -104,14 +105,14 @@ const basicinfo = {
     destinationPort: 'Destination Port',
     //......下拉框
     transportationWay: 'Transportation Way',
-        海运:'海运',
+    海运: '海运',
 
     customerAgreementID: 'Customer Agreement ID',
     customerAgreementDate: 'Customer Agreement Date',
     //下拉框
     batchForLogistics: 'Batch For Logistics',
-        Yes:'Yes',
-        No:'No',
+    Yes: 'Yes',
+    No: 'No',
 
     //下拉框
     paymentCondition: 'Payment Condition',
@@ -125,6 +126,7 @@ const basicinfo = {
 }
 
 const responsibility = {
+    responsibility: 'Responsibility',
     NeedLabelDesignInfoDate: 'Need Label/Design Info Date',
     LableDesignDate: 'Lable/Design Date',
     DesignNeedConfirmDate: 'Design Need Confirm Date',
@@ -134,11 +136,153 @@ const responsibility = {
 }
 
 const productinfo = {
+    productInfo: 'Product Info',
+    productBarCode: 'Product Bar-Code',
+    englishProductName: 'English Product Name',
+    productDescriptionEnglish: 'Product Description (English)',
+    productDescriptionCustomerLanguage: 'Product Description (Customer Language)',
+    productNameCustomerLanguage: 'Product Name(Customer Language)',
+    skuCode: 'SKU Code',
+    vendorSKUcode: 'Vendor SKU code',
+    supplierShortName: 'Supplier Short Name',
+    //.......................FOB
+    fobCurrency: 'FOB Currency',
+    fobPrice: 'FOB Price',
+    fobPort: 'FOB Port',
+    //.......................计量单位
+    unit: 'Unit',
+    englishMaterial: 'English Material',
+    quantity: 'Quantity',
+    totalPrice: 'Total Price',
+    englishColor: 'English Color',
+    minimumOrderQuantity: 'Minimum Order Quantity',
+    deliveryTime: 'Delivery Time',
+    productDesign: 'Product Design',
+    //...............分类名称
+    topCategory: 'Top Category',
+    secondaryCategory: 'Secondary Category',
+    thirdCategory: 'Third Category',
+    fourthCategory: 'Fourth Category',
+    //.....................
+    hsCode: 'HS Code',
+    nameinChineseUsedforExportCustomsClearance: 'Name in Chinese Used for Export Customs Clearance',
+    nameinEnglishUsedforExportCustomsClearance: 'Name in English Used for Export Customs Clearance',
+    englishBrand: 'English Brand',
+    commodityInspectionChineseProductName: 'Commodity Inspection Chinese Product Name',
+    commodityInspectionEnglishProductName: 'Commodity Inspection English Product Name',
+    reportElements: 'Report Elements',
+    placeofOrigin: 'Place of Origin',
+    inspectionType: 'Inspection Type',
+    weightUnit: 'Weight Unit',
+    lengthUnit: 'Length Unit',
+    volumeUnit: 'Volume Unit',
+    productLength: 'Product Length',
+    productWidth: 'Product Width',
+    productHeight: 'Product Height',
+    productNetWeight: 'Product Net Weight',
+    productVolume: 'Product Volume',
+    packingEn: 'Packing( En)',
+    innerCartonUnit: 'Inner Carton Unit',
+    innerCartonProductQuantity: 'Inner Carton Product Quantity',
+    innerCartonLength: 'Inner Carton Length',
+    innerCartonWidth: 'Inner Carton Width',
+    innerCartonHeight: 'Inner Carton Height',
+    innerCartonNetWeight: 'Inner Carton Net Weight',
+    innerCartonGrossWeight: 'Inner Carton Gross Weight',
+    innerCartonVolume: 'Inner Carton Volume',
+    innerCartonDescription: 'Inner Carton Description',
+    innerCartonPackingEn: 'Inner Carton Packing( En)',
+    outerCartonUnit: 'Outer Carton Unit',
+    outerCartonDescription: 'Outer Carton Description',
+    quantityofInnerBoxinOuterCarton: 'Quantity of Inner Box in Outer Carton',
+    quantityofProductsinOuterCarton: 'Quantity of Products in Outer Carton',
+    outerCartonLength: 'Outer Carton Length',
+    outerCartonWidth: 'Outer Carton Width',
+    outerCartonHeight: 'Outer Carton Height',
+    outerCartonNetWeight: 'Outer Carton Net Weight',
+    outerCartonGrossWeight: 'Outer Carton Gross Weight',
+    outerCartonVolume: 'Outer Carton Volume',
+    outerCartonPackingEn: 'Outer Carton Packing( En)',
+    tradeMark: 'Trade Mark',
+    ageofapplication: 'Age of application',
+    qualityGuaranteePeriod: 'Quality Guarantee Period',
+    illustrate: 'Illustrate',
+    //.............................产品状态
+    productStatus: 'Product Status',
+    //    TBC,confirmed,PSI need confirm,PSI confirmed,storage,part shipped,shipped,cancelled,returnd
+    //............................销售状态
+    salesStatus: 'Sales Status',
+    onSale: 'On Sale',
+    notOnSale: 'Not On Sale',
+    //................
+    salesOrderNumber: 'Sales Order Number',
+    orderQuantity: 'Order Quantity',
+    productLabel: 'Product Label',
+    productBarCode: 'Product Bar-Code',
+    innerPackingBarCode: 'Inner Packing Bar-Code',
+    innerPackingLabel: 'Inner Packing Label',
+    innerPackingSKUCode: 'Inner Packing SKU Code',
+    shippingMarks: '· Shipping Marks',
+    outerCartonBarCode: 'Outer Carton Bar-Code',
+    outerCartonSKUCode: 'Outer Carton SKU Code',
+    productLabelPhoto: 'Product Label Photo',
+    //    JPG/JPEG/PNG/BMP
+    productLabelIllustrate: 'Product Label Illustrate',
+    packingMethodPhoto: 'Packing Method Photo',
+    //    JPG/JPEG/PNG/BMP
+    innerPackingPhoto: 'Inner Packing Photo',
+    //    JPG/JPEG/PNG/BMP
+    outerPackingPhoto: 'Outer Packing Photo',
+    //    JPG/JPEG/PNG/BMP
+    //........................是否需要样品
+    needSample: 'Need Sample',
+    //    是，否
+    sampleQuantity: 'Sample Quantity',
+    //    Yes，No
+    samplePrice: 'Sample Price',
+    deliveredQuantity: 'Delivered Quantity',
+    undeliveredQuantity: 'Undelivered Quantity',
+    inquiryID: 'Inquiry ID',
+    modifyStatus: 'Modify Status',
+    //    有，无
+    comments: 'Comments',
+    comments2: 'Comments 2',
+    comments3: 'Comments 3',
+    additionalPicture1: 'Additional Picture 1',
+    //    JPG/JPEG/PNG/BMP
+    additionalPicture2: 'Additional Picture 2',
+    //    JPG/JPEG/PNG/BMP
+    additionalPicture3: 'Additional Picture 3',
+    //    JPG/JPEG/PNG/BMP
+    additionalPicture4: 'Additional Picture 4',
+    //    JPG/JPEG/PNG/BMP
+    totalQuantifiedSKU: 'Total Quantified SKU',
+    totalHaventQCSKU: 'Total Haven'
 
+}
+
+const qcorder = {
+    qcOrder: 'QC Order'
+}
+const logisticplan = {
+    logisticPlan: 'Logistic Plan/Order'
+}
+const payment = {
+    no: 'No.',
+    paymentNumber: 'Payment Number',
+    paymentItem: 'Payment Item',
+    estPayDate: 'Est.PayDate',
+    EstAmount: 'Est.Amount',
+    actPayDate: 'Act.Pay Date',
+    actAmount: 'Act.Amount',
+    avilable: 'Avilable'
 }
 export {
     tableData,
     responsibility,
     basicinfo,
-    productinfo
+    productinfo,
+    payment,
+    qcorder,
+    logisticplan
 }

@@ -611,7 +611,7 @@
       border-color: #c0c4cc; }
     .el-textarea__inner:focus {
       outline: none;
-      border-color: #3f3f3f; }
+      border-color: #409EFF; }
   .el-textarea.is-disabled .el-textarea__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -686,7 +686,7 @@
       border-color: #c0c4cc; }
     .el-input__inner:focus {
       outline: none;
-      border-color: #3f3f3f; }
+      border-color: #409EFF; }
   .el-input__suffix {
     position: absolute;
     height: 100%;
@@ -725,7 +725,7 @@
     pointer-events: none; }
   .el-input.is-active .el-input__inner {
     outline: none;
-    border-color: #3f3f3f; }
+    border-color: #409EFF; }
   .el-input.is-disabled .el-input__inner {
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -746,7 +746,7 @@
   .el-input--prefix .el-input__inner {
     padding-left: 30px; }
   .el-input--medium {
-    font-size: 14px; }
+    font-size: 12px; }
     .el-input--medium .el-input__inner {
       height: 36px;
       line-height: 36px; }
@@ -856,9 +856,9 @@
     cursor: pointer;
     font-size: 13px; }
     .el-input-number__increase:hover, .el-input-number__decrease:hover {
-      color: #3f3f3f; }
+      color: #409EFF; }
       .el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled), .el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
-        border-color: #3f3f3f; }
+        border-color: #409EFF; }
     .el-input-number__increase.is-disabled, .el-input-number__decrease.is-disabled {
       color: #c0c4cc;
       cursor: not-allowed; }
@@ -881,7 +881,7 @@
     line-height: 34px; }
     .el-input-number--medium .el-input-number__increase, .el-input-number--medium .el-input-number__decrease {
       width: 36px;
-      font-size: 14px; }
+      font-size: 12px; }
     .el-input-number--medium .el-input__inner {
       padding-left: 43px;
       padding-right: 43px; }
@@ -1421,7 +1421,7 @@
 
 .el-slider__bar {
   height: 6px;
-  background-color: #3f3f3f;
+  background-color: #409EFF;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   position: absolute; }
@@ -1457,9 +1457,9 @@
     cursor: grabbing; }
 
 .el-slider__button {
-  width: 16px;
-  height: 16px;
-  border: solid 2px #3f3f3f;
+  width: 14px;
+  height: 14px;
+  border: solid 2px #409EFF;
   background-color: #fff;
   border-radius: 50%;
   -webkit-transition: .2s;
@@ -1543,4 +1543,4 @@
         border-color: #c0c4cc; }
       .el-slider.is-vertical.el-slider--with-input .el-slider__input:active .el-input-number__decrease,
       .el-slider.is-vertical.el-slider--with-input .el-slider__input:active .el-input-number__increase {
-        border-color: #3f3f3f; }
+        border-color: #409EFF; }
