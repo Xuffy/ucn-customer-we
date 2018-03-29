@@ -1,6 +1,6 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">Draft Overview</h3>
+        <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
         <div class="status">
             <div class="select-wrap">
                 <div class="select">
@@ -17,8 +17,8 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">Send</el-button>
-                <el-button type="primary">Delete</el-button>
+                <el-button type="primary">{{$t('order.buttonname.send')}}</el-button>
+                <el-button type="primary">{{$t('order.buttonname.delete')}}</el-button>
             </div>
             <div class="viewBy">
                 <div class="set">
@@ -44,10 +44,10 @@
                 keyWord: '',
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: this.$t('order.buttonname.orderNo')
                 }, {
                     id: '2',
-                    label: 'Sku Code'
+                    label: this.$t('order.buttonname.skuCode')
                 }, ]
             }
         },
