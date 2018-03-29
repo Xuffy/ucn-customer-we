@@ -8,26 +8,6 @@
             </el-button>
         </div>
         <div>
-
-            <!--<el-row class="outGroup">-->
-                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-                    <!--<div class="label">-->
-                        <!--{{$t('product.page.category')}}-->
-                    <!--</div>-->
-                    <!--<div style="margin-left: 190px">-->
-                        <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
-                    <!--</div>-->
-                <!--</el-col>-->
-                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-                    <!--asf-->
-                <!--</el-col>-->
-                <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-                    <!--asf-->
-                <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
-
             <el-form ref="form" :model="form" label-width="190px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -158,8 +138,6 @@
         <div class="btn-group">
             <el-button @click="search" type="primary">{{$t('product.btn.search')}}</el-button>
             <el-button @click="clear" type="info" plain>{{$t('product.btn.clear')}}</el-button>
-            <el-button @click="$router.push('/product/bookmark')" type="danger">Bookmark</el-button>
-            <el-button @click="$router.push('/product/compareOverview')" type="danger">Compare</el-button>
             <el-button @click="$router.push('/product/message')" type="success">Message</el-button>
             <el-button @click="$router.push('/product/logs')" type="success">Logs</el-button>
         </div>
@@ -182,7 +160,7 @@
             return{
                 value:1,
                 hideBody:true,            //是否显示body
-                btnInfo:this.$t('product.btn.ShowTheAdvance'),
+                btnInfo:this.$t('product.page.showTheAdvance'),
                 formItem:{
                     Category:'',
                     SKUName:'',
@@ -316,7 +294,7 @@
             //搜查
             search(){
                 console.log(this.dataList)
-                this.$router.push('/product/detail');
+                this.$router.push('/product/sourcing/detail');
                 // window.open('http://192.168.51.228、:8080/#/product');
             },
 
@@ -331,9 +309,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$t('product.btn.ShowTheAdvance');
+                    this.btnInfo=this.$t('product.page.showTheAdvance');
                 }else{
-                    this.btnInfo=this.$t('product.btn.HideTheAdvance');
+                    this.btnInfo=this.$t('product.page.hideTheAdvance');
                 }
             }
         }

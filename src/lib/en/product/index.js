@@ -9,14 +9,26 @@ const page={
     //title
 
     logs:'Logs',
+    productBookmark:'Product Bookmark',
+    workbenchware:'Workbenchware',
+    compareOverview:'Compare Overview',
+    compareDetail:'Compare Detail',
+    basicInfo:'Basic Info',
 
 
 
     //btnGroup
     add:'Add',
     downTheLogs:'Down the logs',
-
-
+    edit:'Edit',
+    showTheAdvance:'Show the Advance',          //切换显示隐藏按钮的文字
+    hideTheAdvance:'Hide the Advance',          //切换显示隐藏按钮的文字
+    search:'Search',
+    clear:'Clear',
+    createInquiry:'Create Inquiry',
+    createOrder:'Create Order',
+    addToCompare:'Add to Compare',
+    addToBookmark:'Add to Bookmark',
 
 
 

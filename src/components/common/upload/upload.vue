@@ -69,7 +69,7 @@
                     message: 'File format of ' + this.fileName + ' is success',
                     duration: 1000
                 });
-                this.loadingStatus = false
+                this.loadingStatus = false;
                 this.$refs.isuploadsuccess.value = true
             },
             handleProgress(file) {
