@@ -3,7 +3,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <span>{{ $t('logistic.status.index') }}:</span>
-                <el-button type="primary">{{ $t('logistic.status.TBCByCustomer') }}</el-button>
+                <el-button typenis="primary">{{ $t('logistic.status.TBCByCustomer') }}</el-button>
                 <el-button>{{ $t('logistic.status.finish') }}</el-button>
                 <el-button>{{ $t('logistic.status.canceled') }}</el-button>
             </div>

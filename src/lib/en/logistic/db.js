@@ -1,4 +1,4 @@
-const tabOrder = { //View by order  
+const tabOrder = { //View by order  || plan
     orderID: "Order ID",
     orderConformedDate: "Order Conformed Date",
     logisticsID: "Logistics ID",
@@ -81,14 +81,14 @@ const tabSku = { //view by sku
     logisticsState: "Logistics state"
 };
 
-const tabBasicInfo = {
+const tabBasicInfo = { //Basic Info
     invoiceNumber: "Invoice Number",
     logisticsID: "Logistics ID",
     shipmentStatus: "Shipment Status",
     billDate: "Bill Date"
 };
 
-const productInfo = {
+const tabProductInfo = { //product info
     salesContractNumber: "Sales Contract Number",
     LCNumber: "LC Number",
     salesOrderNumber: "Sales Order Number",
@@ -111,7 +111,61 @@ const productInfo = {
     shippedCartons: "Shipped Cartons",
     outerProductQuantity: "Outer Product Quantity",
     outerCartonVolume: "Outer Carton Volume",
-    outerCartonNetWeight: "Outer Carton Net Weight"
+    outerCartonNetWeight: "Outer Carton Net Weight",
+    outerCartonGrossWeight: "Outer Carton Gross Weight",
+    totalValue: "Total Value",
+    totalNetWeight: "Total Net Weight",
+    totalGrossWeight: "Total Gross Weight",
+    enteringWarehouseDate: "Entering Warehouse Date",
+    enteringWarehouseListNumber: "Entering Warehouse List Number",
+    warehouseName: "warehouse name",
+    warehouseID: "Warehouse ID",
+    arrivalDate: "Arrival Date",
+    shipmentPort: "Shipment Port",
+    containerType1: "Container Type 1",
+    container1: "Container 1",
+    containerType2: "Container Type 2",
+    container2: "Container 2",
+    sealNumber2: "Seal Number 2",
+    containerType3: "Container Type 3",
+    container3: "Container 3",
+    sealNumber3: "Seal Number 3"
+};
+
+const containerInfo = {
+    containerNumber: "Container Number",
+    sealNumber: "Seal Number",
+    containerWeight: "Container Weight",
+    containerType: "Container Type",
+    VGM: "VGM",
+    SKUAmount: "SKU Amount",
+    valume: "Valume",
+    netWeight: "Net Weight",
+    InnerCartonQuantity: "Inner Carton　Quantity",
+    productValue: "Product Value",
+    totalCustoms: "Total Customs"
+};
+
+const cost = {
+    FCLTransportCharge: "FCL transport charge",
+    FCLTransportChargeCurrency: "FCL transport charge Currency",
+    handlingCharges: "handling charges",
+    handlingChargesCurrency: "handling charges Currency",
+    otherPortCharges: "Other Port Charges",
+    otherPortChargesCurrency: "Other Port Charges Currency",
+    oceanFreight: "ocean freight",
+    oceanFreightCurrency: "ocean freight Currency",
+    insuranceCharges: "Insurance Charges",
+    insuranceChargesCurrency: "Insurance Charges Currency",
+    otherCharges1: "Other Charges1",
+    otherChargesCurrency: "Other Charges Currency",
+    otherChargesExchangeRate1: "Other Charges Exchange Rate1",
+    otherChargesRemark1: "Other Charges Remark1",
+    otherCharges2: "Other Charges2",
+    otherChargesCurrency2: "Other Charges Currency2",
+    otherChargesExchangeRate2: "Other Charges Exchange Rate2",
+    otherChargesRemark2: "Other Charges Remark2",
+    commissionCharges: "Commission Charges"
 };
 
 export default {

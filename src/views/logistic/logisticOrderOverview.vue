@@ -7,15 +7,15 @@
         </div>
         <div class="btn-wrap">
             <div class="fn btn">
-                <el-button type="primary">Download Selected</el-button>
-                <el-button type="primary">Sent as Order</el-button>
-                <el-button>Delete</el-button>
+                <el-button type="primary">{{ $t('logistic.btn.downloadSelected') }}</el-button>
+                <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
+                <el-button>{{ $t('logistic.btn.delete') }}</el-button>
             </div>
             <div class="view-by-btn">
-                <span>View By：</span>
-                <el-button type="primary">Plan</el-button>
-                <el-button>Transportation unit</el-button>
-                <el-button>SKU</el-button>
+                <span>{{ $t('logistic.viewBy.index') }}：</span>
+                <el-button type="primary">{{ $t('logistic.viewBy.plan') }}</el-button>
+                <el-button>{{ $t('logistic.viewBy.transportationUnit') }}</el-button>
+                <el-button>{{ $t('logistic.viewBy.SKU') }}</el-button>
             </div>
         </div>
         <!--form-->

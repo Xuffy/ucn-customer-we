@@ -2,39 +2,7 @@
     <div class="category-setting">
         <div class="hd">Category Setting</div>
         <div class="category-wrap">
-            <div class="my-category">
-                <h5>My Category</h5>
-                <div class="category">
-                    <el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
-                    <el-tree
-                    class="filter-tree"
-                    :data="myCategoryData"
-                    :props="defaultProps"
-                    default-expand-all
-                    :filter-node-method="filterNode"
-                    :render-content="renderContent"
-                    ref="tree">
-                    </el-tree>
-                </div>
-            </div>
-            <div class="mapping">
-                <span>Mapping</span><i></i>
-            </div>
-            <div class="general-category">
-                <h5>General Category</h5>
-                <div class="category">
-                    <el-input placeholder="input key word to search" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
-                    <el-tree
-                    :data="mgeneralCategoryData"
-                    show-checkbox
-                    default-expand-all
-                    node-key="id"
-                    ref="tree1"
-                    highlight-current
-                    :filter-node-method="filterNode"
-                    :props="defaultProps" />
-                </div>
-            </div>
+            
             <div class="maping-relation">
                 <h5>Maping Relation</h5>
                 <div class="category">
@@ -52,6 +20,41 @@
                     :filter-node-method="filterNode"
                     ref="tree2">
                     </el-tree>
+                </div>
+            </div>
+            <div class="my-category">
+                <h5>My Category</h5>
+                <div class="category">
+                    <el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                    <el-tree
+                    class="filter-tree"
+                    :data="myCategoryData"
+                    :props="defaultProps"
+                    default-expand-all
+                    :filter-node-method="filterNode"
+                    :render-content="renderContent"
+                    :expand-on-click-node="false"
+                    ref="tree">
+                    </el-tree>
+                </div>
+            </div>
+            <div class="mapping">
+                <span>Mapping</span><i></i>
+            </div>
+            <div class="general-category">
+                <h5>General Category</h5>
+                <div class="category">
+                    <el-input placeholder="input key word to search" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
+                    <el-tree
+                    :data="mgeneralCategoryData"
+                    show-checkbox
+                    default-expand-all
+                    node-key="id"
+                    ref="tree1"
+                    :expand-on-click-node="false"
+                    highlight-current
+                    :filter-node-method="filterNode"
+                    :props="defaultProps" />
                 </div>
             </div>
         </div>
@@ -169,10 +172,25 @@
                 </span>);
             },
             remove(node, data) {
-                const parent = node.parent;
-                const children = parent.data.children || parent.data;
-                const index = children.findIndex(d => d.id === data.id);
-                children.splice(index, 1);
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const parent = node.parent;
+                    const children = parent.data.children || parent.data;
+                    const index = children.findIndex(d => d.id === data.id);
+                    children.splice(index, 1);
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             },
             add(data) {
                 this.$prompt('添加分类', '提示', {
@@ -206,10 +224,10 @@
                         type: 'warning'
                     });
                     data.label = value;
-                    this.$message({
-                        type: 'success',
-                        message: `编辑成功`
-                    });
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: `编辑成功`
+                    // });
                 }).catch(() => {
                            
                 });
@@ -256,7 +274,10 @@
 
     >>> .custom-tree-node:hover .el-icon-edit,
     >>> .custom-tree-node:hover .el-icon-circle-plus-outline,
-    >>> .custom-tree-node:hover .el-icon-remove-outline  {
+    >>> .custom-tree-node:hover .el-icon-remove-outline,
+    >>> .custom-tree-node:active .el-icon-edit,
+    >>> .custom-tree-node:active .el-icon-circle-plus-outline,
+    >>> .custom-tree-node:active .el-icon-remove-outline  {
         display:inline-block;
     }
 </style>
@@ -329,10 +350,9 @@
             }
             .general-category {
                 padding-right:30px;
-                border-right:1px solid #ccc;
             }
             .maping-relation {
-                padding-left:30px;
+                padding-right:30px;
                 min-width:300px;
                 .hd {
                     display:flex;
