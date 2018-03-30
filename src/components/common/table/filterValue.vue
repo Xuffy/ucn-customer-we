@@ -7,7 +7,7 @@
       @hide="hideListener"
       v-model="visible"
       trigger="click">
-      <h4 slot="reference">
+      <h4 slot="reference" style="cursor: pointer">
         {{label}}
         <i class="el-icon-circle-plus-outline"></i>
       </h4>

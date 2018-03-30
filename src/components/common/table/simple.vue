@@ -144,6 +144,15 @@
         this.$refs.table.toggleRowSelection(data, true);
       },
       column(columns) {
+        this.filterColumn(columns);
+      }
+    },
+    created() {
+      this.filterColumn(this.column);
+      // this.$emit('update:column', [])
+    },
+    methods: {
+      filterColumn(columns) {
         if (columns.length) {
           this.columnList = _.map(columns, val => {
             if (!val.renderHeader) {
@@ -168,12 +177,7 @@
             return val;
           });
         }
-      }
-    },
-    created() {
-      // this.$emit('update:column', [])
-    },
-    methods: {
+      },
       /*selectionChange(selection) {
         this.selectedList = selection;
       },*/
