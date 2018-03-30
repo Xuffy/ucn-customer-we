@@ -7,13 +7,23 @@ const title={
 
 const page={
     //title
-
     logs:'Logs',
     productBookmark:'Product Bookmark',
     workbenchware:'Workbenchware',
+    warehouseOverview:'Warehouse Overview',
     compareOverview:'Compare Overview',
     compareDetail:'Compare Detail',
     basicInfo:'Basic Info',
+    customInfo:'Custom Info',
+    priceInfo:'Price Info',
+    markAsRead:'Mark As Read',
+    qcOrderDetail:'QC Order Detail',
+
+
+
+    //const Table Header
+    content:'Content',
+    time:'Time',
 
 
 
@@ -29,8 +39,12 @@ const page={
     createOrder:'Create Order',
     addToCompare:'Add to Compare',
     addToBookmark:'Add to Bookmark',
-
-
+    finish:'Finish',
+    messageManagement:'Message Management',
+    systemMessage:'System Message',
+    messageSettings:'Message Settings',
+    addNews:'Add News',
+    action:'Action',
 
 
     category:'Category',
@@ -60,13 +74,13 @@ const page={
 
     basicInformation:'basic information',
     price:'price',
-    customInformation:'custom information',
-    packingInfo:'packing info',
-    logisticInfo:'logistic info',
-    otherInfo:'other info',
-    attachment:'attachment',
+    customInformation:'Custom Information',
+    packingInfo:'Packing Info',
+    logisticInfo:'Logistic Info',
+    otherInfo:'Other Info',
+    attachment:'Attachment',
     tradeHistory:'Trade History',
-    remark:'remark',
+    remark:'Remark',
 
     //detail basicInformation
     skuNo:'SKU No',
@@ -179,7 +193,15 @@ const page={
     adjustSKUAndPackageOrNot:'adjust SKU and package or not',
 
 
-
+    //bookmark manuallyAdd price
+    fobCurrency:'FOB currency',
+    fobPrice:'FOB price',
+    fobPort:'FOB Port',
+    exwCurrency:'EXW currency',
+    otherIncoterm:'other incoterm',
+    otherIncotermPrice:'other incoterm price',
+    otherIncotermArea:'other incoterm area',
+    otherIncotermCurrency:'other incoterm currency',
 
 
 };
