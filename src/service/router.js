@@ -64,7 +64,6 @@ export const routerMap = [
               },
           ]
         },
-
         {
           path:'logs',
           component: () => import('../views/product/sourcing/logs'),
@@ -108,17 +107,6 @@ export const routerMap = [
               },
           ]
         },
-
-        // {
-        //   path:'compareOverview',
-        //   component: () => import('../views/product/compare/overview.vue'),
-        //   name:'compareOverview'
-        // },
-        // {
-        //   path:'compare',
-        //   component: () => import('../views/product/compare/compare.vue'),
-        //   name:'compare'
-        // },
         {
           path:'message',
           component: () => import('../views/message/message.vue'),
@@ -129,25 +117,6 @@ export const routerMap = [
           component: () => import('../views/message/messageManagement.vue'),
           name:'messageManagement'
         },
-
-
-        // {
-        //   path:'bookmark',
-        //   component: () => import('../views/product/bookmark/index.vue'),
-        //   name:'bookmark',
-        //   children:[
-        //         {
-        //             path:'',
-        //             component: () => import('../views/product/bookmark/bookmark.vue'),
-        //             name:'',
-        //         },
-        //         {
-        //             path:'detail',
-        //             component: () => import('../views/product/bookmark/detail.vue'),
-        //             name:'detail',
-        //         },
-        //     ]
-        // },
       ]
     },
     {
@@ -290,17 +259,24 @@ export const routerMap = [
     {
       path: '/warehouse',
       component: Layout,
-      redirect: '/warehouse',
+      redirect: '/warehouse/overview',
       name: 'Warehouse',
       noDropdown: true,
       children: [
         {
-          path: 'index',
-          component: () => import('../views/warehouse/warehouseOverview.vue')
+          path: 'overview',
+          component: () => import('../views/warehouse/warehouseOverview.vue'),
+          name:'warehouseOverview'
         },
         {
           path: 'qcDetail',
-          component: () => import('../views/warehouse/qcDetail.vue')
+          component: () => import('../views/warehouse/qcDetail.vue'),
+          name:'qcOrderDetail'
+        },
+        {
+          path: 'createQc',
+          component: () => import('../views/warehouse/createQc.vue'),
+          name:'createQcOrder'
         },
       ]
     },
@@ -378,7 +354,8 @@ export const routerMap = [
       name:'getInvitationCode',
       hidden: true,
       component: () => import('../views/login/getInvitationCode')
-    }
+    },
+
   ]
 ;
 

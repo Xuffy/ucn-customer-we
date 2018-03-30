@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head">
-            <el-button>新增消息</el-button>
+            <el-button @click="addNews">{{$t('product.page.addNews')}}</el-button>
         </div>
         <div class="body">
             <el-table
@@ -13,17 +13,17 @@
                     height="400">
                 <el-table-column
                         prop="content"
-                        label="内容"
+                        :label="$t('product.page.content')"
                         align="center">
                 </el-table-column>
                 <el-table-column
                         prop="time"
-                        label="时间"
+                        :label="$t('product.page.time')"
                         sortable
                         align="center">
                 </el-table-column>
                 <el-table-column
-                        label="操作"
+                        :label="$t('product.page.action')"
                         align="center">
                     <template slot-scope="scope">
                         <el-button @click="publish(scope.row)" type="text">发布</el-button>
@@ -43,6 +43,26 @@
                     :total="400">
             </el-pagination>
         </div>
+
+
+        <el-dialog
+                class="speDialog"
+                title="Add News"
+                :visible.sync="dialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="newsContent">
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="success" plain size="mini" @click="dialogVisible = false">发 布</el-button>
+                <el-button type="primary" plain size="mini" @click="dialogVisible = false">保 存</el-button>
+                <el-button size="mini" @click="dialogVisible = false">取消</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -102,6 +122,8 @@
                     },
                 ],
                 currentPage:1,
+                dialogVisible:false,            //弹出框显示隐藏
+                newsContent:'',                 //新增消息的内容
             }
         },
         methods:{
@@ -123,6 +145,21 @@
                 console.log(`当前页: ${val}`);
             },
 
+            //新增消息
+            addNews(){
+                this.dialogVisible=true;
+            },
+
+            //点击外部取消时的提示
+            handleClose(done) {
+                console.log('取消了')
+                // this.$confirm('确认关闭？')
+                //     .then(_ => {
+                //         done();
+                //     })
+                //     .catch(_ => {});
+                done();
+            }
 
         }
     }
@@ -131,5 +168,8 @@
 <style scoped>
     .head{
         padding: 10px 0;
+    }
+    .speDialog >>> .el-dialog__footer{
+        text-align: center;
     }
 </style>

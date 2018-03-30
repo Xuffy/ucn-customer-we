@@ -1,177 +1,78 @@
 <template>
     <div class="qcDetail">
         <div class="title">
-            QC Report Detail <el-button class="btn" type="text">Relate to Order No.123</el-button>
+            {{$t('warehouse.page.qcOrderDetail')}}
         </div>
         <div class="body">
             <div class="section">
-                <div class="head">Basic Information</div>
+                <div class="head"> {{$t('warehouse.page.basicInfo')}}</div>
                 <div class="content">
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <span class="important">*</span> QC report No. : XXXXXX
+                            {{$t('warehouse.page.qcOrderNo')}}. : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Buyer order No. : XXXXXXXXX
+                            {{$t('warehouse.page.buyerOrderNo')}}. : XXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Buyer Order Date : XXXXXXXXXXXXXXXXXXXXXXXX
+                            {{$t('warehouse.page.buyerOrderDate')}} : XXXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            QC Type : XXXXXX
+                            {{$t('warehouse.page.qcType')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            QC Report Status : XXXXXX
+                            {{$t('warehouse.page.qcDate')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            QC Date : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                            {{$t('warehouse.page.supplierID')}} : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Supplier ID : XXXXXX
+                            {{$t('warehouse.page.supplierName')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Supplier Name : XXXXXX
+                            {{$t('warehouse.page.factoryAddressInEnglish')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Factory Address (In English) : XXXXXX
+                            {{$t('warehouse.page.factoryContactPhone')}} :
+                            XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <span class="important">*</span> Factory Contact Phone : XXXXXX
+                            {{$t('warehouse.page.qcResult')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            <span class="important">*</span> QC Result : XXXXXX
+                            {{$t('warehouse.page.qcMethod')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            QC Method : XXXXXX
+                            {{$t('warehouse.page.surveyor')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Surveyor : XXXXXX
+                            {{$t('warehouse.page.servicePrice')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Factory Contact Phone : XXXXXX
+                            {{$t('warehouse.page.serviceID')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            验货状态 : XXXXXX
+                            {{$t('warehouse.page.serviceName')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Service Price :
-                            <span v-if="!isModify">xxxxx</span>
-                            <el-input-number
-                                    v-else
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="input"
-                                    :min="0"
-                                    label="请输入"
-                                    align="left"
-                                    :controls="false">
-                            </el-input-number>
+                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            {{$t('warehouse.page.remark')}} : XXXXXX
                         </el-col>
-                        <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Order Remark :
-                            <div style="line-height: normal" v-if="!isModify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad blanditiis culpa cum facere harum id labore magni, mollitia nulla omnis optio reiciendis reprehenderit repudiandae sit sunt ullam veniam, voluptas.</div>
-                            <el-input
-                                v-else
-                                type="textarea"
-                                :rows="2"
-                                placeholder="请输入内容"
-                                v-model="textarea">
-                            </el-input>
-                        </el-col>
-                        <el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            Attachment :
-                            <el-input
-                                type="textarea"
-                                :rows="2"
-                                placeholder="请输入内容"
-                                v-model="textarea">
-                            </el-input>
+                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            {{$t('warehouse.page.attachment')}} : XXXXXX
                         </el-col>
                     </el-row>
                 </div>
             </div>
             <div class="section">
-                <div class="head">Payment</div>
+                <pay-table :data="payData"></pay-table>
+            </div>
+            <div class="section">
+                <div class="head"> {{$t('warehouse.page.productInfo')}}</div>
                 <div class="content">
-                    <!--<el-row>-->
-                        <!--<el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">-->
-                            <!--<pay-table :data="payData"></pay-table>-->
-                        <!--</el-col>-->
-                        <!--<el-col class="list noBorder" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">-->
-                            <!--<div>-->
-                                <!--服务付款-->
-                                <!--<el-button type="primary" size="mini">申请付款</el-button>-->
-                            <!--</div>-->
-                            <!--<div>-->
-                                <!--<el-table-->
-                                        <!--:data="payData"-->
-                                        <!--style="width: 100%"-->
-                                        <!--height="250">-->
-                                    <!--<el-table-column-->
-                                            <!--label="#"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.$index+1}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="编号"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.code}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="日期"-->
-                                            <!--width="100"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.date}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="款项类型"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.type}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="付款金额"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.pay}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="收款金额"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.receive}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="待付金额"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.waitPay}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                    <!--<el-table-column-->
-                                            <!--label="待收金额"-->
-                                            <!--align="center">-->
-                                        <!--<template slot-scope="scope">-->
-                                            <!--{{scope.row.waitReceive}}-->
-                                        <!--</template>-->
-                                    <!--</el-table-column>-->
-                                <!--</el-table>-->
-                            <!--</div>-->
-                        <!--</el-col>-->
-                    <!--</el-row>-->
-                    <pay-table :data="payData"></pay-table>
-                    <pay-table :data="payData1"></pay-table>
+
                 </div>
             </div>
+
             <div class="section">
                 <div class="head">Calculate</div>
                 <div class="content" style="margin-top: 10px">
@@ -245,16 +146,11 @@
         </div>
 
         <div class="handler">
-            <el-button v-if="!isModify" @click="modifyDetail" type="primary" size="mini">Modify</el-button>
-            <el-button v-if="!isModify" size="mini">Cancel QC</el-button>
 
+            <el-button @click="close" type="warning" plain>{{$t('warehouse.page.close')}}</el-button>
+            <el-button>{{$t('warehouse.page.cancelQC')}}</el-button>
+            <el-button>{{$t('warehouse.page.deleteQC')}}</el-button>
 
-
-            <el-button v-if="isModify" @click="submitDetail" type="primary" size="mini">Submit</el-button>
-            <el-button @click="cancelModify" v-if="isModify" size="mini">Cancel</el-button>
-
-
-            <el-button size="mini">Delete QC</el-button>
         </div>
     </div>
 </template>
@@ -382,43 +278,23 @@
                 ],
                 payData: [
                     {
-                        id: '124124',
-                        date: '1992-02-02',
-                        moneyType: '预付款',
-                        payMoney: '1241',
-                        receiveMoney: '',
-                        waitPayMoney:'',
-                        waitReceiveMoney:'',
+                        paymentId: '124124',
+                        payName:'赈灾款',
+                        payDate: '1992-02-02',
+                        payDateActually:'1992-02-02',
+                        acceptMoney:998,
+                        acceptMoneyActually:'1902',
+                        waitMoney:'',
                     },
                     {
-                        id: '124124',
-                        date: '1992-02-02',
-                        moneyType: '预付款',
-                        payMoney: '1241',
-                        receiveMoney: '',
-                        waitPayMoney:'',
-                        waitReceiveMoney:'',
-                    }
-                ],
-                payData1: [
-                    {
-                        id: '124124',
-                        date: '1992-02-02',
-                        moneyType: '预付款',
-                        payMoney: '1241',
-                        receiveMoney: '',
-                        waitPayMoney:'',
-                        waitReceiveMoney:'',
+                        paymentId: '124124',
+                        payName:'赈灾款',
+                        payDate: '1992-02-02',
+                        payDateActually:'1992-02-02',
+                        acceptMoney:912,
+                        acceptMoneyActually:'1902',
+                        waitMoney:'',
                     },
-                    {
-                        id: '124124',
-                        date: '1992-02-02',
-                        moneyType: '预付款',
-                        payMoney: '1241',
-                        receiveMoney: '',
-                        waitPayMoney:'',
-                        waitReceiveMoney:'',
-                    }
                 ],
                 textarea:'',
                 currentPage:1,
@@ -427,7 +303,6 @@
                     region: ''
                 },
                 input:'',
-                isModify:false,             //是否处在modify状态，默认为false
             }
         },
         methods:{
@@ -443,22 +318,9 @@
                 console.log(`当前页: ${val}`);
             },
 
-
-            //修改qc详情
-            modifyDetail(){
-                this.isModify=true;
+            close(){
+                window.close();
             },
-
-            //取消修改
-            cancelModify(){
-                this.isModify=false;
-            },
-
-            //提交修改的qc单内容
-            submitDetail(){
-                this.isModify=false;
-            }
-
         }
     }
 </script>
@@ -475,6 +337,7 @@
         line-height: 32px;
         color:#666666;
         border-bottom: 1px solid #e4e4e4;
+        padding-bottom: 8px;
     }
     .title .btn{
         font-size: 15px;
