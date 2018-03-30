@@ -4,9 +4,13 @@
     <el-popover
       popper-class="filter-value-popper"
       placement="bottom"
+      @hide="hideListener"
       v-model="visible"
       trigger="click">
-      <i class="el-icon-circle-plus-outline" slot="reference">{{label}}</i>
+      <h4 slot="reference" style="cursor: pointer">
+        {{label}}
+        <i class="el-icon-circle-plus-outline"></i>
+      </h4>
 
       <el-checkbox-group v-model="sortType" size="mini" @change="changeSortType">
         <el-checkbox-button label="asc">升序</el-checkbox-button>
@@ -103,13 +107,16 @@
         let dl = [];
         this.dataList = this.uniqueData(this.data);
 
-        this.checkedDataList = _.where(this.dataList, {_isHide: false});
+        this.checkedDataList = _.filter(this.dataList, val => {
+          return !val._hide;
+        });
+        this.changeChecked(this.checkedDataList);
 
         if (value) {
           _.map(this.dataList, val => {
             let data = val[this.dataKey];
             if (!_.isUndefined(data) && data.toString().indexOf(value) > -1) {
-              val._isHide = false;
+              val._hide = false;
               dl.push(val);
             }
           });
@@ -121,8 +128,10 @@
         // @onSort
         if (val.length > 1) {
           val.shift();
-          this.$emit('onSort', val[0]);
         }
+        this.$emit('sort-change', val[0] || '', this.dataKey);
+
+        this.visible = false;
 
       },
       changeAllChecked(val) {
@@ -137,13 +146,18 @@
       clickFilter() {
         let data = [];
         _.map(this.data, val => {
-          val._isHide = (_.indexOf(_.pluck(this.checkedDataList, this.dataKey), val[this.dataKey]) < 0);
+          val._hide = (_.indexOf(_.pluck(this.checkedDataList, this.dataKey), val[this.dataKey]) < 0);
           data.push(val);
         });
 
         this.$emit('update:data', data);
 
         this.visible = false;
+      },
+      hideListener() {
+        console.log(1)
+        console.log(this.data)
+        this.getFilterValue();
       }
     }
   }
@@ -159,7 +173,7 @@
 
   .content-box {
     margin-top: 10px;
-    max-height: 200px;
+    height: 200px;
     overflow: auto;
   }
 </style>

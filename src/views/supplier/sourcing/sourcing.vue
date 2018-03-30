@@ -6,27 +6,27 @@
         </div>
 <!--        搜索条件-->
             <div>
-            <el-form ref="formItem" :model="formItem" label-width="140px">
-                <el-row>
+                <el-form ref="formItem" :model="formItem" label-width="140px">
+                    <el-row>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                            <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
+                                <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                         </el-col>
+    <!--                    下拉选择businessScope-->
+                        <el-col :xs="24" :sm="12" :md="8" :lg="8">
+                            <el-form-item class="form-list" :label="$t('supplier.input.businessScope')"  prop="businessScope">
+                                <el-select v-model="formItem.businessScope" placeholder="Enter something..."></el-select>
+                               </el-form-item>
+                        </el-col>
+    <!--                    下拉选择category-->
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
-                            <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                     </el-col>
-<!--                    下拉选择businessScope-->
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.businessScope')"  prop="businessScope">
-                            <el-select v-model="formItem.businessScope" placeholder="Enter something..."></el-select>
-                           </el-form-item>
-                    </el-col>
-<!--                    下拉选择category-->
-                  <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
-                              <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
-                        </el-form-item>
-                    </el-col>
-                    </el-row>
-</el-form>
+                            <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
+                                  <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
+                            </el-form-item>
+                        </el-col>
+                        </el-row>
+    </el-form>
             </div>
             <div class="body" :class="{hide:hideBody}">
                      <el-form ref="formItem" :model="formItem" label-width="140px">

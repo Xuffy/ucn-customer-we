@@ -13,9 +13,10 @@
     </div>
     <br/>
     <el-tabs type="border-card">
-      <el-tab-pane label="Inquiry">
-        <v-simple-table :data="dataList" :column="dataColumn"
-                        @update:data="val => dataList = val"></v-simple-table>
+      <el-tab-pane label="Inquiry" style="min-height: 300px">
+        <v-simple-table :data.sync="dataList" :column="dataColumn"
+                        @sort-change="getSort"
+                        @page-change="pageChange"></v-simple-table>
       </el-tab-pane>
       <el-tab-pane label="Order">
         <v-simple-table></v-simple-table>
@@ -52,17 +53,16 @@
       this.getList();
     },
     methods: {
+      pageChange(page) {
+        console.log(page)
+      },
+      getSort(val, key) {
+        console.log(val, key)
+      },
       getList() {
         this.ajax.get('/getList').then((data) => {
           this.dataList = data;
-          if (data.length) {
-            _.map(_.keys(data[0]), val => {
-              let key = this.$tc(`workbench.tableData.${val}`);
-              if (key.indexOf('.') < 0) {
-                this.dataColumn.push({label: key, prop: val,width:80});
-              }
-            });
-          }
+          this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
         });
       }
     }
