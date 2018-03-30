@@ -355,7 +355,20 @@ export const routerMap = [
       hidden: true,
       component: () => import('../views/login/getInvitationCode')
     },
-
+    {
+        path: '/track',
+        component: Layout,
+        redirect: '/track/trackBySKU',
+        name: 'Track',
+        noDropdown: true,
+        children: [
+            {
+                path: 'trackBySKU',
+                component: () =>import('../views/track/trackBySKU.vue'),
+                name:'trackBySKU'
+            }
+        ]
+    }
   ]
 ;
 

@@ -5,7 +5,9 @@ import supplier from './supplier/index.js'
 import order from './order/index.js'
 import warehouse from './warehouse/index.js'
 import login from './login'
-import logistic from './logistic';
+import logistic from './logistic'
+import track from './track'
+
 
 export default {
   workbench,
@@ -15,6 +17,7 @@ export default {
   order,
   supplier,
   login,
-  logistic
+  logistic,
+  track
 }
 
