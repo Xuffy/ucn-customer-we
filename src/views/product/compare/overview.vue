@@ -1,8 +1,8 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            Compare Overview
-            <el-button type="primary" @click="$router.push('/product/compare')">Compare</el-button>
+            {{$t('product.page.compareOverview')}}
+            <el-button type="primary" @click="$router.push('/product/compare/detail')">Compare</el-button>
         </div>
     </div>
 </template>

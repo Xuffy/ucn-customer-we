@@ -45,40 +45,80 @@ export const routerMap = [
     {
       path: '/product',
       component: Layout,
-      redirect: '/product',
+      redirect: '/product/sourcing',
       name: 'Product',
-      noDropdown: true,
       children: [
         {
-          path: '',
-          component: () => import('../views/product/sourcing/sourcing'),
+          path: 'sourcing',
           name:'sourcing',
+          component: () => import('../views/product/sourcing/index'),
+          children:[
+              {
+                  path:'',
+                  component: () => import('../views/product/sourcing/sourcing'),
+              },
+              {
+                  path:'detail',
+                  component: () => import('../views/product/sourcing/detail'),
+                  name:'detail'
+              },
+          ]
         },
+
         {
-          path:'detail',
-          component: () => import('../views/product/sourcing/detail'),
-          name:'detail'
+          path:'logs',
+          component: () => import('../views/product/sourcing/logs'),
+          name:'logs'
         },
         {
           path:'bookmark',
-          component: () => import('../views/product/bookmark/bookmark'),
-          name:'bookmark'
-        },
-        {
-          path:'bookmarkDetail',
-          component: () => import('../views/product/bookmark/detail.vue'),
-          name:'bookmarkDetail'
-        },
-        {
-          path:'compareOverview',
-          component: () => import('../views/product/compare/overview.vue'),
-          name:'compareOverview'
+          component: () => import('../views/product/bookmark/index'),
+          name:'bookmark',
+          children:[
+              {
+                  path:'',
+                  component: () => import('../views/product/bookmark/bookmark'),
+              },
+              {
+                  path:'detail',
+                  component: () => import('../views/product/bookmark/detail'),
+                  name:'bookmarkDetail'
+              },
+              {
+                  path:'manuallyAdd',
+                  component: () => import('../views/product/bookmark/manuallyAdd'),
+                  name:'manuallyAdd',
+              },
+          ]
         },
         {
           path:'compare',
-          component: () => import('../views/product/compare/compare.vue'),
-          name:'compare'
+          component:() => import('../views/product/compare/index'),
+          name:'compare',
+          children:[
+              {
+                  path:'',
+                  component: () => import('../views/product/compare/overview'),
+                  name:'compareOverview',
+              },
+              {
+                  path:'detail',
+                  component: () => import('../views/product/compare/compare'),
+                  name:'compareDetail',
+              },
+          ]
         },
+
+        // {
+        //   path:'compareOverview',
+        //   component: () => import('../views/product/compare/overview.vue'),
+        //   name:'compareOverview'
+        // },
+        // {
+        //   path:'compare',
+        //   component: () => import('../views/product/compare/compare.vue'),
+        //   name:'compare'
+        // },
         {
           path:'message',
           component: () => import('../views/message/message.vue'),
