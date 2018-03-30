@@ -40,7 +40,6 @@
 
 <script>
 	/**dropDown
-	 * author -LuoTao
      * Time -2018-03-20
      * @param { emptyText } - 内容为空时 树形展示的文本
 	 * @param { searchPlaceholder } - 搜索框提示文字

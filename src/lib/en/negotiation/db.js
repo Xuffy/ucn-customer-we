@@ -1,4 +1,4 @@
-const tableViewByInquiry = {
+const tableViewByInquiry = { //view by inquiry
     inquiryNo: "Inquiry No.",
     quotationNo: "Quotation No.",
     sequence: "Sequence",
@@ -13,7 +13,7 @@ const tableViewByInquiry = {
     remark: "Remark"
 }
 
-const tableViewBySKU = {
+const tableViewBySKU = { //view by SKU
     inquiryNo: "Inquiry No.",
     quotationNo: "Quotation No.",
     sequence: "Sequence",
