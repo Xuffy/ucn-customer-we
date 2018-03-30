@@ -1,8 +1,8 @@
 <template>
     <div class="paymentTable">
         <div>
-            <span style="margin-right: 10px">货物付款</span>
-            <el-button :disabled="disableBtn" @click="payment" type="primary" size="mini">申请付款</el-button>
+            <span class="title" style="margin-right: 10px">付款信息</span>
+            <el-button :disabled="disableBtn" @click="askForPayment" type="primary" size="mini">申请服务付款</el-button>
 
             <el-button v-if="disableBtn" @click="surePay" type="primary" size="mini">OK</el-button>
             <el-button v-if="disableBtn" @click="cancelPay" type="primary" size="mini">Cancel</el-button>
@@ -11,12 +11,11 @@
                 :data="data"
                 border
                 height="300"
-                show-summary
                 style="width: 100%; margin-top: 20px"
-                :summary-method="getSummaries"
+                :row-class-name="tableRowClassName"
                 @selection-change="handleSelectionChange">
             <el-table-column
-                    label="#"
+                    label="序号"
                     align="center"
                     width="50">
                 <template slot-scope="scope">
@@ -24,44 +23,19 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="编号"
+                    label="付款编号"
                     align="center"
                     width="100">
                 <template slot-scope="scope">
-                    {{scope.row.id}}
+                    {{scope.row.paymentId}}
                 </template>
             </el-table-column>
             <el-table-column
-                    label="日期"
-                    align="center"
-                    width="180">
+                    label="款项名称"
+                    align="center">
                 <template slot-scope="scope">
                     <div v-if="scope.row.isNew">
-                        <el-date-picker
-                                class="chooseDate"
-                                size="mini"
-                                v-model="scope.row.date"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </div>
-                    <div v-else>
-                        {{scope.row.date}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="款项类型"
-                    align="center"
-                    width="120">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew">
-                        <el-select
-                                class="chooseType"
-                                size="mini"
-                                v-model="scope.row.moneyType"
-                                placeholder="请选择">
+                        <el-select size="mini" v-model="scope.row.payName" placeholder="请选择">
                             <el-option
                                     v-for="item in options"
                                     :key="item.value"
@@ -71,12 +45,74 @@
                         </el-select>
                     </div>
                     <div v-else>
-                        {{scope.row.moneyType}}
+                        {{scope.row.payName}}
                     </div>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="付款金额"
+                    label="付款日期"
+                    align="center"
+                    width="180">
+                <template slot-scope="scope">
+                    <div v-if="scope.row.isNew">
+                        <el-date-picker
+                                class="chooseDate"
+                                size="mini"
+                                v-model="scope.row.payDate"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </div>
+                    <div v-else>
+                        {{scope.row.payDate}}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="实际付款日期"
+                    align="center"
+                    width="180">
+                <template slot-scope="scope">
+                    <div v-if="scope.row.isNew">
+                        <el-date-picker
+                                class="chooseDate"
+                                size="mini"
+                                v-model="scope.row.payDateActually"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                    </div>
+                    <div v-else>
+                        {{scope.row.payDateActually}}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="收款金额"
+                    align="center"
+                    width="150"
+                    prop="acceptMoney">
+                <template slot-scope="scope">
+                    <div v-if="scope.row.isNew">
+                        <el-input-number
+                                class="payMoney"
+                                size="mini"
+                                v-model="scope.row.acceptMoney"
+                                @change="handleChange"
+                                :min="0"
+                                label="金额"
+                                :controls="false">
+                        </el-input-number>
+                    </div>
+                    <div v-else>
+                        {{scope.row.acceptMoney}}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="实际收款金额"
                     align="center"
                     width="150"
                     prop="payMoney">
@@ -85,7 +121,7 @@
                         <el-input-number
                                 class="payMoney"
                                 size="mini"
-                                v-model="scope.row.payMoney"
+                                v-model="scope.row.acceptMoneyActually"
                                 @change="handleChange"
                                 :min="0"
                                 label="金额"
@@ -93,7 +129,7 @@
                         </el-input-number>
                     </div>
                     <div v-else>
-                        {{scope.row.payMoney}}
+                        {{scope.row.acceptMoneyActually}}
                     </div>
                 </template>
                 <!--<template slot-scope="scope">-->
@@ -101,25 +137,11 @@
                 <!--</template>-->
             </el-table-column>
             <el-table-column
-                    label="收款金额"
-                    align="center">
-                <template slot-scope="scope">
-                    {{scope.row.receiveMoney}}
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="待付金额"
+                    label="有效性"
                     align="center"
                     prop="waitPayMoney">
-                <!--<template slot-scope="scope">-->
-                    <!--{{scope.row.waitPayMoney}}-->
-                <!--</template>-->
-            </el-table-column>
-            <el-table-column
-                    label="待收金额"
-                    align="center">
                 <template slot-scope="scope">
-                    {{scope.row.waitReceiveMoney}}
+                    <el-button type="text">有效</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -176,8 +198,6 @@
 
             },
 
-
-
             handleSizeChange(){
 
             },
@@ -192,15 +212,15 @@
             },
 
             //申请付款
-            payment(){
+            askForPayment(){
                 this.data.push({
-                    id: '124124',
-                    date: '',
-                    moneyType: '预付款',
-                    payMoney: '',
-                    receiveMoney: '',
-                    waitPayMoney:'',
-                    waitReceiveMoney:'',
+                    paymentId: '124124',
+                    payName:'赈灾款',
+                    payDate: '1992-02-02',
+                    payDateActually:'1992-02-02',
+                    acceptMoney:'998',
+                    acceptMoneyActually:'1902',
+                    waitMoney:'',
                     isNew:true
                 });
                 this.disableBtn=true;
@@ -229,14 +249,15 @@
             getSummaries(param) {
                 const { columns, data } = param;
                 const sums = [];
+                // console.log(data)
                 columns.forEach((column, index) => {
                     if (index === 0) {
                         sums[index] = '合计';
                     }
-                    else if(index===4){
+                    else if(index===5){
                         const values = data.map(item => Number(item[column.property]));
                         if (!values.every(value => isNaN(value))) {
-                            sums[6] = values.reduce((prev, curr) => {
+                            sums[7] = values.reduce((prev, curr) => {
                                 const value = Number(curr);
                                 if (!isNaN(value)) {
                                     return prev + curr;
@@ -244,7 +265,7 @@
                                     return prev;
                                 }
                             }, 0);
-                            sums[6]=this.serviceMoney-sums[6];
+                            sums[7]=this.serviceMoney-sums[7];
                             // console.log(sums[index],'????')
                             // sums[index] += ' 元';
                         }else {
@@ -253,6 +274,14 @@
                     }
                 });
                 return sums;
+            },
+
+            //如果无效则这一行变色
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                }
+                return '';
             }
         },
         created(){
@@ -279,10 +308,20 @@
     .paymentTable{
         padding: 10px 0;
     }
+    .title{
+        font-size: 14px;
+        font-weight: bold;
+    }
     .chooseDate{
         width: 140px;
     }
     .chooseType{
         width: 100px;
     }
+
+
+    .el-table >>> .warning-row {
+        background: #fafafa;
+    }
+
 </style>

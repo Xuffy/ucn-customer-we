@@ -4,7 +4,7 @@ export default {
     local: {
       path: '/static/__project',
       api: 'http://store.test.tailorx.cn/api',
-      mock: 'https://www.easy-mock.com/mock/5abb4026b066f456abb6d28e/ucn',
+      mock: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
     develop: {
       path: '/static/__project',

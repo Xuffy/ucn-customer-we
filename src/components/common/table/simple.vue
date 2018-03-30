@@ -140,10 +140,26 @@
             data.push(dv);
           }
         });
-        console.log(data)
         this.$refs.table.toggleRowSelection(data, true);
       },
       column(columns) {
+<<<<<<< HEAD
+=======
+        this.filterColumn(columns);
+      }
+    },
+    created() {
+      this.filterColumn(this.column);
+      if (!_.isEmpty(this.data)) {
+        this.showData = _.filter(this.data, val => {
+          return !val._hide;
+        });
+      }
+      // this.$emit('update:column', [])
+    },
+    methods: {
+      filterColumn(columns) {
+>>>>>>> f2ea871e236fcdc0ebb48e96f315a9533f5549f0
         if (columns.length) {
           this.columnList = _.map(columns, val => {
             if (!val.renderHeader) {

@@ -1,13 +1,13 @@
 <template>
     <div class="message">
         <div class="head">
-            <el-button @click="manageMessage">message management</el-button>
+            <el-button @click="manageMessage">{{$t('product.page.messageManagement')}}</el-button>
         </div>
         <div class="body">
             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane label="System Message" name="System Message">
+                <el-tab-pane :label="$t('product.page.systemMessage')" name="System Message">
                     <div class="title">
-                        <el-button type="primary">Mark as Read</el-button>
+                        <el-button type="primary">{{$t('product.page.markAsRead')}}</el-button>
                         <el-input
                                 class="message-input"
                                 placeholder="请输入内容"
@@ -28,14 +28,15 @@
                                     width="40">
                             </el-table-column>
                             <el-table-column
-                                    label="Content"
-                                    sortable
+                                    :label="$t('product.page.content')"
                                     align="center">
-                                <template slot-scope="scope">{{ scope.row.content }}</template>
+                                <template slot-scope="scope">
+                                    <i style="margin-right: 40px" class="el-icon-info"></i>{{ scope.row.content }}
+                                </template>
                             </el-table-column>
                             <el-table-column
                                     prop="time"
-                                    label="Time"
+                                    :label="$t('product.page.time')"
                                     sortable
                                     align="center">
                                 <!--<template slot-scope="scope">{{ scope.row.content }}</template>-->
@@ -53,7 +54,7 @@
                         </el-pagination>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="Message Settings" name="Message Settings">
+                <el-tab-pane :label="$t('product.page.messageSettings')" name="Message Settings">
                     <el-table
                             ref="multipleTable"
                             :data="messageType"
