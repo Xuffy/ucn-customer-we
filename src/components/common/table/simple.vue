@@ -181,7 +181,12 @@
             return val;
           });
         }
-      },
+      }
+    },
+    created() {
+      // this.$emit('update:column', [])
+    },
+    methods: {
       /*selectionChange(selection) {
         this.selectedList = selection;
       },*/
