@@ -62,14 +62,7 @@
       getList() {
         this.ajax.get('/getList').then((data) => {
           this.dataList = data;
-          if (data.length) {
-            _.map(_.keys(data[0]), val => {
-              let key = this.$tc(`workbench.tableData.${val}`);
-              if (key.indexOf('.') < 0) {
-                this.dataColumn.push({label: key, prop: val, width: 80});
-              }
-            });
-          }
+          this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
         });
       }
     }

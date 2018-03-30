@@ -55,6 +55,32 @@ export default {
     }
 
     /**
+     * 获取 table 配置列名
+     * @param {Object/Array} [data]    - 数据集合
+     * @param {String} [key]    - i18n配置
+     * @param {Object} [config]    - column扩展参数 参照elment-ui
+     * @returns {Object}
+     */
+    Vue.prototype.$getTableColumn = function (data, key, config = {}) {
+      let value, list = [];
+      if (!_.isEmpty(data) && !_.isEmpty(key) && (_.isArray(data) || _.isObject(data))) {
+
+        value = _.isArray(data) ? data[0] : data;
+
+        _.map(_.keys(value), val => {
+          let k = this.$tc(`${key}.${val}`);
+          if (k.indexOf('.') < 0) {
+            list.push(_.extend({label: k, prop: val, width: 80}, config));
+          }
+        });
+        return list;
+      } else {
+        throw new Error('lack of parameters');
+      }
+    }
+
+
+    /**
      * text转换html 替换<br>、&nbsp;
      * @param value
      * @returns {string}
