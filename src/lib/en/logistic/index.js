@@ -29,7 +29,8 @@ const text = {
     logisticsPlanNo: "logistics plan No",
     productInfo: "Product Info",
     placeNewLogisticOrder: "Place New Logistic Order",
-    basicInfo: "Basic Info"
+    basicInfo: "Basic Info",
+    containerInfo: "Container Info"
 };
 
 const basicInfo = {
@@ -63,9 +64,10 @@ const basicInfo = {
     consignee: "consignee",
     notify: "notify",
     transportCompany: "Transport Company",
-    vesselNameVesselNo: "Vessel Name/Vessel No.",
-    countryOfShipmentOrigin: "Country of Shipment Origin",
-    portOfLoading: "Port of Loading",
+    vesselName: "Vessel Name",
+    vesselNo: "Vessel No.",
+    departCountry: "Depart Country",
+    departPort: "Depart Port",
     destinationCountry: "Destination Country",
     destinationPort: "Destination Port"
 };
