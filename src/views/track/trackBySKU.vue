@@ -4,13 +4,13 @@
             {{$t('track.page.trackBySKU')}}
         </div>
         <div class="body">
-            <v-simple-table
-                    class="speTable"
-                    :data.sync="dataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table>
+            <!--<v-simple-table-->
+                    <!--class="speTable"-->
+                    <!--:data.sync="dataList"-->
+                    <!--:column="dataColumn"-->
+                    <!--@sort-change="getSort"-->
+                    <!--@page-change="pageChange">-->
+            <!--</v-simple-table>-->
         </div>
     </div>
 </template>
