@@ -1,31 +1,25 @@
 <template>
-  <div class='download'>   
-     <div>
+  <div class='uploadDialog'>  
+      <div class='download'>
          Template : 
          <span class="filename">我是文件格式的名字哈</span>    
-         <el-button type="primary" icon="el-icon-download"  @click='download'> download</el-button>
+         <el-button type="primary" icon="el-icon-download" > download</el-button>
 
      </div>
   </div>
 </template>
 
 <script>
-    import upload from '../upload/upload.vue'
+    import upload from '@/components/common/upload/upload.vue'
     export default {
         name: 'download',
         data() {
-            return {
-
-            }
+            return {}
         },
-        watch: {
-
-        },
-        created() {
-
-        },
+        watch: {},
+        created() {},
         methods: {
-            download() {}
+
         }
     }
 
@@ -34,6 +28,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+
     .filename {
         text-decoration: underline;
         margin-right: 5px;

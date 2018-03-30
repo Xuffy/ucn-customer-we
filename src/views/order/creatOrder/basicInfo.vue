@@ -2,55 +2,60 @@
     <div class="basicinfo">
              <div class="basicinfo_title">{{$t('order.basicinfo.basicInfo')}}</div>
              <div class="basicinfo_form">
-                  <el-form ref="formItem" :model="formItem" label-width="210px">
+                  <el-form ref='ruleform' :model="formItem" label-width="210px" :rules="rules"  >
                     <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.orderNumber')" prop="orderNumber">
-                                <el-input v-model="formItem.orderNumber" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.orderNumber" :disabled='disabled'  placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list":label=" $t('order.basicinfo.orderDate')" prop="orderDate">
-                                <el-input v-model="formItem.orderDate" placeholder="Enter something..."></el-input>
-                            </el-form-item>
+                               <el-date-picker
+                                      v-model="formItem.orderDate"
+                                      type="date"
+                                      :disabled='disabled'
+                                      placeholder="选择日期">
+                                    </el-date-picker>
+                                </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.purchaseOrderNumber')" prop="purchaseOrderNumber">
-                                <el-input v-model="formItem.purchaseOrderNumber" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.purchaseOrderNumber" :disabled='disabled' placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerShortName')" prop="customerShortName">
-                                <el-input v-model="formItem.customerShortName" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.customerShortName" :disabled='disabled' placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerSerialNumber')" prop="customerSerialNumber">
-                                 <el-input v-model="formItem.customerSerialNumber" placeholder="select">
+                                 <el-input v-model="formItem.customerSerialNumber" :disabled='disabled' placeholder="select">
                                   </el-input>
                             </el-form-item>
                          </el-col>                 
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.salesOrderNumber')" prop="salesOrderNumber">
-                                 <el-input v-model="formItem.salesOrderNumber" placeholder="select">
+                                 <el-input v-model="formItem.salesOrderNumber" :disabled='disabled' placeholder="select">
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.supplierShortName')" prop="supplierShortName">
-                                 <el-input v-model="formItem.supplierShortName" placeholder="select">
+                                 <el-input v-model="formItem.supplierShortName" :disabled='disabled' placeholder="select">
                                   </el-input>
                             </el-form-item>
                          </el-col>              
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.supplierSerialNumber')" prop="supplierSerialNumber">
-                                 <el-input v-model="formItem.supplierSerialNumber" placeholder="please enter">
+                                 <el-input v-model="formItem.supplierSerialNumber" :disabled='disabled' placeholder="please enter">
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.referencesInquiryID')" prop="referencesInquiryID">
-                                 <el-select v-model="formItem.referencesInquiryID" placeholder="select">
+                                 <el-select v-model="formItem.referencesInquiryID" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in referencesInquiryID"
                                       :key="item.value"
@@ -60,9 +65,9 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.orderStatus')" prop="orderStatus">
-                                 <el-select v-model="formItem.orderStatus" placeholder="select">
+                                 <el-select v-model="formItem.orderStatus" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in orderStatus"
                                       :key="item.value"
@@ -72,21 +77,19 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.estDeliveryDate')" prop="estDeliveryDate">
-                                 <el-input v-model="formItem.estDeliveryDate" placeholder="please enter">
-                                  </el-input>
+                            <el-date-picker
+                                      v-model="formItem.estDeliveryDate"
+                                      type="date"
+                                      :disabled='disabled'
+                                      placeholder="选择日期">
+                                    </el-date-picker>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
-                            <el-form-item class="form-list" :label=" $t('order.basicinfo.actDeliveryDate')" prop="actDeliveryDate">
-                                 <el-input v-model="formItem.actDeliveryDate" placeholder="please enter">
-                                  </el-input>
-                            </el-form-item>
-                         </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.priceTerms')" prop="priceTerms">
-                                 <el-select v-model="formItem.priceTerms" placeholder="select">
+                                 <el-select v-model="formItem.priceTerms" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in priceTerms"
                                       :key="item.value"
@@ -96,55 +99,55 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.incortermAea')" prop="incortermAea">
-                                 <el-input v-model="formItem.incortermAea" placeholder="select">                               
+                                 <el-input v-model="formItem.incortermAea" :disabled='disabled' placeholder="select">                               
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentMethod')" prop="paymentMethod">
-                                 <el-input v-model="formItem.paymentMethod" placeholder="select">
+                                 <el-input v-model="formItem.paymentMethod" :disabled='disabled' placeholder="select">
                                     
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.lcNumber')"prop="lcNumber">
-                                 <el-input v-model="formItem.lcNumber" placeholder="select">
+                                 <el-input v-model="formItem.lcNumber" :disabled='disabled' placeholder="select">
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.countryofShipmentOrigin')" prop="countryofShipmentOrigin">
-                                 <el-input v-model="formItem.countryofShipmentOrigin" placeholder="select">
+                                 <el-input v-model="formItem.countryofShipmentOrigin" :disabled='disabled' placeholder="select">
                                    
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.portofLoading')" prop="portofLoading">
-                                 <el-input v-model="formItem.portofLoading" placeholder="select">
+                                 <el-input v-model="formItem.portofLoading" :disabled='disabled' placeholder="select">
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.destinationCountry')" prop="destinationCountry">
-                                 <el-input v-model="formItem.destinationCountry" placeholder="Please enter">
+                                 <el-input v-model="formItem.destinationCountry" :disabled='disabled' placeholder="Please enter">
                                    
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.destinationPort')" prop="destinationPort">
-                                 <el-input v-model="formItem.destinationPort" placeholder="select">
+                                 <el-input v-model="formItem.destinationPort" :disabled='disabled' placeholder="select">
                                    
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.transportationWay')" prop="transportationWay">
-                                 <el-select v-model="formItem.transportationWay" placeholder="select">
+                                 <el-select v-model="formItem.transportationWay" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in transportationWay"
                                       :key="item.value"
@@ -154,23 +157,26 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerAgreementID')" prop="customerAgreementID">
-                                 <el-input v-model="formItem.customerAgreementID" placeholder="select">
+                                 <el-input v-model="formItem.customerAgreementID" :disabled='disabled' placeholder="select">
                                    
                                   </el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerAgreementDate')" prop="customerAgreementDate">
-                                 <el-input v-model="formItem.customerAgreementDate" placeholder="select">
-
-                                  </el-input>
+                                   <el-date-picker
+                                      v-model="formItem.customerAgreementDate"
+                                      type="date"
+                                      :disabled='disabled'
+                                      placeholder="选择日期">
+                                    </el-date-picker>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.batchForLogistics')" prop="batchForLogistics">
-                                 <el-select v-model="formItem.batchForLogistics" placeholder="select">
+                                 <el-select v-model="formItem.batchForLogistics" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in batchForLogistics"
                                       :key="item.value"
@@ -180,9 +186,9 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentCondition')" prop="paymentCondition">
-                                 <el-select v-model="formItem.paymentCondition" placeholder="select">
+                                 <el-select v-model="formItem.paymentCondition" :disabled='disabled' placeholder="select">
                                     <el-option
                                       v-for="item in paymentCondition"
                                       :key="item.value"
@@ -192,19 +198,19 @@
                                   </el-select>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.agreeOnDateInterval')" prop="agreeOnDateInterval">
-                                <el-input v-model="formItem.agreeOnDateInterval" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.agreeOnDateInterval" :disabled='disabled' placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.paymentStatus')" prop="paymentStatus">
-                                <el-input v-model="formItem.paymentStatus" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.paymentStatus" :disabled='disabled' placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="6">
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.comments')" prop="comments">
-                                <el-input v-model="formItem.comments" placeholder="Enter something..."></el-input>
+                                <el-input v-model="formItem.comments" :disabled='disabled' placeholder="Enter something..."></el-input>
                             </el-form-item>
                          </el-col>
                     </el-row>
@@ -215,27 +221,39 @@
 <script>
     export default {
         name: 'basicinfo',
+        props: {
+            disabled: {
+                type: Boolean,
+                default: false
+            },
+            list: {
+                type: Object,
+                default: function() {
+                    return {}
+                }
+            }
+        },
         components: {
 
         },
         data() {
             return {
                 formItem: {
-                    orderNumber: '',
-                    orderDate: '',
+                    orderNumber: '', //必填 
+                    orderDate: '', //必填          
                     purchaseOrderNumber: '',
-                    customerShortName: '',
-                    customerSerialNumber: '',
+                    customerShortName: '', //必填 
+                    customerSerialNumber: '', //必填 
                     salesOrderNumber: '',
-                    supplierShortName: '',
-                    supplierSerialNumber: '',
+                    supplierShortName: '', //必填 
+                    supplierSerialNumber: '', //必填 
                     referencesInquiryID: '', //referencesInquiryID下拉框值
-                    orderStatus: '', //orderStatus下拉框值
-                    estDeliveryDate: '',
-                    actDeliveryDate: '',
-                    priceTerms: '', //下拉框值
-                    incortermAea: '',
-                    paymentMethod: '',
+                    orderStatus: '', //orderStatus下拉框值 //必填 
+                    estDeliveryDate: '', //必填 
+                    //                    actDeliveryDate: '',
+                    priceTerms: '', //下拉框值//必填 
+                    incortermAea: '', //必填 
+                    paymentMethod: '', //必填 
                     lcNumber: '',
                     countryofShipmentOrigin: '',
                     portofLoading: '',
@@ -249,6 +267,59 @@
                     agreeOnDateInterval: '',
                     paymentStatus: '',
                     comments: '',
+                },
+                //......................表单正则
+                rules: {
+                    orderNumber: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    orderDate: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    customerShortName: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    customerSerialNumber: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    supplierShortName: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    supplierSerialNumber: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    estDeliveryDate: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    priceTerms: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    incortermAea: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
+                    paymentMethod: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }, ],
                 },
                 referencesInquiryID: [{
                     value: 'TBCByCustomer',
@@ -292,7 +363,20 @@
                     value: 'paySinceLCNumber',
                     label: this.$t('order.basicinfo.paySinceLCNumber')
                 }],
+
             }
+        },
+        methods: {
+            submitForm(ruleform) {
+                this.$refs.ruleform.validate((valid) => {
+                    if (valid === false) {
+                        return false
+                    }
+                });
+            },
+        },
+        mounted() {
+
         }
     }
 
@@ -300,13 +384,22 @@
 <style scoped>
     .basicinfo_title {
         font-size: 14px;
-        height: 60px;
-        line-height: 60px;
+        height: 80px;
+        line-height: 80px;
         border-bottom: 1px solid #ccc;
+        padding: 0 15px;
     }
 
     .basicinfo_form {
         padding-top: 20px;
+    }
+
+    .el-input {
+        width: 180px;
+    }
+
+    .el-select {
+        width: 180px;
     }
 
 </style>

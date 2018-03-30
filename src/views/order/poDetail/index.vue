@@ -2,7 +2,7 @@
   <div class="poOrder">
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
-         <basicinfo></basicinfo>
+           <basicinfo :disabled='disabled'></basicinfo>
            <div class="basicinfo_other">
     <!--                order remark-->
                     <el-row>
@@ -56,7 +56,7 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button type='primary'>{{$t('order.buttonname.modify')}}</el-button>
+                 <el-button type='primary' @click='modify'>{{$t('order.buttonname.modify')}}</el-button>
                  <el-button type='primary'>{{$t('order.buttonname.confirm')}}</el-button>
                  <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>
                  <el-button type='primary' :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
@@ -108,6 +108,7 @@
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
                 keyWord: '',
+                disabled: true, //页面输入框是否可写
                 options: [{
                     id: '1',
                     label: 'Order No'
@@ -135,7 +136,11 @@
             }
         },
         created() {},
-        methods: {}
+        methods: {
+            modify() {
+                this.disabled = false
+            }
+        }
     }
 
 </script>
