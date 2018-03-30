@@ -140,7 +140,6 @@
             data.push(dv);
           }
         });
-        console.log(data)
         this.$refs.table.toggleRowSelection(data, true);
       },
       column(columns) {
@@ -149,6 +148,11 @@
     },
     created() {
       this.filterColumn(this.column);
+      if (!_.isEmpty(this.data)) {
+        this.showData = _.filter(this.data, val => {
+          return !val._hide;
+        });
+      }
       // this.$emit('update:column', [])
     },
     methods: {
