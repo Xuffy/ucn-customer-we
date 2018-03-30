@@ -5,15 +5,13 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css';
 import {Message} from 'element-ui';
 import _config from './config';
-import {localStore, sessionStore} from  'service/store';
+import {localStore, sessionStore} from 'service/store';
 
-/*let CancelToken = axios.CancelToken;
-let source = CancelToken.source();
-console.log(source)*/
+const mock = true;
 
 // 创建axios实例
 const ajax = axios.create({
-  baseURL: _config.ENV.api,
+  baseURL: mock ? _config.ENV.mock : _config.ENV.api,
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
@@ -22,9 +20,6 @@ const ajax = axios.create({
     data = Qs.stringify(data);
     return data;
   }],
-  /*onUploadProgress: progressEvent => {
-   console.log('--', progressEvent)
-   },*/
 });
 
 /*
@@ -37,34 +32,21 @@ NProgress.configure({
   // showSpinner: false
 });
 
-// let requests = [];
-
 /**
  * request拦截器
  */
 ajax.interceptors.request.use(config => {
   let ts = localStore.get('ticket'), cancel;
   // todo 缓存
-  /*config.cancelToken = new CancelToken(c => {
-    cancel = c;
-  });
-
-  console.log(config)*/
-
 
   // 判断用户是否登录 noAuth 取消登录验证
-  if (_.isEmpty(ts) && !config.noAuth) {
-    // router.push('/login');
-    return Promise.reject('登录失效，请重新登录');
-  }
+  // if (_.isEmpty(ts) && !config.noAuth) {
+  // router.push('/login');
+  // return Promise.reject('登录失效，请重新登录');
+  // }
   config.headers['utouu-open-client-ticket'] = ts;
 
   NProgress.start();
-
-  /* if(config.cache){
-
-   }else {
-   }*/
 
   return config
 }, error => {
@@ -111,20 +93,4 @@ ajax.interceptors.response.use(
 );
 
 
-/*function lock(url) {
- if (_.indexOf(requests, url) < 0) {
- requests.push(url);
- return false;
- }else {
- return true;
- }
- }
-
- function unlock(url) {
- if (url) {
- _.without(requests, url);
- } else {
- requests = [];
- }
- }*/
 export default ajax

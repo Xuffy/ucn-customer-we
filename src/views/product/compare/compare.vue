@@ -1,7 +1,7 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            Compare
+            {{$t('product.page.compareDetail')}}
         </div>
     </div>
 </template>

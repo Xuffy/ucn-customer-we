@@ -359,7 +359,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputValidator:(data)=>{
-                        if(!data || data==''){
+                        if(!data || data===''){
                             return '请输入';
                         }
                     }
@@ -388,7 +388,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputValidator:(data)=>{
-                        if(!data || data==''){
+                        if(!data || data===''){
                             return '请输入';
                         }
                     }

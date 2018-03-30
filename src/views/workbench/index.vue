@@ -4,7 +4,15 @@
     <br/><br/>
     <v-data-dashboard></v-data-dashboard>
     <br/><br/>
-    <v-table-data></v-table-data>
+
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <v-table-data></v-table-data>
+      </el-col>
+      <el-col :span="12">
+        <v-table-data></v-table-data>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -24,9 +32,11 @@
       VTableData,
     },
     created() {
-      console.log()
+
     },
-    methods: {}
+    methods: {
+
+    }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

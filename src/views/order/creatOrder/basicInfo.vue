@@ -1,6 +1,6 @@
 <template>
     <div class="basicinfo">
-             <div class="basicinfo_title">Basic Info</div>
+             <div class="basicinfo_title">{{$t('order.basicinfo.basicInfo')}}</div>
              <div class="basicinfo_form">
                   <el-form ref="formItem" :model="formItem" label-width="210px">
                     <el-row>
@@ -251,45 +251,45 @@
                     comments: '',
                 },
                 referencesInquiryID: [{
-                    value: this.$t('order.basicinfo.TBCByCustomer'),
+                    value: 'TBCByCustomer',
                     label: this.$t('order.basicinfo.TBCByCustomer')
                 }, {
-                    value: this.$t('order.basicinfo.TBCBySupplier'),
+                    value: 'TBCBySupplier',
                     label: this.$t('order.basicinfo.TBCBySupplier')
                 }],
-                 orderStatus: [{
-                    value: this.$t('order.basicinfo.Process'),
+                orderStatus: [{
+                    value: 'Process',
                     label: this.$t('order.basicinfo.Process')
                 }, {
-                    value: this.$t('order.basicinfo.Finished'),
+                    value: 'Finished',
                     label: this.$t('order.basicinfo.Finished')
                 }, {
-                    value: this.$t('order.basicinfo.Cancled'),
+                    value: 'Cancled',
                     label: this.$t('order.basicinfo.Cancled')
                 }],
-                 priceTerms: [{
-                    value: this.$t('order.basicinfo.fob'),
+                priceTerms: [{
+                    value: 'fob',
                     label: this.$t('order.basicinfo.fob')
                 }, {
-                    value: this.$t('order.basicinfo.exw'),
+                    value: 'exw',
                     label: this.$t('order.basicinfo.exw')
                 }],
-                 transportationWay: [{
-                    value: this.$t('order.basicinfo.海运'),
+                transportationWay: [{
+                    value: '海运',
                     label: this.$t('order.basicinfo.海运')
                 }],
-                 batchForLogistics: [{
-                    value: this.$t('order.basicinfo.Yes'),
+                batchForLogistics: [{
+                    value: 'Yes',
                     label: this.$t('order.basicinfo.Yes')
                 }, {
-                    value: this.$t('order.basicinfo.No'),
+                    value: 'No',
                     label: this.$t('order.basicinfo.No')
                 }],
-                  paymentCondition: [{
-                    value: this.$t('order.basicinfo.paySinceBL'),
+                paymentCondition: [{
+                    value: 'paySinceBL',
                     label: this.$t('order.basicinfo.paySinceBL')
                 }, {
-                    value: this.$t('order.basicinfo.paySinceLCNumber'),
+                    value: 'paySinceLCNumber',
                     label: this.$t('order.basicinfo.paySinceLCNumber')
                 }],
             }

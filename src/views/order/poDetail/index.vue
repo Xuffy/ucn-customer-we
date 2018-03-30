@@ -8,7 +8,7 @@
                     <el-row>
                           <el-col :xs="24" :sm="24" :md="24" :lg="12">
                              <div class="order_remark">
-                                 <div class='order_remark_title'>Order Remark</div>
+                                 <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
                                  <div>
                                      <el-input
                                           type="textarea"
@@ -22,7 +22,7 @@
     <!--                 attchment         -->
                           <el-col :xs="24" :sm="24" :md="24" :lg="12">
                              <div class="attchment">
-                                <div class="order_remark_title">Attchment</div>
+                                <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                 <div>
                                     <attchment></attchment>
                                 </div>
@@ -35,31 +35,19 @@
 <!--         payment-->
          <payment></payment>
 <!--         qc order-->
-         <div class="qc_order">
-             <div class="pro_title">
-                 QC Order
-             </div>
-             <div class="QC_file">
-                  <div class="QC_file_item">
-                      <i class="el-icon-document" style='font-size:40px;line-height:60px;'></i>
-                      <span>QC Order No123</span>
-                  </div>
-                  <div class="QC_file_item">
-                      <i class="el-icon-document" style='font-size:40px;line-height:60px;'></i>
-                      <span>QC Order No123</span>
-                  </div>
-             </div>
-         </div>
+         <qcorder></qcorder>
+<!--          logistic order-->
+           <qcorder></qcorder>
 <!--         product_details-->
          <div class="product_details">
              <div class="pro_title">
-                 Product Details
+                 {{$t('order.productinfo.productInfo')}}
              </div>
              <div class="pro_button">
-                  <el-button type='primary' @click="dialogAddproduct = true">Add Product</el-button>
-                  <el-button type='primary'>Remove</el-button>
-                  <el-button type='primary'>Create Qc Order</el-button>
-                  <el-button type='primary'>Logistic Plan</el-button>
+                  <el-button type='primary' @click="dialogAddproduct = true">{{$t('order.buttonname.addProduct')}}</el-button>
+                  <el-button type='primary'>{{$t('order.buttonname.remove')}}</el-button>
+                  <el-button type='primary'>{{$t('order.buttonname.createQcOrder')}}</el-button>
+                  <el-button type='primary'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
                  这块表格
@@ -68,22 +56,22 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button type='primary'>Modify</el-button>
-                 <el-button type='primary'>Confirm</el-button>
-                 <el-button type='primary' >Copy</el-button>
-                 <el-button type='primary' :disabled='true'>Cancle The Order</el-button>
-                 <el-checkbox v-model="checked">Mark As Important</el-checkbox>
-                 <el-checkbox v-model="checked">Hide The Same</el-checkbox>
-                 <el-checkbox v-model="checked">Hightlight The Different</el-checkbox>
+                 <el-button type='primary'>{{$t('order.buttonname.modify')}}</el-button>
+                 <el-button type='primary'>{{$t('order.buttonname.confirm')}}</el-button>
+                 <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>
+                 <el-button type='primary' :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
+                 <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
+                 <el-checkbox v-model="checked">{{$t('order.buttonname.hideTheSame')}}</el-checkbox>
+                 <el-checkbox v-model="checked">{{$t('order.buttonname.hightlightTheDifferent')}}</el-checkbox>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
-           <el-dialog title="Add Product" :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$t('order.buttonname.addProduct')" :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane label="From New Search" name="FromNewSearch">
+                        <el-tab-pane :label="$t('order.buttonname.fromNewSearch')" name="FromNewSearch">
                             <FromNewSearch></FromNewSearch>
                         </el-tab-pane>
-                        <el-tab-pane label="From My Bookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$t('order.buttonname.fromMyBookmark')" name="FromMyBookmark">
                             <FromBookmark></FromBookmark>
                         </el-tab-pane>
                       </el-tabs>
@@ -98,6 +86,7 @@
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
     import payment from '../../warehouse/paymentTable.vue'
+    import qcorder from './qcorder.vue'
     export default {
         name: 'poOrder',
         components: {
@@ -106,12 +95,15 @@
             FromNewSearch,
             FromBookmark,
             attchment,
-            payment
+            payment,
+            qcorder
         },
         data() {
             return {
                 textarea: "", //order remark输入内容
-                checked: true, //底部单选 mark as important
+                markAsImportant: true, //底部单选 mark as important
+                hideTheSame: true, //底部单选 Hide The Same
+                hightlightTheDifferent: true, //底部单选hightlightTheDifferent
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
@@ -216,22 +208,6 @@
     .select {
         width: 110px;
         margin-right: 5px;
-    }
-
-    .QC_file {
-        height: 100px;
-        width: 100%;
-        overflow: auto;
-        display: flex;
-        align-items: center;
-    }
-
-    .QC_file_item {
-        width: 100px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-right: 20px;
     }
 
 </style>

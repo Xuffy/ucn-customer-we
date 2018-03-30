@@ -1,29 +1,48 @@
 <template>
     <div class="bookmark">
         <div class="title">
-            Product Bookmark
+            {{$t('product.page.productBookmark')}}
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
             </el-button>
         </div>
         <div>
-            <el-form ref="form" :model="form" label-width="180px">
+
+            <!--<el-row class="outGroup">-->
+            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+            <!--<div class="label">-->
+            <!--{{$t('product.page.category')}}-->
+            <!--</div>-->
+            <!--<div style="margin-left: 190px">-->
+            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
+            <!--</div>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+            <!--asf-->
+            <!--</el-col>-->
+            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
+            <!--asf-->
+            <!--</el-col>-->
+            <!--</el-row>-->
+
+            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
+
+            <el-form ref="form" :model="form" label-width="190px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Category">
-                            <el-col :span="15">
-                                <el-input v-model="form.name"></el-input>
-                            </el-col>
+                        <el-form-item :label="$t('product.page.category')">
+                            <!--<el-input v-model="form.name"></el-input>-->
+                            <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="SKU Name">
+                        <el-form-item :label="$t('product.page.skuName')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Readily Available">
+                        <el-form-item :label="$t('product.page.readilyAvailable')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
@@ -31,91 +50,104 @@
             </el-form>
         </div>
         <div class="body" :class="{hide:hideBody}">
-            <el-form ref="form" :model="form" label-width="180px">
+            <el-form ref="form" :model="form" label-width="190px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="SKU Code">
-                            <el-col :span="15">
-                                <el-input v-model="form.name"></el-input>
-                            </el-col>
+                        <el-form-item :label="$t('product.page.skuCode')">
+                            <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="EXW Price">
-                            <el-col :span="11">
-                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0" ></el-input-number>
+                        <el-form-item :label="$t('product.page.exwPrice')">
+                            <el-col :span="10">
+                                <el-input-number
+                                        class="numberInput"
+                                        v-model="number"
+                                        @change="handleChange"
+                                        :min="0"
+                                        :controls="false"></el-input-number>
                             </el-col>
                             <el-col class="line" :span="2">-</el-col>
-                            <el-col :span="11">
-                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0"></el-input-number>
+                            <el-col :span="10">
+                                <el-input-number
+                                        class="numberInput"
+                                        v-model="number"
+                                        @change="handleChange"
+                                        :min="0"
+                                        :controls="false"></el-input-number>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Vendor SKU Code">
+                        <el-form-item :label="$t('product.page.vendorSKUCode')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Vendor SKU Name">
+                        <el-form-item :label="$t('product.page.vendorSKUName')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Incoterm Price">
-                            <el-col :span="11">
-                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0" ></el-input-number>
+                        <el-form-item :label="$t('product.page.incotermPrice')">
+                            <el-col :span="10">
+                                <el-input-number
+                                        class="numberInput"
+                                        v-model="number"
+                                        @change="handleChange"
+                                        :min="0"
+                                        :controls="false"></el-input-number>
                             </el-col>
                             <el-col class="line" :span="2">-</el-col>
-                            <el-col :span="11">
-                                <el-input-number v-model="number" controls-position="right" @change="handleChange" :min="0"></el-input-number>
+                            <el-col :span="10">
+                                <el-input-number
+                                        class="numberInput"
+                                        v-model="number"
+                                        @change="handleChange"
+                                        :min="0"
+                                        :controls="false"></el-input-number>
                             </el-col>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="SKU Materials">
+                        <el-form-item :label="$t('product.page.skuMaterials')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Country">
+                        <el-form-item :label="$t('product.page.country')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Supplier Name">
+                        <el-form-item :label="$t('product.page.supplierName')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Package Type">
+                        <el-form-item :label="$t('product.page.packageType')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Product Package Type">
+                        <el-form-item :label="$t('product.page.productPackageType')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Delivery Days">
+                        <el-form-item :label="$t('product.page.deliveryDays')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="MOQ">
+                        <el-form-item :label="$t('product.page.skuDescription')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="SKU Description">
-                            <el-input v-model="form.name"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item label="Vendor SKU Description">
+                        <el-form-item :label="$t('product.page.vendorSKUDescription')">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
@@ -124,20 +156,21 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary">Search</el-button>
-            <el-button @click="clear" type="info" plain>Clear</el-button>
+            <el-button @click="search" type="primary">{{$t('product.btn.search')}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$t('product.btn.clear')}}</el-button>
+            <el-button @click="$router.push('/product/bookmark/manuallyAdd')" type="danger" plain>Manually Add</el-button>
         </div>
     </div>
 </template>
 
 <script>
 
-    // import {dropDown} from '@/components/index'
+    import {dropDown} from '@/components/index'
 
     export default {
-        name: "bookmark",
+        name: "sourcing",
         components:{
-            // dropDown
+            dropDown
         },
         props:{
 
@@ -146,7 +179,7 @@
             return{
                 value:1,
                 hideBody:true,            //是否显示body
-                btnInfo:'Show the Advance',
+                btnInfo:this.$t('product.page.showTheAdvance'),
                 formItem:{
                     Category:'',
                     SKUName:'',
@@ -224,7 +257,46 @@
                             }
                         ]
                     }
-                ]
+                ],
+
+
+
+
+                dropData:[{
+                    id: 1,
+                    label: '一级 1',
+                    children: [{
+                        id: 4,
+                        label: '二级 1-1',
+                        children: [{
+                            id: 9,
+                            label: '三级 1-1-1'
+                        }, {
+                            id: 10,
+                            label: '三级 1-1-2'
+                        }]
+                    }]
+                }, {
+                    id: 2,
+                    label: '一级 2',
+                    children: [{
+                        id: 5,
+                        label: '二级 2-1'
+                    }, {
+                        id: 6,
+                        label: '二级 2-2'
+                    }]
+                }, {
+                    id: 3,
+                    label: '一级 3',
+                    children: [{
+                        id: 7,
+                        label: '二级 3-1'
+                    }, {
+                        id: 8,
+                        label: '二级 3-2'
+                    }]
+                }],
             }
         },
         methods:{
@@ -241,10 +313,9 @@
             //搜查
             search(){
                 console.log(this.dataList)
-                this.$router.push('/product/bookmarkDetail');
+                this.$router.push('/product/bookmark/detail');
                 // window.open('http://192.168.51.228、:8080/#/product');
             },
-
 
             handleChange(value) {
                 console.log(value);
@@ -256,9 +327,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo='Show the Advance';
+                    this.btnInfo=this.$t('product.page.showTheAdvance');
                 }else{
-                    this.btnInfo='Hide the Advance';
+                    this.btnInfo=this.$t('product.page.hideTheAdvance');
                 }
             }
         }
@@ -266,6 +337,22 @@
 </script>
 
 <style scoped>
+    .speDropdown{
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*height: 32px;*/
+        /*background-color: #ffffff;*/
+        /*z-index: 2000;*/
+    }
+    /*.speDropdown >>> .checkInputBox{*/
+    /*height: 32px;*/
+    /*line-height: 32px;*/
+    /*min-height: 32px !important;*/
+    /*}*/
+    /*.speDropdown >>> .checkInputBox .checkInputBoxPl{*/
+    /*height: 32px;*/
+    /*line-height: 32px;*/
+    /*}*/
 
     .bookmark{
         padding-right: 20px;
@@ -278,9 +365,18 @@
         line-height: 32px;
         color:#666666;
     }
+
     .title-btn{
         float: right;
         margin-right: 5px;
+    }
+
+    .outGroup{
+
+    }
+    .outGroup .label{
+        width: 190px;
+        float: left;
     }
 
     .body{
@@ -288,6 +384,13 @@
         max-height: 1400px;
         display: block;
         transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
+    }
+    .body .numberInput{
+        width: 80px;
+        text-align: left;
+    }
+    .body .numberInput >>> input{
+        padding: 0;
     }
     .hide{
         max-height: 0;
