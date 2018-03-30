@@ -163,28 +163,15 @@
                 </div>
             </el-col>  
         </el-row>
-        <div class="hd">Container Information</div>
-        <el-table
-            ref="multipleTable"
-            :data="tableData"
-            height="200"
-            show-summary
-            :summary-method="getSummaries"
-            tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55" />
-            <el-table-column label="集装箱号" prop="ContainerNumber" />
-            <el-table-column prop="sealNo" label="铅封号" />
-            <el-table-column prop="weight" label="集装箱重量" show-overflow-tooltip />
-            <el-table-column prop="type" label="货柜类型" />
-            <el-table-column prop="VGM" label="VGM" />
-            <el-table-column prop="number" label="产品数量" />
-            <el-table-column prop="volume" label="体积" />
-            <el-table-column prop="NetWeight" label="净重" />
-            <el-table-column prop="theNumber" label="箱数" />
-            <el-table-column prop="value" label="货值" />
-            <el-table-column prop="Total" label="总报关合计" />
+        <div class="hd">Container Info</div>
+        <div class="btn-wraps">
+            <el-button type="primary">添加</el-button>
+            <el-button>删除</el-button>
+        </div>
+        <el-table :data="tableData" tooltip-effect="dark" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="30" />
+            <el-table-column prop="date" label="Product" width="180" />
+            <el-table-column prop="name" label="Container Amount" idth="180" />
         </el-table>
         <div class="hd">费用</div>
         <div class="cost-wrap">
@@ -229,23 +216,7 @@
                 <div class="td"><el-input placeholder="please input"></el-input></div>
             </div>
         </div>
-        <div class="hd">Payment</div>
-        <div class="Payment-hd">
-            <span>货物付款</span>
-            <el-button type="primary">申请付款</el-button>
-        </div>
-        <el-table
-            :data="PaymentData"
-            style="width: 100%">
-            <el-table-column prop="index" label="#" width="180" />
-            <el-table-column prop="number" label="编号" width="180" />
-            <el-table-column prop="date" label="日期" />
-            <el-table-column prop="type" label="款项类型" />
-            <el-table-column prop="money" label="付款金额" />
-            <el-table-column prop="Receivables" label="收款金额" />
-            <el-table-column prop="ToBePaid" label="待付金额" />
-            <el-table-column prop="Collect" label="待收金额" />
-        </el-table>
+        
         <div class="hd">Ship Information</div>
         <el-row :gutter="10">
             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
@@ -372,6 +343,7 @@
                     id:'1',
                     label:'dadada'
                 }],
+                PaymentData: [],
                 ContainerOptions: [],
                 CarrierOptions: [],
                 departureOptions: [],
@@ -404,100 +376,14 @@
                     }
                 ],
                 tableData: [{
-                    ContainerNumber: 'YUWEIE',
-                    sealNo: 'REWQIO',
-                    weight: '21345',
-                    type: '',
-                    VGM: '12590.85',
-                    number: '282480',
-                    volume: '66.099',
-                    NetWeight: '11827.6',
-                    theNumber: '2',
-                    value: '354198.8',
-                    Total: '354198.8'
-                },
-                {
-                    ContainerNumber: 'YUWEIE',
-                    sealNo: 'REWQIO',
-                    weight: '21345',
-                    type: '',
-                    VGM: '12590.85',
-                    number: '282480',
-                    volume: '66.099',
-                    NetWeight: '11827.6',
-                    theNumber: '2',
-                    value: '354198.8',
-                    Total: '354198.8'
-                },
-                {
-                    ContainerNumber: 'YUWEIE',
-                    sealNo: 'REWQIO',
-                    weight: '21345',
-                    type: '',
-                    VGM: '12590.85',
-                    number: '282480',
-                    volume: '66.099',
-                    NetWeight: '11827.6',
-                    theNumber: '2',
-                    value: '354198.8',
-                    Total: '354198.8'
-                },
-                {
-                    ContainerNumber: 'YUWEIE',
-                    sealNo: 'REWQIO',
-                    weight: '21345',
-                    type: '',
-                    VGM: '12590.85',
-                    number: '282480',
-                    volume: '66.099',
-                    NetWeight: '11827.6',
-                    theNumber: '2',
-                    value: '354198.8',
-                    Total: '354198.8'
-                }],
-                PaymentData: [{
-                    index:'1',
-                    number: '2134',
-                    date: '2018-10-22',
-                    type: '预付款',
-                    money: '1,992',
-                    Receivables: '',
-                    ToBePaid: '',
-                    Collect: ''
+                    Product: "Product",
+                    containerAmount: "Container Amount"
                 }]
             }
         },
         methods: {
             handleSelectionChange(val) {
-                this.data = val;
-                let params = {
-                    columns: this.columns,
-                    data: val
-                }
-                this.getSummaries(params);
-            },
-            getSummaries(param) {
-                this.columns = param.columns;
-                const sums = [];
-                this.columns.forEach((column, index) => {
-                    if (index === 0) return sums[index] = '总计';
-                    const values = this.data.map(item => Number(item[column.property]));
-                    if (!values.every(value => isNaN(value))) {
-                        sums[index] = values.reduce((prev, curr) => {
-                        const value = Number(curr);
-                        if (!isNaN(value)) {
-                            return prev + curr;
-                        } else {
-                            return prev;
-                        }
-                        }, 0);
-                        sums[index];
-                    } else {
-                        sums[index] = '';
-                    }
-                });
-
-                return sums;
+                console.log(val)
             }
         }
     }
@@ -525,6 +411,9 @@
             border-bottom:1px solid #ccc;
             padding:0 15px;
         }   
+        .btn-wraps {
+            padding:10px 0;
+        }
         .cost-wrap {
             width:100%;
             overflow-x: auto;
@@ -550,7 +439,7 @@
             align-items: center;
             padding:10px 0;
             span {
-                width: 120px;
+                width: 180px;
                 white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
                 display:inline-block;
                 font-size:12px;

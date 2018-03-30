@@ -2,29 +2,29 @@
     <section class="signUp">
         <div class="container">
             <div class="form-box active">
-                <h4 class="hd">User Information</h4>
+                <h4 class="hd">{{ $t('login.text.userInformation') }}</h4>
                 <div class="form-wrap">
                     <div class="form item heavy">
-                        <label for="Invitation code">Invitation code</label>
+                        <label for="Invitation code">{{ $t('login.userInformation.invitationCode') }}</label>
                         <el-input placeholder="Please input your Invitation code" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <router-link to="/getInvitationCode">Go Submit a Request>></router-link>
+                        <router-link to="/getInvitationCode"></router-link>
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">User Name</label>
+                        <label for="Invitation code">{{ $t('login.userInformation.userName') }}</label>
                         <el-input placeholder="nput your username" type="text" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Email</label>
+                        <label for="Invitation code">{{ $t('login.userInformation.email') }}</label>
                         <el-input placeholder="xxxx@xxx.com" type="email" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Password</label>
+                        <label for="Invitation code">{{ $t('login.userInformation.password') }}</label>
                         <el-input placeholder="Input your password" type="password" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">tel</label>
+                        <label for="Invitation code">{{ $t('login.userInformation.tel') }}</label>
                         <el-input placeholder="IPlease input your contact number" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
@@ -34,14 +34,14 @@
                 </div>
             </div>
             <div class="form-box">
-                <h4 class="hd">Company  Information</h4>
+                <h4 class="hd">{{ $t('login.text.companyInformation') }}</h4>
                 <div class="form-wrap">
                     <div class="form item heavy">
-                        <label for="Invitation code">Company Name</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.companyName') }}</label>
                         <el-input placeholder="Input company name" type="text" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Company Type</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.companyType') }}</label>
                         <el-select v-model="company" placeholder="Please select">
                             <el-option
                                 v-for="item in SiteSelection"
@@ -52,11 +52,11 @@
                         </el-select>
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Website</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.website') }}</label>
                         <el-input placeholder="Input company website" type="url" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Country</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.country') }}</label>
                         <el-select v-model="Country" placeholder="Please select">
                             <el-option
                                 v-for="item in TypeOfCompany"
@@ -67,11 +67,11 @@
                         </el-select>
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Contact Number</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.contactNumber') }}</label>
                         <el-input placeholder="Input company name" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Adderss</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.address') }}</label>
                         <el-cascader
                             :options="AdderssData"
                             v-model="selectedOptions"
@@ -85,8 +85,8 @@
                     <el-checkbox v-model="single">I have readed "xxx"</el-checkbox>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary">ok</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button type="primary" @click="$router.push('getInvitationCode')">{{ $t('login.btn.ok') }}</el-button>
+                    <el-button>{{ $t('login.btn.cancel') }}</el-button>
                 </div>
             </div>
         </div>

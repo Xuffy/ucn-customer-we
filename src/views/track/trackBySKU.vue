@@ -1,0 +1,61 @@
+<template>
+    <div class="track">
+        <div class="title">
+            {{$t('track.page.trackBySKU')}}
+        </div>
+        <div class="body">
+            <!--<v-simple-table-->
+                    <!--class="speTable"-->
+                    <!--:data.sync="dataList"-->
+                    <!--:column="dataColumn"-->
+                    <!--@sort-change="getSort"-->
+                    <!--@page-change="pageChange">-->
+            <!--</v-simple-table>-->
+        </div>
+    </div>
+</template>
+
+<script>
+
+    import VSimpleTable from '@/components/common/table/simple'
+
+    export default {
+        name: "track-bySKU",
+        components:{
+            VSimpleTable
+        },
+        data(){
+            return{
+                dataList: [],
+                dataColumn: [],
+            }
+        },
+        methods:{
+            pageChange(page) {
+                console.log(page)
+            },
+            getSort(val, key) {
+                console.log(val, key)
+            },
+            getList() {
+                this.ajax.get('/getList').then((data) => {
+                    this.dataList = data;
+                    this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
+                });
+            }
+        },
+        created(){
+            this.getList();
+        }
+    }
+</script>
+
+<style scoped>
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+    }
+</style>

@@ -22,12 +22,9 @@
                 <span>{{ $t('negotiation.viewBy.index')  }}:</span>
                 <el-button type="primary">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
                 <el-button>{{ $t('negotiation.viewBy.SKU') }}</el-button>
-                <div class="set">
-                    <i class="el-icon-setting"></i>
-                </div>
             </div>
         </div>
-        <!--form-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
@@ -37,7 +34,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
     */
-    import { selectSearch } from '@/components/index';
+    import { selectSearch, VSimpleTable } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -56,11 +53,35 @@
                 }, {
                     id: '4',
                     label: '询价单号（客户）'
-                }]
+                }],
+                tabColumn:[],
+                tabData:[
+                    {
+                        inquiryNo: 2,
+                        quotationNo: 3,
+                        sequence: 3,
+                        status: 3,
+                        supplier: 3,
+                        status: 3,
+                        supplier: 3,
+                        SKUQty: 3,
+                        orderValue: 3,
+                        currency: 3,
+                        totalQTY: 3,
+                        incoterm: 3,
+                        port: 3,
+                        remark: 3
+                    },
+                ]
             }
         },
+        created() {
+            this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry');
+            console.log(this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry'))
+        },
         components: {
-            'select-search': selectSearch
+            'select-search': selectSearch,
+            'v-simple-table': VSimpleTable
         },
         methods: {
             selectChange(val) {

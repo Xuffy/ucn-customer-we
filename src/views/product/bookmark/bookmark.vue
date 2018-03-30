@@ -8,26 +8,6 @@
             </el-button>
         </div>
         <div>
-
-            <!--<el-row class="outGroup">-->
-            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-            <!--<div class="label">-->
-            <!--{{$t('product.page.category')}}-->
-            <!--</div>-->
-            <!--<div style="margin-left: 190px">-->
-            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
-            <!--</div>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-            <!--asf-->
-            <!--</el-col>-->
-            <!--<el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">-->
-            <!--asf-->
-            <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<drop-down class="speDropdown" :list="dropData" ref="dropDown"></drop-down>-->
-
             <el-form ref="form" :model="form" label-width="190px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">

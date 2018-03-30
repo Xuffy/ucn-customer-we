@@ -1,5 +1,5 @@
 <template>
-    <div class="dropDown" @mouseenter="mouseEnter" @mouseleave="mouseLave">
+    <div class="dropDown">
 		<el-dropdown trigger="click">
 			<div class="checkInputBox" :class="{'active':status}">
 				<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
@@ -18,23 +18,20 @@
 						<el-tree
 							default-expand-all
 							:filter-node-method="filterNode"
-							@check="getChecked"
 							ref="tree"
 							:empty-text="emptyText"
 							:data="list"
 							show-checkbox
 							node-key="id"  
 							:props="defaultProps"
-							@check-change="getChecked"
-						><!--check-strictly-->
+							@check="getChecked"
+                            check-strictly
+						>
 						</el-tree>
 					</div>
 				</div>
 			</el-dropdown-menu>
 		</el-dropdown>
-		<div class="data-box-active" @click.stop v-show="dropDownMouse" :style="`right:${dropDownRight}`">
-			<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
-		</div>
     </div>
 </template>
 
@@ -56,7 +53,10 @@
 				selectedList:[],
 				defaultProps: {
 					children: 'children',
-					label: 'label'
+                    label: 'label',
+                    disabled: (data, node) => {
+                        if(data.children) return true;
+                    }
 				},
 				data:[],
 				status: false,
@@ -90,14 +90,7 @@
 			treeHeight: {
 				type: String,
 				default: '200px'
-			},
-			dropDownRight: {
-				type: String,
-				default: '-231px'
 			}
-		},
-		computed: {
-			
 		},
 		watch: {
 			filterText(val) {
@@ -109,9 +102,20 @@
 				if (!value) return true;
 				return data.label.indexOf(value) !== -1;
 			},
-			getChecked() {
+			getChecked(item) {
+                const listForEach = (list) => {
+                    list.forEach(nodes => {
+                        if(nodes.id === item.id) {
+                            this.$refs.tree.setChecked(nodes.id, true);
+                        } else {
+                            this.$refs.tree.setChecked(nodes.id, false);
+                        }
+                        if(!nodes.children) return;
+                        listForEach(nodes.children);
+                    });
+                };
+                listForEach(this.list);
 				this.selectedList = this.$refs.tree.getCheckedNodes(true);
-				this.mouseEnter();
 			},
 			del(item, index) {
 				this.selectedList.splice(index, 1);
@@ -122,13 +126,6 @@
 					});
 				};
 				ergodic(item, this.list);
-			},
-			mouseEnter() {
-				if(this.selectedList.length <= 0) return;
-				this.dropDownMouse = true;
-			},
-			mouseLave() {
-				this.dropDownMouse = false;
 			}
 		}
 	};

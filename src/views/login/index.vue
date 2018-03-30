@@ -4,23 +4,23 @@
     <section id="login-app" class="login-box">
       <div style="text-align: center;">
         <i class="logo"></i>
-        <span class="title">Sign in</span>
+        <span class="title">{{ $t('login.text.signIn') }}</span>
       </div>
       <div class="login-form">
         <div class="from">
           <div class="from-item">
-            <span>UserName</span><el-input v-model="formInline.username" placeholder="Email" ></el-input>
+            <span>{{ $t('login.userInformation.email') }}</span><el-input v-model="formInline.username" placeholder="Email" ></el-input>
           </div>
           <div class="from-item">
-            <span>password</span><el-input v-model="formInline.password" placeholder="Password" ></el-input>
+            <span>{{ $t('login.userInformation.password') }}</span><el-input v-model="formInline.password" placeholder="Password" ></el-input>
           </div>
           <div class="login-link" style="margin-top:50px;">
-            <el-checkbox v-model="checked">Remenber me</el-checkbox>
-            <router-link to="/forgetPassword">forget password?</router-link>
+            <el-checkbox v-model="checked">{{ $t('login.text.remenberMe') }}</el-checkbox>
+            <router-link to="/forgetPassword">{{ $t('login.text.forgetPassword') }}?</router-link>
           </div>
-          <el-button type="primary" @click="handleSubmit('formInline')" style="width:100%;margin:10px 0;">Login in</el-button>
+          <el-button type="primary" @click="handleSubmit('formInline')" style="width:100%;margin:10px 0;">{{$t('login.text.loginIn')}}</el-button>
           <div class="login-link active">
-            <router-link to="/signUp">No account? Sign up now>></router-link>
+            <router-link to="/signUp">{{$t('login.text.noAccount')}}? {{$t('login.text.signUpNow')}}>></router-link>
           </div>
         </div>
       </div>
