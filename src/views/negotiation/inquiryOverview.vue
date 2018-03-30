@@ -22,12 +22,9 @@
                 <span>{{ $t('negotiation.viewBy.index')  }}:</span>
                 <el-button type="primary">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
                 <el-button>{{ $t('negotiation.viewBy.SKU') }}</el-button>
-                <div class="set">
-                    <i class="el-icon-setting"></i>
-                </div>
             </div>
         </div>
-        <!--form-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
@@ -37,7 +34,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
     */
-    import { selectSearch } from '@/components/index';
+    import { selectSearch, VSimpleTable } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -56,11 +53,24 @@
                 }, {
                     id: '4',
                     label: '询价单号（客户）'
-                }]
+                }],
+                tabColumn:[{
+                    label: this.$t('negotiation.tableViewByInquiry.inquiryNo'),
+                    prop: 'inquiryNo'
+                }],
+                tabData:[
+                    {
+                        inquiryNo: 2
+                    }
+                ]
             }
         },
+        created() {
+            
+        },
         components: {
-            'select-search': selectSearch
+            'select-search': selectSearch,
+            'v-simple-table': VSimpleTable
         },
         methods: {
             selectChange(val) {
