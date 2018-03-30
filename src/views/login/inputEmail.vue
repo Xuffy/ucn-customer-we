@@ -1,11 +1,11 @@
 <template>
     <div class="input-email">
         <div class="inputBox center">
-            <label for="Email：">Email：</label>
+            <label for="Email：">{{ $t('login.userInformation.email') }}：</label>
             <el-input v-model="val" type="email" placeholder="Please input the email" style="width: 200px"></el-input>
         </div>
         <div class="inputBox">
-            <el-button type="primary" @click="Next">submit</el-button>
+            <el-button type="primary" @click="Next">{{ $t('login.btn.submit') }}</el-button>
         </div>
     </div>
 </template>

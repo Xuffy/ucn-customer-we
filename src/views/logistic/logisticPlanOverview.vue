@@ -2,11 +2,10 @@
     <div class="logistic-plan-overview">
         <div class="status">
             <div class="btn-wrap">
-                <span>Status:</span>
-                <button>TBC by Customer</button>
-                <button>TBC by Supplier</button>
-                <button>Finish</button>
-                <button>Canceled</button>
+                <span>{{ $t('logistic.status.index') }}:</span>
+                <el-button type="primary">{{ $t('logistic.status.TBCByCustomer') }}</el-button>
+                <el-button>{{ $t('logistic.status.finish') }}</el-button>
+                <el-button>{{ $t('logistic.status.canceled') }}</el-button>
             </div>
             <div class="select-search-wrap">
                 <select-search :options="options" />
@@ -14,15 +13,15 @@
         </div>
         <div class="btn-wrap">
             <div class="fn btn">
-                <el-button type="primary">Download Selected</el-button>
-                <el-button type="primary">Sent as Order</el-button>
-                <el-button>Delete</el-button>
+                <el-button type="primary">{{ $t('logistic.btn.downloadSelected') }}</el-button>
+                <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
+                <el-button>{{ $t('logistic.btn.delete') }}</el-button>
             </div>
             <div class="view-by-btn">
-                <span>View By：</span>
-                <el-button type="primary">Plan</el-button>
-                <el-button>Transportation unit</el-button>
-                <el-button>SKU</el-button>
+                <span>{{ $t('logistic.viewBy.index') }}：</span>
+                <el-button type="primary">{{ $t('logistic.viewBy.plan') }}</el-button>
+                <el-button>{{ $t('logistic.viewBy.transportationUnit') }}</el-button>
+                <el-button>{{ $t('logistic.viewBy.SKU') }}</el-button>
             </div>
         </div>
         <!--form-->
@@ -85,19 +84,12 @@
                 align-items: center;
                 span {
                     font-size:14px;
+                    margin-right:10px;
                 }
                 button {
                     padding:2px 5px;
                     cursor: pointer;
-                    border:1px solid #108ee9;
-                    background-color:#fff;
-                    margin-left:10px;
-                    border-radius: 5px;
                     transition: all .5s ease;
-                    &:hover, &.active {
-                        background-color:#108ee9;
-                        color:#fff;
-                    }
                 }
             }
             .select-wrap {

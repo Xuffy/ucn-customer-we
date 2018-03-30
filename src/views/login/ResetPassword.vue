@@ -2,16 +2,16 @@
     <div class="input-email">
         <div class="inputBox center">
             <div class="form-input">
-                <label for="Email：">New password:</label>
+                <label for="Email：">{{ $t('login.text.newPassword') }}:</label>
                 <el-input v-model="oldPass" type="password" style="width:200px;" placeholder="please input"></el-input>
             </div>
             <div class="form-input">
-                <label for="Email：">Repeat the password：</label>
+                <label for="Email：">{{ $t('login.text.repeatThePassword') }}：</label>
                 <el-input v-model="newPass" type="password" style="width:200px;" placeholder="please input"></el-input>
             </div>
         </div>
         <div class="inputBox btn">
-            <el-button type="primary" @click="Next">Submit</el-button>
+            <el-button type="primary" @click="Next">{{ $t('login.btn.submit') }}</el-button>
         </div>
     </div>
 </template>

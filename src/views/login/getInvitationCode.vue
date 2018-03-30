@@ -2,17 +2,17 @@
     <section class="get-invitation-code">
         <div class="contianer">
             <div class="hd">
-                <h4>Request to Get Invitation Code</h4>
+                <h4> {{ $t('login.text.RequestToGetInvitationCode') }} </h4>
                 <p>Please submit your company infomation, and we will contact you soon, if you have any question, feel free to contact us：email-xxx@xxx.com; tel-123456789</p>
             </div>
             <div class="form-box">
                 <div class="form-wrap">
                     <div class="form item heavy">
-                        <label for="Invitation code">Company Name</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.companyName') }}</label>
                         <el-input placeholder="Input company name" clearable style="max-width:200px" />
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Company Type</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.companyType') }}</label>
                         <el-select v-model="company" placeholder="Please select">
                             <el-option
                                 v-for="item in SiteSelection"
@@ -23,11 +23,11 @@
                         </el-select>
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Website</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.website') }}</label>
                         <el-input type="url" placeholder="Input company website" clearable style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Country</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.country') }}</label>
                         <el-select v-model="Country" placeholder="Please select">
                             <el-option
                                 v-for="item in TypeOfCompany"
@@ -38,11 +38,11 @@
                         </el-select>
                     </div>
                     <div class="form item heavy">
-                        <label for="Invitation code">Contact Number</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.contactNumber') }}</label>
                         <el-input placeholder="Input company name" type="number" style="max-width:200px" />
                     </div>
                     <div class="form item">
-                        <label for="Invitation code">Adderss</label>
+                        <label for="Invitation code">{{ $t('login.getInvitationCode.address') }}</label>
                         <el-cascader
                             :options="AdderssData"
                             v-model="selectedOptions"
@@ -53,8 +53,8 @@
             </div>
             <div class="bottom-btn">
                 <div class="btn-wrap">
-                    <el-button type="primary">Submit</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button type="primary">{{ $t('login.btn.submit') }}</el-button>
+                    <el-button>{{ $t('login.btn.cancel') }}</el-button>
                 </div>
             </div>
         </div>
@@ -152,12 +152,14 @@
         min-height:100vh;
         background:#f4f4f4;
         padding:20px;
+        box-sizing: border-box;
         .contianer {
             padding:40px;
             flex:1;
             background:#fff;
             display:flex;
             flex-direction:column;
+            box-sizing: border-box;
             .hd {
                 display:flex;
                 flex-direction: column;
