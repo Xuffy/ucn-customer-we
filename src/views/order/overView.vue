@@ -147,7 +147,6 @@
             .viewBy {
                 display: flex;
                 align-items: center;
-
                 span {
                     font-size: 14px;
                     color: #666;
