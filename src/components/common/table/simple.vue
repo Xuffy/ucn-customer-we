@@ -3,12 +3,15 @@
     <el-row>
       <el-col :span="16">&nbsp;</el-col>
       <el-col :span="8" style="text-align: right;cursor: pointer">
-        <v-filter-column></v-filter-column>
+        <v-filter-column :data="column"></v-filter-column>
       </el-col>
     </el-row>
     <el-table
+      ref="table"
+      :height="height"
       :max-height="maxHeight"
-      :data="showData">
+      :data="showData"
+      @selection-change="selection => {selectedList = selection}">
       <el-table-column
         v-if="columnList.length"
         width="40"
@@ -42,19 +45,14 @@
     </el-table>
 
     <br>
-    <!--<el-pagination
-      background
-      :current-page="4"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="100"
-      layout="prev, pager, next,sizes, jumper,total"
-      :total="400">
-    </el-pagination>-->
     <el-pagination
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="10"
+      :style="{visibility: !showData.length ? 'hidden' : ''}"
+      @size-change="size => {$emit('page-size-change', size)}"
+      @current-change="page => {$emit('page-change', page)}"
+      :page-sizes="pageSizes"
+      :page-size="pageSize"
       layout="prev, pager, next,sizes, jumper,total"
-      :total="400"></el-pagination>
+      :total="pageTotal"></el-pagination>
   </div>
 </template>
 
@@ -65,6 +63,11 @@
    * @author xuffy
    * @param {Object} [title]    - 参数说明
    * @param {String} [columns] - 参数说明
+   *
+   * @method @sort-change(val, key)   - 点击排序
+   * @method @page-size-change(size)    - 改变分页条数
+   * @method @page-change(page)   - 改变分页
+   *
    * @example
    *  <v-table></v-table>
    */
@@ -95,11 +98,30 @@
         type: Number,
         default: 400,
       },
+      pageSizes: {
+        type: Array,
+        default() {
+          return [10, 20, 30, 40, 50];
+        },
+      },
+      pageSize: {
+        type: Number,
+        default: 10,
+      },
+      pageTotal: {
+        type: Number,
+        default: 10,
+      },
+      height: {
+        type: Number,
+        default: 400,
+      },
     },
     data() {
       return {
         showData: [],
         columnList: [],
+        selectedList: [],
         // checkValue: [],
       }
     },
@@ -107,27 +129,42 @@
       data(value) {
         if (!_.isEmpty(value)) {
           this.showData = _.filter(value, val => {
-            return !val._isHide;
+            return !val._hide;
           });
         }
+      },
+      showData(value) {
+        let data = [];
+        _.map(this.selectedList, dv => {
+          if (!_.isEmpty(_.findWhere(value, {id: dv.id}))) {
+            data.push(dv);
+          }
+        });
+        console.log(data)
+        this.$refs.table.toggleRowSelection(data, true);
       },
       column(columns) {
         if (columns.length) {
           this.columnList = _.map(columns, val => {
-            val.renderHeader = (h, params) => {
-              return h(VFilterValue, {
-                props: {
-                  dataKey: val.prop,
-                  data: this.data,
-                  label: params.column.label
-                },
-                on: {
-                  'update:data': val => {
-                    this.$emit('update:data', val);
+            if (!val.renderHeader) {
+              val.renderHeader = (h, params) => {
+                return h(VFilterValue, {
+                  props: {
+                    dataKey: val.prop,
+                    data: this.data,
+                    label: params.column.label
+                  },
+                  on: {
+                    'update:data': val => {
+                      this.$emit('update:data', val);
+                    },
+                    'sort-change': (val, key) => {
+                      this.$emit('sort-change', val, key);
+                    }
                   }
-                }
-              });
-            };
+                });
+              };
+            }
             return val;
           });
         }
@@ -137,6 +174,9 @@
       // this.$emit('update:column', [])
     },
     methods: {
+      /*selectionChange(selection) {
+        this.selectedList = selection;
+      },*/
       /**
        * 函数说明
        * @method getList
@@ -175,6 +215,10 @@
     text-align: center;
     border-bottom: 1px solid #e9eaec;
     padding: 10px 5px;
+  }
+
+  .ucn-table .el-pagination {
+    white-space: inherit;
   }
 </style>
 <style>
