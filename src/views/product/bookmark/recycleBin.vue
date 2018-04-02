@@ -1,27 +1,29 @@
 <template>
     <div>
-        <product :title="title"></product>
+        <product :hideBtns="true" :showRecover="true"></product>
     </div>
 </template>
+
 <script>
 
-    import product from '../addProduct'
-    console.log('sourcing')
+    import product from '../../../views/product/addProduct'
+
     export default {
-        name:"sourcing",
+        name: "recycle-bin",
         components:{
             product
         },
         data(){
             return{
-                title:this.$t('product.title.productSourcing')
+
             }
         },
         methods:{
 
-        }
+        },
     }
 </script>
+
 <style scoped>
 
 </style>

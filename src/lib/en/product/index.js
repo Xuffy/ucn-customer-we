@@ -20,7 +20,6 @@ const page={
     qcOrderDetail:'QC Order Detail',
 
 
-
     //const Table Header
     content:'Content',
     time:'Time',
@@ -45,6 +44,19 @@ const page={
     messageSettings:'Message Settings',
     addNews:'Add News',
     action:'Action',
+    compare:'Compare',
+    downloadSelectedProducts:'Download Selected Products',
+    addNewProduct: 'Add New Product',
+    remove:'Remove',
+    fromNewSearch:'From New Search',
+    fromManuallyAdd:'From Manually Add',
+    recover:'Recover',
+    downloadSelectedCompare:'Download Selected Compare',
+    delete:'Delete',
+    hideTheSame:'Hide the Same',
+    highlightTheDifference:'Highlight the Difference',
+
+
 
 
     category:'Category',
@@ -202,6 +214,10 @@ const page={
     otherIncotermPrice:'other incoterm price',
     otherIncotermArea:'other incoterm area',
     otherIncotermCurrency:'other incoterm currency',
+
+
+
+
 
 
 };

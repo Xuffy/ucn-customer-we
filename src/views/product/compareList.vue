@@ -1,6 +1,6 @@
 <template>
-    <div v-if="config.showCompareList" class="compare-list">
-        <i @click="hideList" class="el-icon-d-arrow-right"></i>
+    <div v-if="config.showCompareList" class="compare-list" :class="{show:change}">
+        <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change}"></i>
         <el-tag
                 v-for="tag in tags"
                 :key="tag.name"
@@ -49,12 +49,15 @@
                     { name: '标签三', type: '' },
                     { name: '标签四', type: '' },
                     { name: '标签五', type: '' }
-                ]
+                ],
+
+                change:false,
             }
         },
         methods:{
             hideList(){
-                this.config.showCompareList=false;
+                // this.config.showCompareList=false;
+                this.change=!this.change;
             },
 
             //前往比较页面开始比较
@@ -80,7 +83,25 @@
         height: 35px;
         line-height: 35px;
         background: rgba(153, 153, 153, 0.447058823529412);
-        padding-left: 50px;
+        padding-left: 80px;
+        transition: all linear .3s;
+    }
+    .show{
+        transform: translateX(95%);
+        transition: all linear .3s;
+    }
+    .compare-list>i{
+        color: #ffffff;
+        font-size: 20px;
+        position: absolute;
+        top:7px;
+        left: 20px;
+        transition: all linear .3s;
+        cursor: pointer;
+    }
+    .compare-list .iconShow{
+        transform: rotate(180deg);
+        transition: all linear .3s;
     }
     /*.compare-list .icon{*/
         /*color:#999999;*/
