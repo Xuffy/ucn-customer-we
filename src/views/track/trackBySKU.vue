@@ -4,13 +4,13 @@
             {{$t('track.page.trackBySKU')}}
         </div>
         <div class="body">
-            <!--<v-simple-table-->
-                    <!--class="speTable"-->
-                    <!--:data.sync="dataList"-->
-                    <!--:column="dataColumn"-->
-                    <!--@sort-change="getSort"-->
-                    <!--@page-change="pageChange">-->
-            <!--</v-simple-table>-->
+            <v-simple-table
+                    class="speTable"
+                    :data.sync="dataList"
+                    :column="dataColumn"
+                    @sort-change="getSort"
+                    @page-change="pageChange">
+            </v-simple-table>
         </div>
     </div>
 </template>
@@ -27,7 +27,12 @@
         data(){
             return{
                 dataList: [],
-                dataColumn: [],
+                dataColumn: [
+                    // {
+                    //     label:'id',
+                    //     props:'id'
+                    // },
+                ],
             }
         },
         methods:{
@@ -38,10 +43,16 @@
                 console.log(val, key)
             },
             getList() {
-                this.ajax.get('/getList').then((data) => {
+                this.ajax.get('/getTrackList').then((data)=>{
                     this.dataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
-                });
+                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                })
+                // this.ajax.get('/getList').then((data) => {
+                //     this.dataList = data;
+                //     this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
+                //     console.log(this.dataList,'yyy');
+                //     console.log(this.dataColumn,'xxx');
+                // });
             }
         },
         created(){

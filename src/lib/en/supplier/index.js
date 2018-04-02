@@ -1,4 +1,4 @@
-import * as db from './db.js'
+import * as db from './db'
 
 const buttonname = {
     ShowTheAdvance: 'Show the Advance', //切换显示隐藏按钮的文字
@@ -25,6 +25,7 @@ const buttonname = {
     downloadSelectedCompare: 'Download Selected Compare',
     delete: "Delete"
 }
+
 //页面大标题
 const title = {
     supplierSourcing: 'Supplier Sourcing',
