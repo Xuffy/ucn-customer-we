@@ -54,7 +54,7 @@
                     <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
                     <el-button @click="addCompare" type="primary">{{$t('product.page.addToCompare')}}</el-button>
                     <el-button class="roundBtn" @click="editBookmark" round> Edit </el-button>
-                    <el-button class="roundBtn" round> Remove </el-button>
+                    <el-button @click="removeBookmark" class="roundBtn" round> Remove </el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
@@ -848,6 +848,25 @@
             addCompare(){
                 this.compareConfig.showCompareList=true;
             },
+
+
+            //移除bookmark
+            removeBookmark(){
+                this.$confirm('是否确认删除该bookmark？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: 'Successfully Remove！'
+                    });
+                    this.$router.push('/product/bookmark');
+                }).catch(() => {
+
+                });
+            },
+
         },
 
     }

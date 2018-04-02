@@ -38,7 +38,7 @@ const detail = {
     paymentItem: 'payment item',
     description: 'Description',
     //..............................Address
-    adress: 'Adress',
+    address: 'Address',
     factoryAddress: 'Factory Address',
     //.............factory info
     factoryName: 'Factory name',

@@ -40,13 +40,15 @@
                             <el-radio-button label="SKU">{{$t('order.buttonname.SKU')}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
+<!--
                     <i class="el-icon-setting" @click='hiddenDropDown'></i>
                     <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
+-->
                 </div>
             </div>
         </div>
         <!--form-->
-      
+          <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
@@ -56,15 +58,18 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-   
+
     import {
         dropDown
     } from '@/components/index'
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: 'orderOverview',
         components: {
             dropDown,
-           
+            VSimpleTable
         },
         data() {
             return {
@@ -79,7 +84,9 @@
                 }, ],
                 status_buttons: 'TBCByCustomer', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
-                showdropDown: false
+//                showdropDown: false,
+                tabColumn: [],
+                tabData: []
             }
         },
         methods: {
@@ -87,10 +94,23 @@
             selectChange(val) {
                 console.log(val)
             },
-            hiddenDropDown() {
-                this.showdropDown = !this.showdropDown
-            },
-        }
+// hiddenDropDown() { // this.showdropDown = !this.showdropDown // },
+        },
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>
