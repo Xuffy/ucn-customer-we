@@ -1,16 +1,9 @@
 import * as db from './db.js'
 
 
-const page= {
-
-    trackBySKU:'Track By SKU',
-
-
-};
-
-
-
 export default {
-    page,
+    page:{
+        trackBySKU:'Track By SKU',
+    },
     ...db
 }

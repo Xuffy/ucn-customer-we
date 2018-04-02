@@ -63,6 +63,7 @@
         this.ajax.get('/getList').then((data) => {
           this.dataList = data;
           this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
+          console.log(this.dataColumn)
         });
       }
     }

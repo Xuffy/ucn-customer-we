@@ -69,7 +69,9 @@ export default {
 
         _.map(_.keys(value), val => {
           let k = this.$tc(`${key}.${val}`);
-          list.push(_.extend({label: k, prop: val, width: 80}, config));
+          if (k.indexOf('.') < 0 || k.charAt(k.length - 1) === '.') {
+            list.push(_.extend({label: k, prop: val, width: 80}, config));
+          }
         });
         return list;
       } else {
