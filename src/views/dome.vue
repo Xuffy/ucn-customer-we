@@ -1,6 +1,6 @@
 <template>
     <div style="width:300px;">
-        <drop-down :list="dropData" ref="dropDown" />
+        <drop-down1 :list="dropData" ref="dropDown"  />
     </div>
 </template>
 <script>
@@ -16,7 +16,7 @@
         Download,
         Layout
     } from '@/components/index';
-
+    import dropDown1 from '@/components/common/fnCompon/dropDown1';
     export default {
         components: {
             'v-simple-table':VSimpleTable,
@@ -27,7 +27,8 @@
             'filter-value':FilterValue,
             'upload':Upload,
             'download':Download,
-            'layout':Layout
+            'layout':Layout,
+            "drop-down1": dropDown1
         },
         data(){
             return {

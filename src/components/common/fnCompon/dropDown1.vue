@@ -6,7 +6,7 @@
 				<div class="dataBox">
 					<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
 				</div>
-				<i class="el-icon-arrow-up"></i>
+				<i class="el-icon-arrow-down"></i>
 			</div>
 			<el-dropdown-menu slot="dropdown">
 				<div class="deepBox">
@@ -196,7 +196,7 @@
 			font-weight: normal;
 			font-size: 12px;
 		}
-		.el-icon-arrow-up {
+		.el-icon-arrow-down {
 			position: absolute;
 			right:5px;
 			top:50%;

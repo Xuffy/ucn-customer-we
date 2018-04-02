@@ -1,22 +1,24 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">Compare Overview</h3>
+        <h3 class="hd">{{ $t('negotiation.text.compareOverview') }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">Download Selected Compare</el-button>
-                <el-button type="info">Delete</el-button>
+                <el-button type="primary">{{ $t('negotiation.text.downloadSelectedCompare') }}</el-button>
+                <el-button type="info">{{ $t('negotiation.text.delete') }}</el-button>
             </div>
             <select-search :options="options" />
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
-    import { selectSearch } from '@/components/index';
+    import { VSimpleTable, selectSearch } from '@/components/index';
     export default {
         name:'',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 options:[{
                     id:'1',
                     label:'dada'
@@ -24,10 +26,20 @@
             }
         },
         components: {
-            'select-search':selectSearch
+            'select-search':selectSearch,
+            'v-simple-table': VSimpleTable
         },
         methods: {
             
+        },
+        created() {
+            this.ajax({
+                url: '/tableCompareOverview',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res;
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview', { width: '260vw'});
+            });
         }
     }
 </script>

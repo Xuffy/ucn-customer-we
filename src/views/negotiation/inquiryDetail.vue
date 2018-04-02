@@ -1,31 +1,41 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $t('negotiation.title.inquiryDetail') }}</h4>
+            <h4 class="title">{{ $t('negotiation.text.inquiryDetail') }}</h4>
             <el-checkbox-group v-model="checkList">
-                <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
             </el-checkbox-group>
         </div>
         <div class="container">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $t('negotiation.basicInfo.index') }}</h5>
+                        <h5>{{ $t('negotiation.text.basicInfo') }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
-                    <!--form-->
-                    <div class="form-wrap"></div>
+                    <div class="tab-msg-wrap">
+                        <div class="form-wrap">
+                            <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                        </div>
+                        <div class="message-board-wrap" :class="{'active':switchStatus}">
+                            <div class="con"><message-board :list="list" @sub="submit" /></div>
+                            <div class="switch-btn" @click="boardSwitch">
+                                {{$t('negotiation.text.messageBoard')}}
+                                <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{$t('negotiation.basicInfo.productInfo')}}</h5>
+                        <h5>{{$t('negotiation.text.productInfo')}}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
@@ -35,8 +45,7 @@
                         </div>
                         <select-search :options="options" />
                     </div>
-                    <!--form-->
-                    <div class="form-wrap"></div>
+                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
                     <div class="bom-btn-wrap">
                         <el-button type="primary">{{$t('negotiation.btn.accept')}}</el-button>
                         <el-button type="primary">{{$t('negotiation.btn.createOrder')}}</el-button>
@@ -46,13 +55,6 @@
                         <el-button type="primary">{{$t('negotiation.btn.createInquiry')}}</el-button>
                         <el-button>{{$t('negotiation.btn.cancel')}}</el-button>
                     </div>
-                </div>
-            </div>
-            <div class="message-board-wrap" :class="{'active':switchStatus}">
-                <div class="con"><message-board :list="list" @sub="submit" /></div>
-                <div class="switch-btn" @click="boardSwitch">
-                    {{$t('negotiation.basicInfo.messageBoard')}}
-                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
         </div>
@@ -71,12 +73,14 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch } from '@/components/index';
+    import { messageBoard, selectSearch, VSimpleTable } from '@/components/index';
     import { getData } from '@/service/base';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 checkList:[],
                 ChildrenCheckList:[],
                 ProductCheckList:[],
@@ -107,7 +111,17 @@
         },
         components: {
             'message-board':messageBoard,
-            'select-search':selectSearch
+            'select-search':selectSearch,
+            'v-simple-table': VSimpleTable
+        },
+        created() {
+            this.ajax({
+                url: '/tableCompareOverview',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res;
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview', { width: '130vw' });
+            });
         },
         methods: {
             selectChange(val) {
@@ -150,11 +164,22 @@
         .container {
             display:flex;
             .table-wrap {
-                flex:1;
+                width:100%;
                 .basic-info {
                     width:100%;
                     padding:0 10px;
                     box-sizing: border-box;
+                    .tab-msg-wrap {
+                        display:flex;
+                        overflow: hidden;
+                        width:100%;
+                        .form-wrap {
+                            flex:1;
+                        }
+                        .message-board-wrap {
+                            
+                        }
+                    }
                     .basesic-hd {
                         display:flex;
                         justify-content: space-between;
@@ -200,9 +225,6 @@
                             }
                         }
                     }
-                    .form-wrap {
-                        overflow-x: auto;
-                    }
                     .bom-btn-wrap {
                         padding-top:20px;
                         button {
@@ -213,7 +235,7 @@
             }
             .message-board-wrap {
                 position:relative;
-                max-width:302px;
+                width:302px;
                 transition: max-width .5s cubic-bezier(.445,.05,.55,.95);
                 &.active {
                     max-width:0;
@@ -238,6 +260,7 @@
                     font-weight: bold;
                     padding-bottom: 10px;
                     border-radius: 0 5px 0 0;
+                    z-index:11;
                     i {
                         transition: all .5s ease;
                         position:absolute;

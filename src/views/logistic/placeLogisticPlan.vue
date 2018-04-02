@@ -238,9 +238,8 @@
                 <el-button type="primary">{{ $t('logistic.btn.addProduct') }}</el-button>
                 <el-button>{{ $t('logistic.btn.remove') }}</el-button>
             </div>
-            <i class="el-icon-setting"></i>
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
             <el-button type="primary">{{ $t('logistic.btn.save') }}</el-button>
             <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
@@ -250,10 +249,13 @@
     </div>
 </template>
 <script>
+    import { VSimpleTable } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 date:'',
                 pickerOptions:{
                     disabledDate(time) {
@@ -312,6 +314,18 @@
                 depature:'',
                 departure:''
             }
+        },
+        created() {
+            this.ajax({
+                url: '/viewByInquiry',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.inquiry;
+                this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+            });
+        },
+        components: {
+            "v-simple-table": VSimpleTable
         }
     }
 </script>

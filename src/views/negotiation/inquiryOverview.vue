@@ -1,6 +1,6 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $t('negotiation.title.inquiryOverview') }}</h3>
+        <h3 class="hd"> {{ $t('negotiation.text.inquiryOverview') }}</h3>
         <div class="status">
             <div class="btn-wrap">
                 <span>{{ $t('negotiation.status.index') }}:</span>
@@ -20,8 +20,8 @@
             </div>
             <div class="viewBy">
                 <span>{{ $t('negotiation.viewBy.index')  }}:</span>
-                <el-button type="primary">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
-                <el-button>{{ $t('negotiation.viewBy.SKU') }}</el-button>
+                <el-button :type="this.viewByStatus == $t('negotiation.viewBy.inquiry') ? 'primary' : ''" @click="viewByChinge($t('negotiation.viewBy.inquiry'))">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
+                <el-button :type="this.viewByStatus == $t('negotiation.viewBy.SKU') ? 'primary' : ''" @click="viewByChinge($t('negotiation.viewBy.SKU'))">{{ $t('negotiation.viewBy.SKU') }}</el-button>
             </div>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -55,37 +55,45 @@
                     label: '询价单号（客户）'
                 }],
                 tabColumn:[],
-                tabData:[
-                    {
-                        inquiryNo: 2,
-                        quotationNo: 3,
-                        sequence: 3,
-                        status: 3,
-                        supplier: 3,
-                        status: 3,
-                        supplier: 3,
-                        SKUQty: 3,
-                        orderValue: 3,
-                        currency: 3,
-                        totalQTY: 3,
-                        incoterm: 3,
-                        port: 3,
-                        remark: 3
-                    },
-                ]
+                tabData: [],
+                viewByStatus: ''
             }
-        },
-        created() {
-            this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry');
-            console.log(this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry'))
         },
         components: {
             'select-search': selectSearch,
             'v-simple-table': VSimpleTable
         },
+        created() {
+            this.viewByStatus = this.$t('negotiation.viewBy.inquiry');
+        },
+        watch: {
+            viewByStatus (newVal, oldVal) {
+                this.getViewBy(newVal);
+            }
+        },
         methods: {
             selectChange(val) {
                 console.log(val)
+            },
+            viewByChinge(str) {
+                this.viewByStatus = str;
+            },
+            getViewBy(val) {
+                this.ajax({
+                    url: '/viewByInquiry',
+                    method: 'get',
+                    params: {
+                        type: val
+                    }
+                }).then(res => {
+                    if(val === 'Inquiry') {
+                        this.tabData = res.inquiry;
+                        this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+                    } else {
+                        this.tabData = res.SKU;
+                        this.tabColumn = this.$getTableColumn(res.SKU, 'negotiation.tableViewBySKU');
+                    }
+                })
             }
         }
     }
