@@ -21,7 +21,10 @@ const btn = {
     copy: "Copy",
     modify: "Modify",
     createInquiry: "Create Inquiry",
-    cancel: "Cancel"
+    cancel: "Cancel",
+    add: "add",
+    submit: "submit",
+    saveAsDraft: "Save as Draft"
 };
 
 const viewBy = {
@@ -30,24 +33,39 @@ const viewBy = {
     SKU: "SKU"
 };
 
-const title = {
+const text = {
     inquiryOverview: "inquiryOverview",
-    inquiryDetail: "Inquiry No.1273"
-};
-
-const basicInfo = {
-    index: "Basic Info",
+    inquiryDetail: "Inquiry No.1273",
+    basicInfo: "Basic Info",
     hideTheSame: "Hide the Same",
     highlightTheDifferent: "Highlight the Different",
     productInfo: "Product Info",
-    messageBoard: "Message board"
+    messageBoard: "Message board",
+};
+
+const basicInfo = {
+    shippingMethod: "Shipping method",
+    paymentTerm: "Payment Term",
+    departureCountry: "Departure Country",
+    departurePort: "Departure Port",
+    incoterm: "Incoterm",
+    currency: "Currency",
+    inquiryData: "Inquiry Data",
+    inquiryStatus: "Inquiry Status",
+    inquirySequance: "Inquiry Sequance",
+    destinationCountry: "Destination Country",
+    quotationValidity: "Quotation Validity",
+    destinationPort: "Destination Port",
+    myInquiryID: "My Inquiry ID",
+    remarks: "Remarks",
+    attachment: "Attachment"
 };
 
 export default {
     status,
     btn,
     viewBy,
-    title,
+    text,
     basicInfo,
     ...db
 }

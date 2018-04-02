@@ -1,20 +1,20 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $t('negotiation.title.inquiryDetail') }}</h4>
+            <h4 class="title">{{ $t('negotiation.text.inquiryDetail') }}</h4>
             <el-checkbox-group v-model="checkList">
-                <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
             </el-checkbox-group>
         </div>
         <div class="container">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $t('negotiation.basicInfo.index') }}</h5>
+                        <h5>{{ $t('negotiation.text.basicInfo') }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <!--form-->
@@ -22,10 +22,10 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{$t('negotiation.basicInfo.productInfo')}}</h5>
+                        <h5>{{$t('negotiation.text.productInfo')}}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="$t('negotiation.basicInfo.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.basicInfo.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
@@ -51,7 +51,7 @@
             <div class="message-board-wrap" :class="{'active':switchStatus}">
                 <div class="con"><message-board :list="list" @sub="submit" /></div>
                 <div class="switch-btn" @click="boardSwitch">
-                    {{$t('negotiation.basicInfo.messageBoard')}}
+                    {{$t('negotiation.text.messageBoard')}}
                     <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
