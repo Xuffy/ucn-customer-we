@@ -2,6 +2,7 @@
   <section class="filter-value">
 
     <el-popover
+      :width="200"
       popper-class="filter-value-popper"
       placement="bottom"
       @hide="hideListener"
@@ -21,9 +22,10 @@
                 clearable
                 v-model="filterValue"></el-input>
 
+      <el-checkbox :indeterminate="isIndeterminate" style="margin-top: 5px"
+                   v-model="checkAll"
+                   @change="changeAllChecked">全选</el-checkbox>
       <div class="content-box">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="changeAllChecked">全选</el-checkbox>
-        <br/>
 
         <el-checkbox-group v-model="checkedDataList" @change="changeChecked">
           <el-checkbox class="checkbox-item" v-for="(item,index) in dataList"
@@ -170,9 +172,11 @@
   }
 
   .content-box {
-    margin-top: 10px;
+    margin-top: 5px;
     height: 200px;
     overflow: auto;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
   }
 </style>
 

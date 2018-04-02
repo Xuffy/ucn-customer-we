@@ -3,19 +3,21 @@
 
     <el-popover
       :width="200"
+      v-model="visible"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="el-icon-setting">Set Filed</i>
       <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
-                size="mini" style="margin-bottom: 10px"></el-input>
+                size="mini" clearable style="margin-bottom: 10px"></el-input>
       <el-checkbox v-model="checkAll">全选</el-checkbox>
-      <div style="max-height: 200px;overflow: auto">
+      <div style="height: 200px;overflow: auto">
         <el-tree
           show-checkbox
           default-expand-all
           class="filter-tree"
-          node-key="id"
+          node-key="prop"
           :data="data"
+          @current-change=""
           :props="{children: 'children',label: 'label'}"
           :filter-node-method="filterNode"
           ref="columnTree">
@@ -27,7 +29,7 @@
           <el-button size="mini" style="width: 100%">确定</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button size="mini" style="width: 100%">取消</el-button>
+          <el-button size="mini" style="width: 100%" @click="visible =  false">取消</el-button>
         </el-col>
       </el-row>
     </el-popover>
@@ -48,6 +50,7 @@
     },
     data() {
       return {
+        visible: false,
         checkAll: false,
         filterText: '',
         dataList: [
@@ -105,7 +108,7 @@
         this.$refs.columnTree.filter(val);
       },
       checkAll(val) {
-        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.dataList, 'id'))
+        val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.data, 'prop'))
           : this.$refs.columnTree.setCheckedKeys([]);
       }
     },
@@ -114,7 +117,7 @@
     methods: {
       filterNode(value, data) {
         if (!value) return true;
-        return data.label.indexOf(value) !== -1;
+        return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       }
     }
   }
