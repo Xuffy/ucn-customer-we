@@ -148,11 +148,6 @@
     },
     created() {
       this.filterColumn(this.column);
-      if (!_.isEmpty(this.data)) {
-        this.showData = _.filter(this.data, val => {
-          return !val._hide;
-        });
-      }
       // this.$emit('update:column', [])
     },
     methods: {
@@ -181,12 +176,7 @@
             return val;
           });
         }
-      }
-    },
-    created() {
-      // this.$emit('update:column', [])
-    },
-    methods: {
+      },
       /*selectionChange(selection) {
         this.selectedList = selection;
       },*/

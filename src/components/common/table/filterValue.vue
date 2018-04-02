@@ -31,7 +31,7 @@
           <el-checkbox class="checkbox-item" v-for="(item,index) in dataList"
                        :label="item"
                        :key="index"
-                       style="">{{item[dataKey]}}
+                       style="">{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}{{item[dataKey]}}
           </el-checkbox>
         </el-checkbox-group>
       </div>
@@ -157,8 +157,6 @@
         this.visible = false;
       },
       hideListener() {
-        console.log(1)
-        console.log(this.data)
         this.getFilterValue();
       }
     }
