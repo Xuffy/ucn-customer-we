@@ -125,15 +125,15 @@
                 this.$router.push('/product/detail');
             },
         },
-        created() {
-           
+        created() {        
               this.ajax.get('/supplierOverview', {
                     params: {
                     }
                   })
                   .then( res => {
                     this.tabData=res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "suppier.tableData");
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData",{width:'180px'});
+                    console.log(this.tabColumn)
                   })
                   .catch((res)=>{
                     console.log(res);

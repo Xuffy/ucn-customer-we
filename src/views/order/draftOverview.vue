@@ -27,6 +27,8 @@
             </div>
         </div>
         <!--form-->
+          <!--        表格-->
+             <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
@@ -36,6 +38,9 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: '',
         data() {
@@ -48,14 +53,34 @@
                 }, {
                     id: '2',
                     label: this.$t('order.buttonname.skuCode')
-                }, ]
+                }, ],
+                tabColumn: [],
+                tabData: []
             }
+        },
+        components: {
+            VSimpleTable
         },
         methods: {
             selectChange(val) {
                 console.log(val)
             }
-        }
+        },
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>
