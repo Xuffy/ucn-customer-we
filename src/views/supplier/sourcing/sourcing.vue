@@ -22,7 +22,7 @@
     <!--                    下拉选择category-->
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
-                                  <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
+                                  <drop-down class="speDropdown" style="position: absolute;width: 240px;height:40px;background-color: #ffffff;" :list="dropData" ref="dropDown"></drop-down>
                             </el-form-item>
                         </el-col>
                         </el-row>
@@ -72,6 +72,8 @@
                  
               </div>          
         </div>
+<!--        表格-->
+             <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 
@@ -79,10 +81,12 @@
     import {
         dropDown
     } from '@/components/index'
+    import {VSimpleTable } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
-            dropDown
+            dropDown,
+            VSimpleTable
         },
         props: {
 
@@ -101,7 +105,8 @@
                     vendorSKUcode: '',
                     description: '',
                 },
-
+                  tabColumn:[],
+                  tabData:[]
             }
         },
         methods: {
@@ -120,8 +125,19 @@
                 this.$router.push('/product/detail');
             },
         },
-        created() {
-
+        created() {        
+              this.ajax.get('/supplierOverview', {
+                    params: {
+                    }
+                  })
+                  .then( res => {
+                    this.tabData=res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData",{width:'180px'});
+                    console.log(this.tabColumn)
+                  })
+                  .catch((res)=>{
+                    console.log(res);
+                  });
         },
         watch: {
             hideBody(n) {
@@ -204,5 +220,10 @@
         margin-right: 8px;
         margin-top: 20px;
     }
-
+    .el-select{
+      width:240px
+    }
+    .el-input{
+        width: 240px;
+    }
 </style>

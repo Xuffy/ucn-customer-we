@@ -165,8 +165,7 @@ const tableCompareOverview = {
     compareTime: "compare time",
     compareName: "compare name",
     compareItem: "compare item",
-    operater: "operater",
-    action: "Action"
+    operater: "operater"
 };
 
 const tableCompareOverviewSelect = { 
@@ -187,7 +186,7 @@ const tableCompareByInquiry = { //compare
     inquiryRemark: "inquiry remark",
 };
 
-const compareBySKU = { //compare
+const tableCompareBySKU = { //compare
     supplierName: "supplier name",
     validPeriodOfQuotation: "valid period of quotation",
     incoterm: "Incoterm",
@@ -213,8 +212,7 @@ const compareBySKU = { //compare
     brand: "brand",
     incoterm: "incoterm",
     customerSkuQuantity: "customer sku quantity",
-    customerSkuPrice: "customer sku price",
-    
+    customerSkuPrice: "customer sku price"
 };
 
 export {
@@ -223,5 +221,7 @@ export {
     tableBasicInfo,
     tableProductInfo,
     tableCompareOverview,
-    tableCompareOverviewSelect
+    tableCompareOverviewSelect,
+    tableCompareByInquiry,
+    tableCompareBySKU
 }

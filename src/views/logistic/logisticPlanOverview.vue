@@ -19,20 +19,23 @@
             </div>
             <div class="view-by-btn">
                 <span>{{ $t('logistic.viewBy.index') }}：</span>
-                <el-button type="primary">{{ $t('logistic.viewBy.plan') }}</el-button>
-                <el-button>{{ $t('logistic.viewBy.transportationUnit') }}</el-button>
-                <el-button>{{ $t('logistic.viewBy.SKU') }}</el-button>
+                <el-button :type="$t('logistic.viewBy.plan') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.plan')">{{ $t('logistic.viewBy.plan') }}</el-button>
+                <el-button :type="$t('logistic.viewBy.transportationUnit') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.transportationUnit')">{{ $t('logistic.viewBy.transportationUnit') }}</el-button>
+                <el-button :type="$t('logistic.viewBy.SKU') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.SKU')">{{ $t('logistic.viewBy.SKU') }}</el-button>
             </div>
         </div>
-        <!--form-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
-    import { selectSearch } from '@/components/index';
+    import { selectSearch, VSimpleTable } from '@/components/index';
     export default {
         name:'logisticPlanOverview',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
+                viewBy: '',
                 options: [
                     {
                         id: '1',
@@ -50,7 +53,32 @@
             }
         },
         components: {
-            'select-search': selectSearch
+            'select-search': selectSearch,
+            "v-simple-table": VSimpleTable
+        },
+        created() {
+            this.viewBy = 'Plan';
+        },
+        watch: {
+            viewBy (newVal, oldVal) {
+                this.viewByChange(newVal);
+            }
+        },
+        methods: {
+            viewByChange(str) {
+                this.ajax({
+                    url: '/Compare',
+                    method: 'get'
+                }).then(res => {
+                    if(str === 'Plan') {
+                        this.tabData = res.Inquiry;
+                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareByInquiry', { width:200 });
+                    } else {
+                        this.tabData = res.SKU;
+                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareBySKU', { width:200 });
+                    }
+                });
+            }
         }
     }
 </script>

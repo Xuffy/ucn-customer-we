@@ -227,9 +227,8 @@
                 <el-button type="primary">Add product</el-button>
                 <el-button>Remove</el-button>
             </div>
-            <i class="el-icon-setting"></i>
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
             <el-button type="primary">Modify</el-button>
             <el-button type="primary">Sent as Order</el-button>
@@ -240,10 +239,13 @@
     </div>
 </template>
 <script>
+    import { VSimpleTable } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 date:'',
                 pickerOptions:{
                     disabledDate(time) {
@@ -301,6 +303,18 @@
                 destinationOptions: [],
                 destination: ''
             }
+        },
+        components: {
+            "v-simple-table": VSimpleTable
+        },
+        created() {
+            this.ajax({
+                url: '/Compare',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.Inquiry;
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareByInquiry', { width:200 });
+            });
         }
     }
 </script>

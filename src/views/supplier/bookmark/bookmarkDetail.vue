@@ -70,17 +70,19 @@
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
+            <el-tabs v-model="tabName" type="card" >
                 <el-tab-pane :label="$t('supplier.detail.factoryAddress')" name="factoryAddress">
-                   
+                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.accountInfo')" name="accountInfo">
-                   
+                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                    
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.tradeHistory')" name="tradeHistory">
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+<!--
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             Inquiry qty : XXXXXX
@@ -104,6 +106,7 @@
                             Quality approval rate : XXXXXX
                         </el-col>
                     </el-row>
+-->
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="Remark">
                             
@@ -117,18 +120,38 @@
 </template>
 
 <script>
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: "bookmarkDetail",
         components: {
-
+            VSimpleTable
         },
         data() {
             return {
                 noEdit: true,
-                tabName: 'factoryAddress' //默认打开的tab
+                tabName: 'factoryAddress', //默认打开的tab
+                tabColumn: [],
+                tabData: []
             }
         },
-        methods: {}
+        methods: {},
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>

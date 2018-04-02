@@ -11,9 +11,6 @@
         </div>
         <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="max-width:150px;" @change="inputChange" @keyup="inputEnter"
         @keyup.enter.native="inputEnter" />
-        <div class="set" v-if="setting">
-            <i class="el-icon-setting" @click="iconClick"></i>
-        </div>
     </div>
 </template>
 <script>
@@ -35,10 +32,6 @@
             options: {
                 type: Array,
                 default: []
-            },
-            setting: {
-                type: Boolean,
-                default: true
             }
         },
         methods: {

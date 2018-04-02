@@ -1,18 +1,19 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">Compare</h3>
+        <h3 class="hd">{{ $t('negotiation.text.compare') }}</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary">Create Order</el-button>
+                <el-button type="primary">{{ $t('negotiation.btn.createOrder') }}</el-button>
+                <el-button type="primary">{{ $t('negotiation.btn.accept') }}</el-button>
                 <el-checkbox-group v-model="checkList">
-                    <el-checkbox label="Hide the Same"></el-checkbox>
-                    <el-checkbox label="Highlight the Different"></el-checkbox>
+                    <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
+                    <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-                <span>Compare by：</span>
-                <el-button type="primary">Inquiry</el-button>
-                <el-button type="primary">SKU</el-button>
+                <span>{{ $t('negotiation.text.compareBy') }}：</span>
+                <el-button :type="this.compareBy === $t('negotiation.btn.inquiry') ? 'primary' : ''" @click="compareByChange($t('negotiation.btn.inquiry'))">{{ $t('negotiation.btn.inquiry') }}</el-button>
+                <el-button :type="this.compareBy === $t('negotiation.btn.SKU') ? 'primary' : ''"  @click="compareByChange($t('negotiation.btn.SKU'))">{{ $t('negotiation.btn.SKU') }}</el-button>
             </div>
             <div class="filedSelect">
                 <span>Set Filed</span>
@@ -24,22 +25,56 @@
                     :value="item.id" />
                 </el-select>
             </div>
-            <el-button type="text">Compare History</el-button>
+            <!-- <el-button type="text">Compare History</el-button> -->
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
+    import { VSimpleTable } from '@/components/index';
     export default {
         name:'compareOverview',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 checkList: [],
                 options:[{
                     label:'wwww.baidu.com',
                     id:'1'
                 }],
-                Filed:''
+                Filed:'',
+                compareBy: ""
+            }
+        },
+        components: {
+            "v-simple-table": VSimpleTable
+        },
+        created() {
+            this.compareBy = 'Inquiry'
+        },
+        watch: {
+            compareBy (newVal, oldVal) {
+                this.compareByChildren(newVal);
+            }
+        },
+        methods: {
+            compareByChange(str) {
+                this.compareBy = str;
+            },
+            compareByChildren(str) {
+                this.ajax({
+                    url: '/Compare',
+                    method: 'get'
+                }).then(res => {
+                    if(str === 'Inquiry') {
+                        this.tabData = res.Inquiry;
+                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareByInquiry', { width:200 });
+                    } else {
+                        this.tabData = res.SKU;
+                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareBySKU', { width:200 });
+                    }
+                });
             }
         }
     }

@@ -1,11 +1,11 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">inquiry Overview</h3>
+        <h3 class="hd">{{ $t('negotiation.text.inquiryDetail') }}</h3>
         <div class="select-wrap">
-            <h4 class="content-hd">Basic Info</h4>
+            <h4 class="content-hd">{{ $t('negotiation.text.basicInfo') }}</h4>
             <div class="select-main">
                 <div class="select-item">
-                    <span>Shipping method：</span>
+                    <span>{{ $t('negotiation.basicInfo.shippingMethod') }}：</span>
                     <el-select v-model="shipping" placeholder="Please select">
                         <el-option
                         v-for="item in shippingOptions"
@@ -15,7 +15,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Payment Term：</span>
+                    <span>{{ $t('negotiation.basicInfo.paymentTerm') }}：</span>
                     <el-select v-model="Payment" placeholder="Please select">
                         <el-option
                         v-for="item in PaymentOptions"
@@ -25,7 +25,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Departure Country：</span>
+                    <span>{{ $t('negotiation.basicInfo.departureCountry') }}：</span>
                     <el-select v-model="departure" placeholder="Please select">
                         <el-option
                         v-for="item in departureOptions"
@@ -35,7 +35,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Departure Port：</span>
+                    <span>{{ $t('negotiation.basicInfo.departurePort') }}：</span>
                     <el-select v-model="port" placeholder="Please select">
                         <el-option
                         v-for="item in portOptions"
@@ -45,7 +45,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Incoterm：</span>
+                    <span>{{ $t('negotiation.basicInfo.incoterm') }}：</span>
                     <el-select v-model="incoterm" placeholder="Please select">
                         <el-option
                         v-for="item in incotermOptions"
@@ -55,7 +55,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Currency：</span>
+                    <span>{{ $t('negotiation.basicInfo.currency') }}：</span>
                     <el-select v-model="currency" placeholder="Please select">
                         <el-option
                         v-for="item in currencyOptions"
@@ -65,7 +65,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Inquiry Data：</span>
+                    <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
                     <el-select v-model="inquiryData" placeholder="Please select">
                         <el-option
                         v-for="item in inquiryDataOptions"
@@ -75,7 +75,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Inquiry Status：</span>
+                    <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
                     <el-select v-model="InquiryStatus" placeholder="Please select">
                         <el-option
                         v-for="item in InquiryStatusOptions"
@@ -85,7 +85,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Inquiry Sequance：</span>
+                    <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
                     <el-input
                         placeholder="input here"
                         v-model="InquirySequance"
@@ -94,7 +94,7 @@
                         />
                 </div>
                 <div class="select-item">
-                    <span>Inquiry Sequance：</span>
+                    <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
                     <el-input
                         placeholder="input here"
                         v-model="InquirySequance1"
@@ -104,7 +104,7 @@
                         />
                 </div>
                 <div class="select-item">
-                    <span>Destination Country：</span>
+                    <span>{{ $t('negotiation.basicInfo.destinationCountry') }}：</span>
                     <el-select v-model="destinationCountry" placeholder="Please select">
                         <el-option
                         v-for="item in destinationCountryOptions"
@@ -114,7 +114,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Quotation Validity：</span>
+                    <span>{{ $t('negotiation.basicInfo.quotationValidity') }}：</span>
                     <el-select v-model="quotation" placeholder="Please select">
                         <el-option
                         v-for="item in quotationOptions"
@@ -124,7 +124,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Destination Port：</span>
+                    <span>{{ $t('negotiation.basicInfo.destinationPort') }}：</span>
                     <el-select v-model="Destination" placeholder="Please select">
                         <el-option
                         v-for="item in DestinationOptions"
@@ -134,7 +134,7 @@
                     </el-select>
                 </div>
                 <div class="select-item">
-                    <span>Inquiry Data：</span>
+                    <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
                     <el-date-picker
                     v-model="date"
                     align="right"
@@ -144,7 +144,7 @@
                     />
                 </div>
                 <div class="select-item">
-                    <span>My Inquiry ID：</span>
+                    <span>{{ $t('negotiation.basicInfo.myInquiryID') }}：</span>
                     <el-input
                         placeholder="input here"
                         v-model="MyInquiryID"
@@ -154,7 +154,7 @@
                         />
                 </div>
                 <div class="select-item textarea">
-                    <span>Remarks：</span>
+                    <span>{{ $t('negotiation.basicInfo.remarks') }}：</span>
                     <el-input
                         type="textarea"
                         :rows="3"
@@ -165,32 +165,45 @@
                         />
                 </div>
                 <div class="select-item">
-                    <span>Attachment：</span>
-                    <el-button type="primary">add</el-button>
+                    <span>{{ $t('negotiation.basicInfo.attachment') }}：</span>
+                    <el-button type="primary">{{ $t('negotiation.btn.add') }}</el-button>
                 </div>
             </div>
         </div>
-        <h4 class="content-hd">Product Info</h4>
+        <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="info">Add Product</el-button>
-                <el-button type="info">Remove</el-button>
+                <el-button type="primary" @click="dialogFormVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
+                <el-button type="info">{{ $t('negotiation.btn.remove') }}</el-button>
             </div>
             <select-search :options="options" />
         </div>
-        <!--form-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="bom-btn-wrap">
-            <el-button type="primary">Submit</el-button>
-            <el-button type="primary">Save as Draft</el-button>
+            <el-button type="primary">{{ $t('negotiation.btn.submit') }}</el-button>
+            <el-button type="primary">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
         </div>
+        <div class="bom-btn-wrap-station"></div>
+        <el-dialog title="Add product" :visible.sync="dialogFormVisible">
+            <!-- <add-product-msg /> -->
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
-    import { selectSearch } from '@/components/index';
+    import { selectSearch, VSimpleTable } from '@/components/index';
     export default {
         name:'createInquiry',
         data() {
             return {
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                tabColumn: [],
+                tabData: [],
+
                 options:[{
                     id:'1',
                     label:'dada'
@@ -260,12 +273,26 @@
             }
         },
         components: {
-            'select-search':selectSearch
+            'select-search': selectSearch,
+            'v-simple-table': VSimpleTable
+        },
+        created() {
+            this.ajax({
+                url: '/tableProductInfo',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.content;
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableProductInfo', { width:200 });
+            });
+        },
+        methods: {
+           
         }
     }
 </script>
 <style lang="less" scoped>
     .create-inquiry {
+        position: relative;
         .hd {
             padding-left:15px;
             height: 50px;
@@ -332,7 +359,18 @@
             }
         }
         .bom-btn-wrap {
-            padding-left:25px;
+            background:#fff;
+            position:fixed;
+            left:0;
+            bottom:0;
+            z-index:9;
+            width:100%;
+            padding: 10px 245px 10px;
+            box-shadow: 0 -1px 5px #ccc;
+        }
+        .bom-btn-wrap-station {
+            height: 52px;
+            width:100%;
         }
     }
 </style>
