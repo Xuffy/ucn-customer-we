@@ -173,7 +173,7 @@
         <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">{{ $t('negotiation.btn.addProduct') }}</el-button>
+                <el-button type="primary" @click="dialogFormVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
                 <el-button type="info">{{ $t('negotiation.btn.remove') }}</el-button>
             </div>
             <select-search :options="options" />
@@ -183,6 +183,14 @@
             <el-button type="primary">{{ $t('negotiation.btn.submit') }}</el-button>
             <el-button type="primary">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
         </div>
+        <div class="bom-btn-wrap-station"></div>
+        <el-dialog title="Add product" :visible.sync="dialogFormVisible">
+            <!-- <add-product-msg /> -->
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -191,8 +199,11 @@
         name:'createInquiry',
         data() {
             return {
+                dialogTableVisible: false,
+                dialogFormVisible: false,
                 tabColumn: [],
                 tabData: [],
+
                 options:[{
                     id:'1',
                     label:'dada'
@@ -264,11 +275,24 @@
         components: {
             'select-search': selectSearch,
             'v-simple-table': VSimpleTable
+        },
+        created() {
+            this.ajax({
+                url: '/tableProductInfo',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.content;
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableProductInfo', { width:200 });
+            });
+        },
+        methods: {
+           
         }
     }
 </script>
 <style lang="less" scoped>
     .create-inquiry {
+        position: relative;
         .hd {
             padding-left:15px;
             height: 50px;
@@ -335,7 +359,18 @@
             }
         }
         .bom-btn-wrap {
-            padding-left:25px;
+            background:#fff;
+            position:fixed;
+            left:0;
+            bottom:0;
+            z-index:9;
+            width:100%;
+            padding: 10px 245px 10px;
+            box-shadow: 0 -1px 5px #ccc;
+        }
+        .bom-btn-wrap-station {
+            height: 52px;
+            width:100%;
         }
     }
 </style>
