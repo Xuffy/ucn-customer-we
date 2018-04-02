@@ -6,17 +6,25 @@
                  <i class="el-icon-document"></i>
                  <p>1234568</p>
             </span>       
-             <i class="el-icon-remove"></i>
-        </span>
-        
+             <i class="el-icon-remove" @click='deleteFile'></i>
+        </span>      
     </div>
-     <upload class='upload'></upload>
+     <upload class='upload' @uploadsuccess='uploadsuccess'></upload>
     </div>
 </template>
 <script>
     import upload from '@/components/common/upload/upload.vue'
     export default {
         name: "attchment",
+        props: {
+            //....attchment的数据
+            list: {
+                type: Array,
+                default: function(){
+                    return []
+                }
+            }
+        },
         components:{
             upload
         },
@@ -26,7 +34,12 @@
             }
         },
         methods:{
-
+            deleteFile(){
+                
+            },
+            uploadsuccess(data){
+              this.$emit('uploadsuccess',data)  //上传成功一层一层通知父组件
+            }
         }
     }
 </script>

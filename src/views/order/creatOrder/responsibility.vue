@@ -9,28 +9,40 @@
                       :data="tableData"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
+                        prop="item"
+                        label="item"
+                        width="140">
                       </el-table-column>
                       <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="180">
+                        prop="item1"
+                        label="NeedLabel/Design Info Date"
+                        width="200">
                       </el-table-column>
                       <el-table-column
-                        prop="address"
-                        label="地址">
+                        prop="item2"
+                        label="Lable/Design Date"
+                         width="200"
+                        >
                       </el-table-column>
                        <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
+                        prop="item3"
+                        label="Design Need Confirm Date"
+                        width="200">
                       </el-table-column>
                        <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
+                        prop="item4"
+                        label="Receive Sample Date"
+                        width="200">
+                      </el-table-column>
+                      <el-table-column
+                        prop="item5"
+                        label="SampleNeedConfirmDate"
+                        width="200">
+                      </el-table-column>
+                      <el-table-column
+                        prop="item6"
+                        label="OtherDate"
+                        width="200">
                       </el-table-column>
                     </el-table>
               </div>
@@ -46,22 +58,38 @@
         data(){
             return {
                tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
+                    item: 'Me',
+                    item1: '',
+                    item2: '',
+                    item3:'',
+                    item4:'',
+                    item5:'',
+                    item6:'',
+                  },{
+                    item: 'Supplier',
+                    item1: '',
+                    item2: '',
+                    item3:'',
+                    item4:'',
+                    item5:'',
+                    item6:'',
+                  },{
+                    item: 'Remark',
+                    item1: '',
+                    item2: '',
+                    item3:'',
+                    item4:'',
+                    item5:'',
+                    item6:'',
+                  },{
+                    item: 'Actual Date',
+                    item1: '',
+                    item2: '',
+                    item3:'',
+                    item4:'',
+                    item5:'',
+                    item6:'',
+                  }]
             }
         }
     }
@@ -72,6 +100,7 @@
         height: 60px;
         line-height: 60px;
         border-bottom:1px solid #ccc;
+         padding: 0 15px;
     }
 
 </style>

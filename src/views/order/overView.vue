@@ -46,6 +46,7 @@
             </div>
         </div>
         <!--form-->
+      
     </div>
 </template>
 <script>
@@ -55,13 +56,15 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
+   
     import {
         dropDown
     } from '@/components/index'
     export default {
         name: 'orderOverview',
         components: {
-            dropDown
+            dropDown,
+           
         },
         data() {
             return {
@@ -86,7 +89,7 @@
             },
             hiddenDropDown() {
                 this.showdropDown = !this.showdropDown
-            }
+            },
         }
     }
 

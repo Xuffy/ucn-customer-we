@@ -54,19 +54,30 @@
                     id: '4',
                     label: '询价单号（客户）'
                 }],
-                tabColumn:[{
-                    label: this.$t('negotiation.tableViewByInquiry.inquiryNo'),
-                    prop: 'inquiryNo'
-                }],
+                tabColumn:[],
                 tabData:[
                     {
-                        inquiryNo: 2
-                    }
+                        inquiryNo: 2,
+                        quotationNo: 3,
+                        sequence: 3,
+                        status: 3,
+                        supplier: 3,
+                        status: 3,
+                        supplier: 3,
+                        SKUQty: 3,
+                        orderValue: 3,
+                        currency: 3,
+                        totalQTY: 3,
+                        incoterm: 3,
+                        port: 3,
+                        remark: 3
+                    },
                 ]
             }
         },
         created() {
-            
+            this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry');
+            console.log(this.$getTableColumn(this.tabData, 'negotiation.tableViewByInquiry'))
         },
         components: {
             'select-search': selectSearch,

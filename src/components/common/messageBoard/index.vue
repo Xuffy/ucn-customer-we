@@ -12,11 +12,14 @@
             </p>          
         </div>     
      </div>
-     <upload class="messagelist_upload"></upload>
+     <upload class="messagelist_upload" 
+      accept="image/jpeg"
+     @uploadsuccess='updateDate'
+     ></upload>
      <div class="form">       
              <el-input
                   type="textarea"
-                  :rows="3"
+                  :rows="4"
                   placeholder="Add"
                   class="text_enter"
                   v-model="textarea">
@@ -38,12 +41,16 @@
         props: {
             list: {
                 type: Array,
-                default: []
+                default: function() {
+                    return []
+                }
             }
+
         },
         data() {
             return {
-                textarea: ''
+                textarea: '',
+                isuploadsuccess: false, //upload拿到的上传成功值
             }
         },
         watch: {
@@ -60,6 +67,11 @@
                     this.textarea = ''
                 }
 
+            },
+            //..............拿到 upload的传过来的isuploadsuccess是否上传成功的值，并$emit函数uploadsuccess到另一个调用此组件的组件，父组件根据这个成功值做相应处理
+            updateDate(isuploadsuccess) {
+                this.isuploadsuccess = isuploadsuccess
+                this.$emit('uploadsuccess', this.isuploadsuccess)
             }
         }
     }
@@ -73,6 +85,7 @@
         border: 1px solid #BEBEBE;
         height: 600px;
         width: 300px;
+        border-radius: 5px;
     }
 
     .list {

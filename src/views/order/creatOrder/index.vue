@@ -2,7 +2,7 @@
   <div class="creatOrder">
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
-         <basicinfo></basicinfo>
+         <basicinfo ref='basicInfo'></basicinfo>
            <div class="basicinfo_other">
     <!--                order remark-->
                     <el-row>
@@ -24,7 +24,7 @@
                              <div class="attchment">
                                 <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                 <div>
-                                    <attchment></attchment>
+                                    <attchment @uploadsuccess='uploadsuccess'></attchment>
                                 </div>
                             </div>
                            </el-col>
@@ -48,7 +48,7 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button type='primary'>{{$t('order.buttonname.send')}}</el-button>
+                 <el-button type='primary' @click='send'>{{$t('order.buttonname.send')}}</el-button>
                  <el-button type='primary'>{{$t('order.buttonname.saveAsDraft')}}</el-button>
                  <el-button type='primary' @click="dialogQuickcreate = true">{{$t('order.buttonname.quickCreate')}}</el-button>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
@@ -70,11 +70,7 @@
                         <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
                     </div>
                 </div>
-              <el-table :data="gridData">
-                <el-table-column property="date" label="日期" width="150"></el-table-column>
-                <el-table-column property="name" label="姓名" width="200"></el-table-column>
-                <el-table-column property="address" label="地址"></el-table-column>
-              </el-table>
+ 
         </el-dialog>
 <!--                  addproduct弹窗区域-->
            <el-dialog :title="$t('order.buttonname.addProduct')"  :visible.sync="dialogAddproduct" width='80%'>
@@ -91,6 +87,10 @@
 </template>
 
 <script>
+    /*
+                                                       从子组件里面拿的值，这里通过ref拿的
+                                                       this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
+                                                    */
     import responsibility from './responsibility.vue'
     import basicinfo from './basicinfo.vue'
     import FromNewSearch from './FromNewSearch.vue'
@@ -116,32 +116,31 @@
                 keyWord: '',
                 options: [{
                     id: '1',
-                    label: 'Order No'
+                    label: 'Inquiry No'
                 }, {
                     id: '2',
                     label: 'Sku Code'
-                }, ],
-                gridData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
+                }, ]
             }
         },
-        created() {},
-        methods: {}
+        created() {
+
+        },
+        mounted() {
+
+        },
+        methods: {
+            uploadsuccess(data) {
+                console.log(data)
+            },
+            //......................提交
+            send() {
+                //简单的正则
+                if (this.$refs.basicInfo.submitForm()) {
+                    console.log('in')
+                }
+            }
+        }
     }
 
 </script>
@@ -192,6 +191,7 @@
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #ccc;
+        padding: 0 15px;
     }
 
     .footer {

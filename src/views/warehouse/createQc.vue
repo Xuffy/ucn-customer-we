@@ -265,6 +265,10 @@
                 this.dialogTableVisible=true;
             },
 
+            //inputNumber change
+            handleChange(){
+
+            },
 
             //分页操作
             handleSizeChange(val) {

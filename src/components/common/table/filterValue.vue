@@ -157,6 +157,8 @@
         this.visible = false;
       },
       hideListener() {
+        console.log(1)
+        console.log(this.data)
         this.getFilterValue();
       }
     }
