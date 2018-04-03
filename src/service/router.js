@@ -88,6 +88,11 @@ export const routerMap = [
                   component: () => import('../views/product/bookmark/manuallyAdd'),
                   name:'manuallyAdd',
               },
+              {
+                  path:'recycleBin',
+                  component: () => import('../views/product/bookmark/recycleBin'),
+                  name:'recycleBin',
+              }
           ]
         },
         {
@@ -98,7 +103,7 @@ export const routerMap = [
               {
                   path:'',
                   component: () => import('../views/product/compare/overview'),
-                  name:'compareOverview',
+                  name:'compare overview',
               },
               {
                   path:'detail',
@@ -266,12 +271,17 @@ export const routerMap = [
         {
           path: 'overview',
           component: () => import('../views/warehouse/warehouseOverview.vue'),
-          name:'warehouseOverview'
+          name:'warehouse overview'
+        },
+        {
+          path: 'qcOverview',
+          component: () => import('../views/warehouse/qcOverview.vue'),
+          name:'qc overview'
         },
         {
           path: 'qcDetail',
           component: () => import('../views/warehouse/qcDetail.vue'),
-          name:'qcOrderDetail'
+          name:'qcOrder detail'
         },
         {
           path: 'createQc',

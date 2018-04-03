@@ -7,7 +7,7 @@ const page={
     basicInfo:'Basic Info',
     productInfo:'Product Info',
     createQCOrder:'Create QC Order',
-
+    downLoad:'Download',
 
 
 

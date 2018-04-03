@@ -18,16 +18,7 @@
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
-                        <div class="form-wrap">
-                            <v-simple-table :column="tabColumn" :data.sync="tabData" />
-                        </div>
-                        <div class="message-board-wrap" :class="{'active':switchStatus}">
-                            <div class="con"><message-board :list="list" @sub="submit" /></div>
-                            <div class="switch-btn" @click="boardSwitch">
-                                {{$t('negotiation.text.messageBoard')}}
-                                <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
-                            </div>
-                        </div>
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
                     </div>
                 </div>
                 <div class="basic-info">
@@ -55,6 +46,13 @@
                         <el-button type="primary">{{$t('negotiation.btn.createInquiry')}}</el-button>
                         <el-button>{{$t('negotiation.btn.cancel')}}</el-button>
                     </div>
+                </div>
+            </div>
+            <div class="message-board-wrap" :class="{'active':switchStatus}">
+                <div class="con"><message-board :list="list" @sub="submit" /></div>
+                <div class="switch-btn" @click="boardSwitch">
+                    {{$t('negotiation.text.messageBoard')}}
+                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
         </div>
@@ -120,7 +118,7 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res;
-                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview', { width: '130vw' });
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview');
             });
         },
         methods: {
@@ -175,9 +173,6 @@
                         width:100%;
                         .form-wrap {
                             flex:1;
-                        }
-                        .message-board-wrap {
-                            
                         }
                     }
                     .basesic-hd {
@@ -235,7 +230,7 @@
             }
             .message-board-wrap {
                 position:relative;
-                width:302px;
+                max-width:302px;
                 transition: max-width .5s cubic-bezier(.445,.05,.55,.95);
                 &.active {
                     max-width:0;
