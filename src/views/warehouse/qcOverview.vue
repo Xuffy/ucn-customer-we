@@ -49,15 +49,30 @@
         <div class="body">
             <div>
                 <el-button>导出</el-button>
+                <el-button @click="$router.push('/warehouse/qcDetail')">qc detail</el-button>
             </div>
+
+            <v-simple-table
+                    class="speTable"
+                    :data.sync="tableDataList"
+                    :column="dataColumn"
+                    @sort-change="getSort"
+                    @page-change="pageChange">
+            </v-simple-table>
         </div>
 
     </div>
 </template>
 
 <script>
+
+    import VSimpleTable from '@/components/common/table/simple'
+
     export default {
         name: "qc-overview",
+        components:{
+            VSimpleTable
+        },
         data(){
             return{
                 name:'',
@@ -71,15 +86,32 @@
                         label:'喜之郎',
                         value:'喜之郎',
                     },
-                ]
+                ],
+                tableDataList:[],
+                dataColumn:[],
             }
         },
         methods:{
             //获取表格data
+            //table操作
+            pageChange(page) {
+                console.log(page)
+            },
+            getSort(val, key) {
+                console.log(val, key)
+            },
 
+
+            //获取表格data
+            getList() {
+                this.ajax.get('/getTrackList').then((data)=>{
+                    this.tableDataList = data;
+                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                })
+            },
         },
         created(){
-
+            this.getList();
         },
     }
 </script>

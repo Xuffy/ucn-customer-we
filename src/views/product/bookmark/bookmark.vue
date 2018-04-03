@@ -188,14 +188,14 @@
     import {dropDown} from '@/components/index'
     // import dropDown from '../../../components/common/fnCompon/dropdown'
     import VSimpleTable from '@/components/common/table/simple'
-    // import product from '../addProduct'
+    import product from '../addProduct'
 
     export default {
         name: "bookmark",
         components:{
             dropDown,
             VSimpleTable,
-            // product
+            product
         },
         props:{
 
@@ -366,6 +366,7 @@
                 this.ajax.get('/getTrackList').then((data)=>{
                     this.tableDataList = data;
                     this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                    console.log(this.dataColumn,'.//////')
                 })
             },
 

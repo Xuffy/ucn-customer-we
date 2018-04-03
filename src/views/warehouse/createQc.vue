@@ -8,69 +8,126 @@
                 <div class="head"> {{$t('warehouse.page.basicInfo')}}</div>
                 <div class="content">
                     <el-row>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcOrderNo')}}. : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                            {{$t('warehouse.page.qcOrderNo')}}. : 自动生成
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.buyerOrderNo')}}. : XXXXXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                            {{$t('warehouse.page.orderDate')}} : 来自order
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.buyerOrderDate')}} : XXXXXXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.qcType')}} :
+                            <el-select v-model="value" placeholder="请选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcType')}} : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcDate')}} : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.supplierID')}} : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.supplierName')}} : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.factoryAddressInEnglish')}} : XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.factoryContactPhone')}} :
-                            XXXXXX
-                        </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.serviceProviders')}} :
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.qcDate')}} :
                             <el-input
-                                    style="width: auto"
-                                    placeholder="最终显示公司名称"
-                                    v-model="serviceProviders">
-                                <i @click="chooseProviders" slot="suffix" class="el-icon-edit-outline"></i>
+                                    class="speInput"
+                                    placeholder="请输入内容"
+                                    v-model="value"
+                                    :disabled="true">
                             </el-input>
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcResult')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.supplierNO')}} : 来自order
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcMethod')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.supplierName')}} : 来自order
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.surveyor')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.factoryAddress')}} :
+                            <el-input
+                                    class="speInput"
+                                    placeholder="请输入内容"
+                                    v-model="value">
+                            </el-input>
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.servicePrice')}} :
-                            <el-input-number
-                                    v-model="servicePrice"
-                                    :controls="false"
-                                    @change="handleChange"
-                                    :min="0">
-                            </el-input-number>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.factoryContactPhone')}} :
+                            <el-input
+                                    class="speInput"
+                                    placeholder="请输入内容"
+                                    v-model="value">
+                            </el-input>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.qcStatus')}} :
+                            <el-select v-model="value" disabled placeholder="请选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.qcMethod')}} :
+                            <el-select v-model="value" disabled placeholder="请选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.surveyor')}} :
+                            <el-select v-model="value" disabled placeholder="服务商用户选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.supplierOrderNo')}} : 来自QC Order
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.serviceFee')}} :
+                            <el-input
+                                    class="speInput"
+                                    placeholder="服务商填写"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            {{$t('warehouse.page.orderNo')}}. :
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="value"
+                                    class="input-with-select speInput">
+                                <el-button @click="chooseOrderNo" slot="append" icon="el-icon-search"></el-button>
+                            </el-input>
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            {{$t('warehouse.page.serviceProviders')}} :
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="value"
+                                    class="input-with-select speInput">
+                                <el-button @click="chooseProviders" slot="append" icon="el-icon-search"></el-button>
+                            </el-input>
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             {{$t('warehouse.page.remark')}} :
                             <el-input
                                     type="textarea"
-                                    :rows="2"
+                                    :autosize="{ minRows: 2}"
                                     placeholder="请输入内容"
-                                    v-model="remark">
+                                    v-model="value">
                             </el-input>
+
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             {{$t('warehouse.page.attachment')}} : XXXXXX
@@ -80,8 +137,13 @@
             </div>
         </div>
 
+        <div class="footBtn">
+            <el-button type="primary">{{$t('warehouse.page.send')}}</el-button>
+            <el-button type="primary">{{$t('warehouse.page.saveAsDraft')}}</el-button>
+        </div>
 
-        <el-dialog width="80%" title="Choose Service Providers" :visible.sync="dialogTableVisible">
+
+        <el-dialog width="80%" title="Choose Service Providers" :visible.sync="serviceTableVisible">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-row>
                     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -185,6 +247,103 @@
                     :total="400">
             </el-pagination>
         </el-dialog>
+
+        <el-dialog width="80%" title="Choose Order No" :visible.sync="orderTableVisible">
+            <el-form ref="form" :model="form" label-width="100px">
+                <el-row>
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <el-form-item label="合同号">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <el-form-item label="工厂货号">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <el-form-item label="客户货号">
+                            <el-select v-model="form.name" placeholder="请选择">
+                                <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
+                        <el-form-item label="合同日期">
+                            <el-date-picker
+                                    style="width: 100%"
+                                    v-model="value"
+                                    type="date"
+                                    placeholder="选择日期">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        prop="type"
+                        label="公司分类"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="id"
+                        label="公司编号"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        label="公司名称"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="country"
+                        label="国家"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="city"
+                        label="城市"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="contact"
+                        label="联系人"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        prop="contactPhone"
+                        label="联系电话"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        align="center">
+                    <template slot-scope="scope">
+                        <el-button type="text">选择</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <br>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[100, 200, 300, 400]"
+                    :page-size="100"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="400">
+            </el-pagination>
+        </el-dialog>
     </div>
 </template>
 
@@ -196,7 +355,9 @@
                 servicePrice:'',
                 remark:'',
                 serviceProviders:'',
-                dialogTableVisible:false,           //弹出框的显示隐藏
+                serviceTableVisible:false,           //service弹出框的显示隐藏
+                orderTableVisible:false,             //order弹出框的显示隐藏
+
                 form: {
                     name: '',
                     region: '',
@@ -207,7 +368,6 @@
                     resource: '',
                     desc: ''
                 },
-
                 options: [
                     {
                     value: '选项1',
@@ -225,7 +385,7 @@
                     value: '选项5',
                     label: '北京烤鸭'
                 }],
-
+                value:'',
                 tableData: [
                     {
                         type:'甲类',
@@ -258,12 +418,23 @@
                 ],
                 currentPage:1,
                 radio: '1',                         //弹出框的单选，服务商或者供应商
+
+
+                allowClick:false,
+
+
             }
         },
         methods:{
+
             chooseProviders(){
-                this.dialogTableVisible=true;
+                this.serviceTableVisible=true;
             },
+
+            chooseOrderNo(){
+                this.orderTableVisible=true;
+            },
+
 
             //inputNumber change
             handleChange(){
@@ -320,5 +491,23 @@
     }
     .section .speInput >>> .el-input__inner{
         text-align: left;
+    }
+    .section .speInput >>> .el-input-group__append{
+        padding: 0;
+    }
+    .section .speInput >>> .el-input-group__append .el-button{
+        margin-right: 0 !important;
+    }
+
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        /*text-align: center;*/
     }
 </style>
