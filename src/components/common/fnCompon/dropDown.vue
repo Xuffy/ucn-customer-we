@@ -210,7 +210,6 @@
 	.dropDown {
 		position: relative;
 		min-width:188px;
-		
 		.data-box-active {
 			width:230px;
 			padding:10px;
@@ -221,6 +220,7 @@
 			right:-232px;
 			top:0;
 			background:#fff;
+			z-index:999;
 			span {
 				background:#f4f4f4;
 				color:#94979a;

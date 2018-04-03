@@ -1,12 +1,17 @@
 <template>
     <div class="bookmark">
+<!--
         <div class="title">
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
             </el-button>
         </div>
-        <div>
+-->
+        
+        <V-New-Search></V-New-Search>
+<!--        <div>-->
+<!--
             <el-form ref="form" :model="form" label-width="180px">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -126,46 +131,47 @@
             <el-button @click="search" type="primary">Search</el-button>
             <el-button @click="clear" type="info" plain>Clear</el-button>
         </div>
+-->
     </div>
 </template>
 
 <script>
-
     // import {dropDown} from '@/components/index'
-
+    import VNewSearch from '../../product/addProduct.vue'
     export default {
         name: "fromnewsearch",
-        components:{
-            // dropDown
+        components: {
+            // dropDown,
+            VNewSearch
         },
-        props:{
+        props: {
 
         },
-        data(){
-            return{
-                value:1,
-                hideBody:true,            //是否显示body
-                btnInfo:'Show the Advance',
-                formItem:{
-                    Category:'',
-                    SKUName:'',
-                    ReadilyAvailable:'',
-                    SKUCode:'',
-                    minEXWPrice:0,
-                    maxEXWPrice:0,
-                    VendorSKUCode:'',
-                    VendorSKUName:'',
-                    minIncotermPrice:0,
-                    maxIncotermPrice:0,
-                    SKUMaterials:'',
-                    Country:'',
-                    SupplierName:'',
-                    PackageType:'',
-                    ProductPackageType:'',
-                    DeliveryDays:'',
-                    MOQ:'',
-                    SKUDescription:'',
-                    VendorSKUDescription:''
+        data() {
+            return {
+                value: 1,
+                hideBody: true, //是否显示body
+                btnInfo: 'Show the Advance',
+                formItem: {
+                    Category: '',
+                    SKUName: '',
+                    ReadilyAvailable: '',
+                    SKUCode: '',
+                    minEXWPrice: 0,
+                    maxEXWPrice: 0,
+                    VendorSKUCode: '',
+                    VendorSKUName: '',
+                    minIncotermPrice: 0,
+                    maxIncotermPrice: 0,
+                    SKUMaterials: '',
+                    Country: '',
+                    SupplierName: '',
+                    PackageType: '',
+                    ProductPackageType: '',
+                    DeliveryDays: '',
+                    MOQ: '',
+                    SKUDescription: '',
+                    VendorSKUDescription: ''
                 },
 
                 form: {
@@ -179,66 +185,61 @@
                     desc: ''
                 },
 
-                number:'',
+                number: '',
 
 
 
-                dataList:[
-                    {
-                        title: 'parent 1',
-                        expand: true,
-                        selected: true,
-                        children: [
-                            {
-                                title: 'parent 1-1',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-1-1',
-                                        checked:true,
-                                        isActive:true,
-                                        disabled: false
-                                    },
-                                    {
-                                        title: 'leaf 1-1-2',
-                                        isActive:true,
-                                        disabled: false
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'parent 1-2',
-                                expand: true,
-                                children: [
-                                    {
-                                        title: 'leaf 1-2-1',
-                                        isActive:true,
-                                        checked: false
-                                    },
-                                    {
-                                        isActive:true,
-                                        title: 'leaf 1-2-2'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+                dataList: [{
+                    title: 'parent 1',
+                    expand: true,
+                    selected: true,
+                    children: [{
+                            title: 'parent 1-1',
+                            expand: true,
+                            children: [{
+                                    title: 'leaf 1-1-1',
+                                    checked: true,
+                                    isActive: true,
+                                    disabled: false
+                                },
+                                {
+                                    title: 'leaf 1-1-2',
+                                    isActive: true,
+                                    disabled: false
+                                }
+                            ]
+                        },
+                        {
+                            title: 'parent 1-2',
+                            expand: true,
+                            children: [{
+                                    title: 'leaf 1-2-1',
+                                    isActive: true,
+                                    checked: false
+                                },
+                                {
+                                    isActive: true,
+                                    title: 'leaf 1-2-2'
+                                }
+                            ]
+                        }
+                    ]
+                }]
             }
         },
-        methods:{
+        methods: {
             //切换body的收缩展开状态
-            switchDisplay(){
-                this.hideBody=!this.hideBody;
+            switchDisplay() {
+                this.hideBody = !this.hideBody;
             },
 
             //清除填写的表格数据
-            clear(name){
+            clear(name) {
                 console.log(1)
             },
 
             //搜查
-            search(){
+            search() {
                 console.log(this.dataList)
                 this.$router.push('/product/bookmarkDetail');
                 // window.open('http://192.168.51.228、:8080/#/product');
@@ -249,60 +250,65 @@
                 console.log(value);
             }
         },
-        created(){
+        created() {
 
         },
-        watch:{
-            hideBody(n){
-                if(n){
-                    this.btnInfo='Show the Advance';
-                }else{
-                    this.btnInfo='Hide the Advance';
+        watch: {
+            hideBody(n) {
+                if (n) {
+                    this.btnInfo = 'Show the Advance';
+                } else {
+                    this.btnInfo = 'Hide the Advance';
                 }
             }
         }
     }
+
 </script>
 
 <style scoped>
-
-    .bookmark{
+    .bookmark {
         padding-right: 20px;
     }
-    .title{
+
+    .title {
         width: 100%;
-         display: flex;
+        display: flex;
         justify-content: flex-end;
     }
- 
 
-    .body{
+
+    .body {
         overflow: hidden;
         max-height: 1400px;
         display: block;
-        transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
+        transition: max-height .5s cubic-bezier(.445, .05, .55, .95);
     }
-    .hide{
+
+    .hide {
         max-height: 0;
 
     }
 
-    .form-spelist{
+    .form-spelist {
         margin-bottom: 10px !important;
     }
-    .form-spelist >>> .ivu-form-item-content{
+
+    .form-spelist>>>.ivu-form-item-content {
         line-height: normal;
     }
 
-    .form-list{
+    .form-list {
         margin-bottom: 10px;
     }
 
-    .btn-group{
+    .btn-group {
         text-align: center;
         margin-top: 10px;
     }
-    .btn-group .search{
+
+    .btn-group .search {
         margin-right: 30px;
     }
+
 </style>

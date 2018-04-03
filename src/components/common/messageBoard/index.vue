@@ -83,9 +83,11 @@
 <style lang="less" scoped>
     .messagelist {
         border: 1px solid #BEBEBE;
-        height: 600px;
-        width: 300px;
+        height: 100%;
+        width: 100%;
+        padding:10px 0;
         border-radius: 5px;
+        box-sizing: border-box;
     }
 
     .list {

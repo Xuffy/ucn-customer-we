@@ -9,7 +9,7 @@
              <i class="el-icon-remove" @click='deleteFile'></i>
         </span>      
     </div>
-     <upload class='upload' @uploadsuccess='uploadsuccess'></upload>
+     <upload class='upload' @getres='getres'></upload>
     </div>
 </template>
 <script>
@@ -37,8 +37,8 @@
             deleteFile(){
                 
             },
-            uploadsuccess(data){
-              this.$emit('uploadsuccess',data)  //上传成功一层一层通知父组件
+            getres(data){
+              this.$emit('getres',data)  //上传成功一层一层通知父组件
             }
         }
     }

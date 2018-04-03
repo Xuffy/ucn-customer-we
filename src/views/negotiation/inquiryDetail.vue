@@ -7,7 +7,7 @@
                 <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
             </el-checkbox-group>
         </div>
-        <div class="container">
+        <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
@@ -18,16 +18,7 @@
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
-                        <div class="form-wrap">
-                            <v-simple-table :column="tabColumn" :data.sync="tabData" />
-                        </div>
-                        <div class="message-board-wrap" :class="{'active':switchStatus}">
-                            <div class="con"><message-board :list="list" @sub="submit" /></div>
-                            <div class="switch-btn" @click="boardSwitch">
-                                {{$t('negotiation.text.messageBoard')}}
-                                <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
-                            </div>
-                        </div>
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
                     </div>
                 </div>
                 <div class="basic-info">
@@ -40,7 +31,7 @@
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button type="info">{{$t('negotiation.btn.addProduct')}}</el-button>
+                            <el-button type="primary"  @click="newSearchDialogVisible = true">{{$t('negotiation.btn.addProduct')}}</el-button>
                             <el-button type="info">{{$t('negotiation.btn.remove')}}</el-button>
                         </div>
                         <select-search :options="options" />
@@ -57,7 +48,26 @@
                     </div>
                 </div>
             </div>
+            <div class="message-board-wrap">
+                <div class="con"><message-board :list="list" @sub="submit" /></div>
+                <div class="switch-btn" @click="boardSwitch">
+                    {{$t('negotiation.text.messageBoard')}}
+                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
+                </div>
+            </div>
         </div>
+
+        <el-dialog
+                title="Add Product"
+                :visible.sync="newSearchDialogVisible"
+                width="80%"
+                lock-scroll>
+            <v-product :hideBtns="true"></v-product>
+             <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
+                <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -75,10 +85,12 @@
     */
     import { messageBoard, selectSearch, VSimpleTable } from '@/components/index';
     import { getData } from '@/service/base';
+    import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                newSearchDialogVisible:false,
                 tabColumn: [],
                 tabData: [],
                 checkList:[],
@@ -112,7 +124,8 @@
         components: {
             'message-board':messageBoard,
             'select-search':selectSearch,
-            'v-simple-table': VSimpleTable
+            'v-simple-table': VSimpleTable,
+            'v-product': product
         },
         created() {
             this.ajax({
@@ -120,7 +133,7 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res;
-                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview', { width: '130vw' });
+                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview');
             });
         },
         methods: {
@@ -163,22 +176,22 @@
         }
         .container {
             display:flex;
+            &.active {
+                .table-wrap {
+                    width: 100%;
+                }
+                .message-board-wrap {
+                    width: 0;
+                }
+            }
             .table-wrap {
-                width:100%;
+                width:80%;
                 .basic-info {
                     width:100%;
                     padding:0 10px;
                     box-sizing: border-box;
                     .tab-msg-wrap {
-                        display:flex;
-                        overflow: hidden;
-                        width:100%;
-                        .form-wrap {
-                            flex:1;
-                        }
-                        .message-board-wrap {
-                            
-                        }
+                        padding-right:25px;
                     }
                     .basesic-hd {
                         display:flex;
@@ -235,12 +248,13 @@
             }
             .message-board-wrap {
                 position:relative;
-                width:302px;
-                transition: max-width .5s cubic-bezier(.445,.05,.55,.95);
-                &.active {
-                    max-width:0;
-                }
+                width:300px;
+                height:100%;
+                margin-top:1px;
+                background:#fff;
+                z-index:11;
                 .con {
+                    width: 100%;
                     overflow: hidden;
                 }
                 .switch-btn {
@@ -274,5 +288,20 @@
                 }
             }
         }
+    }
+    @media screen and (max-width: 1023px) {
+        .inquiryDetail .container .table-wrap {
+             width:100%;
+         }
+       .inquiryDetail .container .message-board-wrap {
+           position: fixed;
+           right:0;
+           top:100px;
+           z-index:999;
+           width:0;
+           &.active {
+                width:300px;
+            }
+        } 
     }
 </style>
