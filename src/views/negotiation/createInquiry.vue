@@ -173,7 +173,7 @@
         <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="dialogFormVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
+                <el-button type="primary" @click="dialogTableVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
                 <el-button type="info">{{ $t('negotiation.btn.remove') }}</el-button>
             </div>
             <select-search :options="options" />
@@ -184,17 +184,22 @@
             <el-button type="primary">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
-        <el-dialog title="Add product" :visible.sync="dialogFormVisible">
-            <!-- <add-product-msg /> -->
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-            </div>
+        <el-dialog
+                title="Add Product"
+                :visible.sync="dialogTableVisible"
+                width="80%"
+                lock-scroll>
+            <v-product :hideBtns="true"></v-product>
+             <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogTableVisible = false">OK</el-button>
+                <el-button @click="dialogTableVisible = false">Cancel</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
 <script>
     import { selectSearch, VSimpleTable } from '@/components/index';
+    import product from '@/views/product/addProduct';
     export default {
         name:'createInquiry',
         data() {
@@ -203,7 +208,6 @@
                 dialogFormVisible: false,
                 tabColumn: [],
                 tabData: [],
-
                 options:[{
                     id:'1',
                     label:'dada'
@@ -274,7 +278,8 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-simple-table': VSimpleTable
+            'v-simple-table': VSimpleTable,
+            'v-product': product
         },
         created() {
             this.ajax({

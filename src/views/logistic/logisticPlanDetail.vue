@@ -371,6 +371,7 @@
             padding:10px;
             box-sizing: border-box;
             border-top:1px solid #cdcc;
+            z-index:11;
         }
         .fix-btn-station {
             width: 100%;

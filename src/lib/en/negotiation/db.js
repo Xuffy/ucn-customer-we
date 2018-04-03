@@ -165,7 +165,16 @@ const tableCompareOverview = {
     compareTime: "compare time",
     compareName: "compare name",
     compareItem: "compare item",
-    operater: "operater"
+    operater: "operater",
+    inquiryNo: "inquiryNo",
+    quotationNo: "quotationNo",
+    status: "status",
+    supplier: "SKUQty",
+    inquiryValue: "inquiryValue",
+    currency: "currency",
+    incoterm: "incoterm",
+    port: "port",
+    inquiryRemark: "inquiryRemark"
 };
 
 const tableCompareOverviewSelect = { 

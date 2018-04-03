@@ -34,7 +34,6 @@ export const routerMap = [
       component: Layout,
       redirect: '/workbench',
       name: 'Workbench',
-      noDropdown: true,
       children: [
         {
           path: 'index',
@@ -129,7 +128,6 @@ export const routerMap = [
         component: Layout,
         redirect: '/supplier/picture',
         name: 'Supplier',
-        noDropdown: true,
         children: [
             {
                 path: 'SupplierSourcing',
@@ -170,7 +168,6 @@ export const routerMap = [
       component: Layout,
       redirect: '/negotiation/inquiryOverview',
       name: 'negotiation',
-      noDropdown: true,
       children: [
         {
           path: 'inquiryOverview',
@@ -270,7 +267,6 @@ export const routerMap = [
       component: Layout,
       redirect: '/warehouse/overview',
       name: 'Warehouse',
-      noDropdown: true,
       children: [
         {
           path: 'overview',
@@ -374,7 +370,6 @@ export const routerMap = [
         component: Layout,
         redirect: '/track/trackBySKU',
         name: 'Track',
-        noDropdown: true,
         children: [
             {
                 path: 'trackBySKU',
