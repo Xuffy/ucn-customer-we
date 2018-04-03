@@ -12,13 +12,21 @@
               <el-input v-model="input" placeholder="Please enter"></el-input>
               <el-button type="primary" icon="el-icon-search">{{$t('order.buttonname.search')}}</el-button>
         </div>
+        <div>
+             <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        </div>
     </div>
 </template>
 
 <script>
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: "FromBookmark",
-        components: {},
+        components: {
+            VSimpleTable
+        },
         props: {
 
         },
@@ -35,14 +43,28 @@
                     label: this.$t('order.buttonname.skuCode')
                 }],
                 value: '', //下拉框值
-                input: '' //输入框内容
+                input: '', //输入框内容
+                tabColumn: [],
+                tabData: []
             }
         },
         methods: {
 
         },
         created() {
-
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
         },
         watch: {
 

@@ -48,11 +48,11 @@
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary">{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.supplierProducts')}}</el-button>
-                    <el-button >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
+                    <el-button type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button type="primary" @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button type="primary" @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button @click='addToBookmark'>{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
@@ -126,7 +126,30 @@
                 tabData: []
             }
         },
-        methods: {},
+        methods: {
+            createInquiry(){
+                 this.$router.push({
+                    name: 'createInquiry',
+                    query: {
+                        
+                    }
+                })
+            },
+            createOrder(){
+                 this.$router.push({
+                    name: 'creatOrder',
+                    query: {
+                        
+                    }
+                })
+            },
+            addToCompare(){
+                
+            },
+            supplierProducts(){
+                
+            },
+        },
         created() {
             this.ajax.get('/sourcingDetailAdress', {
                     params: {}

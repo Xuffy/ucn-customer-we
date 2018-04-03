@@ -1,7 +1,7 @@
 <template>
      <div class="qc_order">
              <div class="pro_title">
-                 {{$t('order.qcorder.qcOrder')}}
+                {{title}}
              </div>
              <div class="QC_file">
                   <div class="QC_file_item">
@@ -18,6 +18,20 @@
 <script>
     export default {
         name: 'qcOrder',
+        props: {
+            list: {
+                type: Array,
+                default: function() {
+                    return [{
+
+                    }]
+                }
+            },
+            title: {
+                type: String,
+                default: this.$t('order.qcorder.qcOrder')
+            }
+        },
         data() {
             return {
 

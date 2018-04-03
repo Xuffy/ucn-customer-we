@@ -62,9 +62,9 @@
             <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.compare')}}</el-button>
+                  <el-button  type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button  type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button  type="primary" @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>
                   <el-button  type="primary" >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                   <el-button  type="primary" >{{$t('supplier.buttonname.downloadTheSelectedSupplier')}}</el-button>
               </div>  
@@ -81,7 +81,9 @@
     import {
         dropDown
     } from '@/components/index'
-    import {VSimpleTable } from '@/components/index';
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
@@ -105,8 +107,8 @@
                     vendorSKUcode: '',
                     description: '',
                 },
-                  tabColumn:[],
-                  tabData:[]
+                tabColumn: [],
+                tabData: []
             }
         },
         methods: {
@@ -124,20 +126,48 @@
             search() {
                 this.$router.push('/product/detail');
             },
-        },
-        created() {        
-              this.ajax.get('/supplierOverview', {
-                    params: {
+            //....跳入createInquiry
+            createInquiry() {
+                this.$router.push({
+                    name: 'createInquiry',
+                    query: {
+                        
                     }
-                  })
-                  .then( res => {
-                    this.tabData=res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData",{width:'180px'});
+                })
+            },
+            //....跳入createOrder
+            createOrder(){
+                 this.$router.push({
+                    name: 'creatOrder',
+                    query: {
+                        
+                    }
+                })
+            },
+            //........跳入compare
+            compare(){
+                this.$router.push({
+                    name: 'SupplierCompare',
+                    query: {
+                        
+                    }
+                })
+            }
+        },
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
                     console.log(this.tabColumn)
-                  })
-                  .catch((res)=>{
+                })
+                .catch((res) => {
                     console.log(res);
-                  });
+                });
         },
         watch: {
             hideBody(n) {
@@ -220,10 +250,13 @@
         margin-right: 8px;
         margin-top: 20px;
     }
-    .el-select{
-      width:240px
+
+    .el-select {
+        max-width: 200px
     }
-    .el-input{
-        width: 240px;
+
+    .el-input {
+        max-width: 200px;
     }
+
 </style>
