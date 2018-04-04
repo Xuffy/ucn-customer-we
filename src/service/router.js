@@ -19,9 +19,9 @@ export const routerMap = [
       }]
     },
     {
-      path:'/dome',
+      path:'/demo',
       hidden: true,
-      component: () => import('../views/dome')
+      component: () => import('../views/demo')
     },
     {
       path: '/login',

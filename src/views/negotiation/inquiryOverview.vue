@@ -13,8 +13,8 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">{{ $t('negotiation.btn.Compare')  }}</el-button>
-                <el-button type="primary">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
+                <el-button type="primary"  @click="windowOpen('/negotiation/compare')">{{ $t('negotiation.btn.Compare')  }}</el-button>
+                <el-button type="primary"  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
                 <el-button>{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
                 <el-button>{{ $t('negotiation.btn.Delete')  }}</el-button>
             </div>
@@ -94,6 +94,10 @@
                         this.tabColumn = this.$getTableColumn(res.SKU, 'negotiation.tableViewBySKU');
                     }
                 })
+            },
+            windowOpen(str) {
+                const url = `${window.location.origin}/#${str}`;
+                window.open(url);
             }
         }
     }

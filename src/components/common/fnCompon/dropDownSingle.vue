@@ -1,37 +1,39 @@
 <template>
     <div class="dropDown">
-		<el-dropdown trigger="click">
-			<div class="checkInputBox" :class="{'active':status}">
-				<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
-				<div class="dataBox">
-					<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
+		<el-popover
+				ref="popover5"
+				:placement="placement"
+				trigger="click"
+				v-model="visible"
+			>
+			<div class="deepBox">
+				<el-input
+					:placeholder="searchPlaceholder"
+					v-model="filterText">
+				</el-input>
+				<div class="deep" :style="{'height':treeHeight}">
+					<el-tree
+						default-expand-all
+						ref="tree"
+						:empty-text="emptyText"
+						:data="list"
+						node-key="id"  
+						:props="defaultProps"
+						:expand-on-click-node="false"
+						@node-click="getChecked"
+					>
+					</el-tree>
 				</div>
-				<i class="el-icon-arrow-down"></i>
 			</div>
-			<el-dropdown-menu slot="dropdown">
-				<div class="deepBox">
-					<el-input
-						:placeholder="searchPlaceholder"
-						v-model="filterText">
-					</el-input>
-					<div class="deep" :style="{'height':treeHeight}">
-						<el-tree
-							default-expand-all
-							:filter-node-method="filterNode"
-							ref="tree"
-							:empty-text="emptyText"
-							:data="list"
-							show-checkbox
-							node-key="id"  
-							:props="defaultProps"
-							@check="getChecked"
-                            check-strictly
-						>
-						</el-tree>
-					</div>
-				</div>
-			</el-dropdown-menu>
-		</el-dropdown>
+		</el-popover>
+		
+		<div class="checkInputBox" v-popover:popover5>
+			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
+			<div class="dataBox" v-show="selectedList">
+				<span>{{selectedList.label}}</span>
+			</div>
+			<i class="el-icon-arrow-down"></i>
+		</div>
     </div>
 </template>
 
@@ -43,32 +45,21 @@
 	 * @param { checkInputBoxPl } - 操作框提示文字
 	 * @param { list } - 树型组件数组
 	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.status 取值
-	 * @param { getChecked } -methods 当复选框被点击的时候触发 返回值getChecked 
+	 * @param { getChecked } -methods 选择触发 返回值getChecked 
 	 * @param { treeHeight } - 树高度 默认 200
 	*/ 
 	export default {
 		data() {
 			return {
 				filterText: '',
-				selectedList:[],
+				selectedList:'',
 				defaultProps: {
 					children: 'children',
                     label: 'label',
-                    disabled: (data, node) => {
-                        if(data.children) return true;
-                    }
 				},
 				data:[],
-				status: false,
-				dropDownMouse: false
+				visible: false
 			};
-		},
-		mounted() {
-			this.$nextTick(() => {
-				document.onclick = () => {
-					this.status = false;
-				}
-			})
 		},
 		props: {
 			emptyText: {
@@ -90,6 +81,10 @@
 			treeHeight: {
 				type: String,
 				default: '200px'
+			},
+			placement: {
+				type: String,
+				default: 'bottom'
 			}
 		},
 		watch: {
@@ -98,34 +93,9 @@
 			},
 		},
 		methods: {
-			filterNode(value, data) {
-				if (!value) return true;
-				return data.label.indexOf(value) !== -1;
-			},
 			getChecked(item) {
-                const listForEach = (list) => {
-                    list.forEach(nodes => {
-                        if(nodes.id === item.id) {
-                            this.$refs.tree.setChecked(nodes.id, true);
-                        } else {
-                            this.$refs.tree.setChecked(nodes.id, false);
-                        }
-                        if(!nodes.children) return;
-                        listForEach(nodes.children);
-                    });
-                };
-                listForEach(this.list);
-				this.selectedList = this.$refs.tree.getCheckedNodes(true);
-			},
-			del(item, index) {
-				this.selectedList.splice(index, 1);
-				const ergodic = (val, selectedList) => {
-					selectedList.forEach(nodes => {
-						if (nodes.label === val.label) return this.$refs.tree.setChecked(nodes.id, false);
-						if (nodes.children && nodes.children.length) return ergodic(val, nodes.children)
-					});
-				};
-				ergodic(item, this.list);
+				this.selectedList = item;
+				this.visible = false;
 			}
 		}
 	};
@@ -139,6 +109,7 @@
 <style scoped lang="less">
 	.deepBox {
 		padding:10px;
+		background:#fff;
 		.deep {
 			margin-top:10px;
 			max-height:200px;
@@ -191,8 +162,11 @@
 			}
 		}
 		.checkInputBoxPl {
+			position: absolute;
+			left:10px;
+			top:50%;
+			transform: translate(0, -50%);
 			color:#999;
-			line-height:40px;
 			font-weight: normal;
 			font-size: 12px;
 		}

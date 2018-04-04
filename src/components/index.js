@@ -11,8 +11,11 @@ import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
 // import product from '../views/product/addProduct';
+import compareList from '@/views/product/compareList';
 
 import bigPhoto from './common/bigPhoto/bigPhoto';
+import containerInfo from '@/views/logistic/children/containerInfo';
+import dropDownSingle from './common/fnCompon/dropDownSingle';
 
 export {
   VSimpleTable,
@@ -28,5 +31,8 @@ export {
   messageBoard,
   selectSearch,
   // product,                      //product页面组件
-    bigPhoto
+    bigPhoto,
+    compareList,
+    containerInfo,
+    dropDownSingle
 }

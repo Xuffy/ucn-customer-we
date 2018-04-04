@@ -164,15 +164,13 @@
             </el-col>  
         </el-row>
         <div class="hd">Container Info</div>
-        <div class="btn-wraps">
-            <el-button type="primary">添加</el-button>
-            <el-button>删除</el-button>
-        </div>
-        <el-table :data="tableData" tooltip-effect="dark" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="30" />
-            <el-table-column prop="date" label="Product" width="180" />
-            <el-table-column prop="name" label="Container Amount" idth="180" />
-        </el-table>
+        <v-container-info 
+            :tableData="tableData" 
+            @tabAppend="tabAppend" 
+            @tailBtnCancel="tailBtnCancel"
+            @tailBtnOk="tailBtnOk"
+            @tabSplite="tabSplite"
+        />
         <div class="hd">费用</div>
         <div class="cost-wrap">
             <div class="thead">
@@ -305,7 +303,7 @@
     </div>
 </template>
 <script>
-    import { VSimpleTable } from '@/components/index';
+    import { VSimpleTable, containerInfo } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
@@ -319,24 +317,25 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: 'Today',
-                        onClick(picker) {
-                        picker.$emit('pick', new Date());
+                    shortcuts: [
+                        {
+                            text: 'Today',
+                            onClick(picker) {
+                            picker.$emit('pick', new Date());
                         }
                     }, {
                         text: 'Yesterday',
                         onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
                         }
                     }, {
                         text: 'A week ago',
                         onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
                         }
                     }]
                 },
@@ -384,11 +383,24 @@
             }
         },
         components: {
-            "v-simple-table": VSimpleTable
+            "v-simple-table": VSimpleTable,
+            "v-container-info": containerInfo
         },
         methods: {
-            handleSelectionChange(val) {
-                console.log(val)
+            tabAppend() {
+                this.tableData.push({})
+            },
+            tailBtnCancel() {
+                this.tableData.pop();
+            },
+            tailBtnOk(item) {
+                this.tableData.pop();
+                this.tableData.push(item);
+            },
+            tabSplite(item) {
+                _.map(item, (list) => {
+                    this.tableData.splice(list.index, 1);
+                });
             }
         },
         created() {
@@ -424,10 +436,7 @@
             line-height:40px;
             border-bottom:1px solid #ccc;
             padding:0 15px;
-        }   
-        .btn-wraps {
-            padding:10px 0;
-        }
+        }  
         .cost-wrap {
             width:100%;
             overflow-x: auto;
