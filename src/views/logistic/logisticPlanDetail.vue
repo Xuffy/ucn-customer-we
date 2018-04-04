@@ -221,10 +221,19 @@
                 </div>
             </el-col>
         </el-row>
-        <div class="hd">Product Information</div>
+        <div class="hd">{{ $t('logistic.text.containerInfo') }}</div>
+        <v-container-info 
+            :tableData="tableData" 
+            @tabAppend="tabAppend" 
+            @tailBtnCancel="tailBtnCancel"
+            @tailBtnOk="tailBtnOk"
+            @tabSplite="tabSplite"
+        />
+
+        <div class="hd">Product Info</div>
         <div class="btn-wrap">
             <div>
-                <el-button type="primary">Add product</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = true">Add product</el-button>
                 <el-button>Remove</el-button>
             </div>
         </div>
@@ -232,14 +241,25 @@
         <div class="fix-btn">
             <el-button type="primary">Modify</el-button>
             <el-button type="primary">Sent as Order</el-button>
-            <el-button type="primary">Copy</el-button>
             <el-button>Delete</el-button>
         </div>
         <div class="fix-btn-station"></div>
+        <el-dialog
+                title="Add Product"
+                :visible.sync="newSearchDialogVisible"
+                width="80%"
+                lock-scroll>
+            <v-select-search :options="['1', 0]" />
+            <v-simple-table :column="tabColumn" :data.sync="tabData" />
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
+                <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
-    import { VSimpleTable } from '@/components/index';
+    import { VSimpleTable, containerInfo, selectSearch } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
@@ -247,6 +267,7 @@
                 tabColumn: [],
                 tabData: [],
                 date:'',
+                newSearchDialogVisible:false,
                 pickerOptions:{
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -301,11 +322,20 @@
                 shipmentOptions: [],
                 shipment: '',
                 destinationOptions: [],
-                destination: ''
+                destination: '',
+                tableData: [{
+                    Product: "Product",
+                    containerAmount: "Container Amount"
+                },{
+                    Product: "Product",
+                    containerAmount: "Container Amount"
+                }]
             }
         },
         components: {
-            "v-simple-table": VSimpleTable
+            "v-simple-table": VSimpleTable,
+            "v-container-info": containerInfo,
+            "v-select-search": selectSearch
         },
         created() {
             this.ajax({
@@ -315,6 +345,23 @@
                 this.tabData = res.Inquiry;
                 this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareByInquiry', { width:200 });
             });
+        },
+        methods: {
+            tabAppend() {
+                this.tableData.push({})
+            },
+            tailBtnCancel() {
+                this.tableData.pop();
+            },
+            tailBtnOk(item) {
+                this.tableData.pop();
+                this.tableData.push(item);
+            },
+            tabSplite(item) {
+                _.map(item, (list) => {
+                    this.tableData.splice(list.index, 1);
+                });
+            }
         }
     }
 </script>

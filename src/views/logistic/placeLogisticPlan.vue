@@ -232,6 +232,15 @@
                 </div>
             </el-col>
         </el-row>
+        <div class="hd">{{ $t('logistic.text.containerInfo') }}</div>
+        <v-container-info 
+            :tableData="tableData" 
+            @tabAppend="tabAppend" 
+            @tailBtnCancel="tailBtnCancel"
+            @tailBtnOk="tailBtnOk"
+            @tabSplite="tabSplite"
+        />
+        
         <div class="hd">{{ $t('logistic.text.productInfo') }}</div>
         <div class="btn-wrap">
             <div>
@@ -250,10 +259,10 @@
                 title="Add Product"
                 :visible.sync="newSearchDialogVisible"
                 width="80%"
-                :before-close="handleClose"
                 lock-scroll>
-            <v-product :hideBtns="true"></v-product>
-             <span slot="footer" class="dialog-footer">
+            <v-select-search :options="['1', 0]" />
+            <v-simple-table :column="tabColumn" :data.sync="tabData" />
+            <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
                 <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
             </span>
@@ -261,8 +270,7 @@
     </div>
 </template>
 <script>
-    import { VSimpleTable } from '@/components/index';
-    import product from '@/views/product/addProduct';
+    import { VSimpleTable, containerInfo, selectSearch } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
@@ -326,7 +334,11 @@
                 Carrier:'',
                 Container: '',
                 depature:'',
-                departure:''
+                departure:'',
+                tableData: [{
+                    Product: "Product",
+                    containerAmount: "Container Amount"
+                }]
             }
         },
         created() {
@@ -340,15 +352,24 @@
         },
         components: {
             "v-simple-table": VSimpleTable,
-            'v-product': product
+            "v-container-info": containerInfo,
+            "v-select-search": selectSearch
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {});
+            tabAppend() {
+                this.tableData.push({})
+            },
+            tailBtnCancel() {
+                this.tableData.pop();
+            },
+            tailBtnOk(item) {
+                this.tableData.pop();
+                this.tableData.push(item);
+            },
+            tabSplite(item) {
+                _.map(item, (list) => {
+                    this.tableData.splice(list.index, 1);
+                });
             }
         }
     }

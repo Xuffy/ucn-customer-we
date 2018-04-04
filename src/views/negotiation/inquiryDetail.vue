@@ -37,15 +37,20 @@
                         <select-search :options="options" />
                     </div>
                     <v-simple-table :column="tabColumn" :data.sync="tabData" />
-                    <div class="bom-btn-wrap">
+                    <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button type="primary">{{$t('negotiation.btn.accept')}}</el-button>
-                        <el-button type="primary">{{$t('negotiation.btn.createOrder')}}</el-button>
-                        <el-button type="primary">{{$t('negotiation.btn.addToCompare')}}</el-button>
+                        <el-button type="primary" @click="windowOpen('/order/creatOrder')">{{$t('negotiation.btn.createOrder')}}</el-button>
+                        <el-button type="primary" @click="compareConfig.showCompareList = true;">{{$t('negotiation.btn.addToCompare')}}</el-button>
                         <el-button type="primary">{{$t('negotiation.btn.copy')}}</el-button>
-                        <el-button type="primary">{{$t('negotiation.btn.modify')}}</el-button>
-                        <el-button type="primary">{{$t('negotiation.btn.createInquiry')}}</el-button>
+                        <el-button type="primary" @click="statusModify = true">{{$t('negotiation.btn.modify')}}</el-button>
+                        <el-button type="primary" @click="windowOpen('/negotiation/createInquiry')">{{$t('negotiation.btn.createInquiry')}}</el-button>
                         <el-button>{{$t('negotiation.btn.cancel')}}</el-button>
                     </div>
+                    <div class="bom-btn-wrap" v-show="statusModify">
+                        <el-button type="primary" @click="modify">{{$t('negotiation.btn.submit')}}</el-button>
+                        <el-button type="primary" @click="modifyCancel">{{$t('negotiation.btn.cancel')}}</el-button>
+                    </div>
+                    <div class="bom-btn-wrap-box"></div>
                 </div>
             </div>
             <div class="message-board-wrap">
@@ -56,12 +61,17 @@
                 </div>
             </div>
         </div>
-
+        <v-compare-list :config="compareConfig" />
         <el-dialog
                 title="Add Product"
                 :visible.sync="newSearchDialogVisible"
                 width="80%"
-                lock-scroll>
+                lock-scroll
+            >
+            <el-radio-group v-model="radio" @change="fromChange">
+                <el-radio-button label="From New Search"></el-radio-button>
+                <el-radio-button label="From my bookmark"></el-radio-button>
+            </el-radio-group>
             <v-product :hideBtns="true"></v-product>
              <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
@@ -83,16 +93,21 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VSimpleTable } from '@/components/index';
+    import { messageBoard, selectSearch, VSimpleTable, compareList } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                radio: 'From New Search',
+                statusModify: false,
                 newSearchDialogVisible:false,
                 tabColumn: [],
                 tabData: [],
+                compareConfig:{
+                    showCompareList:false,      //是否显示比较列表
+                },
                 checkList:[],
                 ChildrenCheckList:[],
                 ProductCheckList:[],
@@ -125,7 +140,8 @@
             'message-board':messageBoard,
             'select-search':selectSearch,
             'v-simple-table': VSimpleTable,
-            'v-product': product
+            'v-product': product,
+            'v-compare-list': compareList
         },
         created() {
             this.ajax({
@@ -149,7 +165,16 @@
             },
             boardSwitch() {
                 this.switchStatus = !this.switchStatus;
-            }
+            },
+            modifyCancel() {
+                this.statusModify = false;
+            },
+            modify() {
+                this.statusModify = false;
+            },
+            fromChange(val) {
+               console.log(val)
+           }
         }
     }
 </script>
@@ -240,9 +265,21 @@
                     }
                     .bom-btn-wrap {
                         padding-top:20px;
+                        padding-left:10px;
+                        position: fixed;
+                        left:220px;
+                        bottom:0;
+                        background:#fff;
+                        z-index:99;
+                        width: 100%;
+                        box-shadow: 0 -1px 5px #ccc;
                         button {
                             margin-bottom:10px;
                         }
+                    }
+                    .bom-btn-wrap-box {
+                        width: 100%;
+                        height: 62px;
                     }
                 }
             }
