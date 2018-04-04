@@ -18,9 +18,11 @@
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
+                  :disabled='scope.row.item1||disabled'
+                  
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item1" v-else>
+                <el-input v-model="scope.row.item1"  :disabled='scope.row.item1||disabled' v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -31,23 +33,24 @@
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
-                  disabled='disabled'
+                  :disabled=true
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item2" v-else disabled='disabled'>
+                <el-input v-model="scope.row.item2" v-else :disabled=true>
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item3" :label="$t('order.responsibility.DesignNeedConfirmDate')"width="240">
+<el-table-column prop="item3" :label="$t('order.responsibility.DesignNeedConfirmDate')" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item3"
                   type="datetime"
                   placeholder="选择日期时间"
-                  v-if='scope.$index!=2'
+                  v-if='scope.$index!=2' 
+                   :disabled='disabled'              
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item3" v-else>
+                <el-input v-model="scope.row.item3"   :disabled='disabled' v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -58,10 +61,11 @@
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
-                  disabled='disabled'
+                  :disabled=true
+                  
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item4" v-else disabled='disabled'>
+                <el-input v-model="scope.row.item4" v-else :disabled=true>
                 </el-input>
         </template>
 </el-table-column>
@@ -72,9 +76,10 @@
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
+                  :disabled='disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item5" v-else>
+                <el-input v-model="scope.row.item5" :disabled='disabled' v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -85,9 +90,10 @@
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
+                  :disabled='disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item6" v-else>
+                <el-input v-model="scope.row.item6" :disabled='disabled' v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -101,6 +107,12 @@
         name: 'responsibility',
         components: {
 
+        },
+        props:{
+            disabled:{
+                type:Boolean,
+                default:true
+            }
         },
         data() {
             return {
@@ -116,7 +128,7 @@
                     item: 'Supplier',
                     item1: '',
                     item2: '',
-                    item3: '',
+                    item3: '1',
                     item4: '',
                     item5: '',
                     item6: '',
@@ -137,12 +149,15 @@
                     item5: '',
                     item6: '',
                 }],
-                value1: ''
+                value1: '',
             }
         },
         methods: {
 
         },
+       　watch:{
+　
+　　　　　　},
     }
 
 </script>

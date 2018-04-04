@@ -46,7 +46,9 @@ const buttonname = {
     cancelTheOrder: 'Cancel The Order',
     hideTheSame: 'Hide The Same',
     hightlightTheDifferent: 'Hightlight the Different',
-
+    //....................
+    send:'Send',
+    cancel:'Cancel'
 }
 export default {
     buttonname,

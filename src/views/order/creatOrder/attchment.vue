@@ -6,10 +6,10 @@
                  <i class="el-icon-document"></i>
                  <p>1234568</p>
             </span>       
-             <i class="el-icon-remove" @click='deleteFile'></i>
+             <i class="el-icon-remove" @click='deleteFile'  ></i>
         </span>      
     </div>
-     <upload class='upload' @getres='getres'></upload>
+     <upload class='upload' @getres='getres' :disabled='disabled'></upload>
     </div>
 </template>
 <script>
@@ -23,6 +23,10 @@
                 default: function(){
                     return []
                 }
+            },
+            disabled:{
+                type:Boolean,
+                default:true
             }
         },
         components:{
@@ -35,7 +39,7 @@
         },
         methods:{
             deleteFile(){
-                
+                console.log(123)
             },
             getres(data){
               this.$emit('getres',data)  //上传成功一层一层通知父组件

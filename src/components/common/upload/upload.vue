@@ -7,8 +7,9 @@
              :on-progress='handleProgress'
              :on-success="handleSuccess"
              :on-error='handleError'
-             :show-file-list="uploadList"              
+             :show-file-list="uploadList"           
              :before-upload='handelBefore'
+             :disabled='disabled'
             >
         <el-button size="small" type="primary" :loading="loadingStatus">
         <i class="el-icon-upload2"></i>{{ loadingStatus ? 'Uploading' : 'Upload files' }}</el-button>
@@ -35,6 +36,11 @@
                 type: String,
                 default: 'https://jsonplaceholder.typicode.com/posts/'
             },
+            //禁止上传状态
+            disabled:{
+                type:Boolean,
+                default:false
+            }
         },
         components: {
 

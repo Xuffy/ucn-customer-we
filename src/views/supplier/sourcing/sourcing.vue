@@ -22,7 +22,9 @@
     <!--                    下拉选择category-->
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
-                                  <drop-down class="speDropdown" style="position: absolute;width: 240px;height:40px;background-color: #ffffff;" :list="dropData" ref="dropDown"></drop-down>
+                                 <div class="speDropdown">
+                                     <drop-down  :list="dropData" ref="dropDown"></drop-down>
+                                </div>
                             </el-form-item>
                         </el-col>
                         </el-row>
@@ -258,5 +260,8 @@
     .el-input {
         max-width: 200px;
     }
-
+    .speDropdown{
+      max-width: 200px;
+      height: 30px;
+    }
 </style>
