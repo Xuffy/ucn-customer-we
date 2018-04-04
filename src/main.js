@@ -13,6 +13,9 @@ import lang from 'lib/lang'
 import ElementUI from 'element-ui';
 import store from './store';
 
+// 引入样式
+// import 'vue-easytable/libs/themes-base/index.css'
+
 Vue.use(api);
 Vue.use(util);
 Vue.use(VueI18n);
