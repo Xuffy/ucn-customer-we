@@ -2,7 +2,7 @@
   <div class="creatOrder">
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
-         <basicinfo ref='basicInfo'></basicinfo>
+         <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
            <div class="basicinfo_other">
     <!--                order remark-->
                     <el-row>
@@ -24,14 +24,14 @@
                              <div class="attchment">
                                 <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                 <div>
-                                    <attchment @uploadsuccess='uploadsuccess'></attchment>
+                                    <VAttchment @uploadsuccess='uploadsuccess'></VAttchment>
                                 </div>
                             </div>
                            </el-col>
                     </el-row>
                    </div>
 <!--             responsibility     -->
-         <responsibility></responsibility>
+         <VResponsibility></VResponsibility>
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
@@ -42,7 +42,7 @@
                   <el-button type='primary'>{{$t('order.buttonname.remove')}}</el-button>
              </div>
              <div class="pro_table">
-                
+                     <v-simple-table :column="tabColumn" :data.sync="tabData" />
              </div>
          </div>
 <!--         底部固定按钮区域-->
@@ -76,10 +76,10 @@
            <el-dialog :title="$t('order.buttonname.addProduct')"  :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$t('order.buttonname.fromNewSearch')" name="FromNewSearch">
-                            <FromNewSearch></FromNewSearch>
+                            <VFromNewSearch></VFromNewSearch>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('order.buttonname.fromMyBookmark')" name="FromMyBookmark">
-                            <FromBookmark></FromBookmark>
+                            <VFromBookmark></VFromBookmark>
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
@@ -88,22 +88,26 @@
 
 <script>
     /*
-                                                       从子组件里面拿的值，这里通过ref拿的
-                                                       this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
-                                                    */
-    import responsibility from './responsibility.vue'
-    import basicinfo from './basicinfo.vue'
-    import FromNewSearch from './FromNewSearch.vue'
-    import FromBookmark from './FromBookmark.vue'
-    import attchment from './attchment'
+                        从子组件里面拿的值，这里通过ref拿的
+                        this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
+                                                                    */
+    import VResponsibility from './responsibility.vue'
+    import VBasicinfo from './basicinfo.vue'
+    import VFromNewSearch from './FromNewSearch.vue'
+    import VFromBookmark from './FromBookmark.vue'
+    import VAttchment from './attchment'
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: 'creatOrder',
         components: {
-            responsibility,
-            basicinfo,
-            FromNewSearch,
-            FromBookmark,
-            attchment
+            VResponsibility,
+            VBasicinfo,
+            VFromNewSearch,
+            VFromBookmark,
+            VAttchment,
+            VSimpleTable
         },
         data() {
             return {
@@ -120,11 +124,25 @@
                 }, {
                     id: '2',
                     label: 'Sku Code'
-                }, ]
+                }, ],
+                tabColumn: [],
+                tabData: []
             }
         },
         created() {
-
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
         },
         mounted() {
 
@@ -199,6 +217,7 @@
         height: 60px;
         background-color: white;
         position: fixed;
+        z-index: 60;
         bottom: 0;
         line-height: 60px;
     }

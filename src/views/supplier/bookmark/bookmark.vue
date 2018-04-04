@@ -22,7 +22,7 @@
 <!--                    下拉选择category-->
                   <el-col :xs="24" :sm="12" :md="8" :lg="8">
                         <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
-                              <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;z-index: 2000" :list="dropData" ref="dropDown"></drop-down>
+                              <drop-down class="speDropdown" style="position: absolute;width: 100%;background-color: #ffffff;" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
                     </el-row>
@@ -62,10 +62,10 @@
         <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.compare')}}</el-button>             
-                  <el-button  type="primary" >{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
+                  <el-button  type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button  type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button  type="primary"  @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>             
+                  <el-button  type="primary">{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
 <!--                  remove按钮-->
                    <el-button  type="info" :disabled='disabled' >{{$t('supplier.buttonname.remove')}}</el-button>
               </div>  
@@ -74,6 +74,8 @@
                 
               </div>          
         </div>
+        <!--        表格-->
+             <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 
@@ -81,10 +83,12 @@
     import {
         dropDown
     } from '@/components/index'
+    import {VSimpleTable } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
-            dropDown
+            dropDown,
+            VSimpleTable
         },
         props: {
 
@@ -105,6 +109,8 @@
                 },
                 //                remove
                 disabled: true,
+                 tabColumn:[],
+                  tabData:[]
             }
         },
         methods: {
@@ -117,14 +123,51 @@
             clear(name) {
                 this.$refs[name].resetFields();
             },
-
             //搜查
             search() {
                 this.$router.push('/product/detail');
             },
+            //........跳入createInquiry
+            createInquiry(){
+                this.$router.push({
+                    name:'createInquiry',
+                    query:{
+                        
+                    }
+                })
+            },
+              //........跳入createOrder
+            createOrder(){
+                this.$router.push({
+                    name:'creatOrder',
+                    query:{
+                        
+                    }
+                })
+            },
+              //........跳入createInquiry
+            compare(){
+                this.$router.push({
+                    name:'SupplierCompare',
+                    query:{
+                        
+                    }
+                })
+            }
         },
         created() {
-
+                  this.ajax.get('/supplierOverview', {
+                    params: {
+                    }
+                  })
+                  .then( res => {
+                    this.tabData=res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData",{width:'180px'});
+                    console.log(this.tabColumn)
+                  })
+                  .catch((res)=>{
+                    console.log(res);
+                  });
         },
         watch: {
             hideBody(n) {
@@ -207,5 +250,11 @@
         margin-right: 8px;
         margin-top: 20px;
     }
+    .el-select {
+            max-width: 200px
+        }
 
+    .el-input {
+        max-width: 200px;
+    }
 </style>

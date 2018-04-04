@@ -484,7 +484,7 @@
             </div>
             <i class="el-icon-setting"></i>
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
             <el-button type="primary">Modify</el-button>
             <el-button type="primary">Accept</el-button>
@@ -496,10 +496,13 @@
     </div>
 </template>
 <script>
+    import { VSimpleTable } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
                 data:[],
                 columns:'',
                 pickerOptions:{
@@ -621,6 +624,18 @@
                     Collect: ''
                 }]
             }
+        },
+        components: {
+            'v-simple-table': VSimpleTable
+        },
+        created() {
+            this.ajax({
+                url: '/viewByInquiry',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.inquiry;
+                this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+            });
         },
         methods: {
             handleSelectionChange(val) {

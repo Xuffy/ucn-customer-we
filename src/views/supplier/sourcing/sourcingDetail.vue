@@ -48,11 +48,11 @@
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary">{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.supplierProducts')}}</el-button>
-                    <el-button >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
+                    <el-button type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button type="primary" @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button type="primary" @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button @click='addToBookmark'>{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
@@ -61,28 +61,43 @@
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
+            <el-tabs v-model="tabName" type="card" >
                 
-                <el-tab-pane :label="$t('supplier.detail.adress')" name="adress">
-                   
+                <el-tab-pane :label="$t('supplier.detail.address')" name="address">
+                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.accountInfo')"  name="accountInfo">
-                    
+                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                   
+                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.tradeHistory')"  name="tradeHistory">
-                 
+                  <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.inquireHistory')"  name="inquireHistory">
-                            
+                   <v-simple-table :column="tabColumn" :data.sync="tabData" />     
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="remark">
 
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
-                   
+                  <div class="attchment">
+                   <div class="attchment_item">
+                    <div class="attchment_item_content">
+                        <i class="el-icon-document"></i>
+                         <p>产品介绍</p>
+                        <i class="el-icon-download"></i>
+                    </div>
+                    </div>
+                    <div class="attchment_item">
+                    <div class="attchment_item_content">
+                        <i class="el-icon-document"></i>
+                         <p>产品介绍</p>
+                        <i class="el-icon-download"></i>
+                    </div>
+                    </div>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -93,18 +108,63 @@
 </template>
 
 <script>
+    import {
+        VSimpleTable
+    } from '@/components/index';
+
     export default {
         name: "souringDetail",
         components: {
+            VSimpleTable,
 
         },
         data() {
             return {
                 noEdit: true,
-                tabName: 'adress' //默认打开的tab
+                tabName: 'address', //默认打开的tab
+                tabColumn: [],
+                tabData: []
             }
         },
-        methods: {}
+        methods: {
+            createInquiry(){
+                 this.$router.push({
+                    name: 'createInquiry',
+                    query: {
+                        
+                    }
+                })
+            },
+            createOrder(){
+                 this.$router.push({
+                    name: 'creatOrder',
+                    query: {
+                        
+                    }
+                })
+            },
+            addToCompare(){
+                
+            },
+            supplierProducts(){
+                
+            },
+        },
+        created() {
+            this.ajax.get('/sourcingDetailAdress', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.detail", {
+                        width: '220px'
+                    });
+
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>
@@ -198,6 +258,40 @@
 
     .speForm .el-row .list .el-input {
         width: 80%;
+    }
+
+    .attchment {
+        display: flex;
+        justify-content: flex-start;
+        height: 400px;
+    }
+
+    .attchment_item {
+        width: 180px;
+        height: 60px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border: 1px solid #BEBEBE;
+        border-radius: 3px;
+        margin-left: 20px;
+    }
+
+    .attchment_item_content {
+        width: 180px;
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+    }
+
+    .attchment_item p {
+        font-size: 14px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .attchment_item i {
+        font-size: 40px;
     }
 
 </style>

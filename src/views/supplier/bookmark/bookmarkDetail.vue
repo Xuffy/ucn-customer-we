@@ -3,17 +3,18 @@
         <div class="head">
             <div class="title">
                 <el-row>  
-                 <el-col  :xs="18" :sm="18" :md="18" :lg="18" :xl="18">
+                 <el-col  :xs="22" :sm="22" :md="22" :lg="22" :xl="22">
                     <span>  
                         <img src='../../../assets/images/logo.jpg'/> 
                         <span>name</span>
                     </span> 
                 </el-col>  
-                 <el-col  :xs="6" :sm="6" :md="6" :lg="6" :xl="6">      
+                 <el-col  :xs="2" :sm="2" :md="2" :lg="2" :xl="2">      
                      <el-button>{{$t('supplier.buttonname.remove')}}</el-button>
                 </el-col>
                 </el-row>  
             </div>
+<!--            商品详情-->
             <div class="detail">             
                    <el-row>             
                         <el-row class="right">
@@ -58,10 +59,10 @@
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary">{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button type="primary">{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button type="primary" @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button type="primary" @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">{{$t('supplier.buttonname.finish')}}</el-button>
@@ -70,17 +71,19 @@
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
+            <el-tabs v-model="tabName" type="card" >
                 <el-tab-pane :label="$t('supplier.detail.factoryAddress')" name="factoryAddress">
-                   
+                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.accountInfo')" name="accountInfo">
-                   
+                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                    
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.tradeHistory')" name="tradeHistory">
+                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+<!--
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                             Inquiry qty : XXXXXX
@@ -104,6 +107,7 @@
                             Quality approval rate : XXXXXX
                         </el-col>
                     </el-row>
+-->
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="Remark">
                             
@@ -117,18 +121,62 @@
 </template>
 
 <script>
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: "bookmarkDetail",
         components: {
-
+            VSimpleTable
         },
         data() {
             return {
                 noEdit: true,
-                tabName: 'factoryAddress' //默认打开的tab
+                tabName: 'factoryAddress', //默认打开的tab
+                tabColumn: [],
+                tabData: []
             }
         },
-        methods: {}
+        methods: {
+            //...........跳入createInquiry
+            createInquiry(){
+                   this.$router.push({
+                    name:'createInquiry',
+                    query:{
+                        
+                    }
+                })
+            },
+            createOrder(){
+                   this.$router.push({
+                    name:'creatOrder',
+                    query:{
+                        
+                    }
+                })
+            },
+            addToCompare(){
+                
+            },
+            supplierProducts(){
+                
+            },
+        },
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>

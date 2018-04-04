@@ -11,6 +11,9 @@ import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
+// import product from '../views/product/addProduct';
+
+import bigPhoto from './common/bigPhoto/bigPhoto';
 
 export {
   VTestTable,
@@ -25,5 +28,7 @@ export {
   Download,
   Layout,
   messageBoard,
-  selectSearch
+  selectSearch,
+  // product,                      //product页面组件
+    bigPhoto
 }

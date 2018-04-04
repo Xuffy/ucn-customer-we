@@ -17,19 +17,26 @@
                 </el-select>               
                 <el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>
                 <div>
+<!--
                 <i class="el-icon-setting" @click='hiddenDropDown'>
                 </i>
                 <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
+-->
                 </div>
             </div>
         </div>
         <!--from-->
+          <!--        表格-->
+          <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
     import {
         dropDown
     } from '@/components/index'
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: '',
         data() {
@@ -41,20 +48,36 @@
                     id: '1',
                     label: this.$t("supplier.compare.compareItem")
                 }],
-                showdropDown: false
+//                showdropDown: false,
+                tabColumn: [],
+                tabData: []
             }
         },
         components: {
-            dropDown
+            dropDown,
+            VSimpleTable
         },
         methods: {
             selectChange() {
 
             },
-            hiddenDropDown() {
-                this.showdropDown = !this.showdropDown
-            }
-        }
+//  hiddenDropDown() { // this.showdropDown = !this.showdropDown // }
+        },
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>

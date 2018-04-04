@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark">
         <div class="title">
-            {{$t('product.page.productBookmark')}}
+           <span>{{title}}</span>
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
@@ -29,10 +29,9 @@
                 </el-col>
             </el-row>
         </div>
-
         <div class="body" :class="{hide:hideBody}">
             <el-form ref="form" :model="form" label-width="190px">
-                <el-row>
+                <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                         <el-form-item :label="$t('product.page.skuCode')">
                             <el-input v-model="form.name"></el-input>
@@ -140,26 +139,15 @@
             <el-button @click="search" type="primary">{{$t('product.btn.search')}}</el-button>
             <el-button @click="clear" type="info" plain>{{$t('product.btn.clear')}}</el-button>
         </div>
-
-
         <div class="footer">
             <div class="btns">
-                <el-button type="primary">{{$t('product.page.createInquiry')}}</el-button>
-                <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
-                <el-button type="primary">{{$t('product.page.compare')}}</el-button>
-
-                <el-dropdown>
-                    <el-button type="primary">{{$t('product.page.addNewProduct')}}</el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="addFromNewSearch">{{$t('product.page.fromNewSearch')}}</el-dropdown-item>
-                        <el-dropdown-item @click.native="addFromManually">{{$t('product.page.fromManuallyAdd')}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-
-                <el-button type="primary">{{$t('product.page.downloadSelectedProducts')}}</el-button>
-                <el-button @click="removeBookmark" type="info">{{$t('product.page.remove')}}</el-button>
+                <el-button type="primary" v-if="!hideBtns">{{$t('product.page.createInquiry')}}</el-button>
+                <el-button type="primary" v-if="!hideBtns">{{$t('product.page.createOrder')}}</el-button>
+                <el-button type="primary" v-if="!hideBtns">{{$t('product.page.compare')}}</el-button>
+                <el-button @click="addToBookmark" type="primary" v-if="!hideBtns">{{$t('product.page.addToBookmark')}}</el-button>
+                <el-button type="primary" v-if="!hideBtns">{{$t('product.page.downloadSelectedProducts')}}</el-button>
+                <el-button @click="recover" type="primary" v-if="showRecover">{{$t('product.page.recover')}}</el-button>
             </div>
-
 
             <v-simple-table
                     class="speTable"
@@ -169,16 +157,6 @@
                     @page-change="pageChange">
             </v-simple-table>
 
-
-            <el-dialog
-                    title="Add Product"
-                    :visible.sync="newSearchDialogVisible"
-                    width="80%"
-                    :before-close="handleClose">
-                <product :hideBtns="true"></product>
-            </el-dialog>
-
-
         </div>
     </div>
 </template>
@@ -186,19 +164,26 @@
 <script>
 
     import {dropDown} from '@/components/index'
-    // import dropDown from '../../../components/common/fnCompon/dropdown'
     import VSimpleTable from '@/components/common/table/simple'
-    import product from '../addProduct'
-
     export default {
-        name: "bookmark",
+        name: "add-product",
         components:{
             dropDown,
-            VSimpleTable,
-            product
+            VSimpleTable
         },
         props:{
-
+            hideBtns:{
+                type:Boolean,
+                default:false
+            },
+            showRecover:{
+                type:Boolean,
+                default:false
+            },
+            title:{
+                type:String,
+                default:''
+            }
         },
         data(){
             return{
@@ -239,8 +224,6 @@
                 },
 
                 number:'',
-
-
 
                 dataList:[
                     {
@@ -284,50 +267,45 @@
                     }
                 ],
 
-                //表格数据
-                dataColumn:[],
-                tableDataList:[],
-
                 dropData:[
                     {
-                    id: 1,
-                    label: '一级 1',
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
+                        id: 1,
+                        label: '一级 1',
                         children: [{
-                            id: 9,
-                            label: '三级 1-1-1'
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2'
+                            id: 4,
+                            label: '二级 1-1',
+                            children: [{
+                                id: 9,
+                                label: '三级 1-1-1'
+                            }, {
+                                id: 10,
+                                label: '三级 1-1-2'
+                            }]
                         }]
-                    }]
-                }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
                     }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                }, {
-                    id: 3,
-                    label: '一级 3',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
+                        id: 2,
+                        label: '一级 2',
+                        children: [{
+                            id: 5,
+                            label: '二级 2-1'
+                        }, {
+                            id: 6,
+                            label: '二级 2-2'
+                        }]
                     }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],
+                        id: 3,
+                        label: '一级 3',
+                        children: [{
+                            id: 7,
+                            label: '二级 3-1'
+                        }, {
+                            id: 8,
+                            label: '二级 3-2'
+                        }]
+                    }],
 
-                //弹出框
-                //弹出框显示隐藏
-                newSearchDialogVisible:false,
+                tableDataList:[],
+                dataColumn:[]
             }
         },
         methods:{
@@ -344,14 +322,22 @@
             //搜查
             search(){
                 console.log(this.dataList)
-                this.$router.push('/product/bookmark/detail');
+                this.$router.push('/product/sourcing/detail');
                 // window.open('http://192.168.51.228、:8080/#/product');
             },
+
 
             handleChange(value) {
                 console.log(value);
             },
 
+
+            getList() {
+                this.ajax.get('/getTrackList').then((data)=>{
+                    this.tableDataList = data;
+                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                })
+            },
 
             //table操作
             pageChange(page) {
@@ -361,48 +347,19 @@
                 console.log(val, key)
             },
 
-            //获取表格data
-            getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-                    console.log(this.dataColumn,'.//////')
-                })
-            },
-
-            //添加product
-            addFromNewSearch(){
-                this.newSearchDialogVisible=true;
-            },
-            addFromManually(){
-                window.open('http://192.168.51.229:8080/#/product/bookmark/manuallyAdd');
-            },
-
-
-            //移除bookmark
-            removeBookmark(){
-                this.$confirm('是否确认删除该bookmark？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: 'Successfully Remove！'
-                    });
-                }).catch(() => {
-
+            //添加到书签
+            addToBookmark(){
+                this.$message({
+                    message: 'Successfully Add',
+                    type: 'success'
                 });
             },
 
-            //弹出框关闭方法
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {});
-            }
+
+            //恢复删除的bookmark
+            recover(){
+                console.log(1)
+            },
         },
         created(){
             this.getList();
@@ -420,8 +377,46 @@
 </script>
 
 <style scoped>
-    .speDropdown{
+    /*.speDropdown{*/
+    /*!*position: absolute;*!*/
+    /*!*width: 100%;*!*/
+    /*height: 32px;*/
+    /*!*background-color: #ffffff;*!*/
+    /*!*z-index: 2000;*!*/
+    /*}*/
+    /*.speDropdown >>> .el-dropdown{*/
+    /*height: 32px;*/
+    /*}*/
+    /*.speDropdown >>> .el-dropdown .checkInputBox{*/
+    /*height: 32px;*/
+    /*min-height: 32px;*/
+    /*}*/
+    /*.speDropdown >>> .el-dropdown .checkInputBox .checkInputBoxPl{*/
+    /*height: 32px;*/
+    /*line-height: 32px;*/
+    /*}*/
+    /*.speDropdown >>> .el-dropdown .checkInputBox .dataBox{*/
+    /*height: 32px;*/
+    /*}*/
+    /*.speDropdown >>> .el-dropdown .checkInputBox .dataBox span{*/
+    /*padding: 0 8px;*/
+    /*}*/
 
+    .bookmark{
+        padding-right: 20px;
+    }
+
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+    }
+
+    .title-btn{
+        float: right;
+        margin-right: 5px;
     }
 
     .head-list{
@@ -448,23 +443,14 @@
     }
 
 
+    .speZone >>> label{
 
-    .bookmark{
-        padding-right: 20px;
+    }
+    .speZone >>> input{
+
     }
 
-    .title{
-        font-weight: bold;
-        font-size: 18px;
-        height: 32px;
-        line-height: 32px;
-        color:#666666;
-    }
 
-    .title-btn{
-        float: right;
-        margin-right: 5px;
-    }
 
     .outGroup{
 
@@ -476,7 +462,7 @@
 
     .body{
         overflow: hidden;
-        max-height: 1400px;
+        max-height: 320px;
         display: block;
         transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
     }
@@ -489,7 +475,6 @@
     }
     .hide{
         max-height: 0;
-
     }
 
     .form-spelist{
@@ -506,13 +491,12 @@
     .btn-group{
         text-align: center;
         margin-top: 10px;
-        border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
     }
     .btn-group .search{
         margin-right: 30px;
     }
-
 
     .footer{
 

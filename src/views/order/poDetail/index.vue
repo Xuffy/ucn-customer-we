@@ -34,10 +34,6 @@
          <responsibility></responsibility>
 <!--         payment-->
          <payment></payment>
-<!--         qc order-->
-         <qcorder></qcorder>
-<!--          logistic order-->
-           <qcorder></qcorder>
 <!--         product_details-->
          <div class="product_details">
              <div class="pro_title">
@@ -50,7 +46,7 @@
                   <el-button type='primary'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
-                 这块表格
+                  <v-simple-table :column="tabColumn" :data.sync="tabData" />
              </div>
          </div>
 <!--         底部固定按钮区域-->
@@ -86,7 +82,10 @@
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
     import payment from '../../warehouse/paymentTable.vue'
-    import qcorder from './qcorder.vue'
+
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: 'poOrder',
         components: {
@@ -96,7 +95,7 @@
             FromBookmark,
             attchment,
             payment,
-            qcorder
+            VSimpleTable
         },
         data() {
             return {
@@ -109,6 +108,7 @@
                 value: '',
                 keyWord: '',
                 disabled: true, //页面输入框是否可写
+                checked: false,
                 options: [{
                     id: '1',
                     label: 'Order No'
@@ -116,26 +116,25 @@
                     id: '2',
                     label: 'Sku Code'
                 }, ],
-                gridData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
+                tabColumn: [],
+                tabData: []
             }
         },
-        created() {},
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
         methods: {
             modify() {
                 this.disabled = false
@@ -199,6 +198,7 @@
         background-color: white;
         position: fixed;
         bottom: 0;
+        z-index:60;
         line-height: 60px;
     }
 

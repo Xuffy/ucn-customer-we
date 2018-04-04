@@ -11,23 +11,30 @@
                 </el-checkbox-group>
             </div>
             <div>
-                <i class="el-icon-setting" @click='hiddenDropDown'></i>
-                <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
+<!--
+<i class="el-icon-setting" @click='hiddenDropDown'></i>
+<drop-down :class="showdropDown?'speDropdownshow':'speDropdown'" ref="dropDown"></drop-down>
+-->
             </div>
 
            
         </div>
         <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
 </template>
 <script>
     import {
         dropDown
     } from '@/components/index'
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: 'compare',
         components: {
-            dropDown
+            dropDown,
+            VSimpleTable
         },
         data() {
             return {
@@ -37,14 +44,26 @@
                     id: '1'
                 }],
                 Filed: '',
-                showdropDown: false
+                tabColumn: [],
+                tabData: []
             }
         },
-        methods: {
-            hiddenDropDown() {
-                this.showdropDown = !this.showdropDown
-            }
-        }
+        methods: {},
+        created() {
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
+                    console.log(this.tabColumn)
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+        },
     }
 
 </script>

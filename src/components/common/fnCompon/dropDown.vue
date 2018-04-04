@@ -4,9 +4,9 @@
 			<div class="checkInputBox" :class="{'active':status}">
 				<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
 				<div class="dataBox">
-					<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
+					<span v-for="(item, index) in selectedList" :key="item.id" @click.stop="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
 				</div>
-				<i class="el-icon-arrow-up"></i>
+				<i class="el-icon-arrow-down" :class="{'active':dropDownMouse}"></i>
 			</div>
 			<el-dropdown-menu slot="dropdown">
 				<div class="deepBox">
@@ -33,7 +33,7 @@
 			</el-dropdown-menu>
 		</el-dropdown>
 		<div class="data-box-active" @click.stop v-show="dropDownMouse" :style="`right:${dropDownRight}`">
-			<span v-for="(item, index) in selectedList" :key="item.id" @click="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
+			<span v-for="(item, index) in selectedList" :key="item.id" @click.stop="del(item, index)">{{item.label}}<i class="el-icon-close"></i></span>
 		</div>
     </div>
 </template>
@@ -64,11 +64,7 @@
 			};
 		},
 		mounted() {
-			this.$nextTick(() => {
-				document.onclick = () => {
-					this.status = false;
-				}
-			})
+			
 		},
 		props: {
 			emptyText: {
@@ -111,7 +107,6 @@
 			},
 			getChecked() {
 				this.selectedList = this.$refs.tree.getCheckedNodes(true);
-				this.mouseEnter();
 			},
 			del(item, index) {
 				this.selectedList.splice(index, 1);
@@ -122,6 +117,7 @@
 					});
 				};
 				ergodic(item, this.list);
+				if(this.selectedList.length <= 0) this.dropDownMouse = false;
 			},
 			mouseEnter() {
 				if(this.selectedList.length <= 0) return;
@@ -164,7 +160,12 @@
 		outline: 0;
 		padding: 0 15px;
 		min-width:200px;
-		i.el-icon-arrow-up {
+		i.el-icon-arrow-down {
+			top:0;
+			right:5px;
+			height:100%;
+			line-height:40px;
+			position: absolute;
 			transition: all .5s ease;
 			cursor: pointer;
 		}
@@ -209,7 +210,6 @@
 	.dropDown {
 		position: relative;
 		min-width:188px;
-		
 		.data-box-active {
 			width:230px;
 			padding:10px;
@@ -220,6 +220,7 @@
 			right:-232px;
 			top:0;
 			background:#fff;
+			z-index:999;
 			span {
 				background:#f4f4f4;
 				color:#94979a;

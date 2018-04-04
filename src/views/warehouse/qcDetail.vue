@@ -8,51 +8,54 @@
                 <div class="head"> {{$t('warehouse.page.basicInfo')}}</div>
                 <div class="content">
                     <el-row>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.qcOrderNo')}}. : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.buyerOrderNo')}}. : XXXXXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.orderNo')}}. : XXXXXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.buyerOrderDate')}} : XXXXXXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.orderDate')}} : XXXXXXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.qcType')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.qcDate')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.supplierID')}} : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.supplierNO')}} : XXXXXXXXXXXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.supplierName')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.factoryAddressInEnglish')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.factoryAddress')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.factoryContactPhone')}} :
                             XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.qcResult')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.qcStatus')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.qcMethod')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
                             {{$t('warehouse.page.surveyor')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.servicePrice')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.serviceProvidersNo')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.serviceID')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.serviceProvidersName')}} : XXXXXX
                         </el-col>
-                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                            {{$t('warehouse.page.serviceName')}} : XXXXXX
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.supplierOrderNo')}} : XXXXXX
+                        </el-col>
+                        <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="12">
+                            {{$t('warehouse.page.serviceFee')}} : XXXXXX
                         </el-col>
                         <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                             {{$t('warehouse.page.remark')}} : XXXXXX
@@ -64,12 +67,24 @@
                 </div>
             </div>
             <div class="section">
-                <pay-table :data="payData"></pay-table>
+                <pay-table @saveNewItem="saveNewItem" :title="payTitle" :data="payData"></pay-table>
             </div>
             <div class="section">
-                <div class="head"> {{$t('warehouse.page.productInfo')}}</div>
+                <div class="head">
+                    {{$t('warehouse.page.productInfo')}}
+                    <el-button size="mini" type="primary">Confirm SKU</el-button>
+                    <el-button size="mini" type="primary">Restart QC</el-button>
+                    <el-button size="mini" type="primary">申请返工</el-button>
+                    <el-button size="mini" type="info">Return</el-button>
+                </div>
                 <div class="content">
-
+                    <v-simple-table
+                            class="speTable"
+                            :data.sync="tableDataList"
+                            :column="dataColumn"
+                            @sort-change="getSort"
+                            @page-change="pageChange">
+                    </v-simple-table>
                 </div>
             </div>
 
@@ -158,11 +173,13 @@
 <script>
 
     import payTable from './paymentTable'
+    import VSimpleTable from '@/components/common/table/simple'
 
     export default {
         name: "qc-detail",
         components:{
-            payTable
+            payTable,
+            VSimpleTable
         },
         data(){
             return{
@@ -276,26 +293,31 @@
                         waitReceive:'2222'
                     },
                 ],
-                payData: [
-                    {
-                        paymentId: '124124',
-                        payName:'赈灾款',
-                        payDate: '1992-02-02',
-                        payDateActually:'1992-02-02',
-                        acceptMoney:998,
-                        acceptMoneyActually:'1902',
-                        waitMoney:'',
-                    },
-                    {
-                        paymentId: '124124',
-                        payName:'赈灾款',
-                        payDate: '1992-02-02',
-                        payDateActually:'1992-02-02',
-                        acceptMoney:912,
-                        acceptMoneyActually:'1902',
-                        waitMoney:'',
-                    },
-                ],
+                payData: {
+                    data:[
+                        {
+                            paymentId: '1241241',
+                            payName:'赈灾款',
+                            payDate: '1992-02-02',
+                            payDateActually:'1992-02-02',
+                            payMoney:998,
+                            payMoneyActually:'1902',
+                            waitMoney:'',
+                            status:1,
+                        },
+                        {
+                            paymentId: '1241242124',
+                            payName:'赈灾款',
+                            payDate: '1992-02-02',
+                            payDateActually:'1992-02-02',
+                            payMoney:912,
+                            payMoneyActually:'1902',
+                            waitMoney:'',
+                            status:2,
+                        },
+                    ],
+                    type:'refund'
+                },
                 textarea:'',
                 currentPage:1,
                 formInline: {
@@ -303,6 +325,9 @@
                     region: ''
                 },
                 input:'',
+                payTitle:'付款信息',
+                tableDataList:[],
+                dataColumn:[]
             }
         },
         methods:{
@@ -321,7 +346,32 @@
             close(){
                 window.close();
             },
-        }
+
+
+
+            //table操作
+            pageChange(page) {
+                console.log(page)
+            },
+            getSort(val, key) {
+                console.log(val, key)
+            },
+
+            getList() {
+                this.ajax.get('/getTrackList').then((data)=>{
+                    this.tableDataList = data;
+                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                })
+            },
+
+            saveNewItem(e){
+                console.log(e)
+                //调用接口即可
+            },
+        },
+        created(){
+            this.getList();
+        },
     }
 </script>
 

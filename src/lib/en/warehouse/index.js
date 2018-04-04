@@ -7,36 +7,43 @@ const page={
     basicInfo:'Basic Info',
     productInfo:'Product Info',
     createQCOrder:'Create QC Order',
-
+    downLoad:'Download',
 
 
 
 
     //qc detail
     qcOrderNo:'QC Order No',
-    buyerOrderNo:' Buyer order No',
-    buyerOrderDate:'Buyer Order Date',
+    orderNo:' Order No',
+    orderDate:'Order Date',
     qcType:'QC Type',
     qcDate:'QC Date',
-    supplierID:' Supplier ID',
+    supplierNO:' Supplier NO',
     supplierName:'Supplier Name',
-    factoryAddressInEnglish:'Factory Address (In English)',
+    factoryAddress:'Factory Address',
     factoryContactPhone:'Factory Contact Phone',
-    qcResult:'QC Result',
+    qcStatus:'QC Status',
     qcMethod:'QC Method',
     surveyor:'Surveyor',
-    servicePrice:'Service price',
+    serviceFee:'Service fee',
     remark:'Remark',
     attachment:'Attachment',
-    serviceID:'Service ID',
-    serviceName:'Service name',
+    serviceProvidersNo:'Service providers No',
+    serviceProvidersName:'Service providers name',
+    // orderNo:'Order No',          //重复
+    // serviceProviders:'Service providers',    //删除
+    supplierOrderNo:'Supplier Order No.',
     serviceProviders:'Service providers',
+
+
 
 
     //btns
     close:'Close',
     cancelQC:'Cancel QC',
     deleteQC:'Delete QC',
+    send:'Send',
+    saveAsDraft:'Save As Draft',
 
 
 

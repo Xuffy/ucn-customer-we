@@ -235,25 +235,41 @@
         <div class="hd">{{ $t('logistic.text.productInfo') }}</div>
         <div class="btn-wrap">
             <div>
-                <el-button type="primary">{{ $t('logistic.btn.addProduct') }}</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = true">{{ $t('logistic.btn.addProduct') }}</el-button>
                 <el-button>{{ $t('logistic.btn.remove') }}</el-button>
             </div>
-            <i class="el-icon-setting"></i>
         </div>
-        <!--from-->
+        <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
             <el-button type="primary">{{ $t('logistic.btn.save') }}</el-button>
             <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
             <el-button>{{ $t('logistic.btn.delete') }}</el-button>
         </div>
         <div class="fix-btn-station"></div>
+        <el-dialog
+                title="Add Product"
+                :visible.sync="newSearchDialogVisible"
+                width="80%"
+                :before-close="handleClose"
+                lock-scroll>
+            <v-product :hideBtns="true"></v-product>
+             <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
+                <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
+    import { VSimpleTable } from '@/components/index';
+    import product from '@/views/product/addProduct';
     export default {
         name: 'placeLogisticPlan',
         data() {
             return {
+                tabColumn: [],
+                tabData: [],
+                newSearchDialogVisible:false,
                 date:'',
                 pickerOptions:{
                     disabledDate(time) {
@@ -312,6 +328,28 @@
                 depature:'',
                 departure:''
             }
+        },
+        created() {
+            this.ajax({
+                url: '/viewByInquiry',
+                method: 'get'
+            }).then(res => {
+                this.tabData = res.inquiry;
+                this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+            });
+        },
+        components: {
+            "v-simple-table": VSimpleTable,
+            'v-product': product
+        },
+        methods: {
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            }
         }
     }
 </script>
@@ -368,6 +406,7 @@
             padding:10px;
             box-sizing: border-box;
             border-top:1px solid #cdcc;
+            z-index:11;
         }
         .fix-btn-station {
             width: 100%;

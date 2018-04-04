@@ -34,7 +34,6 @@ export const routerMap = [
       component: Layout,
       redirect: '/workbench',
       name: 'Workbench',
-      noDropdown: true,
       children: [
         {
           path: 'index',
@@ -88,6 +87,11 @@ export const routerMap = [
                   component: () => import('../views/product/bookmark/manuallyAdd'),
                   name:'manuallyAdd',
               },
+              {
+                  path:'recycleBin',
+                  component: () => import('../views/product/bookmark/recycleBin'),
+                  name:'recycleBin',
+              }
           ]
         },
         {
@@ -98,7 +102,7 @@ export const routerMap = [
               {
                   path:'',
                   component: () => import('../views/product/compare/overview'),
-                  name:'compareOverview',
+                  name:'compare overview',
               },
               {
                   path:'detail',
@@ -124,38 +128,37 @@ export const routerMap = [
         component: Layout,
         redirect: '/supplier/picture',
         name: 'Supplier',
-        noDropdown: true,
         children: [
             {
-                path: 'sourcing',
-                name: 'Sourcing',
+                path: 'SupplierSourcing',
+                name: 'SupplierSourcing',
                 component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
 
         },
             {
-                path: 'bookmark',
-                name: 'Bookmark',
+                path: 'SupplierBookmark',
+                name: 'SupplierBookmark',
                 component: () =>
                     import ('../views/supplier/bookmark/bookmark.vue')
         },
             {
-                path: 'bookmarkDetail',
-                name: 'bookmarkDetail',
+                path: 'SupplierBookmarkDetail',
+                name: 'SupplierBookmarkDetail',
                 component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
             {
-                path: 'sourcingDetail',
-                name: 'sourcingDetail',
+                path: 'SupplierSourcingDetail',
+                name: 'SupplierSourcingDetail',
                 component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
                {
-                path: 'Compare',
-                name: 'Compare',
+                path: 'SupplierCompare',
+                name: 'SupplierCompare',
                 component: () =>import ('../views/supplier/Compare/Compare.vue')
         },
                 {
-                path: 'CompareOverview',
-                name: 'CompareOverview',
+                path: 'SupplierCompareOverview',
+                name: 'SupplierCompareOverview',
                 component: () =>import ('../views/supplier/Compare/Overview.vue')
         }
       ]
@@ -165,7 +168,6 @@ export const routerMap = [
       component: Layout,
       redirect: '/negotiation/inquiryOverview',
       name: 'negotiation',
-      noDropdown: true,
       children: [
         {
           path: 'inquiryOverview',
@@ -242,16 +244,20 @@ export const routerMap = [
         children: [
             {
                 path: 'overView',
+                name:'orderOverView',
                 component: () =>import('../views/order/overView.vue')
         },
             {
                 path: 'creatOrder',
+                name:'creatOrder',
                 component: () =>import('../views/order/creatOrder/index.vue')
         }, {
                 path: 'poDetail',
+                name:'poDetail',
                 component: () =>import('../views/order/poDetail/index.vue')
         }, {
                 path: 'draftOverview',
+                name:'draftOverview',
                 component: () =>import('../views/order/draftOverview.vue')
         }
       ]
@@ -261,17 +267,21 @@ export const routerMap = [
       component: Layout,
       redirect: '/warehouse/overview',
       name: 'Warehouse',
-      noDropdown: true,
       children: [
         {
           path: 'overview',
           component: () => import('../views/warehouse/warehouseOverview.vue'),
-          name:'warehouseOverview'
+          name:'warehouse overview'
+        },
+        {
+          path: 'qcOverview',
+          component: () => import('../views/warehouse/qcOverview.vue'),
+          name:'qc overview'
         },
         {
           path: 'qcDetail',
           component: () => import('../views/warehouse/qcDetail.vue'),
-          name:'qcOrderDetail'
+          name:'qcOrder detail'
         },
         {
           path: 'createQc',
@@ -360,7 +370,6 @@ export const routerMap = [
         component: Layout,
         redirect: '/track/trackBySKU',
         name: 'Track',
-        noDropdown: true,
         children: [
             {
                 path: 'trackBySKU',

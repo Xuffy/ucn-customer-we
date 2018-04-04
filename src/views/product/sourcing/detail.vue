@@ -7,8 +7,8 @@
             <div class="detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel trigger="click" height="200px">
-                            <el-carousel-item v-for="item in 4" :key="item">
+                        <el-carousel class="banner" trigger="click" height="150px">
+                            <el-carousel-item v-for="item in 3" :key="item">
                                 <img src="../../../assets/images/login-back.jpg" style="width: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
@@ -53,7 +53,7 @@
                     <el-button type="primary">{{$t('product.page.createInquiry')}}</el-button>
                     <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
                     <el-button @click="addCompare" type="primary">{{$t('product.page.addToCompare')}}</el-button>
-                    <el-button round>{{$t('product.page.addToBookmark')}}</el-button>
+                    <el-button @click="addToBookmark" round>{{$t('product.page.addToBookmark')}}</el-button>
                 </div>
             </div>
         </div>
@@ -822,6 +822,15 @@
             //添加比较
             addCompare(){
                 this.compareConfig.showCompareList=true;
+            },
+
+            addToBookmark(){
+                this.$router.push({
+                    path:'/product/bookmark/detail',
+                    query:{
+
+                    }
+                });
             },
         }
     }
