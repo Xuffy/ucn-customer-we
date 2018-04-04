@@ -132,7 +132,7 @@ const responsibility = {
     DesignNeedConfirmDate: 'Design Need Confirm Date',
     ReceiveSampleDate: 'Receive Sample Date',
     SampleNeedConfirmDate: 'Sample Need Confirm Date',
-    OtherDate: 'Other Date',
+    OtherDate: 'Other Responsibility',
 }
 
 const productinfo = {
@@ -264,6 +264,7 @@ const productinfo = {
 const qcorder = {
     qcOrder: 'QC Order'
 }
+
 const logisticplan = {
     logisticPlan: 'Logistic Plan/Order'
 }

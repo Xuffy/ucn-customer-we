@@ -84,7 +84,7 @@
                 }, ],
                 status_buttons: 'TBCByCustomer', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
-//                showdropDown: false,
+                //                showdropDown: false,
                 tabColumn: [],
                 tabData: []
             }
@@ -94,7 +94,7 @@
             selectChange(val) {
                 console.log(val)
             },
-// hiddenDropDown() { // this.showdropDown = !this.showdropDown // },
+            // hiddenDropDown() { // this.showdropDown = !this.showdropDown // },
         },
         created() {
             this.ajax.get('/supplierOverview', {

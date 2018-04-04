@@ -2,7 +2,7 @@
     <div class="responsibility">
          <div>
               <div class="r_title">
-                  Responsibility 
+                 {{$t('order.responsibility.responsibility')}}
               </div>
               <div class="r_table">
    <el-table :data="tableData" style="width: 100%">
@@ -11,7 +11,7 @@
         label="item"
         width="140">
       </el-table-column>
-   <el-table-column prop="item1" label="NeedLabel/Design Info Date" width="240"> 
+   <el-table-column prop="item1" :label="$t('order.responsibility.NeedLabelDesignInfoDate')" width="240"> 
          <template slot-scope="scope" >
                <el-date-picker
                   v-model="scope.row.item1"
@@ -24,20 +24,21 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item2" label="Lable/Design Date" width="240">
+<el-table-column prop="item2" :label="$t('order.responsibility.LableDesignDate')" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item2"
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
+                  disabled='disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item2" v-else>
+                <el-input v-model="scope.row.item2" v-else disabled='disabled'>
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item3" label="Design Need Confirm Date" width="240">
+<el-table-column prop="item3" :label="$t('order.responsibility.DesignNeedConfirmDate')"width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item3"
@@ -50,20 +51,21 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item4" label="Receive Sample Date" width="240">
+<el-table-column prop="item4" :label="$t('order.responsibility.ReceiveSampleDate')" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item4"
                   type="datetime"
                   placeholder="选择日期时间"
                   v-if='scope.$index!=2'
+                  disabled='disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item4" v-else>
+                <el-input v-model="scope.row.item4" v-else disabled='disabled'>
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item5" label="SampleNeedConfirmDate" width="240">
+<el-table-column prop="item5" :label="$t('order.responsibility.SampleNeedConfirmDate')" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item5"
@@ -76,7 +78,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item6" label="OtherDate" width="240">
+<el-table-column prop="item6" :label="$t('order.responsibility.OtherDate')" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item6"

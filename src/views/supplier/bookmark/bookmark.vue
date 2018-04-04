@@ -62,10 +62,10 @@
         <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.compare')}}</el-button>             
-                  <el-button  type="primary" >{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
+                  <el-button  type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button  type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button  type="primary"  @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>             
+                  <el-button  type="primary">{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
 <!--                  remove按钮-->
                    <el-button  type="info" :disabled='disabled' >{{$t('supplier.buttonname.remove')}}</el-button>
               </div>  
@@ -123,11 +123,37 @@
             clear(name) {
                 this.$refs[name].resetFields();
             },
-
             //搜查
             search() {
                 this.$router.push('/product/detail');
             },
+            //........跳入createInquiry
+            createInquiry(){
+                this.$router.push({
+                    name:'createInquiry',
+                    query:{
+                        
+                    }
+                })
+            },
+              //........跳入createOrder
+            createOrder(){
+                this.$router.push({
+                    name:'creatOrder',
+                    query:{
+                        
+                    }
+                })
+            },
+              //........跳入createInquiry
+            compare(){
+                this.$router.push({
+                    name:'SupplierCompare',
+                    query:{
+                        
+                    }
+                })
+            }
         },
         created() {
                   this.ajax.get('/supplierOverview', {
@@ -224,5 +250,11 @@
         margin-right: 8px;
         margin-top: 20px;
     }
+    .el-select {
+            max-width: 200px
+        }
 
+    .el-input {
+        max-width: 200px;
+    }
 </style>

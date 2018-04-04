@@ -33,11 +33,7 @@
 <!--             responsibility     -->
          <responsibility></responsibility>
 <!--         payment-->
-<!--         <payment></payment>-->
-<!--         qc order-->
-         <qcorder></qcorder>
-<!--          logistic order-->
-           <qcorder></qcorder>
+         <payment></payment>
 <!--         product_details-->
          <div class="product_details">
              <div class="pro_title">
@@ -85,8 +81,8 @@
     import FromNewSearch from '../creatOrder/FromNewSearch.vue'
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
-    //    import payment from '../../warehouse/paymentTable.vue'
-    import qcorder from './qcorder.vue'
+    import payment from '../../warehouse/paymentTable.vue'
+
     import {
         VSimpleTable
     } from '@/components/index';
@@ -98,8 +94,7 @@
             FromNewSearch,
             FromBookmark,
             attchment,
-            //            payment,
-            qcorder,
+            payment,
             VSimpleTable
         },
         data() {
@@ -203,6 +198,7 @@
         background-color: white;
         position: fixed;
         bottom: 0;
+        z-index:60;
         line-height: 60px;
     }
 
