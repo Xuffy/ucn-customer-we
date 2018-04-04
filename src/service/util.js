@@ -120,5 +120,20 @@ export default {
       return value.replace(/<br\/>/g, '\n').replace(/&nbsp;/g, ' ');
     }*/
 
+    // Vue.prototype.$windowOpen = (str, query) => {
+    //     function serialization(params) {
+    //       const result = []
+    //       for (const key in params) {
+    //         if (params.hasOwnProperty(key)) {
+    //           const element = params[key];
+    //           result.push(`${key}=${element}`)
+    //         }
+    //       }
+        
+    //       return result.join('&')
+    //     }
+    //     let url = `${window.location.origin}/#${str}?${serialization(query)}`;
+    //     window.open(url);
+    // }
   }
 }

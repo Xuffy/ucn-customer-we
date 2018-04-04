@@ -3,7 +3,7 @@
         <h3 class="hd">{{ $t('negotiation.text.compare') }}</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary">{{ $t('negotiation.btn.createOrder') }}</el-button>
+                <el-button type="primary" @click="windowOpen('/order/creatOrder')">{{ $t('negotiation.btn.createOrder') }}</el-button>
                 <el-button type="primary">{{ $t('negotiation.btn.accept') }}</el-button>
                 <el-checkbox-group v-model="checkList">
                     <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
