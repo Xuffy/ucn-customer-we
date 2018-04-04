@@ -60,13 +60,13 @@ const page={
 
 
     category:'Category',
-    skuName:'SKU Name',
+    skuNameEN:'SKU Name EN',
     readilyAvailable:'Readily Available',
-    skuCode:'SKU Code',
+    customerSkuCode:'customer sku code',
     exwPrice:'EXW Price',
-    vendorSKUCode:'Vendor SKU Code',
-    vendorSKUName:'Vendor SKU Name',
-    incotermPrice:'Incoterm Price',
+    skuCode:'sku code',
+    skuNameCN:'SKU Name CN',
+    // fobPrice:'FOB price',
     skuMaterials:'SKU Materials',
     country:'Country',
     supplierName:'Supplier Name',

@@ -1,48 +1,55 @@
 <template>
     <div class="bookmark">
         <div class="title">
-           <span>{{title}}</span>
+            <span>产品总览</span>
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
             </el-button>
         </div>
         <div style="margin-bottom: 5px">
-            <el-row>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>{{$t('product.page.category')}}</label>
-                    <div class="content">
-                        <drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>{{$t('product.page.skuNameEN')}}</label>
-                    <div class="content">
-                        <el-input v-model="form.name"></el-input>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>{{$t('product.page.readilyAvailable')}}</label>
-                    <div class="content">
-                        <el-input v-model="form.name"></el-input>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="body" :class="{hide:hideBody}">
-            <el-form ref="form" :model="form" label-width="190px">
+
+            <el-form ref="productFormTop" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.customerSkuCode')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="分类">
+                            <drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.exwPrice')">
+                        <el-form-item label="产品英文名" prop="nameEn">
+                            <el-input v-model="productForm.nameEn"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="是否有现货" prop="isReadilyAvailable">
+                            <el-select v-model="productForm.isReadilyAvailable" placeholder="请选择">
+                                <el-option
+                                        v-for="item in readilyAvailableOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <div class="body" :class="{hide:hideBody}">
+            <el-form ref="productForm" :model="productForm" label-width="190px">
+                <el-row class="speZone">
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="客户货号">
+                            <el-input v-model="productForm.customerSkuCode"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="EXW价格">
                             <el-col :span="10">
                                 <el-input-number
                                         class="numberInput"
-                                        v-model="number"
+                                        v-model="productForm.minExwPrice"
                                         @change="handleChange"
                                         :min="0"
                                         :controls="false"></el-input-number>
@@ -51,7 +58,7 @@
                             <el-col :span="10">
                                 <el-input-number
                                         class="numberInput"
-                                        v-model="number"
+                                        v-model="productForm.maxExwPrice"
                                         @change="handleChange"
                                         :min="0"
                                         :controls="false"></el-input-number>
@@ -59,22 +66,22 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.skuCode')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="供应商货号">
+                            <el-input v-model="productForm.code"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.skuNameCN')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="产品中文名">
+                            <el-input v-model="productForm.nameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.fobPrice')">
+                        <el-form-item label="FOB价格">
                             <el-col :span="10">
                                 <el-input-number
                                         class="numberInput"
-                                        v-model="number"
+                                        v-model="productForm.minFobPrice"
                                         @change="handleChange"
                                         :min="0"
                                         :controls="false"></el-input-number>
@@ -83,7 +90,7 @@
                             <el-col :span="10">
                                 <el-input-number
                                         class="numberInput"
-                                        v-model="number"
+                                        v-model="productForm.maxFobPrice"
                                         @change="handleChange"
                                         :min="0"
                                         :controls="false"></el-input-number>
@@ -91,44 +98,48 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.skuMaterials')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="产品英文材质">
+                            <el-input v-model="productForm.materialEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.country')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="国家">
+                            <el-input v-model="productForm.country"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.supplierName')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="供应商名称">
+                            <el-input v-model="productForm.supplierName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.packageType')">
-                            <el-input v-model="form.name"></el-input>
-                        </el-form-item>
-                    </el-col>
-
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.productPackageType')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="外包装方式EN">
+                            <el-input v-model="productForm.outerCartonMethodEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.deliveryDays')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="产品包装方式EN">
+                            <el-input v-model="productForm.methodPkgEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.skuDescription')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="交期">
+                            <el-input-number
+                                    class="numberInput"
+                                    v-model="productForm.deliveryDates"
+                                    @change="handleChange"
+                                    :min="0"
+                                    :controls="false"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                        <el-form-item :label="$t('product.page.vendorSKUDescription')">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="产品英文描述">
+                            <el-input v-model="productForm.descEn"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                        <el-form-item label="产品中文描述">
+                            <el-input v-model="productForm.descCn"></el-input>
                         </el-form-item>
                     </el-col>
 
@@ -137,14 +148,15 @@
         </div>
         <div class="btn-group">
             <el-button @click="search" type="primary">{{$t('product.btn.search')}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$t('product.btn.clear')}}</el-button>
+            <el-button @click="resetForm('productForm')" type="info" plain>{{$t('product.btn.clear')}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
                 <el-button type="primary" v-if="!hideBtns">{{$t('product.page.createInquiry')}}</el-button>
                 <el-button type="primary" v-if="!hideBtns">{{$t('product.page.createOrder')}}</el-button>
                 <el-button type="primary" v-if="!hideBtns">{{$t('product.page.compare')}}</el-button>
-                <el-button @click="addToBookmark" type="primary" v-if="!hideBtns">{{$t('product.page.addToBookmark')}}</el-button>
+                <el-button @click="addToBookmark" type="primary" v-if="!hideBtns">{{$t('product.page.addToBookmark')}}
+                </el-button>
                 <el-button type="primary" v-if="!hideBtns">{{$t('product.page.downloadSelectedProducts')}}</el-button>
                 <el-button @click="recover" type="primary" v-if="showRecover">{{$t('product.page.recover')}}</el-button>
             </div>
@@ -165,67 +177,82 @@
 
     import {dropDown} from '@/components/index'
     import VSimpleTable from '@/components/common/table/simple'
+
     export default {
-        name: "add-product",
-        components:{
+        name: "overview",
+        components: {
             dropDown,
             VSimpleTable
         },
-        props:{
-            hideBtns:{
-                type:Boolean,
-                default:false
+        props: {
+            hideBtns: {
+                type: Boolean,
+                default: false
             },
-            showRecover:{
-                type:Boolean,
-                default:false
+            showRecover: {
+                type: Boolean,
+                default: false
             },
-            title:{
-                type:String,
-                default:''
+            title: {
+                type: String,
+                default: ''
             }
         },
-        data(){
-            return{
-                value:1,
-                hideBody:true,            //是否显示body
-                btnInfo:this.$t('product.page.showTheAdvance'),
-                formItem:{
-                    Category:'',
-                    SKUName:'',
-                    ReadilyAvailable:'',
-                    SKUCode:'',
-                    minEXWPrice:0,
-                    maxEXWPrice:0,
-                    VendorSKUCode:'',
-                    VendorSKUName:'',
-                    minIncotermPrice:0,
-                    maxIncotermPrice:0,
-                    SKUMaterials:'',
-                    Country:'',
-                    SupplierName:'',
-                    PackageType:'',
-                    ProductPackageType:'',
-                    DeliveryDays:'',
-                    MOQ:'',
-                    SKUDescription:'',
-                    VendorSKUDescription:''
+        data() {
+            return {
+                value: 1,
+                hideBody: true,            //是否显示body
+                btnInfo: '展开高级搜索',
+                formItem: {
+                    Category: '',
+                    SKUName: '',
+                    ReadilyAvailable: '',
+                    SKUCode: '',
+                    minEXWPrice: 0,
+                    maxEXWPrice: 0,
+                    VendorSKUCode: '',
+                    VendorSKUName: '',
+                    minIncotermPrice: 0,
+                    maxIncotermPrice: 0,
+                    SKUMaterials: '',
+                    Country: '',
+                    SupplierName: '',
+                    PackageType: '',
+                    ProductPackageType: '',
+                    DeliveryDays: '',
+                    MOQ: '',
+                    SKUDescription: '',
+                    VendorSKUDescription: ''
                 },
 
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                testValidateForm:{
+                    name:''
                 },
 
-                number:'',
+                productForm: {
+                    categoryId: '0',
+                    nameEn: '',                  //产品英文名
+                    isReadilyAvailable: '',      //
+                    customerSkuCode: '',         //客户货号
+                    minExwPrice: '',
+                    maxExwPrice: '',
+                    code: '',                    //供应商货号
+                    nameCn: '',                  //产品中文名
+                    minFobPrice: '',
+                    maxFobPrice: '',
+                    materialEn: '',              //英文材质
+                    country: '',
+                    supplierName: '',            //供应商名称
+                    outerCartonMethodEn: '',     //外包装方式EN
+                    methodPkgEn: '',             //产品包装方式EN
+                    deliveryDates: '',           //交期
+                    descEn: '',                  //产品英文描述
+                    descCn: '',                  //产品中文描述
+                },
 
-                dataList:[
+                number: '',
+
+                dataList: [
                     {
                         title: 'parent 1',
                         expand: true,
@@ -237,13 +264,13 @@
                                 children: [
                                     {
                                         title: 'leaf 1-1-1',
-                                        checked:true,
-                                        isActive:true,
+                                        checked: true,
+                                        isActive: true,
                                         disabled: false
                                     },
                                     {
                                         title: 'leaf 1-1-2',
-                                        isActive:true,
+                                        isActive: true,
                                         disabled: false
                                     }
                                 ]
@@ -254,11 +281,11 @@
                                 children: [
                                     {
                                         title: 'leaf 1-2-1',
-                                        isActive:true,
+                                        isActive: true,
                                         checked: false
                                     },
                                     {
-                                        isActive:true,
+                                        isActive: true,
                                         title: 'leaf 1-2-2'
                                     }
                                 ]
@@ -267,7 +294,7 @@
                     }
                 ],
 
-                dropData:[
+                dropData: [
                     {
                         id: 1,
                         label: '一级 1',
@@ -304,23 +331,39 @@
                         }]
                     }],
 
-                tableDataList:[],
-                dataColumn:[]
+                tableDataList: [],
+                dataColumn: [],
+
+
+                //表格配置参数
+                readilyAvailableOptions: [
+                    {
+                        label: 'not ready',
+                        value: false
+                    },
+                    {
+                        label: 'ready',
+                        value: true
+                    },
+
+                ]
+
+
             }
         },
-        methods:{
+        methods: {
             //切换body的收缩展开状态
-            switchDisplay(){
-                this.hideBody=!this.hideBody;
+            switchDisplay() {
+                this.hideBody = !this.hideBody;
             },
 
             //清除填写的表格数据
-            clear(name){
+            clear(name) {
                 console.log(1)
             },
 
             //搜查
-            search(){
+            search() {
                 console.log(this.dataList)
                 this.$router.push('/product/sourcing/detail');
                 // window.open('http://192.168.51.228、:8080/#/product');
@@ -333,9 +376,9 @@
 
 
             getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
+                this.ajax.get('/getTrackList').then((data) => {
                     this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
+                    this.dataColumn = this.$getTableColumn(data, 'track.tableData', {width: 200});
                 })
             },
 
@@ -348,7 +391,7 @@
             },
 
             //添加到书签
-            addToBookmark(){
+            addToBookmark() {
                 this.$message({
                     message: 'Successfully Add',
                     type: 'success'
@@ -357,19 +400,28 @@
 
 
             //恢复删除的bookmark
-            recover(){
+            recover() {
                 console.log(1)
             },
+
+
+            //表格操作
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.$refs['productFormTop'].resetFields();
+            }
+
+
         },
-        created(){
+        created() {
             this.getList();
         },
-        watch:{
-            hideBody(n){
-                if(n){
-                    this.btnInfo=this.$t('product.page.showTheAdvance');
-                }else{
-                    this.btnInfo=this.$t('product.page.hideTheAdvance');
+        watch: {
+            hideBody(n) {
+                if (n) {
+                    this.btnInfo = '展开高级搜索';
+                } else {
+                    this.btnInfo = '隐藏高级搜索';
                 }
             }
         }
@@ -402,106 +454,114 @@
     /*padding: 0 8px;*/
     /*}*/
 
-    .bookmark{
+    .bookmark {
         padding-right: 20px;
     }
 
-    .title{
+    .title {
         font-weight: bold;
         font-size: 18px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
     }
 
-    .title-btn{
+    .title-btn {
         float: right;
         margin-right: 5px;
     }
 
-    .head-list{
+    .head-list {
 
     }
-    .head-list label{
+
+    .head-list label {
         width: 190px;
         display: inline-block;
         height: 42px;
         line-height: 42px;
         text-align: right;
         font-size: 14px;
-        color:#606266;
+        color: #606266;
         padding: 0 12px 0 0;
         box-sizing: border-box;
         float: left;
     }
-    .head-list .content{
+
+    .head-list .content {
         margin-left: 190px;
         height: 42px;
     }
-    .head-list .content >>> input{
+
+    .head-list .content > > > input {
         height: 42px;
     }
 
-
-    .speZone >>> label{
-
-    }
-    .speZone >>> input{
+    .speZone > > > label {
 
     }
 
-
-
-    .outGroup{
+    .speZone > > > input {
 
     }
-    .outGroup .label{
+
+    .outGroup {
+
+    }
+
+    .outGroup .label {
         width: 190px;
         float: left;
     }
 
-    .body{
+    .body {
         overflow: hidden;
         max-height: 320px;
         display: block;
-        transition: max-height .5s cubic-bezier(.445,.05,.55,.95);
+        transition: max-height .5s cubic-bezier(.445, .05, .55, .95);
     }
-    .body .numberInput{
+
+    .body .numberInput {
         width: 80px;
         text-align: left;
     }
-    .body .numberInput >>> input{
+
+    .body .numberInput > > > input {
         padding: 0;
     }
-    .hide{
+
+    .hide {
         max-height: 0;
     }
 
-    .form-spelist{
+    .form-spelist {
         margin-bottom: 10px !important;
     }
-    .form-spelist >>> .ivu-form-item-content{
+
+    .form-spelist > > > .ivu-form-item-content {
         line-height: normal;
     }
 
-    .form-list{
+    .form-list {
         margin-bottom: 10px;
     }
 
-    .btn-group{
+    .btn-group {
         text-align: center;
         margin-top: 10px;
         padding-bottom: 15px;
         border-bottom: 1px solid #e0e0e0;
     }
-    .btn-group .search{
+
+    .btn-group .search {
         margin-right: 30px;
     }
 
-    .footer{
+    .footer {
 
     }
-    .footer .btns{
+
+    .footer .btns {
         padding: 10px 0;
     }
 </style>
