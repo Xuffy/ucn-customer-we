@@ -1,16 +1,21 @@
 <template>
-    <div v-if="config.showCompareList" class="compare-list" :class="{show:change}">
+    <div class="compare-zone" v-if="config.showCompareList">
+        <div class="compare-list" :class="{show:change}">
+            <el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>
+            <el-tag
+                    class="tag"
+                    v-for="tag in tags"
+                    :key="tag.name"
+                    closable
+                    :type="tag.type"
+                    @close="handleClose(tag)">
+                {{tag.name}}
+            </el-tag>
+            <!--<el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>-->
+        </div>
         <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change}"></i>
-        <el-tag
-                v-for="tag in tags"
-                :key="tag.name"
-                closable
-                :type="tag.type"
-                @close="handleClose(tag)">
-            {{tag.name}}
-        </el-tag>
-        <el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>
     </div>
+
 </template>
 
 <script>
@@ -74,32 +79,35 @@
 </script>
 
 <style scoped>
-    .compare-list{
+    .compare-zone{
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         z-index: 2000;
-        height: 35px;
-        line-height: 35px;
-        background: rgba(153, 153, 153, 0.447058823529412);
-        padding-left: 80px;
+        height: 40px;
+        line-height: 40px;
+        background: rgba(0, 0, 0, 0.6);
+        padding-left: 40px;
+        transition: all linear .3s;
+    }
+    .compare-list{
         transition: all linear .3s;
     }
     .show{
-        transform: translateX(95%);
+        transform: translateX(100%);
         transition: all linear .3s;
     }
-    .compare-list>i{
+    i{
         color: #ffffff;
         font-size: 20px;
         position: absolute;
-        top:7px;
-        left: 20px;
+        bottom: 10px;
+        right: 20px;
         transition: all linear .3s;
         cursor: pointer;
     }
-    .compare-list .iconShow{
+    .iconShow{
         transform: rotate(180deg);
         transition: all linear .3s;
     }
@@ -114,12 +122,12 @@
         /*margin-right: 20px;*/
     /*}*/
     .compare-list .btn{
-        float: right;
-        margin-top: 4px;
+        float: left;
+        margin-top: 6px;
         margin-right: 20px;
     }
     .compare-list .el-tag{
-        background-color: #f4f4f4;
+        background-color: #ffffff;
         color: #666666;
         border:1px solid #f4f4f4;
         margin-left: 10px;

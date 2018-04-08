@@ -7,7 +7,7 @@
             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
                 <el-tab-pane :label="$t('product.page.systemMessage')" name="System Message">
                     <div class="title">
-                        <el-button type="primary">{{$t('product.page.markAsRead')}}</el-button>
+                        <el-button>{{$t('product.page.markAsRead')}}</el-button>
                         <el-input
                                 class="message-input"
                                 placeholder="请输入内容"
@@ -17,6 +17,7 @@
                     </div>
                     <div class="content">
                         <el-table
+                                class="speTable"
                                 ref="multipleTable"
                                 :data="tableData3"
                                 tooltip-effect="dark"
@@ -29,9 +30,11 @@
                             </el-table-column>
                             <el-table-column
                                     :label="$t('product.page.content')"
-                                    align="center">
+                                    align="left">
                                 <template slot-scope="scope">
-                                    <i style="margin-right: 40px" class="el-icon-info"></i>{{ scope.row.content }}
+                                    <div style="font-weight: bold;color:#3f9eff;">
+                                        {{ scope.row.content }}
+                                    </div>
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -194,5 +197,9 @@
     .message-input{
         width: 300px;
         float: right;
+    }
+
+    .speTable >>> .el-table__header-wrapper table thead tr th{
+        font-weight: bold;
     }
 </style>

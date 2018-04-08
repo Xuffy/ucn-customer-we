@@ -25,7 +25,7 @@ const page={
 
     //btnGroup
     add:'Add',
-    downTheLogs:'Down the logs',
+    download:'Download',
     edit:'Edit',
     showTheAdvance:'Show the Advance',          //切换显示隐藏按钮的文字
     hideTheAdvance:'Hide the Advance',          //切换显示隐藏按钮的文字
@@ -231,7 +231,7 @@ const page={
 
     //bookmark manuallyAdd customerInfo
     hsCode:'HS Code',
-    relatedBrand:'related brand',
+        relatedBrand:'related brand',
 
 
 

@@ -14,22 +14,13 @@
                 <el-table-column
                         prop="content"
                         :label="$t('product.page.content')"
-                        align="center">
+                        align="left">
                 </el-table-column>
                 <el-table-column
                         prop="time"
                         :label="$t('product.page.time')"
                         sortable
                         align="center">
-                </el-table-column>
-                <el-table-column
-                        :label="$t('product.page.action')"
-                        align="center">
-                    <template slot-scope="scope">
-                        <el-button @click="publish(scope.row)" type="text">发布</el-button>
-                        <el-button type="text">修改</el-button>
-                        <el-button type="text">删除</el-button>
-                    </template>
                 </el-table-column>
             </el-table>
             <br>
@@ -58,9 +49,8 @@
                     v-model="newsContent">
             </el-input>
             <span slot="footer" class="dialog-footer">
-                <el-button type="success" plain size="mini" @click="dialogVisible = false">发 布</el-button>
-                <el-button type="primary" plain size="mini" @click="dialogVisible = false">保 存</el-button>
-                <el-button size="mini" @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">发 布</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
             </span>
         </el-dialog>
     </div>
