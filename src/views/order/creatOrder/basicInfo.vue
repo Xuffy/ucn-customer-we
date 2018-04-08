@@ -6,37 +6,36 @@
                     <el-row :gutter="10">
                          
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $t('order.basicinfo.orderNo')" prop="orderNo">
+                            <el-form-item  :label=" $t('order.basicinfo.orderNo')" prop="orderNo">
                                 <el-input v-model="formItem.orderNo" :disabled=true  placeholder=""></el-input>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list":label=" $t('order.basicinfo.orderDate')" prop="orderDate">
+                            <el-form-item  :label=" $t('order.basicinfo.orderDate')" prop="orderDate">
                               <div style='display:flex;max-width:200px;'>
-                               <el-date-picker
-                                      v-model="formItem.orderDate"
-                                      type="date"
-                                      :disabled=true
-                                      placeholder=""
-                                      >
-                                    </el-date-picker>
+                                       <el-date-picker
+                                              v-model="formItem.orderDate"
+                                              type="date"
+                                              :disabled=true
+                                              placeholder=""
+                                              >
+                                        </el-date-picker>
                                     </div>
                                 </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerOrderNo')" prop="customerOrderNo">
-                                <el-input v-model="formItem.customerOrderNo" :disabled='disabled' placeholder="Enter something..."></el-input>
-                            </el-form-item>
+                                <el-form-item :label=" $t('order.basicinfo.customerOrderNo')" prop="customerOrderNo">
+                                    <el-input v-model="formItem.customerOrderNo" :disabled='disabled' placeholder=""></el-input>
+                                </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $t('order.basicinfo.customerName')" prop="customerName">
-                                <el-input v-model="formItem.customerName" :disabled='disabled' placeholder="Enter something..."></el-input>
-                                
-                            </el-form-item>
+                                <el-form-item class="form-list" :label=" $t('order.basicinfo.customerName')" prop="customerName">
+                                    <el-input v-model="formItem.customerName" :disabled='disabled' placeholder=""></el-input>                   
+                                </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerNo')" prop="customerNo">
-                                 <el-input v-model="formItem.customerNo" :disabled='disabled' placeholder="select">
+                                 <el-input v-model="formItem.customerNo" :disabled='disabled' placeholder="">
                                   </el-input>
                             </el-form-item>
                          </el-col>                 
@@ -190,7 +189,12 @@
                                     </el-date-picker>
                                         </div>
                             </el-form-item>
-                         </el-col>             
+                         </el-col>  
+                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
+                                <el-form-item class="form-list" :label=" $t('order.basicinfo.remark')" prop="remark">
+                                    <el-input type="textarea" v-model="formItem.remark" :disabled='disabled' placeholder="Enter something..."></el-input>
+                                </el-form-item>
+                            </el-col>
                     </el-row>
                 </el-form>
              </div>
@@ -359,11 +363,7 @@
 
     }
 
-    .form-list {
-        /*        max-width: 240px;*/
-        /*        display: flex;*/
-        /*        justify-content: flex-start;*/
-    }
+    .form-list {}
 
     .basicinfo_title {
         font-size: 14px;

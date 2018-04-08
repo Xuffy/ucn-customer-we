@@ -64,22 +64,22 @@
             <el-tabs v-model="tabName" type="card" >
                 
                 <el-tab-pane :label="$t('supplier.detail.address')" name="address">
-                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.accountInfo')"  name="accountInfo">
-                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.tradeHistory')"  name="tradeHistory">
-                  <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                  <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.inquireHistory')"  name="inquireHistory">
-                   <v-simple-table :column="tabColumn" :data.sync="tabData" />     
+                  <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/> 
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="remark">
-
+                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
                   <div class="attchment">
@@ -109,13 +109,13 @@
 
 <script>
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
 
     export default {
         name: "souringDetail",
         components: {
-            VSimpleTable,
+            VTable,
 
         },
         data() {
@@ -151,18 +151,15 @@
             },
         },
         created() {
-            this.ajax.get('/sourcingDetailAdress', {
+            this.ajax.get('/supplierOverview', {
                     params: {}
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.detail", {
-                        width: '220px'
-                    });
 
                 })
                 .catch((res) => {
-                    console.log(res);
+
                 });
         },
     }

@@ -77,7 +77,7 @@
               </div>          
         </div>
         <!--        表格-->
-             <v-simple-table :column="tabColumn" :data.sync="tabData" />
+            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
     </div>
 </template>
 
@@ -86,13 +86,13 @@
         dropDown
     } from '@/components/index'
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
             dropDown,
-            VSimpleTable
+            VTable
         },
         props: {
 
@@ -165,13 +165,10 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
-                    console.log(res);
+
                 });
         },
         watch: {
@@ -198,7 +195,7 @@
         height: 32px;
         line-height: 32px;
         color: #666666;
-        
+
     }
 
     .title-btn {

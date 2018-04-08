@@ -20,7 +20,7 @@
            
         </div>
         <!--from-->
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -28,13 +28,13 @@
         dropDown
     } from '@/components/index'
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: 'compare',
         components: {
             dropDown,
-            VSimpleTable
+            VTable
         },
         data() {
             return {
@@ -55,13 +55,10 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
-                    console.log(res);
+                    
                 });
         },
     }
