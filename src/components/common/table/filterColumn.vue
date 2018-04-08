@@ -4,12 +4,13 @@
     <el-popover
       :width="200"
       v-model="visible"
+      @hide="defaultChecked"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="el-icon-setting">Set Filed</i>
       <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
                 size="mini" clearable style="margin-bottom: 10px"></el-input>
-      <el-checkbox v-model="checkAll">全选</el-checkbox>
+      <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">全选</el-checkbox>
       <div style="height: 200px;overflow: auto">
         <el-tree
           show-checkbox
@@ -17,7 +18,7 @@
           class="filter-tree"
           node-key="prop"
           :data="data"
-          @current-change=""
+          @check-change="changeCheck"
           :props="{children: 'children',label: 'label'}"
           :filter-node-method="filterNode"
           ref="columnTree">
@@ -26,7 +27,7 @@
       <br/>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-button size="mini" style="width: 100%">确定</el-button>
+          <el-button size="mini" style="width: 100%" @click="clickFilter">确定</el-button>
         </el-col>
         <el-col :span="12">
           <el-button size="mini" style="width: 100%" @click="visible =  false">取消</el-button>
@@ -51,58 +52,15 @@
     data() {
       return {
         visible: false,
+        checkedList: [],
         checkAll: false,
         filterText: '',
-        dataList: [
-          {
-            id: 1,
-            label: '一级 1',
-            children: [{
-              id: 4,
-              label: '二级 1-1',
-              children: [{
-                id: 9,
-                label: '三级 1-1-1'
-              }, {
-                id: 10,
-                label: '三级 1-1-2'
-              }]
-            }]
-          }, {
-            id: 2,
-            label: '一级 2',
-            children: [{
-              id: 5,
-              label: '二级 2-1'
-            }, {
-              id: 6,
-              label: '二级 2-2'
-            }]
-          }, {
-            id: 3,
-            label: '一级 3',
-            children: [{
-              id: 7,
-              label: '二级 3-1'
-            }, {
-              id: 8,
-              label: '二级 3-2'
-            }]
-          }
-        ],
+        isIndeterminate: true,
       }
     },
     watch: {
-      data(value) {
-        // this.dataList = value;
-        // console.log(value)
-        let checked = [];
-        /*_.map(value, val => {
-          val._hide
-        })*/
-      },
-      dataList(value) {
-        // console.log(value)
+      data() {
+        this.defaultChecked();
       },
       filterText(val) {
         this.$refs.columnTree.filter(val);
@@ -110,14 +68,43 @@
       checkAll(val) {
         val ? this.$refs.columnTree.setCheckedKeys(_.pluck(this.data, 'prop'))
           : this.$refs.columnTree.setCheckedKeys([]);
+      },
+      checkedList(value) {
+        console.log(value)
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.data.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.data.length;
       }
     },
-    created() {
+    mounted() {
+      this.defaultChecked();
     },
     methods: {
       filterNode(value, data) {
         if (!value) return true;
         return data.label.toLowerCase().indexOf(value.toLowerCase()) !== -1;
+      },
+      clickFilter() {
+        let list = [];
+        list = _.map(this.data, (value) => {
+          value._isHide = !_.findWhere(this.checkedList, {prop: value.prop});
+          return value;
+        });
+        this.$emit('update:data', list);
+        this.visible = false;
+      },
+      defaultChecked() {
+        let list = [];
+        _.map(this.data, val => {
+          if (!val._isHide) {
+            list.push(val.prop);
+          }
+        });
+        this.$refs.columnTree.setCheckedKeys(list);
+      },
+      changeCheck() {
+        console.log(this.checkedList,'++++++',this.$refs.columnTree.getCheckedKeys());
+        this.checkedList = this.$refs.columnTree.getCheckedKeys();
       }
     }
   }

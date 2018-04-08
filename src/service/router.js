@@ -247,7 +247,7 @@ export const routerMap = [
           component: () => import('../views/logistic/logisticOrderDetail')
         }
       ]
-      
+
     },
     {
         path: '/order',

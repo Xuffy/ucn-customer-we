@@ -1,9 +1,10 @@
 <template>
-  <div class="ucn-table">
+  <div class="ucn-table" ref="tableBox">
     <el-row>
       <el-col :span="16">&nbsp;</el-col>
       <el-col :span="8" style="text-align: right;cursor: pointer">
-        <v-filter-column :data="column"></v-filter-column>
+        <v-filter-column :data.sync="columnList">
+        </v-filter-column>
       </el-col>
     </el-row>
     <el-table
@@ -26,11 +27,12 @@
       </el-table-column>
 
       <el-table-column v-for="(item,index) in columnList" :key="index"
+                       v-if="!item._isHide"
                        align="center"
                        :prop="item.prop"
                        :label="item.label"
                        :render-header="item.renderHeader"
-                       :width="item.width || 80">
+                       :width="columnWidth < item.width ? item.width : columnWidth">
       </el-table-column>
       <el-table-column v-if="columnList.length"
                        label="Actions"
@@ -122,7 +124,7 @@
         showData: [],
         columnList: [],
         selectedList: [],
-        // checkValue: [],
+        columnWidth: 0,
       }
     },
     watch: {
@@ -142,20 +144,31 @@
         });
         this.$refs.table.toggleRowSelection(data, true);
       },
-      column(columns) {
-        this.filterColumn(columns);
+      column(val) {
+        this.filterColumn(val);
+      },
+      columnList(val) {
+        this.computeWidth();
       }
     },
     created() {
       this.filterColumn(this.column);
-      // this.$emit('update:column', [])
     },
     methods: {
+      computeWidth() {
+        let num = 0, cv = 0;
+        _.map(this.columnList, val => {
+          if (!val._isHide) {
+            num++;
+          }
+        });
+        this.columnWidth = this.$refs.tableBox.offsetWidth / num - 80;
+      },
       filterColumn(columns) {
         if (columns.length) {
           this.columnList = _.map(columns, val => {
             if (!val.renderHeader) {
-              val.renderHeader = (h, params) => {
+              /*val.renderHeader = (h, params) => {
                 return h(VFilterValue, {
                   props: {
                     dataKey: val.prop,
@@ -171,15 +184,12 @@
                     }
                   }
                 });
-              };
+              };*/
             }
             return val;
           });
         }
       },
-      /*selectionChange(selection) {
-        this.selectedList = selection;
-      },*/
       /**
        * 函数说明
        * @method getList

@@ -5,7 +5,7 @@
       :width="200"
       popper-class="filter-value-popper"
       placement="bottom"
-      @hide="hideListener"
+      @hide="getFilterValue"
       v-model="visible"
       trigger="click">
       <h4 slot="reference" style="cursor: pointer">
@@ -155,9 +155,6 @@
         this.$emit('update:data', data);
 
         this.visible = false;
-      },
-      hideListener() {
-        this.getFilterValue();
       }
     }
   }

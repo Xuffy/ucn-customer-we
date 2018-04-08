@@ -70,14 +70,17 @@ export default {
         _.map(_.keys(value), val => {
           let k = this.$tc(`${key}.${val}`);
           if (k.indexOf('.') < 0 || k.charAt(k.length - 1) === '.') {
-            list.push(_.extend({label: k, prop: val, width: 80}, config));
+            list.push(_.extend({label: k, prop: val, width: 100}, config));
+            // list.push(_.extend({title: k, field: val, width: 80}, config));
           }
         });
         return list;
       } else {
-        throw new Error('lack of parameters');
+        return [];
+        // throw new Error('lack of parameters');
       }
     }
+
 
 
     /**
