@@ -1,6 +1,6 @@
 <template>
   <div class="ucn-table" v-loading="loading">
-    <div class="table-container">
+    <div class="table-container" :style="{height:height + 'px'}">
       <div class="fixed-left" ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
         <!--<el-checkbox v-model="checkedAll"></el-checkbox>-->
@@ -8,7 +8,6 @@
       <div class="fixed-right" ref="fixedRight" :class="{show:dataColumn.length}">
         action
       </div>
-
 
       <div class="table-box" ref="tableBox">
         <table v-if="dataList.length">
@@ -97,10 +96,22 @@
           return [];
         },
       },
+      dataKey: {
+        type: String,
+        default: '',
+      },
       loading: {
         type: Boolean,
         default: false,
       },
+      height: {
+        type: Number,
+        default: 300,
+      },
+      /*loading: {
+        type: Boolean,
+        default: false,
+      },*/
     },
     data() {
       return {
@@ -146,8 +157,8 @@
         }
       },
       filterKey(k) {
-        const dk = 'negotiation.tableProductInfo';
-        let sk = this.$tc(`${dk}.${k}`);
+        // const dk = 'negotiation.tableProductInfo';
+        let sk = this.$tc(`${this.dataKey}.${k}`);
         if (sk.indexOf('.') < 0 || sk.charAt(sk.length - 1) === '.') {
           return sk;
         }
@@ -184,14 +195,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .ucn-table {
-  }
 
   .ucn-table .table-container {
     position: relative;
     margin-bottom: 10px;
-    width: 700px;
-    height: 500px;
+    width: 100%;
   }
 
   .ucn-table .fixed-left,
@@ -336,5 +344,9 @@
     text-align: center;
     transform: translate(-50%, -50%);
     color: #999999;
+  }
+
+  .ucn-table .el-pagination {
+    white-space: inherit;
   }
 </style>

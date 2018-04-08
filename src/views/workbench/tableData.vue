@@ -29,7 +29,7 @@
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
 
-        <v-table :data="dataList"></v-table>
+        <v-table :data="dataList" data-key="negotiation.tableProductInfo"></v-table>
         <!--<v-simple-table :data.sync="dataList" :column="dataColumn"
                         @sort-change="getSort"
                         @page-change="pageChange"></v-simple-table>-->
