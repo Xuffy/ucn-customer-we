@@ -68,61 +68,52 @@ const tableData = {
 //............................................................po detail
 const basicinfo = {
     basicInfo: 'Basic Info',
-    orderNumber: 'Order Number',
+    orderNo: 'Order NO',
     orderDate: 'Order Date',
-    purchaseOrderNumber: 'Purchase Order Number',
-    customerShortName: 'Customer Short Name',
-    customerSerialNumber: 'Customer Serial Number',
-    salesOrderNumber: 'Sales Order Number',
-    supplierShortName: 'Supplier Short Name',
-    supplierSerialNumber: 'Supplier Serial Number',
-    //...下拉框
-    referencesInquiryID: 'References Inquiry ID',
-    TBCByCustomer: 'TBC by customer',
-    TBCBySupplier: 'TBC by supplier',
-
+    customerOrderNo: 'Customer Order No',
+    customerName: 'Customer Name',
+    customerNo: 'Customer No.',
+    supplierOrderNo: 'Supplier Order No.',
+    supplierName: 'Supplier Name',
+    supplierNo: 'Supplier No',
+    QuotationNo:'Quotation No.',
+ 
     //....下拉框
     orderStatus: 'Order Status',
+    TBCByCustomer: 'TBC by customer',
+    TBCBySupplier: 'TBC by supplier',
     Process: 'Process',
     Finished: 'Finished',
     Cancled: 'Cancled',
 
-    estDeliveryDate: 'Est Delivery Date',
-    actDeliveryDate: 'Act Delivery Date',
+    deliveryDate: 'Delivery Date',
+
     //。。。下拉框
-    priceTerms: 'Price Terms',
+    incoterm: 'Price Terms',
     fob: 'fob',
     exw: 'exw',
     //    其他:'其他'
 
+    incortermAea: 'Incoterm Area',
+    
+    //.....下拉
+    payment: 'Payment',
+//       T/T,L/C,Cash,Bank Transfer,DP,DA
 
-    incortermAea: 'incoterm area',
-    paymentMethod: 'Payment Methods',
-    lcNumber: 'LC Number',
-    countryofShipmentOrigin: 'Country of Shipment Origin',
-    portofLoading: 'Port of Loading',
+    lcNo: 'LC No.',
+    paymentDays: 'Payment Days',
+    paymentStatus: 'Payment Status',
+    departureCountry:'DepartureCountry',
+    departurePort: 'Departure Port', 
     destinationCountry: 'Destination Country',
-    destinationPort: 'Destination Port',
+     destinationPort: 'Destination Port',
+   
     //......下拉框
     transportationWay: 'Transportation Way',
-    海运: '海运',
-
-    customerAgreementID: 'Customer Agreement ID',
+//    海运: '海运',
+    customerAgreementNumber: 'Customer Agreement Number',
     customerAgreementDate: 'Customer Agreement Date',
-    //下拉框
-    batchForLogistics: 'Batch For Logistics',
-    Yes: 'Yes',
-    No: 'No',
-
-    //下拉框
-    paymentCondition: 'Payment Condition',
-    paySinceBL: 'Pay Since B/L',
-    paySinceLCNumber: 'Pay Since LC Number',
-
-
-    agreeOnDateInterval: 'Agree On Date Interval',
-    paymentStatus: 'Payment Status',
-    comments: 'Comments',
+    remark:'Remark',
 }
 
 const responsibility = {

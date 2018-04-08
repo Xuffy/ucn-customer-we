@@ -48,10 +48,10 @@
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button type="primary" @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button type="primary" @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button  @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button  @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button  @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
                     <el-button @click='addToBookmark'>{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                 </div>
                 <div class="btns" v-else>
@@ -127,27 +127,27 @@
             }
         },
         methods: {
-            createInquiry(){
-                 this.$router.push({
+            createInquiry() {
+                this.$router.push({
                     name: 'createInquiry',
                     query: {
-                        
+
                     }
                 })
             },
-            createOrder(){
-                 this.$router.push({
+            createOrder() {
+                this.$router.push({
                     name: 'creatOrder',
                     query: {
-                        
+
                     }
                 })
             },
-            addToCompare(){
-                
+            addToCompare() {
+
             },
-            supplierProducts(){
-                
+            supplierProducts() {
+
             },
         },
         created() {
@@ -173,12 +173,17 @@
     .title img {
         max-width: 100px;
         max-height: 100px;
+        margin-left: 30px;
     }
 
     .title {
         display: flex;
         align-items: center;
         margin-top: 20px;
+    }
+
+    .title span {
+        margin-left: 10px;
     }
 
     .detail {
@@ -229,7 +234,7 @@
         padding-left: 30px;
         font-size: 14px;
         line-height: 2.5;
-        border-bottom: 1px dotted #e0e0e0;
+        /*        border-bottom: 1px dotted #e0e0e0;*/
     }
 
     .souringDetail .head .detail .btns {

@@ -53,14 +53,14 @@
 <!--         payment-->
 <!--         <payment></payment>-->
 <!--         product_details-->
-         <div class="product_details">
+         <div class="product_details" >
              <div class="pro_title">
                  {{$t('order.productinfo.productInfo')}}
              </div>
              <div class="pro_button">
-                  <el-button type='primary' @click="dialogAddproduct = true" disabled='disabled'>{{$t('order.buttonname.addProduct')}}</el-button>
-                  <el-button type='primary' disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
-                  <el-button type='primary' @click='placeLogisticPlan' disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='disabled'>{{$t('order.buttonname.addProduct')}}</el-button>
+                  <el-button  :disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
+                  <el-button  @click='placeLogisticPlan' :disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
                   <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -69,17 +69,17 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='disabled'>
-                 <el-button type='primary' @click='modify'>{{$t('order.buttonname.modify')}}</el-button>
-                 <el-button type='primary'>{{$t('order.buttonname.confirm')}}</el-button>
-                 <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>
-                 <el-button type='primary' :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
+                 <el-button  @click='modify'>{{$t('order.buttonname.modify')}}</el-button>
+                 <el-button >{{$t('order.buttonname.confirm')}}</el-button>
+<!--                 <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>-->
+                 <el-button  :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hideTheSame')}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hightlightTheDifferent')}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
-                 <el-button type='primary'>{{$t('order.buttonname.send')}}</el-button>
-                 <el-button type='primary' @click='cancel'>{{$t('order.buttonname.cancel')}}</el-button>
+                 <el-button >{{$t('order.buttonname.send')}}</el-button>
+                 <el-button type='danger' @click='cancel'>{{$t('order.buttonname.cancel')}}</el-button>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
@@ -144,8 +144,8 @@
                 tabData: []
             }
         },
-        mounted(){
-//            console.log(this.$refs.responsibility.tableData)
+        mounted() {
+            //            console.log(this.$refs.responsibility.tableData)
         },
         created() {
             this.ajax.get('/supplierOverview', {
@@ -156,7 +156,7 @@
                     this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
                         width: '180px'
                     });
-                   
+
                 })
                 .catch((res) => {
                     console.log(res);
@@ -184,12 +184,12 @@
                 window.open(href, '_blank')
             },
             //..............底部cancel
-            cancel(){
-                this.disabled=true
+            cancel() {
+                this.disabled = true
             }
         },
-        watch:{
- 
+        watch: {
+
         }
     }
 

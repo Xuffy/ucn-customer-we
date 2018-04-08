@@ -20,6 +20,7 @@ const buttonname = {
     //......................Draft Overview
     draftOview: 'Draft Overview',
     send: 'send',
+    downloadSelected: 'Download Selected',
     //......................createorder
     orderRemark: 'Order Remark',
     attachment: 'Attachment',
@@ -47,8 +48,8 @@ const buttonname = {
     hideTheSame: 'Hide The Same',
     hightlightTheDifferent: 'Hightlight the Different',
     //....................
-    send:'Send',
-    cancel:'Cancel'
+    send: 'Send',
+    cancel: 'Cancel'
 }
 export default {
     buttonname,

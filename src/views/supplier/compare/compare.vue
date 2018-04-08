@@ -3,8 +3,8 @@
         <h3 class="hd">{{$t("supplier.title.compareDetail")}}</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary">{{$t("supplier.buttonname.createOrder")}}</el-button>
-                 <el-button type="primary">{{$t("supplier.buttonname.accept")}}</el-button>
+                <el-button >{{$t("supplier.buttonname.createOrder")}}</el-button>
+                 <el-button >{{$t("supplier.buttonname.accept")}}</el-button>
                 <el-checkbox-group v-model="checkList">
                     <el-checkbox :label='$t("supplier.buttonname.hideTheSame")'></el-checkbox>
                     <el-checkbox :label='$t("supplier.buttonname.hightlightTheDifferent")'></el-checkbox>

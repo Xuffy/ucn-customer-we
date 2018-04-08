@@ -6,7 +6,7 @@
            <div class="basicinfo_other">
     <!--                order remark-->
                     <el-row>
-                          <el-col :xs="24" :sm="24" :md="24" :lg="12">
+                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
                              <div class="order_remark">
                                  <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
                                  <div>
@@ -20,7 +20,7 @@
                                 </div>  
                          </el-col>
     <!--                 attchment         -->
-                          <el-col :xs="24" :sm="24" :md="24" :lg="12">
+                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
                              <div class="attchment">
                                 <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                 <div>
@@ -38,8 +38,8 @@
                  {{$t('order.productinfo.productInfo')}}
              </div>
              <div class="pro_button">
-                  <el-button type='primary' @click="dialogAddproduct = true">{{$t('order.buttonname.addProduct')}}</el-button>
-                  <el-button type='primary'>{{$t('order.buttonname.remove')}}</el-button>
+                  <el-button  @click="dialogAddproduct = true">{{$t('order.buttonname.addProduct')}}</el-button>
+                  <el-button type='danger'>{{$t('order.buttonname.remove')}}</el-button>
              </div>
              <div class="pro_table">
                      <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -48,9 +48,9 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button type='primary' @click='send'>{{$t('order.buttonname.send')}}</el-button>
-                 <el-button type='primary'>{{$t('order.buttonname.saveAsDraft')}}</el-button>
-                 <el-button type='primary' @click="dialogQuickcreate = true">{{$t('order.buttonname.quickCreate')}}</el-button>
+                 <el-button @click='send'>{{$t('order.buttonname.send')}}</el-button>
+                 <el-button >{{$t('order.buttonname.saveAsDraft')}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$t('order.buttonname.quickCreate')}}</el-button>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
              </div>
          </div>
@@ -87,10 +87,9 @@
 </template>
 
 <script>
-    /*
-                        从子组件里面拿的值，这里通过ref拿的
-                        this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
-                                                                    */
+    /*  从子组件里面拿的值，这里通过ref拿的
+            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
+           */
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicinfo.vue'
     import VFromNewSearch from './FromNewSearch.vue'

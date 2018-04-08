@@ -3,8 +3,8 @@
         <h3 class="hd">Order Overview</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>Status:</span>
-                      <el-radio-group v-model="status_buttons">
+                <span>Status&nbsp</span>
+                      <el-radio-group v-model="status_buttons" size="mini">
                             <el-radio-button label="TBCByCustomer">{{$t('order.buttonname.TBCByCustomer')}}</el-radio-button>
                             <el-radio-button label="TBCBySupplier">{{$t('order.buttonname.TBCBySupplier')}}</el-radio-button>
                             <el-radio-button label="process">{{$t('order.buttonname.process')}}</el-radio-button>
@@ -13,6 +13,7 @@
                     </el-radio-group>
             </div>
             <div class="select-wrap">
+<!--
                 <div class="select">
                     <el-select v-model="value" placeholder="select" @change="selectChange">
                         <el-option
@@ -22,28 +23,28 @@
                         :value="item.id" />
                     </el-select>
                 </div>
-                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
+                 <el-input v-model="keyWord" style="width:250px;">
+                     <el-button slot="append" icon="el-icon-search" style='width:20px;'></el-button>              
+                 </el-input>
+-->
+               <selectSearch></selectSearch>
             </div>
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">{{$t('order.buttonname.downloadSelected')}}</el-button>
-                <el-button type="primary">{{$t('order.buttonname.accept')}}</el-button>
+                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
+                <el-button >{{$t('order.buttonname.accept')}}</el-button>
                 <el-button>{{$t('order.buttonname.copy')}}</el-button>
                 <el-button>{{$t('order.buttonname.cancel')}}</el-button>
-                <el-button>{{$t('order.buttonname.delete')}}</el-button>
+                <el-button type='danger'>{{$t('order.buttonname.delete')}}</el-button>
             </div>
             <div class="viewBy">
-                <span>View by : </span>
-                   <el-radio-group v-model="viewBy_buttons">
+                <span>View by&nbsp</span>
+                   <el-radio-group v-model="viewBy_buttons" size="mini">
                             <el-radio-button label="Inquiry">{{$t('order.buttonname.order')}}</el-radio-button>
                             <el-radio-button label="SKU">{{$t('order.buttonname.SKU')}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
-<!--
-                    <i class="el-icon-setting" @click='hiddenDropDown'></i>
-                    <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
--->
                 </div>
             </div>
         </div>
@@ -60,7 +61,8 @@
      */
 
     import {
-        dropDown
+        dropDown,
+        selectSearch
     } from '@/components/index'
     import {
         VSimpleTable
@@ -69,7 +71,8 @@
         name: 'orderOverview',
         components: {
             dropDown,
-            VSimpleTable
+            VSimpleTable,
+            selectSearch
         },
         data() {
             return {
@@ -82,7 +85,7 @@
                     id: '2',
                     label: this.$t('order.buttonname.skuCode')
                 }, ],
-                status_buttons: 'TBCByCustomer', //status的按钮组
+                status_buttons: '', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
                 //                showdropDown: false,
                 tabColumn: [],
@@ -114,6 +117,12 @@
     }
 
 </script>
+<style scoped>
+    >>>.el-input-group__append {
+        padding: 0 !important;
+    }
+
+</style>
 <style lang="less" scoped>
     .orderOverview {
         .hd {
@@ -161,6 +170,7 @@
                     input {}
                 }
             }
+
         }
         .fn {
             display: flex;
@@ -199,6 +209,7 @@
                 }
             }
         }
+
     }
 
 </style>

@@ -3,11 +3,12 @@
         <h3 class="hd">{{$t("supplier.title.compareOverview")}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">{{$t("supplier.buttonname.downloadSelectedCompare")}}</el-button>
-                <el-button type="info">{{$t("supplier.buttonname.delete")}}</el-button>
+                <el-button >{{$t("supplier.buttonname.downloadSelectedCompare")}}</el-button>
+                <el-button type="danger">{{$t("supplier.buttonname.delete")}}</el-button>
             </div>
 
        <div class="select-wrap">       
+<!--
                 <el-select v-model="value" placeholder="select" @change="selectChange">
                     <el-option
                     v-for="item in options"
@@ -15,7 +16,11 @@
                     :label="item.label"
                     :value="item.id" />
                 </el-select>               
-                <el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>
+                <el-input v-model="keyWord" style="width:150px;margin-left:10px;">
+                    
+                </el-input>
+-->
+                   <selectSearch></selectSearch>
                 <div>
 <!--
                 <i class="el-icon-setting" @click='hiddenDropDown'>
@@ -32,7 +37,8 @@
 </template>
 <script>
     import {
-        dropDown
+        dropDown,
+        selectSearch
     } from '@/components/index'
     import {
         VSimpleTable
@@ -48,20 +54,21 @@
                     id: '1',
                     label: this.$t("supplier.compare.compareItem")
                 }],
-//                showdropDown: false,
+                //                showdropDown: false,
                 tabColumn: [],
                 tabData: []
             }
         },
         components: {
             dropDown,
-            VSimpleTable
+            VSimpleTable,
+            selectSearch
         },
         methods: {
             selectChange() {
 
             },
-//  hiddenDropDown() { // this.showdropDown = !this.showdropDown // }
+            //  hiddenDropDown() { // this.showdropDown = !this.showdropDown // }
         },
         created() {
             this.ajax.get('/supplierOverview', {

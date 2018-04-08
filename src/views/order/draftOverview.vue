@@ -1,30 +1,25 @@
 <template>
     <div class="orderOverview">
         <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
-        <div class="status">
-            <div class="select-wrap">
-                <div class="select">
-                    <el-select v-model="value" placeholder="select" @change="selectChange">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
-                </div>
-                <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-            </div>
+<!--
+<div class="status">
+    <div class="select-wrap">
+        <div class="select">
+            <el-select v-model="value" placeholder="select" @change="selectChange">
+                <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id" />
+            </el-select>
         </div>
+        <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
+    </div>
+</div>
+-->
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">{{$t('order.buttonname.send')}}</el-button>
-                <el-button type="primary">{{$t('order.buttonname.delete')}}</el-button>
+                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
+                <el-button >{{$t('order.buttonname.send')}}</el-button>
+                <el-button type="danger">{{$t('order.buttonname.delete')}}</el-button>
             </div>
-            <div class="viewBy">
-                <div class="set">
-                    <i class="el-icon-setting"></i>
-                </div>
-            </div>
+           <selectSearch></selectSearch>
         </div>
         <!--form-->
           <!--        表格-->
@@ -39,7 +34,8 @@
      * @param value 下拉框 选中值
      */
     import {
-        VSimpleTable
+        VSimpleTable,
+        selectSearch
     } from '@/components/index';
     export default {
         name: '',
@@ -59,7 +55,8 @@
             }
         },
         components: {
-            VSimpleTable
+            VSimpleTable,
+            selectSearch
         },
         methods: {
             selectChange(val) {

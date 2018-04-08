@@ -9,9 +9,6 @@
                         <span>name</span>
                     </span> 
                 </el-col>  
-                 <el-col  :xs="2" :sm="2" :md="2" :lg="2" :xl="2">      
-                     <el-button>{{$t('supplier.buttonname.remove')}}</el-button>
-                </el-col>
                 </el-row>  
             </div>
 <!--            商品详情-->
@@ -59,14 +56,15 @@
 
                 </el-row>
                 <div class="btns" v-if="noEdit">
-                    <el-button type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button type="primary" @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button type="primary" @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button  @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                    <el-button  @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button  @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button type='danger'>{{$t('supplier.buttonname.remove')}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">{{$t('supplier.buttonname.finish')}}</el-button>
-                    <el-button @click="cancelEdit" type="info">{{$t('supplier.buttonname.cancel')}}</el-button>
+                    <el-button @click="finishEdit" >{{$t('supplier.buttonname.finish')}}</el-button>
+                    <el-button @click="cancelEdit" type="danger">{{$t('supplier.buttonname.cancel')}}</el-button>
                 </div>
             </div>
         </div>
@@ -139,27 +137,27 @@
         },
         methods: {
             //...........跳入createInquiry
-            createInquiry(){
-                   this.$router.push({
-                    name:'createInquiry',
-                    query:{
-                        
+            createInquiry() {
+                this.$router.push({
+                    name: 'createInquiry',
+                    query: {
+
                     }
                 })
             },
-            createOrder(){
-                   this.$router.push({
-                    name:'creatOrder',
-                    query:{
-                        
+            createOrder() {
+                this.$router.push({
+                    name: 'creatOrder',
+                    query: {
+
                     }
                 })
             },
-            addToCompare(){
-                
+            addToCompare() {
+
             },
-            supplierProducts(){
-                
+            supplierProducts() {
+
             },
         },
         created() {
@@ -185,6 +183,7 @@
     .title img {
         max-width: 100px;
         max-height: 100px;
+        margin-left: 20px;
     }
 
     .title {
@@ -195,6 +194,7 @@
     .title span {
         display: flex;
         align-items: center;
+        margin-left: 10px;
     }
 
     .detail {
@@ -244,7 +244,7 @@
         padding-left: 30px;
         font-size: 14px;
         line-height: 2.5;
-        border-bottom: 1px dotted #e0e0e0;
+        /*        border-bottom: 1px dotted #e0e0e0;*/
     }
 
     .bookmarkDetail .head .detail .btns {

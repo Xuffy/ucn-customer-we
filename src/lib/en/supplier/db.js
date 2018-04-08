@@ -2,7 +2,7 @@
 
 //表格数据属性
 const tableData = {
-    SupplierCode: 'SupplierCode',
+    SupplierNo: 'Supplier No',
     supplierName: 'supplier name',
     supplierType: 'supplier type',
     country: 'country',

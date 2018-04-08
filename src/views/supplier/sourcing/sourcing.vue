@@ -6,7 +6,7 @@
         </div>
 <!--        搜索条件-->
             <div>
-                <el-form ref="formItem" :model="formItem" label-width="140px">
+                <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="8">
                             <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
@@ -31,7 +31,7 @@
     </el-form>
             </div>
             <div class="body" :class="{hide:hideBody}">
-                     <el-form ref="formItem" :model="formItem" label-width="140px">
+                     <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                      <el-row>
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
                         <el-form-item class="form-list" :label="$t('supplier.input.supplierType')" prop="supplierType">
@@ -64,11 +64,11 @@
             <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button  type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  type="primary" @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
-                  <el-button  type="primary" >{{$t('supplier.buttonname.downloadTheSelectedSupplier')}}</el-button>
+                  <el-button   @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button   @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button  @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>
+                  <el-button  >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
+                  <el-button   >{{$t('supplier.buttonname.downloadTheSelectedSupplier')}}</el-button>
               </div>  
               <div>
                  
@@ -133,25 +133,25 @@
                 this.$router.push({
                     name: 'createInquiry',
                     query: {
-                        
+
                     }
                 })
             },
             //....跳入createOrder
-            createOrder(){
-                 this.$router.push({
+            createOrder() {
+                this.$router.push({
                     name: 'creatOrder',
                     query: {
-                        
+
                     }
                 })
             },
             //........跳入compare
-            compare(){
+            compare() {
                 this.$router.push({
                     name: 'SupplierCompare',
                     query: {
-                        
+
                     }
                 })
             }
@@ -260,8 +260,10 @@
     .el-input {
         max-width: 200px;
     }
-    .speDropdown{
-      max-width: 200px;
-      height: 30px;
+
+    .speDropdown {
+        max-width: 200px;
+        height: 30px;
     }
+
 </style>

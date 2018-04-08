@@ -6,7 +6,7 @@
         </div>
 <!--        搜索条件-->
        <div>
-            <el-form ref="formItem" :model="formItem" label-width="140px">
+            <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                 <el-row>
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
                         <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
@@ -31,7 +31,7 @@
 </el-form>
             </div>
             <div class="body" :class="{hide:hideBody}">
-                     <el-form ref="formItem" :model="formItem" label-width="140px">
+                     <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                      <el-row>
                       <el-col :xs="24" :sm="12" :md="8" :lg="8">
                         <el-form-item class="form-list" :label="$t('supplier.input.supplierType')" prop="supplierType">
@@ -64,12 +64,12 @@
         <div>
 <!--            跳转按钮行-->
              <div class="btnline">
-                  <el-button  type="primary" @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button  type="primary" @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  type="primary"  @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>             
-                  <el-button  type="primary">{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
+                  <el-button   @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
+                  <el-button   @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                  <el-button   @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>             
+                  <el-button  >{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
 <!--                  remove按钮-->
-                   <el-button  type="info" :disabled='disabled' >{{$t('supplier.buttonname.remove')}}</el-button>
+                   <el-button  :disabled='disabled' type="danger">{{$t('supplier.buttonname.remove')}}</el-button>
               </div>  
               <div>
                  
@@ -85,7 +85,9 @@
     import {
         dropDown
     } from '@/components/index'
-    import {VSimpleTable } from '@/components/index';
+    import {
+        VSimpleTable
+    } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
@@ -111,8 +113,8 @@
                 },
                 //                remove
                 disabled: true,
-                 tabColumn:[],
-                  tabData:[]
+                tabColumn: [],
+                tabData: []
             }
         },
         methods: {
@@ -130,46 +132,47 @@
                 this.$router.push('/product/detail');
             },
             //........跳入createInquiry
-            createInquiry(){
+            createInquiry() {
                 this.$router.push({
-                    name:'createInquiry',
-                    query:{
-                        
+                    name: 'createInquiry',
+                    query: {
+
                     }
                 })
             },
-              //........跳入createOrder
-            createOrder(){
+            //........跳入createOrder
+            createOrder() {
                 this.$router.push({
-                    name:'creatOrder',
-                    query:{
-                        
+                    name: 'creatOrder',
+                    query: {
+
                     }
                 })
             },
-              //........跳入createInquiry
-            compare(){
+            //........跳入createInquiry
+            compare() {
                 this.$router.push({
-                    name:'SupplierCompare',
-                    query:{
-                        
+                    name: 'SupplierCompare',
+                    query: {
+
                     }
                 })
             }
         },
         created() {
-                  this.ajax.get('/supplierOverview', {
-                    params: {
-                    }
-                  })
-                  .then( res => {
-                    this.tabData=res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData",{width:'180px'});
+            this.ajax.get('/supplierOverview', {
+                    params: {}
+                })
+                .then(res => {
+                    this.tabData = res.supplierdata
+                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
+                        width: '180px'
+                    });
                     console.log(this.tabColumn)
-                  })
-                  .catch((res)=>{
+                })
+                .catch((res) => {
                     console.log(res);
-                  });
+                });
         },
         watch: {
             hideBody(n) {
@@ -195,6 +198,7 @@
         height: 32px;
         line-height: 32px;
         color: #666666;
+        
     }
 
     .title-btn {
@@ -252,15 +256,18 @@
         margin-right: 8px;
         margin-top: 20px;
     }
+
     .el-select {
-            max-width: 200px
-        }
+        max-width: 200px
+    }
 
     .el-input {
         max-width: 200px;
     }
-     .speDropdown{
-      max-width: 200px;
-      height: 30px;
+
+    .speDropdown {
+        max-width: 200px;
+        height: 30px;
     }
+
 </style>
