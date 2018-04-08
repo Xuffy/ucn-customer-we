@@ -13,7 +13,7 @@
                                      <el-input
                                           type="textarea"
                                           :rows="4"
-                                          placeholder="请输入内容"
+                                          placeholder=""
                                           v-model="textarea">
                                         </el-input>
                                  </div>
@@ -88,8 +88,8 @@
 
 <script>
     /*  从子组件里面拿的值，这里通过ref拿的
-            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
-           */
+                                            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
+                                           */
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicinfo.vue'
     import VFromNewSearch from './FromNewSearch.vue'
@@ -173,7 +173,13 @@
     }
 
     .order_remark {
-        width: 372px;
+        /*        width: 600px;*/
+        /*        display: flex;*/
+        /*        align-items: center;*/
+    }
+
+    .order_remark .el-input {
+        width: 100%;
     }
 
     .order_remark_title {

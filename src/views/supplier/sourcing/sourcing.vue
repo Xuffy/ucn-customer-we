@@ -75,7 +75,7 @@
               </div>          
         </div>
 <!--        表格-->
-             <v-simple-table :column="tabColumn" :data.sync="tabData" />
+             <v-table  :data="tabData" />
     </div>
 </template>
 
@@ -84,13 +84,13 @@
         dropDown
     } from '@/components/index'
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: "SupplierSourcing",
         components: {
             dropDown,
-            VSimpleTable
+            VTable
         },
         props: {
 
