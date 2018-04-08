@@ -28,7 +28,7 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table :data="tabData" :data-key="tabColumn"></v-table>
     </div>
 </template>
 <script>
@@ -38,7 +38,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
     */
-    import { selectSearch, VSimpleTable } from '@/components/index';
+    import { selectSearch, VTable } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -58,7 +58,7 @@
                     id: '4',
                     label: '询价单号（客户）'
                 }],
-                tabColumn:[],
+                tabColumn:'',
                 tabData: [],
                 viewByStatus: '',
                 status:''
@@ -66,7 +66,7 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-simple-table': VSimpleTable
+            'v-table': VTable
         },
         created() {
             this.viewByStatus = this.$t('negotiation.viewBy.inquiry');
@@ -90,10 +90,10 @@
                 }).then(res => {
                     if(val === 'Inquiry') {
                         this.tabData = res.inquiry;
-                        this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+                        this.tabColumn = 'negotiation.tableViewByInquiry';
                     } else {
                         this.tabData = res.SKU;
-                        this.tabColumn = this.$getTableColumn(res.SKU, 'negotiation.tableViewBySKU');
+                        this.tabColumn = 'negotiation.tableViewBySKU';
                     }
                 })
             },
