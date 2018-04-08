@@ -164,6 +164,19 @@ export const routerMap = [
       ]
     },
     {
+        path:'/sellerProduct',
+        component:Layout,
+        redirect:'/sellerProduct/overview',
+        name:'sellerProduct',
+        children:[
+            {
+                path:'overview',
+                name:'overview',
+                component: () => import('../views/sellerProduct/overview')
+            }
+        ]
+    },
+    {
       path: '/negotiation',
       component: Layout,
       redirect: '/negotiation/inquiryOverview',

@@ -19,12 +19,9 @@ const page={
     markAsRead:'Mark As Read',
     qcOrderDetail:'QC Order Detail',
 
-
     //const Table Header
     content:'Content',
     time:'Time',
-
-
 
     //btnGroup
     add:'Add',
@@ -56,33 +53,39 @@ const page={
     hideTheSame:'Hide the Same',
     highlightTheDifference:'Highlight the Difference',
 
-
-
-
+    //sourcing 搜索信息
     category:'Category',
-    skuName:'SKU Name',
+    skuNameEN:'SKU Name EN',
     readilyAvailable:'Readily Available',
-    skuCode:'SKU Code',
+    customerSkuCode:'customer sku code',
     exwPrice:'EXW Price',
-    vendorSKUCode:'Vendor SKU Code',
-    vendorSKUName:'Vendor SKU Name',
-    incotermPrice:'Incoterm Price',
-    skuMaterials:'SKU Materials',
+    skuCode:'sku code',
+    skuNameCN:'SKU Name CN',
+    // fobPrice:'FOB price',
+    skuMaterialsEN:'SKU Materials EN',
     country:'Country',
     supplierName:'Supplier Name',
-    packageType:'Package Type',
-    productPackageType:'Product Package Type',
-    deliveryDays:'Delivery Days',
-    skuDescription:'SKU Description',
-    vendorSKUDescription:'Vendor SKU Description',
+    packingMethodOfOuterCartonEN:'packing method of outer carton EN',
+    // packingMethodEN:'Packing method EN',
+    // deliveryDate:'delivery date',
+    skuDescriptionEN:'SKU Description EN',
+    skuDescriptionCN:'SKU Description CN',
 
-    skuEnglishName:'SKU English name',
-    skuStatus:'SKU status',
-    color:'Color',
+
+
+
+    // skuEnglishName:'SKU English name',
+    // skuNameCN:'SKU name CN',
+    skuSaleStatus:'SKU sale status',
+    // skuCode:'sku code',
+    colourEN:'colour (EN)',
+    // color:'Color',
     incoterm:'Incoterm',
     incotermArea:'incoterm area',
-    unitofMeasurement:' unit of measurement',
-    skuEnglishDescription:'SKU English description',
+    incotermPrice:'incoterm Price',
+    unit:'unit',
+    // supplierName:'Supplier Name',
+    // skuDescriptionCN:'Sku Description CN',
 
     basicInformation:'basic information',
     price:'price',
@@ -216,7 +219,19 @@ const page={
     otherIncotermCurrency:'other incoterm currency',
 
 
+    //bookmark manuallyAdd basicInfo
+    // skuSaleStatus:'SKU sale status',
+    martialEN:'martial (EN)',
+    martialCN:'martial（CN）',
+    // colourEN:'colour(EN)',
+    colourCN:'colour (CN)',
+    deliveryDays:'delivery days',
+    barCode:'bar-code',
+    expirationDateUnit:'expiration date unit',
 
+    //bookmark manuallyAdd customerInfo
+    hsCode:'HS Code',
+    relatedBrand:'related brand',
 
 
 
