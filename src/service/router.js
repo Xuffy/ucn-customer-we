@@ -19,9 +19,9 @@ export const routerMap = [
       }]
     },
     {
-      path:'/dome',
+      path:'/demo',
       hidden: true,
-      component: () => import('../views/dome')
+      component: () => import('../views/demo')
     },
     {
       path: '/login',
@@ -165,6 +165,19 @@ export const routerMap = [
       ]
     },
     {
+        path:'/sellerProduct',
+        component:Layout,
+        redirect:'/sellerProduct/overview',
+        name:'sellerProduct',
+        children:[
+            {
+                path:'overview',
+                name:'overview',
+                component: () => import('../views/sellerProduct/overview')
+            }
+        ]
+    },
+    {
       path: '/negotiation',
       component: Layout,
       redirect: '/negotiation/inquiryOverview',
@@ -241,7 +254,6 @@ export const routerMap = [
         component: Layout,
         redirect: '/order',
         name: 'Order',
-        noDropdown: true,
         children: [
             {
                 path: 'overView',

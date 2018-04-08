@@ -8,7 +8,6 @@ import login from './login'
 import logistic from './logistic'
 import track from './track'
 
-
 export default {
   workbench,
   product,

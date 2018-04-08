@@ -1,6 +1,6 @@
 <template>
     <div class="select-wrap">
-        <div class="select">
+        <div class="select" v-if="selectHide">
             <el-select v-model="value" placeholder="select" @change="selectChange">
                 <el-option
                 v-for="item in options"
@@ -9,17 +9,12 @@
                 :value="item.id" />
             </el-select>
         </div>
-        <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="max-width:150px;" @change="inputChange" @keyup="inputEnter"
-        @keyup.enter.native="inputEnter" />
+        <div class="search">
+            <el-input v-model="keyWord" clearable placeholder="search" style="max-width:150px;" @change="inputChange" @keyup.enter.native="inputEnter" /><el-button type="primary" slot="append" icon="el-icon-search" @click="inputEnter"></el-button>
+        </div>
     </div>
 </template>
 <script>
-    /**
-     * @param selectChange - select 改变事件
-     * @param inputChange - 搜索框 Change事件
-     * @param inputEnter - 搜索框 enter 事件
-     * @param iconClick - set 按钮点击事件
-    */
     export default {
         name:'selectSearch',
         data() {
@@ -32,6 +27,10 @@
             options: {
                 type: Array,
                 default: []
+            },
+            selectHide: {
+                type: Boolean,
+                default: true
             }
         },
         methods: {
@@ -50,6 +49,19 @@
         }
     }
 </script>
+<style scoped>
+    .select-wrap .search {
+        display:flex;
+    }
+    .select-wrap .search >>> input {
+        border-right:none;
+        border-radius:5px 0 0 5px;
+    }
+    .select-wrap .search >>> button {
+        border-radius:0 5px 5px 0;
+    }
+</style>
+
 <style lang="less" scoped>
     .select-wrap {
         display:flex;

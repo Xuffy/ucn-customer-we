@@ -2,7 +2,7 @@
     <div class="basicinfo">
              <div class="basicinfo_title">{{$t('order.basicinfo.basicInfo')}}</div>
              <div class="basicinfo_form">
-                  <el-form ref='ruleform' :model="formItem" label-width="230px" :rules="rules"  >
+                  <el-form ref='ruleform' :model="formItem" label-width="230px" :rules="rules" >
                     <el-row :gutter="10">
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.orderNumber')" prop="orderNumber">
@@ -11,6 +11,7 @@
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list":label=" $t('order.basicinfo.orderDate')" prop="orderDate">
+                              <div style='display:flex;max-width:200px;'>
                                <el-date-picker
                                       v-model="formItem.orderDate"
                                       type="date"
@@ -18,6 +19,7 @@
                                       placeholder="选择日期"
                                       >
                                     </el-date-picker>
+                                    </div>
                                 </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
@@ -80,12 +82,14 @@
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.estDeliveryDate')" prop="estDeliveryDate">
+                             <div style='display:flex;max-width:200px;'>
                             <el-date-picker
                                       v-model="formItem.estDeliveryDate"
                                       type="date"
                                       :disabled='disabled'
                                       placeholder="选择日期">
                                     </el-date-picker>
+                                    </div>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
@@ -167,12 +171,14 @@
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.customerAgreementDate')" prop="customerAgreementDate">
+                                   <div style='display:flex;max-width:200px;'>
                                    <el-date-picker
                                       v-model="formItem.customerAgreementDate"
                                       type="date"
                                       :disabled='disabled'
                                       placeholder="选择日期">
                                     </el-date-picker>
+                                        </div>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
@@ -413,15 +419,5 @@
     .el-input {
         max-width: 200px;
     }
-
-    .el-date-picker {
-        display: flex
-    }
-
-    /*
-    .el-date-picker {
-        max-width: 200px !important;
-    }
-*/
 
 </style>

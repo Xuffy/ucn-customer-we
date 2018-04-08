@@ -16,16 +16,16 @@
                     <el-col :span="18">
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.skuEnglishName')}} : xxxx
+                                {{$t('product.page.skuNameCN')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.skuStatus')}} : xxxx
+                                {{$t('product.page.skuSaleStatus')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.vendorSKUCode')}} : xxxx
+                                {{$t('product.page.skuCode')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.color')}} : xxxx
+                                {{$t('product.page.colourEN')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                                 {{$t('product.page.incoterm')}} : xxxx
@@ -37,13 +37,13 @@
                                 {{$t('product.page.incotermPrice')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.unitofMeasurement')}} : xxxx
+                                {{$t('product.page.unit')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                                 {{$t('product.page.supplierName')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                {{$t('product.page.skuEnglishDescription')}} : xxxx
+                                {{$t('product.page.skuDescriptionCN')}} : xxxx
                             </el-col>
                         </el-row>
 

@@ -132,6 +132,7 @@
 <style scoped>
   .dropDown >>> .el-dropdown {
 	  width:100%;
+	  height:100%;
   }
 </style>
 
@@ -145,6 +146,7 @@
 		}
 	}
 	.checkInputBox {
+		overflow: hidden;
 		position: relative;
 		-webkit-appearance: none;
 		background-color: #fff;
@@ -156,18 +158,20 @@
 		color: #606266;
 		display: inline-block;
 		font-size: inherit;
-		min-height: 40px;
+		min-height: 28px;
 		outline: 0;
 		padding: 0 15px;
 		min-width:200px;
 		i.el-icon-arrow-down {
-			top:0;
-			right:5px;
-			height:100%;
-			line-height:40px;
-			position: absolute;
 			transition: all .5s ease;
 			cursor: pointer;
+			position: absolute;
+			right:10px;
+			top:50%;
+			transform: translate(0, -50%);
+			color:#999;
+			font-weight: normal;
+			font-size: 12px;
 		}
 		&.active {
 			border-color:#409eff;
@@ -195,8 +199,11 @@
 			}
 		}
 		.checkInputBoxPl {
+			position: absolute;
+			left:10px;
+			top:50%;
+			transform: translate(0, -50%);
 			color:#999;
-			line-height:40px;
 			font-weight: normal;
 			font-size: 12px;
 		}

@@ -2,48 +2,65 @@
   <div class="poOrder">
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
-           <basicinfo :disabled='disabled'></basicinfo>
-           <div class="basicinfo_other">
-    <!--                order remark-->
-                    <el-row>
-                          <el-col :xs="24" :sm="24" :md="24" :lg="12">
-                             <div class="order_remark">
-                                 <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
-                                 <div>
-                                     <el-input
-                                          type="textarea"
-                                          :rows="4"
-                                          placeholder="请输入内容"
-                                          v-model="textarea">
-                                        </el-input>
-                                 </div>
-                                </div>  
-                         </el-col>
-    <!--                 attchment         -->
-                          <el-col :xs="24" :sm="24" :md="24" :lg="12">
-                             <div class="attchment">
-                                <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
-                                <div>
-                                    <attchment></attchment>
-                                </div>
-                            </div>
-                           </el-col>
-                    </el-row>
-                   </div>
-<!--             responsibility     -->
-         <responsibility></responsibility>
+         <div class="basic">
+               <div class='basicinfo_input'>
+                  
+                   <basicinfo :disabled='disabled' ref='basicinfo'></basicinfo>
+                  
+                    <div class="basicinfo_other">
+            <!--                order remark-->
+                            <el-row>
+                                  <el-col :xs="24" :sm="24" :md="24" :lg="12">
+                                     <div class="order_remark">
+                                         <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
+                                         <div>
+                                             <el-input
+                                                  type="textarea"
+                                                  :rows="4"
+                                                  placeholder="请输入内容"
+                                                  v-model="textarea"
+                                                  :disabled='disabled'
+                                                  >
+                                                </el-input>
+                                         </div>
+                                        </div>  
+                                 </el-col>
+            <!--                 attchment         -->
+                                  <el-col :xs="24" :sm="24" :md="24" :lg="12">
+                                     <div class="attchment">
+                                        <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
+                                        <div>
+                                            <attchment :disabled='disabled'></attchment>
+                                        </div>
+                                    </div>
+                                   </el-col>
+                            </el-row>
+                           </div>
+              </div>
+               <div class='basicinfo_message'>
+                     <div class="message_div" v-show='switchStatus'>
+                         <messageBoard ></messageBoard>
+                     </div>
+                     <div class="switch-btn" @click="boardSwitch">
+                     {{$t('negotiation.text.messageBoard')}}
+                     <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
+                    </div>
+                   
+                </div>
+        </div>
+ <!--             responsibility     -->
+         <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-         <payment></payment>
+<!--         <payment></payment>-->
 <!--         product_details-->
          <div class="product_details">
              <div class="pro_title">
                  {{$t('order.productinfo.productInfo')}}
              </div>
              <div class="pro_button">
-                  <el-button type='primary' @click="dialogAddproduct = true">{{$t('order.buttonname.addProduct')}}</el-button>
-                  <el-button type='primary'>{{$t('order.buttonname.remove')}}</el-button>
-                  <el-button type='primary'>{{$t('order.buttonname.createQcOrder')}}</el-button>
-                  <el-button type='primary'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
+                  <el-button type='primary' @click="dialogAddproduct = true" disabled='disabled'>{{$t('order.buttonname.addProduct')}}</el-button>
+                  <el-button type='primary' disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
+                  <el-button type='primary' @click='placeLogisticPlan' disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
                   <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -51,7 +68,7 @@
          </div>
 <!--         底部固定按钮区域-->
          <div class="footer">
-             <div class="footer_button">
+             <div class="footer_button" v-if='disabled'>
                  <el-button type='primary' @click='modify'>{{$t('order.buttonname.modify')}}</el-button>
                  <el-button type='primary'>{{$t('order.buttonname.confirm')}}</el-button>
                  <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>
@@ -59,6 +76,10 @@
                  <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hideTheSame')}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hightlightTheDifferent')}}</el-checkbox>
+             </div>
+               <div class="footer_button" v-else>
+                 <el-button type='primary'>{{$t('order.buttonname.send')}}</el-button>
+                 <el-button type='primary' @click='cancel'>{{$t('order.buttonname.cancel')}}</el-button>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
@@ -84,7 +105,8 @@
     import payment from '../../warehouse/paymentTable.vue'
 
     import {
-        VSimpleTable
+        VSimpleTable,
+        messageBoard
     } from '@/components/index';
     export default {
         name: 'poOrder',
@@ -95,7 +117,8 @@
             FromBookmark,
             attchment,
             payment,
-            VSimpleTable
+            VSimpleTable,
+            messageBoard
         },
         data() {
             return {
@@ -116,9 +139,13 @@
                     id: '2',
                     label: 'Sku Code'
                 }, ],
+                switchStatus: false,
                 tabColumn: [],
                 tabData: []
             }
+        },
+        mounted(){
+//            console.log(this.$refs.responsibility.tableData)
         },
         created() {
             this.ajax.get('/supplierOverview', {
@@ -129,16 +156,40 @@
                     this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
                         width: '180px'
                     });
-                    console.log(this.tabColumn)
+                   
                 })
                 .catch((res) => {
                     console.log(res);
                 });
         },
         methods: {
+            //..............messageboard的缩进
+            boardSwitch() {
+                this.switchStatus = !this.switchStatus;
+            },
+            //..............编辑状态
             modify() {
                 this.disabled = false
+            },
+            //.............跳入placeLogisticPlan
+            placeLogisticPlan() {
+                const {
+                    href
+                } = this.$router.resolve({
+                    name: 'placeLogisticPlan',
+                    query: {
+
+                    }
+                })
+                window.open(href, '_blank')
+            },
+            //..............底部cancel
+            cancel(){
+                this.disabled=true
             }
+        },
+        watch:{
+ 
         }
     }
 
@@ -198,7 +249,7 @@
         background-color: white;
         position: fixed;
         bottom: 0;
-        z-index:60;
+        z-index: 60;
         line-height: 60px;
     }
 
@@ -213,6 +264,52 @@
     .select {
         width: 110px;
         margin-right: 5px;
+    }
+
+    .switch-btn {
+        width: 30px;
+        position: absolute;
+        left: -30px;
+        top: 0;
+        writing-mode: tb-rl;
+        transform: rotate(180deg);
+        cursor: pointer;
+        background: #f2f2f2;
+        line-height: 30px;
+        height: 240px;
+        text-align: right;
+        font-size: 12px;
+        color: #333;
+        font-weight: bold;
+        padding-bottom: 10px;
+        border-radius: 0 5px 0 0;
+        z-index: 11;
+    }
+
+    .switch-btn i {
+        transition: all .5s ease;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 16px;
+        font-weight: bold;
+        color: #c0c0c0;
+    }
+
+    .basic {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .message_div {
+        width: 220px;
+        /*        height: 600px;*/
+    }
+
+    .basicinfo_message {
+        position: relative;
+        margin-left: 40px;
     }
 
 </style>

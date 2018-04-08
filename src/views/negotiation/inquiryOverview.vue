@@ -2,26 +2,30 @@
     <div class="inquiryOverview">
         <h3 class="hd"> {{ $t('negotiation.text.inquiryOverview') }}</h3>
         <div class="status">
-            <div class="btn-wrap">
-                <span>{{ $t('negotiation.status.index') }}:</span>
-                <el-button type="primary">{{ $t('negotiation.status.TBCByCustomer') }}</el-button>
-                <el-button>{{ $t('negotiation.status.TBCBySupplier') }}</el-button>
-                <el-button>{{ $t('negotiation.status.finish') }}</el-button>
-                <el-button>{{ $t('negotiation.status.cancel') }}</el-button>
+            <div style="margin-top: 20px">
+                <span>{{ $t('negotiation.status.index') }}</span>
+                <el-radio-group v-model="status"  size="mini">
+                    <el-radio-button :label="$t('negotiation.status.TBCByCustomer')"></el-radio-button>
+                    <el-radio-button :label="$t('negotiation.status.TBCBySupplier')" ></el-radio-button>
+                    <el-radio-button :label="$t('negotiation.status.finish')"></el-radio-button>
+                    <el-radio-button :label="$t('negotiation.status.cancel')"></el-radio-button>
+                </el-radio-group>
             </div>
             <select-search :options="options" :setting="false" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary">{{ $t('negotiation.btn.Compare')  }}</el-button>
-                <el-button type="primary">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
+                <el-button  @click="windowOpen('/negotiation/compare')">{{ $t('negotiation.btn.Compare')  }}</el-button>
+                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
                 <el-button>{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
-                <el-button>{{ $t('negotiation.btn.Delete')  }}</el-button>
+                <el-button type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $t('negotiation.viewBy.index')  }}:</span>
-                <el-button :type="this.viewByStatus == $t('negotiation.viewBy.inquiry') ? 'primary' : ''" @click="viewByChinge($t('negotiation.viewBy.inquiry'))">{{ $t('negotiation.viewBy.inquiry') }}</el-button>
-                <el-button :type="this.viewByStatus == $t('negotiation.viewBy.SKU') ? 'primary' : ''" @click="viewByChinge($t('negotiation.viewBy.SKU'))">{{ $t('negotiation.viewBy.SKU') }}</el-button>
+                <span>{{ $t('negotiation.viewBy.index')  }}&nbsp;</span>
+                <el-radio-group v-model="viewByStatus"  size="mini">
+                    <el-radio-button :label="$t('negotiation.viewBy.inquiry')"></el-radio-button>
+                    <el-radio-button :label="$t('negotiation.viewBy.SKU')" ></el-radio-button>
+                </el-radio-group>
             </div>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -56,7 +60,8 @@
                 }],
                 tabColumn:[],
                 tabData: [],
-                viewByStatus: ''
+                viewByStatus: '',
+                status:''
             }
         },
         components: {
@@ -75,9 +80,6 @@
             selectChange(val) {
                 console.log(val)
             },
-            viewByChinge(str) {
-                this.viewByStatus = str;
-            },
             getViewBy(val) {
                 this.ajax({
                     url: '/viewByInquiry',
@@ -94,6 +96,10 @@
                         this.tabColumn = this.$getTableColumn(res.SKU, 'negotiation.tableViewBySKU');
                     }
                 })
+            },
+            windowOpen(str) {
+                const url = `${window.location.origin}/#${str}`;
+                window.open(url);
             }
         }
     }

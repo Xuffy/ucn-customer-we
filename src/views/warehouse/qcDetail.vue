@@ -67,7 +67,14 @@
                 </div>
             </div>
             <div class="section">
-                <pay-table @saveNewItem="saveNewItem" :title="payTitle" :data="payData"></pay-table>
+                <pay-table
+                        :columns="columns"
+                        :title="payTitle"
+                        :btnInfo="btnInfo"
+                        :data="payData"
+                        :disabledBtn="disabledBtn"
+                        @btnClick="handleBtnClick"
+                        :url="queryUrl"></pay-table>
             </div>
             <div class="section">
                 <div class="head">
@@ -293,31 +300,86 @@
                         waitReceive:'2222'
                     },
                 ],
+
+
+                //表格数据
                 payData: {
                     data:[
                         {
-                            paymentId: '1241241',
+                            paymentId: '125547',
                             payName:'赈灾款',
                             payDate: '1992-02-02',
                             payDateActually:'1992-02-02',
                             payMoney:998,
                             payMoneyActually:'1902',
                             waitMoney:'',
-                            status:1,
+                            status:1
                         },
                         {
-                            paymentId: '1241242124',
+                            paymentId: '547855',
                             payName:'赈灾款',
-                            payDate: '1992-02-02',
-                            payDateActually:'1992-02-02',
-                            payMoney:912,
-                            payMoneyActually:'1902',
+                            payDate: '2018-05-01',
+                            payDateActually:'2010-07-30',
+                            payMoney:152,
+                            payMoneyActually:'1945',
                             waitMoney:'',
-                            status:2,
+                            status:2
                         },
                     ],
                     type:'refund'
                 },
+                //表格列
+                columns:[
+                    {
+                        label:'付款编号',
+                        // type:'Text',         //没传的话就默认只是文本展示
+                        width:'100',
+                        prop:'paymentId',
+                    },
+                    {
+                        label:'款项名称',
+                        type:'Input',
+                        prop:'payName',
+                        width:120,
+                        notEmpty:true,
+                    },
+                    {
+                        label:'预计付款日期',
+                        type:'Date',
+                        prop:'payDate',
+                        width:170,
+                        notEmpty:true,
+                    },
+                    {
+                        label:'预计付款金额',
+                        type:'NumberInput',
+                        prop:'payMoney',
+                        width:150,
+                        notEmpty:true,
+                    },
+                    {
+                        label:'实际付款日期',
+                        type:'Date',
+                        prop:'payDateActually',
+                        width:170
+                    },
+                    {
+                        label:'实际付款金额',
+                        type:'NumberInput',
+                        prop:'payMoneyActually',
+                        width:150
+                    },
+                ],
+                //表格头部按钮名称
+                btnInfo:'申请服务付款',
+                //按钮disabled
+                disabledBtn:{
+                    disabledBtn:false
+                },
+                queryUrl:'/changeItem',
+
+
+
                 textarea:'',
                 currentPage:1,
                 formInline: {
@@ -364,10 +426,29 @@
                 })
             },
 
-            saveNewItem(e){
+            /*
+            * pay-table操作
+            * */
+            saveChangeLine(e){
                 console.log(e)
+                // this.$set(e,'isModify',false);
+                // this.disabledBtn=false;
                 //调用接口即可
             },
+            //处理顶部按钮点击事件
+            handleBtnClick(){
+                this.disabledBtn.disabledBtn=true;
+                this.payData.data.push({
+                    paymentId: '124124',
+                    payName:'',
+                    payDate: '',
+                    payMoney:'',
+                    payDateActually:'',
+                    payMoneyActually:'',
+                    isNew:true
+                });
+            },
+
         },
         created(){
             this.getList();

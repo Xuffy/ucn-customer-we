@@ -166,22 +166,22 @@
                 </div>
                 <div class="select-item">
                     <span>{{ $t('negotiation.basicInfo.attachment') }}：</span>
-                    <el-button type="primary">{{ $t('negotiation.btn.add') }}</el-button>
+                    <v-up-load />
                 </div>
             </div>
         </div>
         <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="dialogTableVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
-                <el-button type="info">{{ $t('negotiation.btn.remove') }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
+                <el-button type="danger">{{ $t('negotiation.btn.remove') }}</el-button>
             </div>
             <select-search :options="options" />
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="bom-btn-wrap">
-            <el-button type="primary">{{ $t('negotiation.btn.submit') }}</el-button>
-            <el-button type="primary">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
+            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.submit') }}</el-button>
+            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -189,6 +189,10 @@
                 :visible.sync="dialogTableVisible"
                 width="80%"
                 lock-scroll>
+            <el-radio-group v-model="radio" @change="fromChange">
+                <el-radio-button label="From New Search"></el-radio-button>
+                <el-radio-button label="From my bookmark"></el-radio-button>
+            </el-radio-group>
             <v-product :hideBtns="true"></v-product>
              <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="dialogTableVisible = false">OK</el-button>
@@ -198,12 +202,13 @@
     </div>
 </template>
 <script>
-    import { selectSearch, VSimpleTable } from '@/components/index';
+    import { selectSearch, VSimpleTable, Upload } from '@/components/index';
     import product from '@/views/product/addProduct';
     export default {
         name:'createInquiry',
         data() {
             return {
+                radio: 'From New Search',
                 dialogTableVisible: false,
                 dialogFormVisible: false,
                 tabColumn: [],
@@ -279,7 +284,8 @@
         components: {
             'select-search': selectSearch,
             'v-simple-table': VSimpleTable,
-            'v-product': product
+            'v-product': product,
+            'v-up-load': Upload
         },
         created() {
             this.ajax({
@@ -291,7 +297,9 @@
             });
         },
         methods: {
-           
+           fromChange(val) {
+               console.log(val)
+           }
         }
     }
 </script>
@@ -346,8 +354,6 @@
             display:flex;
             align-items: center;
             flex-wrap:wrap;
-            height:300px;
-            overflow-y: auto;
             .select-item {
                 width:50%;
                 display:flex;
