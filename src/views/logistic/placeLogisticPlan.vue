@@ -3,13 +3,13 @@
         <div class="hd-top">{{ $t('logistic.text.placeNewLogisticPlan') }}</div>
         <div class="hd">{{ $t('logistic.text.basicInfo') }}</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.invoiceNumber') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.logisticsID') }}</span>
                     <el-select v-model="depature" placeholder="请选择">
@@ -21,7 +21,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shipmentStatus') }}</span>
                     <el-date-picker
@@ -32,7 +32,7 @@
                     :picker-options="pickerOptions" />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.billDate') }}</span>
                     <el-select v-model="Container" placeholder="请选择">
@@ -44,13 +44,13 @@
                     </el-select>
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.declareType') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>Carrier</span>
                     <el-select v-model="Carrier" placeholder="请选择">
@@ -62,7 +62,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.declareDate') }}</span>
                     <el-date-picker
@@ -73,13 +73,13 @@
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.bookingDate') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>    
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.containerStuffingDate') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -91,7 +91,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.customsCleanceDate') }}</span>
                     <el-select v-model="BillType" placeholder="请选择">
@@ -103,7 +103,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.sailDate') }}</span>
                     <el-select v-model="Container1" placeholder="请选择">
@@ -115,7 +115,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.arrivalDate') }}</span>
                     <el-select v-model="Container3" placeholder="请选择">
@@ -127,7 +127,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.releaseDate') }}</span>
                     <el-date-picker
@@ -138,7 +138,7 @@
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.companyName') }}</span>
                     <el-select v-model="Incoterm" placeholder="请选择">
@@ -150,13 +150,13 @@
                     </el-select>
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.customerShortName') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>  
-             <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.receiptCompany') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
@@ -165,15 +165,15 @@
         </el-row>
         <div class="hd">{{ $t('logistic.shipInfo.index') }}</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.transportCompany') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
-                    <span>{{ $t('logistic.shipInfo.shipNumber') }}</span>
+                    <span>{{ $t('logistic.shipInfo.vesselName') }}</span>
                     <el-select v-model="ShipNumber" placeholder="请选择">
                         <el-option
                         v-for="item in ShipNumberOptions"
@@ -183,7 +183,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.departCountry') }}</span>
                     <el-select v-model="CountryOfOrigin" placeholder="请选择">
@@ -195,7 +195,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.departPort') }}</span>
                     <el-select v-model="DestinationCountry" placeholder="请选择">
@@ -207,7 +207,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.destinationCountry') }}</span>
                     <el-select v-model="shipment" placeholder="请选择">
@@ -219,7 +219,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.destinationPort') }}</span>
                     <el-select v-model="destination" placeholder="请选择">
@@ -396,7 +396,7 @@
             align-items: center;
             padding:10px 0;
             span {
-                width: 120px;
+                width: 180px;
                 white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
                 display:inline-block;
                 font-size:12px;

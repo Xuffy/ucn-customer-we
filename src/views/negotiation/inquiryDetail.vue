@@ -41,7 +41,6 @@
                         <el-button type="primary">{{$t('negotiation.btn.accept')}}</el-button>
                         <el-button type="primary" @click="windowOpen('/order/creatOrder')">{{$t('negotiation.btn.createOrder')}}</el-button>
                         <el-button type="primary" @click="compareConfig.showCompareList = true;">{{$t('negotiation.btn.addToCompare')}}</el-button>
-                        <el-button type="primary">{{$t('negotiation.btn.copy')}}</el-button>
                         <el-button type="primary" @click="statusModify = true">{{$t('negotiation.btn.modify')}}</el-button>
                         <el-button type="primary" @click="windowOpen('/negotiation/createInquiry')">{{$t('negotiation.btn.createInquiry')}}</el-button>
                         <el-button>{{$t('negotiation.btn.cancel')}}</el-button>
