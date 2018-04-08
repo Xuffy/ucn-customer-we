@@ -1,27 +1,27 @@
 <template>
     <div class="place-logistic-plan">
         <div class="hd-top">{{ $t('logistic.text.logisticPlanNoHDAMC18005') }}</div>
-        <div class="hd">{{ $t('logistic.text.basicInfo') }}</div>
+        <div class="hd active">{{ $t('logistic.text.basicInfo') }}</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shippmentInvoiceNo') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.logisticsID') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.logisticsStatus') }}</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.createDate') }}</span>
                     <el-input
@@ -31,7 +31,7 @@
                     />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.declareDate') }}</span>
                     <el-date-picker
@@ -43,7 +43,7 @@
                     />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.bookingDate') }}</span>
                     <el-date-picker
@@ -55,7 +55,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.containerStuffingDate') }}</span>
                     <el-input
@@ -65,7 +65,7 @@
                     />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.customsCleanceDate') }}</span>
                     <el-date-picker
@@ -77,7 +77,7 @@
                     />
                 </div>
             </el-col>    
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.dispatchDate') }}</span>
                     <el-date-picker
@@ -89,7 +89,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.arrivalDate') }}</span>
                     <el-date-picker
@@ -101,7 +101,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.releaseDate') }}</span>
                     <el-date-picker
@@ -113,7 +113,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shipServiceProvider') }}</span>
                     <el-input
@@ -122,7 +122,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.customerName') }}</span>
                     <el-input
@@ -131,13 +131,13 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.receiptCompany') }}</span>
                     <el-input v-model="createDate" />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shippingAgent') }}</span>
                     <el-input
@@ -146,7 +146,7 @@
                     />
                 </div>
             </el-col>  
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.Incoterm') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -158,7 +158,7 @@
                     </el-select>
                 </div>
             </el-col>  
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.currency') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -170,7 +170,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.payment') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -183,7 +183,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.paymentTerms') }}</span>
                     <el-input
@@ -191,7 +191,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.transportationWay') }}</span>
                     <el-input
@@ -200,7 +200,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.loadingType') }}</span>
                     <el-input
@@ -209,7 +209,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.permitedForTransportation') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -222,7 +222,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.BLType') }}</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -235,7 +235,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.BLQuantity') }}</span>
                     <el-input
@@ -244,7 +244,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.BLNumber') }}</span>
                     <el-input
@@ -252,7 +252,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.shipper') }}</span>
                     <el-input
@@ -260,7 +260,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.consignee') }}</span>
                     <el-input
@@ -268,7 +268,7 @@
                     />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.basicInfo.notify') }}</span>
                     <el-input
@@ -279,37 +279,37 @@
         </el-row>
         <div class="hd">{{ $t('logistic.shipInfo.index') }}</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.transportCompany') }}</span>
                     <el-input placeholder="请输入"/>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.vesselName') }}</span>
                     <el-input placeholder="请输入"/>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.vesselNo') }}</span>
                     <el-input placeholder="请输入"/>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.departCountry') }}</span>
                     <el-input placeholder="请输入"/>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.departPort') }}</span>
                     <el-input placeholder="请输入"/>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>{{ $t('logistic.shipInfo.destinationCountry') }}</span>
                     <el-input placeholder="请输入"/>
@@ -458,6 +458,10 @@
             line-height:40px;
             border-bottom:1px solid #ccc;
             padding:0 15px;
+            font-weight: bold;
+            &.active {
+                border:none;
+            }
         }   
         .input-item {
             display:flex;
