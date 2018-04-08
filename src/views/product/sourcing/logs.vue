@@ -10,8 +10,8 @@
                     <!--v-model="searchValue">-->
                 <!--<i slot="prefix" class="el-input__icon el-icon-search"></i>-->
             <!--</el-input>-->
-            <select-search :selectHide="true" class="search"></select-search>
-            <el-button class="btn">{{$t('product.page.download')}}</el-button>
+            <select-search :selectHide="false" class="search"></select-search>
+            <el-button class="btn">{{$t('product.page.download')+'('+logsNumber+')'}}</el-button>
         </div>
 
         <div class="body">
@@ -88,7 +88,8 @@
                         remark:'哇哈哈哈哈哈哈哈'
                     },
                 ],
-                currentPage:1
+                currentPage:1,
+                logsNumber:'All',           //日志数目
             }
         },
         methods:{
