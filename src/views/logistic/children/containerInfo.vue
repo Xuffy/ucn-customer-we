@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="btn-wraps">
-            <el-button :type="isActive ? '' : 'primary'" @click="tabAppend" :disabled="isActive">{{ $t('logistic.btn.add') }}</el-button>
+            <el-button @click="tabAppend" :disabled="isActive">{{ $t('logistic.btn.add') }}</el-button>
             <el-button type="primary" v-if="isActive"  @click="tailBtn('ok')">{{ $t('logistic.btn.ok') }}</el-button>
             <el-button type="info" v-if="isActive" @click="tailBtn('cancel')">{{ $t('logistic.btn.cancel') }}</el-button>
-            <el-button @click="tabSplite">{{ $t('logistic.btn.delete') }}</el-button>
+            <el-button type="danger" @click="tabSplite">{{ $t('logistic.btn.delete') }}</el-button>
         </div>
         <el-table
                 :data="tableData"

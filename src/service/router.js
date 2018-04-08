@@ -34,6 +34,7 @@ export const routerMap = [
       component: Layout,
       redirect: '/workbench',
       name: 'Workbench',
+      noDropdown: true,
       children: [
         {
           path: 'index',
@@ -253,7 +254,6 @@ export const routerMap = [
         component: Layout,
         redirect: '/order',
         name: 'Order',
-        noDropdown: true,
         children: [
             {
                 path: 'overView',

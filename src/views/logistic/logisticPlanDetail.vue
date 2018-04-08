@@ -328,19 +328,19 @@
         <div class="hd">{{ $t('logistic.text.productInfo') }}</div>
         <div class="btn-wrap">
             <div>
-                <el-button type="primary" @click="newSearchDialogVisible = true">{{ $t('logistic.btn.addProduct') }}</el-button>
+                <el-button @click="newSearchDialogVisible = true">{{ $t('logistic.btn.addProduct') }}</el-button>
                 <el-button>{{ $t('logistic.btn.remove') }}</el-button>
             </div>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn" v-show="!isModify">
-            <el-button type="primary" @click="isModify = true">{{ $t('logistic.btn.modify') }}</el-button>
-            <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
-            <el-button>{{ $t('logistic.btn.delete') }}</el-button>
+            <el-button @click="isModify = true">{{ $t('logistic.btn.modify') }}</el-button>
+            <el-button>{{ $t('logistic.btn.sentAsOrder') }}</el-button>
+            <el-button type="danger">{{ $t('logistic.btn.delete') }}</el-button>
         </div>
         <div class="fix-btn" v-show="isModify">
-            <el-button type="primary" @click="modify">{{ $t('logistic.btn.save') }}</el-button>
-            <el-button @click="isModify = false">{{ $t('logistic.btn.cancel') }}</el-button>
+            <el-button @click="modify">{{ $t('logistic.btn.save') }}</el-button>
+            <el-button @click="isModify = false" type="info">{{ $t('logistic.btn.cancel') }}</el-button>
         </div>
         <div class="fix-btn-station"></div>
         <el-dialog

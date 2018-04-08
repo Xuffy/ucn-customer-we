@@ -3,19 +3,21 @@
         <h3 class="hd">{{ $t('negotiation.text.compare') }}</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="windowOpen('/order/creatOrder')">{{ $t('negotiation.btn.createOrder') }}</el-button>
-                <el-button type="primary">{{ $t('negotiation.btn.accept') }}</el-button>
+                <el-button @click="windowOpen('/order/creatOrder')">{{ $t('negotiation.btn.createOrder') }}</el-button>
+                <el-button>{{ $t('negotiation.btn.accept') }}</el-button>
                 <el-checkbox-group v-model="checkList">
                     <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
                     <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-                <span>{{ $t('negotiation.text.compareBy') }}：</span>
-                <el-button :type="this.compareBy === $t('negotiation.btn.inquiry') ? 'primary' : ''" @click="compareByChange($t('negotiation.btn.inquiry'))">{{ $t('negotiation.btn.inquiry') }}</el-button>
-                <el-button :type="this.compareBy === $t('negotiation.btn.SKU') ? 'primary' : ''"  @click="compareByChange($t('negotiation.btn.SKU'))">{{ $t('negotiation.btn.SKU') }}</el-button>
+                <span>{{ $t('negotiation.text.compareBy') }}&nbsp;</span>
+                <el-radio-group v-model="compareBy" size="mini">
+                    <el-radio-button :label="$t('negotiation.btn.inquiry')"></el-radio-button>
+                    <el-radio-button :label="$t('negotiation.btn.SKU')"></el-radio-button>
+                </el-radio-group>
             </div>
-            <div class="filedSelect">
+            <!-- <div class="filedSelect">
                 <span>Set Filed</span>
                 <el-select v-model="Filed" placeholder="Please select">
                     <el-option
@@ -24,8 +26,8 @@
                     :label="item.label"
                     :value="item.id" />
                 </el-select>
-            </div>
-            <!-- <el-button type="text">Compare History</el-button> -->
+            </div> -->
+            <el-button type="text">Compare History</el-button>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
     </div>
@@ -97,22 +99,10 @@
                 display:flex;
                 align-items: center;
                 margin:10px 0;
-                button {
-                    margin-right:10px;
-                }
-                .el-checkbox__label {
-                    font-size:12px;
-                }
-                .el-checkbox+.el-checkbox {
-                    margin-left:15px;
-                }
             }
             span {
                 font-size:12px;
                 color:#999;
-            }
-            button {
-                padding:5px 5px !important;
             }
             .filedSelect {
                 margin-left:10px;
