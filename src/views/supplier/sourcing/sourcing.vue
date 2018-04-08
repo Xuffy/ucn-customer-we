@@ -75,7 +75,7 @@
               </div>          
         </div>
 <!--        表格-->
-             <v-table  :data="tabData" />
+             <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
     </div>
 </template>
 
@@ -162,13 +162,10 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
-                    console.log(res);
+
                 });
         },
         watch: {
@@ -265,5 +262,11 @@
         max-width: 200px;
         height: 30px;
     }
+
+    /*
+    .vtable {
+        margin-top: 20px;
+    }
+*/
 
 </style>

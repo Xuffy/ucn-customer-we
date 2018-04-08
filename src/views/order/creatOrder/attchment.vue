@@ -1,12 +1,13 @@
 <template>
     <div class="attchment">
+    
     <div class="attchment_content">
         <span class='attchment_item'>
             <span class="attchment_item_name">
                  <i class="el-icon-document"></i>
                  <p>1234568</p>
             </span>       
-             <i class="el-icon-remove" @click='deleteFile'  ></i>
+             <i class="el-icon-remove" @click='deleteFile'></i>
         </span>      
     </div>
      <upload class='upload' @getres='getres' :disabled='disabled'></upload>
@@ -20,64 +21,70 @@
             //....attchment的数据
             list: {
                 type: Array,
-                default: function(){
+                default: function() {
                     return []
                 }
             },
-            disabled:{
-                type:Boolean,
-                default:true
+            disabled: {
+                type: Boolean,
+                default: true
             }
         },
-        components:{
+        components: {
             upload
         },
-        data(){
-            return{
+        data() {
+            return {
 
             }
         },
-        methods:{
-            deleteFile(){
+        methods: {
+            deleteFile() {
                 console.log(123)
             },
-            getres(data){
-              this.$emit('getres',data)  //上传成功一层一层通知父组件
+            getres(data) {
+                this.$emit('getres', data) //上传成功一层一层通知父组件
             }
         }
     }
+
 </script>
 <style scoped="true">
-    .attchment{
+    .attchment {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         width: 500px;
     }
-    .attchment_content{
+
+    .attchment_content {
         width: 450px;
-        height:86px;
-        border: 1px solid #BEBEBE;
-        overflow:auto;
+        height: 86px;
+        overflow: auto;
         display: flex;
         flex-wrap: wrap;
     }
-    .el-icon-document{
-      font-size: 40px;
+
+    .el-icon-document {
+        font-size: 40px;
     }
-    .attchment_item{
-        height:40px;
+
+    .attchment_item {
+        height: 40px;
         display: flex;
         justify-content: flex-start;
         padding: 4px;
         margin-right: 10px;
     }
-    .attchment_item_name{
+
+    .attchment_item_name {
         display: flex;
         justify-content: flex-start;
         align-items: flex-end;
     }
-    .upload{
+
+    .upload {
         margin-left: 10px;
     }
+
 </style>

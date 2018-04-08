@@ -9,24 +9,9 @@
                   
                     <div class="basicinfo_other">
             <!--                order remark-->
-                            <el-row>
-                                  <el-col :xs="24" :sm="24" :md="24" :lg="12">
-                                     <div class="order_remark">
-                                         <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
-                                         <div>
-                                             <el-input
-                                                  type="textarea"
-                                                  :rows="4"
-                                                  placeholder="请输入内容"
-                                                  v-model="textarea"
-                                                  :disabled='disabled'
-                                                  >
-                                                </el-input>
-                                         </div>
-                                        </div>  
-                                 </el-col>
+                            <el-row>                                
             <!--                 attchment         -->
-                                  <el-col :xs="24" :sm="24" :md="24" :lg="12">
+                                  <el-col :xs="24" :sm="24" :md="24" :lg="24">
                                      <div class="attchment">
                                         <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
                                         <div>
@@ -63,7 +48,7 @@
                   <el-button  @click='placeLogisticPlan' :disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
-                  <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                 <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
              </div>
          </div>
 <!--         底部固定按钮区域-->
@@ -105,7 +90,7 @@
     import payment from '../../warehouse/paymentTable.vue'
 
     import {
-        VSimpleTable,
+        VTable,
         messageBoard
     } from '@/components/index';
     export default {
@@ -117,7 +102,7 @@
             FromBookmark,
             attchment,
             payment,
-            VSimpleTable,
+            VTable,
             messageBoard
         },
         data() {
@@ -153,9 +138,7 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
+
 
                 })
                 .catch((res) => {
