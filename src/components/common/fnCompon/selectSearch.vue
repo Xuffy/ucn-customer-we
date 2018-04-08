@@ -26,7 +26,9 @@
         props: {
             options: {
                 type: Array,
-                default: []
+                default: () => {
+                    return [];
+                }
             },
             selectHide: {
                 type: Boolean,

@@ -1,15 +1,15 @@
 <template>
     <div class="place-logistic-plan">
         <div class="hd-top">Place New Logistic Order</div>
-        <div class="hd">Basic Information</div>
+        <div class="hd active">Basic Information</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>logistics plan No</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Est depature date</span>
                     <el-select v-model="depature" placeholder="请选择">
@@ -21,7 +21,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>预计出运日期</span>
                     <el-date-picker
@@ -32,7 +32,7 @@
                     :picker-options="pickerOptions" />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱类型2</span>
                     <el-select v-model="Container" placeholder="请选择">
@@ -44,13 +44,13 @@
                     </el-select>
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Shipping method</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Carrier</span>
                     <el-select v-model="Carrier" placeholder="请选择">
@@ -62,7 +62,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>预计到港日期</span>
                     <el-date-picker
@@ -73,13 +73,13 @@
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>    
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Est departure port</span>
                     <el-select v-model="departure" placeholder="请选择">
@@ -91,7 +91,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Bill type</span>
                     <el-select v-model="BillType" placeholder="请选择">
@@ -103,7 +103,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Container type 1</span>
                     <el-select v-model="Container1" placeholder="请选择">
@@ -115,7 +115,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱类型3</span>
                     <el-select v-model="Container3" placeholder="请选择">
@@ -127,7 +127,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Commodit Inspectioy</span>
                     <el-date-picker
@@ -138,7 +138,7 @@
                     :picker-options="CarrierOptions" />
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Incoterm</span>
                     <el-select v-model="Incoterm" placeholder="请选择">
@@ -150,13 +150,13 @@
                     </el-select>
                 </div>
             </el-col>
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量1</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>  
-             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>集装箱数量3</span>
                     <el-input placeholder="请输入内容"></el-input>
@@ -194,36 +194,36 @@
                 <div class="td">佣金</div>
             </div>
             <div class="tbody">
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
-                <div class="td"><el-input placeholder="please input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
+                <div class="td"><el-input placeholder="input"></el-input></div>
             </div>
         </div>
         
         <div class="hd">Ship Information</div>
         <el-row :gutter="10">
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>运输公司</span>
                     <el-input placeholder="请输入内容"></el-input>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>航船次号</span>
                     <el-select v-model="ShipNumber" placeholder="请选择">
@@ -235,7 +235,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>Country of origin</span>
                     <el-select v-model="CountryOfOrigin" placeholder="请选择">
@@ -247,7 +247,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>DestinationCountry</span>
                     <el-select v-model="DestinationCountry" placeholder="请选择">
@@ -259,7 +259,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>出运口岸</span>
                     <el-select v-model="shipment" placeholder="请选择">
@@ -271,7 +271,7 @@
                     </el-select>
                 </div>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                 <div class="input-item">
                     <span>目的口岸</span>
                     <el-select v-model="destination" placeholder="请选择">
@@ -435,6 +435,10 @@
             line-height:40px;
             border-bottom:1px solid #ccc;
             padding:0 15px;
+            font-weight: bold;
+            &.active {
+                border:none;
+            }
         }  
         .cost-wrap {
             width:100%;
@@ -442,8 +446,7 @@
             .thead, .tbody {
                 display:flex;
                 .td {
-                    padding:10px 5px;
-                    border-bottom:1px solid #ccc;
+                    padding:0 5px;
                     display:flex;
                     align-items: center;
                     justify-content: center;
