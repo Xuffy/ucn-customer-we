@@ -3,9 +3,11 @@
         <div class="status">
             <div class="btn-wrap">
                 <span>{{ $t('logistic.status.index') }}:</span>
-                <el-button typenis="primary">{{ $t('logistic.status.TBCByCustomer') }}</el-button>
-                <el-button>{{ $t('logistic.status.finish') }}</el-button>
-                <el-button>{{ $t('logistic.status.canceled') }}</el-button>
+                <el-radio-group v-model="radioStatus" size="mini">
+                    <el-radio-button :label="$t('logistic.status.TBCByCustomer')"></el-radio-button>
+                    <el-radio-button :label="$t('logistic.status.finish')"></el-radio-button>
+                    <el-radio-button :label="$t('logistic.status.canceled')"></el-radio-button>
+                </el-radio-group>
             </div>
             <div class="select-search-wrap">
                 <select-search :options="options" />
@@ -13,15 +15,17 @@
         </div>
         <div class="btn-wrap">
             <div class="fn btn">
-                <el-button type="primary">{{ $t('logistic.btn.downloadSelected') }}</el-button>
-                <el-button type="primary">{{ $t('logistic.btn.sentAsOrder') }}</el-button>
-                <el-button>{{ $t('logistic.btn.delete') }}</el-button>
+                <el-button>{{ $t('logistic.btn.downloadSelected') }}</el-button>
+                <el-button>{{ $t('logistic.btn.sentAsOrder') }}</el-button>
+                <el-button type="danger">{{ $t('logistic.btn.delete') }}</el-button>
             </div>
             <div class="view-by-btn">
-                <span>{{ $t('logistic.viewBy.index') }}：</span>
-                <el-button :type="$t('logistic.viewBy.plan') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.plan')">{{ $t('logistic.viewBy.plan') }}</el-button>
-                <el-button :type="$t('logistic.viewBy.transportationUnit') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.transportationUnit')">{{ $t('logistic.viewBy.transportationUnit') }}</el-button>
-                <el-button :type="$t('logistic.viewBy.SKU') === viewBy ? 'primary' : ''" @click="viewBy = $t('logistic.viewBy.SKU')">{{ $t('logistic.viewBy.SKU') }}</el-button>
+                <span>{{ $t('logistic.viewBy.index') }}&nbsp;</span>
+                <el-radio-group v-model="viewBy" size="mini">
+                    <el-radio-button :label="$t('logistic.viewBy.plan')"></el-radio-button>
+                    <el-radio-button :label="$t('logistic.viewBy.transportationUnit')"></el-radio-button>
+                    <el-radio-button :label="$t('logistic.viewBy.SKU')"></el-radio-button>
+                </el-radio-group>
             </div>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
@@ -33,6 +37,7 @@
         name:'logisticPlanOverview',
         data() {
             return {
+                radioStatus: '',
                 tabColumn: [],
                 tabData: [],
                 viewBy: '',

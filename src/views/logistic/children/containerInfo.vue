@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="btn-wraps">
-            <el-button :type="isActive ? '' : 'primary'" @click="tabAppend" :disabled="isActive">添加</el-button>
-            <el-button type="primary" v-if="isActive"  @click="tailBtn('ok')">确定</el-button>
-            <el-button type="info" v-if="isActive" @click="tailBtn('cancel')">取消</el-button>
-            <el-button @click="tabSplite">删除</el-button>
+            <el-button @click="tabAppend" :disabled="isActive">{{ $t('logistic.btn.add') }}</el-button>
+            <el-button type="primary" v-if="isActive"  @click="tailBtn('ok')">{{ $t('logistic.btn.ok') }}</el-button>
+            <el-button type="info" v-if="isActive" @click="tailBtn('cancel')">{{ $t('logistic.btn.cancel') }}</el-button>
+            <el-button type="danger" @click="tabSplite">{{ $t('logistic.btn.delete') }}</el-button>
         </div>
         <el-table
                 :data="tableData"
@@ -29,16 +29,15 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="货柜类型"
-                    align="center"
-                    width="100">
+                    :label="$t('logistic.containerInfo.containerType')"
+                    align="center">
                 <template slot-scope="scope">
                     <el-select v-model="containerSelect" placeholder="请选择" v-if="!scope.row.Product">
                         <el-option
                             v-for="item in containerType"
                             :key="item.id"
                             :label="item.label"
-                            :value="item.id" 
+                            :value="item.label" 
                         />
                     </el-select>
                     <div v-else>
@@ -47,12 +46,11 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="货柜数量"
-                    align="center"
-                    width="180">
+                    :label="$t('logistic.containerInfo.containerQuantity')"
+                    align="center">
                 <template slot-scope="scope">
                     <div v-if="!scope.row.containerAmount">
-                        <el-input v-model="containerNo" type="number" placeholder="请输入"></el-input>
+                        <el-input-number v-model="containerNo" :min="1" label="描述文字"></el-input-number>
                     </div>
                     <div v-else>
                         {{scope.row.containerAmount}}

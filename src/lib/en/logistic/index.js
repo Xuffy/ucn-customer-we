@@ -13,7 +13,11 @@ const btn = {
     delete: "Delete",
     addProduct: "Add product",
     remove: "Remove",
-    save: "Save"
+    save: "Save",
+    ok: "ok",
+    cancel: "cancel",
+    add: "add",
+    modify: "Modify"
 };
 
 const viewBy = {
@@ -30,10 +34,31 @@ const text = {
     productInfo: "Product Info",
     placeNewLogisticOrder: "Place New Logistic Order",
     basicInfo: "Basic Info",
-    containerInfo: "Container Info"
+    containerInfo: "Container Info",
+    logisticPlanNoHDAMC18005: "Logistic Plan No.HDAMC18005"
+};
+const containerInfo = {
+    containerType: "Container Type",
+    containerQuantity: "Container Quantity"
 };
 
 const basicInfo = {
+    shipServiceProvider: "Ship Service Provider",
+    shippmentInvoiceNo: "Shippment Invoice No",
+    paymentTerms: "Payment Terms",
+    transportationWay: "Transportation Way",
+    loadingType: "Loading Type",
+    shippingAgent: "Shipping Agent",
+    logisticsStatus: "Logistics Status",
+    dispatchDate: "Dispatch Date",
+    customerName: "Customer Name",
+    BLType: "B/L Type",
+    BLQuantity: "B/L Quantity",
+    BLNumber: "BL Number",
+    permitedForTransportation: "Permited for Transportation",
+    createDate: "Create Date",
+    Incoterm: "Incoterm",
+    deliveryDate: "Delivery Date",
     invoiceNumber: "Invoice Number",
     logisticsID: "Logistics ID",
     shipmentStatus: "Shipment Status",
@@ -52,14 +77,12 @@ const basicInfo = {
     shippingAgentCompany: "Shipping Agent Company",
     priceTerms: "Price Terms",
     currency: "Currency",
+    payment: "Payment",
     paymentMethod: "Payment Method",
     paymentTerm: "Payment Term",
     transportationWay: "Transportation Way",
     batchForLogistics: "Batch For Logistics",
     permitedOrNotPrmitedForTransshipment: "Permited or not Prmited for Transshipment",
-    BLType: "BLType",
-    BLQuantity: "B/L Quantity",
-    BLNumber: "BL Number",
     shipper: "shipper",
     consignee: "consignee",
     notify: "notify",
@@ -75,7 +98,8 @@ const basicInfo = {
 const shipInfo = {
     index: "Ship Info",
     transportCompany: "Transport Company",
-    shipNumber: "Ship Number",
+    vesselName: "Vessel Name",
+    vesselNo: "Vessel No.",
     departCountry: "Depart Country",
     departPort: "Depart Port",
     destinationCountry: "Destination Country",
@@ -89,5 +113,6 @@ export default {
     text,
     shipInfo,
     basicInfo,
+    containerInfo,
     ...db
 }

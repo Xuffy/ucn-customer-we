@@ -1,6 +1,6 @@
 <template>
     <div class="select-wrap">
-        <div class="select">
+        <div class="select" v-if="selectHide">
             <el-select v-model="value" placeholder="select" @change="selectChange">
                 <el-option
                 v-for="item in options"
@@ -27,6 +27,10 @@
             options: {
                 type: Array,
                 default: []
+            },
+            selectHide: {
+                type: Boolean,
+                default: true
             }
         },
         methods: {

@@ -2,7 +2,7 @@
     <div class="paymentTable">
         <div>
             <span class="title" style="margin-right: 10px">{{title}}</span>
-            <el-button :disabled="disableBtn" @click="askForPayment" type="primary" size="mini">申请服务付款</el-button>
+            <el-button :disabled="disabledBtn.disabledBtn" @click="askForPayment" type="primary" size="mini">{{btnInfo}}</el-button>
         </div>
         <el-table
                 :data="data.data"
@@ -22,220 +22,46 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    label="付款编号"
+                    v-for="v in columns"
+                    :key="v.prop"
+                    :label="v.label"
                     align="center"
-                    width="100">
-                <template slot-scope="scope">
-                    {{scope.row.paymentId}}
-                </template>
-            </el-table-column>
-            
-
-            <el-table-column
-                    label="款项名称"
-                    align="center">
+                    :prop="v.prop"
+                    :width="v.width?v.width:100">
                 <template slot-scope="scope">
                     <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-select size="mini" v-model="scope.row.payName" placeholder="请选择">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <div v-if="!v.type || v.type==='Text'">
+                            {{data.data[scope.$index][v.prop]}}
+                        </div>
+                        <div v-if="v.type==='Input'">
+                            <el-input size="mini" v-model="data.data[scope.$index][v.prop]" placeholder="请输入内容"></el-input>
+                        </div>
+                        <div v-if="v.type==='Date'">
+                            <el-date-picker
+                                    class="chooseDate"
+                                    size="mini"
+                                    v-model="data.data[scope.$index][v.prop]"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    value-format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </div>
+                        <div v-if="v.type==='NumberInput'">
+                            <el-input-number
+                                    class="payMoney"
+                                    size="mini"
+                                    v-model="data.data[scope.$index][v.prop]"
+                                    @change="handleChange"
+                                    :min="0"
+                                    label="金额"
+                                    :controls="false">
+                            </el-input-number>
+                        </div>
                     </div>
                     <div v-else>
-                        {{scope.row.payName}}
+                        {{data.data[scope.$index][v.prop]}}
                     </div>
                 </template>
-            </el-table-column>
-
-            <!--付款显示区域-->
-            <el-table-column
-                    v-if="data.type==='payment'"
-                    label="预计付款日期"
-                    align="center"
-                    width="180">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-date-picker
-                                class="chooseDate"
-                                size="mini"
-                                v-model="scope.row.date"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </div>
-                    <div v-else>
-                        {{scope.row.date}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='payment'"
-                    label="预计付款金额"
-                    align="center"
-                    width="150"
-                    prop="money">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-input-number
-                                class="payMoney"
-                                size="mini"
-                                v-model="scope.row.money"
-                                @change="handleChange"
-                                :min="0"
-                                label="金额"
-                                :controls="false">
-                        </el-input-number>
-                    </div>
-                    <div v-else>
-                        {{scope.row.money}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='payment'"
-                    label="实际付款日期"
-                    align="center"
-                    width="180">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-date-picker
-                                class="chooseDate"
-                                size="mini"
-                                v-model="scope.row.dateActually"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </div>
-                    <div v-else>
-                        {{scope.row.dateActually}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='payment'"
-                    label="实际付款金额"
-                    align="center"
-                    width="150"
-                    prop="moneyActually">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-input-number
-                                class="payMoney"
-                                size="mini"
-                                v-model="scope.row.moneyActually"
-                                @change="handleChange"
-                                :min="0"
-                                label="金额"
-                                :controls="false">
-                        </el-input-number>
-                    </div>
-                    <div v-else>
-                        {{scope.row.moneyActually}}
-                    </div>
-                </template>
-                <!--<template slot-scope="scope">-->
-                    <!--{{scope.row.payMoney}}-->
-                <!--</template>-->
-            </el-table-column>
-
-
-            <!--退款显示区域-->
-            <el-table-column
-                    v-if="data.type==='refund'"
-                    label="预计退款日期"
-                    align="center"
-                    width="180">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-date-picker
-                                class="chooseDate"
-                                size="mini"
-                                v-model="scope.row.date"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </div>
-                    <div v-else>
-                        {{scope.row.date}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='refund'"
-                    label="预计退款金额"
-                    align="center"
-                    width="150"
-                    prop="money">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-input-number
-                                class="payMoney"
-                                size="mini"
-                                v-model="scope.row.money"
-                                @change="handleChange"
-                                :min="0"
-                                label="金额"
-                                :controls="false">
-                        </el-input-number>
-                    </div>
-                    <div v-else>
-                        {{scope.row.money}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='refund'"
-                    label="实际退款日期"
-                    align="center"
-                    width="180">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-date-picker
-                                class="chooseDate"
-                                size="mini"
-                                v-model="scope.row.dateActually"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-dd">
-                        </el-date-picker>
-                    </div>
-                    <div v-else>
-                        {{scope.row.dateActually}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    v-if="data.type==='refund'"
-                    label="实际退款金额"
-                    align="center"
-                    width="150"
-                    prop="moneyActually">
-                <template slot-scope="scope">
-                    <div v-if="scope.row.isNew || scope.row.isModify">
-                        <el-input-number
-                                class="payMoney"
-                                size="mini"
-                                v-model="scope.row.moneyActually"
-                                @change="handleChange"
-                                :min="0"
-                                label="金额"
-                                :controls="false">
-                        </el-input-number>
-                    </div>
-                    <div v-else>
-                        {{scope.row.moneyActually}}
-                    </div>
-                </template>
-                <!--<template slot-scope="scope">-->
-                <!--{{scope.row.payMoney}}-->
-                <!--</template>-->
             </el-table-column>
 
             <el-table-column
@@ -256,19 +82,24 @@
                     prop="waitPayMoney">
                 <template slot-scope="scope">
                     <div v-if="!scope.row.abandoned">
-                        <!--页面新增栏目时的保存取消-->
-                        <div v-if="scope.row.isNew && !scope.row.isModify">
-                            <el-button @click="saveRow(scope.row)" type="text">保存</el-button>
-                            <el-button @click="cancelSaveRow(scope.row)" type="text">取消</el-button>
+                        <div v-if="data.type==='refund'">
+                            <el-button type="text">确认</el-button>
                         </div>
-                        <!--修改一行数据时的保存取消-->
-                        <div v-if="!scope.row.isNew && scope.row.isModify">
-                            <el-button @click="saveModify(scope.row)" type="text">保存</el-button>
-                            <el-button @click="cancelModify(scope.row)" type="text">取消</el-button>
-                        </div>
-                        <div v-if="!scope.row.isNew && !scope.row.isModify">
-                            <el-button @click="modifyRow(scope.row)" type="text">修改</el-button>
-                            <el-button @click="abandon(scope.row)" type="text">作废</el-button>
+                        <div v-if="data.type==='payment'">
+                            <!--页面新增栏目时的保存取消-->
+                            <div v-if="scope.row.isNew && !scope.row.isModify">
+                                <el-button @click="saveRow(scope.row)" type="text">保存</el-button>
+                                <el-button @click="cancelSaveRow(scope.row)" type="text">取消</el-button>
+                            </div>
+                            <!--修改一行数据时的保存取消-->
+                            <div v-if="!scope.row.isNew && scope.row.isModify">
+                                <el-button @click="saveModify(scope.row)" type="text">保存</el-button>
+                                <el-button @click="cancelModify(scope.row)" type="text">取消</el-button>
+                            </div>
+                            <div v-if="!scope.row.isNew && !scope.row.isModify">
+                                <el-button @click="modifyRow(scope.row)" type="text">修改</el-button>
+                                <el-button @click="abandon(scope.row)" type="text">作废</el-button>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -290,6 +121,81 @@
 </template>
 
 <script>
+
+    /**
+     *
+     *           <pay-table
+     *               :columns="columns"
+     *               :title="payTitle"
+     *               :btnInfo="btnInfo"
+     *               :data="payData"
+     *               :disabledBtn="disabledBtn"
+     *               @btnClick="handleBtnClick"
+     *               :url="queryUrl">
+     *           </pay-table>
+     *
+     *
+     *      @param { columns }  -表头配置
+     *          columns:[
+     *              {
+     *                    label:'付款编号',     //表头文字显示
+     *                    type:'Text',         //类型:Text,Input,Select,Date,NumberInput
+     *                                               不传的话默认是Text纯文本显示
+     *                    width:'100',         //表格一列的宽度，不传的话默认是100，可以自行调整
+     *                    prop:'paymentId',    //表头对应的字段名
+     *               },
+     *           ],
+     *
+     *       @param { title }  -顶部按钮旁边标题文字，如果不传则不显示
+     *       @param { btnInfo }  -顶部按钮文字
+     *       @param { data }  -表格数据
+     *          表格数据格式(以payData为例):
+     *          payData:{
+     *              data:[              //必传，字段名必须与上面columns里的字段一一对应
+     *                                  //一一对应包括字段名和字段顺序
+     *                  {
+                            paymentId: '125547',
+                            payName:'赈灾款',
+                            payDate: '1992-02-02',
+                            payDateActually:'1992-02-02',
+                            payMoney:998,
+                            payMoneyActually:'1902',
+                            waitMoney:'',
+                            status:1
+                        },
+     *              ],
+     *              type:'',            //必传,payment(处理付款)或者refund(处理退款)
+     *          }
+     *
+     *       @param { disabledBtn }  -是否禁用顶部按钮
+     *          格式: //不能单独传true/false,必须包在对象里
+     *              {
+     *                  disabledBtn:true/false
+     *              }
+     *
+     *       @function { btnClick }  -按钮点击事件
+     *          如果是处理付款的表格，在新增行，push数据时，需要在对象里加上inNew:true
+     *          payData.data.push({
+     *              paymentId: '124124',
+                    payName:'',
+                    payDate: '',
+                    payMoney:'',
+                    payDateActually:'',
+                    payMoneyActually:'',
+                    isNew:true,                 !!!!!!!!!!!!!
+     *          })
+     *
+     *       @param {queryUrl}  -点击保存时的url，等接口出来了再后续处理
+     *
+     *
+     * */
+
+
+
+
+
+
+
     export default {
         name: "payment-table",
         props:{
@@ -300,7 +206,36 @@
             title:{
                 type:String,
                 default:''
+            },
+            columns:{
+                type:Array,
+                default:[]
+            },
+            btnInfo:{
+                type:String,
+                default:''
+            },
+            disabledBtn:{
+                type:Object,
+                default:{
+                    disabledBtn:false
+                }
+            },
+            queryUrl:{
+                type:String,
+                default:''
             }
+        },
+        computed:{
+            // isDisabledBtn: {
+            //     get(){
+            //         return this.disabledBtn;
+            //     },
+            //     set(value){
+            //         // this.isDisabledBtn=value;
+            //         console.log(value,'???')
+            //     }
+            // }
         },
         data(){
             return{
@@ -350,24 +285,51 @@
 
             //申请付款
             askForPayment(){
-                this.data.data.push({
-                    paymentId: '124124',
-                    payName:'赈灾款',
-                    date: '1992-02-02',
-                    dateActually:'1992-02-02',
-                    money:'998',
-                    moneyActually:'1902',
-                    waitMoney:'',
-                    isNew:true
-                });
-                this.disableBtn=true;
+                this.$emit('btnClick');
+                // this.data.data.push({
+                //     paymentId: '124124',
+                //     payName:'赈灾款',
+                //     date: '1992-02-02',
+                //     dateActually:'1992-02-02',
+                //     money:'998',
+                //     moneyActually:'1902',
+                //     waitMoney:'',
+                //     isNew:true
+                // });
+                // this.disableBtn=true;
             },
 
             //保存一行数据
             saveRow(e){
-                this.$set(e,'isNew',false);
-                this.disableBtn=false;
-                this.cacheData=this.copyArr(this.data.data);
+                let canSave=true;
+                _.map(this.columns,v=>{
+                    if(v.notEmpty){
+                        _.map(e,(m,n)=>{
+                            if(n===v.prop){
+                                if(!m){
+                                    //存在一个没有填的，就不能保存了
+                                    canSave=false;
+                                }
+                            }
+                        })
+                    }
+                });
+                if(!canSave){
+                    let message='';
+                    if(this.data.type==='refund'){
+                        message='款项名称/预计退款日期/预计退款金额不能为空';
+                    }else if(this.data.type==='payment'){
+                        message='款项名称/预计收款日期/预计收款金额不能为空';
+                    }
+                    this.$message({
+                        message: message,
+                        type: 'warning'
+                    });
+                }else{
+                    this.$set(e,'isNew',false);
+                    this.disabledBtn.disabledBtn=false;
+                    this.cacheData=this.copyArr(this.data.data);
+                }
             },
             //取消保存
             cancelSaveRow(e){
@@ -385,10 +347,45 @@
 
             //保存修改
             saveModify(e){
-                this.$set(e,'isModify',false);
-                //这里要调用接口,最后保存cacheData
-                this.cacheData=this.copyArr(this.data.data);
-                this.$emit('saveNewItem',e);
+
+                let canSave=true;
+                _.map(this.columns,v=>{
+                    if(v.notEmpty){
+                        _.map(e,(m,n)=>{
+                            if(n===v.prop){
+                                if(!m){
+                                    //存在一个没有填的，就不能保存了
+                                    canSave=false;
+                                }
+                            }
+                        })
+                    }
+                });
+                if(!canSave){
+                    let message='';
+                    if(this.data.type==='refund'){
+                        message='款项名称/预计退款日期/预计退款金额不能为空';
+                    }else if(this.data.type==='payment'){
+                        message='款项名称/预计收款日期/预计收款金额不能为空';
+                    }
+                    this.$message({
+                        message: message,
+                        type: 'warning'
+                    });
+                }else{
+                    //调用接口，如果返回成功，则执行后续操作，如果失败，则还原数据并提示保存失败
+                    let success=false;
+                    if(success){
+                        this.$set(e,'isModify',false);
+
+                        this.$set(e,'conform',false);                       //修改完数据之后肯定是待确认
+
+                        this.cacheData=this.copyArr(this.data.data);        //更新克隆的data
+                    }else{
+                        this.cancelModify(e);               //取消修改
+                        this.$message.error('保存更改失败');
+                    }
+                }
             },
 
             //取消修改
@@ -438,10 +435,10 @@
                         return;
                     }else if(index===4 || index===6){
                         const values = data.map(item => {
+                            console.log(column,"xxxx")
                             if(!item.abandoned){
                                 return Number(item[column.property])
                             }
-
                         });
                         if (!values.every(value => isNaN(value))) {
                             sums[index] = values.reduce((prev, curr) => {
@@ -473,30 +470,15 @@
             if(this.data.data.length<10){
                 //如果数据长度小于10条，就不显示分页组件
                 this.showPage=false;
-            }else{
+            }
+            else{
                 this.showPage=true;
             }
-            _.map(this.data.data,v=>{
-                if(v.payDate || v.refundDate){
-                    this.$set(v,'date',v.payDate || v.refundDate);
-                }
-                if(v.payMoney || v.refundMoney){
-                    this.$set(v,'money',v.payMoney || v.refundMoney);
-                }
-                if(v.payDateActually || v.refundDateActually){
-                    this.$set(v,'dateActually',v.payDateActually || v.refundDateActually);
-                }
-                if(v.payMoneyActually || v.refundMoneyActually){
-                    this.$set(v,'moneyActually',v.payMoneyActually || v.refundMoneyActually);
-                }
-            });
-
             this.cacheData=this.copyArr(this.data.data);           //备份数组
-
         },
         watch:{
             'data.data'(n){
-                if(n.length>=3){
+                if(n.length>=5){
                     this.showPage=true;
                 }else{
                     this.showPage=false;

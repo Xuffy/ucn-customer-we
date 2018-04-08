@@ -34,6 +34,7 @@ export const routerMap = [
       component: Layout,
       redirect: '/workbench',
       name: 'Workbench',
+      noDropdown: true,
       children: [
         {
           path: 'index',
@@ -164,6 +165,19 @@ export const routerMap = [
       ]
     },
     {
+        path:'/sellerProduct',
+        component:Layout,
+        redirect:'/sellerProduct/overview',
+        name:'sellerProduct',
+        children:[
+            {
+                path:'overview',
+                name:'overview',
+                component: () => import('../views/sellerProduct/overview')
+            }
+        ]
+    },
+    {
       path: '/negotiation',
       component: Layout,
       redirect: '/negotiation/inquiryOverview',
@@ -233,14 +247,13 @@ export const routerMap = [
           component: () => import('../views/logistic/logisticOrderDetail')
         }
       ]
-      
+
     },
     {
         path: '/order',
         component: Layout,
         redirect: '/order',
         name: 'Order',
-        noDropdown: true,
         children: [
             {
                 path: 'overView',

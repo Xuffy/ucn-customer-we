@@ -1,7 +1,7 @@
 <template>
     <div class="place-logistic-plan">
         <div class="hd-top">{{ $t('logistic.text.placeNewLogisticOrder') }}</div>
-        <div class="hd">{{ $t('logistic.text.basicInfo') }}</div>
+        <div class="hd active">{{ $t('logistic.text.basicInfo') }}</div>
         <el-row :gutter="10">
             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
                 <div class="input-item">
@@ -386,14 +386,14 @@
             <div class="thead">
                 <div class="tr">
                     <div class="td">拖柜费</div>
-                    <div class="td"><el-input placeholder="please input"></el-input></div>
+                    <div class="td"><el-input placeholder="input"></el-input></div>
                 </div>
             </div>
         </div>
         <div class="hd">Payment</div>
         <div class="Payment-hd">
             <span>服务付款</span>
-            <el-button type="primary">申请服务付款</el-button>
+            <el-button>申请服务付款</el-button>
         </div>
         <el-table
             :data="PaymentData"
@@ -479,18 +479,17 @@
         <div class="hd">Product Information</div>
         <div class="btn-wrap">
             <div>
-                <el-button type="primary">Add product</el-button>
-                <el-button>Remove</el-button>
+                <el-button>Add product</el-button>
+                <el-button type="danger">Remove</el-button>
             </div>
             <i class="el-icon-setting"></i>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
-            <el-button type="primary">Modify</el-button>
-            <el-button type="primary">Accept</el-button>
-            <el-button type="primary">Copy</el-button>    
-            <el-button>Cancle Order</el-button>    
-            <el-button>Delete</el-button>
+            <el-button>Modify</el-button>
+            <el-button>Accept</el-button>
+            <el-button type="info">Cancle Order</el-button>    
+            <el-button type="danger">Delete</el-button>
         </div>
         <div class="fix-btn-station"></div>
     </div>
@@ -694,6 +693,10 @@
             line-height:40px;
             border-bottom:1px solid #ccc;
             padding:0 15px;
+            font-weight: bold;
+            &.active {
+                border-bottom:none;
+            }
         }   
         .cost-wrap {
             width:100%;
@@ -702,7 +705,6 @@
                 display:flex;
                 .td {
                     padding:10px 5px;
-                    border-bottom:1px solid #ccc;
                     display:flex;
                     align-items: center;
                     justify-content: center;

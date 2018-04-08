@@ -4,19 +4,22 @@
         <el-button type="primary" @click="$router.push('/product/compare/detail')">Detail</el-button>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">{{$t("product.page.downloadSelectedCompare")}}</el-button>
-                <el-button type="info">{{$t("product.page.delete")}}</el-button>
+                <el-button>{{$t("product.page.downloadSelectedCompare")}}</el-button>
+                <el-button type="danger">{{$t("product.page.delete")}}</el-button>
             </div>
 
             <div class="select-wrap">
-                <el-select v-model="value" placeholder="select" @change="selectChange">
-                    <el-option
-                            v-for="item in options"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.id" />
-                </el-select>
-                <el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>
+                <select-search></select-search>
+
+
+                <!--<el-select v-model="value" placeholder="select" @change="selectChange">-->
+                    <!--<el-option-->
+                            <!--v-for="item in options"-->
+                            <!--:key="item.id"-->
+                            <!--:label="item.label"-->
+                            <!--:value="item.id" />-->
+                <!--</el-select>-->
+                <!--<el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>-->
             </div>
         </div>
         <div class="body">
@@ -33,11 +36,16 @@
 </template>
 <script>
     import {dropDown} from '@/components/index'
-
+    import selectSearch from '@/components/common/fnCompon/selectSearch'
     import VSimpleTable from '@/components/common/table/simple'
 
     export default {
         name: '',
+        components: {
+            dropDown,
+            VSimpleTable,
+            selectSearch
+        },
         data() {
             return {
                 options: [
@@ -58,10 +66,6 @@
                 dataColumn:[],
 
             }
-        },
-        components: {
-            dropDown,
-            VSimpleTable
         },
         methods: {
             selectChange() {

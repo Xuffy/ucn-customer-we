@@ -287,17 +287,16 @@
         <div class="hd">Product Information</div>
         <div class="btn-wrap">
             <div>
-                <el-button type="primary">Add product</el-button>
-                <el-button>Remove</el-button>
+                <el-button>Add product</el-button>
+                <el-button type="danger">Remove</el-button>
             </div>
         </div>
         <v-simple-table :column="tabColumn" :data.sync="tabData" />
         <div class="fix-btn">
-            <el-button type="primary">Modify</el-button>
-            <el-button type="primary">Accept</el-button>
-            <el-button type="primary">Copy</el-button>    
-            <el-button>Cancle Order</el-button>    
-            <el-button>Delete</el-button>
+            <el-button>Modify</el-button>
+            <el-button>Accept</el-button>
+            <el-button type="info">Cancle Order</el-button>    
+            <el-button type="danger">Delete</el-button>
         </div>
         <div class="fix-btn-station"></div>
     </div>

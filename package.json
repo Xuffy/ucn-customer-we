@@ -19,7 +19,7 @@
     "nprogress": "^0.2.0",
     "store": "^2.0.12",
     "underscore": "^1.8.3",
-    "vue": "^2.4.2",
+    "vue": "^2.5.2",
     "vue-i18n": "^7.6.0",
     "vue-router": "^2.7.0"
   },
@@ -70,6 +70,7 @@
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "url-loader": "^0.5.8",
+    "vue-easytable": "^1.7.0",
     "vue-loader": "^13.0.4",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.4.2",

@@ -128,7 +128,7 @@
 		color: #606266;
 		display: inline-block;
 		font-size: inherit;
-		min-height: 40px;
+		min-height: 28px;
 		outline: 0;
 		padding: 0 15px;
 		min-width:200px;

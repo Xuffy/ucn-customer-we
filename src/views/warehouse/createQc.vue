@@ -248,6 +248,8 @@
             </el-pagination>
         </el-dialog>
 
+
+
         <el-dialog width="80%" title="Choose Order No" :visible.sync="orderTableVisible">
             <el-form ref="form" :model="form" label-width="100px">
                 <el-row>

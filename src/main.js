@@ -13,13 +13,16 @@ import lang from 'lib/lang'
 import ElementUI from 'element-ui';
 import store from './store';
 
+// 引入样式
+// import 'vue-easytable/libs/themes-base/index.css'
+
 Vue.use(api);
 Vue.use(util);
 Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'small',i18n: (key, value) => i18n.t(key, value)});
 
 Vue.prototype.ajax = ajax;
-
+Vue.config.productionTip = false;
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

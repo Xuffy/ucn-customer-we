@@ -3,8 +3,8 @@
         <h3 class="hd">{{ $t('negotiation.text.compareOverview') }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary">{{ $t('negotiation.text.downloadSelectedCompare') }}</el-button>
-                <el-button type="info">{{ $t('negotiation.text.delete') }}</el-button>
+                <el-button>{{ $t('negotiation.text.downloadSelectedCompare') }}</el-button>
+                <el-button type="danger">{{ $t('negotiation.text.delete') }}</el-button>
             </div>
             <select-search :options="options" />
         </div>
