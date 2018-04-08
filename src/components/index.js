@@ -1,4 +1,4 @@
-import VTestTable from './common/table/index';
+import VTable from './common/table/index';
 import VSimpleTable from './common/table/simple';
 import VComplexTable from './common/table/complex';
 import dropDown from './common/fnCompon/dropDown';
@@ -16,7 +16,7 @@ import selectSearch from './common/fnCompon/selectSearch';
 import bigPhoto from './common/bigPhoto/bigPhoto';
 
 export {
-  VTestTable,
+  VTable,
   VSimpleTable,
   VComplexTable,
   dropDown,

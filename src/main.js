@@ -22,7 +22,7 @@ Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'small',i18n: (key, value) => i18n.t(key, value)});
 
 Vue.prototype.ajax = ajax;
-
+Vue.config.productionTip = false;
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

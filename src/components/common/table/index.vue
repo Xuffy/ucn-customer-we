@@ -1,23 +1,69 @@
 <template>
-  <div class="ucn-table" ref="testTable" style="width: 500px;height: 500px;overflow: auto">
-    <table>
-      <tr>
-        <th v-for="item in dataColumn" v-text="item.prop"></th>
-      </tr>
-    </table>
-    <!--<ul class="table-title">
-      <li v-for="item in dataColumn" v-text="item.prop"></li>
-    </ul>-->
-    <table>
-      <thead>
-      <tr v-for="item in dataList">
-        <td v-for="cItem in item" v-text="cItem"></td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr></tr>
-      </tbody>
-    </table>
+  <div class="ucn-table" v-loading="loading">
+    <div class="table-container">
+      <div class="fixed-left" ref="fixedLeft" :class="{show:dataColumn.length}">
+        <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
+        <!--<el-checkbox v-model="checkedAll"></el-checkbox>-->
+      </div>
+      <div class="fixed-right" ref="fixedRight" :class="{show:dataColumn.length}">
+        action
+      </div>
+
+
+      <div class="table-box" ref="tableBox">
+        <table v-if="dataList.length">
+          <thead ref="tableTitle">
+          <tr>
+            <td ref="tableCheckbox">
+              <div style="visibility: hidden"><input type="checkbox"/></div>
+            </td>
+            <td>
+              <div>#</div>
+            </td>
+            <td v-for="item in dataColumn">
+              <div v-text="item.prop">
+              </div>
+            </td>
+            <td ref="tableAction">
+              <div>action</div>
+            </td>
+          </tr>
+          </thead>
+          <tbody ref="tableBody">
+          <tr v-for="(item,index) in dataList">
+            <td>
+              <div>
+                <input type="checkbox" ref="checkbox" v-model="item._checked"/>
+                <!--<el-checkbox v-model="item._checked"></el-checkbox>-->
+              </div>
+            </td>
+            <td>
+              <div v-text="index + 1"></div>
+            </td>
+            <td v-for="(cItem,cKey) in item" v-if="filterKey(cKey)">
+              <div v-text="cItem"></div>
+            </td>
+            <td>
+              <div style="white-space: nowrap;">
+                <span class="button">查看</span>
+                <span class="button">修改</span>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div v-else class="empty">
+          暂无数据
+        </div>
+      </div>
+    </div>
+
+    <el-pagination
+      v-if="dataColumn.length"
+      background
+      layout="prev, pager, next, jumper,total,sizes"
+      :total="1000">
+    </el-pagination>
   </div>
 </template>
 
@@ -37,18 +83,13 @@
    *  <v-table></v-table>
    */
 
-    // import VFilterValue from './filterValue'
-    // import VFilterColumn from './filterColumn'
+  // import VFilterValue from './filterValue'
+  // import VFilterColumn from './filterColumn'
 
-  let allData = [];
-  let i = 0;
 
   export default {
-    name: 'VSimpleTable',
-    components: {
-      // VFilterValue,
-      // VFilterColumn
-    },
+    name: 'VTable',
+    components: {},
     props: {
       data: {
         type: Array,
@@ -56,47 +97,85 @@
           return [];
         },
       },
+      loading: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
         dataList: [],
         dataColumn: [],
-
+        checkedAll: false,
       }
     },
-    watch: {},
+    watch: {
+      data(val) {
+        this.dataList = val;
+        this.dataColumn = this.filterColumn(val);
+        this.$nextTick(() => {
+          this.scrollListener();
+        });
+      },
+      checkedAll(value) {
+        this.dataList = _.map(this.dataList, val => {
+          val._checked = value;
+          return val;
+        });
+      },
+    },
     mounted() {
-      this.getList();
-      let node = this.$refs.testTable;
-      let scrollNum = 0;
-      node.addEventListener('scroll', (e) => {
-        let h = e.target.scrollTop
-          , sh = e.target.scrollHeight - e.target.clientHeight - 10;
-        /*if (h > sh) {
-          console.log(i * 50, i * 50 + 50)
-          this.dataList = allData.slice(i * 50, i * 50 + 50);
-          e.target.scrollTop = 0;
-        }*/
-
-        if (h > sh) {
-          let n = (i - 1) * 50;
-          this.dataList = this.dataList.concat(allData.slice(n, n + 50));
-          console.log(this.dataList.length)
-          i++;
-        }
-
-
-      }, false);
+      this.dataList = this.data;
+      this.dataColumn = this.filterColumn(this.dataList);
+      this.$nextTick(() => {
+        this.scrollListener();
+      });
+      this.$refs.tableBox.addEventListener('scroll', this.scrollListener);
     },
     methods: {
-      getList() {
-        this.ajax.get('/getBigList').then((data) => {
-          allData = data;
-          // this.dataList = data;
-          this.dataList = data.slice(0, 50);
-          i++;
-          this.dataColumn = this.$getTableColumn(data, 'negotiation.tableProductInfo');
+      filterColumn(data) {
+        let list = [];
+        if (_.isEmpty(data)) {
+          return [];
+        } else {
+          _.map(_.keys(data[0]), val => {
+            let k = this.filterKey(val);
+            k && list.push({label: k, prop: val, width: 100});
+          });
+          return list;
+        }
+      },
+      filterKey(k) {
+        const dk = 'negotiation.tableProductInfo';
+        let sk = this.$tc(`${dk}.${k}`);
+        if (sk.indexOf('.') < 0 || sk.charAt(sk.length - 1) === '.') {
+          return sk;
+        }
+        return false;
+      },
+      scrollListener(e) {
+        if (!this.$refs.tableBody) return false;
+
+        let trs = this.$refs.tableBody.children;
+        let st, sl, sw;
+        if (e) {
+          st = e.target.scrollTop;
+          sl = e.target.scrollLeft;
+          sw = e.target.scrollWidth;
+        } else {
+          st = 0;
+          sl = 0;
+          sw = this.$refs.tableBody.offsetWidth;
+        }
+
+        this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
+        this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
+
+        _.map(trs, (val) => {
+          val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
+          val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
         });
+        this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
       }
     }
   }
@@ -106,31 +185,156 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .ucn-table {
+  }
+
+  .ucn-table .table-container {
+    position: relative;
+    margin-bottom: 10px;
+    width: 700px;
+    height: 500px;
+  }
+
+  .ucn-table .fixed-left,
+  .ucn-table .fixed-right {
+    position: absolute;
+    z-index: 9;
+    top: 0;
+    height: 40px;
+    width: 20px;
+    line-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    color: #999999;
+    display: none;
+    background-color: #ECEFF1;
+  }
+
+  .ucn-table .show {
+    display: block;
+  }
+
+  .ucn-table .fixed-left {
+    left: 0;
+    line-height: 50px;
+  }
+
+  .ucn-table .fixed-right {
+    right: 14px;
+  }
+
+  .ucn-table .table-box {
+    max-height: 100%;
+    max-width: 100%;
+    overflow-y: scroll;
+    overflow-x: auto;
+  }
+
+  .ucn-table table {
+    border-collapse: collapse;
+    border: none;
+    table-layout: fixed;
+    min-width: 100%;
+  }
+
+  .ucn-table input[type=checkbox] {
+    zoom: 130%;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .ucn-table tr {
+    background-color: #FFFFFF;
+  }
+
+  .ucn-table td,
+  .ucn-table th {
+    font-size: 12px;
+    vertical-align: middle;
+    text-align: center;
+    border-bottom: 1px solid #ebeef5;
+
+  }
+
+  .ucn-table thead {
+    /*position: absolute;*/
+    /*z-index: 9999;*/
+  }
+
+  .ucn-table thead td {
+    background-color: #ECEFF1;
+    color: #999999;
+    word-break: keep-all;
+    padding: 0 10px;
+  }
+
+  .ucn-table td > div {
+    text-align: center;
+    width: 100%;
+    line-height: 14px;
+  }
+
+  .ucn-table thead td > div {
+    line-height: 40px;
+  }
+
+  .ucn-table thead tr td:first-child > div {
+    width: 20px;
+  }
+
+  .ucn-table tbody td {
+    padding: 10px;
+  }
+
+  .ucn-table thead tr:nth-child(even) td,
+  .ucn-table tbody tr:nth-child(even) {
+    background-color: #F7F8F9;
+  }
+
+  .ucn-table tbody tr td:hover,
+  .ucn-table tbody tr:hover td {
+    background-color: #ebeff1 !important;
+  }
+
+  .ucn-table tbody tr td:first-child,
+  .ucn-table tbody tr td:last-child {
+    background-color: #FFFFFF;
     position: relative;
   }
 
-  .table-title {
-    position: absolute;
-    width: 100%;
-  }
-
-  .table-title li {
-    float: left;
-  }
-
-  .table-title:after {
+  .ucn-table tbody tr td:last-child:after,
+  .ucn-table tbody tr td:first-child:after {
     content: '';
-    display: block;
-    clear: both;
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    top: 0;
+    right: 0;
+    background-color: #ebeef5;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, .4);
   }
 
-  table {
-    border-collapse: collapse;
-    border: none;
-    width: 200px;
+  .ucn-table tbody tr td:last-child:after {
+    left: 0;
+    box-shadow: -3px 0 10px rgba(0, 0, 0, .2);
   }
 
-  td {
-    border: solid #000 1px;
+  .ucn-table .button {
+    color: #409eff;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .ucn-table .button:last-child {
+    margin-right: 0;
+  }
+
+  .ucn-table .empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    color: #999999;
   }
 </style>
