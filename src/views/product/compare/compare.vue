@@ -4,8 +4,8 @@
             {{$t('product.page.compareDetail')}}
         </div>
         <div class="btn-groups">
-            <el-button type="primary">{{$t('product.page.createInquiry')}}</el-button>
-            <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
+            <el-button>{{$t('product.page.createInquiry')}}</el-button>
+            <el-button>{{$t('product.page.createOrder')}}</el-button>
             <el-checkbox-group v-model="checkList" class="checkbox-group">
                 <el-checkbox :label="$t('product.page.hideTheSame')"></el-checkbox>
                 <el-checkbox :label="$t('product.page.highlightTheDifference')"></el-checkbox>

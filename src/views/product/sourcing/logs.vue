@@ -4,13 +4,14 @@
             {{$t('product.page.logs')}}
         </div>
         <div class="head-btn">
-            <el-button type="primary">{{$t('product.page.downTheLogs')}}</el-button>
-            <el-input
-                    class="message-input"
-                    placeholder="请输入内容"
-                    v-model="searchValue">
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
-            </el-input>
+            <!--<el-input-->
+                    <!--class="message-input"-->
+                    <!--placeholder="请输入内容"-->
+                    <!--v-model="searchValue">-->
+                <!--<i slot="prefix" class="el-input__icon el-icon-search"></i>-->
+            <!--</el-input>-->
+            <select-search :selectHide="true" class="search"></select-search>
+            <el-button class="btn">{{$t('product.page.download')}}</el-button>
         </div>
 
         <div class="body">
@@ -30,8 +31,7 @@
                 <el-table-column
                         prop="describe"
                         :label="$t('product.tableData.description')"
-                        align="center"
-                        width="180">
+                        align="center">
                 </el-table-column>
                 <el-table-column
                         prop="date"
@@ -39,11 +39,6 @@
                         sortable
                         align="center"
                         width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="remark"
-                        :label="$t('product.tableData.remarks')"
-                        :formatter="formatter">
                 </el-table-column>
             </el-table>
             <br>
@@ -62,8 +57,14 @@
 </template>
 
 <script>
+
+    import selectSearch from '@/components/common/fnCompon/selectSearch'
+
     export default {
         name: "logs",
+        components:{
+            selectSearch
+        },
         data(){
             return{
                 searchValue:'',         //搜索框搜索内容
@@ -120,13 +121,29 @@
     }
     .head-btn{
         margin-top: 15px;
+        margin-bottom: 15px;
     }
+    .head-btn:after{
+        display: table;
+        clear: both;
+        content: '';
+    }
+    .head-btn .search{
+        float: left;
+    }
+
+    .head-btn .btn{
+        float: left;
+    }
+
+
+
     .body{
         margin-top: 15px;
     }
     .message-input{
-        width: 300px;
-        float: right;
+        /*width: 300px;*/
+        /*float: right;*/
     }
     .logs-table >>> .el-table__header-wrapper>table>thead>tr>th{
         background-color: #f3f3f3;

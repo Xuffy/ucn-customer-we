@@ -13,17 +13,17 @@
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="categoryId" :label="$t('product.page.category')">
                             <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
-                            <el-input v-model="productForm.categoryId"></el-input>
+                            <el-input size="mini" v-model="productForm.categoryId"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="nameEn" :label="$t('product.page.skuNameEN')">
-                            <el-input v-model="productForm.nameEn"></el-input>
+                            <el-input size="mini" v-model="productForm.nameEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="isReadilyAvailable":label="$t('product.page.readilyAvailable')">
-                            <el-select v-model="productForm.isReadilyAvailable" placeholder="请选择">
+                            <el-select size="mini" v-model="productForm.isReadilyAvailable" placeholder="请选择">
                                 <el-option
                                         v-for="item in readilyAvailableOptions"
                                         :key="item.value"
@@ -41,76 +41,76 @@
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="customerSkuCode" :label="$t('product.page.customerSkuCode')">
-                            <el-input v-model="productForm.customerSkuCode"></el-input>
+                            <el-input size="mini" v-model="productForm.customerSkuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="section-number">
                             <el-form-item :label="$t('product.page.exwPrice')">
-                                <el-input class="section-input" v-model="productForm.minExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input class="section-input" v-model="productForm.maxExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="code" :label="$t('product.page.skuCode')">
-                            <el-input v-model="productForm.code"></el-input>
+                            <el-input size="mini" v-model="productForm.code"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="nameCn" :label="$t('product.page.skuNameCN')">
-                            <el-input v-model="productForm.nameCn"></el-input>
+                            <el-input size="mini" v-model="productForm.nameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="section-number">
                             <el-form-item class="section-item1" :label="$t('product.page.fobPrice')">
-                                <el-input class="section-input" v-model="productForm.minFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input class="section-input" v-model="productForm.maxFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="materialEn" :label="$t('product.page.skuMaterialsEN')">
-                            <el-input v-model="productForm.materialEn"></el-input>
+                            <el-input size="mini" v-model="productForm.materialEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="country" :label="$t('product.page.country')">
-                            <el-input v-model="productForm.country"></el-input>
+                            <el-input size="mini" v-model="productForm.country"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="supplierName" :label="$t('product.page.supplierName')">
-                            <el-input v-model="productForm.supplierName"></el-input>
+                            <el-input size="mini" v-model="productForm.supplierName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="outerCartonMethodEn"  :label="$t('product.page.packingMethodOfOuterCartonEN')">
-                            <el-input v-model="productForm.outerCartonMethodEn"></el-input>
+                            <el-input size="mini" v-model="productForm.outerCartonMethodEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="methodPkgEn"  :label="$t('product.page.packingMethodEN')">
-                            <el-input v-model="productForm.methodPkgEn"></el-input>
+                            <el-input size="mini" v-model="productForm.methodPkgEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="deliveryDates"  :label="$t('product.page.deliveryDate')">
-                            <el-input v-model="productForm.deliveryDates"></el-input>
+                            <el-input size="mini" v-model="productForm.deliveryDates"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="descEn" :label="$t('product.page.skuDescriptionEN')">
-                            <el-input v-model="productForm.descEn"></el-input>
+                            <el-input size="mini" v-model="productForm.descEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="descCn":label="$t('product.page.skuDescriptionCN')">
-                            <el-input v-model="productForm.descCn"></el-input>
+                            <el-input size="mini" v-model="productForm.descCn"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -124,20 +124,20 @@
 
         <div class="footer">
             <div class="btns">
-                <el-button type="primary">{{$t('product.page.createInquiry')}}</el-button>
-                <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
-                <el-button type="primary">{{$t('product.page.compare')}}</el-button>
+                <el-button>{{$t('product.page.createInquiry')}}</el-button>
+                <el-button>{{$t('product.page.createOrder')}}</el-button>
+                <el-button>{{$t('product.page.compare')}}</el-button>
 
                 <el-dropdown>
-                    <el-button type="primary">{{$t('product.page.addNewProduct')}}</el-button>
+                    <el-button>{{$t('product.page.addNewProduct')}}</el-button>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="addFromNewSearch">{{$t('product.page.fromNewSearch')}}</el-dropdown-item>
                         <el-dropdown-item @click.native="addFromManually">{{$t('product.page.fromManuallyAdd')}}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
 
-                <el-button type="primary">{{$t('product.page.downloadSelectedProducts')}}</el-button>
-                <el-button @click="removeBookmark" type="info">{{$t('product.page.remove')}}</el-button>
+                <el-button>{{$t('product.page.downloadSelectedProducts')}}</el-button>
+                <el-button @click="removeBookmark" type="danger">{{$t('product.page.remove')}}</el-button>
             </div>
 
 

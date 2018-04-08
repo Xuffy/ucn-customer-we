@@ -15,7 +15,7 @@
             </el-table-column>
             <el-table-column
                     prop="remark"
-                    :label="$t('product.tableData.submiter')"
+                    :label="$t('product.tableData.operater')"
                     align="center">
             </el-table-column>
             <el-table-column
@@ -28,9 +28,9 @@
                     :label="$t('product.tableData.action')"
                     align="center">
                 <template slot-scope="scope">
-                    <el-button @click="checkRemark" type="text" size="small">查看</el-button>
-                    <el-button @click="editRemark" type="text" size="small">修改</el-button>
-                    <el-button @click="deleteRemark" type="text" size="small">删除</el-button>
+                    <!--<el-button @click="checkRemark" type="text" size="small">查看</el-button>-->
+                    <el-button @click="editRemark" type="text" size="small">{{$t('product.tableData.modify')}}</el-button>
+                    <el-button @click="deleteRemark" type="text" size="small">{{$t('product.tableData.deletes')}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -62,19 +62,19 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="备注查看" :visible.sync="checkRemarkFormVisible" center width="500px">
-            <el-form :model="form">
+        <!--<el-dialog title="备注查看" :visible.sync="checkRemarkFormVisible" center width="500px">-->
+            <!--<el-form :model="form">-->
 
-                <el-form-item label="备注:" :label-width="formLabelWidth">
-                    {{form.name}}
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur debitis deleniti ea, eligendi est magnam numquam perferendis quidem suscipit, veniam voluptatem voluptatibus! Assumenda, corporis impedit in iste minus neque.
-                </el-form-item>
+                <!--<el-form-item label="备注:" :label-width="formLabelWidth">-->
+                    <!--{{form.name}}-->
+                    <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur debitis deleniti ea, eligendi est magnam numquam perferendis quidem suscipit, veniam voluptatem voluptatibus! Assumenda, corporis impedit in iste minus neque.-->
+                <!--</el-form-item>-->
 
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="checkRemarkFormVisible = false">关 闭</el-button>
-            </div>
-        </el-dialog>
+            <!--</el-form>-->
+            <!--<div slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="checkRemarkFormVisible = false">关 闭</el-button>-->
+            <!--</div>-->
+        <!--</el-dialog>-->
 
         <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
             <el-form :model="form">

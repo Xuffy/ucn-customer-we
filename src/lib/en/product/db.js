@@ -29,8 +29,10 @@ const tableData = {
     //detail remark
     time:'time',
     remark:'remark',
-    submiter:'submiter',
+    operater:'operater',
     action:'action',
+    modify:'Modify',
+    deletes:'Delete',
 
 
     //product logs
