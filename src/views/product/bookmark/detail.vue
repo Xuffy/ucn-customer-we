@@ -7,8 +7,8 @@
             <div class="detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel trigger="click" height="200px">
-                            <el-carousel-item v-for="item in 4" :key="item">
+                        <el-carousel class="banner" trigger="click" height="150px">
+                            <el-carousel-item v-for="item in 3" :key="item">
                                 <img src="../../../assets/images/login-back.jpg" style="width: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
@@ -16,16 +16,16 @@
                     <el-col :span="18">
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.skuEnglishName')}} : xxxx
+                                {{$t('product.page.skuNameCN')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.skuStatus')}} : xxxx
+                                {{$t('product.page.skuSaleStatus')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.vendorSKUCode')}} : xxxx
+                                {{$t('product.page.skuCode')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.color')}} : xxxx
+                                {{$t('product.page.colourEN')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                                 {{$t('product.page.incoterm')}} : xxxx
@@ -37,13 +37,13 @@
                                 {{$t('product.page.incotermPrice')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('product.page.unitofMeasurement')}} : xxxx
+                                {{$t('product.page.unit')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                                 {{$t('product.page.supplierName')}} : xxxx
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                {{$t('product.page.skuEnglishDescription')}} : xxxx
+                                {{$t('product.page.skuDescriptionCN')}} : xxxx
                             </el-col>
                         </el-row>
 
@@ -53,12 +53,13 @@
                     <el-button type="primary">{{$t('product.page.createInquiry')}}</el-button>
                     <el-button type="primary">{{$t('product.page.createOrder')}}</el-button>
                     <el-button @click="addCompare" type="primary">{{$t('product.page.addToCompare')}}</el-button>
-                    <el-button class="roundBtn" @click="editBookmark" round> Edit </el-button>
-                    <el-button @click="removeBookmark" class="roundBtn" round> Remove </el-button>
+                    <el-button @click="editBookmark" type="primary">{{$t('product.page.edit')}}</el-button>
+                    <el-button @click="removeBookmark" type="primary">{{$t('product.page.remove')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
-                    <el-button @click="cancelEdit" type="info">Cancel</el-button>
+                    <el-button @click="cancelEdit" type="primary">Cancel</el-button>
+
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                         <el-form-item label="分类">
-                            <drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm.categoryId" class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
@@ -175,13 +175,13 @@
 
 <script>
 
-    import {dropDown} from '@/components/index'
+    import {dropDownSingle} from '@/components/index'
     import VSimpleTable from '@/components/common/table/simple'
 
     export default {
         name: "overview",
         components: {
-            dropDown,
+            dropDown:dropDownSingle,
             VSimpleTable
         },
         props: {
@@ -225,9 +225,6 @@
                     VendorSKUDescription: ''
                 },
 
-                testValidateForm:{
-                    name:''
-                },
 
                 productForm: {
                     categoryId: '0',
