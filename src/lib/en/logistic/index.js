@@ -39,7 +39,8 @@ const text = {
 };
 const containerInfo = {
     containerType: "Container Type",
-    containerQuantity: "Container Quantity"
+    containerQuantity: "Container Quantity",
+    actions: "actions"
 };
 
 const basicInfo = {

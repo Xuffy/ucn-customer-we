@@ -145,16 +145,11 @@
 		}
 		width: 100%;
 		.dataBox {
-			max-height:40px;
 			overflow: hidden;
 			span {
-				background:#f4f4f4;
-				color:#94979a;
-				padding:8px 8px;
-				margin:5px 5px 5px 0;
-				border-radius: 5px;
 				display:inline-block;
 				font-size:12px;
+				line-height: 26px;
 				i {
 					font-size:14px;
 					cursor: pointer;

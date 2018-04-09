@@ -248,7 +248,10 @@
                 <el-button type="danger">{{ $t('logistic.btn.remove') }}</el-button>
             </div>
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table 
+            :data="tabData" 
+            :data-key="tabColumn"
+        />
         <div class="fix-btn">
             <el-button>{{ $t('logistic.btn.save') }}</el-button>
             <el-button>{{ $t('logistic.btn.sentAsOrder') }}</el-button>
@@ -261,7 +264,10 @@
                 width="80%"
                 lock-scroll>
             <v-select-search :options="['1', 0]" />
-            <v-simple-table :column="tabColumn" :data.sync="tabData" />
+            <v-table 
+                :data="tabData" 
+                :data-key="tabColumn"
+            />
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
                 <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
@@ -270,12 +276,12 @@
     </div>
 </template>
 <script>
-    import { VSimpleTable, containerInfo, selectSearch } from '@/components/index';
+    import { VTable, containerInfo, selectSearch } from '@/components/index';
     export default {
         name: 'placeLogisticPlan',
         data() {
             return {
-                tabColumn: [],
+                tabColumn: '',
                 tabData: [],
                 newSearchDialogVisible:false,
                 date:'',
@@ -335,10 +341,7 @@
                 Container: '',
                 depature:'',
                 departure:'',
-                tableData: [{
-                    Product: "Product",
-                    containerAmount: "Container Amount"
-                }]
+                tableData: []
             }
         },
         created() {
@@ -347,11 +350,11 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res.inquiry;
-                this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
+                this.tabColumn = 'negotiation.tableViewByInquiry';
             });
         },
         components: {
-            "v-simple-table": VSimpleTable,
+            "v-table": VTable,
             "v-container-info": containerInfo,
             "v-select-search": selectSearch
         },
@@ -366,10 +369,8 @@
                 this.tableData.pop();
                 this.tableData.push(item);
             },
-            tabSplite(item) {
-                _.map(item, (list) => {
-                    this.tableData.splice(list.index, 1);
-                });
+            tabSplite(index) {
+                this.tableData.splice(index, 1);
             }
         }
     }
@@ -388,7 +389,6 @@
         .hd {
             height: 40px;
             line-height:40px;
-            border-bottom:1px solid #ccc;
             padding:0 15px;
             font-weight: bold;
             &.active {

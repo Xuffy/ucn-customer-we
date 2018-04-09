@@ -17,6 +17,7 @@ import compareList from '@/views/product/compareList';
 import bigPhoto from './common/bigPhoto/bigPhoto';
 import containerInfo from '@/views/logistic/children/containerInfo';
 import dropDownSingle from './common/fnCompon/dropDownSingle';
+import paymentTable from '@/views/warehouse/paymentTable';
 
 export {
   VTable,
@@ -36,5 +37,6 @@ export {
     bigPhoto,
     compareList,
     containerInfo,
-    dropDownSingle
+    dropDownSingle,
+    paymentTable
 }

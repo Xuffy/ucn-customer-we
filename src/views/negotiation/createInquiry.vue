@@ -215,7 +215,7 @@
             </div>
             <select-search :options="options" />
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table :data="tabData" :data-key="tabColumn"></v-table>
         <div class="bom-btn-wrap">
             <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.submit') }}</el-button>
             <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
@@ -239,7 +239,7 @@
     </div>
 </template>
 <script>
-    import { selectSearch, VSimpleTable, Upload } from '@/components/index';
+    import { selectSearch, VTable, Upload } from '@/components/index';
     import product from '@/views/product/addProduct';
     export default {
         name:'createInquiry',
@@ -248,7 +248,7 @@
                 radio: 'From New Search',
                 dialogTableVisible: false,
                 dialogFormVisible: false,
-                tabColumn: [],
+                tabColumn: '',
                 tabData: [],
                 options:[{
                     id:'1',
@@ -320,7 +320,7 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-simple-table': VSimpleTable,
+            'v-table': VTable,
             'v-product': product,
             'v-up-load': Upload
         },
@@ -330,7 +330,7 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res.content;
-                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableProductInfo', { width:200 });
+                this.tabColumn =  'negotiation.tableProductInfo';
             });
         },
         methods: {
