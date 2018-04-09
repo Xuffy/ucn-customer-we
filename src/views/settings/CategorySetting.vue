@@ -19,6 +19,7 @@
                         default-expand-all
                         :filter-node-method="filterNode"
                         ref="tree2"
+                        v-show="mappingRelationData"
                     />
                 </div>
             </div>
@@ -158,7 +159,7 @@
                         label: '二级 3-2'
                     }]
                 }],
-                mappingRelationData: [],
+                mappingRelationData: '',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -168,8 +169,7 @@
         created() {
             this.ajax({
                 url: this.$apis.sys_category,
-                method: "get",
-
+                method: 'get'
             });
         },
         methods: {

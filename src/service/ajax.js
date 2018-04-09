@@ -38,7 +38,7 @@ ajax.interceptors.request.use(config => {
   // router.push('/login');
   // return Promise.reject('登录失效，请重新登录');
   // }
-  config.headers['utouu-open-client-ticket'] = ts;
+  // config.headers['utouu-open-client-ticket'] = ts;
 
   NProgress.start();
 
