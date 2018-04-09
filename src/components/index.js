@@ -17,8 +17,10 @@ import compareList from '@/views/product/compareList';
 import bigPhoto from './common/bigPhoto/bigPhoto';
 import containerInfo from '@/views/logistic/children/containerInfo';
 import dropDownSingle from './common/fnCompon/dropDownSingle';
+import VAddQuickLink from './common/addQuickLink/index';
 
 export {
+  VAddQuickLink,
   VTable,
   VSimpleTable,
   VComplexTable,
@@ -33,8 +35,8 @@ export {
   messageBoard,
   selectSearch,
   // product,                      //product页面组件
-    bigPhoto,
-    compareList,
-    containerInfo,
-    dropDownSingle
+  bigPhoto,
+  compareList,
+  containerInfo,
+  dropDownSingle
 }
