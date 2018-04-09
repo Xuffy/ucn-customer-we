@@ -74,7 +74,7 @@
                     <el-button>{{$t('product.page.createInquiry')}}</el-button>
                     <el-button>{{$t('product.page.createOrder')}}</el-button>
                     <el-button @click="addCompare">{{$t('product.page.addToCompare')}}</el-button>
-                    <el-button @click="addToBookmark" round>{{$t('product.page.addToBookmark')}}</el-button>
+                    <el-button @click="addToBookmark">{{$t('product.page.addToBookmark')}}</el-button>
                 </div>
             </div>
         </div>
@@ -921,7 +921,7 @@
         height: 35px;
     }
     .Details .body .list >>> label{
-        text-align: right;
+        /*text-align: right;*/
     }
 
     .speForm .el-form-item--small.el-form-item{

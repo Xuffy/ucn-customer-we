@@ -5,54 +5,32 @@
         </div>
         <div class="body">
             <div class="select">
-                <el-select v-model="value" placeholder="请选择">
-                    <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-                <el-input
-                        class="search-input"
-                        placeholder="请输入内容"
-                        v-model="searchValue">
-                    <i slot="prefix" class="el-input__icon el-icon-search"></i>
-                </el-input>
+                <select-search class="search"></select-search>
             </div>
             <div class="btn">
                 <el-button type="primary">{{$t('warehouse.page.downLoad')}}</el-button>
             </div>
 
             <div class="table">
-                <v-simple-table
-                        class="speTable"
-                        :data.sync="tableDataList"
-                        :column="dataColumn"
-                        @sort-change="getSort"
-                        @page-change="pageChange">
-                </v-simple-table>
-
+                <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
             </div>
-
         </div>
-
-
 
         <el-button @click="$router.push('/warehouse/qcOverview')" type="primary">qc Overview</el-button>
         <el-button @click="$router.push('/warehouse/createQc')" type="primary">Create Qc Order</el-button>
     </div>
 </template>
 <script>
-
-    import VSimpleTable from '@/components/common/table/simple'
+    import VTable from '@/components/common/table/index'
     import {bigPhoto} from '@/components/index'
+    import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
         name:'warehouse',
         components:{
-            VSimpleTable,
-            bigPhoto
+            bigPhoto,
+            VTable,
+            selectSearch
         },
         data(){
             return{
@@ -91,7 +69,6 @@
             getList() {
                 this.ajax.get('/getTrackList').then((data)=>{
                     this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
                 })
             },
         },
@@ -116,6 +93,10 @@
         width: auto;
     }
     .body .btn{
+        margin-top: 10px;
+    }
+
+    .table{
         margin-top: 10px;
     }
 </style>

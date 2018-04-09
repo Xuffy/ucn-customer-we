@@ -23,7 +23,7 @@
         </div>
         <!--form-->
           <!--        表格-->
-             <v-simple-table :column="tabColumn" :data.sync="tabData" />
+            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -34,7 +34,7 @@
      * @param value 下拉框 选中值
      */
     import {
-        VSimpleTable,
+        VTable,
         selectSearch
     } from '@/components/index';
     export default {
@@ -55,7 +55,7 @@
             }
         },
         components: {
-            VSimpleTable,
+            VTable,
             selectSearch
         },
         methods: {
@@ -69,10 +69,7 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
                     console.log(res);
