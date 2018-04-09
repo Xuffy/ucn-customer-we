@@ -8,7 +8,7 @@ export default {
     },
     develop: {
       path: '/static/__project',
-      api: 'http://192.168.11.215:30704'
+      api: 'http://192.168.51.33:11003/web/v1/'
     },
     test: {
       path: '/static/__project',

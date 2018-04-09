@@ -7,7 +7,7 @@ import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from 'service/store';
 
-const mock = true;
+const mock = false;
 
 // 创建axios实例
 const ajax = axios.create({
