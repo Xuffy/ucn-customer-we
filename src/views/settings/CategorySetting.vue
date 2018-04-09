@@ -76,6 +76,7 @@
         name: 'CategorySetting',
         data() {
             return {
+                selectedNodes: [],
                 myCategoryKeyWord:'',
                 generalCategoryKeyWord:'',
                 mapingCategoryKeyWord:'',
@@ -165,11 +166,11 @@
             }
         },
         created() {
-            // this.ajax({
-            //     url:"/sys/category",
-            //     method: "get",
+            this.ajax({
+                url: this.$apis.sys_category,
+                method: "get",
 
-            // });
+            });
         },
         methods: {
             filterNode(value, data) {
@@ -260,7 +261,8 @@
                 // });
             },
             generalCategoryChange(data) {
-                console.log(data)
+                if(!data.children) this.selectedNodes.push(data.id);
+
             }
         },
         watch: {
