@@ -4,6 +4,7 @@ import config from './config';
 const apis = {
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
+
 };
 
 
