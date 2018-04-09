@@ -2,7 +2,7 @@ export default {
   // 环境配置
   ENV: {
     local: {
-      BASE_CS: 'http://192.168.51.33:8080/web/v1/',
+      BASE_CS: 'http://192.168.51.33:8080',
       BASE_API: '',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
