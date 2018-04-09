@@ -4,6 +4,7 @@
     <v-menu></v-menu>
     <div class="main-container" :class="{fullBox:fullBox}">
       <nav-bar></nav-bar>
+
       <section class="app-main">
         <transition name="fade" mode="out-in">
           <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
@@ -13,6 +14,7 @@
       </section>
     </div>
 
+    <v-add-quick-link></v-add-quick-link>
 
   </div>
 </template>
@@ -21,13 +23,16 @@
   import VHeader from './Header'
   import VMenu from './Menu'
   import NavBar from './navBar'
+  import {VAddQuickLink} from '@/components/index'
+  import {mapState} from 'vuex'
 
   export default {
     name: 'layout',
     components: {
       VHeader,
       VMenu,
-      NavBar
+      NavBar,
+      VAddQuickLink
     },
     data() {
       return {
@@ -39,11 +44,12 @@
         this.fullBox = type;
       });
     },
-    computed: {
+    computed: mapState({
+      count: state => state.count,
       key() {
         return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date();
       },
-    },
+    }),
     methods: {}
   }
 </script>
@@ -53,11 +59,13 @@
 <style lang="less" scoped>
   .main-container {
     width: 100%;
-    padding-left: 220px;
+    padding-left: 180px;
     padding-top: 70px;
     /*padding-bottom: 50px;*/
     transition: all .4s;
     box-sizing: border-box;
+    /*min-width: 1186px;*/
+    /*overflow: auto;*/
   }
 
   .app-main {
@@ -68,7 +76,7 @@
   }
 
   .main-container.fullBox {
-    padding-left: 0 !important;
+    padding-left: 50px !important;
   }
 
   .layout {

@@ -7,26 +7,20 @@ import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from 'service/store';
 
-const mock = false;
 
 // 创建axios实例
 const ajax = axios.create({
-  baseURL: mock ? _config.ENV.mock : _config.ENV.api,
+  // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
-  transformRequest: [function (data) {
+  transformRequest: [function (data,b,c) {
     data = Qs.stringify(data);
     return data;
   }],
 });
 
-/*
-Message.config({
-  duration: 3
-});
-*/
 
 NProgress.configure({
   // showSpinner: false
