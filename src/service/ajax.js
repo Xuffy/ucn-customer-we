@@ -13,11 +13,10 @@ const ajax = axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/json'
   },
-  transformRequest: [function (data) {
-    data = Qs.stringify(data);
-    return data;
+  transformRequest: [function (data,b,c) {
+    return JSON.stringify(data);
   }],
 });
 
@@ -54,6 +53,7 @@ ajax.interceptors.request.use(config => {
  */
 ajax.interceptors.response.use(
   response => {
+    console.log(response)
     NProgress.done();
 
     if (_.isEmpty(response.data)) {
@@ -65,16 +65,16 @@ ajax.interceptors.response.use(
       response.data = JSON.parse(response.data);
     }
 
-    if (response.data.code !== '200') {
-      Message.warning(response.data.msg || '数据返回异常，请重试！');
-      throw new Error(`[code - ${response.data.code || '000'}] ${response.data.msg || 'api request data unsuccessful'}`);
+    if (!response.data.success) {
+      Message.warning(response.data.errorMsg || '数据返回异常，请重试！');
+      throw new Error(`[code - ${response.data.status || '000'}] ${response.data.errorMsg || 'api request data unsuccessful'}`);
     }
 
     // _fullData 判断时候返回完整数据
     if (response.config._fullData) {
       return response.data;
     } else {
-      return response.data.data;
+      return response.data.content;
     }
 
   },

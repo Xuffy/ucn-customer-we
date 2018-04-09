@@ -444,8 +444,6 @@
                         waitReceive:'2222'
                     },
                 ],
-
-
                 //表格数据
                 payData: {
                     data:[
@@ -470,7 +468,7 @@
                             status:2
                         },
                     ],
-                    type:'refund'
+                    type:'payment'
                 },
                 //表格列
                 columns:[

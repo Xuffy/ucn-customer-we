@@ -76,8 +76,8 @@ const basicinfo = {
     supplierOrderNo: 'Supplier Order No.',
     supplierName: 'Supplier Name',
     supplierNo: 'Supplier No',
-    QuotationNo:'Quotation No.',
- 
+    QuotationNo: 'Quotation No.',
+
     //....下拉框
     orderStatus: 'Order Status',
     TBCByCustomer: 'TBC by customer',
@@ -95,25 +95,28 @@ const basicinfo = {
     //    其他:'其他'
 
     incortermAea: 'Incoterm Area',
-    
+
     //.....下拉
     payment: 'Payment',
-//       T/T,L/C,Cash,Bank Transfer,DP,DA
+    //       T/T,L/C,Cash,Bank Transfer,DP,DA
 
     lcNo: 'LC No.',
     paymentDays: 'Payment Days',
     paymentStatus: 'Payment Status',
-    departureCountry:'DepartureCountry',
-    departurePort: 'Departure Port', 
+    departureCountry: 'DepartureCountry',
+    departurePort: 'Departure Port',
     destinationCountry: 'Destination Country',
-     destinationPort: 'Destination Port',
-   
+    destinationPort: 'Destination Port',
+
     //......下拉框
     transportationWay: 'Transportation Way',
-//    海运: '海运',
+    //    海运: '海运',
     customerAgreementNumber: 'Customer Agreement Number',
     customerAgreementDate: 'Customer Agreement Date',
-    remark:'Remark',
+    remark: 'Remark',
+    attachment: 'Attachment',
+    Yes: 'yes',
+    No: 'no'
 }
 
 const responsibility = {

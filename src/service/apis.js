@@ -4,9 +4,10 @@ import config from './config';
 const apis = {
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
+  category: ['/category', 'BASE_CS'],
+  mappingCategory: ['/category/mapping ', 'BASE_CS'],
 
 };
-
 
 let list = _.mapObject(apis, val => {
   let b = ''

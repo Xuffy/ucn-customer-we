@@ -129,31 +129,23 @@
                 <el-button v-if="!hideBtns">{{$t('product.page.downloadSelectedProducts')}}</el-button>
                 <el-button @click="recover" type="primary" v-if="showRecover">{{$t('product.page.recover')}}</el-button>
             </div>
-
-            <v-simple-table
-                    class="speTable"
-                    :data.sync="tableDataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table>
+            <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
 
         </div>
     </div>
 </template>
 
 <script>
-
+    import VTable from '@/components/common/table/index'
     import {dropDownSingle} from '@/components/index'
-    import VSimpleTable from '@/components/common/table/simple'
     import sectionNumber from './sectionNumber'
 
     export default {
         name: "add-product",
         components:{
             dropDown:dropDownSingle,
-            VSimpleTable,
-            sectionNumber
+            sectionNumber,
+            VTable
         },
         props:{
             hideBtns:{
