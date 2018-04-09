@@ -3,7 +3,7 @@
 
     <div class="header-content">
       <div class="fixed">
-        <v-filter-value></v-filter-value>
+        <v-filter-value :data="dataColumn"></v-filter-value>
         <v-filter-column :data="dataColumn"></v-filter-column>
       </div>
     </div>

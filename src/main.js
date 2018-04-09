@@ -20,11 +20,23 @@ import store from './store';
 Vue.use(fetch);
 Vue.use(util);
 Vue.use(VueI18n);
-Vue.use(ElementUI, {size: 'small',i18n: (key, value) => i18n.t(key, value)});
+Vue.use(ElementUI, {size: 'small', i18n: (key, value) => i18n.t(key, value)});
 
 Vue.config.productionTip = false;
 Vue.prototype.ajax = ajax;
 Vue.prototype.$apis = apis;
+
+
+// 屏蔽开发环境warn
+console.warn = () => {
+}
+
+
+// 去掉console
+if (config.ENV_FLAG !== 'local') {
+  console.log = () => {
+  }
+}
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
@@ -38,11 +50,11 @@ const i18n = new VueI18n({
 });
 
 Vue.prototype.windowOpen = (url, config) => {
-    const { href } = router.resolve({
-      path: url,
-      query: config
-    });
-    window.open(href, '_blank')
+  const {href} = router.resolve({
+    path: url,
+    query: config
+  });
+  window.open(href, '_blank')
 };
 
 new Vue({

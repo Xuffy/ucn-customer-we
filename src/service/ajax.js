@@ -15,12 +15,11 @@ const ajax = axios.create({
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
   },
-  transformRequest: [function (data,b,c) {
+  transformRequest: [function (data) {
     data = Qs.stringify(data);
     return data;
   }],
 });
-
 
 NProgress.configure({
   // showSpinner: false
