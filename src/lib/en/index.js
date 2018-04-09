@@ -8,6 +8,7 @@ import login from './login'
 import logistic from './logistic'
 import track from './track'
 import payment from './payment'
+import setting from './setting'
 
 /**
  *  供应商端
@@ -25,6 +26,7 @@ export default {
   logistic,
   track,
   payment,
-  productSeller
+  productSeller,
+  setting
 }
 

@@ -14,7 +14,7 @@ const page={
     basicInformation:'Basic Information',
     customInformation:'Custom Information',
     priceInfo:'Price Information',
-
+    packingInfo:'Packing Info',
 
     //add New Product
     //basic info
@@ -70,6 +70,50 @@ const page={
     brandRemark:'品牌备注',
     relatedBrand:'相关品牌',
     certificat:'认证',
+
+
+    //Packing Info
+    unitOfWeight:'重量单位',
+    unitOfLength:'长度单位',
+    unitOfVolume:'体积单位',
+    skuLength:'产品长',
+    skuBreadth:'产品宽',
+    skuHeight:'产品高',
+    skuNetWeight:'产品净重',
+    skuVolume:'产品体积',
+    packingMethodCN:'产品包装方式CN',
+    packingMethodEN:'产品包装方式EN',
+    unitOfInnerCarton:'中包单位',
+    skuQuantityOfInnerCarton:'中包产品数',
+    lengthOfInnerCarton:'中包长',
+    breadthOfInnerCarton:'中包宽',
+    heightOfInnerCarton:'中包高',
+    netWeightOfInnerCarton:'中包净重',
+    grossWeightOfInnerCarton:'中包毛重',
+    volumeOfInnerCarton:'中包体积',
+    descriptionOfInnerCarton:'中包描述',
+    packingMethodOfInnerCartonCN:'中包包装方式CN',
+    packingMethodOfInnerCartonEN:'中包包装方式EN',
+    unitOfOuterCarton:'外箱单位',
+    descriptionOfOuterCarton:'外箱描述',
+    quantityOfInnerBoxInOuterCarton:'外箱中包数',
+    skuQuantityOfOuterCarton:'外箱产品数',
+    lengthOfOuterCarton:'外箱长',
+    breadthOfOuterCarton:'外箱宽',
+    heightOfOuterCarton:'外箱高',
+    netWeightOfOuterCarton:'外箱净重',
+    grossWeightOfOuterCarton:'外箱毛重',
+    volumeOfOuterCarton:'外箱体积',
+    packingMethodOfOuterCartonCN:'外包装方式CN',
+    packingMethodOfOuterCartonEN:'外包装方式EN',
+    oem:'可否贴牌',
+
+
+
+
+
+
+
 
 
 

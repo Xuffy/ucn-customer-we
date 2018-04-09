@@ -522,32 +522,156 @@
         </div>
         <el-form :model="productForm" ref="productForm3" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-table
-                    :data="priceTableData"
+                    :data="productForm.price"
                     border
                     style="width: 100%">
                 <el-table-column
-                        prop="date"
-                        label="日期"
+                        align="center"
                         width="180">
+                    <template slot-scope="scope">
+                        <div v-if="scope.$index===0">
+                            {{$t('productSeller.tableData.costPrice')}}
+                        </div>
+                        <div v-if="scope.$index===1">
+                            {{$t('productSeller.tableData.quotedPrice')}}
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
-                        label="姓名"
+                        prop="fobCurrency"
+                        align="center"
+                        :label="$t('productSeller.tableData.fobCurrency')"
                         width="180">
+                    <template slot-scope="scope">
+                        <el-form-item>
+                            <el-select v-model="scope.row.fobCurrency" placeholder="请选择">
+                                <el-option
+                                        v-for="item in fobUnit"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                        prop="address"
-                        label="地址">
+                        prop="fobPrice"
+                        align="center"
+                        :label="$t('productSeller.tableData.fobPrice')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-model="scope.row.fobPrice"
+                                :controls="false"
+                                :min="0"
+                                label="描述文字"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="fobPort"
+                        align="center"
+                        :label="$t('productSeller.tableData.fobPort')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input
+                                v-model="scope.row.fobPort"
+                                clearable
+                                placeholder="请输入内容"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="exwPrice"
+                        align="center"
+                        :label="$t('productSeller.tableData.exwPrice')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-model="scope.row.exwPrice"
+                                :controls="false"
+                                :min="0"
+                                label="描述文字"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="exwCurrency"
+                        align="center"
+                        :label="$t('productSeller.tableData.exwCurrency')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.exwCurrency" placeholder="请选择">
+                            <el-option
+                                    v-for="item in fobUnit"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncoterm"
+                        align="center"
+                        :label="$t('productSeller.tableData.otherIncoterm')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.otherIncoterm" placeholder="请选择">
+                            <el-option
+                                    v-for="item in otherIncotermUnit"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermPrice"
+                        align="center"
+                        :label="$t('productSeller.tableData.otherIncotermPrice')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-model="scope.row.otherIncotermPrice"
+                                :controls="false"
+                                :min="0"
+                                label="描述文字"></el-input-number>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermArea"
+                        align="center"
+                        :label="$t('productSeller.tableData.otherIncotermArea')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input
+                                v-model="scope.row.otherIncotermArea"
+                                clearable
+                                placeholder="请输入内容"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermCurrency"
+                        align="center"
+                        :label="$t('productSeller.tableData.otherIncotermCurrency')"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-select v-model="scope.row.otherIncotermCurrency" placeholder="请选择">
+                            <el-option
+                                    v-for="item in fobUnit"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-form>
 
 
-
-
-
         <div class="title">
-            {{$t('product.page.packingInfo')}}
+            {{$t('productSeller.page.packingInfo')}}
         </div>
         <el-form class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -1140,7 +1264,7 @@
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button type="primary">{{$t('product.page.finish')}}</el-button>
+            <el-button @click="finish" type="primary">{{$t('product.page.finish')}}</el-button>
         </div>
     </div>
 </template>
@@ -1274,7 +1398,18 @@
                     pkgId: 0,
                     price: [
                         {
-                            id: 0,
+                            fobCurrency: 2,
+                            fobPrice: 0,
+                            fobPort: "string",
+                            exwPrice: 0,
+                            exwCurrency: 0,
+                            otherIncoterm: 0,
+                            otherIncotermPrice: 0,
+                            otherIncotermArea: 0,
+                            otherIncotermCurrency: 0,
+                            status: 1
+                        },
+                        {
                             fobCurrency: 0,
                             fobPrice: 0,
                             fobPort: "string",
@@ -1284,8 +1419,8 @@
                             otherIncotermPrice: 0,
                             otherIncotermArea: 0,
                             otherIncotermCurrency: 0,
-                            status: 0
-                        }
+                            status: 2
+                        },
                     ]
                 },
                 //是否现货
@@ -1333,9 +1468,28 @@
                         value:'year'
                     },
                 ],
-                //价格表格
-                priceTableData:[],
-
+                //fob单位
+                fobUnit:[
+                    {
+                        label:'USD',
+                        value:'USD'
+                    },
+                    {
+                        label:'CNY',
+                        value:'CNY'
+                    },
+                    {
+                        label:'EUR',
+                        value:'EUR'
+                    },
+                ],
+                //otherIncoterm单位
+                otherIncotermUnit:[
+                    {
+                        label:'CIF',
+                        value:'CIF'
+                    },
+                ],
 
                 month:'',                       //月份选择
                 skuStatusOption:[
@@ -1397,6 +1551,11 @@
             //添加图片到暂存区
             addPic(){
                 document.getElementById('pic').click();
+            },
+
+
+            finish(){
+                console.log(this.productForm,'???')
             },
         }
     }
