@@ -3,8 +3,7 @@
              <div class="basicinfo_title">{{$t('order.basicinfo.basicInfo')}}</div>
              <div class="basicinfo_form">
                   <el-form ref='ruleform' :model="formItem" label-width="230px" :rules="rules" >
-                    <el-row :gutter="10">
-                         
+                    <el-row :gutter="10">                    
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item  :label=" $t('order.basicinfo.orderNo')" prop="orderNo">
                                 <el-input v-model="formItem.orderNo" :disabled=true  placeholder=""></el-input>
@@ -47,7 +46,7 @@
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.supplierName')" prop="supplierName">
-                                 <el-input v-model="formItem.supplierName" :disabled=true placeholder="">
+                                 <el-input v-model="formItem.supplierName"  :disabled='disabled||podisabled'  placeholder="">
                                   </el-input>
                             </el-form-item>
                          </el-col>              
@@ -162,12 +161,7 @@
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
                             <el-form-item class="form-list" :label=" $t('order.basicinfo.transportationWay')" prop="transportationWay">
                                  <el-select v-model="formItem.transportationWay" :disabled=true placeholder="select">
-                                    <el-option
-                                      v-for="item in transportationWay"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
+                                    
                                   </el-select>
                             </el-form-item>
                          </el-col>
@@ -205,6 +199,10 @@
         name: 'basicinfo',
         props: {
             disabled: {
+                type: Boolean,
+                default: false
+            },
+            podisabled: {
                 type: Boolean,
                 default: false
             },
@@ -324,22 +322,8 @@
                     value: 'exw',
                     label: this.$t('order.basicinfo.exw')
                 }],
-                //           transportationWay: [{ // value: '海运', // label: this.$t('order.basicinfo.海运') // }],
-                batchForLogistics: [{
-                    value: 'Yes',
-                    label: this.$t('order.basicinfo.Yes')
-                }, {
-                    value: 'No',
-                    label: this.$t('order.basicinfo.No')
-                }],
-                paymentCondition: [{
-                    value: 'paySinceBL',
-                    label: this.$t('order.basicinfo.paySinceBL')
-                }, {
-                    value: 'paySinceLCNumber',
-                    label: this.$t('order.basicinfo.paySinceLCNumber')
-                }],
 
+                // batchForLogistics: [{ // value: 'Yes', // label: this.$t('order.basicinfo.Yes') // }, { // value: 'No', // label: this.$t('order.basicinfo.No') // }], // paymentCondition: [{ // value: 'paySinceBL', // label: this.$t('order.basicinfo.paySinceBL') // }, { // value: 'paySinceLCNumber', // label: this.$t('order.basicinfo.paySinceLCNumber') // }],
             }
         },
         methods: {

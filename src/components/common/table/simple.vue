@@ -74,13 +74,13 @@
    *  <v-table></v-table>
    */
 
-  import VFilterValue from './filterValue'
+  // import VFilterValue from './filterValue'
   import VFilterColumn from './filterColumn'
 
   export default {
     name: 'VSimpleTable',
     components: {
-      VFilterValue,
+      // VFilterValue,
       VFilterColumn
     },
     props: {

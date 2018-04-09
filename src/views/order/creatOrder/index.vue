@@ -3,20 +3,9 @@
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
-           <div class="basicinfo_other">
-    <!--                order remark-->
-                    <el-row>
-    <!--                 attchment         -->
-                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
-                             <div class="attchment">
-                              
-                                <div>
-                                    <VAttchment @uploadsuccess='uploadsuccess'></VAttchment>
-                                </div>
-                            </div>
-                           </el-col>
-                    </el-row>
-                   </div>
+       
+         <VAttchment :disabled=false class='attachment'></VAttchment>
+   
 <!--             responsibility     -->
          <VResponsibility></VResponsibility>
 <!--         productinfo-->
@@ -42,25 +31,11 @@
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$t('order.buttonname.quickCreate')" :visible.sync="dialogQuickcreate">
-                <div class="status">
-                    <div class="select-wrap">
-                        <div class="select">
-                            <el-select v-model="value" placeholder="select">
-                                <el-option
-                                v-for="item in options"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                        <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-                    </div>
-                </div>
- 
+          <el-dialog :title="$t('order.buttonname.quickCreate')" :visible.sync="dialogQuickcreate" width='70%'>
+             <VQuickCreate></VQuickCreate>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$t('order.buttonname.addProduct')"  :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$t('order.buttonname.addProduct')"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$t('order.buttonname.fromNewSearch')" name="FromNewSearch">
                             <VFromNewSearch></VFromNewSearch>
@@ -74,13 +49,12 @@
 </template>
 
 <script>
-    /*  从子组件里面拿的值，这里通过ref拿的
-                                                            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
-                                                           */
+    /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicinfo.vue'
     import VFromNewSearch from './FromNewSearch.vue'
     import VFromBookmark from './FromBookmark.vue'
+    import VQuickCreate from './QuickCreate.vue'
     import VAttchment from './attchment'
     import {
         VTable
@@ -93,7 +67,8 @@
             VFromNewSearch,
             VFromBookmark,
             VAttchment,
-            VTable
+            VTable,
+            VQuickCreate
         },
         data() {
             return {

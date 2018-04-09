@@ -3,24 +3,9 @@
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
          <div class="basic">
-               <div class='basicinfo_input'>
-                  
-                   <basicinfo :disabled='disabled' ref='basicinfo'></basicinfo>
-                  
-                    <div class="basicinfo_other">
-            <!--                order remark-->
-                            <el-row>                                
-            <!--                 attchment         -->
-                                  <el-col :xs="24" :sm="24" :md="24" :lg="24">
-                                     <div class="attchment">
-                                        <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
-                                        <div>
-                                            <attchment :disabled='disabled'></attchment>
-                                        </div>
-                                    </div>
-                                   </el-col>
-                            </el-row>
-                           </div>
+               <div class='basicinfo_input'>                
+                   <basicinfo :disabled='disabled' :podisabled=true ref='basicinfo'></basicinfo>
+                   <attchment :disabled='disabled'></attchment>                       
               </div>
                <div class='basicinfo_message'>
                      <div class="message_div" v-show='switchStatus'>

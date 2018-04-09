@@ -4,6 +4,7 @@
              :action="action" 
              :accept="accept"
              :maxsize='maxsize'  
+             :multiple='multiple'
              :on-progress='handleProgress'
              :on-success="handleSuccess"
              :on-error='handleError'
@@ -38,6 +39,11 @@
             },
             //禁止上传状态
             disabled:{
+                type:Boolean,
+                default:false
+            },
+            //是否批量上传
+            multiple:{
                 type:Boolean,
                 default:false
             }
