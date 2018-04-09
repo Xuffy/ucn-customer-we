@@ -1,11 +1,11 @@
 <template>
-  <div class="menu ucn-menu" :class="{hideMenu:hideMenu}">
+  <div class="menu ucn-menu" :class="{hideMenu:$store.state.layout.hideMenu}">
     <div class="fold-box" @click="changeHideMenu">
-      <!--<Icon type="chevron-left" v-show="!hideMenu"></Icon>-->
-      <!--<Icon type="chevron-right" v-show="hideMenu"></Icon>-->
+      <i class="el-icon-arrow-left" v-show="!$store.state.layout.hideMenu"></i>
+      <i class="el-icon-arrow-right" v-show="$store.state.layout.hideMenu"></i>
     </div>
 
-    <el-menu default-active="1" class="menu-box">
+    <el-menu class="menu-box">
       <el-menu-item-group>
         <div slot="title">
           <i class="el-icon-menu"></i>
@@ -13,7 +13,7 @@
         </div>
 
         <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
-          <el-tooltip :disabled="!hideMenu" effect="dark" :content="item.label" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
             <i class="el-icon-tickets"></i>
           </el-tooltip>
           <span v-text="item.label"></span>
@@ -69,8 +69,7 @@
       return {
         routerList: [],
         activeName: null,
-        activeOpen: [],
-        hideMenu: false
+        activeOpen: []
       }
     },
     mounted() {
@@ -115,8 +114,9 @@
         return _.indexOf(param, user.userType) !== -1;
       },
       changeHideMenu() {
-        this.$parent.$emit('full-box', !this.hideMenu);
-        this.hideMenu = !this.hideMenu;
+        this.$store.state.layout.hideMenu = !this.$store.state.layout.hideMenu;
+        // this.$parent.$emit('full-box', !this.hideMenu);
+        // this.hideMenu = !this.hideMenu;
       }
     },
     watch: {

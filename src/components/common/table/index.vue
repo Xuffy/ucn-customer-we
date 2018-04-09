@@ -1,5 +1,7 @@
 <template>
   <div class="ucn-table" v-loading="loading">
+
+    <v-filter-column :data="dataColumn"></v-filter-column>
     <div class="table-container" :style="{height:height + 'px'}">
       <div class="fixed-left" ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
@@ -20,7 +22,7 @@
               <div>#</div>
             </td>
             <td v-for="item in dataColumn">
-              <div v-text="item.prop">
+              <div v-text="item.label">
               </div>
             </td>
             <td ref="tableAction">
@@ -85,10 +87,11 @@
   // import VFilterValue from './filterValue'
   // import VFilterColumn from './filterColumn'
 
+  import VFilterColumn from './filterColumn'
 
   export default {
     name: 'VTable',
-    components: {},
+    components: {VFilterColumn},
     props: {
       data: {
         type: Array,
@@ -108,10 +111,6 @@
         type: Number,
         default: 300,
       },
-      /*loading: {
-        type: Boolean,
-        default: false,
-      },*/
     },
     data() {
       return {
@@ -283,6 +282,7 @@
 
   .ucn-table thead td > div {
     line-height: 40px;
+    white-space: nowrap;
   }
 
   .ucn-table thead tr td:first-child > div {

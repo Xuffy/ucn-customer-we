@@ -2,7 +2,7 @@
   <div class="app-wrapper">
     <v-header></v-header>
     <v-menu></v-menu>
-    <div class="main-container" :class="{fullBox:fullBox}">
+    <div class="main-container" :class="{fullBox:$store.state.layout.hideMenu}">
       <nav-bar></nav-bar>
 
       <section class="app-main">
@@ -36,20 +36,18 @@
     },
     data() {
       return {
-        fullBox: false
       }
     },
     mounted() {
-      this.$on('full-box', (type) => {
+      /*this.$on('full-box', (type) => {
         this.fullBox = type;
-      });
+      });*/
     },
-    computed: mapState({
-      count: state => state.count,
+    computed: {
       key() {
         return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date();
       },
-    }),
+    },
     methods: {}
   }
 </script>
@@ -60,7 +58,7 @@
   .main-container {
     width: 100%;
     padding-left: 180px;
-    padding-top: 70px;
+    padding-top: 60px;
     /*padding-bottom: 50px;*/
     transition: all .4s;
     box-sizing: border-box;
