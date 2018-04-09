@@ -53,7 +53,6 @@ ajax.interceptors.request.use(config => {
  */
 ajax.interceptors.response.use(
   response => {
-    console.log(response)
     NProgress.done();
 
     if (_.isEmpty(response.data)) {
