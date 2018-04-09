@@ -29,16 +29,19 @@
             </div> -->
             <el-button type="text">Compare History</el-button>
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table 
+            :data="tabData" 
+            :data-key="tabColumn"
+        />
     </div>
 </template>
 <script>
-    import { VSimpleTable } from '@/components/index';
+    import { VTable } from '@/components/index';
     export default {
         name:'compareOverview',
         data() {
             return {
-                tabColumn: [],
+                tabColumn: '',
                 tabData: [],
                 checkList: [],
                 options:[{
@@ -50,7 +53,7 @@
             }
         },
         components: {
-            "v-simple-table": VSimpleTable
+            "v-table": VTable
         },
         created() {
             this.compareBy = 'Inquiry'
@@ -71,10 +74,10 @@
                 }).then(res => {
                     if(str === 'Inquiry') {
                         this.tabData = res.Inquiry;
-                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareByInquiry', { width:200 });
+                        this.tabColumn = 'negotiation.tableCompareByInquiry';
                     } else {
                         this.tabData = res.SKU;
-                        this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareBySKU', { width:200 });
+                        this.tabColumn = 'negotiation.tableCompareBySKU';
                     }
                 });
             }

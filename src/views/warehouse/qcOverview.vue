@@ -1,64 +1,49 @@
 <template>
     <div class="qc-overview">
         <div class="head">
-            <el-row>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>验货结果</label>
-                    <div class="content">
-                        <el-select v-model="value" placeholder="请选择">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>验货单号</label>
-                    <div class="content">
-                        <el-input v-model="name"></el-input>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>订单编号</label>
-                    <div class="content">
-                        <el-input v-model="name"></el-input>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>客户编号</label>
-                    <div class="content">
-                        <el-input v-model="name"></el-input>
-                    </div>
-                </el-col>
-                <el-col class="head-list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                    <label>入库编号</label>
-                    <div class="content">
-                        <el-input v-model="name"></el-input>
-                    </div>
-                </el-col>
-            </el-row>
+            <el-form ref="qcOrder" :model="qcOrder" label-width="190px">
+                <el-row class="speZone">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.qcStatus')+' :'">
+                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
+                            <el-input size="mini" v-model="qcOrder.qcStatus"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.qcOrderNo')+' :'">
+                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
+                            <el-input size="mini" v-model="qcOrder.qcOrderNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.orderNo')+' :'">
+                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
+                            <el-input size="mini" v-model="qcOrder.orderNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.inboundNo')+' :'">
+                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
+                            <el-input size="mini" v-model="qcOrder.inboundNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+
             <div class="btns">
-                <el-button size="mini" type="primary">搜索</el-button>
-                <el-button size="mini" type="primary">新增</el-button>
+                <el-button type="primary">{{$t('warehouse.page.search')}}</el-button>
+                <el-button type="info">{{$t('warehouse.page.clear')}}</el-button>
             </div>
         </div>
 
         <div class="body">
-            <div>
-                <el-button>导出</el-button>
+            <div class="btn-group">
+                <el-button>{{$t('warehouse.page.exports')}}</el-button>
+                <el-button>{{$t('warehouse.page.add')}}</el-button>
                 <el-button @click="$router.push('/warehouse/qcDetail')">qc detail</el-button>
             </div>
 
-            <v-simple-table
-                    class="speTable"
-                    :data.sync="tableDataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table>
+            <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
         </div>
 
     </div>
@@ -66,12 +51,12 @@
 
 <script>
 
-    import VSimpleTable from '@/components/common/table/simple'
+    import VTable from '@/components/common/table/index'
 
     export default {
         name: "qc-overview",
         components:{
-            VSimpleTable
+            VTable
         },
         data(){
             return{
@@ -87,6 +72,12 @@
                         value:'喜之郎',
                     },
                 ],
+                qcOrder:{
+                    qcStatus:'',
+                    qcOrderNo:'',
+                    orderNo:'',
+                    inboundNo:''
+                },
                 tableDataList:[],
                 dataColumn:[],
             }
@@ -106,7 +97,6 @@
             getList() {
                 this.ajax.get('/getTrackList').then((data)=>{
                     this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
                 })
             },
         },
@@ -142,5 +132,8 @@
 
     .btns{
         text-align: center;
+    }
+    .btn-group{
+        margin-bottom: 10px;
     }
 </style>

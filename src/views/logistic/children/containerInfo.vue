@@ -2,62 +2,68 @@
     <div>
         <div class="btn-wraps">
             <el-button @click="tabAppend" :disabled="isActive">{{ $t('logistic.btn.add') }}</el-button>
-            <el-button type="primary" v-if="isActive"  @click="tailBtn('ok')">{{ $t('logistic.btn.ok') }}</el-button>
-            <el-button type="info" v-if="isActive" @click="tailBtn('cancel')">{{ $t('logistic.btn.cancel') }}</el-button>
-            <el-button type="danger" @click="tabSplite">{{ $t('logistic.btn.delete') }}</el-button>
         </div>
-        <el-table
+        <div class="tab-wrap">
+            <el-table
                 :data="tableData"
                 border
-                height="300"
                 style="width: 100%; margin-top: 20px"
                 :row-class-name="tableRowClassName"
                 tooltip-effect="dark"
                 row-key
-                @selection-change="selectChange"
             >
-            <el-table-column
-                type="selection"
-                width="40"
-            />
-            <el-table-column
-                    label="序号"
-                    align="center"
-                    width="50">
-                <template slot-scope="scope">
-                    {{scope.row.index + 1}}
-                </template>
-            </el-table-column>
-            <el-table-column
-                    :label="$t('logistic.containerInfo.containerType')"
-                    align="center">
-                <template slot-scope="scope">
-                    <el-select v-model="containerSelect" placeholder="请选择" v-if="!scope.row.Product">
-                        <el-option
-                            v-for="item in containerType"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.label" 
-                        />
-                    </el-select>
-                    <div v-else>
-                        {{scope.row.Product}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    :label="$t('logistic.containerInfo.containerQuantity')"
-                    align="center">
-                <template slot-scope="scope">
-                    <div v-if="!scope.row.containerAmount">
-                        <el-input-number v-model="containerNo" :min="1" label="描述文字"></el-input-number>
-                    </div>
-                    <div v-else>
-                        {{scope.row.containerAmount}}
-                    </div>
-                </template>
-            </el-table-column>
-        </el-table>
+                <el-table-column
+                    type="selection"
+                    width="40"
+                />
+                <el-table-column
+                        label="序号"
+                        align="center"
+                        width="50">
+                    <template slot-scope="scope">
+                        {{scope.row.index + 1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$t('logistic.containerInfo.containerType')"
+                        align="center">
+                    <template slot-scope="scope">
+                        <el-select v-model="containerSelect" placeholder="请选择" v-if="!scope.row.Product">
+                            <el-option
+                                v-for="item in containerType"
+                                :key="item.id"
+                                :label="item.label"
+                                :value="item.label" 
+                            />
+                        </el-select>
+                        <div v-else>
+                            {{scope.row.Product}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$t('logistic.containerInfo.containerQuantity')"
+                        align="center">
+                    <template slot-scope="scope">
+                        <div v-if="!scope.row.containerAmount">
+                            <el-input-number v-model="containerNo" :min="1" label="描述文字"></el-input-number>
+                        </div>
+                        <div v-else>
+                            {{scope.row.containerAmount}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    :label="$t('logistic.containerInfo.actions')"
+                    width="100"
+                >
+                    <template slot-scope="scope">
+                        <el-button type="text" size="small" @click="tailBtn('ok')" v-show="!scope.row.containerAmount">ok</el-button>
+                        <el-button type="text" size="small" @click="tabSplite(scope.row.index)" v-show="scope.row.containerAmount">{{ $t('logistic.btn.delete') }}</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 </template>
 <script>
@@ -66,8 +72,7 @@
             return {
                 containerNo: '',
                 containerSelect: '',
-                isActive: false,
-                deleteList: ''
+                isActive: false
             }
         },
         props: {
@@ -87,10 +92,10 @@
                 }
             }
         },
+        created() {
+            this.tabAppend();
+        },
         methods: {
-            selectChange(val, index) {
-                this.deleteList = val;
-            },
             tableRowClassName({row, rowIndex}) {
                 row.index = rowIndex;
             },
@@ -119,12 +124,9 @@
                 }
                 return this.isActive = false
             },
-            tabSplite() {
-                if(!this.deleteList.length) return this.$message({
-                    message: '请选择您要删除的项',
-                    type: 'warning'
-                });
-                this.$emit('tabSplite', this.deleteList)
+            tabSplite(index) {
+                if(this.tableData.length <= 1) this.tabAppend();
+                this.$emit('tabSplite', index)
             }
         }
     }

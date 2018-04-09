@@ -71,16 +71,16 @@
         <div class="body">
             <el-tabs v-model="tabName" type="card" >
                 <el-tab-pane :label="$t('supplier.detail.factoryAddress')" name="factoryAddress">
-                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                        <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.accountInfo')" name="accountInfo">
-                       <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                        <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                        <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.tradeHistory')" name="tradeHistory">
-                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                         <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
 <!--
                     <el-row>
                         <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -108,7 +108,7 @@
 -->
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="Remark">
-                            
+                            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/> 
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -120,18 +120,18 @@
 
 <script>
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: "bookmarkDetail",
         components: {
-            VSimpleTable
+            VTable
         },
         data() {
             return {
                 noEdit: true,
                 tabName: 'factoryAddress', //默认打开的tab
-                tabColumn: [],
+                
                 tabData: []
             }
         },
@@ -166,13 +166,10 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
-                    console.log(res);
+
                 });
         },
     }

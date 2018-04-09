@@ -18,6 +18,7 @@ import bigPhoto from './common/bigPhoto/bigPhoto';
 import containerInfo from '@/views/logistic/children/containerInfo';
 import dropDownSingle from './common/fnCompon/dropDownSingle';
 import VAddQuickLink from './common/addQuickLink/index';
+import paymentTable from '@/views/warehouse/paymentTable';
 
 export {
   VAddQuickLink,
@@ -38,5 +39,6 @@ export {
   bigPhoto,
   compareList,
   containerInfo,
-  dropDownSingle
+  dropDownSingle,
+  paymentTable,
 }

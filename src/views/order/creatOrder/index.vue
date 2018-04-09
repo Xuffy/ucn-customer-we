@@ -6,23 +6,10 @@
            <div class="basicinfo_other">
     <!--                order remark-->
                     <el-row>
-                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
-                             <div class="order_remark">
-                                 <div class='order_remark_title'>{{ $t('order.buttonname.orderRemark')}}</div>
-                                 <div>
-                                     <el-input
-                                          type="textarea"
-                                          :rows="4"
-                                          placeholder="请输入内容"
-                                          v-model="textarea">
-                                        </el-input>
-                                 </div>
-                                </div>  
-                         </el-col>
     <!--                 attchment         -->
                           <el-col :xs="24" :sm="24" :md="24" :lg="24">
                              <div class="attchment">
-                                <div class="order_remark_title">{{ $t('order.buttonname.attachment')}}</div>
+                              
                                 <div>
                                     <VAttchment @uploadsuccess='uploadsuccess'></VAttchment>
                                 </div>
@@ -42,7 +29,7 @@
                   <el-button type='danger'>{{$t('order.buttonname.remove')}}</el-button>
              </div>
              <div class="pro_table">
-                     <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                     <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
              </div>
          </div>
 <!--         底部固定按钮区域-->
@@ -88,15 +75,15 @@
 
 <script>
     /*  从子组件里面拿的值，这里通过ref拿的
-            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
-           */
+                                                            this.$refs.basicInfo.formItem  =>basicinfo那些输入框的值(不包括remark和attachment)
+                                                           */
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicinfo.vue'
     import VFromNewSearch from './FromNewSearch.vue'
     import VFromBookmark from './FromBookmark.vue'
     import VAttchment from './attchment'
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: 'creatOrder',
@@ -106,7 +93,7 @@
             VFromNewSearch,
             VFromBookmark,
             VAttchment,
-            VSimpleTable
+            VTable
         },
         data() {
             return {
@@ -134,10 +121,7 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
                     console.log(res);
@@ -173,8 +157,11 @@
     }
 
     .order_remark {
-        width: 372px;
+        /*        width: 600px;*/
+        /*        display: flex;*/
+        /*        align-items: center;*/
     }
+
 
     .order_remark_title {
         margin-bottom: 20px;

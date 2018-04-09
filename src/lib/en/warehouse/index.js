@@ -10,6 +10,11 @@ const page={
     downLoad:'Download',
 
 
+    //qc Status
+    // qcStatus:'QC status',
+    // qcOrderNo:'QC Order No.',
+    // orderNo:'Order No',
+    inboundNo:'inbound No.',
 
 
     //qc detail
@@ -44,9 +49,10 @@ const page={
     deleteQC:'Delete QC',
     send:'Send',
     saveAsDraft:'Save As Draft',
-
-
-
+    search:'Search',
+    clear:'Clear',
+    exports:'Export',
+    add:'Add',
 };
 
 

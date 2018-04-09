@@ -169,5 +169,5 @@ const cost = {
 };
 
 export default {
-
+    
 }

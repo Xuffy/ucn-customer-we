@@ -8,16 +8,19 @@
             </div>
             <select-search :options="options" />
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table 
+            :data="tabData" 
+            :data-key="tabColumn"
+        />
     </div>
 </template>
 <script>
-    import { VSimpleTable, selectSearch } from '@/components/index';
+    import { VTable, selectSearch } from '@/components/index';
     export default {
         name:'',
         data() {
             return {
-                tabColumn: [],
+                tabColumn: '',
                 tabData: [],
                 options:[{
                     id:'1',
@@ -27,7 +30,7 @@
         },
         components: {
             'select-search':selectSearch,
-            'v-simple-table': VSimpleTable
+            'v-table': VTable
         },
         methods: {
             
@@ -38,7 +41,7 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res;
-                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview', { width: '260vw'});
+                this.tabColumn = 'negotiation.tableCompareOverview';
             });
         }
     }

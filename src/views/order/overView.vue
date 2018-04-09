@@ -49,7 +49,7 @@
             </div>
         </div>
         <!--form-->
-          <v-simple-table :column="tabColumn" :data.sync="tabData" />
+          <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -65,13 +65,13 @@
         selectSearch
     } from '@/components/index'
     import {
-        VSimpleTable
+        VTable
     } from '@/components/index';
     export default {
         name: 'orderOverview',
         components: {
             dropDown,
-            VSimpleTable,
+            VTable,
             selectSearch
         },
         data() {
@@ -105,10 +105,7 @@
                 })
                 .then(res => {
                     this.tabData = res.supplierdata
-                    this.tabColumn = this.$getTableColumn(this.tabData, "supplier.tableData", {
-                        width: '180px'
-                    });
-                    console.log(this.tabColumn)
+
                 })
                 .catch((res) => {
                     console.log(res);

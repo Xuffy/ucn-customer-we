@@ -7,6 +7,7 @@ import warehouse from './warehouse/index.js'
 import login from './login'
 import logistic from './logistic'
 import track from './track'
+import payment from './payment'
 
 export default {
   workbench,
@@ -17,6 +18,7 @@ export default {
   supplier,
   login,
   logistic,
-  track
+  track,
+  payment
 }
 
