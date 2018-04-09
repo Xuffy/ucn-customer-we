@@ -4,7 +4,8 @@ import router from 'service/router'
 import ajax from 'service/ajax'
 import config from 'service/config';
 import * as filters from 'service/filters.js'
-import api from 'service/api';
+import fetch from 'service/fetch';
+import apis from 'service/apis';
 import util from 'service/util';
 import '../theme/index.css';
 import 'assets/style/main.less';
@@ -16,13 +17,14 @@ import store from './store';
 // 引入样式
 // import 'vue-easytable/libs/themes-base/index.css'
 
-Vue.use(api);
+Vue.use(fetch);
 Vue.use(util);
 Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'small',i18n: (key, value) => i18n.t(key, value)});
 
-Vue.prototype.ajax = ajax;
 Vue.config.productionTip = false;
+Vue.prototype.ajax = ajax;
+Vue.prototype.$apis = apis;
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

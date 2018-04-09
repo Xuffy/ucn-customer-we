@@ -204,7 +204,7 @@
   @import '../../assets/style/base.less';
 
   .header-box {
-    height: 70px;
+    height: 60px;
     position: fixed;
     width: 100%;
     z-index: 910;
@@ -212,7 +212,7 @@
 
   .header {
     height: 100%;
-    line-height: 70px;
+    line-height: 60px;
     background-color: @header-back;
   }
 
@@ -300,6 +300,20 @@
 
   .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
     color: #909399;
+    font-size: 12px;
+  }
+
+  .ucn-header-menu .el-menu--horizontal > .el-menu-item a {
+    font-size: 12px;
+  }
+
+  .ucn-header-menu .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
+  .ucn-header-menu .el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom: none;
+  }
+
+  .ucn-header-menu .is-active .el-submenu__title span{
+    color: #ffffff;
   }
 
   /*.ucn-header-menu .ivu-menu-submenu-title {

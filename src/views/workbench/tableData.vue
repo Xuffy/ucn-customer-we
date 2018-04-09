@@ -76,7 +76,8 @@
         console.log(val, key)
       },
       getList() {
-        this.ajax.get('/getBigList').then((data) => {
+        console.log()
+        this.ajax.get(this.$apis.sys_category).then((data) => {
           this.dataList = data;
           // this.dataColumn = this.$getTableColumn(data, 'negotiation.tableProductInfo');
         });

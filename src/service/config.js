@@ -2,23 +2,26 @@ export default {
   // 环境配置
   ENV: {
     local: {
-      path: '/static/__project',
-      api: 'http://store.test.tailorx.cn/api',
-      mock: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
+      BASE_CS: 'http://192.168.51.33:8080',
+      BASE_API: '',
+      MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
     develop: {
-      path: '/static/__project',
-      api: 'http://192.168.11.215:30704'
+      BASE_API: 'http://192.168.11.215:30704'
     },
     test: {
-      path: '/static/__project',
-      api: 'http://store.test.tailorx.cn/api'
+      BASE_API: 'http://store.test.tailorx.cn/api'
     },
     production: {
-      path: '/static/__project',
-      api: 'https://store.tailorx.cn/api'
+      BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
+
+  // 环境标识
+  ENV_FLAG: process.env.NODE_ENV,
+
+  // 是否mock
+  IS_MOCK: false,
 
   // 请求超时
   TIMEOUT: 60000,
