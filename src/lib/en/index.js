@@ -9,6 +9,11 @@ import logistic from './logistic'
 import track from './track'
 import payment from './payment'
 
+/**
+ *  供应商端
+ * */
+import productSeller from './productSeller'
+
 export default {
   workbench,
   product,
@@ -19,6 +24,7 @@ export default {
   login,
   logistic,
   track,
-  payment
+  payment,
+  productSeller
 }
 

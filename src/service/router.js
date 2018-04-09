@@ -174,6 +174,11 @@ export const routerMap = [
                 path:'overview',
                 name:'overview',
                 component: () => import('../views/sellerProduct/overview')
+            },
+            {
+                path:'addNewProduct',
+                name:'Add New Product',
+                component: () => import('../views/sellerProduct/addNewProduct')
             }
         ]
     },
