@@ -132,34 +132,34 @@ export const routerMap = [
         children: [
             {
                 path: 'SupplierSourcing',
-                name: 'SupplierSourcing',
+                name: 'Supplier Sourcing',
                 component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
 
         },
             {
                 path: 'SupplierBookmark',
-                name: 'SupplierBookmark',
+                name: 'Supplier Bookmark',
                 component: () =>
                     import ('../views/supplier/bookmark/bookmark.vue')
         },
             {
                 path: 'SupplierBookmarkDetail',
-                name: 'SupplierBookmarkDetail',
+                name: 'Supplier Bookmark Detail',
                 component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
             {
                 path: 'SupplierSourcingDetail',
-                name: 'SupplierSourcingDetail',
+                name: 'Supplier Sourcing Detail',
                 component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
                {
                 path: 'SupplierCompare',
-                name: 'SupplierCompare',
+                name: 'Supplier Compare',
                 component: () =>import ('../views/supplier/Compare/Compare.vue')
         },
                 {
                 path: 'SupplierCompareOverview',
-                name: 'SupplierCompareOverview',
+                name: 'Supplier Compare Overview',
                 component: () =>import ('../views/supplier/Compare/Overview.vue')
         }
       ]
@@ -257,7 +257,7 @@ export const routerMap = [
         children: [
             {
                 path: 'overView',
-                name:'orderOverView',
+                name:'Order OverView',
                 component: () =>import('../views/order/overView.vue')
         },
             {
@@ -270,7 +270,7 @@ export const routerMap = [
                 component: () =>import('../views/order/poDetail/index.vue')
         }, {
                 path: 'draftOverview',
-                name:'draftOverview',
+                name:'Draft Overview',
                 component: () =>import('../views/order/draftOverview.vue')
         }
       ]
