@@ -107,6 +107,26 @@ const shipInfo = {
     destinationPort: "Destination Port"
 };
 
+const payment = {
+    paymentNumber: "Payment Number",
+    paymentItem: "Payment Item",
+    estPayDate: "Est. Pay Date",
+    estAmount: "Est. Amount",
+    actPayDate: "Act. Pay Date",
+    actAmount: "Act. Amount",
+    avilable: "Avilable"
+};
+
+const paymentTableData = {
+    paymentNumber: "Input",
+    paymentItem: "Text",
+    estPayDate: "Date",
+    estAmount: "NumberInput",
+    actPayDate: "Date",
+    actAmount: "NumberInput",
+    avilable: "Input"
+};
+
 export default {
     status,
     btn,
@@ -115,5 +135,6 @@ export default {
     shipInfo,
     basicInfo,
     containerInfo,
+    payment,
     ...db
 }

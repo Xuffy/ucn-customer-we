@@ -425,7 +425,7 @@
                 this.tableData.pop();
                 this.tableData.push(item);
             },
-             tabSplite(index) {
+            tabSplite(index) {
                 this.tableData.splice(index, 1);
             },
             modify() {

@@ -395,7 +395,7 @@
             <span>服务付款</span>
             <el-button>申请服务付款</el-button>
         </div> -->
-        <payment-table btnInfo="申请付款" />
+        <payment-table btnInfo="申请付款" :columns="PaymentColumns" :data="PaymentData" />
         <div class="hd">Ship Info</div>
         <el-row :gutter="10">
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -489,6 +489,35 @@
         name: 'placeLogisticPlan',
         data() {
             return {
+                PaymentColumns: [],
+                PaymentData: {
+                    type: 'payment',
+                    data: [{
+                        paymentNumber: "232",
+                        paymentItem: 222,
+                        estPayDate: "2018-09-08",
+                        estAmount: 2323,
+                        actPayDate: "2018-09-07",
+                        actAmount: 2323,
+                        avilable: 2323
+                    },{
+                        paymentNumber: "232",
+                        paymentItem: 222,
+                        estPayDate: "2018-09-08",
+                        estAmount: 2323,
+                        actPayDate: "2018-09-07",
+                        actAmount: 2323,
+                        avilable: 2323
+                    },{
+                        paymentNumber: "232",
+                        paymentItem: 222,
+                        estPayDate: "2018-09-08",
+                        estAmount: 2323,
+                        actPayDate: "2018-09-07",
+                        actAmount: 2323,
+                        avilable: 2323
+                    }]
+                },
                 tabColumn: [],
                 tabData: [],
                 data:[],
@@ -600,16 +629,6 @@
                     theNumber: '2',
                     value: '354198.8',
                     Total: '354198.8'
-                }],
-                PaymentData: [{
-                    index:'1',
-                    number: '2134',
-                    date: '2018-10-22',
-                    type: '预付款',
-                    money: '1,992',
-                    Receivables: '',
-                    ToBePaid: '',
-                    Collect: ''
                 }]
             }
         },
@@ -625,6 +644,17 @@
                 this.tabData = res.inquiry;
                 this.tabColumn = this.$getTableColumn(res.inquiry, 'negotiation.tableViewByInquiry');
             });
+            
+            for(let key in this.$t('logistic.payment')) {
+                this.PaymentColumns.push(
+                    {
+                        label: this.$t('logistic.payment')[key], 
+                        type: this.$t('logistic.paymentTableData')[key],
+                        prop: key,
+                        width: 150
+                    }
+                );
+            }
         },
         methods: {
             handleSelectionChange(val) {
