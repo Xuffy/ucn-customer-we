@@ -397,13 +397,7 @@
                 date: '',
                 departureOptions: [],
                 departure: '',
-                tableData: [{
-                    Product: "Product",
-                    containerAmount: "Container Amount"
-                },{
-                    Product: "Product",
-                    containerAmount: "Container Amount"
-                }]
+                tableData: []
             }
         },
         components: {
@@ -431,10 +425,8 @@
                 this.tableData.pop();
                 this.tableData.push(item);
             },
-            tabSplite(item) {
-                _.map(item, (list) => {
-                    this.tableData.splice(list.index, 1);
-                });
+            tabSplite(index) {
+                this.tableData.splice(index, 1);
             },
             modify() {
                 this.isModify = false;

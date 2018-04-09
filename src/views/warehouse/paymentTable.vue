@@ -201,7 +201,9 @@
         props:{
             data:{
                 type:Object,
-                default:{},
+                default:() => {
+                    return {};
+                },
             },
             title:{
                 type:String,
@@ -217,8 +219,10 @@
             },
             disabledBtn:{
                 type:Object,
-                default:{
-                    disabledBtn:false
+                default:() => {
+                    return {
+                        disabledBtn:false
+                    };
                 }
             },
             queryUrl:{

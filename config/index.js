@@ -28,7 +28,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      
+      // '/cs': { //陈赛
+      //   target:'http://192.168.51.33:8080/web/v1/',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //       '^/cs': ''
+      //   }
+      // }
     },
     useEslint: false,
     // CSS Sourcemaps off by default because relative paths are "buggy"

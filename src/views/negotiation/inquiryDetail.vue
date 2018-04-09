@@ -14,7 +14,7 @@
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
-                        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                        <v-table :data="tabData" :data-key="tabColumn"></v-table>
                     </div>
                 </div>
                 <div class="basic-info">
@@ -32,7 +32,7 @@
                         </div>
                         <select-search :options="options" />
                     </div>
-                    <v-simple-table :column="tabColumn" :data.sync="tabData" />
+                    <v-table :data="tabData" :data-key="tabColumn"></v-table>
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button>{{$t('negotiation.btn.accept')}}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{$t('negotiation.btn.createOrder')}}</el-button>
@@ -87,7 +87,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VSimpleTable, compareList } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
@@ -97,7 +97,7 @@
                 radio: 'From New Search',
                 statusModify: false,
                 newSearchDialogVisible:false,
-                tabColumn: [],
+                tabColumn: '',
                 tabData: [],
                 compareConfig:{
                     showCompareList:false,      //是否显示比较列表
@@ -132,7 +132,7 @@
         components: {
             'message-board':messageBoard,
             'select-search':selectSearch,
-            'v-simple-table': VSimpleTable,
+            'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList
         },
@@ -142,7 +142,7 @@
                 method: 'get'
             }).then(res => {
                 this.tabData = res;
-                this.tabColumn = this.$getTableColumn(this.tabData, 'negotiation.tableCompareOverview');
+                this.tabColumn = 'negotiation.tableCompareOverview';
             });
         },
         methods: {

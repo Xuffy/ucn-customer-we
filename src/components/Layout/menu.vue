@@ -1,20 +1,55 @@
 <template>
-  <div class="menu ucn-menu" :class="{hideMenu:hideMenu}">
+  <div class="menu ucn-menu" :class="{hideMenu:$store.state.layout.hideMenu}">
     <div class="fold-box" @click="changeHideMenu">
-      <!--<Icon type="chevron-left" v-show="!hideMenu"></Icon>-->
-      <!--<Icon type="chevron-right" v-show="hideMenu"></Icon>-->
+      <i class="el-icon-arrow-left" v-show="!$store.state.layout.hideMenu"></i>
+      <i class="el-icon-arrow-right" v-show="$store.state.layout.hideMenu"></i>
     </div>
 
-    <el-menu default-active="1" class="el-menu-vertical-demo" style="width: 220px">
+    <el-menu class="menu-box">
       <el-menu-item-group>
-        <span slot="title">分组一</span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
+        <div slot="title">
+          <i class="el-icon-menu"></i>
+          <span>Quick Link</span>
+        </div>
+
+        <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
+            <i class="el-icon-tickets"></i>
+          </el-tooltip>
+          <span v-text="item.label"></span>
+        </el-menu-item>
+        <el-menu-item @click="$store.state.quickLink.show = true" index="1-0">
+          <i class="el-icon-more"></i>
+          <span>add new links</span>
+        </el-menu-item>
       </el-menu-item-group>
+
       <el-menu-item-group>
-        <span slot="title">分组一</span>
-        <el-menu-item index="1-1">选项1</el-menu-item>
-        <el-menu-item index="1-2">选项2</el-menu-item>
+        <div slot="title">
+          <i class="el-icon-menu"></i>
+          <span>Pages</span>
+        </div>
+
+        <el-menu-item index="1-1">
+          <i class="el-icon-tickets"></i>
+          <span>log</span>
+        </el-menu-item>
+      </el-menu-item-group>
+
+      <el-menu-item-group>
+        <div slot="title">
+          <i class="el-icon-menu"></i>
+          <span>Action</span>
+        </div>
+
+        <el-menu-item index="1-1">
+          <i class="el-icon-tickets"></i>
+          <span>create inquiry</span>
+        </el-menu-item>
+        <el-menu-item index="1-1">
+          <i class="el-icon-tickets"></i>
+          <span>create orde</span>
+        </el-menu-item>
       </el-menu-item-group>
     </el-menu>
 
@@ -34,8 +69,7 @@
       return {
         routerList: [],
         activeName: null,
-        activeOpen: [],
-        hideMenu: false
+        activeOpen: []
       }
     },
     mounted() {
@@ -80,8 +114,9 @@
         return _.indexOf(param, user.userType) !== -1;
       },
       changeHideMenu() {
-        this.$parent.$emit('full-box', !this.hideMenu);
-        this.hideMenu = !this.hideMenu;
+        this.$store.state.layout.hideMenu = !this.$store.state.layout.hideMenu;
+        // this.$parent.$emit('full-box', !this.hideMenu);
+        // this.hideMenu = !this.hideMenu;
       }
     },
     watch: {
@@ -96,10 +131,10 @@
 <style lang="less" scoped>
   @import "../../assets/style/base.less";
 
-  .menu {
+  .ucn-menu {
     position: fixed;
     height: 100%;
-    margin-top: 70px;
+    margin-top: 60px;
     top: 0;
     left: 0;
     background-color: @menu-back;
@@ -108,13 +143,18 @@
     transition: all .4s;
   }
 
-  .menu .ivu-menu {
-    background-color: @menu-back;
-    transition: all .3s;
-    max-width: 220px;
+  .ucn-menu .menu-box {
+    width: 180px;
+    height: 100%;
+    overflow: auto;
   }
 
-  .menu .ivu-menu-item {
+  .ucn-menu .ivu-menu {
+    background-color: @menu-back;
+    transition: all .3s;
+  }
+
+  .ucn-menu .ivu-menu-item {
     font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -143,8 +183,26 @@
     transform: translate(0, 0);
   }
 
-  .menu.hideMenu .fold-box,
-  .menu:hover .fold-box {
+  .el-menu {
+    border: none;
+    background-color: inherit;
+  }
+
+  .el-menu-item,
+  .el-menu-item i {
+    line-height: 30px;
+    height: 30px;
+    font-size: 12px;
+    color: #FFFFFF;
+    background-color: inherit !important;
+  }
+
+  .el-menu-item i {
+    width: auto;
+  }
+
+  .ucn-menu.hideMenu .fold-box,
+  .ucn-menu:hover .fold-box {
     transform: translate(20px);
     opacity: 1;
   }
@@ -160,60 +218,33 @@
     color: #FFFFFF;
   }
 
-  .menu.hideMenu {
-    transform: translate(-100%, 0);
+  .ucn-menu.hideMenu {
+    transform: translate(-130px, 0);
   }
 
-  .el-menu {
-    border: none;
-    background-color: inherit;
+  .ucn-menu.hideMenu .el-menu-item-group__title i,
+  .ucn-menu.hideMenu .el-menu-item i {
+    font-size: 20px;
+    margin-right: 0;
+    padding-right: 15px;
   }
 
-  .el-menu-item,
-  .el-submenu__title {
-    line-height: 40px;
-    height: 40px;
-    font-size: 14px;
-    color: #FFFFFF;
-    background-color: inherit!important;
+  .ucn-menu.hideMenu .el-menu-item {
+    padding-right: 0;
   }
 
-  .el-menu-item:focus,
-  .el-menu-item:hover {
+  .ucn-menu.hideMenu .el-menu-item-group__title span,
+  .ucn-menu.hideMenu .el-menu-item span {
+    display: none;
   }
+
+  .ucn-menu.hideMenu .el-menu-item-group__title > div,
+  .ucn-menu.hideMenu .el-menu-item {
+    text-align: right;
+  }
+
+
 </style>
 <style>
-  /*.menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover,
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover {
-    color: #fff;
-    background-color: #262626 !important;
-  }
 
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened {
-    background-color: #292929;
-    !*background-color: #333333;*!
-  }
-
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title {
-    background: #333333;
-  }
-
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active,
-  .menu .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover {
-    background-color: #1f1f1f !important;
-    position: relative;
-  }
-
-  .menu .router-link-active li {
-    color: #fff !important;
-    background-color: #262626 !important;
-    border: none !important;
-  }
-
-  .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu),
-  .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
-    color: rgba(255, 255, 255, .7);
-    border: none;
-    background-color: #3f3f3f;
-  }*/
 </style>

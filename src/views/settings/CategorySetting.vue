@@ -1,60 +1,72 @@
 <template>
     <div class="category-setting">
-        <div class="hd">Category Setting</div>
+        <div class="hd">{{ $t('setting.page.categorySetting') }}</div>
         <div class="category-wrap">
             
             <div class="maping-relation">
-                <h5>Maping Relation</h5>
+                <h5>{{ $t('setting.page.mappingRelation') }}</h5>
                 <div class="category">
                     <div class="hd">
                         <span class="text">
-                            <b>My Category</b>  （Genera Category）（Tags）
+                            <b>{{ $t('setting.page.myCategory') }}</b>  （{{ $t('setting.page.generalCategory') }}）（{{ $t('setting.page.tags') }}）
                         </span>
                         <el-input placeholder="input key word to search" v-model="mapingCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
-                    class="filter-tree"
-                    :data="myCategoryData"
-                    :props="defaultProps"
-                    default-expand-all
-                    :filter-node-method="filterNode"
-                    ref="tree2">
-                    </el-tree>
+                        class="filter-tree"
+                        :data="mappingRelationData"
+                        :props="defaultProps"
+                        default-expand-all
+                        :filter-node-method="filterNode"
+                        ref="tree2"
+                        v-show="mappingRelationData"
+                    />
                 </div>
             </div>
             <div class="my-category">
-                <h5>My Category</h5>
+                <h5>{{ $t('setting.page.myCategory') }}</h5>
                 <div class="category">
-                    <el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                    <div class="input-hd">
+                        <el-button size="mini" @click="add(myCategoryData)">{{ $t('setting.page.add') }}</el-button><el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                    </div>
                     <el-tree
-                    class="filter-tree"
-                    :data="myCategoryData"
-                    :props="defaultProps"
-                    default-expand-all
-                    :filter-node-method="filterNode"
-                    :render-content="renderContent"
-                    :expand-on-click-node="false"
-                    ref="tree">
-                    </el-tree>
+                        class="filter-tree"
+                        :data="myCategoryData"
+                        :props="defaultProps"
+                        default-expand-all
+                        highlight-current
+                        :filter-node-method="filterNode"
+                        :render-content="renderContent"
+                        :expand-on-click-node="false"
+                        ref="tree"
+                        @node-click="myCategoryChange"
+                    />
                 </div>
             </div>
             <div class="mapping">
-                <span>Mapping</span><i></i>
+                <span>{{ $t('setting.page.mapping') }}</span><i></i>
             </div>
             <div class="general-category">
-                <h5>General Category</h5>
+                <h5>{{ $t('setting.page.generalCategory') }}</h5>
                 <div class="category">
-                    <el-input placeholder="input key word to search" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
+                    <div class="input-hd">
+                        <el-input placeholder="input key word to search" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
+                    </div>
                     <el-tree
-                    :data="mgeneralCategoryData"
-                    show-checkbox
-                    default-expand-all
-                    node-key="id"
-                    ref="tree1"
-                    :expand-on-click-node="false"
-                    highlight-current
-                    :filter-node-method="filterNode"
-                    :props="defaultProps" />
+                        :data="mgeneralCategoryData"
+                        show-checkbox
+                        default-expand-all
+                        node-key="id"
+                        ref="tree1"
+                        :expand-on-click-node="false"
+                        highlight-current
+                        :filter-node-method="filterNode"
+                        :props="defaultProps" 
+                        @check-change="generalCategoryChange"
+                    />
+                    <div class="btn-wrap">
+                        <el-button type="primary">{{ $t('setting.page.save') }}</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,6 +77,7 @@
         name: 'CategorySetting',
         data() {
             return {
+                selectedNodes: [],
                 myCategoryKeyWord:'',
                 generalCategoryKeyWord:'',
                 mapingCategoryKeyWord:'',
@@ -107,7 +120,7 @@
                         label: '二级 3-2'
                     }]
                 }],
-                mgeneralCategoryData: [{
+                mgeneralCategoryData:[{
                     id: 1,
                     label: '一级 1',
                     isActive: false,
@@ -146,6 +159,7 @@
                         label: '二级 3-2'
                     }]
                 }],
+                mappingRelationData: '',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -153,7 +167,10 @@
             }
         },
         created() {
-            
+            this.ajax({
+                url: this.$apis.sys_category,
+                method: 'get'
+            });
         },
         methods: {
             filterNode(value, data) {
@@ -201,9 +218,13 @@
                         message: '分类名不能为空',
                         type: 'warning'
                     });
-                    const newChild = { id: 6, label: value, children: [] };
+                    const newChild = { id: 6, label: value, isActive:false, children: [] };
                     if (!data.children) this.$set(data, 'children', []);
-                    data.children.push(newChild);
+                    if(!data.length) {
+                        data.children.push(newChild);
+                    } else {
+                        data.push(newChild);
+                    }
 
                     this.$message({
                         type: 'success',
@@ -231,6 +252,17 @@
                 }).catch(() => {
                            
                 });
+            },
+            myCategoryChange() {
+                // this.ajax({
+                //     url:"/sys/category",
+                //     method: "get",
+                //     params: {}
+                // });
+            },
+            generalCategoryChange(data) {
+                if(!data.children) this.selectedNodes.push(data.id);
+
             }
         },
         watch: {
@@ -274,10 +306,7 @@
 
     >>> .custom-tree-node:hover .el-icon-edit,
     >>> .custom-tree-node:hover .el-icon-circle-plus-outline,
-    >>> .custom-tree-node:hover .el-icon-remove-outline,
-    >>> .custom-tree-node:active .el-icon-edit,
-    >>> .custom-tree-node:active .el-icon-circle-plus-outline,
-    >>> .custom-tree-node:active .el-icon-remove-outline  {
+    >>> .custom-tree-node:hover .el-icon-remove-outline {
         display:inline-block;
     }
 </style>
@@ -300,22 +329,57 @@
                 width: 50px;
                 height: 30px;
                 line-height: 30px;
-                background:#d7d7d7;
                 padding:0 10px;
-                color:#fff;
+                background:#fff;
+                color:#000;
                 position: relative;
                 margin-top:245px;
                 margin-right:30px;
+                &::after {
+                    content: ' ';
+                    position: absolute;
+                    left:0;
+                    top:0;
+                    width:100%;
+                    height: 1px;
+                    background:#d7d7d7;
+                }
+                &::before {
+                    content: ' ';
+                    position: absolute;
+                    left:0;
+                    bottom:0;
+                    width:100%;
+                    height: 1px;
+                    background:#d7d7d7;
+                }
                 i {
                     z-index: 0;
-                    height: 21px;
-                    width: 21px;
-                    background:#d7d7d7;
+                    height: 100%;
+                    width: 20px;
                     position: absolute;
-                    right:-11px;
-                    top:50%;
-                    margin-top:-10px;
-                    transform: rotate(45deg)
+                    right:0;
+                    top:0;
+                    &::after {
+                        content: ' ';
+                        position: absolute;
+                        left:0;
+                        top:0;
+                        width:40px;
+                        height: 1px;
+                        background:#d7d7d7;
+                        transform: rotate(45deg);
+                    }
+                    &::before {
+                        content: ' ';
+                        position: absolute;
+                        left:0;
+                        bottom:0;
+                        width:40px;
+                        height: 1px;
+                        background:#d7d7d7;
+                        transform: rotate(-45deg);
+                    }
                 }
                 span {
                     position:absolute;
@@ -328,32 +392,44 @@
                 font-weight: normal;
                 font-size:20px;
                 color:#666;
-                padding:15px 0;
+                padding:15px 15px;
+                border-bottom: 1px solid #e0e0e0;
             }
             .my-category, .general-category {
+                .btn-wrap {
+                    padding:10px;
+                    display:flex;
+                    align-items: center;
+                    justify-content: center;
+                }
                 margin-right:15px;
                 min-width:260px;
+                background:#fff;
+                border:1px solid #e0e0e0;
+                box-shadow: 0 0 30px #e0e0e0;
+                border-radius: 5px;
                 .category {
-                    background:#f2f2f2;
-                    padding:10px;
-                    border-radius: 5px;
-                    height: 60vh;
-                    min-width:200px;
-                    overflow-y: auto;
                     .el-input.el-input--small {
                         margin-bottom:10px;
                     }
+                    .input-hd {
+                        display:flex;
+                        height:32px;
+                        padding:10px 15px;
+                        border-bottom:1px solid #e0e0e0;
+                    }
                     .el-tree {
-                        background:#f2f2f2;
+                        overflow-y: auto;
+                        height: 50vh;
+                        min-width:200px;
                     }
                 }
             }
-            .general-category {
-                padding-right:30px;
-            }
             .maping-relation {
-                padding-right:30px;
+                margin-right:20px;
+                padding-right:10px;
                 min-width:300px;
+                border-right:1px solid #f2f2f2;
                 .hd {
                     display:flex;
                     align-items: center;
