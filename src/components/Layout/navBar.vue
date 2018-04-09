@@ -48,7 +48,7 @@
     background-color: #F4F4F4;
     width: 100%;
     height: 40px;
-    top: 70px;
+    top: 60px;
     position: fixed;
     z-index: 905;
     padding-left: 15px;
@@ -62,7 +62,7 @@
 <style>
   .nav-bar-box .el-breadcrumb__inner,
   .nav-bar-box .el-breadcrumb__inner a{
-
+    font-size: 12px;
     font-weight: 400;
     color: #9f9f9f;
   }

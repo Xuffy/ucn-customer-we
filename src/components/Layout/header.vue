@@ -305,6 +305,7 @@
 
   .ucn-header-menu .el-menu--horizontal > .el-menu-item a {
     font-size: 12px;
+    display: inline;
   }
 
   .ucn-header-menu .el-menu--horizontal > .el-submenu.is-active .el-submenu__title,
