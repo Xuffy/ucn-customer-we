@@ -1,13 +1,12 @@
 <template>
-  <section class="filter-column">
-
+  <div class="filter-column">
     <el-popover
       :width="200"
       v-model="visible"
       @hide="defaultChecked"
       placement="bottom-end"
       trigger="click">
-      <i slot="reference" class="el-icon-setting">Set Filed</i>
+      <i slot="reference" class="el-icon-setting"></i>
       <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
                 size="mini" clearable style="margin-bottom: 10px"></el-input>
       <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">全选</el-checkbox>
@@ -34,7 +33,7 @@
         </el-col>
       </el-row>
     </el-popover>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -70,7 +69,6 @@
           : this.$refs.columnTree.setCheckedKeys([]);
       },
       checkedList(value) {
-        console.log(value)
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.data.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.data.length;
@@ -103,7 +101,6 @@
         this.$refs.columnTree.setCheckedKeys(list);
       },
       changeCheck() {
-        console.log(this.checkedList,'++++++',this.$refs.columnTree.getCheckedKeys());
         this.checkedList = this.$refs.columnTree.getCheckedKeys();
       }
     }
@@ -112,9 +109,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .content-box {
-    padding: 10px;
-    max-height: 300px;
+
+  .filter-column{
+    margin-left: 10px;
+    display: inline-block;
+  }
+  .filter-column .el-icon-setting{
+    font-size: 20px;
+    color: #666666;
+    cursor: pointer;
   }
 
 </style>

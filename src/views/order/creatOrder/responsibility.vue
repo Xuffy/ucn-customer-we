@@ -16,12 +16,13 @@
                <el-date-picker
                   v-model="scope.row.item1"
                   type="datetime"
-                  placeholder="选择日期时间"
-                  v-if='scope.$index!=2'           
-                   :disabled=true
-                  >
+                  placeholder=" "
+                  v-if='scope.$index!=2'   
+                  :disabled='scope.$index==1'                      
+                  >            
                 </el-date-picker>
-                <el-input v-model="scope.row.item1"  :disabled=true v-else>
+                <el-input v-model="scope.row.item1"  v-else>
+                   
                 </el-input>
         </template>
 </el-table-column>
@@ -30,12 +31,12 @@
                <el-date-picker
                   v-model="scope.row.item2"
                   type="datetime"
-                  placeholder="选择日期时间"
+                  placeholder=""
                   v-if='scope.$index!=2'
-                  :disabled='scope.row.item2||disabled'
+                 :disabled='scope.$index==1||scope.$index==0'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item2" v-else  :disabled='scope.row.item2||disabled'>
+                <el-input v-model="scope.row.item2" v-else  >
                 </el-input>
         </template>
 </el-table-column>
@@ -44,12 +45,13 @@
                <el-date-picker
                   v-model="scope.row.item3"
                   type="datetime"
-                  placeholder="选择日期时间"
+                  placeholder=""
                   v-if='scope.$index!=2' 
-                    :disabled=true             
-                  >
+                  :disabled='scope.$index==1'                        
+                  >              
                 </el-date-picker>
-                <el-input v-model="scope.row.item3"    :disabled=true v-else>
+                <el-input v-model="scope.row.item3"   v-else>
+               
                 </el-input>
         </template>
 </el-table-column>
@@ -58,13 +60,13 @@
                <el-date-picker
                   v-model="scope.row.item4"
                   type="datetime"
-                  placeholder="选择日期时间"
+                  placeholder=""
                   v-if='scope.$index!=2'
-                 :disabled='scope.row.item4||disabled'
+                :disabled='scope.$index==1||scope.$index==0'
                   
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item4" v-else :disabled='scope.row.item4||disabled'>
+                <el-input v-model="scope.row.item4" v-else >
                 </el-input>
         </template>
 </el-table-column>
@@ -73,12 +75,12 @@
                <el-date-picker
                   v-model="scope.row.item5"
                   type="datetime"
-                  placeholder="选择日期时间"
+                  placeholder=""
                   v-if='scope.$index!=2'
-                 :disabled=true 
+                 :disabled='scope.$index==1'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item5" :disabled=true  v-else>
+                <el-input v-model="scope.row.item5"   v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -87,12 +89,12 @@
                <el-date-picker
                   v-model="scope.row.item6"
                   type="datetime"
-                  placeholder="选择日期时间"
+                  placeholder=""
                   v-if='scope.$index!=2'
-                  :disabled='scope.row.item6||disabled'
+                 :disabled='scope.$index==1'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item6" :disabled='scope.row.item6||disabled' v-else>
+                <el-input v-model="scope.row.item6"  v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -107,17 +109,17 @@
         components: {
 
         },
-        props:{
-            disabled:{
-                type:Boolean,
-                default:false
+        props: {
+            disabled: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
                 tableData: [{
                     item: 'Me',
-                    item1: '',
+                    item1: '1',
                     item2: '',
                     item3: '',
                     item4: '',
@@ -127,7 +129,7 @@
                     item: 'Supplier',
                     item1: '',
                     item2: '',
-                    item3: '1',
+                    item3: '',
                     item4: '',
                     item5: '',
                     item6: '',
@@ -154,9 +156,7 @@
         methods: {
 
         },
-       　watch:{
-　
-　　　　　　},
+        　watch: {　　　　　　　},
     }
 
 </script>

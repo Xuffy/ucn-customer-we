@@ -49,10 +49,10 @@
                 </el-row>
                 <div class="btns" v-if="noEdit">
                     <el-button @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button  @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button  @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button  @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
-                    <el-button @click='addToBookmark'>{{$t('supplier.buttonname.addToBookmark')}}</el-button>
+                    <el-button @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
+                    <el-button @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
+                    <el-button @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
+                    <el-button >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">Finish</el-button>
@@ -102,12 +102,13 @@
             </el-tabs>
         </div>
 
-
+        <VCompareList :config="compareConfig"></VCompareList>
 
     </div>
 </template>
 
 <script>
+    import VCompareList from '../../product/compareList'
     import {
         VTable
     } from '@/components/index';
@@ -116,14 +117,16 @@
         name: "souringDetail",
         components: {
             VTable,
-
+            VCompareList
         },
         data() {
             return {
                 noEdit: true,
                 tabName: 'address', //默认打开的tab
-                tabColumn: [],
-                tabData: []
+                tabData: [],
+                compareConfig: {
+                    showCompareList: false, //是否显示比较列表
+                },
             }
         },
         methods: {
@@ -144,7 +147,7 @@
                 })
             },
             addToCompare() {
-
+                this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
 

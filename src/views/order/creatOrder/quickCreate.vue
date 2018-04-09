@@ -1,9 +1,9 @@
 <template>
-    <div class="FromBookmark">
-       <div class='select_div'>
-            <selectSearch ></selectSearch>
+    <div class="QuickCreate">
+       <div class="select_div">
+           <selectSearch></selectSearch>
        </div>
-       
+        
         <div>
              <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
         </div>
@@ -16,7 +16,7 @@
         selectSearch
     } from '@/components/index';
     export default {
-        name: "FromBookmark",
+        name: "QuickCreate",
         components: {
             VTable,
             selectSearch

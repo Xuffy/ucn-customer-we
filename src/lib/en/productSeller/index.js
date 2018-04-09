@@ -15,6 +15,9 @@ const page={
     customInformation:'Custom Information',
     priceInfo:'Price Information',
     packingInfo:'Packing Info',
+    logisticInfo:'Logistic Info',
+    otherInfo:'Other Info',
+    attachment:'Attachment',
 
     //add New Product
     //basic info
@@ -107,6 +110,34 @@ const page={
     packingMethodOfOuterCartonCN:'外包装方式CN',
     packingMethodOfOuterCartonEN:'外包装方式EN',
     oem:'可否贴牌',
+
+
+    //logistic info
+    gpSKUQuantity20:'20GP产品数量',
+    gpSKUQuantity40:'40GP产品数量',
+    hqSKUQuantity40:'40HQ产品数量',
+    trayDimension:'托盘尺寸',
+    skuQuantityPerTray:'每托盘产品数量',
+    specialTransportRequirements:'特殊运输要求',
+    inventoryCostCalculationMethod:'库存成本计算方式',
+    defaultWarehouse:'默认仓库',
+    supplierInventoryQuantity:'自有库存',
+    supplierSafeInventoryQuantity:'安全库存',
+    supplierMinimumInventory:'最低库存量',
+
+
+    //other info
+    mainSaleCountry:'主销国家',
+    mainSaleArea:'主销区域',
+    productionDays:'开发时间',
+    qualityStander:'质量标准',
+    yearOfListed:'上市年份',
+    useDisplayBoxOrNot:'是否展示盒包装',
+    skuQuantityInDisplayBox:'展示盒内产品数',
+    lengthBreadthAndHeight:'展示盒长宽高',
+    otherPackingInformationCN:'其他包装信息CN',
+    otherPackingInformationEN:'其他包装信息EN',
+    adjustSKUAndPackageOrNot:'产品或包装可否调整',
 
 
 

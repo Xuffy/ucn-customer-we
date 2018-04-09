@@ -19,6 +19,7 @@
                         default-expand-all
                         :filter-node-method="filterNode"
                         ref="tree2"
+                        v-show="mappingRelationData"
                     />
                 </div>
             </div>
@@ -80,113 +81,80 @@
                 myCategoryKeyWord:'',
                 generalCategoryKeyWord:'',
                 mapingCategoryKeyWord:'',
-                myCategoryData: [{
-                    id: 1,
-                    label: '一级 1',
-                    isActive: false,
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        isActive: false,
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1',
-                            isActive: false
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2',
-                            isActive: false,
-                        }]
-                    }]
-                    }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                    }, {
-                    id: 3,
-                    label: '一级 3',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
-                    }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],
-                mgeneralCategoryData:[{
-                    id: 1,
-                    label: '一级 1',
-                    isActive: false,
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        isActive: false,
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1',
-                            isActive: false
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2',
-                            isActive: false,
-                        }]
-                    }]
-                    }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                    }, {
-                    id: 3,
-                    label: '一级 3',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
-                    }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],
+                myCategoryData: [],
+                mgeneralCategoryData:[],
                 mappingRelationData: [],
                 defaultProps: {
                     children: 'children',
-                    label: 'label'
+                    label: 'name',
+                    id: 'id'
                 }
             }
         },
         created() {
-            this.ajax({
-                url: this.$apis.sys_category,
-                method: "get",
-
-            });
+            this.getMgeneralCategoryData();
+            this.getMyCategoryData();
+            this.getMappingCategory();
         },
         methods: {
+            getMgeneralCategoryData() {
+                this.ajax({
+                    url: this.$apis.sys_category,
+                    method: 'get'
+                })
+                .then(res => {
+                    this.mgeneralCategoryData = res;
+                });
+            },
+            getMyCategoryData() {
+                this.ajax({
+                    url: this.$apis.category,
+                    method: 'get'
+                })
+                .then(res => {
+                    this.myCategoryData = res;
+                })
+            },
+            getMappingCategory() {
+                this.ajax({
+                    url: this.$apis.category,
+                    method: 'get'
+                })
+                .then(res => {
+                    this.mappingRelationData = res;
+                })
+            },
+            addNewCategory(data, name) {
+                const params = {
+                    parentId: data.id || 0,
+                    name: name
+                };
+                this.ajax.post(this.$apis.category, params)
+                .then(res => {
+                    const newChild = { id: 6, label: value, isActive:false, children: [] };
+                    if (!data.children) this.$set(data, 'children', []);
+                    if(!data.length) {
+                        data.children.push(newChild);
+                    } else {
+                        data.push(newChild);
+                    };
+                });
+            },
             filterNode(value, data) {
                 if (!value) return true;
                 return data.label.indexOf(value) !== -1;
             },
             renderContent(h, { node, data, store }) {
                 return (
-                <span class="custom-tree-node">
-                    <span>{node.label}</span>
-                    <span class="icon-wrap" on-click={ (ev) => { ev.cancelBubble = true } }>
-                        <i class="el-icon-edit" on-click={ () => this.edit(data) }></i>
-                        <i class="el-icon-remove-outline" on-click={ () => this.remove(node, data) }></i>
-                        <i class="el-icon-circle-plus-outline" on-click={ () => this.add(data) }></i>
+                    <span class="custom-tree-node">
+                        <span>{node.label}</span>
+                        <span class="icon-wrap" on-click={ (ev) => { ev.cancelBubble = true } }>
+                            <i class="el-icon-edit" on-click={ () => this.edit(data) }></i>
+                            <i class="el-icon-remove-outline" on-click={ () => this.remove(node, data) }></i>
+                            <i class="el-icon-circle-plus-outline" on-click={ () => this.add(data) }></i>
+                        </span>
                     </span>
-                </span>);
+                );
             },
             remove(node, data) {
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -218,18 +186,7 @@
                         message: '分类名不能为空',
                         type: 'warning'
                     });
-                    const newChild = { id: 6, label: value, isActive:false, children: [] };
-                    if (!data.children) this.$set(data, 'children', []);
-                    if(!data.length) {
-                        data.children.push(newChild);
-                    } else {
-                        data.push(newChild);
-                    }
-
-                    this.$message({
-                        type: 'success',
-                        message: `分类添加成功`
-                    });
+                    this.addNewCategory(data, value)
                 }).catch(() => {
                            
                 });
@@ -262,7 +219,6 @@
             },
             generalCategoryChange(data) {
                 if(!data.children) this.selectedNodes.push(data.id);
-
             }
         },
         watch: {
