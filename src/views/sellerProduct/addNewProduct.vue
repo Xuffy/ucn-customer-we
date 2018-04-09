@@ -1830,6 +1830,11 @@
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
+
+                this.ajax.post('/',{
+
+                }).then().catch();
+
                 console.log(this.productForm,'???')
             },
         }
