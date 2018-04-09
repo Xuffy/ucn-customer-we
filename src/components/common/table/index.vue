@@ -1,7 +1,13 @@
 <template>
   <div class="ucn-table" v-loading="loading">
 
-    <v-filter-column :data="dataColumn"></v-filter-column>
+    <div class="header-content">
+      <div class="fixed">
+        <v-filter-value></v-filter-value>
+        <v-filter-column :data="dataColumn"></v-filter-column>
+      </div>
+    </div>
+
     <div class="table-container" :style="{height:height + 'px'}">
       <div class="fixed-left" ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
@@ -88,10 +94,11 @@
   // import VFilterColumn from './filterColumn'
 
   import VFilterColumn from './filterColumn'
+  import VFilterValue from './filterValue'
 
   export default {
     name: 'VTable',
-    components: {VFilterColumn},
+    components: {VFilterColumn, VFilterValue},
     props: {
       data: {
         type: Array,
@@ -348,5 +355,17 @@
 
   .ucn-table .el-pagination {
     white-space: inherit;
+  }
+
+  .header-content {
+    width: 100%;
+    position: relative;
+    min-height: 30px;
+  }
+
+  .header-content .fixed {
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 </style>

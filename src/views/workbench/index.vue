@@ -1,5 +1,6 @@
 <template>
   <div class="workbench">
+
     <!--<v-table-data></v-table-data>-->
     <v-quick-link></v-quick-link>
     <br/><br/>
@@ -24,7 +25,8 @@
   export default {
     name: 'workbench',
     data() {
-      return {}
+      return {
+      }
     },
     components: {
       VQuickLink,
@@ -34,9 +36,7 @@
     created() {
 
     },
-    methods: {
-
-    }
+    methods: {}
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
