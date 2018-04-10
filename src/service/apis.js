@@ -5,8 +5,8 @@ const apis = {
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
-  mappingCategory: ['/category/mapping ', 'BASE_CS'],
-  delete_category: ['/category/delete/', 'BASE_CS']
+  delete_category: ['/category/delete', 'BASE_CS'],
+  mapping_category: ['/category/mapping', 'BASE_CS']
 };
 
 let list = _.mapObject(apis, val => {

@@ -1,5 +1,6 @@
 <template>
     <div class="category-setting">
+        <span style="display:none;" v-text="upDataPage"></span>
         <div class="hd">{{ $t('setting.page.categorySetting') }}</div>
         <div class="category-wrap">
             <div class="maping-relation">
@@ -14,19 +15,20 @@
                     <el-tree
                         class="filter-tree"
                         :data="mappingRelationData"
-                        :props="defaultProps"
+                        :props="treeProps"
                         :filter-node-method="filterNode"
                         ref="tree2"
                         default-expand-all
                         v-show="mappingRelationData.length >= 1"
                     />
+                    <div v-show="mappingRelationData.length <= 0" class="mappingRelation">请设置对应映射关系</div>
                 </div>
             </div>
             <div class="my-category">
                 <h5>{{ $t('setting.page.myCategory') }}</h5>
                 <div class="category">
                     <div class="input-hd">
-                        <el-button size="mini" @click="add(myCategoryData)">{{ $t('setting.page.add') }}</el-button><el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-button size="mini" @click="add(myCategoryData, 'parents')">{{ $t('setting.page.add') }}</el-button><el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         class="filter-tree"
@@ -64,7 +66,7 @@
                         @check-change="generalCategoryChange"
                     />
                     <div class="btn-wrap">
-                        <el-button type="primary">{{ $t('setting.page.save') }}</el-button>
+                        <el-button type="primary" @click="save">{{ $t('setting.page.save') }}</el-button>
                     </div>
                 </div>
             </div>
@@ -76,15 +78,22 @@
         name: 'CategorySetting',
         data() {
             return {
+                upDataPage:0,
                 selectedNodes: [],
                 myCategoryKeyWord:'',
                 generalCategoryKeyWord:'',
                 mapingCategoryKeyWord:'',
                 myCategoryData: [],
+                myCategory: '',
                 mgeneralCategoryData:[],
                 mappingRelationData: [],
                 defaultProps: {
                     children: 'children',
+                    label: 'name',
+                    id: 'id'
+                },
+                treeProps: {
+                    children: 'categorys',
                     label: 'name',
                     id: 'id'
                 }
@@ -97,60 +106,57 @@
         },
         methods: {
             getMgeneralCategoryData() {
-                this.ajax({
-                    url: this.$apis.sys_category,
-                    method: 'get'
-                })
+                this.ajax.get(this.$apis.sys_category)
                 .then(res => {
-                    this.mgeneralCategoryData = res;
+                    this.mgeneralCategoryData = res || [];
                 });
             },
             getMyCategoryData() {
-                this.ajax({
-                    url: this.$apis.category,
-                    method: 'get'
-                })
+                this.ajax.get(this.$apis.category)
                 .then(res => {
-                    this.myCategoryData = res;
+                    this.myCategoryData = res || [];
                 })
             },
             getMappingCategory() {
-                this.ajax({
-                    url: this.$apis.category,
-                    method: 'get'
-                })
+                this.ajax.get(this.$apis.mapping_category)
                 .then(res => {
-                    this.mappingRelationData = res;
+                    this.mappingRelationData = res || [];
+                    this.mappingRelationDataSplit(this.mappingRelationData);
                 })
             },
-            addData(id, data, name) {
-                const newChild = { id: id, name: name, parentId:data.id, isActive:false, children: [] };
-                if (!data.children && data.length) this.$set(data, 'children', []);
-                this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'add', newChild);
-                if(!data.length) {
-                    data.children.push(newChild);
-                } else {
-                    data.push(newChild);
-                };
+            mappingRelationDataSplit(list) {
+                list.forEach((item, index) => {
+                    if(item.builder) item.name = `${item.name}(${item.builder})`;
+                    if(item[this.treeProps.children].length && item[this.treeProps.children]) this.mappingRelationDataSplit(item[this.treeProps.children])
+                });
             },
-            addNewCategory(data, name) {
+            addData(id, data, name, type) {
+                const newChild = { id: id, name: name, parentId:data.id, isActive:false, children: [] };
+                if(type === 'parents') {
+                    data.push(newChild);
+                } else {
+                    data.children.push(newChild);
+                }
+                this.getMappingCategory();
+            },
+            addNewCategory(data, name, type) {
                 const params = {
                     parentId: data.id || 0,
                     name: name
                 };
                 this.ajax.post(this.$apis.category, params)
                 .then(res => {
-                    this.addData(res, data, name);
+                    this.addData(res, data, name, type);
                 });
             },
             filterNode(value, data) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data[this.defaultProps.label].indexOf(value) !== -1;
             },
             renderContent(h, { node, data, store }) {
                 return (
                     <span class="custom-tree-node">
-                        <span>{node.label}</span>
+                        <span>{ node.label }</span>
                         <span class="icon-wrap" on-click={ (ev) => { ev.cancelBubble = true } }>
                             <i class="el-icon-edit" on-click={ () => this.edit(data) }></i>
                             <i class="el-icon-remove-outline" on-click={ () => this.remove(node, data) }></i>
@@ -159,38 +165,40 @@
                     </span>
                 );
             },
-            mappingRelationDataForEach(list, id, type, val){
-                list.forEach((res, index) => {
-                    if(res.id === id) {
-                        switch(type) {
-                            case 'delete':
-                                list.splice(index, 1);
-                                break;
-                            case 'add':
-                                list[index].children.push(val);
-                                console.log(list[index].children);
-                                break;
-                            case 'edit':
-                                res.name = val;
-                                break;
-                        };
-                    };
-                    if(res.children && res.children.length) this.mappingRelationDataForEach(res.children, id, type, val);
-                });
-            },
+            // mappingRelationDataForEach(list, id, type, val){
+            //     list.forEach((res, index) => {
+            //         if(res.id === id) {
+            //             switch(type) {
+            //                 case 'delete':
+            //                     list.splice(index, 1);
+            //                     break;
+            //                 case 'edit':
+            //                     res.name = val;
+            //                     break;
+            //             };
+            //         } else if(!id) {
+            //             if(index <= 0) list.push(val);
+            //         }
+            //         if(res.children && res.children.length) this.mappingRelationDataForEach(res.children, id, type, val);
+            //     });
+            // },
             remove(node, data) {
-                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                const parent = node.parent;
+                const children = parent.data.children || parent.data;
+                const index = children.findIndex(d => d.id === data.id);
+                const id = children[index].id;
+                if(data.children && data.children.length) return  this.$message({
+                    type: 'info',
+                    message: '请先删除子节点!'
+                }); 
+                this.$confirm('此操作将永久删除该分类以及映射关系, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const parent = node.parent;
-                    const children = parent.data.children || parent.data;
-                    const index = children.findIndex(d => d.id === data.id);
-                    const id = children[index].id;
-                    this.ajax.get(`${this.$apis.delete_category + id}`)
+                    this.ajax.get(`${this.$apis.delete_category}/${id}`)
                     .then(res => {
-                        this.mappingRelationDataForEach(this.mappingRelationData, id, 'delete');
+                        this.getMappingCategory();
                         children.splice(index, 1);
                         this.$message({
                             type: 'success',
@@ -204,7 +212,7 @@
                     });          
                 });
             },
-            add(data) {
+            add(data, type) {
                 this.$prompt('添加分类', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消'
@@ -213,7 +221,7 @@
                         message: '分类名不能为空',
                         type: 'warning'
                     });
-                    this.addNewCategory(data, value)
+                    this.addNewCategory(data, value, type)
                 }).catch(() => {
                            
                 });
@@ -232,27 +240,59 @@
                         type: 'info',
                         message: '不修改和以前同'
                     });  
-                    this.ajax.post(this.$apis.category, {
-                        id: data.id,
+                    this.ajax.post(`${this.$apis.category}/${data.id}?name=${value}`, {
                         name: value
                     })
                     .then(res => {
                         data.name = value;
+                        this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
                     });
-                    this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
                 }).catch(() => {
                            
                 });
             },
-            myCategoryChange() {
-                // this.ajax({
-                //     url:"/sys/category",
-                //     method: "get",
-                //     params: {}
-                // });
+            genCheckBox(id, list) {
+                list.forEach(items => {
+                    if(id === items.id) this.setChecked(items.id, true, true);
+                    if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(items[this.defaultProps.children]);
+                });
+            },
+            myCategoryChange(val) {
+                if(val.children && val.children.length) return this.$message({
+                    type: 'info',
+                    message: '父节点不能添加映射关系'
+                });
+                this.myCategory = val.id;
+                
+                this.ajax.get(`${this.$apis.mapping_category}/${val.id}`)
+                .then(res => {
+                    const genCheckBox = res.split(',');
+                    genCheckBox.forEach(item => {
+                        this.genCheckBox(item, this.mgeneralCategoryData)
+                    });
+                });
+            },
+            save() {
+                const params = {
+                    categoryId: this.myCategory,
+                    sysId: this.selectedNodes.toString()
+                };
+                if(!params.categoryId) return this.$message({
+                    type: 'info',
+                    message: '请先选择分类'
+                });
+                if(!params.sysId) return this.$message({
+                    type: 'info',
+                    message: '请勾选系统分类'
+                });
+                this.getMappingCategory()
+                this.ajax.post(this.$apis.mapping_category, params)
+                 .then(res => {
+                     console.log(res)
+                 });
             },
             generalCategoryChange(data) {
-                if(!data.children) this.selectedNodes.push(data.id);
+                if(!data.children.length || !data.children) this.selectedNodes.push(data.id);
             }
         },
         watch: {
@@ -307,7 +347,12 @@
             font-weight: bold;
             font-size:16px;
         }
-        
+        .mappingRelation {
+            font-size:16px;
+            color:#666;
+            text-align: center; 
+            line-height:50px;
+        }
         .category-wrap {
             display:flex;
             padding:20px;

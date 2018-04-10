@@ -54,7 +54,6 @@ ajax.interceptors.request.use(config => {
 ajax.interceptors.response.use(
   response => {
     NProgress.done();
-
     if (_.isEmpty(response.data)) {
       throw new Error('api data is undefined');
     }
