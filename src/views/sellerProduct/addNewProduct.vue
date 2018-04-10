@@ -231,17 +231,20 @@
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.categoryLevel')+':'">
-                        <el-select
-                                size="mini"
-                                v-model="productForm.categoryId"
-                                placeholder="请选择">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <drop-down class="dropdown" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
+
+
+                        <!--<el-select-->
+                                <!--size="mini"-->
+                                <!--v-model="productForm.categoryId"-->
+                                <!--placeholder="请选择">-->
+                            <!--<el-option-->
+                                    <!--v-for="item in options"-->
+                                    <!--:key="item.value"-->
+                                    <!--:label="item.label"-->
+                                    <!--:value="item.value">-->
+                            <!--</el-option>-->
+                        <!--</el-select>-->
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
@@ -1368,154 +1371,167 @@
 <script>
     import upLoad from '@/components/common/upload/upload'
     import imgHandler from '../product/bookmark/imgHandler'
+    import {dropDownSingle} from '@/components/index'
 
     export default {
         name: "addNewProduct",
         components:{
             imgHandler,
-            upLoad
+            upLoad,
+            dropDown:dropDownSingle
         },
         data(){
             return{
                 labelPosition:'left',
                 imgGroup:[],
 
-                //???code没找到
+
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
-                    status: 2,
-                    nameEn: "2",
-                    barcode: "2",
-                    nameCn: "2",
-                    descEn: "2",
-                    descCn: "2",
-                    descCustomer: "2",
-                    nameCustomer: "2",
-                    customerSkuCode: "2",
-                    supplierCode: "2",
-                    supplierName: "2",
-                    code: "2",
+                    status: 0,                      //0下架 1上架
+                    nameEn: "",
+                    barcode: "",                    //产品条码
+                    nameCn: "",
+                    descEn: "",
+                    descCn: "",
+                    descCustomer: "",
+                    nameCustomer: "",
+                    customerSkuCode: "",
+                    supplierCode: "",
+                    supplierName: "",
+                    code: "",                       //新增时系统生成，传空
                     unit: "2",
-                    formation: "2",
-                    materialEn: "2",
-                    materialCn: "2",
-                    colourEn: "2",
-                    colourCn: "2",
-                    minOrderQty: 2,
-                    deliveryDates: 2,
-                    design: "2",
-                    noneSellCountry: 2,
-                    applicableAge: 2,
-                    expireDates: 2,
-                    expireUnit: "2",
-                    comments: "2",
-                    readilyAvailable: 2,
-                    availableQty: 2,
-                    mainSaleCountry: 2,
-                    mainSaleArea: "2",
-                    productionDates: 2,
-                    qualityStander: "2",
+                    formation: "",
+                    materialEn: "",
+                    materialCn: "",
+                    colourEn: "",
+                    colourCn: "",
+                    minOrderQty: 1,
+                    deliveryDates: 1,               //交期(做完需要多少天)
+                    design: "",
+                    noneSellCountry: 1,             //禁售国家，暂时传1
+                    applicableAge: 1,
+                    expireDates: 1,
+                    expireUnit: 1,                  //保质期单位，暂时传1
+                    comments: "",
+                    readilyAvailable: 1,
+                    availableQty: 1,
+                    mainSaleCountry: 1,
+                    mainSaleArea: "",
+                    productionDates: 1,             //开发时间
+                    qualityStander: "",
                     yearListed: "2018-02-23",
-                    useDisplayBox: 2,
-                    displayBoxQty: 2,
-                    otherPackInfoCn: "2",
-                    otherPackInfoEn: "2",
+                    useDisplayBox: 1,
+                    displayBoxQty: 0,
+                    otherPackInfoCn: "",
+                    otherPackInfoEn: "",
                     adjustPackage: 2,
-                    lengthWidthHeight: "2",
+                    lengthWidthHeight: "",
                     recycle: 2,
-                    categoryId: 2,
-                    rateValueAddedTax: 2,
-                    taxRefundRate: 2,
-                    customsCode: "2",
-                    customsNameCn: "2",
-                    customsNameEn: "2",
-                    tradeMarkCn: "2",
-                    tradeMarkEn: "2",
-                    commodityInspectionCn: "2",
-                    commodityInspectionEn: "2",
-                    declareElement: "2",
-                    origin: "2",
-                    inspectQuarantineCategory: "2",
-                    brand: "2",
-                    brandRemark: "2",
-                    brandRelated: "2",
-                    certificat: "2",
-                    gp20SkuQty: 2,
-                    gp40SkuQty: 2,
-                    hq40SkuQty: 2,
-                    tryDimension: 2,
-                    skuQtyPerTray: 2,
-                    specialTransportRequire: "2",
-                    inventoryCostMethod: "2",
-                    warehourceDefault: "2",
-                    inventory: 2,
-                    safeInventory: 2,
-                    minInventory: 2,
-                    unitWeight: 2,
-                    unitLength: 2,
-                    unitVolume: 2,
-                    length: 2,
-                    width: 2,
-                    height: 2,
-                    netWeight: 2,
-                    volume: 2,
-                    methodPkgCn: "2",
-                    methodPkgEn: "2",
-                    innerCartonUnit: "2",
-                    innerCartonQty: 2,
-                    innerCartonLength: 2,
-                    innerCartonWidth: 2,
-                    innerCartonHeight: 2,
-                    innerCartonWeightNet: 2,
-                    innerCartonRoughWeight: 2,
-                    innerCartonVolume: 2,
-                    innerCartonDesc: "2",
-                    innerCartonMethodCn: "2",
-                    innerCartonMethodEn: "2",
-                    outerCartonUnit: "2",
-                    outerCartonDesc: "2",
-                    innerCartonOuterNum: 2,
-                    outerCartonQty: 2,
-                    outerCartonLength: 2,
-                    outerCartonWidth: 2,
-                    outerCartonHeight: 2,
-                    outerCartonNetWeight: 2,
-                    outerCartonRoughWeight: 2,
-                    outerCartonVolume: 2,
-                    outerCartonMethodCn: "2",
-                    outerCartonMethodEn: "2",
-                    oem: 2,
+                    categoryId: '',                      //类型id
+                    rateValueAddedTax: 1,               //增值税率
+                    taxRefundRate: 1,
+                    customsCode: "",
+                    customsNameCn: "",
+                    customsNameEn: "",
+                    tradeMarkCn: "",
+                    tradeMarkEn: "",
+                    commodityInspectionCn: "",
+                    commodityInspectionEn: "",
+                    declareElement: "",
+                    origin: "",
+                    inspectQuarantineCategory: "",      //检疫类别
+                    brand: "",
+                    brandRemark: "",
+                    brandRelated: "",
+                    certificat: "",
+                    gp20SkuQty: 0,
+                    gp40SkuQty: 0,
+                    hq40SkuQty: 0,
+                    tryDimension: 1,                    //托盘尺寸？？？
+                    skuQtyPerTray: 0,
+                    specialTransportRequire: "",
+                    inventoryCostMethod: "",
+                    warehourceDefault: "",
+                    inventory: 0,
+                    safeInventory: 0,
+                    minInventory: 0,
+                    unitWeight: 1,                      //重量单位,暂时传1
+                    unitLength: 1,                      //长度单位,暂时传1
+                    unitVolume: 1,                      //提及单位，暂时传1
+                    length: 0,
+                    width: 0,
+                    height: 0,
+                    netWeight: 0,
+                    volume: 0,
+                    methodPkgCn: "",
+                    methodPkgEn: "",
+                    innerCartonUnit: "",                //中包单位
+                    innerCartonQty: 0,
+                    innerCartonLength: 0,
+                    innerCartonWidth: 0,
+                    innerCartonHeight: 0,
+                    innerCartonWeightNet: 0,
+                    innerCartonRoughWeight: 0,
+                    innerCartonVolume: 0,
+                    innerCartonDesc: "",
+                    innerCartonMethodCn: "",
+                    innerCartonMethodEn: "",
+                    outerCartonUnit: "",                //外箱单位
+                    outerCartonDesc: "",
+                    innerCartonOuterNum: 0,
+                    outerCartonQty: 0,
+                    outerCartonLength: 0,
+                    outerCartonWidth: 0,
+                    outerCartonHeight: 0,
+                    outerCartonNetWeight: 0,
+                    outerCartonRoughWeight: 0,
+                    outerCartonVolume: 0,
+                    outerCartonMethodCn: "",
+                    outerCartonMethodEn: "",
+                    oem: 1,
                     logisticId: 2,
                     version: 2,
                     pkgId: 2,
                     price: [
                         {
-                            fobCurrency: 2,
-                            fobPrice: 2,
-                            fobPort: "2",
-                            exwPrice: 2,
-                            exwCurrency: 2,
-                            otherIncoterm: 2,
-                            otherIncotermPrice: 2,
-                            otherIncotermArea: 2,
-                            otherIncotermCurrency: 2,
-                            status: 2
+                            fobCurrency: 1,
+                            fobPrice: 1,                    //价格起始是多少
+                            fobPort: "",
+                            exwPrice: 1,                    //价格起始是多少
+                            exwCurrency: 1,
+                            otherIncoterm: 1,
+                            otherIncotermPrice: 1,
+                            otherIncotermArea: '',
+                            otherIncotermCurrency: 1,
+                            status: 1                       //1成本价，2基础报价
                         },
                         {
-                            fobCurrency: 2,
-                            fobPrice: 2,
-                            fobPort: "2",
-                            exwPrice: 2,
-                            exwCurrency: 2,
-                            otherIncoterm: 2,
-                            otherIncotermPrice: 2,
-                            otherIncotermArea: 2,
-                            otherIncotermCurrency: 2,
+                            fobCurrency: 1,
+                            fobPrice: 1,
+                            fobPort: "",
+                            exwPrice: 1,
+                            exwCurrency: 1,
+                            otherIncoterm: 1,
+                            otherIncotermPrice: 1,
+                            otherIncotermArea: '',
+                            otherIncotermCurrency: 1,
                             status: 2
                         },
                     ]
                 },
+                //上下架状态
+                skuStatusOption:[
+                    {
+                        label: '上架',
+                        value: 1
+                    },
+                    {
+                        label: '下架',
+                        value: 0
+                    }
+                ],
                 //是否现货
                 isReadilyAvailable:[
                     {
@@ -1531,180 +1547,184 @@
                 countryList:[
                     {
                         label:'中国',
-                        value:'China'
+                        value:1
                     },
                     {
                         label:'美国',
-                        value:'America'
+                        value:2
                     },
                     {
                         label:'日本',
-                        value:'Japan'
+                        value:3
                     }
                 ],
                 //保质期单位
                 expireUnitList:[
                     {
                         label:'小时',
-                        value:'hour'
+                        value:1
                     },
                     {
                         label:'日',
-                        value:'day'
+                        value:2
                     },
                     {
                         label:'月',
-                        value:'month'
+                        value:3
                     },
                     {
                         label:'年',
-                        value:'year'
+                        value:4
                     },
                 ],
                 //fob单位
                 fobUnit:[
                     {
                         label:'USD',
-                        value:'USD'
+                        value:1
                     },
                     {
                         label:'CNY',
-                        value:'CNY'
+                        value:2
                     },
                     {
                         label:'EUR',
-                        value:'EUR'
+                        value:3
                     },
                 ],
                 //otherIncoterm单位
                 otherIncotermUnit:[
                     {
                         label:'CIF',
-                        value:'CIF'
+                        value:1
+                    },
+                    {
+                        label:'DDU',
+                        value:2
                     },
                 ],
                 //weight单位
                 weightUnit:[
                     {
                         label:'t',
-                        value:'t'
+                        value:1
                     },
                     {
                         label:'kg',
-                        value:'kg'
+                        value:2
                     },
                     {
                         label:'lb',
-                        value:'lb'
+                        value:3
                     },
                     {
                         label:'sh.ton',
-                        value:'sh.ton'
+                        value:4
                     },
                     {
                         label:'long ton',
-                        value:'long ton'
+                        value:5
                     },
                     {
                         label:'oz',
-                        value:'oz'
+                        value:6
                     },
                     {
                         label:'g',
-                        value:'g'
+                        value:7
                     },
                 ],
                 //length单位
                 lengthUnit:[
                     {
                         label:'km',
-                        value:'km'
+                        value:1
                     },
                     {
                         label:'mile',
-                        value:'mile'
+                        value:2
                     },
                     {
                         label:'m',
-                        value:'m'
+                        value:3
                     },
                     {
                         label:'ft',
-                        value:'ft'
+                        value:4
                     },
                     {
                         label:'yd',
-                        value:'yd'
+                        value:5
                     },
                     {
                         label:'cm',
-                        value:'cm'
+                        value:6
                     },
                     {
                         label:'in',
-                        value:'in'
+                        value:7
                     },
                     {
                         label:'mm',
-                        value:'mm'
+                        value:8
                     },
                 ],
                 //volume单位
                 volumeUnit:[
                     {
                         label:'m3',
-                        value:'m3'
+                        value:1
                     },
                     {
                         label:'liter',
-                        value:'liter'
+                        value:2
                     },
                     {
                         label:'ft3',
-                        value:'ft3'
+                        value:3
                     },
                     {
                         label:'mcf',
-                        value:'mcf'
+                        value:4
                     },
                     {
                         label:'in3',
-                        value:'in3'
+                        value:5
                     },
                     {
                         label:'cm3',
-                        value:'cm3'
+                        value:6
                     },
                     {
                         label:'bbl',
-                        value:'bbl'
+                        value:7
                     },
                     {
                         label:'gal',
-                        value:'gal'
+                        value:8
                     },
                     {
                         label:'qt',
-                        value:'qt'
+                        value:9
                     },
                     {
                         label:'pt',
-                        value:'pt'
+                        value:10
                     },
                     {
                         label:'gi',
-                        value:'gi'
+                        value:11
                     },
                 ],
                 //可否贴牌
                 isOem:[
                     {
                         label:'是',
-                        value:'1'
+                        value:1
                     },
                     {
                         label:'否',
-                        value:'2'
+                        value:0
                     }
                 ],
                 //日期组件配置
@@ -1762,21 +1782,53 @@
                     height:0
                 },
 
-
-
-                month:'',                       //月份选择
-                skuStatusOption:[
+                //dropDown Data
+                dropData:[
                     {
-                        value: '选项1',
-                        label: '上架'
+                        id: 1,
+                        label: '一级 1',
+                        children: [{
+                            id: 4,
+                            label: '二级 1-1',
+                            children: [
+                                {
+                                id: 9,
+                                label: '三级 1-1-1'
+                                }, {
+                                id: 10,
+                                label: '三级 1-1-2'
+                                }
+                            ]
+                        }]
                     },
                     {
-                        value: '选项2',
-                        label: '下架'
-                    }
-                ],
-                skuStatus:'',                   //skuStatus
-                skuEnglishName:'',              //skuEnglishName
+                        id: 2,
+                        label: '一级 2',
+                        children: [{
+                            id: 5,
+                            label: '二级 2-1'
+                        }, {
+                            id: 6,
+                            label: '二级 2-2'
+                        }]
+                    },
+                    {
+                        id: 3,
+                        label: '一级 3',
+                        children: [{
+                            id: 7,
+                            label: '二级 3-1'
+                        }, {
+                            id: 8,
+                            label: '二级 3-2'
+                        }]
+                    }],
+                defaultProps:{
+                    label:'name',
+                    children:'children'
+                },
+
+
 
                 options: [
                     {
@@ -1796,7 +1848,6 @@
                     label: '北京烤鸭'
                 }],
 
-                value5: [],
 
 
 
@@ -1827,17 +1878,38 @@
             },
 
 
+            getCategoryId(){
+                this.ajax({
+                    url:this.$apis.getCategory,
+                    method:'get'
+                }).then(res=>{
+                    console.log(res)
+                    this.dropData=res;
+                }).catch(err=>{
+                    console.log(err)
+                });
+            },
+
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
+                this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
+                this.ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                    this.$message({
+                        message: '新增成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/sellerProduct/overview');
+                }).catch(err=>{
+                    console.log(err)
+                });
 
-                this.ajax.post('/',{
-
-                }).then().catch();
-
-                console.log(this.productForm,'???')
+                // console.log(this.productForm,'???')
             },
-        }
+        },
+        created(){
+            this.getCategoryId();
+        },
     }
 </script>
 
@@ -1891,6 +1963,10 @@
         display: inline-block;
         height: 28px;
         line-height: 28px;
+    }
+    .dropdown{
+        height: 32px;
+        width: 80%;
     }
 
     .footBtn{

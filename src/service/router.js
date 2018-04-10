@@ -43,6 +43,26 @@ export const routerMap = [
       ]
     },
     {
+        path:'/message',
+        component: Layout,
+        redirect:'/message/index',
+        name:'Message',
+        // hidden:true,
+        children:[
+            {
+                path:'index',
+                name:'Index',
+                component: () => import('../views/message/message.vue'),
+            },
+            {
+                path:'messageManagement',
+                component: () => import('../views/message/messageManagement.vue'),
+                name:'Message Management'
+            },
+
+        ],
+    },
+    {
       path: '/product',
       component: Layout,
       redirect: '/product/sourcing',
@@ -50,78 +70,65 @@ export const routerMap = [
       children: [
         {
           path: 'sourcing',
-          name:'sourcing',
-          component: () => import('../views/product/sourcing/index'),
-          children:[
-              {
-                  path:'',
-                  component: () => import('../views/product/sourcing/sourcing'),
-              },
-              {
-                  path:'detail',
-                  component: () => import('../views/product/sourcing/detail'),
-                  name:'detail'
-              },
-          ]
+          name:'Sourcing',
+          component: () => import('../views/product/sourcing/sourcing'),
+        },
+        {
+            path:'sourcingDetail',
+            component: () => import('../views/product/sourcing/detail'),
+            name:'Sourcing Detail',
+            hidden:true
         },
         {
           path:'logs',
           component: () => import('../views/product/sourcing/logs'),
           name:'logs'
         },
-        {
-          path:'bookmark',
-          component: () => import('../views/product/bookmark/index'),
-          name:'bookmark',
-          children:[
-              {
-                  path:'',
-                  component: () => import('../views/product/bookmark/bookmark'),
-              },
-              {
-                  path:'detail',
-                  component: () => import('../views/product/bookmark/detail'),
-                  name:'bookmarkDetail'
-              },
-              {
-                  path:'manuallyAdd',
-                  component: () => import('../views/product/bookmark/manuallyAdd'),
-                  name:'manuallyAdd',
-              },
-              {
-                  path:'recycleBin',
-                  component: () => import('../views/product/bookmark/recycleBin'),
-                  name:'recycleBin',
-              }
-          ]
-        },
-        {
-          path:'compare',
-          component:() => import('../views/product/compare/index'),
-          name:'compare',
-          children:[
-              {
-                  path:'',
-                  component: () => import('../views/product/compare/overview'),
-                  name:'compare overview',
-              },
-              {
-                  path:'detail',
-                  component: () => import('../views/product/compare/compare'),
-                  name:'compareDetail',
-              },
-          ]
-        },
-        {
-          path:'message',
-          component: () => import('../views/message/message.vue'),
-          name:'message'
-        },
-        {
-          path:'messageManagement',
-          component: () => import('../views/message/messageManagement.vue'),
-          name:'messageManagement'
-        },
+          {
+              path:'bookmark',
+              name:'Bookmark',
+              component: () => import('../views/product/bookmark/bookmark'),
+          },
+          {
+              path:'bookmarkDetail',
+              name:'Bookmark Detail',
+              hidden:true,
+              component: () => import('../views/product/bookmark/detail'),
+          },
+          {
+              path:'bookmarkManuallyAdd',
+              name:'Bookmark ManuallyAdd',
+              hidden:true,
+              component: () => import('../views/product/bookmark/manuallyAdd'),
+          },
+          {
+              path:'bookmarkRecycleBin',
+              name:'Bookmark RecycleBin',
+              hidden:true,
+              component: () => import('../views/product/bookmark/recycleBin'),
+          },
+
+          {
+              path:'compare',
+              name:'Compare',
+              component: () => import('../views/product/compare/overview'),
+          },
+          {
+              path:'compareDetail',
+              name:'Compare Detail',
+              hidden:true,
+              component: () => import('../views/product/compare/compare'),
+          },
+        // {
+        //   path:'message',
+        //   component: () => import('../views/message/message.vue'),
+        //   name:'message'
+        // },
+        // {
+        //   path:'messageManagement',
+        //   component: () => import('../views/message/messageManagement.vue'),
+        //   name:'messageManagement'
+        // },
       ]
     },
     {
@@ -285,26 +292,27 @@ export const routerMap = [
       component: Layout,
       redirect: '/warehouse/overview',
       name: 'Warehouse',
+      noDropdown: true,
       children: [
         {
           path: 'overview',
           component: () => import('../views/warehouse/warehouseOverview.vue'),
-          name:'warehouse overview'
+          name:'Warehouse Overview'
         },
         {
           path: 'qcOverview',
           component: () => import('../views/warehouse/qcOverview.vue'),
-          name:'qc overview'
+          name:'Qc Overview'
         },
         {
           path: 'qcDetail',
           component: () => import('../views/warehouse/qcDetail.vue'),
-          name:'qcOrder detail'
+          name:'QcOrder Detail'
         },
         {
           path: 'createQc',
           component: () => import('../views/warehouse/createQc.vue'),
-          name:'createQcOrder'
+          name:'Create QcOrder'
         },
       ]
     },

@@ -184,7 +184,7 @@
 
             //管理信息
             manageMessage(){
-                this.$router.push('/product/messageManagement');
+                this.$router.push('/message/messageManagement');
             },
         }
     }
