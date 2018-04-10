@@ -178,6 +178,7 @@
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #ccc;
+        padding: 0 15px;
     }
 
     .order_remark {
