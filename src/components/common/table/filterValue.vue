@@ -96,14 +96,12 @@
     },
     watch: {},
     created() {
-      console.log(this.$options.data())
     },
     methods: {
       addCompute() {
         this.conditionList.push(this.$options.data().conditionList[0])
       },
       cutCompute(index) {
-        console.log(this.conditionList.length)
         if (this.conditionList.length > 1) {
           this.conditionList = _.filter(this.conditionList, (val, ind) => {
             return ind !== index;
