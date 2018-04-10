@@ -8,10 +8,11 @@ const apis = {
   mappingCategory: ['/category/mapping ', 'BASE_CS'],
   getCategory:['/category','BASE_CS'],
   delete_category: ['/category/delete/', 'BASE_CS'],
-
     //供应商product接口
   add_newSKU:['/sku','BASE_CS'],
   get_listData:['/sku/listSkuByParams','BASE_CS'],
+
+  supplier_overview: ['/supplierOverview', 'BASE_API'],
 
 };
 

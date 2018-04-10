@@ -49,13 +49,20 @@
             }
         },
         methods: {
-            deleteFile() {},
-            //上传成功一层一层通知父组件 //
+            deleteFile() {
+                console.log('in')
+            },
+            //上传成功拿到的data //
             getres(data) {
-                this.$emit('getres', data)
+                console.log(data)
+
+                //                this.$emit('getres', data)
             },
 
-        }
+        },
+        created() {
+
+        },
     }
 
 </script>
