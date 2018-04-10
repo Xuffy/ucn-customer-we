@@ -200,9 +200,6 @@
                 //表格验证参数
                 rules:[],
 
-
-
-
                 //Category下拉组件数据
                 dropData:[
                     {
@@ -268,18 +265,43 @@
                 // window.open('http://192.168.51.228、:8080/#/product');
             },
 
-
             handleChange(value) {
                 console.log(value);
 
             },
 
+            getData() {
+                let params={
+                    ps: 10,                     //pageSIze
+                    pn: 1,                      //pageNumber
+                    sorts: [
+                        {
+                            orderBy: "string",
+                            orderType: "string"
+                        }
+                    ],
+                    categoryId: 0,
+                    barcode: "",
+                    customerSkuCode: "",
+                    nameEn: "",
+                    readilyAvailable: true,
+                    minExwPrice: 0,
+                    maxExwPrice: 0,
+                    minFobPrice: 0,
+                    maxFobPrice: 0,
+                    code: "string",
+                    supplierName: "string",
+                    materialEn: "string",
+                    descEn: "string",
+                    deliveryDates: 0,
+                    outerCartonMethodEn: "string",
+                    country: 0,
+                    methodPkgEn: "string",
+                    nameCustomer: "string",
+                    nameCn: "string"
+                };
 
-            getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-                })
+                // this.ajax.post(this.$apis.get_listData,params);
             },
 
             //table操作
@@ -296,7 +318,7 @@
             },
         },
         created(){
-            this.getList();
+            this.getData();
         },
 
         watch:{
