@@ -53,10 +53,6 @@
 			return {
 				filterText: '',
 				selectedList:'',
-				defaultProps: {
-					children: 'children',
-                    label: 'label',
-				},
 				data:[],
 				visible: false
 			};
@@ -85,7 +81,16 @@
 			placement: {
 				type: String,
 				default: 'bottom'
-			}
+			},
+			defaultProps: {
+				type: Object,
+				default: () => {
+					return {
+						children: 'children',
+						label: 'label'
+					}
+				}
+			},
 		},
 		watch: {
 			filterText(val) {
