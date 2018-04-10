@@ -231,7 +231,7 @@
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.categoryLevel')+':'">
-                        <drop-down class="dropdown" :list="dropData" ref="dropDown"></drop-down>
+                        <drop-down class="dropdown" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
 
 
                         <!--<el-select-->
@@ -1429,7 +1429,7 @@
                     adjustPackage: 2,
                     lengthWidthHeight: "",
                     recycle: 2,
-                    categoryId: 2,
+                    categoryId: '',                      //类型id
                     rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
                     customsCode: "",
@@ -1823,6 +1823,10 @@
                             label: '二级 3-2'
                         }]
                     }],
+                defaultProps:{
+                    label:'name',
+                    children:'children'
+                },
 
 
 
@@ -1889,10 +1893,16 @@
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
-                console.log(this.$refs.dropDown,'????')
-                // this.ajax.post('/',{
-                //
-                // }).then().catch();
+                this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
+                this.ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                    this.$message({
+                        message: '新增成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/sellerProduct/overview');
+                }).catch(err=>{
+                    console.log(err)
+                });
 
                 // console.log(this.productForm,'???')
             },

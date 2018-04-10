@@ -264,8 +264,8 @@
 
             //搜查
             search(){
-                this.$router.push('/product/sourcing/detail');
-                // window.open('http://192.168.51.228、:8080/#/product');
+                this.$router.push('/product/sourcingDetail');
+                // window.open('http://192.168.51.228:8080/#/product');
             },
 
 

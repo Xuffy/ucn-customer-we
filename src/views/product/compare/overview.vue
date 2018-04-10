@@ -1,7 +1,7 @@
 <template>
     <div class="compare-overview">
         <h3 class="hd">{{$t("product.page.compareOverview")}}</h3>
-        <el-button type="primary" @click="$router.push('/product/compare/detail')">Detail</el-button>
+        <el-button type="primary" @click="$router.push('/product/compareDetail')">Detail</el-button>
         <div class="status">
             <div class="btn-wrap">
                 <el-button>{{$t("product.page.downloadSelectedCompare")}}</el-button>
