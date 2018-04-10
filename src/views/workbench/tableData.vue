@@ -13,26 +13,15 @@
     </div>
     <br/>
 
-
-    <!--<el-table
-      :data="dataList"
-      :width="500"
-      :height="500">
-      <el-table-column v-for="(item,index) in dataColumn" :key="index"
-                       :prop="item.prop"
-                       :label="item.label"
-                       width="100">
-      </el-table-column>
-    </el-table>-->
-
-
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
 
-        <v-table :data="dataList" data-key="negotiation.tableProductInfo"></v-table>
-        <!--<v-simple-table :data.sync="dataList" :column="dataColumn"
-                        @sort-change="getSort"
-                        @page-change="pageChange"></v-simple-table>-->
+        <v-table :data="dataList" data-key="negotiation.tableProductInfo"
+                 :buttons="[{label: 'detail', type: 1}, {label: 'history', type: 2}]"
+                 :selection="filterSelection"
+                 @action="onAction">
+          <div slot="header">asdasd</div>
+        </v-table>
       </el-tab-pane>
       <el-tab-pane label="Order">
         <!--<v-simple-table></v-simple-table>-->
@@ -69,6 +58,16 @@
       this.getList();
     },
     methods: {
+      filterButton(params) {
+
+        return [{label: 'detail', type: 1}, {label: 'history', type: 2}]
+      },
+      filterSelection(params) {
+        return true;
+      },
+      onAction(item,type){
+        console.log(item,type)
+      },
       pageChange(page) {
         console.log(page)
       },
@@ -79,12 +78,7 @@
         console.log()
         this.ajax.get(this.$apis.sys_category).then((data) => {
           this.dataList = data;
-          // this.dataColumn = this.$getTableColumn(data, 'negotiation.tableProductInfo');
         });
-        /*this.ajax.get('/getTrackList').then((data)=>{
-          this.dataList = data;
-          this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-        })*/
       }
     }
   }
