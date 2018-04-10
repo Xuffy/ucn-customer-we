@@ -16,7 +16,7 @@ export default {
       BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
-
+    
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,
 
