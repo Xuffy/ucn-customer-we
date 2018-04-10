@@ -1,7 +1,11 @@
 <template>
-  <div class="ucn-table" v-loading="loading">
+  <div class="ucn-table" v-loading="loading"
+       :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
 
     <div class="header-content">
+      <div>
+        <slot name="header"></slot>
+      </div>
       <div class="fixed">
         <v-filter-value :data="dataColumn"></v-filter-value>
         <v-filter-column :data="dataColumn"></v-filter-column>
@@ -9,11 +13,12 @@
     </div>
 
     <div class="table-container" :style="{height:height + 'px'}">
-      <div class="fixed-left" ref="fixedLeft" :class="{show:dataColumn.length}">
+      <div class="fixed-left" v-if="selection"
+           ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
-        <!--<el-checkbox v-model="checkedAll"></el-checkbox>-->
       </div>
-      <div class="fixed-right" ref="fixedRight" :class="{show:dataColumn.length}">
+      <div class="fixed-right" v-if="buttons"
+           ref="fixedRight" :class="{show:dataColumn.length}">
         action
       </div>
 
@@ -21,7 +26,7 @@
         <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
-            <td ref="tableCheckbox">
+            <td ref="tableCheckbox" v-if="selection">
               <div style="visibility: hidden"><input type="checkbox"/></div>
             </td>
             <td>
@@ -31,17 +36,19 @@
               <div v-text="item.label">
               </div>
             </td>
-            <td ref="tableAction">
+            <td v-if="buttons" ref="tableAction">
               <div>action</div>
             </td>
           </tr>
           </thead>
+
           <tbody ref="tableBody">
           <tr v-for="(item,index) in dataList">
-            <td>
+            <td v-if="selection">
               <div>
-                <input type="checkbox" ref="checkbox" v-model="item._checked"/>
-                <!--<el-checkbox v-model="item._checked"></el-checkbox>-->
+                <input type="checkbox" ref="checkbox"
+                       v-if="typeof selection === 'function' ? selection(item) : true"
+                       v-model="item._checked"/>
               </div>
             </td>
             <td>
@@ -50,10 +57,10 @@
             <td v-for="(cItem,cKey) in item" v-if="filterKey(cKey)">
               <div v-text="cItem"></div>
             </td>
-            <td>
+            <td v-if="buttons">
               <div style="white-space: nowrap;">
-                <span class="button">查看</span>
-                <span class="button">修改</span>
+                <span class="button" v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      @click="$emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
               </div>
             </td>
           </tr>
@@ -77,10 +84,14 @@
 <script>
   /**
    * 表格组件
-   * @desc 组件描述
-   * @author xuffy
-   * @param {Object} [title]    - 参数说明
-   * @param {String} [columns] - 参数说明
+   * @desc 表格基础组件
+   * @param {Array} [data]    - 列表数据  例：[{},{},{}]
+   * @param {String} [dataKey]    - i18n对应配置参数  例：'negotiation.tableProductInfo'
+   * @param {Boolean} [loading]    - 加载loading状态  例：true
+   * @param {String} [height]    - 设置表格高度  例：200
+   * @param {Function, Array} [buttons]    - 设置action按钮，可传入函数判断按钮是否显示，返回Array
+   *                                         例：[{label: 'detail', type: 1}, {label: 'history', type: 2}]
+   *                                         例：['detail', 'history']
    *
    * @method @sort-change(val, key)   - 点击排序
    * @method @page-size-change(size)    - 改变分页条数
@@ -90,8 +101,6 @@
    *  <v-table></v-table>
    */
 
-  // import VFilterValue from './filterValue'
-  // import VFilterColumn from './filterColumn'
 
   import VFilterColumn from './filterColumn'
   import VFilterValue from './filterValue'
@@ -117,6 +126,13 @@
       height: {
         type: Number,
         default: 300,
+      },
+      buttons: {
+        type: [Function, Array]
+      },
+      selection: {
+        type: [Function, Boolean],
+        default: true,
       },
     },
     data() {
@@ -185,14 +201,25 @@
           sw = this.$refs.tableBody.offsetWidth;
         }
 
-        this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
-        this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
+        if (this.selection) {
+          this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
+        }
 
+        if (this.buttons) {
+          this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
+        }
         _.map(trs, (val) => {
-          val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
-          val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
+          if (this.selection) {
+            val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
+          }
+          if (this.buttons) {
+            val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
+          }
         });
         this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
+      },
+      getSelected() {
+        return _.where(this.dataList, {_checked: true});
       }
     }
   }
@@ -208,8 +235,8 @@
     width: 100%;
   }
 
-  .ucn-table .fixed-left,
-  .ucn-table .fixed-right {
+  .ucn-table.fixed-left-box .fixed-left,
+  .ucn-table.fixed-right-box .fixed-right {
     position: absolute;
     z-index: 9;
     top: 0;
@@ -224,10 +251,10 @@
   }
 
   .ucn-table .show {
-    display: block;
+    display: block !important;
   }
 
-  .ucn-table .fixed-left {
+  .ucn-table.fixed-left-box .fixed-left {
     left: 0;
     line-height: 50px;
   }
@@ -310,14 +337,14 @@
     background-color: #ebeff1 !important;
   }
 
-  .ucn-table tbody tr td:first-child,
-  .ucn-table tbody tr td:last-child {
+  .ucn-table.fixed-left-box tbody tr td:first-child,
+  .ucn-table.fixed-right-box tbody tr td:last-child {
     background-color: #FFFFFF;
     position: relative;
   }
 
-  .ucn-table tbody tr td:last-child:after,
-  .ucn-table tbody tr td:first-child:after {
+  .ucn-table.fixed-right-box tbody tr td:last-child:after,
+  .ucn-table.fixed-left-box tbody tr td:first-child:after {
     content: '';
     position: absolute;
     height: 100%;
@@ -328,7 +355,7 @@
     box-shadow: 3px 0 10px rgba(0, 0, 0, .4);
   }
 
-  .ucn-table tbody tr td:last-child:after {
+  .ucn-table.fixed-right-box tbody tr td:last-child:after {
     left: 0;
     box-shadow: -3px 0 10px rgba(0, 0, 0, .2);
   }
