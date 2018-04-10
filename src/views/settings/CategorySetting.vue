@@ -17,6 +17,7 @@
                         :props="defaultProps"
                         :filter-node-method="filterNode"
                         ref="tree2"
+                        default-expand-all
                         v-show="mappingRelationData.length >= 1"
                     />
                 </div>
@@ -167,14 +168,14 @@
                                 break;
                             case 'add':
                                 list[index].children.push(val);
-                                console.log(this.mappingRelationData)
+                                console.log(list[index].children);
                                 break;
                             case 'edit':
                                 res.name = val;
                                 break;
                         };
                     };
-                    if(res.children && res.children.length) this.mappingRelationDataForEach(res.children, id, type);
+                    if(res.children && res.children.length) this.mappingRelationDataForEach(res.children, id, type, val);
                 });
             },
             remove(node, data) {
