@@ -2,11 +2,10 @@
     <div class="category-setting">
         <div class="hd">{{ $t('setting.page.categorySetting') }}</div>
         <div class="category-wrap">
-            
             <div class="maping-relation">
                 <h5>{{ $t('setting.page.mappingRelation') }}</h5>
                 <div class="category">
-                    <div class="hd">
+                    <div class="hd input-hd">
                         <span class="text">
                             <b>{{ $t('setting.page.myCategory') }}</b>  （{{ $t('setting.page.generalCategory') }}）（{{ $t('setting.page.tags') }}）
                         </span>
@@ -16,10 +15,9 @@
                         class="filter-tree"
                         :data="mappingRelationData"
                         :props="defaultProps"
-                        default-expand-all
                         :filter-node-method="filterNode"
                         ref="tree2"
-                        v-show="mappingRelationData"
+                        v-show="mappingRelationData.length >= 1"
                     />
                 </div>
             </div>
@@ -124,6 +122,16 @@
                     this.mappingRelationData = res;
                 })
             },
+            addData(id, data, name) {
+                const newChild = { id: id, name: name, parentId:data.id, isActive:false, children: [] };
+                if (!data.children && data.length) this.$set(data, 'children', []);
+                this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'add', newChild);
+                if(!data.length) {
+                    data.children.push(newChild);
+                } else {
+                    data.push(newChild);
+                };
+            },
             addNewCategory(data, name) {
                 const params = {
                     parentId: data.id || 0,
@@ -131,13 +139,7 @@
                 };
                 this.ajax.post(this.$apis.category, params)
                 .then(res => {
-                    const newChild = { id: 6, label: value, isActive:false, children: [] };
-                    if (!data.children) this.$set(data, 'children', []);
-                    if(!data.length) {
-                        data.children.push(newChild);
-                    } else {
-                        data.push(newChild);
-                    };
+                    this.addData(res, data, name);
                 });
             },
             filterNode(value, data) {
@@ -156,6 +158,25 @@
                     </span>
                 );
             },
+            mappingRelationDataForEach(list, id, type, val){
+                list.forEach((res, index) => {
+                    if(res.id === id) {
+                        switch(type) {
+                            case 'delete':
+                                list.splice(index, 1);
+                                break;
+                            case 'add':
+                                list[index].children.push(val);
+                                console.log(this.mappingRelationData)
+                                break;
+                            case 'edit':
+                                res.name = val;
+                                break;
+                        };
+                    };
+                    if(res.children && res.children.length) this.mappingRelationDataForEach(res.children, id, type);
+                });
+            },
             remove(node, data) {
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -165,10 +186,15 @@
                     const parent = node.parent;
                     const children = parent.data.children || parent.data;
                     const index = children.findIndex(d => d.id === data.id);
-                    children.splice(index, 1);
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
+                    const id = children[index].id;
+                    this.ajax.get(`${this.$apis.delete_category + id}`)
+                    .then(res => {
+                        this.mappingRelationDataForEach(this.mappingRelationData, id, 'delete');
+                        children.splice(index, 1);
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
                     });
                 }).catch(() => {
                     this.$message({
@@ -195,17 +221,24 @@
                 this.$prompt('请编辑', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    inputValue: data.label
+                    inputValue: data.name
                 }).then(({ value }) => {
                     if(!value) return this.$message({
                         message: '不能为空',
                         type: 'warning'
                     });
-                    data.label = value;
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: `编辑成功`
-                    // });
+                    if(data.name === value) return this.$message({
+                        type: 'info',
+                        message: '不修改和以前同'
+                    });  
+                    this.ajax.post(this.$apis.category, {
+                        id: data.id,
+                        name: value
+                    })
+                    .then(res => {
+                        data.name = value;
+                    });
+                    this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
                 }).catch(() => {
                            
                 });
@@ -270,9 +303,6 @@
 <style lang="less" scoped>
     .category-setting {
         .hd {
-            height: 40px;
-            line-height: 40px;
-            border-bottom:1px solid #ccc;
             font-weight: bold;
             font-size:16px;
         }
@@ -351,7 +381,7 @@
                 padding:15px 15px;
                 border-bottom: 1px solid #e0e0e0;
             }
-            .my-category, .general-category {
+            .my-category, .general-category, .maping-relation {
                 .btn-wrap {
                     padding:10px;
                     display:flex;
@@ -365,9 +395,6 @@
                 box-shadow: 0 0 30px #e0e0e0;
                 border-radius: 5px;
                 .category {
-                    .el-input.el-input--small {
-                        margin-bottom:10px;
-                    }
                     .input-hd {
                         display:flex;
                         height:32px;
@@ -382,10 +409,10 @@
                 }
             }
             .maping-relation {
-                margin-right:20px;
-                padding-right:10px;
-                min-width:300px;
-                border-right:1px solid #f2f2f2;
+                .el-tree {
+                    max-height:60vh;
+                    overflow-y: auto;
+                }
                 .hd {
                     display:flex;
                     align-items: center;
