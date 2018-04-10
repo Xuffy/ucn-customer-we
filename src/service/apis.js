@@ -6,7 +6,8 @@ const apis = {
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
   mappingCategory: ['/category/mapping ', 'BASE_CS'],
-  delete_category: ['/category/delete/', 'BASE_CS']
+  delete_category: ['/category/delete/', 'BASE_CS'],
+  supplier_overview: ['/supplierOverview', 'BASE_API']
 };
 
 let list = _.mapObject(apis, val => {

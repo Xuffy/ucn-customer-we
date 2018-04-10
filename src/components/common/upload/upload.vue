@@ -38,14 +38,14 @@
                 default: 'https://jsonplaceholder.typicode.com/posts/'
             },
             //禁止上传状态
-            disabled:{
-                type:Boolean,
-                default:false
+            disabled: {
+                type: Boolean,
+                default: false
             },
             //是否批量上传
-            multiple:{
-                type:Boolean,
-                default:false
+            multiple: {
+                type: Boolean,
+                default: false
             }
         },
         components: {
@@ -91,7 +91,7 @@
                 //.............................这里我只发送了一个是否成功的值
                 this.$emit('uploadsuccess', this.isuploadsuccess)
                 //............................这里发送的是后台返回的response            
-                this.$emit('getres', response)
+                this.$emit('getres', file)
             },
             //...............上传进行中 这里给按钮了一个加载loading
             handleProgress(file) {
