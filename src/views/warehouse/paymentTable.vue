@@ -4,6 +4,7 @@
             <el-button :disabled="disabledBtn" @click="handleClick" type="primary">{{btnInfo}}</el-button>
         </div>
         <el-table
+                class="speTable"
                 :data="data"
                 height="250"
                 border
@@ -25,6 +26,7 @@
                     :key="v.id"
                     :label="v.label"
                     align="center"
+                    :prop="v.prop"
                     :min-width="v.width?v.width:'100'">
                 <template slot-scope="scope">
                     <div v-if="v.type==='Text'">
@@ -116,7 +118,6 @@
                             <el-button type="text" @click="confirmLine(scope.row)">确认</el-button>
                         </div>
                     </div>
-
                 </template>
             </el-table-column>
 
@@ -197,7 +198,7 @@
                         return;
                     } else if (index === 4 || index === 6) {
                         const values = data.map(item => {
-                            if (item.available === 2) {
+                            if (item[this.columns[6].prop] === 2) {
                                 return Number(item[column.property])
                             }
                         });
@@ -332,6 +333,16 @@
     }
 </style>
 <style scoped>
+
+    .speTable{
+        height: auto !important;
+    }
+    .speTable >>> .el-table__body-wrapper{
+        height: auto !important;
+    }
+
+
+
     /*日期选择框宽度*/
     .chooseDate {
         width: 130px;

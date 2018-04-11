@@ -404,7 +404,7 @@
                     },
                 ],
                 //table的类型，simple/complex,简单的只有确认操作，复杂的有一系列操作
-                tableType:'simple',
+                tableType:'complex',
                 tablePort:'',
                 tableBtnInfo:'申请付款',        //table按钮文字
 

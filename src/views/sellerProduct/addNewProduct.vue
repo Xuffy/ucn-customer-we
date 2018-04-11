@@ -232,8 +232,6 @@
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.categoryLevel')+':'">
                         <drop-down class="dropdown" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
-
-
                         <!--<el-select-->
                                 <!--size="mini"-->
                                 <!--v-model="productForm.categoryId"-->
@@ -1361,7 +1359,7 @@
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" type="primary">{{$t('product.page.finish')}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$t('product.page.finish')}}</el-button>
         </div>
     </div>
 </template>
@@ -1383,9 +1381,8 @@
         data(){
             return{
                 labelPosition:'left',
+                disabledSubmit:false,               //防止用户多次提及表单
                 imgGroup:[],
-
-
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
@@ -1879,10 +1876,7 @@
 
 
             getCategoryId(){
-                this.ajax({
-                    url:this.$apis.getCategory,
-                    method:'get'
-                }).then(res=>{
+                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
                     console.log(res)
                     this.dropData=res;
                 }).catch(err=>{
@@ -1894,17 +1888,17 @@
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
-                this.ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                this.disabledSubmit=true;
+                this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
                     this.$message({
                         message: '新增成功',
                         type: 'success'
                     });
+                    this.disabledSubmit=false;
                     this.$router.push('/sellerProduct/overview');
                 }).catch(err=>{
-                    console.log(err)
+                    this.disabledSubmit=false;
                 });
-
-                // console.log(this.productForm,'???')
             },
         },
         created(){
