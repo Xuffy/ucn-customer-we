@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
@@ -10,57 +11,31 @@ export const routerMap = [
     {
       path: '/',
       component: Layout,
-      redirect: '/home',
-      name: 'Home',
+      redirect: '/workbench/index',
       hidden: true, // 在侧边栏中不显示该菜单
-      children: [{
-        path: 'home',
-        component: () => import('../views/home/index.vue')
-      }]
-    },
-    {
-      path:'/demo',
-      hidden: true,
-      component: () => import('../views/demo')
     },
     {
       path: '/login',
       hidden: true,
       component: () => import('../views/login/index.vue')
     },
-
     {
       path: '/workbench',
       component: Layout,
-      redirect: '/workbench',
       name: 'Workbench',
+      redirect: '/workbench/index',
       noDropdown: true,
       children: [
         {
           path: 'index',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
           component: () => import('../views/workbench/index.vue')
         }
       ]
-    },
-    {
-        path:'/message',
-        component: Layout,
-        redirect:'/message/index',
-        name:'Message',
-        // hidden:true,
-        children:[
-            {
-                path:'index',
-                name:'Index',
-                component: () => import('../views/message/message.vue'),
-            },
-            {
-                path:'messageManagement',
-                component: () => import('../views/message/messageManagement.vue'),
-                name:'Message Management'
-            },
-
-        ],
     },
     {
       path: '/product',
@@ -70,220 +45,286 @@ export const routerMap = [
       children: [
         {
           path: 'sourcing',
-          name:'Sourcing',
+          name: 'Sourcing Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/product/sourcing/sourcing'),
         },
         {
-            path:'sourcingDetail',
-            component: () => import('../views/product/sourcing/detail'),
-            name:'Sourcing Detail',
-            hidden:true
+          path: 'sourcingDetail',
+          name: 'Sourcing Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/product/sourcing/detail'),
         },
         {
-          path:'logs',
-          component: () => import('../views/product/sourcing/logs'),
-          name:'logs'
+          path: 'bookmark',
+          name: 'Bookmark Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/product/bookmark/bookmark'),
         },
-          {
-              path:'bookmark',
-              name:'Bookmark',
-              component: () => import('../views/product/bookmark/bookmark'),
+        {
+          path: 'bookmarkDetail',
+          name: 'Bookmark Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
           },
-          {
-              path:'bookmarkDetail',
-              name:'Bookmark Detail',
-              hidden:true,
-              component: () => import('../views/product/bookmark/detail'),
+          component: () => import('../views/product/bookmark/detail'),
+        },
+        {
+          path: 'bookmarkManuallyAdd',
+          name: 'Bookmark ManuallyAdd',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
           },
-          {
-              path:'bookmarkManuallyAdd',
-              name:'Bookmark ManuallyAdd',
-              hidden:true,
-              component: () => import('../views/product/bookmark/manuallyAdd'),
+          component: () => import('../views/product/bookmark/manuallyAdd'),
+        },
+        {
+          path: 'bookmarkRecycleBin',
+          name: 'Bookmark RecycleBin',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
           },
-          {
-              path:'bookmarkRecycleBin',
-              name:'Bookmark RecycleBin',
-              hidden:true,
-              component: () => import('../views/product/bookmark/recycleBin'),
-          },
+          component: () => import('../views/product/bookmark/recycleBin'),
+        },
 
-          {
-              path:'compare',
-              name:'Compare',
-              component: () => import('../views/product/compare/overview'),
+        {
+          path: 'compare',
+          name: 'Compare Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
           },
-          {
-              path:'compareDetail',
-              name:'Compare Detail',
-              hidden:true,
-              component: () => import('../views/product/compare/compare'),
+          component: () => import('../views/product/compare/overview'),
+        },
+        {
+          path: 'compareDetail',
+          name: 'Compare Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
           },
-        // {
-        //   path:'message',
-        //   component: () => import('../views/message/message.vue'),
-        //   name:'message'
-        // },
-        // {
-        //   path:'messageManagement',
-        //   component: () => import('../views/message/messageManagement.vue'),
-        //   name:'messageManagement'
-        // },
+          component: () => import('../views/product/compare/compare'),
+        },
       ]
     },
     {
-        path: '/supplier',
-        component: Layout,
-        redirect: '/supplier/picture',
-        name: 'Supplier',
-        children: [
-            {
-                path: 'SupplierSourcing',
-                name: 'Supplier Sourcing',
-                component: () =>import ('../views/supplier/sourcing/sourcing.vue'),
-
+      path: '/supplier',
+      component: Layout,
+      redirect: '/supplier/sourcing',
+      name: 'Supplier',
+      children: [
+        {
+          path: 'sourcing',
+          name: 'Sourcing',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/sourcing/sourcing.vue'),
         },
-            {
-                path: 'SupplierBookmark',
-                name: 'Supplier Bookmark',
-                component: () =>
-                    import ('../views/supplier/bookmark/bookmark.vue')
+        {
+          path: 'bookmark',
+          name: 'Bookmark',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/bookmark/bookmark.vue')
         },
-            {
-                path: 'SupplierBookmarkDetail',
-                name: 'Supplier Bookmark Detail',
-                component: () =>import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        {
+          path: 'bookmarkDetail',
+          name: 'Bookmark Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
-            {
-                path: 'SupplierSourcingDetail',
-                name: 'Supplier Sourcing Detail',
-                component: () =>import ('../views/supplier/sourcing/sourcingDetail.vue')
+        {
+          path: 'sourcingDetail',
+          name: 'Sourcing Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
-               {
-                path: 'SupplierCompare',
-                name: 'Supplier Compare',
-                component: () =>import ('../views/supplier/Compare/Compare.vue')
+        {
+          path: 'compareDetail',
+          name: 'Compare Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/Compare/Compare.vue')
         },
-                {
-                path: 'SupplierCompareOverview',
-                name: 'Supplier Compare Overview',
-                component: () =>import ('../views/supplier/Compare/Overview.vue')
+        {
+          path: 'compare',
+          name: 'Compare Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import ('../views/supplier/Compare/Overview.vue')
         }
       ]
     },
     {
-        path:'/sellerProduct',
-        component:Layout,
-        redirect:'/sellerProduct/overview',
-        name:'sellerProduct',
-        children:[
-            {
-                path:'overview',
-                name:'overview',
-                component: () => import('../views/sellerProduct/overview')
-            },
-            {
-                path:'addNewProduct',
-                name:'Add New Product',
-                component: () => import('../views/sellerProduct/addNewProduct')
-            }
-        ]
-    },
-    {
       path: '/negotiation',
       component: Layout,
-      redirect: '/negotiation/inquiryOverview',
+      redirect: '/negotiation/inquiry',
       name: 'negotiation',
       children: [
         {
-          path: 'inquiryOverview',
-          name:'inquiryOverview',
+          path: 'inquiry',
+          name: 'Inquiry Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/negotiation/inquiryOverview')
         },
         {
           path: 'inquiryDetail',
-          name: 'inquiryDetail',
+          name: 'Inquiry Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/negotiation/inquiryDetail')
         },
         {
           path: 'createInquiry',
-          name: 'createInquiry',
+          name: 'Create Inquiry',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/negotiation/createInquiry')
         },
         {
-          path: 'compareOverview',
-          name: 'compareOverview',
+          path: 'compare',
+          name: 'Compare Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/negotiation/compareOverview')
         },
         {
-          path: 'compare',
-          name: 'compare',
+          path: 'compareDetail',
+          name: 'Compare Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/negotiation/compare')
         }
       ]
     },
     {
-      path: '/logistic',
-      name: 'logistic',
+      path: '/payment',
       component: Layout,
-      redirect: '/logistic/logisticPlanOverview',
+      redirect: '/payment/index',
+      name: 'Payment',
+      noDropdown: true,
       children: [
         {
-          path: 'logisticPlanOverview',
-          name: 'logisticPlanOverview',
-          component: () => import('../views/logistic/logisticPlanOverview')
-        },
-        {
-          path: 'placeLogisticPlan',
-          name: 'placeLogisticPlan',
-          component: () => import('../views/logistic/placeLogisticPlan')
-        },
-        {
-          path: 'logisticPlanDetail',
-          name: 'logisticPlanDetail',
-          component: () => import('../views/logistic/logisticPlanDetail')
-        },
-        {
-          path: 'logisticOrderOverview',
-          name: 'logisticOrderOverview',
-          component: () => import('../views/logistic/logisticOrderOverview')
-        },
-        {
-          path: 'placeLogisticOrder',
-          name: 'placeLogisticOrder',
-          component: () => import('../views/logistic/placeLogisticOrder')
-        },
-        {
-          path: 'logisticOrderDetail',
-          name: 'logisticOrderDetail',
-          component: () => import('../views/logistic/logisticOrderDetail')
+          path: 'index',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/payment/index.vue')
         }
       ]
-
     },
     {
-        path: '/order',
-        component: Layout,
-        redirect: '/order',
-        name: 'Order',
-        children: [
-            {
-                path: 'overView',
-                name:'Order OverView',
-                component: () =>import('../views/order/overView.vue')
+      path: '/order',
+      component: Layout,
+      redirect: '/order/overview',
+      name: 'Order',
+      noDropdown: true,
+      children: [
+        {
+          path: 'overview',
+          name: 'Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/order/overView.vue')
         },
-            {
-                path: 'creatOrder',
-                name:'creatOrder',
-                component: () =>import('../views/order/creatOrder/index.vue')
+        {
+          path: 'creat',
+          name: 'Creat',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/order/creatOrder/index.vue')
         }, {
-                path: 'poDetail',
-                name:'poDetail',
-                component: () =>import('../views/order/poDetail/index.vue')
+          path: 'detail',
+          name: 'Detail',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/order/poDetail/index.vue')
         }, {
-                path: 'draftOverview',
-                name:'Draft Overview',
-                component: () =>import('../views/order/draftOverview.vue')
+          path: 'draftOverview',
+          name: 'Draft Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/order/draftOverview.vue')
         }
       ]
     },
@@ -296,114 +337,218 @@ export const routerMap = [
       children: [
         {
           path: 'overview',
+          name: 'Warehouse Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
-          name:'Warehouse Overview'
         },
         {
           path: 'qcOverview',
+          name: 'Qc Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/warehouse/qcOverview.vue'),
-          name:'Qc Overview'
         },
         {
           path: 'qcDetail',
+          name: 'QcOrder Detail',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/warehouse/qcDetail.vue'),
-          name:'QcOrder Detail'
         },
         {
           path: 'createQc',
+          name: 'Create QcOrder',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/warehouse/createQc.vue'),
-          name:'Create QcOrder'
         },
       ]
     },
     {
-      path: '/payment',
+      path: '/logistic',
+      name: 'logistic',
       component: Layout,
-      redirect: '/payment',
-      name: 'Payment',
-      noDropdown: true,
+      redirect: '/logistic/plan',
       children: [
         {
-          path: 'index',
-          component: () => import('../views/payment/index.vue')
+          path: 'plan',
+          name: 'Plan Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'placeLogisticPlan',
+          name: 'Place Logistic Plan',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/placeLogisticPlan')
+        },
+        {
+          path: 'planDetail',
+          name: 'Plan Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
+          path: 'orderOverview',
+          name: 'Order Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/logisticOrderOverview')
+        },
+        {
+          path: 'placeLogisticOrder',
+          name: 'Place Logistic Order',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/placeLogisticOrder')
+        },
+        {
+          path: 'orderDetail',
+          name: 'Order Detail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/logistic/logisticOrderDetail')
         }
       ]
+
     },
     {
       path: '/settings',
       component: Layout,
-      redirect: '/settings/departmentSetting',
+      redirect: '/settings/department',
       name: 'Settings',
-      noDropdown: true,
       children: [
         {
-          path: 'departmentSetting',
+          path: 'department',
+          name: 'department and user setting',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/settings/departmentSetting.vue')
         },
         {
-          path: 'CategorySetting',
+          path: 'category',
+          name: 'Category Setting',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/settings/CategorySetting')
         }
       ]
     },
     {
-      path: '/forgetPassword',
-      name:'forgetPassword',
-      hidden: true,
-      component: () => import('../views/login/forgetPassword'),
-      redirect: '/forgetPassword/inputEmail',
+      path: '/track',
+      component: Layout,
+      redirect: '/track/index',
+      name: 'Track',
+      noDropdown: true,
       children: [
         {
-          path:'inputEmail',
-          name:'inputEmail',
-          hidden: true,
-          component: () => import('../views/login/inputEmail')
-        },
-        {
-          path:'Identify',
-          name:'Identify',
-          hidden: true,
-          component: () => import('../views/login/Identify')
-        },
-        {
-          path:'ResetPassword',
-          name:'ResetPassword',
-          hidden: true,
-          component: () => import('../views/login/ResetPassword')
-        },
-        {
-          path:'Finish',
-          name:'Finish',
-          hidden: true,
-          component: () => import('../views/login/Identify')
+          path: 'index',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/track/trackBySKU.vue'),
         }
       ]
     },
     {
-      path: '/signUp',
-      name:'signUp',
+      path: '/logs',
+      component: Layout,
+      name: 'Logs',
+      redirect: '/logs/index',
+      noDropdown: true,
       hidden: true,
-      component: () => import('../views/login/signUp')
+      children: [
+        {
+          path: 'index',
+          component: () => import('../views/logs/logs.vue')
+        }
+      ]
     },
     {
-      path:'/getInvitationCode',
-      name:'getInvitationCode',
+      path: '/message',
+      component: Layout,
+      redirect: '/message/index',
+      name: 'Message',
       hidden: true,
-      component: () => import('../views/login/getInvitationCode')
+      children: [
+        {
+          path: 'index',
+          component: () => import('../views/message/message.vue'),
+        },
+        {
+          name: 'Management',
+          path: 'management',
+          component: () => import('../views/message/messageManagement.vue'),
+        },
+
+      ],
     },
+    // todo 供应商路由
     {
-        path: '/track',
-        component: Layout,
-        redirect: '/track/trackBySKU',
-        name: 'Track',
-        children: [
-            {
-                path: 'trackBySKU',
-                component: () =>import('../views/track/trackBySKU.vue'),
-                name:'trackBySKU'
-            }
-        ]
-    }
+      path: '/sellerProduct',
+      component: Layout,
+      redirect: '/sellerProduct/overview',
+      name: 'sellerProduct',
+      hidden: true,
+      children: [
+        {
+          path: 'overview',
+          name: 'overview',
+          component: () => import('../views/sellerProduct/overview')
+        },
+        {
+          path: 'addNewProduct',
+          name: 'Add New Product',
+          component: () => import('../views/sellerProduct/addNewProduct')
+        }
+      ]
+    },
   ]
 ;
 
@@ -411,6 +556,8 @@ export const routerMap = [
 let router = new Router({
   routes: routerMap
 });
+
+
 router.beforeResolve((to, from, next) => {
   let ts = localStore.get('ticket')
     , cacheParam = sessionStore.get('cache_router_param') || []
@@ -428,7 +575,6 @@ router.beforeResolve((to, from, next) => {
     }
   }
 
-
   // 判断路由是否必须带入参数 todo 跳转之前页面地址没有带上参数
   if (to.meta.needParam) {
     if (_.isEmpty(to.params) && _.isEmpty(to.query)) {
@@ -441,7 +587,8 @@ router.beforeResolve((to, from, next) => {
           to.params[key] = val;
         });
       } else {
-        return to.matched.length ? next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
+        return to.matched.length ?
+          next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
       }
     }
     if (!_.isEmpty(cp)) {

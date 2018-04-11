@@ -1,4 +1,4 @@
-import axios from 'axios'
+import Axios from 'axios'
 import Qs from 'qs'
 import router from './router'
 import NProgress from 'nprogress'
@@ -7,36 +7,64 @@ import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from 'service/store';
 
-
-// 创建axios实例
-const ajax = axios.create({
+const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json;charset=utf-8'
   },
-  transformRequest: [function (data,b,c) {
-    return JSON.stringify(data);
+  transformRequest: [function (data) {
+    // return JSON.stringify(data);
+    return data;
   }],
 });
+
+
+const $ajax = (config) => {
+
+  this.setUrl = (url, params) => {
+    let p = {};
+    if (!_.isEmpty(params)) {
+      _.mapObject(params, (val, key) => {
+        if (url.indexOf(`{${key}`) < 0) {
+          p[key] = val;
+        }
+      });
+      return {url: _.template(url)(params), params: p};
+    }
+    return {url, params};
+  }
+}
+
+$ajax.prototype.get = (url, params = {}, config = {}) => {
+  let data = this.setUrl(url, params)
+  return axios.get(data.url, _.extend(config, {params: data.params}));
+}
+
+$ajax.prototype.post = (url, params = {}, config = {}) => {
+  let data = this.setUrl(url, params)
+    , options = {method: 'POST', headers: {}, url: data.url, data: data.params};
+
+  if (config._contentType === 'F') {
+    options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    options.data = Qs.stringify(options.data);
+  } else {
+    // options.headers['Content-Type'] = 'application/json;charset=utf-8';
+    options.data = JSON.stringify(options.data);
+  }
+  return axios(options);
+}
+
 
 NProgress.configure({
   // showSpinner: false
 });
 
+
 /**
  * request拦截器
  */
-ajax.interceptors.request.use(config => {
-  let ts = localStore.get('ticket'), cancel;
-  // todo 缓存
-
-  // 判断用户是否登录 noAuth 取消登录验证
-  // if (_.isEmpty(ts) && !config.noAuth) {
-  // router.push('/login');
-  // return Promise.reject('登录失效，请重新登录');
-  // }
-  // config.headers['utouu-open-client-ticket'] = ts;
+axios.interceptors.request.use(config => {
 
   NProgress.start();
 
@@ -51,7 +79,7 @@ ajax.interceptors.request.use(config => {
 /**
  * respone拦截器
  */
-ajax.interceptors.response.use(
+axios.interceptors.response.use(
   response => {
     NProgress.done();
 
@@ -85,4 +113,4 @@ ajax.interceptors.response.use(
 );
 
 
-export default ajax
+export default $ajax;

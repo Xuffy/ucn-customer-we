@@ -11,22 +11,24 @@
 
             <el-menu-item v-if="item.children.length&&item.noDropdown&&!item.hidden&&checkAuth(item.auth)"
                           :index="index + ''">
-              <router-link
-                :to="item.path+'/'+item.children[0].path">
+              <router-link class="link"
+                           :to="item.path+'/'+item.children[0].path">
                 {{item.name}}
               </router-link>
             </el-menu-item>
 
 
-            <el-submenu v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :index="index + ''">
+            <el-submenu
+              v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :index="index + ''">
               <template slot="title">
                 <span v-text="item.name"></span>
               </template>
 
               <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
                         v-for="(cItem,cIndex) in item.children">
-                <el-menu-item v-if="!cItem.hidden&&checkAuth(cItem.auth)" :index="index +'-'+cIndex">
-                  <router-link :to="item.path+'/'+cItem.path">
+                <el-menu-item class="ucn-header-submenu"
+                              v-if="!cItem.hidden&&checkAuth(cItem.auth)" :index="index +'-'+cIndex">
+                  <router-link class="link" :to="item.path+'/'+cItem.path">
                     {{cItem.name}}
                   </router-link>
                 </el-menu-item>
@@ -37,6 +39,92 @@
         </el-menu>
       </div>
       <div class="header-right" style="color: #999999!important;">
+        <div class="message-box" v-popover:messageBox>
+          <el-badge :value="3">
+            <i class="el-icon-bell"></i>
+          </el-badge>
+
+          <el-popover
+            popper-class="message-popover"
+            ref="messageBox"
+            placement="bottom-end"
+            width="300"
+            v-model="message.show"
+            trigger="click">
+            <h3 class="ucn-content-title">System Message（4 New ）</h3>
+            <ul class="list">
+              <li class="unread">
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+              <li>
+                <p>The system will be updated at 12:00 today</p>
+                <span>1 hour ago</span>
+              </li>
+            </ul>
+            <el-row>
+              <el-col :span="12" style="text-align: left;padding: 5px 10px">
+                <el-button type="text" size="mini">Mark as readed</el-button>
+              </el-col>
+              <el-col :span="12" style="text-align: right;padding: 5px 10px">
+                <el-button type="text" size="mini" @click="goMessage">More</el-button>
+              </el-col>
+            </el-row>
+          </el-popover>
+        </div>
+
         <div style="display: inline-block">
           <a href="javascript:void(0)">
             {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -55,61 +143,8 @@
             <el-dropdown-item>Sign out</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
-
-        <!--<Dropdown trigger="click" class="mobile-hide-lg">
-
-          <a href="javascript:void(0)">
-            {{username || '管理员'}}&nbsp;&nbsp;|&nbsp;&nbsp;
-          </a>
-          <a href="javascript:void(0)" @click="logout">
-            Sign out
-          </a>
-        </Dropdown>
-
-        <Dropdown class="mobile-show-lg user-box">
-          <a href="javascript:void(0)">
-            <Icon type="person"></Icon>
-          </a>
-          <DropdownMenu slot="list">
-            <DropdownItem>User name</DropdownItem>
-            <DropdownItem divided>Sign out</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>-->
       </div>
 
-      <!--<div class="ucn-header-menu" v-if="routerList.length">
-        <Menu theme="dark" mode="horizontal" :active-name="activeName" :open-names="activeOpen"
-              :accordion="true">
-          <template v-for="(item,index) in routerList">
-
-            <router-link v-if="item.children.length&&item.noDropdown&&!item.hidden&&checkAuth(item.auth)"
-                         :to="item.path+'/'+item.children[0].path">
-              <MenuItem :name="index + ''">
-                {{item.name}}
-              </MenuItem>
-            </router-link>
-
-
-            <Submenu v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :key="index" :name="index + ''">
-              <template slot="title">
-                <span v-text="item.name"></span>
-              </template>
-
-              <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
-                        v-for="(cItem,cIndex) in item.children">
-                <router-link :to="item.path+'/'+cItem.path" v-if="!cItem.hidden&&checkAuth(cItem.auth)">
-                  <MenuItem :key="cIndex" :name="index +'-'+cIndex">
-                    {{cItem.name}}
-                  </MenuItem>
-                </router-link>
-              </template>
-            </Submenu>
-          </template>
-        </Menu>
-      </div>
-
-      -->
     </div>
   </div>
 </template>
@@ -125,7 +160,11 @@
         userType: ['店长', '设计师', '管理员'],
         routerList: [],
         activeName: null,
-        activeOpen: []
+        activeOpen: [],
+        message: {
+          show: false
+        },
+
       }
     },
     created() {
@@ -158,6 +197,10 @@
           this.$router.push('/login');
         }).catch(() => {
         });
+      },
+      goMessage() {
+        this.message.show = false;
+        this.$router.push('/message/index');
       },
       updateMenuActive() {
         this.activeOpen = [];
@@ -208,6 +251,12 @@
     position: fixed;
     width: 100%;
     z-index: 910;
+  }
+
+  .ucn-header .link {
+    width: 100%;
+    height: 100%;
+    display: block !important;
   }
 
   .header {
@@ -280,18 +329,98 @@
 
   .el-menu-item {
     padding: 0 10px;
+    border: none !important;
   }
 
   .el-menu-item:hover,
   .el-menu--horizontal > .el-menu-item.is-active,
   .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
   .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-    background-color: inherit !important;
+    background-color: inherit;
     color: #FFFFFF !important;
+  }
+
+  .message-box {
+    position: relative;
+    display: inline-block;
+    line-height: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .message-box i {
+    font-size: 20px;
+    color: #eeeeee;
+  }
+
+  .message-popover .ucn-content-title {
+    font-size: 14px;
+    width: 100%;
+    padding: 15px 10px 10px 10px;
+    box-sizing: border-box;
+  }
+
+  .message-popover .list {
+    width: 100%;
+    max-height: 300px;
+    overflow: auto;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .message-popover .list li {
+    padding: 10px 10px 10px 20px;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .message-popover .list li.unread:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    top: 50%;
+    left: 5px;
+    margin-top: -4px;
+    border-radius: 50%;
+    background-color: #f56c6c;
+    position: absolute;
+  }
+
+  .message-popover .list li:last-child {
+    border-bottom: none;
+  }
+
+  .message-popover .list li:hover {
+    background-color: #F7F4F4;
+  }
+
+  .message-popover .list li span {
+    display: block;
+    width: 100%;
+    text-align: right;
+    color: #CDCDCD;
   }
 </style>
 <style>
+  .message-popover {
+    padding: 0;
+  }
 
+  .ucn-header-submenu a {
+    width: 100%;
+    height: 100%;
+    display: block !important;
+  }
+
+  .ucn-header .router-link-active {
+    color: #FFFFFF!important;
+  }
+
+  .ucn-header-submenu.is-active,
+  .ucn-header-submenu:hover {
+    background-color: #EBEEF5 !important;
+  }
 
   .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
     background-color: inherit !important;
@@ -313,7 +442,7 @@
     border-bottom: none;
   }
 
-  .ucn-header-menu .is-active .el-submenu__title span{
+  .ucn-header-menu .is-active .el-submenu__title span {
     color: #ffffff;
   }
 

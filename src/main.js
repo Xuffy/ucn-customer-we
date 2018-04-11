@@ -23,7 +23,7 @@ Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'small', i18n: (key, value) => i18n.t(key, value)});
 
 Vue.config.productionTip = false;
-Vue.prototype.ajax = ajax;
+Vue.prototype.$ajax = new ajax();
 Vue.prototype.$apis = apis;
 
 
@@ -42,6 +42,10 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 });
 
+// underscorejs配置template
+_.templateSettings = {
+  interpolate: /\{(.+?)\}/g
+};
 
 const i18n = new VueI18n({
   locale: 'en',

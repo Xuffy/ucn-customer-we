@@ -59,14 +59,13 @@
     },
     methods: {
       filterButton(params) {
-
         return [{label: 'detail', type: 1}, {label: 'history', type: 2}]
       },
       filterSelection(params) {
         return true;
       },
-      onAction(item,type){
-        console.log(item,type)
+      onAction(item, type) {
+        console.log(item, type)
       },
       pageChange(page) {
         console.log(page)
@@ -75,8 +74,7 @@
         console.log(val, key)
       },
       getList() {
-        console.log()
-        this.ajax.get(this.$apis.sys_category).then((data) => {
+        this.$ajax.get(this.$apis.sys_category).then((data) => {
           this.dataList = data;
         });
       }
