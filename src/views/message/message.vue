@@ -1,7 +1,7 @@
 <template>
     <div class="message">
         <div class="head">
-            <el-button @click="manageMessage">{{$t('product.page.messageManagement')}}</el-button>
+            <el-button @click="manageMessage">{{$t('product.page.management')}}</el-button>
         </div>
         <div class="body">
             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
@@ -184,7 +184,7 @@
 
             //管理信息
             manageMessage(){
-                this.$router.push('/message/messageManagement');
+                this.$router.push('/message/management');
             },
         }
     }

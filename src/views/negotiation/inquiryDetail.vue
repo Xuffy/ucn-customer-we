@@ -137,13 +137,9 @@
             'v-compare-list': compareList
         },
         created() {
-            this.ajax({
-                url: '/tableCompareOverview',
-                method: 'get'
-            }).then(res => {
-                this.tabData = res;
-                this.tabColumn = 'negotiation.tableCompareOverview';
-            });
+            this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
+                id: this.$route.query.id
+            })
         },
         methods: {
             selectChange(val) {

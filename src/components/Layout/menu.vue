@@ -25,9 +25,23 @@
       </el-menu-item-group>
 
       <el-menu-item-group>
-        <el-menu-item index="2-0">
-          <i class="el-icon-more"></i>
-          <span>add new links</span>
+        <el-menu-item index="2-0" v-show="$store.state.quickLink.draft">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Draft" placement="right">
+            <i class="el-icon-edit-outline"></i>
+          </el-tooltip>
+          <span>Draft</span>
+        </el-menu-item>
+        <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Recycle Bin" placement="right">
+            <i class="el-icon-delete"></i>
+          </el-tooltip>
+          <span>Recycle Bin</span>
+        </el-menu-item>
+        <el-menu-item index="2-3" v-show="$store.state.quickLink.log">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Log" placement="right">
+            <i class="el-icon-tickets"></i>
+          </el-tooltip>
+          <span>Log</span>
         </el-menu-item>
       </el-menu-item-group>
     </el-menu>
@@ -59,7 +73,12 @@
         }
       });
 
-      this.updateMenuActive()
+      this.updateMenuActive();
+    },
+    watch: {
+      $route(val) {
+        this.updateMenuActive();
+      }
     },
     methods: {
       updateMenuActive() {
@@ -96,11 +115,6 @@
         this.$store.state.layout.hideMenu = !this.$store.state.layout.hideMenu;
         // this.$parent.$emit('full-box', !this.hideMenu);
         // this.hideMenu = !this.hideMenu;
-      }
-    },
-    watch: {
-      $route() {
-        this.updateMenuActive()
       }
     }
   }

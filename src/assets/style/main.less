@@ -1,4 +1,5 @@
 @import "reset";
+@import "animate.css";
 @import "base";
 @import "icon";
 @import "mobile";
@@ -26,14 +27,13 @@ input, button, select, textarea {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
-  background: rgba(128,133,144,.6)
+  background: rgba(128, 133, 144, .2)
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 2px;
-  background: rgba(128,133,144,.06)
+  background: rgba(128, 133, 144, .06)
 }
-
 
 body {
   background-color: rgba(244, 244, 244, 1);
@@ -41,15 +41,16 @@ body {
   overflow: auto;
 }
 
-.ucn-content-title{
+.ucn-content-title {
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 10px;
-}
-.ucn-content-title.inline{
-  display: inline-block;
+  color: #1d1007;
 }
 
+.ucn-content-title.inline {
+  display: inline-block;
+}
 
 /*重置*/
 .ivu-input:focus {
@@ -61,20 +62,21 @@ body {
   padding-left: 3px;
 }
 
-.el-checkbox{
-  margin-left: 0!important;
+.el-checkbox {
+  margin-left: 0 !important;
   margin-right: 30px;
 }
 
-.el-button{
-  margin-left: 0!important;
-  margin-right: 10px!important;
-}
-.el-dialog__body{
-  padding-top: 10px!important;
-  padding-bottom: 10px!important;
+.el-button {
+  margin-left: 0 !important;
+  margin-right: 10px !important;
 }
 
-.el-picker-panel__shortcut{
-  font-size: 12px!important;
+.el-dialog__body {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.el-picker-panel__shortcut {
+  font-size: 12px !important;
 }
