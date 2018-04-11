@@ -446,7 +446,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.DeclareElements')+':'">
+                    <el-form-item :label="$t('productSeller.page.declareElements')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"

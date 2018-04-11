@@ -12,6 +12,8 @@ const apis = {
   supplier_overview: ['/supplierOverview', 'BASE_API'],
   inquiry_list: ['/inquiry/list', 'BASE_API'],
   get_productDetail:['/sku/{id}','BASE_CS'],
+  delete_product:['/sku/{id}/delete','BASE_CS']
+
 };
 
 let list = _.mapObject(apis, val => {
