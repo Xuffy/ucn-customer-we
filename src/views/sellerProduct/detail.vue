@@ -1,23 +1,1097 @@
 <template>
-    <div class="detail">
+    <div class="Details">
+        <div class="head">
+            <div class="title">
+                （SKU name）
+            </div>
+            <div class="detail">
+                <el-row>
+                    <el-col :span="6">
+                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
+                            <el-carousel-item v-for="item in 3" :key="item">
+                                <img src="../../assets/images/login-back.jpg" style="width: 100%" alt="">
+                            </el-carousel-item>
+                        </el-carousel>
+                    </el-col>
+                    <el-col :span="18">
+                        <el-form :modal="productForm" ref="sourcingDetail" label-width="190px">
+                            <el-row>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.skuNameCN')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.skuSaleStatus')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.skuCode')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.colourEN')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.incoterm')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.incotermArea')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.incotermPrice')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.unit')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.supplierName')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                                    <el-form-item prop="categoryId" :label="$t('product.page.skuDescriptionCN')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </el-col>
+                </el-row>
+                <div class="btns">
+                    <el-button>{{$t('productSeller.page.edit')}}</el-button>
+                    <el-button>{{$t('productSeller.page.setUp')}}</el-button>
+                    <el-button @click="addNewProduct">{{$t('productSeller.page.addNewProduct')}}</el-button>
+                    <el-button @click="deleteProduct">{{$t('productSeller.page.delete')}}</el-button>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
+                <el-tab-pane :label="$t('product.page.basicInformation')" name="Basic Info">
+                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                        <el-row>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuStatus')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuNo')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuEnglishName')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuNameInCustomerLanguage')+' :'">
+                                    XXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.skuEnglishDescription')+' :'">
+                                    XXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.skuDescriptionInCustomerLanguage')+' :'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuCode')+' :'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.vendorSkuCode')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.supplierName')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.supplierCode')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitofMeasurement')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.productFormation')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.textureEnglish')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.colourEnglish')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.minimumOrderQuantity')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.deliveryDate')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.productDesign')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.categoryLevel1')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.categoryLevel2')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.categoryLevel3')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.categoryLevel4')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.readilyAvailable')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuAvailable')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.restrictedSellingCountry')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.applicableAge')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.expirationDate')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unexpirationDate')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.explain')+' :'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.customInformation')" name="Customer Info">
+                    <el-form class="speForm" label-width="290px" :label-position="labelPosition">
+                        <el-row>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.rateOfValueAddedTax')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.taxRefundRate')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.customsCode')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.customsDeclarationNameInChinese')+':'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.customsDeclarationNameInEnglish')+':'">
+                                    XXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.chineseTradeMark')+':'">
+                                    asfsaf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.englishTradeMark')+':'">
+                                    asfasgqewtq
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.commodityInspectionChineseName')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.commodityInspectionEnglishName')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.declareElements')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.origin')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.inspectionAndQuarantineCategory')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.brand')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.related')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.brandRemark')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.certificat')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.price')" name="Price Info">
+                    <el-table
+                            :data="tableData"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="date"
+                                :label="$t('product.tableData.fobCurrency')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                :label="$t('product.tableData.fobPrice')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.fobPort')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.exwPrice')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.exwCurrency')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.otherIncoterm')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.otherIncotermPrice')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.otherIncotermArea')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.otherIncotermCurrency')"
+                                width="180px">
+                        </el-table-column>
+                    </el-table>
+                    <br>
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage1"
+                            :page-sizes="[100, 200, 300, 400]"
+                            :page-size="100"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="400">
+                    </el-pagination>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.packingInfo')" name="Packing Info">
+                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                        <el-row>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitOfWeight')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitOfLength')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitOfVolume')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuLength')+':'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuBreadth')+':'">
+                                    XXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuHeight')+':'">
+                                    asfsaf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuNetWeight')+':'">
+                                    asfasgqewtq
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuVolume')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.packingMethodCN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.packingMethodEN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuQuantityOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.lengthOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.breadthOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.heightOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.netWeightOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.roughWeightOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.volumeOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.descriptionOfMediumPackage')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.packingMethodOfMediumPackageCN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.packingMethodOfMediumPackageEN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.unitOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.descriptionOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.mediumPackageOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuQuantityOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.lengthOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.breadthOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.heightOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.netWeightOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.roughWeightOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.volumeOfOuterBox')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.outerPackingMethodCN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.outerPackingMethodEN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.oem')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.logisticInfo')" name="Logistic">
+                    <el-form class="speForm" label-width="260px" :label-position="labelPosition">
+                        <el-row>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="'20'+$t('product.page.gpSKUQuantity')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="'40'+$t('product.page.gpSKUQuantity')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="'40'+$t('product.page.hqSKUQuantity')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.trayDimension')+':'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuQuantityPerTray')+':'">
+                                    XXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.inventoryCostCalculationMethod')+':'">
+                                    asfsaf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.specialTransportRequirements')+':'">
+                                    asfasgqewtq
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.defaultWarehouse')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.warehouseQuantity')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.safeStock')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.minimumStock')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.maximumBatch')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.otherInfo')" name="Other Info">
+                    <el-form class="speForm" label-width="250px" :label-position="labelPosition">
+                        <el-row>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.mainSaleCountry')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.mainSaleArea')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.productionTime')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.qualityStander')+':'">
+                                    asfasf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.yearOfListed')+':'">
+                                    XXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.useDisplayBoxOrNot')+':'">
+                                    asfsaf
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.skuQuantityInDisplayBox')+':'">
+                                    asfasgqewtq
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.lengthWidthAndHeight')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.otherPackingInformationCN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                <el-form-item :label="$t('product.page.otherPackingInformationEN')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('product.page.adjustSKUAndPackageOrNot')+':'">
+                                    XXXXXX
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.attachment')" name="Attachment">
+
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.tradeHistory')" name="History">
+                    <el-table
+                            :data="tableData"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="date"
+                                :label="$t('product.tableData.inquiryNo')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="name"
+                                :label="$t('product.tableData.orderNo')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.orderDate')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.incoterm')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.incotermArea')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.purchaseCurrency')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.purchasePrice')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.orderPrice')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.totalQuantity')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.deliverDate')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.qcDate')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.logisticDate')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.logisticQuantity')"
+                                width="180px">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                :label="$t('product.tableData.orderSkuQuantity')"
+                                width="180px">
+                        </el-table-column>
+                        <!--<el-table-column-->
+                        <!--prop="address"-->
+                        <!--:label="$t('product.tableData.inquiryNo')"-->
+                        <!--width="180px">-->
+                        <!--</el-table-column>-->
+                    </el-table>
+                    <br>
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage1"
+                            :page-sizes="[100, 200, 300, 400]"
+                            :page-size="100"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="400">
+                    </el-pagination>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('product.page.remark')" name="Remark">
+                    <add-table></add-table>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+
+        <compare-list :config="compareConfig"></compare-list>
 
     </div>
 </template>
 
 <script>
+
+    import addTable from '../product/addlineTable'
+    import compareList from '../product/compareList'
+
     export default {
         name: "detail",
+        components:{
+            addTable,
+            compareList
+        },
         data(){
             return{
+                value1: 0,
+                tabName:'Basic Info',
+                labelPosition:'left',               //文字靠边参数，left或者right
+                //页面数据
+                productForm:{
+                    id: '',                         //新增传空
+                    pic: "thisIsAPicture",
+                    status: 0,                      //0下架 1上架
+                    nameEn: "",
+                    barcode: "",                    //产品条码
+                    nameCn: "",
+                    descEn: "",
+                    descCn: "",
+                    descCustomer: "",
+                    nameCustomer: "",
+                    customerSkuCode: "",
+                    supplierCode: "",
+                    supplierName: "",
+                    code: "",                       //新增时系统生成，传空
+                    unit: "2",
+                    formation: "",
+                    materialEn: "",
+                    materialCn: "",
+                    colourEn: "",
+                    colourCn: "",
+                    minOrderQty: 1,
+                    deliveryDates: 1,               //交期(做完需要多少天)
+                    design: "",
+                    noneSellCountry: 1,             //禁售国家，暂时传1
+                    applicableAge: 1,
+                    expireDates: 1,
+                    expireUnit: 1,                  //保质期单位，暂时传1
+                    comments: "",
+                    readilyAvailable: 1,
+                    availableQty: 1,
+                    mainSaleCountry: 1,
+                    mainSaleArea: "",
+                    productionDates: 1,             //开发时间
+                    qualityStander: "",
+                    yearListed: "2018-02-23",
+                    useDisplayBox: 1,
+                    displayBoxQty: 0,
+                    otherPackInfoCn: "",
+                    otherPackInfoEn: "",
+                    adjustPackage: 2,
+                    lengthWidthHeight: "",
+                    recycle: 2,
+                    categoryId: '',                      //类型id
+                    rateValueAddedTax: 1,               //增值税率
+                    taxRefundRate: 1,
+                    customsCode: "",
+                    customsNameCn: "",
+                    customsNameEn: "",
+                    tradeMarkCn: "",
+                    tradeMarkEn: "",
+                    commodityInspectionCn: "",
+                    commodityInspectionEn: "",
+                    declareElement: "",
+                    origin: "",
+                    inspectQuarantineCategory: "",      //检疫类别
+                    brand: "",
+                    brandRemark: "",
+                    brandRelated: "",
+                    certificat: "",
+                    gp20SkuQty: 0,
+                    gp40SkuQty: 0,
+                    hq40SkuQty: 0,
+                    tryDimension: 1,                    //托盘尺寸？？？
+                    skuQtyPerTray: 0,
+                    specialTransportRequire: "",
+                    inventoryCostMethod: "",
+                    warehourceDefault: "",
+                    inventory: 0,
+                    safeInventory: 0,
+                    minInventory: 0,
+                    unitWeight: 1,                      //重量单位,暂时传1
+                    unitLength: 1,                      //长度单位,暂时传1
+                    unitVolume: 1,                      //提及单位，暂时传1
+                    length: 0,
+                    width: 0,
+                    height: 0,
+                    netWeight: 0,
+                    volume: 0,
+                    methodPkgCn: "",
+                    methodPkgEn: "",
+                    innerCartonUnit: "",                //中包单位
+                    innerCartonQty: 0,
+                    innerCartonLength: 0,
+                    innerCartonWidth: 0,
+                    innerCartonHeight: 0,
+                    innerCartonWeightNet: 0,
+                    innerCartonRoughWeight: 0,
+                    innerCartonVolume: 0,
+                    innerCartonDesc: "",
+                    innerCartonMethodCn: "",
+                    innerCartonMethodEn: "",
+                    outerCartonUnit: "",                //外箱单位
+                    outerCartonDesc: "",
+                    innerCartonOuterNum: 0,
+                    outerCartonQty: 0,
+                    outerCartonLength: 0,
+                    outerCartonWidth: 0,
+                    outerCartonHeight: 0,
+                    outerCartonNetWeight: 0,
+                    outerCartonRoughWeight: 0,
+                    outerCartonVolume: 0,
+                    outerCartonMethodCn: "",
+                    outerCartonMethodEn: "",
+                    oem: 1,
+                    logisticId: 1,
+                    version: 1,
+                    pkgId: 1,
+                    price: [
+                        {
+                            fobCurrency: 1,
+                            fobPrice: 1,                    //价格起始是多少
+                            fobPort: "",
+                            exwPrice: 1,                    //价格起始是多少
+                            exwCurrency: 1,
+                            otherIncoterm: 1,
+                            otherIncotermPrice: 1,
+                            otherIncotermArea: '',
+                            otherIncotermCurrency: 1,
+                            status: 1                       //1成本价，2基础报价
+                        },
+                        {
+                            fobCurrency: 1,
+                            fobPrice: 1,
+                            fobPort: "",
+                            exwPrice: 1,
+                            exwCurrency: 1,
+                            otherIncoterm: 1,
+                            otherIncotermPrice: 1,
+                            otherIncotermArea: '',
+                            otherIncotermCurrency: 1,
+                            status: 2
+                        },
+                    ]
+                },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                tableData: [
+                    {
+                        date: '2016-05-02',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    },
+                    {
+                        date: '2016-05-04',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1517 弄'
+                    },
+                    {
+                        date: '2016-05-01',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1519 弄'
+                    },
+                    {
+                        date: '2016-05-03',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1516 弄'
+                    }
+                ],
+                currentPage1:1,
+
+                //compareList配置
+                compareConfig:{
+                    showCompareList:false,      //是否显示比较列表
+                },
             }
         },
         methods:{
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            },
+            handleClick(){
+                //切换tab页
+            },
 
-        }
+            //获取产品详情
+            getGoodsData(){
+                this.$ajax.get(this.$apis.get_productDetail,{id:'1'}).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+                    console.log(err)
+                });
+            },
+
+            //添加新产品
+            addNewProduct(){
+                this.windowOpen('/sellerProduct/addNewProduct');
+            },
+
+            //删除产品
+            deleteProduct(){
+
+            },
+        },
+        created(){
+            this.getGoodsData();
+        },
     }
 </script>
 
 <style scoped>
+    .Details{
+        background-color: #f4f4f4;
+    }
+    .Details .head{
+        background-color: #FFFFFF;
+        padding:0 20px;
 
+    }
+    .Details .head .title{
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        font-weight: bold;
+        font-size: 18px;
+        color:#666666;
+    }
+
+    .Details .head .title .btn{
+        position: absolute;
+        right: 10px;
+        top:4px;
+    }
+    .Details .head .detail{
+        margin-top: 8px;
+    }
+    .Details .head .detail .carousel-img{
+        height: 170px;
+    }
+    .Details .head .detail .carousel-img img{
+        width: 100%;
+        height: 100%;
+    }
+    .Details .head .detail .right{
+        /*padding-top: 10px;*/
+    }
+    .Details .head .detail .list{
+        /*padding-left: 30px;*/
+        /*font-size: 14px;*/
+        /*line-height: 2.5;*/
+        /*border-bottom: 1px dotted #e0e0e0;*/
+    }
+    .Details .head .detail .list >>> .el-form-item.el-form-item--small{
+        margin-bottom: 6px;
+    }
+    .Details .head .detail .btns{
+        text-align: center;
+        padding: 15px 0;
+    }
+    .Details .head .detail .btns>Button{
+        margin-right: 10px;
+    }
+
+    .Details .body{
+        margin-top: 10px;
+        margin-bottom: 35px;
+        background-color: #FFFFFF;
+    }
+    .Details .body .list{
+        line-height: 35px;
+        font-size: 13px;
+        height: 35px;
+    }
+    .Details .body .list >>> label{
+        /*text-align: right;*/
+    }
+
+    .speForm .el-form-item--small.el-form-item{
+        margin-bottom: 0;
+    }
+    .speForm .el-row .list .el-input{
+        width: 80%;
+    }
 </style>

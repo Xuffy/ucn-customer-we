@@ -546,7 +546,12 @@ export const routerMap = [
           path: 'addNewProduct',
           name: 'Add New Product',
           component: () => import('../views/sellerProduct/addNewProduct')
-        }
+        },
+        {
+          path: 'detail',
+          name: 'Detail',
+          component: () => import('../views/sellerProduct/detail')
+        },
       ]
     },
   ]

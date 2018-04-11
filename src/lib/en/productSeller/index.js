@@ -7,6 +7,8 @@ const page={
     setDown:'设为下架',            //Set Down
     downloadSelectProducts:'下载选中的商品',//Download Select Products
     delete:'删除',                //Delete
+    edit:'编辑',                  //Edit
+
 
 
 
