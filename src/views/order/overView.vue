@@ -34,7 +34,7 @@
             <div class="btn-wrap">
                 <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
                 <el-button >{{$t('order.buttonname.accept')}}</el-button>
-                <el-button>{{$t('order.buttonname.copy')}}</el-button>
+<!--                <el-button>{{$t('order.buttonname.copy')}}</el-button>-->
                 <el-button>{{$t('order.buttonname.cancel')}}</el-button>
                 <el-button type='danger'>{{$t('order.buttonname.delete')}}</el-button>
             </div>

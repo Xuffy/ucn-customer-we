@@ -36,9 +36,7 @@
                     value: '选项3',
                     label: this.$t('order.buttonname.skuCode')
                 }],
-                value: '', //下拉框值
-                input: '', //输入框内容
-                tabColumn: [],
+
                 tabData: []
             }
         },
