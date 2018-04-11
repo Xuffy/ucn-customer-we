@@ -214,12 +214,16 @@
             </div>
             <div class="section">
                 <div class="head"> {{$t('warehouse.page.paymentInformation')}}</div>
+                <!--tablePort:是哪个端，采购商，服务商，供应商-->
                 <pay-table
-                        :isBuyer="true"
+                        :columns="tableColumns"
                         :data="paymentData"
                         :type="tableType"
+                        :port="tablePort"
+                        :btnInfo="tableBtnInfo"
                         @btnClick="handleClick"
-                        @restoreData="changeData"></pay-table>
+                        @restoreData="changeData">
+                </pay-table>
             </div>
             <div class="section">
                 <div class="head">
@@ -309,6 +313,7 @@
 
                 </div>
             </div>
+
         </div>
 
         <div class="handler">
@@ -334,6 +339,50 @@
             return{
                 labelPosition:'right',
                 //传入payTable的数据
+                tableColumns:[
+                    {
+                        label:'付款编号',
+                        prop:'paymentNumber',
+                        type:'Text',
+                        width:180
+                    },
+                    {
+                        label:'款项名称',
+                        prop:'paymentItem',
+                        type:'Input',
+                        width:150
+                    },
+                    {
+                        label:'预计付款日期',
+                        prop:'estPayDate',
+                        type:'Date',
+                        width:150
+                    },
+                    {
+                        label:'预计付款金额',
+                        prop:'estAmount',
+                        type:'Number',
+                        width:130
+                    },
+                    {
+                        label:'实际付款日期',
+                        prop:'actPayDate',
+                        type:'Date',
+                        width:150
+                    },
+                    {
+                        label:'实际付款金额',
+                        prop:'actAmount',
+                        type:'Number',
+                        width:130
+
+                    },
+                    {
+                        label:'有效性',
+                        prop:'available',
+                        type:'Text'
+                    },
+                ],
                 paymentData:[
                     {
                         paymentNumber:151254757457,
@@ -342,7 +391,7 @@
                         estAmount:19025,               //预计付款金额
                         actPayDate:'2018-04-01',              //实际付款时间
                         actAmount:12345,               //实际付款金额
-                        available:1,                    //有效性,1:待确认,2:已确认
+                        available:2,                    //有效性,1:待确认,2:已确认,3:作废
                     },
                     {
                         paymentNumber:236987239862,
@@ -351,12 +400,13 @@
                         estAmount:6723,               //预计付款金额
                         actPayDate:'2018-06-01',              //实际付款时间
                         actAmount:1351,               //实际付款金额
-                        available:3,                    //有效性,1:待确认,2:已确认
+                        available:3,                    //有效性,1:待确认,2:已确认,3:作废
                     },
                 ],
-                tableType:'payment',
-
-
+                //table的类型，simple/complex,简单的只有确认操作，复杂的有一系列操作
+                tableType:'simple',
+                tablePort:'',
+                tableBtnInfo:'申请付款',        //table按钮文字
 
 
                 textarea:'',
