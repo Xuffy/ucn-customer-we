@@ -6,11 +6,11 @@
       <nav-bar></nav-bar>
 
       <section class="app-main">
-        <transition name="fade" mode="out-in">
-          <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
+        <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
+          <transition>
             <router-view :key="key"></router-view>
-          </div>
-        </transition>
+          </transition>
+        </div>
       </section>
     </div>
 
@@ -35,8 +35,7 @@
       VAddQuickLink
     },
     data() {
-      return {
-      }
+      return {}
     },
     mounted() {
       /*this.$on('full-box', (type) => {
@@ -55,6 +54,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+
   .main-container {
     width: 100%;
     padding-left: 180px;

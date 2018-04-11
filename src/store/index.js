@@ -6,6 +6,9 @@ Vue.use(Vuex);
 
 const state = {
   quickLink: {
+    draft: false,
+    log: false,
+    recycleBin: false,
     show: false,
     list: [],
   },

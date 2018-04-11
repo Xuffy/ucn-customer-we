@@ -213,14 +213,13 @@
                 </div>
             </div>
             <div class="section">
+                <div class="head"> {{$t('warehouse.page.paymentInformation')}}</div>
                 <pay-table
-                        :columns="columns"
-                        :title="payTitle"
-                        :btnInfo="btnInfo"
-                        :data="payData"
-                        :disabledBtn="disabledBtn"
-                        @btnClick="handleBtnClick"
-                        :url="queryUrl"></pay-table>
+                        :isBuyer="true"
+                        :data="paymentData"
+                        :type="tableType"
+                        @btnClick="handleClick"
+                        @restoreData="changeData"></pay-table>
             </div>
             <div class="section">
                 <div class="head">
@@ -334,191 +333,29 @@
         data(){
             return{
                 labelPosition:'right',
-                tableData:[
+                //传入payTable的数据
+                paymentData:[
                     {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
+                        paymentNumber:151254757457,
+                        paymentItem:'QC预付款',
+                        estPayDate:'2018-02-23',              //预计付款时间
+                        estAmount:19025,               //预计付款金额
+                        actPayDate:'2018-04-01',              //实际付款时间
+                        actAmount:12345,               //实际付款金额
+                        available:1,                    //有效性,1:待确认,2:已确认
                     },
                     {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
-                    },
-                    {
-                        code:'1923',
-                        date:'2018-02-22',
-                        type:'预付款',
-                        pay:'1992',
-                        receive:'239',
-                        waitPay:'1244',
-                        waitReceive:'2222'
+                        paymentNumber:236987239862,
+                        paymentItem:'QC尾款',
+                        estPayDate:'2018-03-11',              //预计付款时间
+                        estAmount:6723,               //预计付款金额
+                        actPayDate:'2018-06-01',              //实际付款时间
+                        actAmount:1351,               //实际付款金额
+                        available:3,                    //有效性,1:待确认,2:已确认
                     },
                 ],
-                //表格数据
-                payData: {
-                    data:[
-                        {
-                            paymentId: '125547',
-                            payName:'赈灾款',
-                            payDate: '1992-02-02',
-                            payDateActually:'1992-02-02',
-                            payMoney:998,
-                            payMoneyActually:'1902',
-                            waitMoney:'',
-                            status:1
-                        },
-                        {
-                            paymentId: '547855',
-                            payName:'赈灾款',
-                            payDate: '2018-05-01',
-                            payDateActually:'2010-07-30',
-                            payMoney:152,
-                            payMoneyActually:'1945',
-                            waitMoney:'',
-                            status:2
-                        },
-                    ],
-                    type:'payment'
-                },
-                //表格列
-                columns:[
-                    {
-                        label:'付款编号',
-                        // type:'Text',         //没传的话就默认只是文本展示
-                        width:'100',
-                        prop:'paymentId',
-                    },
-                    {
-                        label:'款项名称',
-                        type:'Input',
-                        prop:'payName',
-                        width:120,
-                        notEmpty:true,
-                    },
-                    {
-                        label:'预计付款日期',
-                        type:'Date',
-                        prop:'payDate',
-                        width:170,
-                        notEmpty:true,
-                    },
-                    {
-                        label:'预计付款金额',
-                        type:'NumberInput',
-                        prop:'payMoney',
-                        width:150,
-                        notEmpty:true,
-                    },
-                    {
-                        label:'实际付款日期',
-                        type:'Date',
-                        prop:'payDateActually',
-                        width:170
-                    },
-                    {
-                        label:'实际付款金额',
-                        type:'NumberInput',
-                        prop:'payMoneyActually',
-                        width:150
-                    },
-                ],
-                //表格头部按钮名称
-                btnInfo:'申请服务付款',
-                //按钮disabled
-                disabledBtn:{
-                    disabledBtn:false
-                },
-                queryUrl:'/changeItem',
+                tableType:'payment',
+
 
 
 
@@ -568,28 +405,45 @@
                 })
             },
 
-            /*
-            * pay-table操作
-            * */
-            saveChangeLine(e){
-                console.log(e)
-                // this.$set(e,'isModify',false);
-                // this.disabledBtn=false;
-                //调用接口即可
+            /**
+             * pay-table操作
+             * */
+            //用于data的还原更新
+            changeData(data){
+                let key;
+                this.paymentData.forEach((v,k)=>{
+                    if(v.paymentNumber===data.paymentNumber){
+                        key=k;
+                    }
+                });
+                this.paymentData.splice(key,1,Object.assign({},data));
             },
-            //处理顶部按钮点击事件
-            handleBtnClick(){
-                this.disabledBtn.disabledBtn=true;
-                this.payData.data.push({
-                    paymentId: '124124',
-                    payName:'',
-                    payDate: '',
-                    payMoney:'',
-                    payDateActually:'',
-                    payMoneyActually:'',
-                    isNew:true
+
+            //深克隆方法
+            copyArr(arr){
+                return arr.map((e)=>{
+                    if(typeof e === 'object'){
+                        return Object.assign({},e)
+                    }else{
+                        return e
+                    }
+                })
+            },
+
+            //顶部按钮的点击操作
+            handleClick(data){
+                data.push({
+                    paymentNumber:890807,
+                    paymentItem:'',
+                    estPayDate:'',              //预计付款时间
+                    estAmount:0,               //预计付款金额
+                    actPayDate:'',              //实际付款时间
+                    actAmount:0,               //实际付款金额
+                    available:1,                    //有效性,1:待确认,2:已确认,3:无效
+                    isNew:true,                    //新增的数据全部处于新增状态
                 });
             },
+
 
         },
         created(){

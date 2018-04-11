@@ -105,19 +105,19 @@
         },
         methods: {
             getMgeneralCategoryData() {
-                this.ajax.get(this.$apis.sys_category)
+                this.$ajax.get(this.$apis.sys_category)
                 .then(res => {
                     this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
-                this.ajax.get(this.$apis.category)
+                this.$ajax.get(this.$apis.category)
                 .then(res => {
                     this.myCategoryData = res;
                 })
             },
             getMappingCategory() {
-                this.ajax.get(this.$apis.mapping_category)
+                this.$ajax.get(this.$apis.mapping_category)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);
@@ -143,7 +143,7 @@
                     parentId: data.id || 0,
                     name: name
                 };
-                this.ajax.post(this.$apis.category, params)
+                this.$ajax.post(this.$apis.category, params)
                 .then(res => {
                     this.addData(res, data, name, type);
                 });
@@ -195,7 +195,9 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.ajax.get(`${this.$apis.delete_category}/${id}`)
+                    this.$ajax.get(`${this.$apis.delete_category}/{id}`, {
+                        id: id
+                    })
                     .then(res => {
                         this.getMappingCategory();
                         // this.mappingRelationDataForEach(this.mappingRelationData, id, 'delete');
@@ -225,7 +227,7 @@
                     if(data.children && data.children.length) {
                         this.addNewCategory(data, value, type);
                     } else {
-                        this.ajax.get(`${this.$apis.mapping_category}/${data.id}`)
+                        this.$ajax.get(`${this.$apis.mapping_category}/${data.id}`)
                         .then(res => {
                             if(!res) return this.addNewCategory(data, value, type);
                             this.$confirm('添加子集会导致父级节点对应关系被清空，请问确定添加吗？', '提示', {
@@ -255,7 +257,7 @@
                         type: 'info',
                         message: '不修改和以前同'
                     });  
-                    this.ajax.post(`${this.$apis.category}/${data.id}?name=${value}`, {
+                    this.$ajax.post(`${this.$apis.category}/${data.id}?name=${value}`, {
                         name: value
                     })
                     .then(res => {
@@ -283,7 +285,7 @@
                         message: '父节点不能添加映射关系'
                     });
                 this.myCategory = val.id;
-                this.ajax.get(`${this.$apis.mapping_category}/${val.id}`)
+                this.$ajax.get(`${this.$apis.mapping_category}/${val.id}`)
                 .then(res => {
                     if(res) {
                         const genCheckBox = res.split(',');
@@ -312,7 +314,7 @@
                     type: 'info',
                     message: '请勾选系统分类'
                 });
-                this.ajax.post(this.$apis.mapping_category, params)
+                this.$ajax.post(this.$apis.mapping_category, params)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);

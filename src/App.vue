@@ -8,8 +8,14 @@
 
   export default {
     name: 'app',
-    components: {
-    }
+    components: {},
+    watch: {
+      $route(val) {
+        this.$store.state.quickLink.draft = val.meta.draft;
+        this.$store.state.quickLink.log = val.meta.log;
+        this.$store.state.quickLink.recycleBin = val.meta.recycleBin;
+      }
+    },
   }
 </script>
 
