@@ -5,15 +5,12 @@ const apis = {
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
-  mappingCategory: ['/category/mapping ', 'BASE_CS'],
+  mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory:['/category','BASE_CS'],
-  delete_category: ['/category/delete/', 'BASE_CS'],
-    //供应商product接口
+  delete_category: ['/category/delete', 'BASE_CS'],
   add_newSKU:['/sku','BASE_CS'],
-  get_listData:['/sku/listSkuByParams','BASE_CS'],
-
   supplier_overview: ['/supplierOverview', 'BASE_API'],
-
+  inquiry_list: ['/inquiry/list', 'BASE_API']
 };
 
 let list = _.mapObject(apis, val => {
