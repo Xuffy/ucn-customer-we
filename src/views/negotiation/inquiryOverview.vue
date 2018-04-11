@@ -4,21 +4,21 @@
         <div class="status">
             <div style="margin-top: 20px">
                 <span>{{ $t('negotiation.status.index') }}</span>
-                <el-radio-group v-model="status"  size="mini">
-                    <el-radio-button :label="$t('negotiation.status.TBCByCustomer')"></el-radio-button>
-                    <el-radio-button :label="$t('negotiation.status.TBCBySupplier')" ></el-radio-button>
-                    <el-radio-button :label="$t('negotiation.status.finish')"></el-radio-button>
-                    <el-radio-button :label="$t('negotiation.status.cancel')"></el-radio-button>
+                <el-radio-group v-model="params.status"  size="mini">
+                    <el-radio-button :label="0">{{$t('negotiation.status.TBCByCustomer')}}</el-radio-button>
+                    <el-radio-button :label="1" >{{$t('negotiation.status.TBCBySupplier')}}</el-radio-button>
+                    <el-radio-button :label="2">{{$t('negotiation.status.finish')}}</el-radio-button>
+                    <el-radio-button :label="3">{{$t('negotiation.status.cancel')}}</el-radio-button>
                 </el-radio-group>
             </div>
-            <select-search :options="options" :setting="false" />
+            <select-search :options="options" @selectChange="selectChange" @inputEnter="inputEnter" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
                 <el-button  @click="windowOpen('/negotiation/compare')">{{ $t('negotiation.btn.Compare')  }}</el-button>
                 <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
-                <el-button>{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
-                <el-button type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
+                <el-button @click="cancelInquiry">{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
+                <el-button @click="deleteInquiry" type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $t('negotiation.viewBy.index')  }}&nbsp;</span>
@@ -61,7 +61,14 @@
                 tabColumn:'',
                 tabData: [],
                 viewByStatus: '',
-                status:''
+                keyType: '',
+                params: {
+                    status: '',
+                    keyType: '',
+                    key: '',
+                    ps: 10,
+                    pn: 1
+                }
             }
         },
         components: {
@@ -72,34 +79,90 @@
             this.viewByStatus = this.$t('negotiation.viewBy.inquiry');
         },
         watch: {
-            viewByStatus (newVal, oldVal) {
-                this.getViewBy(newVal);
+            viewByStatus() {
+                this.gettabData();
+            },
+            params: {
+                handler(val, oldVal) {
+                    this.gettabData();
+                },
+                deep: true
             }
         },
         methods: {
             selectChange(val) {
-                console.log(val)
+                this.keyType = val;
             },
-            getViewBy(val) {
-                this.ajax({
-                    url: '/viewByInquiry',
-                    method: 'get',
-                    params: {
-                        type: val
-                    }
-                }).then(res => {
-                    if(val === 'Inquiry') {
-                        this.tabData = res.inquiry;
-                        this.tabColumn = 'negotiation.tableViewByInquiry';
-                    } else {
-                        this.tabData = res.SKU;
-                        this.tabColumn = 'negotiation.tableViewBySKU';
-                    }
+            inputEnter(val) {
+                if(!val) return this.$message('搜索内容不能为空');
+                this.params.keyType = this.keyType;
+                this.params.key = val;
+            },
+            gettabData() {
+                let url = null,
+                    tabColumn = null;
+                if(this.viewByStatus === 'Inquiry') {
+                    url = this.$apis.inquiry_list;
+                    tabColumn = 'negotiation.tableViewByInquiry';
+                } else {
+                    url = this.$apis.inquiry_list_sku
+                    tabColumn = 'negotiation.tableViewBySKU';
+                };
+                this.$ajax.get(url, this.params)
+                .then(res => {
+                    this.tabColumn = tabColumn;
+                    // this.tabData = res;
+                    this.tabData = [
+                                    {
+                                        "id": 0,
+                                        "tenantId": 0,
+                                        "orderNo": "string",
+                                        "quotationNo": "string",
+                                        "isDraft": 0,
+                                        "isRecycleCustomer": 0,
+                                        "isRecycleSupplier": 0,
+                                        "status": 0,
+                                        "supplierId": 0,
+                                        "supplierType": 0,
+                                        "supplierName": "string",
+                                        "skuQty": 0,
+                                        "inquiryAmount": 0,
+                                        "discountRate": 0,
+                                        "currency": 0,
+                                        "payment": 0,
+                                        "incoterm": "string",
+                                        "transport": 0,
+                                        "destinationCountry": "string",
+                                        "destinationPort": "string",
+                                        "departureCountry": "string",
+                                        "departurePort": "string",
+                                        "exportLicense": "string",
+                                        "remark": "string",
+                                        "entryId": 0,
+                                        "entryName": "string",
+                                        "entryDt": 0,
+                                        "updateId": 0,
+                                        "updateName": "string",
+                                        "updateDt": 0
+                                    }
+                                    ]
+                });
+            },
+            cancelInquiry() { //取消询价单
+                this.$ajax.post(this.$apis.inquiry_cancel, {
+
                 })
+                .then(res => {
+                    
+                });
             },
-            windowOpen(str) {
-                const url = `${window.location.origin}/#${str}`;
-                window.open(url);
+            deleteInquiry() { //取消询价单
+                this.$ajax.post(this.$apis.inquiry_delete, {
+
+                })
+                .then(res => {
+                    
+                });
             }
         }
     }

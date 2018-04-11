@@ -227,7 +227,9 @@
                     if(data.children && data.children.length) {
                         this.addNewCategory(data, value, type);
                     } else {
-                        this.$ajax.get(`${this.$apis.mapping_category}/${data.id}`)
+                        this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
+                            id: data.id
+                        })
                         .then(res => {
                             if(!res) return this.addNewCategory(data, value, type);
                             this.$confirm('添加子集会导致父级节点对应关系被清空，请问确定添加吗？', '提示', {
@@ -257,7 +259,8 @@
                         type: 'info',
                         message: '不修改和以前同'
                     });  
-                    this.$ajax.post(`${this.$apis.category}/${data.id}?name=${value}`, {
+                    this.$ajax.post(`${this.$apis.category}/{id}?name={name}`, {
+                        id: data.id,
                         name: value
                     })
                     .then(res => {
@@ -285,7 +288,9 @@
                         message: '父节点不能添加映射关系'
                     });
                 this.myCategory = val.id;
-                this.$ajax.get(`${this.$apis.mapping_category}/${val.id}`)
+                this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
+                    id: val.id
+                })
                 .then(res => {
                     if(res) {
                         const genCheckBox = res.split(',');
