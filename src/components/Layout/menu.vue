@@ -6,7 +6,7 @@
     </div>
 
     <el-menu class="menu-box">
-      <el-menu-item-group>
+      <el-menu-item-group style="border-bottom: 1px solid rgba(255,255,255,.5);padding-bottom: 10px">
         <div slot="title">
           <i class="el-icon-menu"></i>
           <span>Quick Link</span>
@@ -25,30 +25,9 @@
       </el-menu-item-group>
 
       <el-menu-item-group>
-        <div slot="title">
-          <i class="el-icon-menu"></i>
-          <span>Pages</span>
-        </div>
-
-        <el-menu-item index="1-1">
-          <i class="el-icon-tickets"></i>
-          <span>log</span>
-        </el-menu-item>
-      </el-menu-item-group>
-
-      <el-menu-item-group>
-        <div slot="title">
-          <i class="el-icon-menu"></i>
-          <span>Action</span>
-        </div>
-
-        <el-menu-item index="1-1">
-          <i class="el-icon-tickets"></i>
-          <span>create inquiry</span>
-        </el-menu-item>
-        <el-menu-item index="1-1">
-          <i class="el-icon-tickets"></i>
-          <span>create orde</span>
+        <el-menu-item index="2-0">
+          <i class="el-icon-more"></i>
+          <span>add new links</span>
         </el-menu-item>
       </el-menu-item-group>
     </el-menu>

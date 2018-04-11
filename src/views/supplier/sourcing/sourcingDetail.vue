@@ -6,47 +6,85 @@
                 <span>name</span>
             </div>
             <div class="detail">             
-                   <el-row>             
+                 <el-form  label-width="190px">          
+                    <el-row>             
                         <el-row class="right">
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                {{$t('supplier.detail.supplierName')}}:xxxx
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">                           
+                                    <el-form-item prop="SupplierName" :label="$t('supplier.detail.supplierName')+' :'">
+                                        xxxx
+                                    </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.SupplierCode')}}:xxxx
+                                   <el-form-item prop="SupplierNo" :label="$t('supplier.detail.SupplierNo')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.supplierType')}}: xxxx
+                                    <el-form-item prop="SupplierType" :label="$t('supplier.detail.supplierType')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.country')}}: xxxx
+                                   <el-form-item prop="Country" :label="$t('supplier.detail.country')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.city')}}: xxxx
+                                    <el-form-item prop="City" :label="$t('supplier.detail.city')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.provideIncoterm')}}: xxxx
+                                    <el-form-item prop="ProvideIncoterm" :label="$t('supplier.detail.provideIncoterm')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.exportLicense')}}: xxxx
+                                   <el-form-item prop="ExportLicense" :label="$t('supplier.detail.exportLicense')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.mainBusinessScope')}}: xxxx
+                                   <el-form-item prop="MainBusinessScope" :label="$t('supplier.detail.mainBusinessScope')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                                
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.category')}}: xxxx
+                                    <el-form-item prop="Category" :label="$t('supplier.detail.category')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.currency')}}: xxxx
+                                   <el-form-item prop="Currency" :label="$t('supplier.detail.currency')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                               
                             </el-col>
                              <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.paymentItem')}}: xxxx
+                                   <el-form-item prop="PaymentItem" :label="$t('supplier.detail.paymentItem')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                              
+                            </el-col>                     
+                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                                     <el-form-item prop="description" :label="$t('supplier.detail.description')+' :'">
+                                        xxxx
+                                    </el-form-item>
+                              
                             </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                 {{$t('supplier.detail.description')}}: xxxx
-                            </el-col>
+                            
                         </el-row>
 
                 </el-row>
+                  </el-form>
                 <div class="btns" v-if="noEdit">
                     <el-button @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
                     <el-button @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
@@ -79,7 +117,7 @@
                   <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/> 
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="remark">
-                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                    <v-remark   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
                   <div class="attchment">
@@ -109,6 +147,7 @@
 
 <script>
     import VCompareList from '../../product/compareList'
+    import VRemark from '../../product/addlineTable'
     import {
         VTable
     } from '@/components/index';
@@ -117,7 +156,8 @@
         name: "souringDetail",
         components: {
             VTable,
-            VCompareList
+            VCompareList,
+            VRemark
         },
         data() {
             return {
@@ -154,11 +194,11 @@
             },
         },
         created() {
-            this.ajax.get('/supplierOverview', {
+            this.ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
                 .then(res => {
-                    this.tabData = res.supplierdata
+                    this.tabData = res
 
                 })
                 .catch((res) => {

@@ -328,8 +328,8 @@
   }
 
   .ucn-table thead tr:nth-child(even) td,
-  .ucn-table tbody tr:nth-child(even) {
-    background-color: #F7F8F9;
+  .ucn-table tbody tr:nth-child(even) td{
+    background-color: #F7F8F9!important;
   }
 
   .ucn-table tbody tr td:hover,

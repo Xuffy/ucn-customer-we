@@ -118,11 +118,11 @@
             //            console.log(this.$refs.responsibility.tableData)
         },
         created() {
-            this.ajax.get('/supplierOverview', {
+            this.ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
                 .then(res => {
-                    this.tabData = res.supplierdata
+                    this.tabData = res
 
 
                 })
@@ -178,6 +178,7 @@
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #ccc;
+        padding: 0 15px;
     }
 
     .order_remark {

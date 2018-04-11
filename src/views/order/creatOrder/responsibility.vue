@@ -12,17 +12,16 @@
         width="140">
       </el-table-column>
    <el-table-column prop="item1" :label="$t('order.responsibility.NeedLabelDesignInfoDate')" width="240"> 
-         <template slot-scope="scope" >
+         <template slot-scope="scope"  >
                <el-date-picker
                   v-model="scope.row.item1"
                   type="datetime"
                   placeholder=" "
                   v-if='scope.$index!=2'   
-                  :disabled='scope.$index==1'                      
-                  >            
+                  :disabled="scope.$index==1||disabled"                               
+                  >    
                 </el-date-picker>
-                <el-input v-model="scope.row.item1"  v-else>
-                   
+                <el-input v-model="scope.row.item1" v-else :disabled='disabled' >
                 </el-input>
         </template>
 </el-table-column>
@@ -33,10 +32,10 @@
                   type="datetime"
                   placeholder=""
                   v-if='scope.$index!=2'
-                 :disabled='scope.$index==1||scope.$index==0'
+                 :disabled='scope.$index==1||scope.$index==0||disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item2" v-else  >
+                <el-input v-model="scope.row.item2" v-else :disabled='disabled' >
                 </el-input>
         </template>
 </el-table-column>
@@ -47,10 +46,10 @@
                   type="datetime"
                   placeholder=""
                   v-if='scope.$index!=2' 
-                  :disabled='scope.$index==1'                        
+                  :disabled='scope.$index==1||disabled'                        
                   >              
                 </el-date-picker>
-                <el-input v-model="scope.row.item3"   v-else>
+                <el-input v-model="scope.row.item3"  :disabled='disabled' v-else>
                
                 </el-input>
         </template>
@@ -62,11 +61,11 @@
                   type="datetime"
                   placeholder=""
                   v-if='scope.$index!=2'
-                :disabled='scope.$index==1||scope.$index==0'
+                :disabled='scope.$index==1||scope.$index==0||disabled'
                   
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item4" v-else >
+                <el-input v-model="scope.row.item4" v-else :disabled='disabled'>
                 </el-input>
         </template>
 </el-table-column>
@@ -77,10 +76,10 @@
                   type="datetime"
                   placeholder=""
                   v-if='scope.$index!=2'
-                 :disabled='scope.$index==1'
+                 :disabled='scope.$index==1||disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item5"   v-else>
+                <el-input v-model="scope.row.item5" :disabled='disabled'  v-else>
                 </el-input>
         </template>
 </el-table-column>
@@ -91,14 +90,15 @@
                   type="datetime"
                   placeholder=""
                   v-if='scope.$index!=2'
-                 :disabled='scope.$index==1'
+                 :disabled='scope.$index==1||disabled'
                   >
                 </el-date-picker>
-                <el-input v-model="scope.row.item6"  v-else>
+                <el-input v-model="scope.row.item6" :disabled='disabled' v-else>
                 </el-input>
         </template>
 </el-table-column>
 </el-table>
+
 </div>
 </div>
 </div>
@@ -119,7 +119,10 @@
             return {
                 tableData: [{
                     item: 'Me',
-                    item1: '1',
+                    item1: {
+                        value: 1,
+                        disabled: true
+                    },
                     item2: '',
                     item3: '',
                     item4: '',
@@ -152,9 +155,13 @@
                 }],
                 value1: '',
             }
+
         },
         methods: {
-
+            text(scope) {
+                console.log(scope)
+                console.log(scope.row.item1)
+            }
         },
         　watch: {　　　　　　　},
     }
@@ -172,6 +179,11 @@
 
     .el-date-picker {
         width: 220px;
+    }
+
+    .r_table {
+        width: 100%;
+        overflow: auto;
     }
 
 </style>

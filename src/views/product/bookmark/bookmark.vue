@@ -364,7 +364,7 @@
             //搜查
             search(){
                 console.log(this.dataList)
-                this.$router.push('/product/bookmark/detail');
+                this.$router.push('/product/bookmarkDetail');
                 // window.open('http://192.168.51.228、:8080/#/product');
             },
 
@@ -395,7 +395,7 @@
                 this.newSearchDialogVisible=true;
             },
             addFromManually(){
-                this.windowOpen('/product/bookmark/manuallyAdd');
+                this.windowOpen('/product/bookmarkManuallyAdd');
 
                 // window.open('http://192.168.51.229:8080/#/product/bookmark/manuallyAdd');
             },

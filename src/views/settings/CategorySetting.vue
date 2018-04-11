@@ -59,7 +59,6 @@
                         default-expand-all
                         node-key="id"
                         ref="tree1"
-                        :expand-on-click-node="false"
                         highlight-current
                         :filter-node-method="filterNode"
                         :props="defaultProps" 
@@ -108,19 +107,19 @@
             getMgeneralCategoryData() {
                 this.ajax.get(this.$apis.sys_category)
                 .then(res => {
-                    this.mgeneralCategoryData = res || [];
+                    this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
                 this.ajax.get(this.$apis.category)
                 .then(res => {
-                    this.myCategoryData = res || [];
+                    this.myCategoryData = res;
                 })
             },
             getMappingCategory() {
                 this.ajax.get(this.$apis.mapping_category)
                 .then(res => {
-                    this.mappingRelationData = res || [];
+                    this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);
                 })
             },
@@ -199,6 +198,7 @@
                     this.ajax.get(`${this.$apis.delete_category}/${id}`)
                     .then(res => {
                         this.getMappingCategory();
+                        // this.mappingRelationDataForEach(this.mappingRelationData, id, 'delete');
                         children.splice(index, 1);
                         this.$message({
                             type: 'success',
@@ -221,9 +221,24 @@
                         message: '分类名不能为空',
                         type: 'warning'
                     });
-                    this.addNewCategory(data, value, type)
-                }).catch(() => {
-                           
+                    if(type === 'parents') return this.addNewCategory(data, value, type);
+                    if(data.children && data.children.length) {
+                        this.addNewCategory(data, value, type);
+                    } else {
+                        this.ajax.get(`${this.$apis.mapping_category}/${data.id}`)
+                        .then(res => {
+                            if(!res) return this.addNewCategory(data, value, type);
+                            this.$confirm('添加子集会导致父级节点对应关系被清空，请问确定添加吗？', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then(() => {
+                                this.addNewCategory(data, value, type)
+                            }).catch(() => {
+                                return false;
+                            })
+                        });
+                    };
                 });
             },
             edit(data) {
@@ -245,7 +260,8 @@
                     })
                     .then(res => {
                         data.name = value;
-                        this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
+                        this.getMappingCategory();
+                        // this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
                     });
                 }).catch(() => {
                            
@@ -253,29 +269,40 @@
             },
             genCheckBox(id, list) {
                 list.forEach(items => {
-                    if(id === items.id) this.setChecked(items.id, true, true);
-                    if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(items[this.defaultProps.children]);
+                    if(id) {
+                        if(id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
+                    } else {
+                        this.$refs.tree1.setChecked(items.id, false, true);
+                    }
+                    if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(id, items[this.defaultProps.children]);
                 });
             },
             myCategoryChange(val) {
                 if(val.children && val.children.length) return this.$message({
-                    type: 'info',
-                    message: '父节点不能添加映射关系'
-                });
+                        type: 'info',
+                        message: '父节点不能添加映射关系'
+                    });
                 this.myCategory = val.id;
-                
                 this.ajax.get(`${this.$apis.mapping_category}/${val.id}`)
                 .then(res => {
-                    const genCheckBox = res.split(',');
-                    genCheckBox.forEach(item => {
-                        this.genCheckBox(item, this.mgeneralCategoryData)
-                    });
+                    if(res) {
+                        const genCheckBox = res.split(',');
+                        genCheckBox.forEach(item => {
+                            this.genCheckBox(item, this.mgeneralCategoryData)
+                        });
+                    } else {
+                        this.genCheckBox('', this.mgeneralCategoryData)
+                    }
                 });
             },
             save() {
+                let nodes = [];
+                this.selectedNodes.forEach(item => {
+                    nodes.push(item.id)
+                });
                 const params = {
                     categoryId: this.myCategory,
-                    sysId: this.selectedNodes.toString()
+                    sysId: nodes.toString()
                 };
                 if(!params.categoryId) return this.$message({
                     type: 'info',
@@ -285,14 +312,14 @@
                     type: 'info',
                     message: '请勾选系统分类'
                 });
-                this.getMappingCategory()
                 this.ajax.post(this.$apis.mapping_category, params)
-                 .then(res => {
-                     console.log(res)
-                 });
+                .then(res => {
+                    this.mappingRelationData = res;
+                    this.mappingRelationDataSplit(this.mappingRelationData);
+                });
             },
             generalCategoryChange(data) {
-                if(!data.children.length || !data.children) this.selectedNodes.push(data.id);
+                this.selectedNodes = this.$refs.tree1.getCheckedNodes(true);
             }
         },
         watch: {
@@ -338,6 +365,9 @@
     >>> .custom-tree-node:hover .el-icon-circle-plus-outline,
     >>> .custom-tree-node:hover .el-icon-remove-outline {
         display:inline-block;
+    }
+    >>> .el-tree-node > .el-tree-node__children {
+        overflow: visible;
     }
 </style>
 
@@ -427,6 +457,9 @@
                 padding:15px 15px;
                 border-bottom: 1px solid #e0e0e0;
             }
+            .my-category, .general-category {
+                width:30vw;
+            }
             .my-category, .general-category, .maping-relation {
                 .btn-wrap {
                     padding:10px;
@@ -447,18 +480,14 @@
                         padding:10px 15px;
                         border-bottom:1px solid #e0e0e0;
                     }
-                    .el-tree {
-                        overflow-y: auto;
+                    .el-tree {  
+                        overflow: auto;
                         height: 50vh;
-                        min-width:200px;
                     }
                 }
             }
             .maping-relation {
-                .el-tree {
-                    max-height:60vh;
-                    overflow-y: auto;
-                }
+                width:40vw;
                 .hd {
                     display:flex;
                     align-items: center;
