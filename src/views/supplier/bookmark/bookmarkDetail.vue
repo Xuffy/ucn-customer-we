@@ -145,7 +145,7 @@
 -->
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.remark')" name="Remark">
-                            <v-remark style='marginTop:10px'/></v-remark> 
+                            <v-remark style='marginTop:10px'/> </v-remark> 
                 </el-tab-pane>
             </el-tabs>
         </div>

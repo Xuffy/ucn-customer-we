@@ -120,10 +120,13 @@
                 tableData: [{
                     item: 'Me',
                     item1: {
-                        value: 1,
-                        disabled: true
+                        value:'123',
+                        disabled:true
                     },
-                    item2: '',
+                    item2: {
+                        value:'',
+                        disabled:false
+                    },
                     item3: '',
                     item4: '',
                     item5: '',
@@ -155,8 +158,7 @@
                 }],
                 value1: '',
             }
-
-        },
+        },    
         methods: {
             text(scope) {
                 console.log(scope)

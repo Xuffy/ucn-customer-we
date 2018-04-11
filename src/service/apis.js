@@ -10,10 +10,14 @@ const apis = {
   delete_category: ['/category/delete', 'BASE_CS'],
   add_newSKU:['/sku','BASE_CS'],
   supplier_overview: ['/supplierOverview', 'BASE_API'],
-  inquiry_list: ['/inquiry/list', 'BASE_API'],
   get_productDetail:['/sku/{id}','BASE_CS'],
-  delete_product:['/sku/{id}/delete','BASE_CS']
+  delete_product:['/sku/{id}/delete','BASE_CS'],
 
+  inquiry_list: ['/inquiry/list', 'BASE_DHC'],
+  inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
+  inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
+  inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
+  inquiry_detail: ['/inquiry', 'BASE_DHC']
 };
 
 let list = _.mapObject(apis, val => {
