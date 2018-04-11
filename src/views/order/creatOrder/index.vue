@@ -95,7 +95,7 @@
                     params: {}
                 })
                 .then(res => {
-                    this.tabData = res.supplierdata
+                    this.tabData = res
 
                 })
                 .catch((res) => {

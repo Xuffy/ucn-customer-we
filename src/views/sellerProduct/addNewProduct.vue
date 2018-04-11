@@ -1491,9 +1491,9 @@
                     outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
                     oem: 1,
-                    logisticId: 2,
-                    version: 2,
-                    pkgId: 2,
+                    logisticId: 1,
+                    version: 1,
+                    pkgId: 1,
                     price: [
                         {
                             fobCurrency: 1,

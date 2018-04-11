@@ -8,6 +8,7 @@ const page={
     productInfo:'Product Info',
     createQCOrder:'Create QC Order',
     downLoad:'Download',
+    paymentInformation:'Payment Information',
 
 
     //qc Status

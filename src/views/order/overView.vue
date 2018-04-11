@@ -49,7 +49,10 @@
             </div>
         </div>
         <!--form-->
-          <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+          <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1}]" 
+           @action="onAction"
+          :loading='loading'
+           style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -87,9 +90,8 @@
                 }, ],
                 status_buttons: '', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
-                //                showdropDown: false,
-                tabColumn: [],
-                tabData: []
+                tabData: [],
+                loading: false
             }
         },
         methods: {
@@ -97,20 +99,26 @@
             selectChange(val) {
                 console.log(val)
             },
-            // hiddenDropDown() { // this.showdropDown = !this.showdropDown // },
+            onAction(item, type) {
+                console.log(item)
+            },
+
         },
         created() {
-            this.ajax.get('/supplierOverview', {
+            this.loading = true
+            this.ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
-                .then(res => {
-                    this.tabData = res.supplierdata
-
+                .then((res) => {
+                    this.tabData = res
                 })
                 .catch((res) => {
                     console.log(res);
                 });
         },
+        mounted() {
+            this.loading = false
+        }
     }
 
 </script>

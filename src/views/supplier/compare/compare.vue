@@ -50,11 +50,11 @@
         },
         methods: {},
         created() {
-            this.ajax.get('/supplierOverview', {
+            this.ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
                 .then(res => {
-                    this.tabData = res.supplierdata
+                    this.tabData = res
 
                 })
                 .catch((res) => {
