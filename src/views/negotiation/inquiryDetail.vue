@@ -14,7 +14,14 @@
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
-                        <v-table :data="tabData" :data-key="tabColumn"></v-table>
+                        <v-table 
+                            :data="tabData" 
+                            :selection="false" 
+                            :buttons="basicInfoBtn"
+                            :height="120"
+                            @action="basicInfoAction"
+                            data-key="negotiation.tableBasicInfo"
+                        />
                     </div>
                 </div>
                 <div class="basic-info">
@@ -27,17 +34,21 @@
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button  @click="newSearchDialogVisible = true">{{$t('negotiation.btn.addProduct')}}</el-button>
+                            <el-button @click="newSearchDialogVisible = true">{{$t('negotiation.btn.addProduct')}}</el-button>
                             <el-button type="danger">{{$t('negotiation.btn.remove')}}</el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
-                    <v-table :data="tabData" :data-key="tabColumn"></v-table>
+                    <v-table 
+                        :data="tabData"
+                        :buttons="productInfoBtn" 
+                        data-key="negotiation.tableProductInfo"
+                    />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button>{{$t('negotiation.btn.accept')}}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{$t('negotiation.btn.createOrder')}}</el-button>
                         <el-button @click="compareConfig.showCompareList = true;">{{$t('negotiation.btn.addToCompare')}}</el-button>
-                        <el-button @click="statusModify = true">{{$t('negotiation.btn.modify')}}</el-button>
+                        <el-button @click="modifyAction">{{$t('negotiation.btn.modify')}}</el-button>
                         <el-button @click="windowOpen('/negotiation/createInquiry')">{{$t('negotiation.btn.createInquiry')}}</el-button>
                         <el-button type="info">{{$t('negotiation.btn.cancel')}}</el-button>
                     </div>
@@ -60,19 +71,24 @@
         <el-dialog
                 title="Add Product"
                 :visible.sync="newSearchDialogVisible"
-                width="80%"
+                width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="From New Search"></el-radio-button>
+                <el-radio-button :label="$t('negotiation.text.fromNewSearch')"></el-radio-button>
                 <el-radio-button label="From my bookmark"></el-radio-button>
             </el-radio-group>
             <v-product :hideBtns="true"></v-product>
-             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">OK</el-button>
-                <el-button @click="newSearchDialogVisible = false">Cancel</el-button>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="newSearchDialogVisible = false">{{$t('negotiation.btn.ok')}}</el-button>
+                <el-button @click="newSearchDialogVisible = false">{{$t('negotiation.btn.cancel')}}</el-button>
             </span>
         </el-dialog>
+        <v-history 
+            :oSwitch.sync="oSwitch" 
+            :tableData="HistotyData" 
+            :tableColumn="tableColumn" 
+        />
     </div>
 </template>
 <script>
@@ -87,14 +103,25 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                tableColumn: {
+                    
+                },
+                HistotyData: [],
+                basicInfoBtn: [{label: 'Histoty', type: 'histoty'}],
+                productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
+                basicInfoBtns: [{label: 'Histoty', type: 'histoty'}],
+                productInfoBtns: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
+                basicInfoBtnModify: [{label: 'Histoty', type: 'histoty'}, {label: 'Modify', type: 'modify'}],
+                productInfoBtnModify: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}, {label: 'Modify', type: 'modify'}],
                 radio: 'From New Search',
+                oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
                 tabColumn: '',
@@ -134,14 +161,43 @@
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
-            'v-compare-list': compareList
+            'v-compare-list': compareList,
+            'v-history': VHistory
         },
         created() {
-            this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
-                id: this.$route.query.id
-            })
+            this.getInquiryDetail();
+        },
+        watch: {
+            ChildrenCheckList(val, oldVal) {
+                console.log(val);
+            }
         },
         methods: {
+            getInquiryDetail() {
+                if(!this.$route.query.id) return this.$message('地址错误');
+                this.tabData = [
+                    {
+                        id: 0,
+                        tenantId: 0,
+                        inquiryNo: 0,
+                        quotationNo: 0,
+                        time: 0,
+                        shippingMethod: 0
+                    },
+                    {
+                        id: 1,
+                        tenantId: 1,
+                        inquiryNo: 0,
+                        quotationNo: 0,
+                        time: 0,
+                        shippingMethod: 0
+                    }
+                ]
+                return false;
+                this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
+                    id: this.$route.query.id
+                })
+            },
             selectChange(val) {
                 console.log(val)
             },
@@ -156,13 +212,51 @@
                 this.switchStatus = !this.switchStatus;
             },
             modifyCancel() {
+                this.basicInfoBtn = this.basicInfoBtns;
+                this.productInfoBtn = this.productInfoBtns;
                 this.statusModify = false;
             },
             modify() {
                 this.statusModify = false;
+                this.basicInfoBtn = this.basicInfoBtns;
+                this.productInfoBtn = this.productInfoBtns;
             },
             fromChange(val) {
                console.log(val)
+           },
+           modifyAction() {
+                this.basicInfoBtn = this.basicInfoBtnModify;
+                this.productInfoBtn = this.productInfoBtnModify;
+                this.statusModify = true;
+           },
+           fnHistoty(item) {
+               this.oSwitch = true;
+                return this.HistotyData = [
+                    {
+                        id: 0,
+                        tenantId: 0,
+                        inquiryNo: 1,
+                        quotationNo: 2,
+                        time: 4,
+                        shippingMethod: 5
+                    },
+                    {
+                        id: 1,
+                        tenantId: 1,
+                        inquiryNo: 0,
+                        quotationNo: 0,
+                        time: 0,
+                        shippingMethod: 0
+                    }
+                ]
+                this.HistotyData = this.item;
+           },
+           basicInfoAction(data, type) {
+               switch(type) {
+                    case 'histoty':
+                        this.fnHistoty(data);
+                        break;
+               }
            }
         }
     }
@@ -256,7 +350,7 @@
                         padding-top:20px;
                         padding-left:10px;
                         position: fixed;
-                        left:220px;
+                        left:180px;
                         bottom:0;
                         background:#fff;
                         z-index:99;
