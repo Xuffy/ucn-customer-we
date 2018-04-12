@@ -11,11 +11,11 @@
                     <el-radio-button :label="3">{{$t('negotiation.status.cancel')}}</el-radio-button>
                 </el-radio-group>
             </div>
-            <select-search :options="options" @selectChange="selectChange" @inputEnter="inputEnter" />
+            <select-search :options="options" :search-load="searchLoad" @selectChange="selectChange" @inputEnter="inputEnter" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button  @click="windowOpen('/negotiation/compare')">{{ $t('negotiation.btn.Compare')  }}</el-button>
+                <el-button  @click="toCompare">{{ $t('negotiation.btn.Compare')  }}</el-button>
                 <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
                 <el-button @click="cancelInquiry">{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
                 <el-button @click="deleteInquiry" type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
@@ -28,23 +28,20 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table :data="tabData" :data-key="tabColumn"></v-table>
+        <v-table :data="tabData" :data-key="tabColumn" :buttons="[{label: 'detail', type: 'detail'}]" @action="action" @page-change="pageChange" :loading="tabLoad" ref="tab"></v-table>
     </div>
 </template>
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
-     * @param keyWord search框 值
      * @param options 下拉框 原始数据 
-     * @param value 下拉框 选中值
     */
     import { selectSearch, VTable } from '@/components/index';
     export default {
         name:'',
         data() {
             return {
-                value:'',
-                keyWord:'',
+                searchLoad: false,
                 options: [{
                     id: '1',
                     label: '时间段'
@@ -68,7 +65,8 @@
                     key: '',
                     ps: 10,
                     pn: 1
-                }
+                },
+                tabLoad:false
             }
         },
         components: {
@@ -94,13 +92,16 @@
                 this.keyType = val;
             },
             inputEnter(val) {
+                if(!this.keyType) return this.$message('请选中搜索类型');
                 if(!val) return this.$message('搜索内容不能为空');
                 this.params.keyType = this.keyType;
                 this.params.key = val;
+                this.searchLoad = true;
             },
             gettabData() {
                 let url = null,
                     tabColumn = null;
+                this.tabLoad = true;
                 if(this.viewByStatus === 'Inquiry') {
                     url = this.$apis.inquiry_list;
                     tabColumn = 'negotiation.tableViewByInquiry';
@@ -108,61 +109,83 @@
                     url = this.$apis.inquiry_list_sku
                     tabColumn = 'negotiation.tableViewBySKU';
                 };
+                this.tabColumn = tabColumn;
+                return this.tabData = [
+                    {
+                        "inquiryNo": 0,
+                        "quotationNo": 0,
+                        "sequence": 2,
+                        "id": 2
+                    },
+                    {
+                        "inquiryNo": 0,
+                        "quotationNo": 0,
+                        "sequence": 2,
+                        "id": 3
+                    }
+                ]
                 this.$ajax.get(url, this.params)
                 .then(res => {
                     this.tabColumn = tabColumn;
-                    // this.tabData = res;
-                    this.tabData = [
-                                    {
-                                        "id": 0,
-                                        "tenantId": 0,
-                                        "orderNo": "string",
-                                        "quotationNo": "string",
-                                        "isDraft": 0,
-                                        "isRecycleCustomer": 0,
-                                        "isRecycleSupplier": 0,
-                                        "status": 0,
-                                        "supplierId": 0,
-                                        "supplierType": 0,
-                                        "supplierName": "string",
-                                        "skuQty": 0,
-                                        "inquiryAmount": 0,
-                                        "discountRate": 0,
-                                        "currency": 0,
-                                        "payment": 0,
-                                        "incoterm": "string",
-                                        "transport": 0,
-                                        "destinationCountry": "string",
-                                        "destinationPort": "string",
-                                        "departureCountry": "string",
-                                        "departurePort": "string",
-                                        "exportLicense": "string",
-                                        "remark": "string",
-                                        "entryId": 0,
-                                        "entryName": "string",
-                                        "entryDt": 0,
-                                        "updateId": 0,
-                                        "updateName": "string",
-                                        "updateDt": 0
-                                    }
-                                    ]
+                    this.tabData = res;
+                    this.tabLoad = false;   
+                    this.searchLoad = false; 
                 });
             },
             cancelInquiry() { //取消询价单
+                const argId = this.getChildrenTab('id');
+                if(argId <= 0) return this.$message('请勾选询价单');
                 this.$ajax.post(this.$apis.inquiry_cancel, {
-
+                    id:argId
                 })
                 .then(res => {
                     
                 });
             },
-            deleteInquiry() { //取消询价单
+            deleteInquiry() { //删除询价单
+                const argId = this.getChildrenTab('id');
+                if(argId <= 0) return this.$message('请勾选询价单');
                 this.$ajax.post(this.$apis.inquiry_delete, {
-
+                    id: argId
                 })
                 .then(res => {
                     
                 });
+            },
+            action(item, type) {
+                switch(type) {
+                    case 'detail':
+                        this.detail(item);
+                        break;
+                }
+            },
+            detail(item) {
+                this.$router.push({
+                    path: '/negotiation/inquiryDetail',
+                    query: {
+                        id: item.id
+                    }
+                });
+            },
+            getChildrenTab(key) {
+                let arr = [];
+                this.$refs.tab.dataList.forEach(item => {
+                    if(item._checked) arr.push(item[key]);
+                });
+                return arr;
+            },
+            toCompare() {
+                let argId = this.getChildrenTab('id');
+                if(argId.length < 2) return this.$message('请至少勾选两个以上');
+                this.$router.push({
+                    path: '/negotiation/compare',
+                    query: {
+                        id: argId
+                    }
+                })
+            },
+            pageChange(No) {
+                console.log(No)
             }
         }
     }
