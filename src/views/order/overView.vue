@@ -49,10 +49,15 @@
             </div>
         </div>
         <!--form-->
-          <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1}]" 
+          <v-table  
+          ref='vtable'
+          :data="tabData" 
+          data-key="supplier.tableData" 
+          :buttons="[{label: 'detail', type: 1}]" 
            @action="onAction"
           :loading='loading'
            style='marginTop:10px'/>
+       
     </div>
 </template>
 <script>
@@ -91,7 +96,8 @@
                 status_buttons: '', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
                 tabData: [],
-                loading: false
+                loading: false,
+                selected:[]
             }
         },
         methods: {
@@ -100,24 +106,32 @@
                 console.log(val)
             },
             onAction(item, type) {
-                console.log(item)
+               console.log(item)
             },
-
+        },
+        computed:{
+ 
         },
         created() {
             this.loading = true
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
+            this.$ajax.get(this.$apis.supplier_overview, {})
                 .then((res) => {
                     this.tabData = res
                 })
                 .catch((res) => {
                     console.log(res);
                 });
+            
         },
         mounted() {
             this.loading = false
+            console.log(this.$refs.vtable.getSelected())
+        },
+        updated(){
+             
+        },
+        watch:{
+        
         }
     }
 

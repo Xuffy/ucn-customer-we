@@ -21,7 +21,7 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-<!--         <payment></payment>-->
+         <payment></payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -39,6 +39,8 @@
                            style='marginTop:10px'/>
              </div>
          </div>
+<!--         caculate-->
+         <v-caculate :disabled='disabled'></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='disabled'>
@@ -77,6 +79,7 @@
     import FromNewSearch from '../creatOrder/FromNewSearch.vue'
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
+    import VCaculate from '../creatOrder/caculate'
     import payment from '../../warehouse/paymentTable.vue'
 
     import {
@@ -93,7 +96,8 @@
             attchment,
             payment,
             VTable,
-            messageBoard
+            messageBoard,
+            VCaculate
         },
         data() {
             return {
@@ -123,7 +127,7 @@
             //            console.log(this.$refs.responsibility.tableData)
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
+            this.$ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
                 .then((res) => {
@@ -216,7 +220,7 @@
 
     .pro_table {
         margin-top: 10px;
-        padding-bottom: 60px;
+/*        padding-bottom: 60px;*/
     }
 
     .footer {

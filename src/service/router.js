@@ -475,6 +475,16 @@ export const routerMap = [
             log: true,
           },
           component: () => import('../views/settings/CategorySetting')
+        },
+           {
+          path: 'Personal',
+          name: 'Personal Setting',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/settings/personalSetting')
         }
       ]
     },

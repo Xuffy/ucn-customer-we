@@ -5,6 +5,7 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
+         
    
 <!--             responsibility     -->
          <VResponsibility></VResponsibility>
@@ -24,6 +25,8 @@
                            style='marginTop:10px'/>
              </div>
          </div>
+<!--           caculate-->
+         <v-caculate></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
@@ -62,6 +65,7 @@
     import VFromBookmark from './FromBookmark.vue'
     import VQuickCreate from './QuickCreate.vue'
     import VAttchment from './attchment'
+    import VCaculate from './caculate'
     import {
         VTable
     } from '@/components/index';
@@ -74,7 +78,8 @@
             VFromBookmark,
             VAttchment,
             VTable,
-            VQuickCreate
+            VQuickCreate,
+            VCaculate
         },
         data() {
             return {
@@ -98,7 +103,7 @@
             }
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
+            this.$ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
                 .then((res) => {
@@ -175,7 +180,7 @@
 
     .pro_table {
         margin-top: 10px;
-        padding-bottom: 60px;
+/*        padding-bottom: 60px;*/
     }
 
     .pro_title {

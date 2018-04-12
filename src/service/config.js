@@ -22,7 +22,7 @@ export default {
   ENV_FLAG: process.env.NODE_ENV,
 
   // 是否mock
-  IS_MOCK: false,
+  IS_MOCK: true,
 
   // 请求超时
   TIMEOUT: 60000,

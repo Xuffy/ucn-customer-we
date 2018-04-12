@@ -262,6 +262,8 @@ const qcorder = {
 const logisticplan = {
     logisticPlan: 'Logistic Plan/Order'
 }
+
+
 const payment = {
     no: 'No.',
     paymentNumber: 'Payment Number',
