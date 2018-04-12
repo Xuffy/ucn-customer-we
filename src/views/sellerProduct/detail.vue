@@ -71,10 +71,10 @@
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button>{{$t('productSeller.page.edit')}}</el-button>
-                    <el-button>{{$t('productSeller.page.setUp')}}</el-button>
+                    <el-button @click="editProduct">{{$t('productSeller.page.edit')}}</el-button>
+                    <el-button :loading="disabledSetupBtn" @click="setUp">{{$t('productSeller.page.setUp')}}</el-button>
                     <el-button @click="addNewProduct">{{$t('productSeller.page.addNewProduct')}}</el-button>
-                    <el-button type="danger" @click="deleteProduct">{{$t('productSeller.page.delete')}}</el-button>
+                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$t('productSeller.page.delete')}}</el-button>
                 </div>
             </div>
         </div>
@@ -631,14 +631,13 @@
                 <el-tab-pane :label="$t('productSeller.page.tradeHistory')" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">
-                    <span style="color:red">暂时接口还没做</span>
-                    <add-table></add-table>
-                </el-tab-pane>
+                <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
+                    <!--<span style="color:red">暂时接口还没做</span>-->
+                    <!--<add-table></add-table>-->
+                <!--</el-tab-pane>-->
             </el-tabs>
         </div>
 
-        <compare-list :config="compareConfig"></compare-list>
 
     </div>
 </template>
@@ -646,13 +645,11 @@
 <script>
     import VTable from '@/components/common/table/index'
     import addTable from '../product/addlineTable'
-    import compareList from '../product/compareList'
 
     export default {
         name: "detail",
         components:{
             addTable,
-            compareList,
             VTable
         },
         data(){
@@ -797,6 +794,9 @@
                     ]
                 },
 
+                //btn禁用状态组
+                disabledDeleteBtn:false,
+                disabledSetupBtn:false,
 
                 currentPage1:1,
 
@@ -826,6 +826,36 @@
                 });
             },
 
+            //编辑产品
+            editProduct(){
+                this.windowOpen('/sellerProduct/addNewProduct',{id:1});
+            },
+
+            //设为上架
+            setUp(){
+                this.$confirm('确定上架该商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.disabledSetupBtn=true;
+                    this.$ajax.post(this.$apis.change_productStatus,{
+                        id:this.productForm.id,
+                        status:false
+                    }).then(res=>{
+                        this.disabledSetupBtn=false;
+                        this.$message({
+                            message: '上架成功',
+                            type: 'success'
+                        });
+                    }).catch(err=>{
+                        this.disabledSetupBtn=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+
             //添加新产品
             addNewProduct(){
                 this.windowOpen('/sellerProduct/addNewProduct');
@@ -838,16 +868,17 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '删除成功!'
-                    // });
-                    console.log(this.productForm.id,'???')
-                    // this.$ajax.post(this.$apis.delete_product,{id:this.productForm.id}).then(res=>{
-                    //     console.log(res)
-                    // }).catch(err=>{
-                    //     console.log(err)
-                    // });
+                    this.disabledDeleteBtn=true;
+                    this.$ajax.post(this.$apis.delete_product,{id:this.productForm.id}).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.$router.push('/sellerProduct/overview');
+                        this.disabledDeleteBtn=false;
+                    }).catch(err=>{
+                        this.disabledDeleteBtn=false;
+                    });
                 }).catch(() => {
 
                 });

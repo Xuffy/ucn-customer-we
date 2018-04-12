@@ -10,7 +10,7 @@
             </el-select>
         </div>
         <div class="search">
-            <el-input v-model="keyWord" clearable placeholder="search" style="max-width:150px;" @change="inputChange" @keyup.enter.native="inputEnter" /><el-button type="primary" slot="append" icon="el-icon-search" @click="inputEnter"></el-button>
+            <el-input v-model="keyWord" clearable placeholder="search" style="max-width:150px;" @change="inputChange" @keyup.enter.native="inputEnter" /><el-button type="primary" slot="append" icon="el-icon-search" @click="inputEnter" :loading="searchLoad"></el-button>
         </div>
     </div>
 </template>
@@ -33,6 +33,10 @@
             selectHide: {
                 type: Boolean,
                 default: true
+            },
+            searchLoad: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {

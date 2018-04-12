@@ -91,7 +91,7 @@ axios.interceptors.response.use(
       response.data = JSON.parse(response.data);
     }
 
-    if (!response.data.success) {
+    if (response.data.status !== 'SUCCESS') {
       Message.warning(response.data.errorMsg || '数据返回异常，请重试！');
       throw new Error(`[code - ${response.data.status || '000'}] ${response.data.errorMsg || 'api request data unsuccessful'}`);
     }

@@ -11,19 +11,17 @@
             <el-form ref="productFormTop" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="categoryId" :label="$t('product.page.category')">
-
+                        <el-form-item prop="categoryId" :label="$t('productSeller.page.category')">
                             <drop-down class="" :list="dropData" ref="dropDown"></drop-down>
-                            <!--<el-input size="mini" v-model="productForm.categoryId"></el-input>-->
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="nameEn" :label="$t('product.page.skuNameEN')">
+                        <el-form-item prop="nameEn" :label="$t('productSeller.page.skuNameEN')">
                             <el-input size="mini" v-model="productForm.nameEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="isReadilyAvailable":label="$t('product.page.readilyAvailable')">
+                        <el-form-item prop="isReadilyAvailable":label="$t('productSeller.page.readilyAvailable')">
                             <el-select size="mini" v-model="productForm.isReadilyAvailable" placeholder="请选择">
                                 <el-option
                                         v-for="item in readilyAvailableOptions"
@@ -41,13 +39,13 @@
             <el-form ref="productForm" :rule="rules" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="customerSkuCode" :label="$t('product.page.customerSkuCode')">
+                        <el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')">
                             <el-input size="mini" v-model="productForm.customerSkuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="section-number">
-                            <el-form-item :label="$t('product.page.exwPrice')">
+                            <el-form-item :label="$t('productSeller.page.exwPrice')">
                                 <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
                                 <div class="section-line">--</div>
                                 <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>
@@ -55,19 +53,19 @@
                         </div>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="code" :label="$t('product.page.skuCode')">
+                        <el-form-item prop="code" :label="$t('productSeller.page.skuCode')">
                             <el-input size="mini" v-model="productForm.code"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="nameCn" :label="$t('product.page.skuNameCN')">
+                        <el-form-item prop="nameCn" :label="$t('productSeller.page.skuNameCN')">
                             <el-input size="mini" v-model="productForm.nameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <div class="section-number">
-                            <el-form-item class="section-item1" :label="$t('product.page.fobPrice')">
+                            <el-form-item class="section-item1" :label="$t('productSeller.page.fobPrice')">
                                 <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>
                                 <div class="section-line">--</div>
                                 <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>
@@ -75,42 +73,42 @@
                         </div>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="materialEn" :label="$t('product.page.skuMaterialsEN')">
+                        <el-form-item prop="materialEn" :label="$t('productSeller.page.skuMaterialsEN')">
                             <el-input size="mini" v-model="productForm.materialEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="country" :label="$t('product.page.country')">
+                        <el-form-item prop="country" :label="$t('productSeller.page.country')">
                             <el-input size="mini" v-model="productForm.country"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="supplierName" :label="$t('product.page.supplierName')">
+                        <el-form-item prop="supplierName" :label="$t('productSeller.page.supplierName')">
                             <el-input size="mini" v-model="productForm.supplierName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="outerCartonMethodEn"  :label="$t('product.page.packingMethodOfOuterCartonEN')">
+                        <el-form-item prop="outerCartonMethodEn"  :label="$t('productSeller.page.packingMethodOfOuterCartonEN')">
                             <el-input size="mini" v-model="productForm.outerCartonMethodEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="methodPkgEn"  :label="$t('product.page.packingMethodEN')">
+                        <el-form-item prop="methodPkgEn"  :label="$t('productSeller.page.packingMethodEN')">
                             <el-input size="mini" v-model="productForm.methodPkgEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="deliveryDates"  :label="$t('product.page.deliveryDate')">
+                        <el-form-item prop="deliveryDates"  :label="$t('productSeller.page.deliveryDays')">
                             <el-input size="mini" v-model="productForm.deliveryDates"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="descEn" :label="$t('product.page.skuDescriptionEN')">
+                        <el-form-item prop="descEn" :label="$t('productSeller.page.skuDescriptionEN')">
                             <el-input size="mini" v-model="productForm.descEn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="descCn":label="$t('product.page.skuDescriptionCN')">
+                        <el-form-item prop="descCn":label="$t('productSeller.page.skuDescriptionCN')">
                             <el-input size="mini" v-model="productForm.descCn"></el-input>
                         </el-form-item>
                     </el-col>
@@ -166,6 +164,14 @@
                 hideBody:true,            //是否显示body
                 btnInfo:this.$t('product.page.showTheAdvance'),     //按钮默认文字显示
                 productForm: {
+                    ps:10,                      //pageSize
+                    pn: 1,
+                    sorts: [
+                        {
+                            orderBy: "string",
+                            orderType: "string"
+                        }
+                    ],
                     categoryId: '',
                     nameEn: '',                  //产品英文名
                     isReadilyAvailable: '',      //
@@ -251,6 +257,7 @@
 
             //清除填写的表格数据
             clear(){
+                this.$refs.dropDown.selectedList=[];
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
                 this.$set(this.productForm,'minExwPrice','');
@@ -261,8 +268,12 @@
 
             //搜查
             search(){
-                this.$router.push('/product/sourcing/detail');
-                // window.open('http://192.168.51.228、:8080/#/product');
+                this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
+                console.log(this.productForm)
+
+
+                this.$ajax.post(this.$apis.get_productList,{});
+
             },
 
             handleChange(value) {
