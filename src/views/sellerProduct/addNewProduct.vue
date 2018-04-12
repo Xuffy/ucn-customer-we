@@ -19,7 +19,7 @@
                 <!--<el-button @click="addPic">Add</el-button>-->
             </div>
         </div>
-        <el-form :model="productForm" ref="productForm1" class="speForm" label-width="290px" :label-position="labelPosition">
+        <el-form :model="productForm" :rules="rules" ref="productForm1" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.skuSaleStatus')+':'">
@@ -34,7 +34,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.skuCode')+':'">
+                    <el-form-item prop="code" :label="$t('productSeller.page.skuCode')+':'">
                         <el-input
                                 :disabled="true"
                                 size="mini"
@@ -44,7 +44,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.skuNameCN')+':'">
+                    <el-form-item prop="nameCn" :label="$t('productSeller.page.skuNameCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -54,7 +54,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('productSeller.page.skuDescriptionCN')+':'">
+                    <el-form-item prop="descCn" :label="$t('productSeller.page.skuDescriptionCN')+':'">
                         <el-input
                                 size="mini"
                                 type="textarea"
@@ -66,7 +66,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.skuNameEN')+':'">
+                    <el-form-item prop="nameEn" :label="$t('productSeller.page.skuNameEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -76,7 +76,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('productSeller.page.skuDescriptionEN')+':'">
+                    <el-form-item prop="descEn" :label="$t('productSeller.page.skuDescriptionEN')+':'">
                         <el-input
                                 size="mini"
                                 type="textarea"
@@ -88,7 +88,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.skuNameInCustomerLanguage')+':'">
+                    <el-form-item prop="nameCustomer" :label="$t('productSeller.page.skuNameInCustomerLanguage')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -98,7 +98,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.skuDescriptionInCustomerLanguage')+':'">
+                    <el-form-item prop="descCustomer" :label="$t('productSeller.page.skuDescriptionInCustomerLanguage')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -108,7 +108,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.customerSkuCode')+':'">
+                    <el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -118,7 +118,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.supplierName')+':'">
+                    <el-form-item prop="supplierName" :label="$t('productSeller.page.supplierName')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -128,7 +128,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.supplierCode')+':'">
+                    <el-form-item prop="supplierCode" :label="$t('productSeller.page.supplierCode')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -138,7 +138,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.unit')+':'">
+                    <el-form-item prop="unit" :label="$t('productSeller.page.unit')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -148,7 +148,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.productFormation')+':'">
+                    <el-form-item prop="formation" :label="$t('productSeller.page.productFormation')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -158,7 +158,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.martialEN')+':'">
+                    <el-form-item prop="materialEn" :label="$t('productSeller.page.martialEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -168,7 +168,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.martialCN')+':'">
+                    <el-form-item prop="materialCn" :label="$t('productSeller.page.martialCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -178,7 +178,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.colourEN')+':'">
+                    <el-form-item prop="materialCn" :label="$t('productSeller.page.colourEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -188,7 +188,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.colourCN')+':'">
+                    <el-form-item prop="colourCn" :label="$t('productSeller.page.colourCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -220,7 +220,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.productDesign')+':'">
+                    <el-form-item prop="design" :label="$t('productSeller.page.productDesign')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -246,7 +246,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.barCode')+':'">
+                    <el-form-item prop="barcode" :label="$t('productSeller.page.barCode')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -255,7 +255,7 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.readilyAvailable')+':'">
                         <el-select
                                 size="mini"
@@ -281,7 +281,7 @@
                         </el-input-number>
                     </el-form-item>
                 </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.restrictedSellingCountry')+':'">
                         <el-select
                                 size="mini"
@@ -318,8 +318,8 @@
                         </el-input-number>
                     </el-form-item>
                 </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.expirationDateUnit')+':'">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                    <el-form-item prop="expireUnit" :label="$t('productSeller.page.expirationDateUnit')+':'">
                         <el-select
                                 size="mini"
                                 v-model="productForm.expireUnit"
@@ -334,7 +334,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('productSeller.page.explain')+':'">
+                    <el-form-item prop="comments" :label="$t('productSeller.page.explain')+':'">
                         <el-input
                                 size="mini"
                                 type="textarea"
@@ -376,7 +376,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.hsCode')+':'">
+                    <el-form-item prop="customsCode" :label="$t('productSeller.page.hsCode')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -386,7 +386,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.customsDeclarationNameCN')+':'">
+                    <el-form-item prop="customsNameCn" :label="$t('productSeller.page.customsDeclarationNameCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -396,7 +396,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.customsDeclarationNameEN')+':'">
+                    <el-form-item prop="customsNameEn" :label="$t('productSeller.page.customsDeclarationNameEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -406,7 +406,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.chineseTradeMark')+':'">
+                    <el-form-item prop="tradeMarkCn" :label="$t('productSeller.page.chineseTradeMark')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -416,7 +416,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.englishTradeMark')+':'">
+                    <el-form-item prop="tradeMarkEn" :label="$t('productSeller.page.englishTradeMark')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -426,7 +426,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.commodityInspectionChineseName')+':'">
+                    <el-form-item prop="commodityInspectionCn" :label="$t('productSeller.page.commodityInspectionChineseName')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -436,7 +436,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.commodityInspectionEnglishName')+':'">
+                    <el-form-item prop="commodityInspectionEn" :label="$t('productSeller.page.commodityInspectionEnglishName')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -446,7 +446,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.declareElements')+':'">
+                    <el-form-item prop="declareElement" :label="$t('productSeller.page.declareElements')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -456,7 +456,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.origin')+':'">
+                    <el-form-item prop="origin" :label="$t('productSeller.page.origin')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -466,7 +466,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.inspectionAndQuarantineCategory')+':'">
+                    <el-form-item prop="inspectQuarantineCategory" :label="$t('productSeller.page.inspectionAndQuarantineCategory')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -476,7 +476,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.brand')+':'">
+                    <el-form-item prop="brand" :label="$t('productSeller.page.brand')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -486,7 +486,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.brandRemark')+':'">
+                    <el-form-item prop="brandRemark" :label="$t('productSeller.page.brandRemark')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -496,7 +496,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.relatedBrand')+':'">
+                    <el-form-item prop="brandRelated" :label="$t('productSeller.page.relatedBrand')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -506,7 +506,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.certificat')+':'">
+                    <el-form-item prop="certificat" :label="$t('productSeller.page.certificat')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -692,7 +692,7 @@
         </div>
         <el-form :model="productForm" ref="productForm4" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.unitOfWeight')+':'">
                         <el-select size="mini" v-model="productForm.unitWeight" placeholder="请选择">
                             <el-option
@@ -704,7 +704,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.unitOfLength')+':'">
                         <el-select size="mini" v-model="productForm.unitLength" placeholder="请选择">
                             <el-option
@@ -716,7 +716,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.unitOfVolume')+':'">
                         <el-select size="mini" v-model="productForm.unitVolume" placeholder="请选择">
                             <el-option
@@ -785,7 +785,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodCN')+':'">
+                    <el-form-item prop="methodPkgCn" :label="$t('productSeller.page.packingMethodCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -795,7 +795,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodEN')+':'">
+                    <el-form-item prop="methodPkgEn" :label="$t('productSeller.page.packingMethodEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -805,7 +805,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.unitOfInnerCarton')+':'">
+                    <el-form-item prop="innerCartonUnit" :label="$t('productSeller.page.unitOfInnerCarton')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -892,7 +892,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.descriptionOfInnerCarton')+':'">
+                    <el-form-item prop="innerCartonDesc" :label="$t('productSeller.page.descriptionOfInnerCarton')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -902,7 +902,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodOfInnerCartonCN')+':'">
+                    <el-form-item prop="innerCartonMethodCn" :label="$t('productSeller.page.packingMethodOfInnerCartonCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -912,7 +912,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodOfInnerCartonEN')+':'">
+                    <el-form-item prop="innerCartonMethodEn" :label="$t('productSeller.page.packingMethodOfInnerCartonEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -922,7 +922,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.unitOfOuterCarton')+':'">
+                    <el-form-item prop="outerCartonUnit" :label="$t('productSeller.page.unitOfOuterCarton')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -932,7 +932,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.descriptionOfOuterCarton')+':'">
+                    <el-form-item prop="outerCartonDesc" :label="$t('productSeller.page.descriptionOfOuterCarton')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1030,7 +1030,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodOfOuterCartonCN')+':'">
+                    <el-form-item prop="outerCartonMethodCn" :label="$t('productSeller.page.packingMethodOfOuterCartonCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1040,7 +1040,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.packingMethodOfOuterCartonEN')+':'">
+                    <el-form-item prop="outerCartonMethodEn" :label="$t('productSeller.page.packingMethodOfOuterCartonEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1049,7 +1049,7 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.oem')+':'">
                         <el-select v-model="productForm.oem" placeholder="请选择">
                             <el-option
@@ -1129,7 +1129,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.specialTransportRequirements')+':'">
+                    <el-form-item prop="specialTransportRequire" :label="$t('productSeller.page.specialTransportRequirements')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1139,7 +1139,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.inventoryCostCalculationMethod')+':'">
+                    <el-form-item prop="inventoryCostMethod" :label="$t('productSeller.page.inventoryCostCalculationMethod')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1149,7 +1149,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.defaultWarehouse')+':'">
+                    <el-form-item prop="warehourceDefault" :label="$t('productSeller.page.defaultWarehouse')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1202,7 +1202,7 @@
         </div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.mainSaleCountry')+':'">
                         <el-select size="mini" v-model="productForm.mainSaleCountry" placeholder="请选择">
                             <el-option
@@ -1215,7 +1215,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.mainSaleArea')+':'">
+                    <el-form-item prop="mainSaleArea" :label="$t('productSeller.page.mainSaleArea')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1237,7 +1237,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.qualityStander')+':'">
+                    <el-form-item prop="qualityStander" :label="$t('productSeller.page.qualityStander')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1254,11 +1254,12 @@
                                 align="right"
                                 type="date"
                                 placeholder="选择日期"
+                                :editable="false"
                                 :picker-options="pickerOptions1">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.useDisplayBoxOrNot')+':'">
                         <el-select size="mini" v-model="productForm.useDisplayBox" placeholder="请选择">
                             <el-option
@@ -1314,7 +1315,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.otherPackingInformationCN')+':'">
+                    <el-form-item prop="otherPackInfoCn" :label="$t('productSeller.page.otherPackingInformationCN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1324,7 +1325,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('productSeller.page.otherPackingInformationEN')+':'">
+                    <el-form-item prop="otherPackInfoEn" :label="$t('productSeller.page.otherPackingInformationEN')+':'">
                         <el-input
                                 size="mini"
                                 placeholder="请输入内容"
@@ -1333,7 +1334,7 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col class="list number" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                <el-col class="list select" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                     <el-form-item :label="$t('productSeller.page.adjustSKUAndPackageOrNot')+':'">
                         <el-select size="mini" v-model="productForm.adjustPackage" placeholder="请选择">
                             <el-option
@@ -1350,9 +1351,6 @@
 
         <div class="title">
             {{$t('productSeller.page.attachment')}}
-        </div>
-        <div>
-
         </div>
 
 
@@ -1518,6 +1516,168 @@
                         },
                     ]
                 },
+
+                rules:{
+                    nameEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    nameCn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    barcode:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    descEn:[
+                        {max:300,message: '最大长度为300',}
+                    ],
+                    descCn:[
+                        {max:300,message: '最大长度为300',}
+                    ],
+                    descCustomer:[
+                        {max:300,message: '最大长度为300',}
+                    ],
+                    nameCustomer:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    customerSkuCode:[
+                        {max:50,message: '最大长度为50',}
+                    ],
+                    supplierCode:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    supplierName:[
+                        {max:80,message: '最大长度为80',}
+                    ],
+                    code:[
+                        {max:40,message: '最大长度为40',}
+                    ],
+                    unit:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    formation:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    materialEn:[
+                        {max:60,message: '最大长度为60',}
+                    ],
+                    materialCn:[
+                        {max:60,message: '最大长度为60',}
+                    ],
+                    colourEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    colourCn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    design:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    expireUnit:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    comments:[
+                        {max:300,message: '最大长度为300',}
+                    ],
+                    mainSaleArea:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    qualityStander:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    otherPackInfoCn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    otherPackInfoEn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    //暂时未处理的验证规则
+                    lengthWidthHeight:[
+                        // {max:100,message: '最大长度为100',}
+                    ],
+                    customsCode:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    customsNameCn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    customsNameEn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    tradeMarkCn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    tradeMarkEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    commodityInspectionCn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    commodityInspectionEn:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    declareElement:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    origin:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    inspectQuarantineCategory:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    brand:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    brandRemark:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    brandRelated:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    certificat:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    specialTransportRequire:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    inventoryCostMethod:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    warehourceDefault:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    methodPkgCn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    methodPkgEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    innerCartonUnit:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    innerCartonDesc:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    innerCartonMethodCn:[
+                        {max:30,message: '最大长度为30',}
+                    ],
+                    innerCartonMethodEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    outerCartonUnit:[
+                        {max:20,message: '最大长度为20',}
+                    ],
+                    outerCartonDesc:[
+                        {max:100,message: '最大长度为100',}
+                    ],
+                    outerCartonMethodCn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+                    outerCartonMethodEn:[
+                        {max:45,message: '最大长度为45',}
+                    ],
+
+                },
+
                 //上下架状态
                 skuStatusOption:[
                     {
@@ -1726,9 +1886,9 @@
                 ],
                 //日期组件配置
                 pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
+                    // disabledDate(time) {
+                    //     return time.getTime() > Date.now();
+                    // },
                     shortcuts: [{
                         text: '今天',
                         onClick(picker) {
@@ -1825,8 +1985,6 @@
                     children:'children'
                 },
 
-
-
                 options: [
                     {
                     value: '选项1',
@@ -1844,13 +2002,6 @@
                     value: '选项5',
                     label: '北京烤鸭'
                 }],
-
-
-
-
-
-
-
 
             }
         },
@@ -1874,16 +2025,15 @@
                 document.getElementById('pic').click();
             },
 
-
             getCategoryId(){
                 this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                    console.log(res)
                     this.dropData=res;
                 }).catch(err=>{
                     console.log(err)
                 });
             },
 
+            //完成新增
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
@@ -1900,9 +2050,23 @@
                     this.disabledSubmit=false;
                 });
             },
+
+            //获取产品详情
+            getGoodsData(){
+                this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
+                    console.log(res)
+                    this.productForm=res;
+                }).catch(err=>{
+                    console.log(err,'12345')
+                });
+            },
         },
         created(){
             this.getCategoryId();
+            let id=this.$route.query.id;
+            if(id){
+                this.getGoodsData();
+            }
         },
     }
 </script>
@@ -1912,8 +2076,15 @@
         position: relative;
     }
     .number{
-        height: 33px;
+        min-height: 51px;
     }
+    .number >>> .el-input-number--mini{
+        width:80%;
+    }
+    .select >>> .el-select{
+        width: 80%;
+    }
+
     .title{
         font-weight: bold;
         font-size: 18px;
@@ -1940,7 +2111,7 @@
     }
 
     .speForm .el-form-item--small.el-form-item{
-        margin-bottom: 0;
+        /*margin-bottom: 0;*/
     }
     .speForm .el-row .list .el-input{
         width: 80%;
@@ -1960,6 +2131,9 @@
     }
     .dropdown{
         height: 32px;
+        width: 80%;
+    }
+    .speNumbberInput{
         width: 80%;
     }
 

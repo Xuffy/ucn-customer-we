@@ -23,7 +23,25 @@ const page={
     tradeHistory:'Trade History',
     remark:'Remark',
 
-    //add New Product
+
+
+    /**
+     * overview sourcing
+     * */
+    category:'分类',
+    // skuNameEN:'',
+    // readilyAvailable:'',
+    // customerSkuCode:'',
+    exwPrice:'EXW价格',
+    fobPrice:'FOB价格',
+    skuMaterialsEN:'产品英文材质',
+    country:'国家',
+    deliveryDays:'交期',
+
+
+    /**
+     * add New Product
+     * */
     //basic info
     pic:'图片',
     skuSaleStatus:'销售状态',
