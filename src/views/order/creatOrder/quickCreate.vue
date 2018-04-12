@@ -2,8 +2,7 @@
     <div class="QuickCreate">
        <div class="select_div">
            <selectSearch></selectSearch>
-       </div>
-        
+       </div>     
         <div>
              <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
         </div>

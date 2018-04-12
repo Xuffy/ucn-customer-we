@@ -2,7 +2,7 @@
     <div class="Details">
         <div class="head">
             <div class="title">
-                （SKU name）
+                {{productForm.nameCn}}   (采购商显示英文，供应商显示中文)
             </div>
             <div class="detail">
                 <el-row>
@@ -16,54 +16,54 @@
                     <el-col :span="18">
                         <el-form :modal="productForm" ref="sourcingDetail" label-width="190px">
                             <el-row>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.skuNameCN')+' :'">
-                                        xxxx
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.skuNameCN')+' :'">
+                                        {{productForm.nameCn}}
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.skuSaleStatus')+' :'">
+                                        {{productForm.status===0?'下架':'上架'}}
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.skuCode')+' :'">
+                                        {{productForm.code}}
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.colourCN')+' :'">
+                                        {{productForm.colourCn}}
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.incoterm')+' :'">
+                                        {{productForm.colourCn}}******
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.incotermArea')+' :'">
+                                        {{productForm.colourCn}}*******
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.incotermPrice')+' :'">
+                                        {{productForm.colourCn}}*******
+                                    </el-form-item>
+                                </el-col>
+                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.unit')+' :'">
+                                        {{productForm.unit}}
                                     </el-form-item>
                                 </el-col>
                                 <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.skuSaleStatus')+' :'">
-                                        xxxx
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.supplierName')+' :'">
+                                        {{productForm.supplierName}}
                                     </el-form-item>
                                 </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.skuCode')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.colourEN')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.incoterm')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.incotermArea')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.incotermPrice')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.unit')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.supplierName')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                </el-col>
-                                <el-col class="list" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                                    <el-form-item prop="categoryId" :label="$t('product.page.skuDescriptionCN')+' :'">
-                                        xxxx
+                                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                                    <el-form-item prop="categoryId" :label="$t('productSeller.page.skuDescriptionCN')+' :'">
+                                        {{productForm.descCn}}
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -74,705 +74,565 @@
                     <el-button>{{$t('productSeller.page.edit')}}</el-button>
                     <el-button>{{$t('productSeller.page.setUp')}}</el-button>
                     <el-button @click="addNewProduct">{{$t('productSeller.page.addNewProduct')}}</el-button>
-                    <el-button @click="deleteProduct">{{$t('productSeller.page.delete')}}</el-button>
+                    <el-button type="danger" @click="deleteProduct">{{$t('productSeller.page.delete')}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$t('product.page.basicInformation')" name="Basic Info">
+                <el-tab-pane :label="$t('productSeller.page.basicInformation')" name="Basic Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuStatus')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuSaleStatus')+' :'">
+                                    {{productForm.status}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuNo')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuCode')+' :'">
+                                    {{productForm.code}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuEnglishName')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuNameCN')+' :'">
+                                    {{productForm.nameCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuNameInCustomerLanguage')+' :'">
-                                    XXXX
+                                <el-form-item :label="$t('productSeller.page.skuDescriptionCN')+' :'">
+                                    {{productForm.descCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.skuEnglishDescription')+' :'">
-                                    XXXXX
+                                <el-form-item :label="$t('productSeller.page.skuNameEN')+' :'">
+                                    {{productForm.nameEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.skuDescriptionInCustomerLanguage')+' :'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.skuDescriptionEN')+' :'">
+                                    {{productForm.descEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuCode')+' :'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.skuNameInCustomerLanguage')+' :'">
+                                    {{productForm.nameCustomer}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.vendorSkuCode')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuDescriptionInCustomerLanguage')+' :'">
+                                    {{productForm.descCustomer}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.supplierName')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.customerSkuCode')+' :'">
+                                    {{productForm.customerSkuCode}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.supplierCode')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.supplierName')+' :'">
+                                    {{productForm.supplierName}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitofMeasurement')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.supplierCode')+' :'">
+                                    {{productForm.supplierCode}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.productFormation')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unit')+' :'">
+                                    {{productForm.unit}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.textureEnglish')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.productFormation')+' :'">
+                                    {{productForm.formation}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.colourEnglish')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.martialEN')+' :'">
+                                    {{productForm.materialEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.minimumOrderQuantity')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.martialCN')+' :'">
+                                    {{productForm.materialCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.deliveryDate')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.colourEN')+' :'">
+                                    {{productForm.colourEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.productDesign')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.colourCN')+' :'">
+                                    {{productForm.colourCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.categoryLevel1')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.minimumOrderQuantity')+' :'">
+                                    {{productForm.minOrderQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.categoryLevel2')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.deliveryDays')+' :'">
+                                    {{productForm.deliveryDates}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.categoryLevel3')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.productDesign')+' :'">
+                                    {{productForm.design}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.categoryLevel4')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.categoryLevel1')+' :'">
+                                    <span style="color:red">暂未处理</span>
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.readilyAvailable')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.categoryLevel2')+' :'">
+                                    <span style="color:red">暂未处理</span>
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuAvailable')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.barCode')+' :'">
+                                    {{productForm.barcode}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.restrictedSellingCountry')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.readilyAvailable')+' :'">
+                                    {{productForm.readilyAvailable}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.applicableAge')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuAvailable')+' :'">
+                                    {{productForm.availableQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.expirationDate')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.restrictedSellingCountry')+' :'">
+                                    {{productForm.noneSellCountry}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unexpirationDate')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.applicableAge')+' :'">
+                                    {{productForm.applicableAge}}
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('productSeller.page.expirationDate')+' :'">
+                                    {{productForm.expireDates}}
+                                </el-form-item>
+                            </el-col>
+                            <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <el-form-item :label="$t('productSeller.page.expirationDateUnit')+' :'">
+                                    {{productForm.expireUnit}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.explain')+' :'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.explain')+' :'">
+                                    {{productForm.comments}}
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.customInformation')" name="Customer Info">
+                <el-tab-pane :label="$t('productSeller.page.customInformation')" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.rateOfValueAddedTax')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.rateOfValueAddedTax')+':'">
+                                    {{productForm.rateValueAddedTax}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.taxRefundRate')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.taxRefundRate')+':'">
+                                    {{productForm.taxRefundRate}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.customsCode')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.hsCode')+':'">
+                                    {{productForm.customsCode}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.customsDeclarationNameInChinese')+':'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.customsDeclarationNameCN')+':'">
+                                    {{productForm.customsNameCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.customsDeclarationNameInEnglish')+':'">
-                                    XXXXX
+                                <el-form-item :label="$t('productSeller.page.customsDeclarationNameEN')+':'">
+                                    {{productForm.customsNameEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.chineseTradeMark')+':'">
-                                    asfsaf
+                                <el-form-item :label="$t('productSeller.page.chineseTradeMark')+':'">
+                                    {{productForm.tradeMarkCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.englishTradeMark')+':'">
-                                    asfasgqewtq
+                                <el-form-item :label="$t('productSeller.page.englishTradeMark')+':'">
+                                    {{productForm.tradeMarkEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.commodityInspectionChineseName')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.commodityInspectionChineseName')+':'">
+                                    {{productForm.commodityInspectionCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.commodityInspectionEnglishName')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.commodityInspectionEnglishName')+':'">
+                                    {{productForm.commodityInspectionEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.declareElements')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.declareElements')+':'">
+                                    {{productForm.declareElement}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.origin')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.origin')+':'">
+                                    {{productForm.origin}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.inspectionAndQuarantineCategory')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.inspectionAndQuarantineCategory')+':'">
+                                    {{productForm.inspectQuarantineCategory}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.brand')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.brand')+':'">
+                                    {{productForm.brand}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.related')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.brandRemark')+':'">
+                                    {{productForm.brandRemark}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.brandRemark')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.relatedBrand')+':'">
+                                    {{productForm.brandRelated}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.certificat')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.certificat')+':'">
+                                    {{productForm.certificat}}
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.price')" name="Price Info">
-                    <el-table
-                            :data="tableData"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="date"
-                                :label="$t('product.tableData.fobCurrency')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                :label="$t('product.tableData.fobPrice')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.fobPort')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.exwPrice')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.exwCurrency')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.otherIncoterm')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.otherIncotermPrice')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.otherIncotermArea')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.otherIncotermCurrency')"
-                                width="180px">
-                        </el-table-column>
-                    </el-table>
-                    <br>
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage1"
-                            :page-sizes="[100, 200, 300, 400]"
-                            :page-size="100"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="400">
-                    </el-pagination>
+                <el-tab-pane :label="$t('productSeller.page.priceInfo')" name="Price Info">
+
+                    <v-table :data="productForm.price" data-key="productSeller.tableData"></v-table>
+
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.packingInfo')" name="Packing Info">
+                <el-tab-pane :label="$t('productSeller.page.packingInfo')" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitOfWeight')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unitOfWeight')+':'">
+                                    {{productForm.unitWeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitOfLength')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unitOfLength')+':'">
+                                    {{productForm.unitLength}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitOfVolume')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unitOfVolume')+':'">
+                                    {{productForm.unitVolume}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuLength')+':'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.skuLength')+':'">
+                                    {{productForm.length}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuBreadth')+':'">
-                                    XXXXX
+                                <el-form-item :label="$t('productSeller.page.skuBreadth')+':'">
+                                    {{productForm.width}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuHeight')+':'">
-                                    asfsaf
+                                <el-form-item :label="$t('productSeller.page.skuHeight')+':'">
+                                    {{productForm.height}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuNetWeight')+':'">
-                                    asfasgqewtq
+                                <el-form-item :label="$t('productSeller.page.skuNetWeight')+':'">
+                                    {{productForm.netWeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuVolume')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuVolume')+':'">
+                                    {{productForm.volume}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.packingMethodCN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodCN')+':'">
+                                    {{productForm.methodPkgCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.packingMethodEN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodEN')+':'">
+                                    {{productForm.methodPkgEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unitOfInnerCarton')+':'">
+                                    {{productForm.innerCartonUnit}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuQuantityOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuQuantityOfInnerCarton')+':'">
+                                    {{productForm.innerCartonQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.lengthOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.lengthOfInnerCarton')+':'">
+                                    {{productForm.innerCartonLength}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.breadthOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.breadthOfInnerCarton')+':'">
+                                    {{productForm.innerCartonWidth}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.heightOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.heightOfInnerCarton')+':'">
+                                    {{productForm.innerCartonHeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.netWeightOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.netWeightOfInnerCarton')+':'">
+                                    {{productForm.innerCartonWeightNet}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.roughWeightOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.grossWeightOfInnerCarton')+':'">
+                                    {{productForm.innerCartonRoughWeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.volumeOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.volumeOfInnerCarton')+':'">
+                                    {{productForm.innerCartonVolume}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.descriptionOfMediumPackage')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.descriptionOfInnerCarton')+':'">
+                                    {{productForm.innerCartonDesc}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.packingMethodOfMediumPackageCN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodOfInnerCartonCN')+':'">
+                                    {{productForm.innerCartonMethodCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.packingMethodOfMediumPackageEN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodOfInnerCartonEN')+':'">
+                                    {{productForm.innerCartonMethodEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.unitOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.unitOfOuterCarton')+':'">
+                                    {{productForm.outerCartonUnit}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.descriptionOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.descriptionOfOuterCarton')+':'">
+                                    {{productForm.outerCartonDesc}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.mediumPackageOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.quantityOfInnerBoxInOuterCarton')+':'">
+                                    {{productForm.innerCartonOuterNum}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuQuantityOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.skuQuantityOfOuterCarton')+':'">
+                                    {{productForm.outerCartonQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.lengthOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.lengthOfOuterCarton')+':'">
+                                    {{productForm.outerCartonLength}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.breadthOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.breadthOfOuterCarton')+':'">
+                                    {{productForm.outerCartonWidth}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.heightOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.heightOfOuterCarton')+':'">
+                                    {{productForm.outerCartonHeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.netWeightOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.netWeightOfOuterCarton')+':'">
+                                    {{productForm.outerCartonNetWeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.roughWeightOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.grossWeightOfOuterCarton')+':'">
+                                    {{productForm.outerCartonRoughWeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.volumeOfOuterBox')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.volumeOfOuterCarton')+':'">
+                                    {{productForm.outerCartonVolume}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.outerPackingMethodCN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodOfOuterCartonCN')+':'">
+                                    {{productForm.outerCartonMethodCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.outerPackingMethodEN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.packingMethodOfOuterCartonEN')+':'">
+                                    {{productForm.outerCartonMethodEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.oem')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.oem')+':'">
+                                    {{productForm.oem}}
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.logisticInfo')" name="Logistic">
+                <el-tab-pane :label="$t('productSeller.page.logisticInfo')" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="'20'+$t('product.page.gpSKUQuantity')+':'">
-                                    XXXXXX
+                                <el-form-item :label="'20'+$t('productSeller.page.gpSKUQuantity20')+':'">
+                                    {{productForm.gp20SkuQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="'40'+$t('product.page.gpSKUQuantity')+':'">
-                                    XXXXXX
+                                <el-form-item :label="'40'+$t('productSeller.page.gpSKUQuantity40')+':'">
+                                    {{productForm.gp40SkuQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="'40'+$t('product.page.hqSKUQuantity')+':'">
-                                    XXXXXX
+                                <el-form-item :label="'40'+$t('productSeller.page.hqSKUQuantity40')+':'">
+                                    {{productForm.hq40SkuQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.trayDimension')+':'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.trayDimension')+':'">
+                                    {{productForm.tryDimension}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuQuantityPerTray')+':'">
-                                    XXXXX
+                                <el-form-item :label="$t('productSeller.page.skuQuantityPerTray')+':'">
+                                    {{productForm.skuQtyPerTray}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.inventoryCostCalculationMethod')+':'">
-                                    asfsaf
-                                </el-form-item>
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.specialTransportRequirements')+':'">
-                                    asfasgqewtq
+                                <el-form-item :label="$t('productSeller.page.specialTransportRequirements')+':'">
+                                    {{productForm.specialTransportRequire}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.defaultWarehouse')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.inventoryCostCalculationMethod')+':'">
+                                    {{productForm.inventoryCostMethod}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.warehouseQuantity')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.defaultWarehouse')+':'">
+                                    {{productForm.warehourceDefault}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.safeStock')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.supplierInventoryQuantity')+':'">
+                                    {{productForm.inventory}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.minimumStock')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.supplierSafeInventoryQuantity')+':'">
+                                    {{productForm.safeInventory}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.maximumBatch')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.supplierMinimumInventory')+':'">
+                                    {{productForm.minInventory}}
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.otherInfo')" name="Other Info">
+                <el-tab-pane :label="$t('productSeller.page.otherInfo')" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.mainSaleCountry')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.mainSaleCountry')+':'">
+                                    {{productForm.mainSaleCountry}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.mainSaleArea')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.mainSaleArea')+':'">
+                                    {{productForm.mainSaleArea}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.productionTime')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.productionDays')+':'">
+                                    {{productForm.productionDates}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.qualityStander')+':'">
-                                    asfasf
+                                <el-form-item :label="$t('productSeller.page.qualityStander')+':'">
+                                    {{productForm.qualityStander}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.yearOfListed')+':'">
-                                    XXXXX
+                                <el-form-item :label="$t('productSeller.page.yearOfListed')+':'">
+                                    {{productForm.yearListed}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.useDisplayBoxOrNot')+':'">
-                                    asfsaf
+                                <el-form-item :label="$t('productSeller.page.useDisplayBoxOrNot')+':'">
+                                    {{productForm.useDisplayBox}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.skuQuantityInDisplayBox')+':'">
-                                    asfasgqewtq
+                                <el-form-item :label="$t('productSeller.page.skuQuantityInDisplayBox')+':'">
+                                    {{productForm.displayBoxQty}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.lengthWidthAndHeight')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.lengthBreadthAndHeight')+':'">
+                                    {{productForm.lengthWidthHeight}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.otherPackingInformationCN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.otherPackingInformationCN')+':'">
+                                    {{productForm.otherPackInfoCn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                                <el-form-item :label="$t('product.page.otherPackingInformationEN')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.otherPackingInformationEN')+':'">
+                                    {{productForm.otherPackInfoEn}}
                                 </el-form-item>
                             </el-col>
                             <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                                <el-form-item :label="$t('product.page.adjustSKUAndPackageOrNot')+':'">
-                                    XXXXXX
+                                <el-form-item :label="$t('productSeller.page.adjustSKUAndPackageOrNot')+':'">
+                                    {{productForm.adjustPackage}}
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.attachment')" name="Attachment">
+                <el-tab-pane :label="$t('productSeller.page.attachment')" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.tradeHistory')" name="History">
-                    <el-table
-                            :data="tableData"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="date"
-                                :label="$t('product.tableData.inquiryNo')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="name"
-                                :label="$t('product.tableData.orderNo')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.orderDate')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.incoterm')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.incotermArea')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.purchaseCurrency')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.purchasePrice')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.orderPrice')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.totalQuantity')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.deliverDate')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.qcDate')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.logisticDate')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.logisticQuantity')"
-                                width="180px">
-                        </el-table-column>
-                        <el-table-column
-                                prop="address"
-                                :label="$t('product.tableData.orderSkuQuantity')"
-                                width="180px">
-                        </el-table-column>
-                        <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--:label="$t('product.tableData.inquiryNo')"-->
-                        <!--width="180px">-->
-                        <!--</el-table-column>-->
-                    </el-table>
-                    <br>
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage1"
-                            :page-sizes="[100, 200, 300, 400]"
-                            :page-size="100"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="400">
-                    </el-pagination>
+                <el-tab-pane :label="$t('productSeller.page.tradeHistory')" name="History">
+                    <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.remark')" name="Remark">
+                <el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">
+                    <span style="color:red">暂时接口还没做</span>
                     <add-table></add-table>
                 </el-tab-pane>
             </el-tabs>
@@ -784,7 +644,7 @@
 </template>
 
 <script>
-
+    import VTable from '@/components/common/table/index'
     import addTable from '../product/addlineTable'
     import compareList from '../product/compareList'
 
@@ -792,7 +652,8 @@
         name: "detail",
         components:{
             addTable,
-            compareList
+            compareList,
+            VTable
         },
         data(){
             return{
@@ -937,46 +798,6 @@
                 },
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                tableData: [
-                    {
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄'
-                    },
-                    {
-                        date: '2016-05-04',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1517 弄'
-                    },
-                    {
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1519 弄'
-                    },
-                    {
-                        date: '2016-05-03',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1516 弄'
-                    }
-                ],
                 currentPage1:1,
 
                 //compareList配置
@@ -999,7 +820,7 @@
             //获取产品详情
             getGoodsData(){
                 this.$ajax.get(this.$apis.get_productDetail,{id:'1'}).then(res=>{
-                    console.log(res)
+                    this.productForm=res;
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -1012,7 +833,24 @@
 
             //删除产品
             deleteProduct(){
+                this.$confirm('是否确认删除该商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: '删除成功!'
+                    // });
+                    console.log(this.productForm.id,'???')
+                    // this.$ajax.post(this.$apis.delete_product,{id:this.productForm.id}).then(res=>{
+                    //     console.log(res)
+                    // }).catch(err=>{
+                    //     console.log(err)
+                    // });
+                }).catch(() => {
 
+                });
             },
         },
         created(){
@@ -1022,6 +860,11 @@
 </script>
 
 <style scoped>
+    >>> .el-form-item__content{
+        word-wrap: break-word;
+    }
+
+
     .Details{
         background-color: #f4f4f4;
     }
