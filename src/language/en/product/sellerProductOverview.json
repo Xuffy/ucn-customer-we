@@ -5,6 +5,12 @@
   "hideTheAdvanced":"收起高级搜索",
   "search":"搜索",
   "clear":"清除条件",
+  "addNewProduct":"添加新产品",
+  "setUp":"设为上架",
+  "setDown":"设为下架",
+  "downloadSelected":"下载选中的产品",
+  "delete":"删除",
+
 
 
   "categoryId":"产品类型",

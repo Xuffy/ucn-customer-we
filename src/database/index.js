@@ -2,12 +2,12 @@ import language from '../language/index';
 import workbench from './workbench/index';
 import product from './product/index';
 
+import inquiryOverview from './inquiry';
 const db = {
   workbench,
-  product
+    product,
+  inquiryOverview
 };
-
-
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {

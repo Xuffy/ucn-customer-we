@@ -162,17 +162,18 @@
             <el-button @click="search" type="primary">{{$lang.product.search}}</el-button>
             <el-button @click="clear" type="info" plain>{{$lang.product.clear}}</el-button>
         </div>
-        <!--<div class="footer">-->
-            <!--<div class="btns">-->
-                <!--<el-button @click="addNewProduct">{{$t('productSeller.page.addNewProduct')}}</el-button>-->
-                <!--<el-button>{{$t('productSeller.page.setUp')}}</el-button>-->
-                <!--<el-button>{{$t('productSeller.page.setDown')}}</el-button>-->
-                <!--<el-button>{{$t('productSeller.page.downloadSelectProducts')}}</el-button>-->
-                <!--<el-button type="danger">{{$t('productSeller.page.delete')}}</el-button>-->
-            <!--</div>-->
-            <!--<v-table :data="tableDataList" data-key="productSeller.tableData"></v-table>-->
+        <div class="footer">
+            <div class="btns">
+                <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
+                <el-button>{{$lang.product.setUp}}</el-button>
+                <el-button>{{$lang.product.setDown}}</el-button>
+                <el-button>{{$lang.product.downloadSelected}}</el-button>
+                <el-button type="danger">{{$lang.product.delete}}</el-button>
+            </div>
 
-        <!--</div>-->
+            <v-table :data="tableDataList"></v-table>
+
+        </div>
     </div>
 </template>
 
@@ -193,6 +194,7 @@
         },
         data(){
             return{
+
                 hideBody:true,            //是否显示body
                 btnInfo:this.$lang.product.advanced,     //按钮默认文字显示
 
@@ -319,8 +321,8 @@
 
             getData() {
                 this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
-                    console.log(res.datas)
-                    this.tableDataList=res.datas;
+                    this.tableDataList = this.$getDB(this.$db.product.table, data);
+                    // this.tableDataList=res.datas;
                 }).catch(err=>{
                     console.log(err)
                 });
