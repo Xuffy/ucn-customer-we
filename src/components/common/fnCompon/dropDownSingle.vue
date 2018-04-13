@@ -9,7 +9,7 @@
 			<div class="deepBox">
 				<el-input
 					:placeholder="searchPlaceholder"
-					v-model="filterText">
+					v-model="key">
 				</el-input>
 				<div class="deep" :style="{'height':treeHeight}">
 					<el-tree
@@ -52,7 +52,6 @@
 	export default {
 		data() {
 			return {
-				filterText: '',
 				selectedList:'',
 				data:[],
 				visible: false
@@ -95,6 +94,20 @@
 			chindeNode: {
 				type: Boolean,
 				default: false
+			},
+			value: {
+				type: String,
+				default: ''
+			}
+		},
+		computed: {
+			key: {
+				get() {
+					return this.value;
+				},
+				set(val) {
+					this.$emit('input', val);
+				}
 			}
 		},
 		watch: {
