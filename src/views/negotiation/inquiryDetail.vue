@@ -110,9 +110,7 @@
         name:'inquiryDetail',
         data() {
             return {
-                tableColumn: {
-                    
-                },
+                tableColumn: 'negotiation.tableBasicInfo',
                 HistotyData: [],
                 basicInfoBtn: [{label: 'Histoty', type: 'histoty'}],
                 productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
