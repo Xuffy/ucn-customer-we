@@ -564,6 +564,46 @@ export const routerMap = [
         },
       ]
     },
+    //draft  草稿箱路由
+    {
+      path: '/draft',
+      component: Layout,
+      name: 'draft',
+      redirect: '/draft/index',
+      noDropdown: true,
+         hidden: true,
+      children: [
+        {
+          path: 'index',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/draft/index.vue')
+        }
+      ]
+    },
+        //recycleBin  回收站路由
+    {
+      path: '/recycle',
+      component: Layout,
+      name: 'recycle Bin',
+      redirect: '/recycle/index',
+      noDropdown: true,
+         hidden: true,
+      children: [
+        {
+          path: 'index',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/recycleBin/index.vue')
+        }
+      ]
+    },
   ]
 ;
 
