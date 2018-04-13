@@ -20,7 +20,7 @@ import dropDownSingle from './common/fnCompon/dropDownSingle';
 import VAddQuickLink from './common/addQuickLink/index';
 import paymentTable from '@/views/warehouse/paymentTable';
 import VHistory from '@/views/negotiation/children/history';
-import timeSelection from './common/fnCompon/timeSelection';
+// import timeSelection from './common/fnCompon/timeSelection';
 
 export {
   VAddQuickLink,
@@ -44,5 +44,5 @@ export {
   dropDownSingle,
   paymentTable,
   VHistory,
-  timeSelection
+  // timeSelection
 }
