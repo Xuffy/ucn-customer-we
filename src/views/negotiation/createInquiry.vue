@@ -10,7 +10,7 @@
                     <el-row :gutter="10">                    
                         <el-col v-for="(item, index) in basicInfoForm" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
                             <el-form-item  :label="item.label" :prop="item.label" :rules="item.rules" :label-width="item.width">
-                                <el-input v-model="item.value" :placeholder="item.placeholder" />
+                                <el-input v-model="item.value" :placeholder="item.placeholder" v-if="item.type === 'text'" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -77,7 +77,7 @@
                         value: '',
                         rules: [],
                         width: '150px',
-                        type: 'text',
+                        type: 'date',
                         state: 0
                     }
                 ], 
