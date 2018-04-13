@@ -1,8 +1,10 @@
 import language from '../language/index';
 import workbench from './workbench/index';
+import product from './product/index';
 
 const db = {
-  workbench
+  workbench,
+  product
 };
 
 
