@@ -1,210 +1,220 @@
 <template>
     <div class="create-inquiry">
         <h3 class="hd">{{ $t('negotiation.text.inquiryDetail') }}</h3>
+        <time-selection />
         <div class="select-wrap">
             <h4 class="content-hd">{{ $t('negotiation.text.basicInfo') }}</h4>
             <div class="select-main">
-                <el-row :gutter="10">
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.shippingMethod') }}：</span>
-                            <el-select v-model="shipping" placeholder="Please select">
-                                <el-option
-                                    v-for="item in shippingOptions"
+                <!-- <el-form 
+                        :model="basicInfoForm" 
+                        status-icon 
+                        :rules="rules2" 
+                        ref="ruleForm2" 
+                        label-width="100px" 
+                        class="demo-ruleForm"
+                    >
+                    <el-row :gutter="10">
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.shippingMethod') }}：</span>
+                                <el-select v-model="shipping" placeholder="Please select">
+                                    <el-option
+                                        v-for="item in shippingOptions"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.id"
+                                    />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.paymentTerm') }}：</span>
+                                <el-select v-model="Payment" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in PaymentOptions"
                                     :key="item.id"
                                     :label="item.label"
-                                    :value="item.id"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.departureCountry') }}：</span>
+                                <el-select v-model="departure" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in departureOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.departurePort') }}：</span>
+                                <el-select v-model="port" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in portOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.incoterm') }}：</span>
+                                <el-select v-model="incoterm" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in incotermOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.currency') }}：</span>
+                                <el-select v-model="currency" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in currencyOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
+                                <el-select v-model="inquiryData" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in inquiryDataOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
+                                <el-select v-model="InquiryStatus" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in InquiryStatusOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
+                                <el-input
+                                    placeholder="input here"
+                                    v-model="InquirySequance"
+                                    clearable
+                                    style="max-width:203px;"
+                                    />
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
+                                <el-input
+                                    placeholder="input here"
+                                    v-model="InquirySequance1"
+                                    clearable
+                                    :disabled="true"
+                                    style="max-width:203px;"
                                 />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.paymentTerm') }}：</span>
-                            <el-select v-model="Payment" placeholder="Please select">
-                                <el-option
-                                v-for="item in PaymentOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.departureCountry') }}：</span>
-                            <el-select v-model="departure" placeholder="Please select">
-                                <el-option
-                                v-for="item in departureOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.departurePort') }}：</span>
-                            <el-select v-model="port" placeholder="Please select">
-                                <el-option
-                                v-for="item in portOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.incoterm') }}：</span>
-                            <el-select v-model="incoterm" placeholder="Please select">
-                                <el-option
-                                v-for="item in incotermOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.currency') }}：</span>
-                            <el-select v-model="currency" placeholder="Please select">
-                                <el-option
-                                v-for="item in currencyOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
-                            <el-select v-model="inquiryData" placeholder="Please select">
-                                <el-option
-                                v-for="item in inquiryDataOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
-                            <el-select v-model="InquiryStatus" placeholder="Please select">
-                                <el-option
-                                v-for="item in InquiryStatusOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
-                            <el-input
-                                placeholder="input here"
-                                v-model="InquirySequance"
-                                clearable
-                                style="max-width:203px;"
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.destinationCountry') }}：</span>
+                                <el-select v-model="destinationCountry" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in destinationCountryOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                            <span>{{ $t('negotiation.basicInfo.quotationValidity') }}：</span>
+                                <el-select v-model="quotation" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in quotationOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.destinationPort') }}：</span>
+                                <el-select v-model="Destination" placeholder="Please select">
+                                    <el-option
+                                    v-for="item in DestinationOptions"
+                                    :key="item.id"
+                                    :label="item.label"
+                                    :value="item.id" />
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
+                                <el-date-picker
+                                v-model="date"
+                                align="right"
+                                type="date"
+                                placeholder="Please choose the date"
+                                :picker-options="pickerOptions"
                                 />
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.inquirySequance') }}：</span>
-                            <el-input
-                                placeholder="input here"
-                                v-model="InquirySequance1"
-                                clearable
-                                :disabled="true"
-                                style="max-width:203px;"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.destinationCountry') }}：</span>
-                            <el-select v-model="destinationCountry" placeholder="Please select">
-                                <el-option
-                                v-for="item in destinationCountryOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                        <span>{{ $t('negotiation.basicInfo.quotationValidity') }}：</span>
-                            <el-select v-model="quotation" placeholder="Please select">
-                                <el-option
-                                v-for="item in quotationOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.destinationPort') }}：</span>
-                            <el-select v-model="Destination" placeholder="Please select">
-                                <el-option
-                                v-for="item in DestinationOptions"
-                                :key="item.id"
-                                :label="item.label"
-                                :value="item.id" />
-                            </el-select>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.inquiryData') }}：</span>
-                            <el-date-picker
-                            v-model="date"
-                            align="right"
-                            type="date"
-                            placeholder="Please choose the date"
-                            :picker-options="pickerOptions"
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.myInquiryID') }}：</span>
-                            <el-input
-                                placeholder="input here"
-                                v-model="MyInquiryID"
-                                clearable
-                                :disabled="true"
-                                style="max-width:203px;"
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.myInquiryID') }}：</span>
+                                <el-input
+                                    placeholder="input here"
+                                    v-model="MyInquiryID"
+                                    clearable
+                                    :disabled="true"
+                                    style="max-width:203px;"
+                                    />
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <div class="select-item textarea">
+                                <span>{{ $t('negotiation.basicInfo.remarks') }}：</span>
+                                <el-input
+                                    type="textarea"
+                                    :rows="3"
+                                    placeholder="Please enter the content"
+                                    v-model="textarea"
+                                    style="max-width:203px"
+                                    clearable
                                 />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <div class="select-item textarea">
-                            <span>{{ $t('negotiation.basicInfo.remarks') }}：</span>
-                            <el-input
-                                type="textarea"
-                                :rows="3"
-                                placeholder="Please enter the content"
-                                v-model="textarea"
-                                style="max-width:203px"
-                                clearable
-                            />
-                        </div>
-                    </el-col>
-                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <div class="select-item">
-                            <span>{{ $t('negotiation.basicInfo.attachment') }}：</span>
-                            <v-up-load />
-                        </div>
-                    </el-col>
-                </el-row>
+                            </div>
+                        </el-col>
+                        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                            <div class="select-item">
+                                <span>{{ $t('negotiation.basicInfo.attachment') }}：</span>
+                                <v-up-load />
+                            </div>
+                        </el-col>
+                    </el-row>
+                </el-form> -->
             </div>
         </div>
         <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
@@ -239,7 +249,7 @@
     </div>
 </template>
 <script>
-    import { selectSearch, VTable, Upload } from '@/components/index';
+    import { selectSearch, VTable, Upload, timeSelection } from '@/components/index';
     import product from '@/views/product/addProduct';
     export default {
         name:'createInquiry',
@@ -322,16 +332,17 @@
             'select-search': selectSearch,
             'v-table': VTable,
             'v-product': product,
-            'v-up-load': Upload
+            'v-up-load': Upload,
+            'time-selection': timeSelection
         },
         created() {
-            this.ajax({
-                url: '/tableProductInfo',
-                method: 'get'
-            }).then(res => {
-                this.tabData = res.content;
-                this.tabColumn =  'negotiation.tableProductInfo';
-            });
+            // this.ajax({
+            //     url: '/tableProductInfo',
+            //     method: 'get'
+            // }).then(res => {
+            //     this.tabData = res.content;
+            //     this.tabColumn =  'negotiation.tableProductInfo';
+            // });
         },
         methods: {
            fromChange(val) {
@@ -412,7 +423,7 @@
             bottom:0;
             z-index:9;
             width:100%;
-            padding: 10px 245px 10px;
+            padding: 10px 200px 10px;
             box-shadow: 0 -1px 5px #ccc;
         }
         .bom-btn-wrap-station {

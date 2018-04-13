@@ -1,27 +1,28 @@
 <template>
-   <div>
-        <div class="attchment_title">{{$t('order.basicinfo.attachment')}}                 
-        </div>
-         <Upload class='upload' @getres='getres' :disabled='disabled'></Upload> 
-            <div class="Vattchment" >   
+   <div class='attachment'>
+        <el-form  label-width="230px">
+        <el-form-item class="form-list" :label=" $t('order.basicinfo.attachment')" prop="supplierName">     
+            <Upload class='upload' @getres='getres'              :disabled='disabled'></Upload> 
+            <div class="order_attchment" >   
                  <div class="attchment_content">
-                    <span class='attchment_item'>
+                    <span class='attchment_item' v-for='(item,index) in list'>
                         <span class="attchment_item_name">
                              <i class="el-icon-document" style='color:#BEBEBE'></i>
-                             <p>123456111111111111118</p>
+                             <p>{{item.name}}</p>
                         </span>   
-                          <button  class='el_delete' :disabled='disabled' @click='deleteFile'>     
+                          <button  class='el_delete' :disabled='disabled' @click.prevent='deleteFile(index)'>     
                                  <i class="el-icon-circle-close" style='color:#f56c6c;fontSize:16px'></i>
                            </button> 
                     </span> 
                        
                 </div>      
             </div>
-            
-            
+         </el-form-item>    
+        </el-form>  
     </div>
 </template>
 <script>
+    /*自己ref拿 上传的url数组*/
     import {
         Upload
     } from '@/components/index';
@@ -44,19 +45,16 @@
             Upload
         },
         data() {
-            return {
-
-            }
+            return {}
         },
         methods: {
-            deleteFile() {
-                console.log('in')
+            deleteFile(index) {
+                this.list.splice(index, 1)
+
             },
             //上传成功拿到的data //
             getres(data) {
-                console.log(data)
-
-                //                this.$emit('getres', data)
+                this.list.push(data)
             },
 
         },
@@ -67,7 +65,11 @@
 
 </script>
 <style scoped="true">
-    .Vattchment {
+    .attachment {
+        /*        height: 100px;*/
+    }
+
+    .order_attchment {
         display: flex;
         justify-content: flex-start;
         align-items: center;

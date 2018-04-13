@@ -7,22 +7,44 @@ const page={
     setDown:'设为下架',            //Set Down
     downloadSelectProducts:'下载选中的商品',//Download Select Products
     delete:'删除',                //Delete
+    edit:'编辑',                  //Edit
+
 
 
 
     //title
     basicInformation:'Basic Information',
     customInformation:'Custom Information',
-    priceInfo:'Price Information',
+    priceInfo:'Price',
     packingInfo:'Packing Info',
     logisticInfo:'Logistic Info',
     otherInfo:'Other Info',
     attachment:'Attachment',
+    tradeHistory:'Trade History',
+    remark:'Remark',
 
-    //add New Product
+
+
+    /**
+     * overview sourcing
+     * */
+    category:'分类',
+    // skuNameEN:'',
+    // readilyAvailable:'',
+    // customerSkuCode:'',
+    exwPrice:'EXW价格',
+    fobPrice:'FOB价格',
+    skuMaterialsEN:'产品英文材质',
+    country:'国家',
+    deliveryDays:'交期',
+
+
+    /**
+     * add New Product
+     * */
     //basic info
     pic:'图片',
-    skuSaleStatus:'产品状态',
+    skuSaleStatus:'销售状态',
     skuCode:'供应商货号',
     skuNameCN:'产品中文名',
     skuDescriptionCN:'产品中文描述',
@@ -43,9 +65,10 @@ const page={
     deliveryDays:'交期',
     productDesign:'产品设计',
     categoryLevel:'分类名称',
-    // categoryLevel2:'二级分类名称',
-    // categoryLevel3:'三级分类名称',
-    // categoryLevel4:'四级分类名称',
+    categoryLevel1:'一级分类名称',
+    categoryLevel2:'二级分类名称',
+    categoryLevel3:'三级分类名称',
+    categoryLevel4:'四级分类名称',
     barCode:'产品条码',
     readilyAvailable:'是否现货',
     skuAvailable:'现货数量',
@@ -66,14 +89,13 @@ const page={
     englishTradeMark:'英文商标',
     commodityInspectionChineseName:'商检中文品名',
     commodityInspectionEnglishName:'商检英文品名',
-    DeclareElements:'申报要素',
+    declareElements:'申报要素',
     origin:'原产地',
     inspectionAndQuarantineCategory:'检验检疫类别',
     brand:'品牌',
     brandRemark:'品牌备注',
     relatedBrand:'相关品牌',
     certificat:'认证',
-
 
     //Packing Info
     unitOfWeight:'重量单位',
@@ -138,6 +160,19 @@ const page={
     otherPackingInformationCN:'其他包装信息CN',
     otherPackingInformationEN:'其他包装信息EN',
     adjustSKUAndPackageOrNot:'产品或包装可否调整',
+
+    /**
+     *  detail页面
+     * */
+    // skuNameCN:'产品中文名',
+    // skuSaleStatus:'销售状态',
+    // skuCode:'供应商货号',
+    // colour EN:'颜色 EN',
+    incoterm:'价格条款',
+    incotermArea:'价格条款区域',
+    incotermPrice:'价格',
+    // unit:'计量单位',
+    // Supplier Name:'供应商名称',
 
 
 

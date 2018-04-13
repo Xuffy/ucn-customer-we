@@ -2,6 +2,7 @@
     <div class="message">
         <div class="head">
             <el-button @click="manageMessage">{{$t('product.page.management')}}</el-button>
+            <h1 style="color:red">这个页面表格要加一列title</h1>
         </div>
         <div class="body">
             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
@@ -16,45 +17,7 @@
                         </el-input>
                     </div>
                     <div class="content">
-                        <el-table
-                                class="speTable"
-                                ref="multipleTable"
-                                :data="tableData3"
-                                tooltip-effect="dark"
-                                style="width: 100%"
-                                @selection-change="handleSelectionChange"
-                                height="350">
-                            <el-table-column
-                                    type="selection"
-                                    width="40">
-                            </el-table-column>
-                            <el-table-column
-                                    :label="$t('product.page.content')"
-                                    align="left">
-                                <template slot-scope="scope">
-                                    <div style="font-weight: bold;color:#3f9eff;">
-                                        {{ scope.row.content }}
-                                    </div>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                    prop="time"
-                                    :label="$t('product.page.time')"
-                                    sortable
-                                    align="center">
-                                <!--<template slot-scope="scope">{{ scope.row.content }}</template>-->
-                            </el-table-column>
-                        </el-table>
-                        <br>
-                        <el-pagination
-                                @size-change="handleSizeChange"
-                                @current-change="handleCurrentChange"
-                                :current-page="currentPage"
-                                :page-sizes="[100, 200, 300, 400]"
-                                :page-size="100"
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="400">
-                        </el-pagination>
+                        <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('product.page.messageSettings')" name="Message Settings">
@@ -86,8 +49,13 @@
 </template>
 
 <script>
+    import VTable from '@/components/common/table/index'
+
     export default {
         name: "message",
+        components:{
+            VTable
+        },
         data(){
             return{
                 tabPosition: 'left',

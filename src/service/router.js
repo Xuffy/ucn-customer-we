@@ -475,6 +475,16 @@ export const routerMap = [
             log: true,
           },
           component: () => import('../views/settings/CategorySetting')
+        },
+           {
+          path: 'Personal',
+          name: 'Personal Setting',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/settings/personalSetting')
         }
       ]
     },
@@ -546,7 +556,12 @@ export const routerMap = [
           path: 'addNewProduct',
           name: 'Add New Product',
           component: () => import('../views/sellerProduct/addNewProduct')
-        }
+        },
+        {
+          path: 'detail',
+          name: 'Detail',
+          component: () => import('../views/sellerProduct/detail')
+        },
       ]
     },
   ]

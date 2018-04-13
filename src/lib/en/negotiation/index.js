@@ -26,7 +26,8 @@ const btn = {
     submit: "submit",
     saveAsDraft: "Save as Draft",
     inquiry: "Inquiry",
-    SKU: "SKU"
+    SKU: "SKU",
+    ok: "ok"
 };
 
 const viewBy = {
@@ -47,7 +48,8 @@ const text = {
     compare: "Compare",
     compareOverview: "Compare Overview",
     downloadSelectedCompare: "Download Selected Compare",
-    delete: "Delete"
+    delete: "Delete",
+    fromNewSearch: "From New Search"
 };
 
 const basicInfo = {

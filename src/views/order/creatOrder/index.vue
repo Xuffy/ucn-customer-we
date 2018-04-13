@@ -5,6 +5,7 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
+         
    
 <!--             responsibility     -->
          <VResponsibility></VResponsibility>
@@ -18,9 +19,14 @@
                   <el-button type='danger'>{{$t('order.buttonname.remove')}}</el-button>
              </div>
              <div class="pro_table">
-                     <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                     <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1},{label: 'history', type: 2}]" 
+                           @action="onAction"
+                          :loading='loading'
+                           style='marginTop:10px'/>
              </div>
          </div>
+<!--           caculate-->
+         <v-caculate></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
@@ -45,6 +51,9 @@
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
+           <el-dialog  :visible.sync="dialogHistory" width='70%'>
+               
+           </el-dialog>
   </div>
 </template>
 
@@ -56,6 +65,7 @@
     import VFromBookmark from './FromBookmark.vue'
     import VQuickCreate from './QuickCreate.vue'
     import VAttchment from './attchment'
+    import VCaculate from './caculate'
     import {
         VTable
     } from '@/components/index';
@@ -68,7 +78,8 @@
             VFromBookmark,
             VAttchment,
             VTable,
-            VQuickCreate
+            VQuickCreate,
+            VCaculate
         },
         data() {
             return {
@@ -76,6 +87,7 @@
                 checked: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
+                dialogHistory: false, //弹出框 productinfo 弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
                 keyWord: '',
@@ -86,17 +98,16 @@
                     id: '2',
                     label: 'Sku Code'
                 }, ],
-                tabColumn: [],
-                tabData: []
+                tabData: [], //表格数据
+                loading: false //表格加载状态
             }
         },
         created() {
-            this.ajax.get('/supplierOverview', {
+            this.$ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
-                .then(res => {
+                .then((res) => {
                     this.tabData = res
-
                 })
                 .catch((res) => {
                     console.log(res);
@@ -115,7 +126,14 @@
                 if (this.$refs.basicInfo.submitForm()) {
                     console.log('in')
                 }
-            }
+            },
+            onAction(item, type) {
+                if (type === 1) {
+                    this.windowOpen('/product/sourcingDetail', '')
+                } else if (type === 2) {
+                    this.dialogHistory = true
+                }
+            },
         }
     }
 
@@ -162,7 +180,7 @@
 
     .pro_table {
         margin-top: 10px;
-        padding-bottom: 60px;
+/*        padding-bottom: 60px;*/
     }
 
     .pro_title {

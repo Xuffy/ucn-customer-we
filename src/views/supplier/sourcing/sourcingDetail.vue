@@ -120,6 +120,7 @@
                     <v-remark   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
+<!--
                   <div class="attchment">
                    <div class="attchment_item">
                     <div class="attchment_item_content">
@@ -136,6 +137,8 @@
                     </div>
                     </div>
                     </div>
+-->
+                   <v-attachment></v-attachment>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -148,6 +151,7 @@
 <script>
     import VCompareList from '../../product/compareList'
     import VRemark from '../../product/addlineTable'
+    import VAttachment from '../attachment'
     import {
         VTable
     } from '@/components/index';
@@ -157,7 +161,8 @@
         components: {
             VTable,
             VCompareList,
-            VRemark
+            VRemark,
+            VAttachment
         },
         data() {
             return {
@@ -305,6 +310,7 @@
         width: 80%;
     }
 
+/*
     .attchment {
         display: flex;
         justify-content: flex-start;
@@ -338,5 +344,6 @@
     .attchment_item i {
         font-size: 40px;
     }
+*/
 
 </style>

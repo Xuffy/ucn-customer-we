@@ -21,7 +21,7 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-<!--         <payment></payment>-->
+         <payment></payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -29,13 +29,18 @@
              </div>
              <div class="pro_button">
                   <el-button  @click="dialogAddproduct = true" :disabled='disabled'>{{$t('order.buttonname.addProduct')}}</el-button>
-                  <el-button  :disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
+                  <el-button type='danger' :disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
                   <el-button  @click='placeLogisticPlan' :disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
              </div>
              <div class="pro_table">
-                 <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                   <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1},{label: 'history', type: 2}]" 
+                           @action="onAction"
+                          :loading='loading'
+                           style='marginTop:10px'/>
              </div>
          </div>
+<!--         caculate-->
+         <v-caculate :disabled='disabled'></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='disabled'>
@@ -44,8 +49,10 @@
 <!--                 <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>-->
                  <el-button  :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
+<!--
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hideTheSame')}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$t('order.buttonname.hightlightTheDifferent')}}</el-checkbox>
+-->
              </div>
                <div class="footer_button" v-else>
                  <el-button >{{$t('order.buttonname.send')}}</el-button>
@@ -72,6 +79,7 @@
     import FromNewSearch from '../creatOrder/FromNewSearch.vue'
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
+    import VCaculate from '../creatOrder/caculate'
     import payment from '../../warehouse/paymentTable.vue'
 
     import {
@@ -88,7 +96,8 @@
             attchment,
             payment,
             VTable,
-            messageBoard
+            messageBoard,
+            VCaculate
         },
         data() {
             return {
@@ -110,21 +119,19 @@
                     label: 'Sku Code'
                 }, ],
                 switchStatus: false,
-                tabColumn: [],
-                tabData: []
+                tabData: [],
+                loading: false, //表格加载
             }
         },
         mounted() {
             //            console.log(this.$refs.responsibility.tableData)
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
+            this.$ajax.get(this.$apis.supplier_overview, {
                     params: {}
                 })
-                .then(res => {
+                .then((res) => {
                     this.tabData = res
-
-
                 })
                 .catch((res) => {
                     console.log(res);
@@ -154,7 +161,11 @@
             //..............底部cancel
             cancel() {
                 this.disabled = true
-            }
+            },
+            onAction(item, type) {
+                console.log(item,type)
+               
+            },
         },
         watch: {
 
@@ -209,7 +220,7 @@
 
     .pro_table {
         margin-top: 10px;
-        padding-bottom: 60px;
+/*        padding-bottom: 60px;*/
     }
 
     .footer {
