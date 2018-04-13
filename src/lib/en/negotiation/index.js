@@ -53,8 +53,8 @@ const text = {
 };
 
 const basicInfo = {
-    shippingMethod: "Shipping method",
-    paymentTerm: "Payment Term",
+    operater: "operater",
+    time: "time",
     departureCountry: "Departure Country",
     departurePort: "Departure Port",
     incoterm: "Incoterm",

@@ -9,7 +9,7 @@
 			<div class="deepBox">
 				<el-input
 					:placeholder="searchPlaceholder"
-					v-model="key">
+					v-model="filterText">
 				</el-input>
 				<div class="deep" :style="{'height':treeHeight}">
 					<el-tree
@@ -100,20 +100,13 @@
 				default: ''
 			}
 		},
-		computed: {
-			key: {
-				get() {
-					return this.value;
-				},
-				set(val) {
-					this.$emit('input', val);
-				}
-			}
-		},
 		watch: {
 			filterText(val) {
 				this.$refs.tree.filter(val);
 			},
+			selectedList(val) {
+				this.$emit('input', val);
+			}
 		},
 		methods: {
 			getChecked(item) {
