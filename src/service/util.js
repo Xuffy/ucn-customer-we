@@ -1,29 +1,10 @@
 import DateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
+import database from '../database/index';
+import language from '../language/index';
 
 export default {
   install(Vue, options) {
-    let alertShow = false;
-
-    /**
-     * 阻塞message提示（只能提示显示一个message）
-     * @param param
-     * @returns {boolean}
-     */
-    // Vue.prototype.$alert = function (param) {
-    //   if (alertShow) return false;
-    //
-    //   if (_.isString(param)) {
-    //     param = {content: param};
-    //   }
-    //
-    //   param.onClose = () => {
-    //     alertShow = false;
-    //   };
-    //
-    //   this.$Message.warning(param);
-    //   alertShow = true;
-    // };
 
     /**
      * 本地永久缓存
@@ -39,6 +20,43 @@ export default {
      * 格式化日期
      */
     Vue.prototype.$dateFormat = DateFormat;
+
+    /**
+     * 格式化日期
+     */
+    Vue.prototype.$dateFormat = DateFormat;
+
+    /**
+     * 国际化语言配置
+     */
+    Vue.prototype.$lang = language;
+
+    /**
+     * 字段配置
+     */
+    Vue.prototype.$db = database;
+
+    /**
+     * 字段配置
+     */
+    Vue.prototype.$getDB = (db, data) => {
+      let list = [];
+      db = _.values(db);
+      _.map(data, value => {
+        let obj = {};
+        _.mapObject(value, (val, key) => {
+          let dbValue = _.clone(_.findWhere(db, {key: key}));
+          if (!_.isEmpty(dbValue)) {
+            dbValue.value = val;
+            obj[key] = dbValue;
+          }
+
+        });
+        list.push(obj);
+        // list.push(_.values(obj));
+      });
+      return list;
+    };
 
 
     /**
@@ -61,7 +79,7 @@ export default {
      * @param {Object} [config]    - column扩展参数 参照elment-ui
      * @returns {Object}
      */
-    Vue.prototype.$getTableColumn = function (data, key, config = {}) {
+    Vue.prototype.$getTableColumn = (data, key, config = {}) => {
       let value, list = [];
       if (!_.isEmpty(data) && !_.isEmpty(key) && (_.isArray(data) || _.isObject(data))) {
 
@@ -82,61 +100,5 @@ export default {
     }
 
 
-
-    /**
-     * text转换html 替换<br>、&nbsp;
-     * @param value
-     * @returns {string}
-     */
-    /*Vue.prototype.$textToHtml = function (value) {
-      let val_array, val_num = 0, val_new = '';
-
-      if (!_.isString(value)) {
-        return '';
-      }
-
-      value = value.replace(/\n/g, "<br/>").replace(/\s/g, "&nbsp;");
-      val_array = value.split('&nbsp;');
-      _.map(val_array, function (val) {
-        if (val) {
-          val_new += val;
-          val_num = 0;
-        } else if (val_num < 4) {
-          val_num++;
-          val_new += '&nbsp;';
-        }
-      });
-
-      return val_new;
-    };*/
-
-
-    /**
-     * html转换text 替换<br>、&nbsp;
-     * @param value
-     * @returns {string}
-     */
-    /*Vue.prototype.$htmlToText = function (value) {
-      if (!_.isString(value)) {
-        return '';
-      }
-      return value.replace(/<br\/>/g, '\n').replace(/&nbsp;/g, ' ');
-    }*/
-
-    // Vue.prototype.$windowOpen = (str, query) => {
-    //     function serialization(params) {
-    //       const result = []
-    //       for (const key in params) {
-    //         if (params.hasOwnProperty(key)) {
-    //           const element = params[key];
-    //           result.push(`${key}=${element}`)
-    //         }
-    //       }
-        
-    //       return result.join('&')
-    //     }
-    //     let url = `${window.location.origin}/#${str}?${serialization(query)}`;
-    //     window.open(url);
-    // }
   }
 }
