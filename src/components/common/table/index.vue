@@ -22,12 +22,12 @@
         action
       </div>
 
-      <div class="table-box" ref="tableBox">
+      <div class="table-box" id="table-box" ref="tableBox">
         <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
             <td ref="tableCheckbox" v-if="selection">
-              <div style="visibility: hidden"><input type="checkbox"/></div>
+              <div style="visibility: hidden"><input type="checkbox" @change="changeCheck()"/></div>
             </td>
             <td>
               <div>#</div>
@@ -48,14 +48,15 @@
               <div>
                 <input type="checkbox" ref="checkbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
+                       @change="changeCheck()"
                        v-model="item._checked"/>
               </div>
             </td>
             <td>
               <div v-text="index + 1"></div>
             </td>
-            <td v-for="(cItem,cKey) in item" v-if="filterKey(cKey)">
-              <div v-text="cItem"></div>
+            <td v-for="(cItem,cKey) in item">
+              <div v-text="cItem.value"></div>
             </td>
             <td v-if="buttons">
               <div style="white-space: nowrap;">
@@ -73,10 +74,13 @@
     </div>
 
     <el-pagination
-      v-if="dataColumn.length"
-      background
-      layout="prev, pager, next, jumper,total,sizes"
-      :total="1000">
+      :style="{visibility: !dataColumn.length ? 'hidden' : ''}"
+      @size-change="size => {$emit('page-size-change', size)}"
+      @current-change="page => {$emit('page-change', page)}"
+      :page-sizes="pageSizes"
+      :page-size="pageSize"
+      :total="pageTotal"
+      layout="prev, pager, next,sizes, jumper,total">
     </el-pagination>
   </div>
 </template>
@@ -89,11 +93,14 @@
    * @param {String} [dataKey]    - i18n对应配置参数  例：'negotiation.tableProductInfo'
    * @param {Boolean} [loading]    - 加载loading状态  例：true
    * @param {String} [height]    - 设置表格高度  例：200
+   * @param {Array} [pageSizes]    - 允许分页显示条数  例：[10,20,30]
+   * @param {Number} [pageSize]    - 每页条数  例：200
+   * @param {Number} [pageTotal]    - 总条数  例：200
    * @param {Function, Array} [buttons]    - 设置action按钮，可传入函数判断按钮是否显示，返回Array
    *                                         例：[{label: 'detail', type: 1}, {label: 'history', type: 2}]
    *                                         例：['detail', 'history']
    *
-   * @method @sort-change(val, key)   - 点击排序
+   * @method @change-checked(checkedList)   - checkbox改变时调用
    * @method @page-size-change(size)    - 改变分页条数
    * @method @page-change(page)   - 改变分页
    *
@@ -134,6 +141,20 @@
         type: [Function, Boolean],
         default: true,
       },
+      pageSizes: {
+        type: Array,
+        default() {
+          return [10, 20, 30, 40, 50];
+        },
+      },
+      pageSize: {
+        type: Number,
+        default: 10,
+      },
+      pageTotal: {
+        type: Number,
+        default: 1,
+      },
     },
     data() {
       return {
@@ -155,6 +176,17 @@
           val._checked = value;
           return val;
         });
+        this.changeCheck();
+      },
+      buttons() {
+        this.$nextTick(() => {
+          this.scrollListener();
+        });
+      },
+      selection() {
+        this.$nextTick(() => {
+          this.scrollListener();
+        });
       },
     },
     mounted() {
@@ -167,24 +199,11 @@
     },
     methods: {
       filterColumn(data) {
-        let list = [];
         if (_.isEmpty(data)) {
           return [];
         } else {
-          _.map(_.keys(data[0]), val => {
-            let k = this.filterKey(val);
-            k && list.push({label: k, prop: val, width: 100});
-          });
-          return list;
+          return _.values(data[0]);
         }
-      },
-      filterKey(k) {
-        // const dk = 'negotiation.tableProductInfo';
-        let sk = this.$tc(`${this.dataKey}.${k}`);
-        if (sk.indexOf('.') < 0 || sk.charAt(sk.length - 1) === '.') {
-          return sk;
-        }
-        return false;
       },
       scrollListener(e) {
         if (!this.$refs.tableBody) return false;
@@ -217,6 +236,9 @@
           }
         });
         this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
+      },
+      changeCheck() {
+        this.$emit('change-checked', this.getSelected());
       },
       getSelected() {
         return _.where(this.dataList, {_checked: true});
@@ -328,8 +350,8 @@
   }
 
   .ucn-table thead tr:nth-child(even) td,
-  .ucn-table tbody tr:nth-child(even) td{
-    background-color: #F7F8F9!important;
+  .ucn-table tbody tr:nth-child(even) td {
+    background-color: #F7F8F9 !important;
   }
 
   .ucn-table tbody tr td:hover,
