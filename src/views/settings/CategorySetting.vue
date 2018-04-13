@@ -146,6 +146,7 @@
                 this.$ajax.post(this.$apis.category, params)
                 .then(res => {
                     this.addData(res, data, name, type);
+                    this.myCategory = '';
                 });
             },
             filterNode(value, data) {
