@@ -58,6 +58,7 @@
 			};
 		},
 		props: {
+			filterText: '',
 			emptyText: {
 				type: String,
 				default: 'no data'
@@ -105,7 +106,7 @@
 				this.$refs.tree.filter(val);
 			},
 			selectedList(val) {
-				this.$emit('input', val);
+				this.$emit('input', val[this.defaultProps.label]);
 			}
 		},
 		methods: {
