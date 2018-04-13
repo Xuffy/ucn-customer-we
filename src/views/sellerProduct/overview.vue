@@ -127,7 +127,7 @@
                 <el-button>{{$t('productSeller.page.downloadSelectProducts')}}</el-button>
                 <el-button type="danger">{{$t('productSeller.page.delete')}}</el-button>
             </div>
-            <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
+            <v-table :data="tableDataList" data-key="productSeller.tableData"></v-table>
 
         </div>
     </div>
@@ -174,7 +174,7 @@
                     ],
                     categoryId: '',
                     nameEn: '',                  //产品英文名
-                    isReadilyAvailable: '',      //
+                    isReadilyAvailable: true,      //
                     customerSkuCode: '',         //客户货号
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -282,36 +282,71 @@
             },
 
             getData() {
-                let params={
-                    ps: 10,                     //pageSIze
-                    pn: 1,                      //pageNumber
-                    sorts: [
-                        {
-                            orderBy: "string",
-                            orderType: "string"
-                        }
-                    ],
-                    categoryId: 0,
-                    barcode: "",
-                    customerSkuCode: "",
-                    nameEn: "",
-                    readilyAvailable: true,
-                    minExwPrice: 0,
-                    maxExwPrice: 0,
-                    minFobPrice: 0,
-                    maxFobPrice: 0,
-                    code: "string",
-                    supplierName: "string",
-                    materialEn: "string",
-                    descEn: "string",
-                    deliveryDates: 0,
-                    outerCartonMethodEn: "string",
-                    country: 0,
-                    methodPkgEn: "string",
-                    nameCustomer: "string",
-                    nameCn: "string"
-                };
-
+                // let params={
+                //     categoryId: 0,
+                //     codeLike: "",     //???
+                //     companyId: 0,
+                //     country: 0,
+                //     customerSkuCodeLike: "",
+                //     deliveryDates: 0,
+                //     descEnLike: "",
+                //     materialEnLike: "",
+                //     maxExwPrice: 0,
+                //     maxFobPrice: 0,
+                //     methodPkgEnLike: "",
+                //     minExwPrice: 0,
+                //     minFobPrice: 0,
+                //     nameCnLike: "",
+                //     nameCustomerLike: "",
+                //     nameEnLike: "",
+                //     operatorFilters: [
+                //         {
+                //             columnName: "string",
+                //             operator: "string",
+                //             property: "string",
+                //             value: {}
+                //         }
+                //     ],
+                //     outerCartonMethodEnLike: "",
+                //     pn: 1,
+                //     ps: 10,
+                //     readilyAvailable: this.productForm.isReadilyAvailable,
+                //     recycle: true,
+                //     sorts: [
+                //         {
+                //             orderBy: "string",
+                //             orderTye: "string",
+                //         }
+                //     ],
+                //     supplierNameLike: "",
+                //     unifyUser: {
+                //         companyId: 0,
+                //         dataPrivileges: {
+                //             additionalProp1: [
+                //                 0
+                //             ],
+                //             additionalProp2: [
+                //                 0
+                //             ],
+                //             additionalProp3: [
+                //                 0
+                //             ]
+                //         },
+                //         deptId: 0,
+                //         id: 0,
+                //         realName: "string",
+                //         roleId: 0,
+                //         tenantId: 0,
+                //         userName: "string"
+                //     }
+                // };
+                // console.log(params)
+                this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
+                    console.log(res.datas)
+                    this.tableDataList=res.datas;
+                }).catch(err=>{
+                    console.log(err)
+                });
                 // this.ajax.post(this.$apis.get_listData,params);
             },
 

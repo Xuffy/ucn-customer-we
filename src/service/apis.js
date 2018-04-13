@@ -6,7 +6,7 @@ const apis = {
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
   mapping_category: ['/category/mapping', 'BASE_CS'],
-  getCategory:['/category','BASE_CS'],
+  getCategory:['/sys/category','BASE_CS'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
   add_newSKU:['/sku','BASE_CS'],
   supplier_overview: ['/supplierOverview', 'BASE_API'],
