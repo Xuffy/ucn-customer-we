@@ -1,8 +1,11 @@
 import language from '../language/index';
 import workbench from './workbench/index';
+import payment from './payment/index';
+
 
 const db = {
-  workbench
+  workbench,
+  payment
 };
 
 

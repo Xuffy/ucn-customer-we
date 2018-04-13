@@ -1,7 +1,7 @@
 <template>
     <div class="payment">
         <div class="title">
-            {{$t('payment.page.orderOverview')}}
+            {{$db.payment.title.orderOverview.key}}
         </div>
         <div class="body">
             <div class="head">
@@ -24,7 +24,6 @@
                     </div>
                     <div class="search">
                         <select-search :selectHide="false" class="search"></select-search>
-                        <!--<el-input v-model="searchValue"></el-input>-->
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -131,7 +130,9 @@
             },
         },
         created(){
-            this.getList();
+            // this.getList();
+            console.log(this.$lang)
+            console.log(this.$db)
         },
     }
 </script>

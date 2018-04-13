@@ -34,7 +34,8 @@
       VTableData,
     },
     created() {
-
+        console.log(this.$db)
+        console.log(this.$lang)
     },
     methods: {}
   }
