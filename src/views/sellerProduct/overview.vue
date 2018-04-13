@@ -9,18 +9,22 @@
         </div>
 
         <div>
-            <el-form ref="productFormTop" :model="productForm" label-width="190px">
+            <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
                 <el-row class="speZone">
-
-                    <el-col v-for="v in $db.product.basic" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col v-if="v.isOutside" v-for="v in $db.product.basic" :key="v.id" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-
-                            <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
-                            <el-input size="mini" v-model="productForm[v.key]"></el-input>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-select v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
+                                <el-option
+                                        v-for="item in readilyAvailableOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
-
-
                     <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
                         <!--<el-form-item prop="categoryId" :label="$t('productSeller.page.category')">-->
                             <!--<drop-down class="" :list="dropData" ref="dropDown"></drop-down>-->
@@ -46,9 +50,36 @@
                 </el-row>
             </el-form>
         </div>
-        <!--<div class="body" :class="{hide:hideBody}">-->
-            <!--<el-form ref="productForm" :rule="rules" :model="productForm" label-width="190px">-->
-                <!--<el-row class="speZone">-->
+        <div class="body" :class="{hide:hideBody}">
+            <el-form ref="productForm" :rule="productFormRules" :model="productForm" label-width="190px">
+                <el-row class="speZone">
+                    <el-col v-if="!v.isOutside" v-for="v in $db.product.basic" :key="v.id" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :prop="v.key" :label="v.label">
+                            <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                <el-option
+                                        v-for="item in readilyAvailableOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <div v-if="v.showType==='exwNumber'" class="section-number">
+                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
+                                <div class="section-line">--</div>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>
+                            </div>
+                            <div v-if="v.showType==='fobNumber'" class="section-number">
+                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>
+                                <div class="section-line">--</div>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>
+                            </div>
+                            <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>
+                        </el-form-item>
+                    </el-col>
+
+
                     <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
                         <!--<el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')">-->
                             <!--<el-input size="mini" v-model="productForm.customerSkuCode"></el-input>-->
@@ -68,7 +99,6 @@
                             <!--<el-input size="mini" v-model="productForm.code"></el-input>-->
                         <!--</el-form-item>-->
                     <!--</el-col>-->
-
                     <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
                         <!--<el-form-item prop="nameCn" :label="$t('productSeller.page.skuNameCN')">-->
                             <!--<el-input size="mini" v-model="productForm.nameCn"></el-input>-->
@@ -123,13 +153,15 @@
                             <!--<el-input size="mini" v-model="productForm.descCn"></el-input>-->
                         <!--</el-form-item>-->
                     <!--</el-col>-->
-                <!--</el-row>-->
-            <!--</el-form>-->
-        <!--</div>-->
-        <!--<div class="btn-group">-->
-            <!--<el-button @click="search" type="primary">{{$t('product.btn.search')}}</el-button>-->
-            <!--<el-button @click="clear" type="info" plain>{{$t('product.btn.clear')}}</el-button>-->
-        <!--</div>-->
+
+
+                </el-row>
+            </el-form>
+        </div>
+        <div class="btn-group">
+            <el-button @click="search" type="primary">{{$lang.product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$lang.product.clear}}</el-button>
+        </div>
         <!--<div class="footer">-->
             <!--<div class="btns">-->
                 <!--<el-button @click="addNewProduct">{{$t('productSeller.page.addNewProduct')}}</el-button>-->
@@ -163,6 +195,8 @@
             return{
                 hideBody:true,            //是否显示body
                 btnInfo:this.$lang.product.advanced,     //按钮默认文字显示
+
+                //表格字段绑定
                 productForm: {
                     ps:10,                      //pageSize
                     pn: 1,
@@ -174,7 +208,7 @@
                     ],
                     categoryId: '',
                     nameEn: '',                  //产品英文名
-                    isReadilyAvailable: true,      //
+                    isReadilyAvailable: '',      //
                     customerSkuCode: '',         //客户货号
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -191,7 +225,12 @@
                     descEn: '',                  //产品英文描述
                     descCn: '',                  //产品中文描述
                 },
-
+                //表格验证参数
+                productFormRules:{
+                    nameCn: [
+                        { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
+                    ],
+                },
                 //表格配置参数
                 readilyAvailableOptions: [
                     {
@@ -203,8 +242,6 @@
                         value: true
                     },
                 ],
-                //表格验证参数
-                rules:[],
 
                 //Category下拉组件数据
                 dropData:[
@@ -257,7 +294,7 @@
 
             //清除填写的表格数据
             clear(){
-                this.$refs.dropDown.selectedList=[];
+                // this.$refs.dropDown.selectedList=[];
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
                 this.$set(this.productForm,'minExwPrice','');
@@ -268,9 +305,10 @@
 
             //搜查
             search(){
-                this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
-
-                this.$ajax.post(this.$apis.get_productList,{});
+                console.log(this.productForm)
+                // this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
+                //
+                // this.$ajax.post(this.$apis.get_productList,{});
 
             },
 
@@ -305,15 +343,15 @@
         created(){
             this.getData();
             console.log(this.$db.product.basic,'db')
-            console.log(this.$lang.product,'lang')
+            console.log(this.$lang,'lang')
         },
 
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$t('product.page.showTheAdvance');
+                    this.btnInfo=this.$lang.product.advanced;
                 }else{
-                    this.btnInfo=this.$t('product.page.hideTheAdvance');
+                    this.btnInfo=this.$lang.product.hideTheAdvanced;
                 }
             }
         }
@@ -439,6 +477,11 @@
 
     .form-list{
         margin-bottom: 10px;
+    }
+
+
+    .speSelect{
+        width: 100%;
     }
 
 

@@ -3,11 +3,26 @@
 
   "advanced":"展开高级收缩",
   "hideTheAdvanced":"收起高级搜索",
+  "search":"搜索",
+  "clear":"清除条件",
 
 
   "categoryId":"产品类型",
-  "nameEn":"产品中文名",
-  "isReadilyAvailable":"是否有现货"
+  "nameCn":"产品中文名",
+  "isReadilyAvailable":"是否有现货",
+  "customerSkuCode":"客户货号",
+  "exwPrice":"EXW价格",
+  "code":"供应商货号",
+  "nameEn":"产品英文名",
+  "fobPrice":"FOB价格",
+  "materialEn":"产品英文材质",
+  "country":"国家",
+  "supplierName":"供应商名称",
+  "outerCartonMethodEn":"外包装方式EN",
+  "methodPkgEn":"产品包装方式EN",
+  "deliveryDates":"交期",
+  "descEn":"产品英文描述",
+  "descCn":"产品中文描述"
 
 
 

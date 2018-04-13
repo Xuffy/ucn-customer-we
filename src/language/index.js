@@ -6,6 +6,6 @@ export default _.extend(
   {workbench: require(`./${lang}/workbench`)},
     require(`./${lang}/workbench.pending`),
 
-    {product:require(`./${lang}/product/sellerProductOverview.pending`)},
+    {product:require(`./${lang}/product/sellerProductOverview`)},
     require(`./${lang}/product/sellerProductOverview`),
 )
