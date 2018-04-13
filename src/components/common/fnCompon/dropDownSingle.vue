@@ -58,6 +58,7 @@
 			};
 		},
 		props: {
+			filterText: '',
 			emptyText: {
 				type: String,
 				default: 'no data'
