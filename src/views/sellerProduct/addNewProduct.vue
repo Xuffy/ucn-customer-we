@@ -1353,7 +1353,6 @@
             {{$t('productSeller.page.attachment')}}
         </div>
 
-
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
@@ -1361,8 +1360,6 @@
         </div>
     </div>
 </template>
-
-
 
 <script>
     import upLoad from '@/components/common/upload/upload'
