@@ -1,11 +1,11 @@
 {
-  "customerItemNumber": "customerItemNumber",
-  "itemNoPLATE": "itemNoPLATE",
-  "manufacturer": "manufacturer",
-  "photo": "photo",
-  "productName": "productName",
-  "purchaseOrderNumber": "purchaseOrderNumber",
-  "salesOrderNumber": "salesOrderNumber",
-  "supplier": "supplier",
-  "vendorSKUCode": "vendorSKUCode"
+  "orderNO": "Order NO",
+  "orderType": "Order Type",
+  "orderStatus": "Order Status",
+  "paymentUpdateDate": "Payment update date",
+  "payable": "Payable",
+  "paid": "Paid",
+  "waitPayment": "Wait Payment",
+  "planDateOfPayment": "Plan Date of Payment",
+  "action": "Action"
 }

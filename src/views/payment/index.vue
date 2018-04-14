@@ -1,7 +1,7 @@
 <template>
     <div class="payment">
         <div class="title">
-            {{$db.payment.title.orderOverview.key}}
+            {{$lang.payment.orderOverview}}
         </div>
         <div class="body">
             <div class="head">
@@ -17,9 +17,9 @@
                         <span class="text">View : </span>
                         <el-radio-group size="mini" v-model="radio1">
                             <el-radio-button label="All" border></el-radio-button>
-                            <el-radio-button label="Logistic Order" border></el-radio-button>
-                            <el-radio-button label="Purchase Order" border></el-radio-button>
-                            <el-radio-button label="Service Order" border></el-radio-button>
+                            <el-radio-button border>{{$lang.baseText.logisticOrder}}</el-radio-button>
+                            <el-radio-button border>{{$lang.baseText.purchaseOrder}}</el-radio-button>
+                            <el-radio-button border>{{$lang.baseText.qcOrder}}</el-radio-button>
                         </el-radio-group>
                     </div>
                     <div class="search">
@@ -131,8 +131,6 @@
         },
         created(){
             // this.getList();
-            console.log(this.$lang)
-            console.log(this.$db)
         },
     }
 </script>

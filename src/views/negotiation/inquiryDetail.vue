@@ -1,16 +1,16 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $t('negotiation.text.inquiryDetail') }}</h4>
+            <h4 class="title">{{ $lang.inquiry.inquiryDetailTitle }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $t('negotiation.text.basicInfo') }}</h5>
+                        <h5>{{ $lang.baseText.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="0">{{ $lang.baseText.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $lang.baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
@@ -26,16 +26,16 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{$t('negotiation.text.productInfo')}}</h5>
+                        <h5>{{ $lang.baseText.productInfo }}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="$t('negotiation.text.hideTheSame')"></el-checkbox>
-                            <el-checkbox :label="$t('negotiation.text.highlightTheDifferent')"></el-checkbox>
+                            <el-checkbox :label="0">{{ $lang.baseText.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="0">{{ $lang.baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="newSearchDialogVisible = true">{{$t('negotiation.btn.addProduct')}}</el-button>
-                            <el-button type="danger">{{$t('negotiation.btn.remove')}}</el-button>
+                            <el-button @click="newSearchDialogVisible = true">{{ $lang.baseText.addProduct }}</el-button>
+                            <el-button type="danger">{{ $lang.baseText.remove }}</el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
@@ -45,16 +45,16 @@
                         data-key="negotiation.tableProductInfo"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button>{{$t('negotiation.btn.accept')}}</el-button>
-                        <el-button @click="windowOpen('/order/creatOrder')">{{$t('negotiation.btn.createOrder')}}</el-button>
-                        <el-button @click="compareConfig.showCompareList = true;">{{$t('negotiation.btn.addToCompare')}}</el-button>
-                        <el-button @click="modifyAction">{{$t('negotiation.btn.modify')}}</el-button>
-                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{$t('negotiation.btn.createInquiry')}}</el-button>
-                        <el-button type="info">{{$t('negotiation.btn.cancel')}}</el-button>
+                        <el-button>{{ $lang.baseText.accept }}</el-button>
+                        <el-button @click="windowOpen('/order/creatOrder')">{{ $lang.baseText.createOrder }}</el-button>
+                        <el-button @click="compareConfig.showCompareList = true;">{{ $lang.baseText.addToCompare }}</el-button>
+                        <el-button @click="modifyAction">{{ $lang.baseText.modify }}</el-button>
+                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $lang.baseText.createInquiry }}</el-button>
+                        <el-button type="info">{{ $lang.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{$t('negotiation.btn.submit')}}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{$t('negotiation.btn.cancel')}}</el-button>
+                        <el-button @click="modify">{{ $lang.baseText.submit }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $lang.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -62,26 +62,26 @@
             <div class="message-board-wrap">
                 <div class="con"><message-board :list="list" @sub="submit" /></div>
                 <div class="switch-btn" @click="boardSwitch">
-                    {{$t('negotiation.text.messageBoard')}}
+                    {{ $lang.baseText.messageBoard }}
                     <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
         </div>
         <v-compare-list :config="compareConfig" />
         <el-dialog
-                title="Add Product"
+                :title="$lang.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button :label="$t('negotiation.text.fromNewSearch')"></el-radio-button>
-                <el-radio-button label="From my bookmark"></el-radio-button>
+                <el-radio-button label="0">{{ $lang.baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="1">{{ $lang.baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
             <v-product :hideBtns="true"></v-product>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">{{$t('negotiation.btn.ok')}}</el-button>
-                <el-button @click="newSearchDialogVisible = false">{{$t('negotiation.btn.cancel')}}</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $lang.baseText.ok }}</el-button>
+                <el-button @click="newSearchDialogVisible = false">{{ $lang.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
         <v-history 

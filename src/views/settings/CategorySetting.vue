@@ -1,16 +1,16 @@
 <template>
     <div class="category-setting">
         <span style="display:none;" v-text="upDataPage"></span>
-        <div class="hd">{{ $t('setting.page.categorySetting') }}</div>
+        <div class="hd">{{ $lang.setting.categorySettingTitle }}</div>
         <div class="category-wrap">
             <div class="maping-relation">
-                <h5>{{ $t('setting.page.mappingRelation') }}</h5>
+                <h5>{{ $lang.setting.mappingRelation }}</h5>
                 <div class="category">
                     <div class="hd input-hd">
                         <span class="text">
-                            <b>{{ $t('setting.page.myCategory') }}</b>  （{{ $t('setting.page.generalCategory') }}）（{{ $t('setting.page.tags') }}）
+                            <b>{{ $lang.setting.myCategory }}</b>({{ $lang.setting.generalCategory }})({{ $lang.setting.tags }})&nbsp;
                         </span>
-                        <el-input placeholder="input key word to search" v-model="mapingCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-input :placeholder="$lang.basePlaceholder.inputkeyWordToSearch" v-model="mapingCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         class="filter-tree"
@@ -21,14 +21,14 @@
                         default-expand-all
                         v-show="mappingRelationData.length >= 1"
                     />
-                    <div v-show="mappingRelationData.length <= 0" class="mappingRelation">请设置对应映射关系</div>
+                    <div v-show="mappingRelationData.length <= 0" class="mappingRelation">{{ $lang.setting.mappingNoData }}</div>
                 </div>
             </div>
             <div class="my-category">
-                <h5>{{ $t('setting.page.myCategory') }}</h5>
+                <h5>{{ $lang.setting.myCategory }}</h5>
                 <div class="category">
                     <div class="input-hd">
-                        <el-button size="mini" @click="add(myCategoryData, 'parents')">{{ $t('setting.page.add') }}</el-button><el-input placeholder="input key word to search" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-button size="mini" @click="add(myCategoryData, 'parents')">{{ $lang.baseText.add }}</el-button><el-input :placeholder="$lang.basePlaceholder.inputkeyWordToSearch" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         class="filter-tree"
@@ -45,13 +45,13 @@
                 </div>
             </div>
             <div class="mapping">
-                <span>{{ $t('setting.page.mapping') }}</span><i></i>
+                <span>{{ $lang.setting.mapping }}</span><i></i>
             </div>
             <div class="general-category">
-                <h5>{{ $t('setting.page.generalCategory') }}</h5>
+                <h5>{{ $lang.setting.generalCategory }}</h5>
                 <div class="category">
                     <div class="input-hd">
-                        <el-input placeholder="input key word to search" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-input :placeholder="$lang.basePlaceholder.inputkeyWordToSearch" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         :data="mgeneralCategoryData"
@@ -65,7 +65,7 @@
                         @check-change="generalCategoryChange"
                     />
                     <div class="btn-wrap">
-                        <el-button type="primary" @click="save">{{ $t('setting.page.save') }}</el-button>
+                        <el-button type="primary" @click="save">{{ $lang.baseText.save }}</el-button>
                     </div>
                 </div>
             </div>

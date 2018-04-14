@@ -1,30 +1,33 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $t('negotiation.text.inquiryOverview') }}</h3>
+        <h3 class="hd"> {{ $lang.inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
-            <div style="margin-top: 20px">
-                <span>{{ $t('negotiation.status.index') }}</span>
-                <el-radio-group v-model="params.status"  size="mini">
-                    <el-radio-button :label="0">{{$t('negotiation.status.TBCByCustomer')}}</el-radio-button>
-                    <el-radio-button :label="1" >{{$t('negotiation.status.TBCBySupplier')}}</el-radio-button>
-                    <el-radio-button :label="2">{{$t('negotiation.status.finish')}}</el-radio-button>
-                    <el-radio-button :label="3">{{$t('negotiation.status.cancel')}}</el-radio-button>
-                </el-radio-group>
+            <div class="state">
+                <span>{{ $lang.baseText.state }}</span>
+                <el-checkbox-group v-model="params.status">
+                    <el-checkbox-button 
+                            v-for="item in $db.inquiryOverview.overoiewState"
+                            :label="item.id"
+                            :key="item.id"
+                        >
+                        {{ $lang.baseText.TBCByCustomer }}
+                    </el-checkbox-button>
+                </el-checkbox-group>
             </div>
             <select-search :options="options" :search-load="searchLoad" @selectChange="selectChange" @inputEnter="inputEnter" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button  @click="toCompare">{{ $t('negotiation.btn.Compare')  }}</el-button>
-                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
-                <el-button @click="cancelInquiry">{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
-                <el-button @click="deleteInquiry" type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
+                <el-button  @click="toCompare">{{ $lang.baseText.compare }}</el-button>
+                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $lang.baseText.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry">{{ $lang.baseText.cancelTheInquiry }}</el-button>
+                <el-button @click="deleteInquiry" type="danger">{{ $lang.baseText.delete }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $t('negotiation.viewBy.index')  }}&nbsp;</span>
+                <span>{{ $lang.baseText.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button :label="$t('negotiation.viewBy.inquiry')"></el-radio-button>
-                    <el-radio-button :label="$t('negotiation.viewBy.SKU')" ></el-radio-button>
+                    <el-radio-button label="0">{{$lang.baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$lang.baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -36,7 +39,7 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable } from '@/components/index';
+    import { selectSearch, VTable, dropDownSingle } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -60,7 +63,7 @@
                 viewByStatus: '',
                 keyType: '',
                 params: {
-                    status: '',
+                    status: [],
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -71,10 +74,11 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'drop-down-single': dropDownSingle
         },
         created() {
-            this.viewByStatus = this.$t('negotiation.viewBy.inquiry');
+            this.viewByStatus = 0;
         },
         watch: {
             viewByStatus() {
@@ -102,7 +106,7 @@
                 let url = null,
                     tabColumn = null;
                 this.tabLoad = true;
-                if(this.viewByStatus === 'Inquiry') {
+                if(this.viewByStatus + '' === '0') {
                     url = this.$apis.inquiry_list;
                     tabColumn = 'negotiation.tableViewByInquiry';
                 } else {
@@ -206,6 +210,12 @@
             justify-content:space-between;
             padding:0 15px;
             box-sizing: border-box;
+            .state {
+                display:flex;
+                align-items: center;
+                font-size:16px;
+                color:#666;
+            }
             span {
                 padding-right:5px;
             }

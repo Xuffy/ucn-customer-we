@@ -21,7 +21,8 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-         <payment></payment>
+         <v-payment 
+         ></v-payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -80,7 +81,7 @@
     import FromBookmark from '../creatOrder/FromBookmark.vue'
     import attchment from '../creatOrder/attchment'
     import VCaculate from '../creatOrder/caculate'
-    import payment from '../../warehouse/paymentTable.vue'
+    import VPayment from './payment.vue'
 
     import {
         VTable,
@@ -94,7 +95,7 @@
             FromNewSearch,
             FromBookmark,
             attchment,
-            payment,
+            VPayment,
             VTable,
             messageBoard,
             VCaculate
@@ -121,21 +122,68 @@
                 switchStatus: false,
                 tabData: [],
                 loading: false, //表格加载
+                tableColumns: [{
+                        label: '付款编号',
+                        prop: 'paymentNumber',
+                        type: 'Text',
+                        width: 180
+                    },
+                    {
+                        label: '款项名称',
+                        prop: 'paymentItem',
+                        type: 'Input',
+                        width: 150
+                    },
+                    {
+                        label: '预计付款日期',
+                        prop: 'estPayDate',
+                        type: 'Date',
+                        width: 150
+                    },
+                    {
+                        label: '预计付款金额',
+                        prop: 'estAmount',
+                        type: 'Number',
+                        width: 130
+                    },
+                    {
+                        label: '实际付款日期',
+                        prop: 'actPayDate',
+                        type: 'Date',
+                        width: 150
+                    },
+                    {
+                        label: '实际付款金额',
+                        prop: 'actAmount',
+                        type: 'Number',
+                        width: 130
+
+                    },
+                    {
+                        label: '有效性',
+                        prop: 'available',
+                        type: 'Text'
+                    },
+                ],
+
+
+
+
             }
         },
         mounted() {
             //            console.log(this.$refs.responsibility.tableData)
         },
         created() {
-            this.$ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then((res) => {
-                    this.tabData = res
-                })
-                .catch((res) => {
-                    console.log(res);
-                });
+            //            this.$ajax.get(this.$apis.supplier_overview, {
+            //                    params: {}
+            //                })
+            //                .then((res) => {
+            //                    this.tabData = res
+            //                })
+            //                .catch((res) => {
+            //                    console.log(res);
+            //                });
         },
         methods: {
             //..............messageboard的缩进
@@ -163,9 +211,11 @@
                 this.disabled = true
             },
             onAction(item, type) {
-                console.log(item,type)
-               
+                console.log(item, type)
+
             },
+
+
         },
         watch: {
 
@@ -220,7 +270,7 @@
 
     .pro_table {
         margin-top: 10px;
-/*        padding-bottom: 60px;*/
+        /*        padding-bottom: 60px;*/
     }
 
     .footer {
