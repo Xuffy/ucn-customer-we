@@ -28,5 +28,8 @@
     "fromNewSearch": "From New Search",
     "FromMyBookmark": "From my bookmark",
     "basicInfo": "Basic Info",
-    "productInfo": "Product Info"
+    "productInfo": "Product Info",
+    "process":"process",
+    "downloadSelected":"downloadSelected",
+    "order":"order"
 }

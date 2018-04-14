@@ -5,11 +5,11 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="status_buttons" size="mini">
-                            <el-radio-button label="TBCByCustomer">{{$t('order.buttonname.TBCByCustomer')}}</el-radio-button>
-                            <el-radio-button label="TBCBySupplier">{{$t('order.buttonname.TBCBySupplier')}}</el-radio-button>
-                            <el-radio-button label="process">{{$t('order.buttonname.process')}}</el-radio-button>
-                            <el-radio-button label="finish">{{$t('order.buttonname.finish')}}</el-radio-button>
-                            <el-radio-button label="cancel">{{$t('order.buttonname.cancel')}}</el-radio-button>
+                            <el-radio-button label="TBCByCustomer"> {{ $lang.baseText.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="TBCBySupplier">{{($lang.baseText.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="process">{{($lang.baseText.process)}}</el-radio-button>
+                            <el-radio-button label="finish">{{($lang.baseText.finish)}}</el-radio-button>
+                            <el-radio-button label="cancel">{{($lang.baseText.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -32,17 +32,17 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
-                <el-button >{{$t('order.buttonname.accept')}}</el-button>
-<!--                <el-button>{{$t('order.buttonname.copy')}}</el-button>-->
-                <el-button>{{$t('order.buttonname.cancel')}}</el-button>
-                <el-button type='danger'>{{$t('order.buttonname.delete')}}</el-button>
+                <el-button >{{($lang.baseText.downloadSelected)}}</el-button>
+                <el-button >{{($lang.baseText.accept)}}</el-button>
+<!--                <el-button>{{($lang.baseText.copy)}}</el-button>-->
+                <el-button>{{($lang.baseText.cancel)}}</el-button>
+                <el-button type='danger'>{{($lang.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
                    <el-radio-group v-model="viewBy_buttons" size="mini">
-                            <el-radio-button label="Inquiry">{{$t('order.buttonname.order')}}</el-radio-button>
-                            <el-radio-button label="SKU">{{$t('order.buttonname.SKU')}}</el-radio-button>
+                            <el-radio-button label="Inquiry">{{($lang.baseText.order)}}</el-radio-button>
+                            <el-radio-button label="SKU">{{($lang.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
                 </div>
@@ -86,13 +86,6 @@
             return {
                 value: '',
                 keyWord: '',
-                options: [{
-                    id: '1',
-                    label: this.$t('order.buttonname.orderNo')
-                }, {
-                    id: '2',
-                    label: this.$t('order.buttonname.skuCode')
-                }, ],
                 status_buttons: '', //status的按钮组
                 viewBy_buttons: 'SKU', //status的按钮组
                 tabData: [],
@@ -125,7 +118,6 @@
         },
         mounted() {
             this.loading = false
-            console.log(this.$refs.vtable.getSelected())
         },
         updated(){
              
