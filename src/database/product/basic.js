@@ -1,5 +1,4 @@
 
-
 export default {
     categoryId: {
         key: 'categoryId',
@@ -8,7 +7,7 @@ export default {
         isOutside:'true',               //是否是默认显示
         // isText:true,
     },
-    nameCn: {
+    nameCnLike: {
         key: 'nameEn',
         type: 'String',
         showType:'input',
@@ -23,12 +22,11 @@ export default {
         showType:'select',
         isOutside:'true',               //是否是默认显示
     },
-    customerSkuCode: {
+    customerSkuCodeLike: {
         key: 'customerSkuCode',
         type: 'String',
         showType:'input',
         length: 10,
-
     },
     exwPrice: {
         key: 'exwPrice',
@@ -36,14 +34,14 @@ export default {
         showType:'exwNumber',
         length: 10,
     },
-    code:{
+    codeLike:{
         key: 'code',
         type: 'String',
         showType:'input',
         length: 10,
     },
 
-    nameEn:{
+    nameEnLike:{
         key: 'nameEn',
         type: 'String',
         showType:'input',
@@ -55,7 +53,7 @@ export default {
         showType:'fobNumber',
         length: 10,
     },
-    materialEn:{
+    materialEnLike:{
         key: 'materialEn',
         type: 'String',
         showType:'input',
@@ -67,19 +65,19 @@ export default {
         showType:'select',
         length: 10,
     },
-    supplierName:{
+    supplierNameLike:{
         key: 'supplierName',
         type: 'String',
         showType:'input',
         length: 10,
     },
-    outerCartonMethodEn:{
+    outerCartonMethodEnLike:{
         key: 'outerCartonMethodEn',
         type: 'String',
         showType:'input',
         length: 10,
     },
-    methodPkgEn:{
+    methodPkgEnLike:{
         key: 'methodPkgEn',
         type: 'String',
         showType:'input',
@@ -91,7 +89,7 @@ export default {
         showType:'number',
         length: 10,
     },
-    descEn:{
+    descEnLike:{
         key: 'descEn',
         type: 'String',
         showType:'input',

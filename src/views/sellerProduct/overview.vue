@@ -79,7 +79,6 @@
                         </el-form-item>
                     </el-col>
 
-
                     <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
                         <!--<el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')">-->
                             <!--<el-input size="mini" v-model="productForm.customerSkuCode"></el-input>-->
@@ -154,7 +153,6 @@
                         <!--</el-form-item>-->
                     <!--</el-col>-->
 
-
                 </el-row>
             </el-form>
         </div>
@@ -200,32 +198,46 @@
 
                 //表格字段绑定
                 productForm: {
-                    ps:10,                      //pageSize
-                    pn: 1,
-                    sorts: [
-                        {
-                            orderBy: "string",
-                            orderType: "string"
-                        }
-                    ],
                     categoryId: '',
-                    nameEn: '',                  //产品英文名
-                    isReadilyAvailable: '',      //
-                    customerSkuCode: '',         //客户货号
+                    nameCnLike: "",
+                    readilyAvailable: true,
+                    customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
-                    code: '',                    //供应商货号
-                    nameCn: '',                  //产品中文名
+                    codeLike: "",
+                    nameEnLike: "",
                     minFobPrice: '',
                     maxFobPrice: '',
-                    materialEn: '',              //英文材质
+                    materialEnLike: "",
                     country: '',
-                    supplierName: '',            //供应商名称
-                    outerCartonMethodEn: '',     //外包装方式EN
-                    methodPkgEn: '',             //产品包装方式EN
-                    deliveryDates: '',           //交期
-                    descEn: '',                  //产品英文描述
-                    descCn: '',                  //产品中文描述
+                    supplierNameLike: "",
+                    outerCartonMethodEnLike: "",
+                    methodPkgEnLike: "",
+                    deliveryDates: '',
+                    descEnLike: "",
+                    descCnLike: "",
+
+                    pn: 1,
+                    ps: 50,
+
+
+                    recycle: false,         //是否是在recycle bin里请求
+                    operatorFilters: [
+                        {
+                            operator: "",
+                            property: "",
+                            value: {}
+                        }
+                    ],
+
+
+                    sorts: [
+                        {
+                            orderBy: "",
+                            orderType: "",
+                        }
+                    ],
+
                 },
                 //表格验证参数
                 productFormRules:{
@@ -316,17 +328,14 @@
 
             handleChange(value) {
                 console.log(value);
-
             },
 
             getData() {
                 this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.table, data);
-                    // this.tableDataList=res.datas;
+                    this.tableDataList = this.$getDB(this.$db.product.table, res.datas);
                 }).catch(err=>{
                     console.log(err)
                 });
-                // this.ajax.post(this.$apis.get_listData,params);
             },
 
             //table操作
@@ -344,7 +353,7 @@
         },
         created(){
             this.getData();
-            console.log(this.$db.product.basic,'db')
+            console.log(this.$db,'db')
             console.log(this.$lang,'lang')
         },
 
