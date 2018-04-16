@@ -1,0 +1,13 @@
+{
+  "supplierCodeSetting":"Supplier Code",
+  "supplierCompanyNameSetting":"Supplier Company Name",
+  "supplierTypeSetting":"Supplier Type",
+  "countrySetting":"Country",
+  "citySetting":"City",
+  "provideIncotermSetting":"Provide Incoterm",
+  "exportLicenseSetting":"Export License",
+  "currencySetting":"Currency",
+  "paymentTermSetting":"Payment Term",
+  "supplierShortNameSetting":"Supplier Short Name",
+  "descriptionSetting":"Description"
+}

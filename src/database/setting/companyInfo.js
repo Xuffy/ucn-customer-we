@@ -10,123 +10,62 @@
  * */
 
 export default {
-    //overview页面字段
-    categoryId: {
-        key: 'categoryId',
-        type: 'String',
-        showType:'dropdown',
-        isDefaultShow:true,               //是否是默认显示
-        belongPage:'sellerProductOverview'
-        // isText:true,
+    //顶部简介字段
+    supplierCodeSetting: {
+        key: 'code',
+        type: 'input',
+        belong:'summary'
     },
-    nameEnLike:{
-        key: 'nameEnLike',
-        type: 'String',
-        showType:'input',
-        isDefaultShow:true,               //是否是默认显示
-        length: 10,
-        belongPage:'sellerProductOverview'
+    supplierCompanyNameSetting:{
+        key: 'name',
+        type: 'input',
+        belong:'summary'
     },
-    readilyAvailable: {
-        key: 'readilyAvailable',
-        type: 'Boolean',
-        showType:'select',
-        isDefaultShow:true,               //是否是默认显示
-        belongPage:'sellerProductOverview'
+    supplierTypeSetting:{
+        key: 'type',
+        type: 'select',
+        belong:'summary'
     },
-    customerSkuCodeLike: {
-        key: 'customerSkuCodeLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
-    exwPrice: {
-        key: 'exwPrice',
-        type: 'Number',
-        showType:'exwNumber',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
-    codeLike:{
-        key: 'codeLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
-    nameCnLike: {
-        key: 'nameCnLike',
-        type: 'String',
-        showType:'input',
-        length: 45,
-        rule:'',
-        belongPage:'sellerProductOverview'
-
-    },
-
-    fobPrice:{
-        key: 'fobPrice',
-        type: 'String',
-        showType:'fobNumber',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
-    materialEnLike:{
-        key: 'materialEnLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    },
-    country:{
+    countrySetting:{
         key: 'country',
-        type: 'String',
-        showType:'select',
-        length: 10,
-        belongPage:'sellerProductOverview'
+        type: 'select',
+        belong:'summary'
     },
-    supplierNameLike:{
-        key: 'supplierNameLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
+    citySetting:{
+        key: 'city',
+        type: 'select',
+        belong:'summary'
     },
-    outerCartonMethodEnLike:{
-        key: 'outerCartonMethodEnLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
+    provideIncotermSetting:{
+        key: 'incoterm',
+        type: 'select',
+        belong:'summary'
     },
-    methodPkgEnLike:{
-        key: 'methodPkgEnLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
+    exportLicenseSetting:{
+        key: 'exportLicense',
+        type: 'select',
+        belong:'summary'
     },
-    deliveryDates:{
-        key: 'deliveryDates',
-        type: 'String',
-        showType:'number',
-        length: 10,
-        belongPage:'sellerProductOverview'
+    currencySetting:{
+        key: 'currency',
+        type: 'select',
+        belong:'summary'
     },
-    descEnLike:{
-        key: 'descEnLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
+    paymentTermSetting:{
+        key: 'payment',
+        type: 'select',
+        belong:'summary'
     },
-    descCnLike:{
-        key: 'descCnLike',
-        type: 'String',
-        showType:'input',
-        length: 10,
-        belongPage:'sellerProductOverview'
-    }
+    supplierShortNameSetting:{
+        key: 'shortName',
+        type: 'input',
+        belong:'summary'
+    },
+    descriptionSetting:{
+        key: 'desc',
+        type: 'textarea',
+        belong:'summary',
+        fullLine:true
+    },
 
 }

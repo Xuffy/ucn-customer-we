@@ -20,7 +20,16 @@ const apis = {
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
-  get_supplierWhole:['/supplierWhole','BASE_CS']
+  get_supplierWhole:['/supplierWhole','BASE_CS'],
+  add_address:['/supplier/address','BASE_CS'],
+  delete_address:['/supplier/delAddress/{id}','BASE_CS'],
+  update_address:['/supplier/address/{id}','BASE_CS'],
+  add_account:['/supplier/account','BASE_CS'],
+  update_account:['/supplier/account/{id}','BASE_CS'],
+  delete_account:['/supplier/delAccount/{id}','BASE_CS'],
+  //order
+  get_orderlist:['/customer/order/page','BASE_HCJ']
+
 };
 
 let list = _.mapObject(apis, val => {

@@ -4,11 +4,16 @@ import product from './product/index';
 import setting from './setting/index';
 
 import inquiryOverview from './inquiry';
+import order from './order/index';
+import supplier from './supplier/index'
+import lang from "../lib/lang";
 const db = {
   workbench,
     product,
   inquiryOverview,
-    setting
+    setting,
+    order,
+    supplier
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {

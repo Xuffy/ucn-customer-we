@@ -4,12 +4,12 @@
         <div class="status">
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
-                      <el-radio-group v-model="status_buttons" size="mini">
-                            <el-radio-button label="TBCByCustomer">{{$t('order.buttonname.TBCByCustomer')}}</el-radio-button>
-                            <el-radio-button label="TBCBySupplier">{{$t('order.buttonname.TBCBySupplier')}}</el-radio-button>
-                            <el-radio-button label="process">{{$t('order.buttonname.process')}}</el-radio-button>
-                            <el-radio-button label="finish">{{$t('order.buttonname.finish')}}</el-radio-button>
-                            <el-radio-button label="cancel">{{$t('order.buttonname.cancel')}}</el-radio-button>
+                      <el-radio-group v-model="status" size="mini">
+                            <el-radio-button label="TBCByCustomer"> {{ $lang.baseText.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="TBCBySupplier">{{($lang.baseText.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="process">{{($lang.baseText.process)}}</el-radio-button>
+                            <el-radio-button label="finish">{{($lang.baseText.finish)}}</el-radio-button>
+                            <el-radio-button label="cancel">{{($lang.baseText.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -27,22 +27,26 @@
                      <el-button slot="append" icon="el-icon-search" style='width:20px;'></el-button>              
                  </el-input>
 -->
-               <selectSearch></selectSearch>
+               <selectSearch 
+                    :options=options
+                    @selectChange="selectChange"
+                    @inputEnter="inputEnter"
+                 ></selectSearch>
             </div>
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
-                <el-button >{{$t('order.buttonname.accept')}}</el-button>
-<!--                <el-button>{{$t('order.buttonname.copy')}}</el-button>-->
-                <el-button>{{$t('order.buttonname.cancel')}}</el-button>
-                <el-button type='danger'>{{$t('order.buttonname.delete')}}</el-button>
+                <el-button >{{($lang.baseText.download)}}</el-button>
+<!--                <el-button >{{($lang.baseText.accept)}}</el-button>-->
+<!--                <el-button>{{($lang.baseText.copy)}}</el-button>-->
+                <el-button @click='creat_order'>{{($lang.baseText.create)}}</el-button>
+                <el-button type='danger' :disabled='disabled'>{{($lang.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
-                   <el-radio-group v-model="viewBy_buttons" size="mini">
-                            <el-radio-button label="Inquiry">{{$t('order.buttonname.order')}}</el-radio-button>
-                            <el-radio-button label="SKU">{{$t('order.buttonname.SKU')}}</el-radio-button>
+                   <el-radio-group v-model="view" size="mini">
+                            <el-radio-button label=1>{{($lang.baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($lang.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
                 </div>
@@ -86,52 +90,84 @@
             return {
                 value: '',
                 keyWord: '',
-                options: [{
-                    id: '1',
-                    label: this.$t('order.buttonname.orderNo')
-                }, {
-                    id: '2',
-                    label: this.$t('order.buttonname.skuCode')
-                }, ],
-                status_buttons: '', //status的按钮组
-                viewBy_buttons: 'SKU', //status的按钮组
+                status: '', //status的按钮组
+                view: 2, //view by的按钮组
+                disabled:false, //delete的状态
                 tabData: [],
                 loading: false,
-                selected:[]
+                options: [{
+                    id: '1',
+                    label: 'orderNo'
+                }, {
+                    id: '2',
+                    label: 'skuCode'
+                }],
+               
+                 keyType: '',
+                 params: {
+                        status:this.status,
+                        orderNo:'',
+                        skuCode:'',
+                        view:this.view,
+                        ps: 10,
+                        pn: 1
+                    }
             }
         },
         methods: {
-            //下拉框值
-            selectChange(val) {
-                console.log(val)
-            },
             onAction(item, type) {
                console.log(item)
             },
+            creat_order(){
+                  this.$router.push('/order/creat');
+            },
+            selectChange(val) {
+                this.keyType = val;
+            },
+            inputEnter(val) {
+                if(!this.keyType) return this.$message('请选中搜索类型');
+                if(!val) return this.$message('搜索内容不能为空');
+                console.log(this.keyType)
+                 if(this.keyType=='1'){
+                     this.params.orderNo=val
+                  }else{
+                      this.params.skuCode=val
+                  }
+               console.log(this.params)
+            },
+            //get_orderlist数据
+            getdata(){
+                this.loading = true
+                this.$ajax.get(this.$apis.get_orderlist,this.params )
+                .then((res) => {
+                      console.log(res);
+                })
+                .catch((res) => {
+                    console.log(res);
+                });
+            }
         },
         computed:{
  
         },
         created() {
-            this.loading = true
-            this.$ajax.get(this.$apis.supplier_overview, {})
-                .then((res) => {
-                    this.tabData = res
-                })
-                .catch((res) => {
-                    console.log(res);
-                });
+//         this.getdata()
             
         },
         mounted() {
             this.loading = false
-            console.log(this.$refs.vtable.getSelected())
         },
         updated(){
              
         },
         watch:{
-        
+           status(curVal,oldVal){
+　　　　　　　　　if(curVal==this.$lang.baseText.cancel){
+                    this.disabled=false
+                }else{
+                    this.disabled=true
+                }
+　　　　　　　　},
         }
     }
 

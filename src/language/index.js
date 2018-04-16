@@ -14,6 +14,7 @@ export default _.extend(
 
   require(`./${lang}/workbench.pending`),
   {setting: require(`./${lang}/setting`)},
+    require(`./${lang}/setting/setting.basic`),
   { baseText: require(`./${lang}/baseText`) },
   { basePlaceholder: require(`./${lang}/basePlaceholder`) },
   { inquiry: require(`./${lang}/inquiry/index`) },
@@ -23,7 +24,16 @@ export default _.extend(
   { basePlaceholder: require(`./${lang}/basePlaceholder`) },
   { inquiry: require(`./${lang}/inquiry/index`) },
   require(`./${lang}/inquiry/viewByInqury.pending`),
+ require(`./${lang}/inquiry/viewByInqury.pending`),
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/detail/basicInfo.pending`),
-  require(`/${lang}/inquiry/create/basicInfo.pending`)
+  require(`/${lang}/inquiry/create/basicInfo.pending`),
+
+
+  { supplier: require(`./${lang}/supplier/overview`) } ,
+   { order: require(`./${lang}/order/overview`) },
+    
+
+ 
+
 )
