@@ -4,25 +4,31 @@
   "quotedPrice":"基础报价",
 
 
-
-  "advanced":"展开高级收缩",
-  "hideTheAdvanced":"收起高级搜索",
-  "search":"搜索",
-  "clear":"清除条件",
+  "advanced":"Advanced",
+  "hideTheAdvanced":"Hide The Advanced",
+  "search":"Search",
+  "clear":"Clear",
+  "createInquiry":"Create Inquiry",
+  "createOrder":"Create Order",
+  "compare":"Compare",
+  "addToCompare":"Add To Compare",
+  "addToBookmark":"Add To Bookmark",
+  "download":"download",
+  "delete":"Delete",
   "addNewProduct":"添加新产品",
   "setUp":"设为上架",
   "setDown":"设为下架",
   "downloadSelected":"下载选中的产品",
-  "delete":"删除",
   "edit":"编辑",
-  "basicInformation":"基础信息",
-  "customerInfo":"海关信息",
-  "priceInfo":"价格信息",
-  "packingInfo":"包装信息",
-  "logisticInfo":"物流信息",
-  "otherInfo":"其他信息",
-  "attachment":"附件",
-  "tradeHistory":"交易历史",
+  "basicInformation":"Basic Info",
+  "customerInfo":"Customer Info",
+  "priceInfo":"Price Info",
+  "packingInfo":"Packing Info",
+  "logisticInfo":"Logistic Info",
+  "otherInfo":"Other Info",
+  "attachment":"Attachment",
+  "tradeHistory":"Trade History",
+  "remark":"Remark",
   "finish":"完成",
 
 
@@ -37,5 +43,13 @@
   "otherIncoterm":"其他价格条款",
   "otherIncotermPrice":"其他价格条款单价",
   "otherIncotermArea":"其他价格条款区域",
-  "otherIncotermCurrency":"其他价格条款币种"
+  "otherIncotermCurrency":"其他价格条款币种",
+
+
+
+  "add":"Add",
+  "operator":"Operator",
+  "time":"Time",
+  "action":"Action",
+  "modify":"Modify"
 }

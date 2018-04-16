@@ -1,5 +1,5 @@
 <template>
-    <div class="compare-zone" v-if="config.showCompareList">
+    <div class="compare-zone" :class="{isTransparent:change}" v-if="config.showCompareList">
         <div class="compare-list" :class="{show:change}">
             <el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>
             <el-tag
@@ -87,16 +87,20 @@
         z-index: 2000;
         height: 40px;
         line-height: 40px;
-        background: rgba(0, 0, 0, 0.6);
-        padding-left: 40px;
         transition: all linear .3s;
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .isTransparent{
+        background: transparent !important;
     }
     .compare-list{
+        margin-left: 40px;
         transition: all linear .3s;
     }
     .show{
-        transform: translateX(100%);
+        transform: translateX(110%);
         transition: all linear .3s;
+        /*background: red;*/
     }
     i{
         color: #ffffff;
@@ -110,6 +114,7 @@
     .iconShow{
         transform: rotate(180deg);
         transition: all linear .3s;
+        color:#636363;
     }
     /*.compare-list .icon{*/
         /*color:#999999;*/

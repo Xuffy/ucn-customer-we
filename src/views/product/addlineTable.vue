@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <el-button @click="createRemark" type="primary" plain size="mini">{{$t('product.page.add')}}</el-button>
+            <el-button @click="createRemark" type="primary" plain size="mini">{{$lang.product.add}}</el-button>
         </div>
         <br>
         <el-table
@@ -10,27 +10,26 @@
                 style="width: 100%">
             <el-table-column
                     prop="time"
-                    :label="$t('product.tableData.remark')"
+                    :label="$lang.product.remark"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="remark"
-                    :label="$t('product.tableData.operater')"
+                    :label="$lang.product.operator"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="submiter"
-                    :label="$t('product.tableData.time')"
+                    :label="$lang.product.time"
                     align="center">
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    :label="$t('product.tableData.action')"
+                    :label="$lang.product.action"
                     align="center">
                 <template slot-scope="scope">
-                    <!--<el-button @click="checkRemark" type="text" size="small">查看</el-button>-->
-                    <el-button @click="editRemark" type="text" size="small">{{$t('product.tableData.modify')}}</el-button>
-                    <el-button @click="deleteRemark" type="text" size="small">{{$t('product.tableData.deletes')}}</el-button>
+                    <el-button @click="editRemark" type="text" size="small">{{$lang.product.modify}}</el-button>
+                    <el-button @click="deleteRemark" type="text" size="small">{{$lang.product.delete}}</el-button>
                 </template>
             </el-table-column>
         </el-table>

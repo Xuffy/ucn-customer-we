@@ -171,9 +171,9 @@
 
             <v-table
                     :data="tableDataList"
-                    :buttons="[{label: 'detail', type: 1}]"
-                    @action="btnClick"></v-table>
+                    :buttons="[{label: 'Detail', type: 1}]"
 
+                    @action="btnClick"></v-table>
         </div>
     </div>
 </template>
@@ -316,7 +316,7 @@
 
             //清除填写的表格数据
             clear(){
-                // this.$refs.dropDown.selectedList=[];
+                this.$refs.dropDown[0].selectedList=[];
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
                 this.$set(this.productForm,'minExwPrice','');
@@ -342,7 +342,6 @@
             getData() {
                 this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    console.log(res.datas)
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -353,6 +352,11 @@
                 this.windowOpen('/sellerProduct/detail',{id:item.id.value});
             },
 
+            //表格check状态改变
+            handleCheckChange(e){
+                console.log(e)
+            },
+
 
             addNewProduct(){
 
@@ -360,8 +364,6 @@
         },
         created(){
             this.getData();
-            console.log(this.$db,'db')
-            console.log(this.$lang,'lang')
         },
 
         watch:{
@@ -371,7 +373,7 @@
                 }else{
                     this.btnInfo=this.$lang.product.hideTheAdvanced;
                 }
-            }
+            },
         }
     }
 </script>

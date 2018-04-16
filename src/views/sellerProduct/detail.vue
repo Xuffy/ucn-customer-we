@@ -76,7 +76,6 @@
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-
                 <el-tab-pane :label="$lang.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
