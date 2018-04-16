@@ -14,7 +14,7 @@
         },
         data(){
             return{
-                title:this.$t('product.title.productSourcing')
+                title:'哇哈哈'
             }
         },
         methods:{

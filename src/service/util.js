@@ -2,7 +2,6 @@ import DateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
-
 export default {
   install(Vue, options) {
 
@@ -40,26 +39,27 @@ export default {
      * 字段配置
      */
     Vue.prototype.$getDB = (db, data) => {
-      let list = [];
-      db = _.values(db);
-      _.map(data, value => {
-        let obj = {};
-        _.mapObject(value, (val, key) => {
-          let dbValue = _.clone(_.findWhere(db, {key: key}));
-          if (!_.isEmpty(dbValue)) {
-            dbValue.value = val;
-            obj[key] = dbValue;
-          }
+        let list = [];
+        db = _.values(db);
+        _.map(data, value => {
+            let obj = {};
+            _.mapObject(value, (val, key) => {
+                let dbValue = _.clone(_.findWhere(db, {key: key}));
+                if (!_.isEmpty(dbValue)) {
+                    dbValue.value = val;
+                    obj[key] = dbValue;
+                }
 
+            });
+            list.push(obj);
+            // list.push(_.values(obj));
         });
-        list.push(obj);
-        // list.push(_.values(obj));
-      });
-      return list;
+        return list;
     };
 
 
-    /**
+
+      /**
      *
      * @param value
      * @returns {string}
