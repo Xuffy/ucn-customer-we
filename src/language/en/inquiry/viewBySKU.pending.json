@@ -1,0 +1,15 @@
+{
+    "inquiryNo": "Inquiry No.",
+    "quotationNo": "Quotation No.",
+    "sequence": "Sequence",
+    "status": "Status",
+    "supplier": "Supplier",
+    "SKUCode": "SKU code",
+    "SKUName": "SKU name",
+    "price": "Price",
+    "currency": "Currency",
+    "totalQTY": "Total QTY",
+    "incoterm": "Incoterm",
+    "port": "Port",
+    "remark": "Remark"
+}

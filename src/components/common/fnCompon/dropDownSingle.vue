@@ -52,13 +52,13 @@
 	export default {
 		data() {
 			return {
-				filterText: '',
 				selectedList:'',
 				data:[],
 				visible: false
 			};
 		},
 		props: {
+			filterText: '',
 			emptyText: {
 				type: String,
 				default: 'no data'
@@ -95,12 +95,19 @@
 			chindeNode: {
 				type: Boolean,
 				default: false
+			},
+			value: {
+				type: String,
+				default: ''
 			}
 		},
 		watch: {
 			filterText(val) {
 				this.$refs.tree.filter(val);
 			},
+			selectedList(val) {
+				this.$emit('input', val.id);
+			}
 		},
 		methods: {
 			getChecked(item) {

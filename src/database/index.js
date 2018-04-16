@@ -1,17 +1,24 @@
 import language from '../language/index';
 import workbench from './workbench/index';
+import product from './product/index';
 
+import inquiryOverview from './inquiry';
+import order from './order/index';
+import supplier from './supplier/index'
 const db = {
-  workbench
+  workbench,
+    product,
+  inquiryOverview,
+    order,
+    supplier
 };
-
-
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {
-      if (_.isUndefined(v.k)) {
+      if (_.isUndefined(v.key)) {
         v.key = k;
       }
+
       if (_.isUndefined(v.type)) {
         v.type = 'String';
       }

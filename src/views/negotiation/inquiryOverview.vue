@@ -1,34 +1,47 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $t('negotiation.text.inquiryOverview') }}</h3>
+        <h3 class="hd"> {{ $lang.inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
-            <div style="margin-top: 20px">
-                <span>{{ $t('negotiation.status.index') }}</span>
-                <el-radio-group v-model="params.status"  size="mini">
-                    <el-radio-button :label="0">{{$t('negotiation.status.TBCByCustomer')}}</el-radio-button>
-                    <el-radio-button :label="1" >{{$t('negotiation.status.TBCBySupplier')}}</el-radio-button>
-                    <el-radio-button :label="2">{{$t('negotiation.status.finish')}}</el-radio-button>
-                    <el-radio-button :label="3">{{$t('negotiation.status.cancel')}}</el-radio-button>
-                </el-radio-group>
+            <div class="state">
+                <span>{{ $lang.baseText.state }}</span>
+                <el-checkbox-group v-model="status">
+                    <el-checkbox-button 
+                            v-for="item in $db.inquiryOverview.overoiewState"
+                            :label="item.id"
+                            :key="item.id"
+                        >
+                        {{ item.text }}
+                    </el-checkbox-button>
+                </el-checkbox-group>
             </div>
-            <select-search :options="options" :search-load="searchLoad" @selectChange="selectChange" @inputEnter="inputEnter" />
+            <select-search 
+                :options="options" 
+                @inputChange="inputEnter"
+                :searchLoad="searchLoad"
+            />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button  @click="toCompare">{{ $t('negotiation.btn.Compare')  }}</el-button>
-                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $t('negotiation.btn.createNewInquiry')  }}</el-button>
-                <el-button @click="cancelInquiry">{{ $t('negotiation.btn.cancelTheInquiry')  }}</el-button>
-                <el-button @click="deleteInquiry" type="danger">{{ $t('negotiation.btn.Delete')  }}</el-button>
+                <el-button  @click="toCompare">{{ $lang.baseText.compare }}</el-button>
+                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $lang.baseText.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry">{{ $lang.baseText.cancelTheInquiry }}</el-button>
+                <el-button @click="deleteInquiry" type="danger">{{ $lang.baseText.delete }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $t('negotiation.viewBy.index')  }}&nbsp;</span>
+                <span>{{ $lang.baseText.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button :label="$t('negotiation.viewBy.inquiry')"></el-radio-button>
-                    <el-radio-button :label="$t('negotiation.viewBy.SKU')" ></el-radio-button>
+                    <el-radio-button label="0">{{$lang.baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$lang.baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
-        <v-table :data="tabData" :data-key="tabColumn" :buttons="[{label: 'detail', type: 'detail'}]" @action="action" @page-change="pageChange" :loading="tabLoad" ref="tab"></v-table>
+        <v-table 
+            :data="tabData" 
+            :buttons="[{label: 'detail', type: 'detail'}]" 
+            @action="action" 
+            @page-change="pageChange" 
+            :loading="tabLoad" ref="tab"
+        />
     </div>
 </template>
 <script>
@@ -36,31 +49,34 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable } from '@/components/index';
+    import { selectSearch, VTable, dropDownSingle } from '@/components/index';
     export default {
         name:'',
         data() {
             return {
                 searchLoad: false,
                 options: [{
-                    id: '1',
-                    label: '时间段'
+                    id: 'INQUIRY_NO',
+                    label: '询价单号'
                 }, {
-                    id: '2',
-                    label: '询价单号（系统）'
-                }, {
-                    id: '3',
+                    id: 'QUOTATION_NO',
                     label: '询价单号（供应商自有）'
                 }, {
-                    id: '4',
-                    label: '询价单号（客户）'
+                    id: 'SUPPLIER_NAME',
+                    label: '供应商名称'
+                }, {
+                    id: 'SUPPLIER_TYPE',
+                    label: '供应商类型'
+                }, {
+                    id: 'PAYMENT_METHOD',
+                    label: '支付方式'
                 }],
-                tabColumn:'',
+
                 tabData: [],
                 viewByStatus: '',
-                keyType: '',
+                status: [],
                 params: {
-                    status: '',
+                    statuses: [],
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -71,10 +87,11 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'drop-down-single': dropDownSingle
         },
         created() {
-            this.viewByStatus = this.$t('negotiation.viewBy.inquiry');
+            this.viewByStatus = 0;
         },
         watch: {
             viewByStatus() {
@@ -85,52 +102,39 @@
                     this.gettabData();
                 },
                 deep: true
+            },
+            status(val) {
+                this.params.statuses = val;
             }
         },
         methods: {
-            selectChange(val) {
-                this.keyType = val;
-            },
             inputEnter(val) {
-                if(!this.keyType) return this.$message('请选中搜索类型');
-                if(!val) return this.$message('搜索内容不能为空');
-                this.params.keyType = this.keyType;
-                this.params.key = val;
+                if(!val.keyType) return this.$message('请选中搜索类型');
+                if(!val.key) return this.$message('搜索内容不能为空');
+                this.params.keyType = val.keyType;
+                this.params.key = val.key;
                 this.searchLoad = true;
             },
             gettabData() {
-                let url = null,
-                    tabColumn = null;
+                let url, column;
                 this.tabLoad = true;
-                if(this.viewByStatus === 'Inquiry') {
+                if(this.viewByStatus + '' === '0') {
                     url = this.$apis.inquiry_list;
-                    tabColumn = 'negotiation.tableViewByInquiry';
+                    column = this.$db.inquiryOverview.viewByInqury;
                 } else {
-                    url = this.$apis.inquiry_list_sku
-                    tabColumn = 'negotiation.tableViewBySKU';
+                    url = this.$apis.inquiry_list_sku;
+                    column = this.$db.inquiryOverview.viewBySKU;
                 };
-                this.tabColumn = tabColumn;
-                return this.tabData = [
-                    {
-                        "inquiryNo": 0,
-                        "quotationNo": 0,
-                        "sequence": 2,
-                        "id": 2
-                    },
-                    {
-                        "inquiryNo": 0,
-                        "quotationNo": 0,
-                        "sequence": 2,
-                        "id": 3
-                    }
-                ]
-                this.$ajax.get(url, this.params)
+                this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.tabColumn = tabColumn;
-                    this.tabData = res;
+                    this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;   
                     this.searchLoad = false; 
-                });
+                })
+                .catch(() => {
+                    this.searchLoad = false; 
+                    this.tabLoad = false;
+                })
             },
             cancelInquiry() { //取消询价单
                 const argId = this.getChildrenTab('id');
@@ -206,6 +210,12 @@
             justify-content:space-between;
             padding:0 15px;
             box-sizing: border-box;
+            .state {
+                display:flex;
+                align-items: center;
+                font-size:16px;
+                color:#666;
+            }
             span {
                 padding-right:5px;
             }

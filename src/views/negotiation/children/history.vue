@@ -16,7 +16,7 @@
                     :label="item.label"
                     :prop="item.key"
                 >
-
+                    
                 </el-table-column>
             </el-table>
         </el-dialog>
@@ -66,15 +66,7 @@
         },
         methods: {
             filterColumn(str) {
-                let column = [];
-                const sk = this.$t(str);
-                for(let k in sk) {
-                    column.push({
-                        key: k,
-                        label: sk[k]
-                    });
-                };
-                return column;
+                
             }
         }
     }
