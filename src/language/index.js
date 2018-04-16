@@ -11,5 +11,9 @@ export default _.extend(
   {setting: require(`./${lang}/setting`)},
   { baseText: require(`./${lang}/baseText`) },
   { basePlaceholder: require(`./${lang}/basePlaceholder`) },
-  { inquiry: require(`./${lang}/inquiry/index`) }
+  { inquiry: require(`./${lang}/inquiry/index`) },
+
+  { supplier: require(`./${lang}/supplier/overview`) } ,
+   { order: require(`./${lang}/order/overview`) },
+    
 )

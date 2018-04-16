@@ -31,5 +31,7 @@
     "productInfo": "Product Info",
     "process":"process",
     "downloadSelected":"downloadSelected",
-    "order":"order"
+    "order":"order",
+    "create":"Create Order",
+    "download":"Download All"
 }
