@@ -19,7 +19,6 @@ const axios = Axios.create({
   }],
 });
 
-
 const $ajax = (config) => {
 
   this.setUrl = (url, params) => {
@@ -36,11 +35,14 @@ const $ajax = (config) => {
   }
 }
 
+$ajax.prototype.all = (list) => {
+  return Promise.all(list);
+}
+
 $ajax.prototype.get = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params)
   return axios.get(data.url, _.extend(config, {params: data.params}));
 }
-
 $ajax.prototype.post = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params)
     , options = {method: 'POST', headers: {}, url: data.url, data: data.params};

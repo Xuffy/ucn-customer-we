@@ -7,8 +7,9 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value :data="dataColumn"></v-filter-value>
-        <v-filter-column :data="dataColumn"></v-filter-column>
+        <v-table-filter ref="tableFilter"
+                        @filter-column="onFilterColumn"
+                        @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
 
@@ -32,7 +33,7 @@
             <td>
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn">
+            <td v-for="item in dataColumn" v-if="!item._hide">
               <div v-text="item.label">
               </div>
             </td>
@@ -55,7 +56,8 @@
             <td>
               <div v-text="index + 1"></div>
             </td>
-            <td v-for="(cItem,cKey) in item">
+            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide"
+                :style="{'background-color':cItem._highlight}">
               <div v-text="cItem.value"></div>
             </td>
             <td v-if="buttons">
@@ -109,12 +111,12 @@
    */
 
 
-  import VFilterColumn from './filterColumn'
-  import VFilterValue from './filterValue'
+  import VTableFilter from './filter'
+  // import VFilterValue from './filterValue'
 
   export default {
     name: 'VTable',
-    components: {VFilterColumn, VFilterValue},
+    components: {VTableFilter},
     props: {
       data: {
         type: Array,
@@ -168,7 +170,7 @@
         this.dataList = val;
         this.dataColumn = this.filterColumn(val);
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
       checkedAll(value) {
@@ -180,12 +182,12 @@
       },
       buttons() {
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
       selection() {
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
     },
@@ -193,11 +195,15 @@
       this.dataList = this.data;
       this.dataColumn = this.filterColumn(this.dataList);
       this.$nextTick(() => {
-        this.scrollListener();
+        this.updateTable();
       });
-      this.$refs.tableBox.addEventListener('scroll', this.scrollListener);
+      this.$refs.tableBox.addEventListener('scroll', this.updateTable);
     },
     methods: {
+      onFilterColumn(checked) {
+        this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
+        this.dataColumn = this.filterColumn(this.dataList);
+      },
       filterColumn(data) {
         if (_.isEmpty(data)) {
           return [];
@@ -205,7 +211,7 @@
           return _.values(data[0]);
         }
       },
-      scrollListener(e) {
+      updateTable(e) {
         if (!this.$refs.tableBody) return false;
 
         let trs = this.$refs.tableBody.children;
@@ -351,12 +357,12 @@
 
   .ucn-table thead tr:nth-child(even) td,
   .ucn-table tbody tr:nth-child(even) td {
-    background-color: #F7F8F9 !important;
+    background-color: #F7F8F9;
   }
 
   .ucn-table tbody tr td:hover,
   .ucn-table tbody tr:hover td {
-    background-color: #ebeff1 !important;
+    /*background-color: #ebeff1 !important;*/
   }
 
   .ucn-table.fixed-left-box tbody tr td:first-child,

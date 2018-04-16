@@ -2,7 +2,10 @@ const version = ['/web/v1', '/web/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
+  get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
+  update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
