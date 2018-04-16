@@ -19,7 +19,7 @@ const apis = {
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
-  get_productList:['/sku/listSkuByParams','BASE_CS']
+  get_productList:['/sku/listSkuByParams','BASE_CS'],
 };
 
 let list = _.mapObject(apis, val => {

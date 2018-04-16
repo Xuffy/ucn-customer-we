@@ -5,7 +5,6 @@ const db = {
   workbench,
   inquiryOverview
 };
-console.log(db)
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {

@@ -7,5 +7,9 @@ export default _.extend(
   {setting: require(`./${lang}/setting`)},
   { baseText: require(`./${lang}/baseText`) },
   { basePlaceholder: require(`./${lang}/basePlaceholder`) },
-  { inquiry: require(`./${lang}/inquiry/index`) }
+  { inquiry: require(`./${lang}/inquiry/index`) },
+  require(`./${lang}/inquiry/viewByInqury.pending`),
+  require(`./${lang}/inquiry/viewBySKU.pending`),
+  require(`./${lang}/inquiry/detail/basicInfo.pending`),
+  require(`/${lang}/inquiry/create/basicInfo.pending`)
 )
