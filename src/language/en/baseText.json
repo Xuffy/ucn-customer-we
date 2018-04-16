@@ -33,6 +33,18 @@
     "process":"process",
     "downloadSelected":"downloadSelected",
     "order":"order",
-    "create":"Create Order",
-    "download":"Download All"
+    "createorder":"Create Order",
+    "downloadall":"Download All",
+    "addproduct":"Add Product",
+    "send":"send",
+    "saveAsDraft":"saveAsDraft",
+    "quickCreate":"quickCreate",
+     "markAsImportant":"markAsImportant",
+    "fromNewSearch":"From New Search",
+    "fromMyBookmark":"From My Bookmark",
+    "modify":"Modify",
+    "messageBoard":"messageBoard",
+    "confirm":"confirm",
+    "download":"download"
+    
 }

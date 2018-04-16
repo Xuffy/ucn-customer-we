@@ -30,9 +30,11 @@ export default _.extend(
   require(`/${lang}/inquiry/create/basicInfo.pending`),
 
 
-  { supplier: require(`./${lang}/supplier/overview`) } ,
-   { order: require(`./${lang}/order/overview`) },
+  require(`./${lang}/supplier/overview`) ,
     
+    
+   { order: require(`./${lang}/order/overview`) },
+     require(`/${lang}/order/basicinfo.pending`),
 
  
 

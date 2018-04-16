@@ -36,10 +36,10 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{($lang.baseText.download)}}</el-button>
+                <el-button >{{($lang.baseText.downloadall)}}</el-button>
 <!--                <el-button >{{($lang.baseText.accept)}}</el-button>-->
 <!--                <el-button>{{($lang.baseText.copy)}}</el-button>-->
-                <el-button @click='creat_order'>{{($lang.baseText.create)}}</el-button>
+                <el-button @click='creat_order'>{{($lang.baseText.createorder)}}</el-button>
                 <el-button type='danger' :disabled='disabled'>{{($lang.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
@@ -105,10 +105,10 @@
                
                  keyType: '',
                  params: {
-                        status:this.status,
+                        status:'',
                         orderNo:'',
                         skuCode:'',
-                        view:this.view,
+                        view:'',
                         ps: 10,
                         pn: 1
                     }
@@ -129,7 +129,7 @@
                 if(!val) return this.$message('搜索内容不能为空');
                 console.log(this.keyType)
                  if(this.keyType=='1'){
-                     this.params.orderNo=val
+                      this.params.orderNo=val
                   }else{
                       this.params.skuCode=val
                   }
@@ -151,7 +151,7 @@
  
         },
         created() {
-//         this.getdata()
+         this.getdata()
             
         },
         mounted() {
