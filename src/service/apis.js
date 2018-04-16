@@ -20,8 +20,11 @@ const apis = {
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
+<<<<<<< HEAD
   //order
   get_orderlist:['/customer/order/page','BASE_HCJ']
+=======
+>>>>>>> 81a409ffbb3217602702336c74e31b98bba41fa6
 };
 
 let list = _.mapObject(apis, val => {

@@ -11,11 +11,11 @@
         <div>
             <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
                 <el-row class="speZone">
-                    <el-col v-if="v.isOutside" v-for="v in $db.product.basic" :key="v.id" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.sellerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
+                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
                                         v-for="item in readilyAvailableOptions"
                                         :key="item.value"
@@ -53,7 +53,7 @@
         <div class="body" :class="{hide:hideBody}">
             <el-form ref="productForm" :rule="productFormRules" :model="productForm" label-width="190px">
                 <el-row class="speZone">
-                    <el-col v-if="!v.isOutside" v-for="v in $db.product.basic" :key="v.id" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.sellerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
@@ -169,7 +169,10 @@
                 <el-button type="danger">{{$lang.product.delete}}</el-button>
             </div>
 
-            <v-table :data="tableDataList"></v-table>
+            <v-table
+                    :data="tableDataList"
+                    :buttons="[{label: 'detail', type: 1}]"
+                    @action="btnClick"></v-table>
 
         </div>
     </div>
@@ -200,7 +203,7 @@
                 productForm: {
                     categoryId: '',
                     nameCnLike: "",
-                    readilyAvailable: true,
+                    readilyAvailable: '',
                     customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -217,6 +220,12 @@
                     descEnLike: "",
                     descCnLike: "",
 
+
+
+
+
+
+
                     pn: 1,
                     ps: 50,
 
@@ -229,7 +238,6 @@
                             value: {}
                         }
                     ],
-
 
                     sorts: [
                         {
@@ -330,25 +338,24 @@
                 console.log(value);
             },
 
+            //获取table数据
             getData() {
                 this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.table, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    console.log(res.datas)
                 }).catch(err=>{
                     console.log(err)
                 });
             },
 
-            //table操作
-            pageChange(page) {
-                console.log(page)
+            //表格按钮点击
+            btnClick(item){
+                this.windowOpen('/sellerProduct/detail',{id:item.id.value});
             },
 
-            getSort(val, key) {
-                console.log(val, key)
-            },
 
             addNewProduct(){
-                this.windowOpen('/sellerProduct/addNewProduct');
+
             },
         },
         created(){
@@ -370,31 +377,6 @@
 </script>
 
 <style scoped>
-    /*.speDropdown{*/
-    /*!*position: absolute;*!*/
-    /*!*width: 100%;*!*/
-    /*height: 32px;*/
-    /*!*background-color: #ffffff;*!*/
-    /*!*z-index: 2000;*!*/
-    /*}*/
-    /*.speDropdown >>> .el-dropdown{*/
-    /*height: 32px;*/
-    /*}*/
-    /*.speDropdown >>> .el-dropdown .checkInputBox{*/
-    /*height: 32px;*/
-    /*min-height: 32px;*/
-    /*}*/
-    /*.speDropdown >>> .el-dropdown .checkInputBox .checkInputBoxPl{*/
-    /*height: 32px;*/
-    /*line-height: 32px;*/
-    /*}*/
-    /*.speDropdown >>> .el-dropdown .checkInputBox .dataBox{*/
-    /*height: 32px;*/
-    /*}*/
-    /*.speDropdown >>> .el-dropdown .checkInputBox .dataBox span{*/
-    /*padding: 0 8px;*/
-    /*}*/
-
     .bookmark{
         padding-right: 20px;
     }

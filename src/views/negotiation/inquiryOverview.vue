@@ -4,17 +4,21 @@
         <div class="status">
             <div class="state">
                 <span>{{ $lang.baseText.state }}</span>
-                <el-checkbox-group v-model="params.status">
+                <el-checkbox-group v-model="status">
                     <el-checkbox-button 
                             v-for="item in $db.inquiryOverview.overoiewState"
                             :label="item.id"
                             :key="item.id"
                         >
-                        {{ $lang.baseText.TBCByCustomer }}
+                        {{ item.text }}
                     </el-checkbox-button>
                 </el-checkbox-group>
             </div>
-            <select-search :options="options" :search-load="searchLoad" @selectChange="selectChange" @inputEnter="inputEnter" />
+            <select-search 
+                :options="options" 
+                @inputChange="inputEnter"
+                :searchLoad="searchLoad"
+            />
         </div>
         <div class="fn">
             <div class="btn-wrap">
@@ -31,7 +35,13 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table :data="tabData" :data-key="tabColumn" :buttons="[{label: 'detail', type: 'detail'}]" @action="action" @page-change="pageChange" :loading="tabLoad" ref="tab"></v-table>
+        <v-table 
+            :data="tabData" 
+            :buttons="[{label: 'detail', type: 'detail'}]" 
+            @action="action" 
+            @page-change="pageChange" 
+            :loading="tabLoad" ref="tab"
+        />
     </div>
 </template>
 <script>
@@ -46,24 +56,27 @@
             return {
                 searchLoad: false,
                 options: [{
-                    id: '1',
-                    label: '时间段'
+                    id: 'INQUIRY_NO',
+                    label: '询价单号'
                 }, {
-                    id: '2',
-                    label: '询价单号（系统）'
-                }, {
-                    id: '3',
+                    id: 'QUOTATION_NO',
                     label: '询价单号（供应商自有）'
                 }, {
-                    id: '4',
-                    label: '询价单号（客户）'
+                    id: 'SUPPLIER_NAME',
+                    label: '供应商名称'
+                }, {
+                    id: 'SUPPLIER_TYPE',
+                    label: '供应商类型'
+                }, {
+                    id: 'PAYMENT_METHOD',
+                    label: '支付方式'
                 }],
-                tabColumn:'',
+
                 tabData: [],
                 viewByStatus: '',
-                keyType: '',
+                status: [],
                 params: {
-                    status: [],
+                    statuses: [],
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -89,52 +102,39 @@
                     this.gettabData();
                 },
                 deep: true
+            },
+            status(val) {
+                this.params.statuses = val;
             }
         },
         methods: {
-            selectChange(val) {
-                this.keyType = val;
-            },
             inputEnter(val) {
-                if(!this.keyType) return this.$message('请选中搜索类型');
-                if(!val) return this.$message('搜索内容不能为空');
-                this.params.keyType = this.keyType;
-                this.params.key = val;
+                if(!val.keyType) return this.$message('请选中搜索类型');
+                if(!val.key) return this.$message('搜索内容不能为空');
+                this.params.keyType = val.keyType;
+                this.params.key = val.key;
                 this.searchLoad = true;
             },
             gettabData() {
-                let url = null,
-                    tabColumn = null;
+                let url, column;
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
                     url = this.$apis.inquiry_list;
-                    tabColumn = 'negotiation.tableViewByInquiry';
+                    column = this.$db.inquiryOverview.viewByInqury;
                 } else {
-                    url = this.$apis.inquiry_list_sku
-                    tabColumn = 'negotiation.tableViewBySKU';
+                    url = this.$apis.inquiry_list_sku;
+                    column = this.$db.inquiryOverview.viewBySKU;
                 };
-                this.tabColumn = tabColumn;
-                return this.tabData = [
-                    {
-                        "inquiryNo": 0,
-                        "quotationNo": 0,
-                        "sequence": 2,
-                        "id": 2
-                    },
-                    {
-                        "inquiryNo": 0,
-                        "quotationNo": 0,
-                        "sequence": 2,
-                        "id": 3
-                    }
-                ]
-                this.$ajax.get(url, this.params)
+                this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.tabColumn = tabColumn;
-                    this.tabData = res;
+                    this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;   
                     this.searchLoad = false; 
-                });
+                })
+                .catch(() => {
+                    this.searchLoad = false; 
+                    this.tabLoad = false;
+                })
             },
             cancelInquiry() { //取消询价单
                 const argId = this.getChildrenTab('id');

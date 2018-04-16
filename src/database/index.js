@@ -15,9 +15,10 @@ const db = {
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {
-      if (_.isUndefined(v.k)) {
+      if (_.isUndefined(v.key)) {
         v.key = k;
       }
+
       if (_.isUndefined(v.type)) {
         v.type = 'String';
       }
