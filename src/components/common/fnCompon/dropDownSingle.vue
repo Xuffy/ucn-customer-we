@@ -29,7 +29,7 @@
 		
 		<el-input
 			:placeholder="checkInputBoxPl"
-			v-model="val.label"
+			v-model="val[defaultProps.children]"
 			v-popover:popover5
 			suffix-icon="el-icon-arrow-down"
 			:size="size"
