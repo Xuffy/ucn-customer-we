@@ -26,11 +26,10 @@
 				</div>
 			</div>
 		</el-popover>
-		
 		<el-input
 			:placeholder="checkInputBoxPl"
-			v-model="val[defaultProps.children]"
 			v-popover:popover5
+			v-model="val[defaultProps.label]"
 			suffix-icon="el-icon-arrow-down"
 			:size="size"
 			readonly
