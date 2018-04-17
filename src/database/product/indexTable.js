@@ -3,7 +3,7 @@ export default {
 
     },
     pic: {
-        
+
     },
     status: {
 
@@ -343,7 +343,7 @@ export default {
         
     },
     adjustPackage:{
-        
+
     },
 
 }

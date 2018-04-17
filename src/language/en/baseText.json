@@ -11,7 +11,6 @@
     "remove": "Remove",
     "submit": "submit",
     "accept": "accept",
-    "saveAsDraft": "save as Draft",
     "createOrder": "Create Order",
     "addToCompare": "Add to Compare",
     "modify": "modify",
@@ -26,7 +25,6 @@
     "createNewInquiry": "Create New Inquiry",
     "cancelTheInquiry": "Cancel the Inquiry",
     "messageBoard": "messageBoard",
-    "fromNewSearch": "From New Search",
     "FromMyBookmark": "From my bookmark",
     "basicInfo": "Basic Info",
     "productInfo": "Product Info",
@@ -42,8 +40,6 @@
      "markAsImportant":"markAsImportant",
     "fromNewSearch":"From New Search",
     "fromMyBookmark":"From My Bookmark",
-    "modify":"Modify",
-    "messageBoard":"messageBoard",
     "confirm":"confirm",
     "download":"download"
     

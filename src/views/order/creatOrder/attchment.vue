@@ -2,7 +2,7 @@
    <div class='attachment'>
         <el-form  label-width="230px">
         <el-form-item class="form-list"
-            :label="$lang.attachment" prop="supplierName">     
+            :label="$i.attachment" prop="supplierName">     
             <Upload class='upload' @getres='getres'              :disabled='disabled'></Upload> 
             <div class="order_attchment" >   
                  <div class="attchment_content">

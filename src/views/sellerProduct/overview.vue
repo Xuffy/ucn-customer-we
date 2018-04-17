@@ -1,23 +1,22 @@
 <template>
     <div class="bookmark">
         <div class="title">
-            <span>{{$lang.product.title}}</span>
+            <span>{{$i.product.title}}</span>
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
             </el-button>
         </div>
-
         <div>
             <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.sellerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down class="speDropDown" v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
-                                        v-for="item in readilyAvailableOptions"
+                                        v-for="item in v.options"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -37,7 +36,7 @@
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                 <el-option
-                                        v-for="item in readilyAvailableOptions"
+                                        v-for="item in v.options"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -56,95 +55,20 @@
                             <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>
                         </el-form-item>
                     </el-col>
-
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')">-->
-                            <!--<el-input size="mini" v-model="productForm.customerSkuCode"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<div class="section-number">-->
-                            <!--<el-form-item :label="$t('productSeller.page.exwPrice')">-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>-->
-                            <!--</el-form-item>-->
-                        <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="code" :label="$t('productSeller.page.skuCode')">-->
-                            <!--<el-input size="mini" v-model="productForm.code"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="nameCn" :label="$t('productSeller.page.skuNameCN')">-->
-                            <!--<el-input size="mini" v-model="productForm.nameCn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<div class="section-number">-->
-                            <!--<el-form-item class="section-item1" :label="$t('productSeller.page.fobPrice')">-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>-->
-                            <!--</el-form-item>-->
-                        <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="materialEn" :label="$t('productSeller.page.skuMaterialsEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.materialEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="country" :label="$t('productSeller.page.country')">-->
-                            <!--<el-input size="mini" v-model="productForm.country"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="supplierName" :label="$t('productSeller.page.supplierName')">-->
-                            <!--<el-input size="mini" v-model="productForm.supplierName"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="outerCartonMethodEn"  :label="$t('productSeller.page.packingMethodOfOuterCartonEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.outerCartonMethodEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="methodPkgEn"  :label="$t('productSeller.page.packingMethodEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.methodPkgEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="deliveryDates"  :label="$t('productSeller.page.deliveryDays')">-->
-                            <!--<el-input size="mini" v-model="productForm.deliveryDates"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="descEn" :label="$t('productSeller.page.skuDescriptionEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.descEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="descCn":label="$t('productSeller.page.skuDescriptionCN')">-->
-                            <!--<el-input size="mini" v-model="productForm.descCn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-
                 </el-row>
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary">{{$lang.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$lang.product.clear}}</el-button>
+            <el-button @click="search" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
-                <el-button @click="setUp">{{$lang.product.setUp}}</el-button>
-                <el-button @click="setDown">{{$lang.product.setDown}}</el-button>
-                <el-button>{{$lang.product.downloadSelected}}</el-button>
-                <el-button type="danger">{{$lang.product.delete}}</el-button>
+                <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                <el-button @click="setUp">{{$i.product.setUp}}</el-button>
+                <el-button @click="setDown">{{$i.product.setDown}}</el-button>
+                <el-button>{{$i.product.downloadSelected}}</el-button>
+                <el-button type="danger">{{$i.product.delete}}</el-button>
             </div>
 
             <v-table
@@ -176,40 +100,26 @@
             return{
 
                 hideBody:true,            //是否显示body
-                btnInfo:this.$lang.product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
 
                 //表格字段绑定
                 productForm: {
                     categoryId: '',
-                    nameCnLike: "",
-                    readilyAvailable: '',
-                    customerSkuCodeLike: "",
-                    minExwPrice: '',
-                    maxExwPrice: '',
                     codeLike: "",
-                    nameEnLike: "",
-                    minFobPrice: '',
-                    maxFobPrice: '',
-                    materialEnLike: "",
                     country: '',
-                    supplierNameLike: "",
-                    outerCartonMethodEnLike: "",
-                    methodPkgEnLike: "",
+                    customerSkuCodeLike: "",
                     deliveryDates: '',
-                    descEnLike: "",
                     descCnLike: "",
-
-
-
-
-
-
-
-                    pn: 1,
-                    ps: 50,
-
-
-                    recycle: false,         //是否是在recycle bin里请求
+                    descEnLike: "",
+                    materialEnLike: "",
+                    maxExwPrice: '',
+                    maxFobPrice: '',
+                    methodPkgEnLike: "",
+                    minExwPrice: '',
+                    minFobPrice: '',
+                    nameCnLike: "",
+                    // nameCustomerLike: "",    没有发现这个字段
+                    nameEnLike: "",
                     operatorFilters: [
                         {
                             operator: "",
@@ -217,14 +127,26 @@
                             value: {}
                         }
                     ],
-
+                    outerCartonMethodEnLike: "",
+                    pn: 1,
+                    ps: 50,
+                    readilyAvailable: true,
+                    recycle: false,             //recycleBin里传true
+                    sortParam: {
+                        sorts: [
+                            {
+                                orderBy: "",
+                                orderType: "",
+                            }
+                        ]
+                    },
                     sorts: [
                         {
                             orderBy: "",
                             orderType: "",
                         }
                     ],
-
+                    supplierNameLike: "",
                 },
                 //表格验证参数
                 productFormRules:{
@@ -233,16 +155,17 @@
                     ],
                 },
                 //表格配置参数
-                readilyAvailableOptions: [
-                    {
-                        label: 'not ready',
-                        value: false
-                    },
-                    {
-                        label: 'ready',
-                        value: true
-                    },
-                ],
+                // readilyAvailableOptions: [
+                //     {
+                //         label: 'not ready',
+                //         value: false
+                //     },
+                //     {
+                //         label: 'ready',
+                //         value: true
+                //     },
+                // ],
+
 
                 //Category下拉组件数据
                 dropData:[
@@ -307,9 +230,8 @@
             //搜查
             search(){
                 console.log(this.productForm)
-                // this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
-                //
-                // this.$ajax.post(this.$apis.get_productList,{});
+
+
 
             },
 
@@ -361,14 +283,15 @@
         },
         created(){
             this.getData();
+            console.log(this.$db.product.sellerBasic)
         },
 
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$lang.product.advanced;
+                    this.btnInfo=this.$i.product.advanced;
                 }else{
-                    this.btnInfo=this.$lang.product.hideTheAdvanced;
+                    this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
             },
         }
@@ -376,6 +299,19 @@
 </script>
 
 <style scoped>
+    .speDropDown{
+        height: 32px;
+    }
+    .speDropDown >>> .checkInputBox{
+        height: 28px;
+    }
+    .speDropDown >>> .checkInputBox .dataBox{
+        height: 28px;
+        line-height: 28px;
+    }
+
+
+
     .bookmark{
         padding-right: 20px;
     }

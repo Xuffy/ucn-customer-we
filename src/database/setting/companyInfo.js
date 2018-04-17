@@ -62,7 +62,7 @@ export default {
         belong:'summary'
     },
     descriptionSetting:{
-        key: 'desc',
+        key: 'description',
         type: 'textarea',
         belong:'summary',
         fullLine:true

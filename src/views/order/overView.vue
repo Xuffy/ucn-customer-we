@@ -5,11 +5,11 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="status" size="mini">
-                            <el-radio-button label="TBCByCustomer"> {{ $lang.baseText.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="TBCBySupplier">{{($lang.baseText.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="process">{{($lang.baseText.process)}}</el-radio-button>
-                            <el-radio-button label="finish">{{($lang.baseText.finish)}}</el-radio-button>
-                            <el-radio-button label="cancel">{{($lang.baseText.cancel)}}</el-radio-button>
+                            <el-radio-button label="TBCByCustomer"> {{ $i.baseText.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="TBCBySupplier">{{($i.baseText.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="process">{{($i.baseText.process)}}</el-radio-button>
+                            <el-radio-button label="finish">{{($i.baseText.finish)}}</el-radio-button>
+                            <el-radio-button label="cancel">{{($i.baseText.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -36,17 +36,17 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{($lang.baseText.downloadall)}}</el-button>
-<!--                <el-button >{{($lang.baseText.accept)}}</el-button>-->
-<!--                <el-button>{{($lang.baseText.copy)}}</el-button>-->
-                <el-button @click='creat_order'>{{($lang.baseText.createorder)}}</el-button>
-                <el-button type='danger' :disabled='disabled'>{{($lang.baseText.delete)}}</el-button>
+                <el-button >{{($i.baseText.downloadall)}}</el-button>
+<!--                <el-button >{{($i.baseText.accept)}}</el-button>-->
+<!--                <el-button>{{($i.baseText.copy)}}</el-button>-->
+                <el-button @click='creat_order'>{{($i.baseText.createorder)}}</el-button>
+                <el-button type='danger' :disabled='disabled'>{{($i.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
                    <el-radio-group v-model="view" size="mini">
-                            <el-radio-button label=1>{{($lang.baseText.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($lang.baseText.SKU)}}</el-radio-button>
+                            <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
                 </div>
@@ -162,7 +162,7 @@
         },
         watch:{
            status(curVal,oldVal){
-　　　　　　　　　if(curVal==this.$lang.baseText.cancel){
+　　　　　　　　　if(curVal==this.$i.baseText.cancel){
                     this.disabled=false
                 }else{
                     this.disabled=true
