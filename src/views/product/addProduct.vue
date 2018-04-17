@@ -66,9 +66,10 @@
             <div class="btns" v-if="!hideBtn">
                 <el-button @click="addNewProduct">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button>{{$i.product.compare}}</el-button>
-                <el-button>{{$i.product.download+'(0)'}}</el-button>
-                <el-button type="danger">{{$i.product.delete}}</el-button>
+                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
+                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
             </div>
 
             <v-table
@@ -76,7 +77,7 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
-            <div class="footer-btn">
+            <div class="footer-btn" v-if="hideBtn">
                 <el-button type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </div>
@@ -103,7 +104,7 @@
             },
             type:{
                 type:String,
-                default:''
+                default:'product'
             },
             hideBtn:{
                 type:Boolean,
@@ -120,6 +121,11 @@
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 selectList:[],
+                downloadBtnInfo:'All',
+                //btn禁用状态
+                disabledAddBookmark:true,
+                disabledCompare:true,
+
                 //表格字段绑定
                 productForm: {
                     categoryId: '',
@@ -266,10 +272,17 @@
                 });
             },
 
+            /**
+             * 按钮组操作
+             * */
+            addToBookmark(){
+                console.log(this.selectList)
+            },
+
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/sellerProduct/detail',{id:item.id.value});
+                    this.windowOpen('/product/detail',{id:item.id.value});
                 }
             },
 
@@ -288,6 +301,21 @@
                     this.btnInfo=this.$i.product.advanced;
                 }else{
                     this.btnInfo=this.$i.product.hideTheAdvanced;
+                }
+            },
+            selectList(n){
+                if(n.length===0){
+                    this.downloadBtnInfo='All';
+                    this.disabledAddBookmark=true;
+                }else{
+                    this.downloadBtnInfo=n.length;
+                    this.disabledAddBookmark=false;
+                }
+
+                if(n.length>=2){
+                    this.disabledCompare=false;
+                }else{
+                    this.disabledCompare=true;
                 }
             }
         }
