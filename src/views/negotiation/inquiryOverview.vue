@@ -1,9 +1,9 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $lang.inquiry.inquiryOverviewTitle }}</h3>
+        <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
             <div class="state">
-                <span>{{ $lang.baseText.state }}</span>
+                <span>{{ $i.baseText.state }}</span>
                 <el-checkbox-group v-model="status">
                     <el-checkbox-button 
                             v-for="item in $db.inquiryOverview.overoiewState"
@@ -22,16 +22,16 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button  @click="toCompare">{{ $lang.baseText.compare }}</el-button>
-                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $lang.baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry">{{ $lang.baseText.cancelTheInquiry }}</el-button>
-                <el-button @click="deleteInquiry" type="danger">{{ $lang.baseText.delete }}</el-button>
+                <el-button  @click="toCompare">{{ $i.baseText.compare }}</el-button>
+                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry">{{ $i.baseText.cancelTheInquiry }}</el-button>
+                <el-button @click="deleteInquiry" type="danger">{{ $i.baseText.delete }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $lang.baseText.viewBy }}&nbsp;</span>
+                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$lang.baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$lang.baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>

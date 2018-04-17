@@ -1,7 +1,8 @@
 <template>
    <div class='attachment'>
         <el-form  label-width="230px">
-        <el-form-item class="form-list" :label=" $t('order.basicinfo.attachment')" prop="supplierName">     
+        <el-form-item class="form-list"
+            :label="$i.attachment" prop="supplierName">     
             <Upload class='upload' @getres='getres'              :disabled='disabled'></Upload> 
             <div class="order_attchment" >   
                  <div class="attchment_content">

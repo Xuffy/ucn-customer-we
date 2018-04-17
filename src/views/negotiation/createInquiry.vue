@@ -1,9 +1,9 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $lang.inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
         <!-- <time-selection v-model="dateTime" /> -->
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $lang.inquiry.basicInfo }}</h4>
+            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
                     <el-col v-for="(item, index) in $db.inquiryOverview.createbBasicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
@@ -51,18 +51,18 @@
                 </el-row>
             </el-form>
         </div>
-        <h4 class="content-hd">{{ $lang.baseText.productInfo }}</h4>
+        <h4 class="content-hd">{{ $i.baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $lang.baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $lang.baseText.remove }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $i.baseText.addProduct }}</el-button>
+                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
             </div>
             <select-search :options="[]" />
         </div>
         <v-table :data="tabData" :data-key="tabColumn"></v-table>
         <div class="bom-btn-wrap">
-            <el-button @click="submitForm('draft')">{{ $lang.baseText.submit }}</el-button>
-            <el-button @click="submitForm('draft')">{{ $lang.baseText.saveAsDraft }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog

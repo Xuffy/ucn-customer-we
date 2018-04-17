@@ -1,6 +1,8 @@
 <template>
   <div class="filter-value">
     <i class="el-icon-search" @click="visible = !visible"></i>
+    <v-filter-column :data="setFiledData" @filter-column="onFilterColumn">
+    </v-filter-column>
 
     <el-dialog title="Table filter" :visible.sync="visible" width="1000px">
       <ul>
@@ -50,27 +52,20 @@
                           placeholder="选择日期">
           </el-date-picker>
 
-
           <el-radio-group v-model="cItem.sort" size="small" v-if="cItem.sortable">
             <el-radio-button label="asc">升序</el-radio-button>
             <el-radio-button label="desc">降序</el-radio-button>
           </el-radio-group>
 
-          <!--<el-checkbox-group v-model="cItem.sort" size="small" style="display: inline-block;vertical-align: top">
-            <el-checkbox-button label="升序">
-            </el-checkbox-button>
-            <el-checkbox-button label="降序">
-            </el-checkbox-button>
-          </el-checkbox-group>-->
-
           <el-button icon="el-icon-plus" @click="addCompute"></el-button>
           <el-button icon="el-icon-minus" @click="cutCompute(index)"></el-button>
+
         </li>
       </ul>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="visible = false">取 消</el-button>
-        <el-button type="primary" @click="visible = false">确 定</el-button>
+        <el-button type="primary" @click="submitFilter">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -78,6 +73,7 @@
 
 <script>
 
+  import VFilterColumn from './filterColumn'
 
   const operators = [
     {value: '=', label: '等于'},
@@ -99,10 +95,12 @@
         },
       },
     },
+    components: {VFilterColumn},
     data() {
       return {
         visible: false,
         dataList: [],
+        setFiledData: [],
         computeTypeList: [
           {
             value: '>',
@@ -131,7 +129,7 @@
         ],
         computeType: '',
         conditionList: [
-          {property: '', operator: '', value: '', sort: ''}
+          {property: '', operator: '', value: '', sort: '', tooltipShow: false}
         ],
         value8: '',
       }
@@ -157,9 +155,18 @@
         }
       },
       getConfig() {
-        this.$ajax.get(this.$apis.gridfieldsetting).then(data => {
-          this.dataList = data;
-          console.log(data)
+        this.$ajax.all([
+          this.$ajax.get(this.$apis.gridfieldsetting),
+          this.$ajax.get(this.$apis.get_itemfavoriteList),
+        ]).then(data => {
+          this.dataList = data[0];
+
+          this.setFiledData = _.map(data[0], val => {
+            if (!_.isEmpty(_.findWhere(data[1], {gridFieldId: val.name}))) {
+              val._checked = true;
+            }
+            return val;
+          });
         });
       },
       selectCondition(item) {
@@ -175,10 +182,52 @@
         });
 
         item.sort = '';
-        item.operator = '';
+        item.tooltipContent = '';
         item.sortable = data.sortable;
         item.dataType = data.dataType;
 
+      },
+      onFilterColumn(val) {
+        this.$ajax.get(this.$apis.get_itemfavoriteList).then(data => {
+          this.setFiledData = _.map(this.dataList, val => {
+            if (!_.isEmpty(_.findWhere(data, {gridFieldId: val.name}))) {
+              val._checked = true;
+            }
+            return val;
+          });
+        });
+        this.$emit('filter-column', val);
+      },
+      submitFilter() {
+        let operatorFilters = []
+          , sorts = [];
+        for (let i = 0; i < this.conditionList.length; i++) {
+          let val = this.conditionList[i]
+            , {operator, property, value} = val;
+          if (!operator || !property || !value) {
+            this.$message({
+              message: '请输入完整筛选条件',
+              type: 'warning'
+            });
+            return false;
+          }
+          if (val.sort) {
+            sorts.push({orderBy: property, orderType: val.sort});
+          }
+          operatorFilters.push({property, operator, value});
+        }
+        this.visible = false;
+        this.$emit('filter-value', {operatorFilters, sorts});
+      },
+      getFilterColumn(dataList, checked) {
+        return _.map(dataList, value => {
+          return _.mapObject(value, val => {
+            if(_.isObject(val)){
+              val._hide = _.indexOf(checked, val.key) < 0;
+            }
+            return val;
+          });
+        })
       }
     }
   }

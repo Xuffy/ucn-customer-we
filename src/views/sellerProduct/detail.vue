@@ -28,6 +28,9 @@
                                             <span v-if="v.key==='incotermPrice'">
                                                 {{fobPrice}}
                                             </span>
+                                            <span v-if="v.key==='status'">
+                                                {{productForm[v.key]===0?'下架':'上架'}}
+                                            </span>
                                             <span v-else>
                                                 {{productForm[v.key]}}
                                             </span>
@@ -39,27 +42,32 @@
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button @click="editProduct">{{$lang.product.edit}}</el-button>
-                    <el-button :loading="disabledSetupBtn" @click="setUpDown">{{$lang.product.setUp}}</el-button>
-                    <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
-                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$lang.product.delete}}</el-button>
+                    <el-button @click="editProduct">{{$i.product.edit}}</el-button>
+                    <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
+                    <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$i.product.delete}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$lang.product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="200px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+' :'">
-                                    {{productForm[v.key]}}
+                                    <span v-if="v.key==='status'">
+                                        {{productForm[v.key]===1?'上架':'下架'}}
+                                    </span>
+                                    <span v-else>
+                                        {{productForm[v.key]}}
+                                    </span>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -70,14 +78,13 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-
-                <el-tab-pane :label="$lang.product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -88,7 +95,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -99,7 +106,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -111,10 +118,10 @@
                     </el-form>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$lang.product.tradeHistory" name="History">
+                <el-tab-pane :label="$i.product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.attachment" name="Attachment">
+                <el-tab-pane :label="$i.product.attachment" name="Attachment">
 
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
@@ -282,6 +289,8 @@
                 fobPrice:'',
                 //用于展示的table数据
                 tableData:[],
+                //上下架按钮文字切换
+                btnInfo:this.$i.product.setUp,
 
                 //btn禁用状态组
                 disabledDeleteBtn:false,
@@ -308,6 +317,13 @@
 
             //获取产品详情
             getGoodsData(){
+                const loading = this.$loading({
+                    target:'.detail',
+                    lock: true,
+                    text: 'Loading',
+                    // spinner: 'el-icon-loading',
+                    background: 'rgba(255, 255, 255, .8)'
+                });
                 this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
                     this.productForm=res;
                     this.productForm.price.forEach(v=>{
@@ -316,10 +332,13 @@
                             this.fobPrice=v.fobPrice;
                         }
                     });
-                    console.log(this.$db,'db')
+                    if(this.productForm.status===1){
+                        this.btnInfo=this.$i.product.setDown;
+                    }else if(this.productForm.status===0){
+                        this.btnInfo=this.$i.product.setUp;
+                    }
                     this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price);
-
-
+                    loading.close();
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -332,21 +351,37 @@
 
             //设置商品上/下架状态
             setUpDown(){
-                this.$confirm('确定上架该商品?', '提示', {
+                let info,status,successInfo;
+                if(this.productForm.status===1){
+                    info='确定下架该商品?';
+                    successInfo='下架成功';
+                    status=0;
+                }else if(this.productForm.status===0){
+                    info='确定上架该商品?';
+                    successInfo='上架成功';
+                    status=1;
+                }
+                this.$confirm(info, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     this.disabledSetupBtn=true;
-                    this.$ajax.post(this.$apis.change_productStatus,{
+                    this.$ajax.post(`${this.$apis.change_productStatus}?status=${status}`,{
                         id:this.productForm.id,
-                        status:false
                     }).then(res=>{
                         this.disabledSetupBtn=false;
                         this.$message({
-                            message: '上架成功',
+                            message: successInfo,
                             type: 'success'
                         });
+                        if(status===1){
+                            this.$set(this.productForm,'status',1);
+                            this.btnInfo=this.$i.product.setDown;
+                        }else if(status===0){
+                            this.$set(this.productForm,'status',0);
+                            this.btnInfo=this.$i.product.setUp;
+                        }
                     }).catch(err=>{
                         this.disabledSetupBtn=false;
                     });
@@ -383,13 +418,11 @@
                 });
             },
 
-
-
             filterSelection(params) {
                 return false;
             },
         },
-        created(){
+        mounted(){
             this.getGoodsData();
         },
     }

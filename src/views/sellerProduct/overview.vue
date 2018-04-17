@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark">
         <div class="title">
-            <span>{{$lang.product.title}}</span>
+            <span>{{$i.product.title}}</span>
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
@@ -25,28 +25,6 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="categoryId" :label="$t('productSeller.page.category')">-->
-                            <!--<drop-down class="" :list="dropData" ref="dropDown"></drop-down>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="nameEn" :label="$t('productSeller.page.skuNameEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.nameEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="isReadilyAvailable":label="$t('productSeller.page.readilyAvailable')">-->
-                            <!--<el-select size="mini" v-model="productForm.isReadilyAvailable" placeholder="请选择">-->
-                                <!--<el-option-->
-                                        <!--v-for="item in readilyAvailableOptions"-->
-                                        <!--:key="item.value"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.value">-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -157,23 +135,24 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary">{{$lang.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$lang.product.clear}}</el-button>
+            <el-button @click="search" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
-                <el-button>{{$lang.product.setUp}}</el-button>
-                <el-button>{{$lang.product.setDown}}</el-button>
-                <el-button>{{$lang.product.downloadSelected}}</el-button>
-                <el-button type="danger">{{$lang.product.delete}}</el-button>
+                <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                <el-button @click="setUp">{{$i.product.setUp}}</el-button>
+                <el-button @click="setDown">{{$i.product.setDown}}</el-button>
+                <el-button>{{$i.product.downloadSelected}}</el-button>
+                <el-button type="danger">{{$i.product.delete}}</el-button>
             </div>
 
             <v-table
+                    ref="vTable"
                     :data="tableDataList"
-                    :buttons="[{label: 'detail', type: 1}]"
+                    :buttons="[{label: 'Detail', type: 1}]"
+                    @change-checked=""
                     @action="btnClick"></v-table>
-
         </div>
     </div>
 </template>
@@ -197,7 +176,7 @@
             return{
 
                 hideBody:true,            //是否显示body
-                btnInfo:this.$lang.product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
 
                 //表格字段绑定
                 productForm: {
@@ -249,7 +228,7 @@
                 },
                 //表格验证参数
                 productFormRules:{
-                    nameCn: [
+                    nameCnLike: [
                         { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
                     ],
                 },
@@ -316,7 +295,7 @@
 
             //清除填写的表格数据
             clear(){
-                // this.$refs.dropDown.selectedList=[];
+                this.$refs.dropDown[0].selectedList=[];
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
                 this.$set(this.productForm,'minExwPrice','');
@@ -341,8 +320,14 @@
             //获取table数据
             getData() {
                 this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
+                    res.datas.forEach(v=>{
+                        if(v.status===0){
+                            v.status='下架';
+                        }else if(v.status===1){
+                            v.status='上架';
+                        }
+                    });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    console.log(res.datas)
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -353,25 +338,39 @@
                 this.windowOpen('/sellerProduct/detail',{id:item.id.value});
             },
 
+            //设为上架
+            setUp(){
+                console.log(this.$refs.vTable.getSelected())
+            },
+
+            //设为下架
+            setDown(){},
+
+            //表格check状态改变
+            handleCheckChange(e){
+                console.log(e)
+            },
+
+            check(e){
+                console.log(e)
+            },
 
             addNewProduct(){
-
+                this.windowOpen('/sellerProduct/addNewProduct');
             },
         },
         created(){
             this.getData();
-            console.log(this.$db,'db')
-            console.log(this.$lang,'lang')
         },
 
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$lang.product.advanced;
+                    this.btnInfo=this.$i.product.advanced;
                 }else{
-                    this.btnInfo=this.$lang.product.hideTheAdvanced;
+                    this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
-            }
+            },
         }
     }
 </script>

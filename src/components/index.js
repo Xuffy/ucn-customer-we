@@ -1,4 +1,5 @@
 import VTable from './common/table/index';
+import VTableFilter from './common/table/filter';
 import VSimpleTable from './common/table/simple';
 import VComplexTable from './common/table/complex';
 import dropDown from './common/fnCompon/dropDown';
@@ -25,6 +26,7 @@ import VHistory from '@/views/negotiation/children/history';
 export {
   VAddQuickLink,
   VTable,
+  VTableFilter,
   VSimpleTable,
   VComplexTable,
   dropDown,

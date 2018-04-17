@@ -4,7 +4,12 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       BASE_API: '',
+
+      BASE_DHC: 'http://192.168.51.111:18100',
+      BASE_HCJ:'http://192.168.51.173:18003', 
+
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
+
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
     develop: {
@@ -17,7 +22,7 @@ export default {
       BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
-  
+
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,
 
@@ -28,7 +33,7 @@ export default {
   TIMEOUT: 60000,
 
   // 项目版本号
-  VERSION: `3.3.4.${process.env.VERSION}`,
+  VERSION: `2.0.${process.env.VERSION}`,
 
   // 本地store缓存 前缀
   STORE_PREFIX: 'ucn_'

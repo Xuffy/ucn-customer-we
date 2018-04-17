@@ -2,7 +2,10 @@ const version = ['/web/v1', '/web/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
+  get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
+  update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
   sys_category: ['/sys/category', 'BASE_CS'],
   get_quickLink: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
@@ -20,6 +23,16 @@ const apis = {
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
+  get_supplierWhole:['/supplierWhole','BASE_CS'],
+  add_address:['/supplier/address','BASE_CS'],
+  delete_address:['/supplier/delAddress/{id}','BASE_CS'],
+  update_address:['/supplier/address/{id}','BASE_CS'],
+  add_account:['/supplier/account','BASE_CS'],
+  update_account:['/supplier/account/{id}','BASE_CS'],
+  delete_account:['/supplier/delAccount/{id}','BASE_CS'],
+  //order
+  get_orderlist:['/customer/order/page','BASE_HCJ']
+
 };
 
 let list = _.mapObject(apis, val => {

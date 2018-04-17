@@ -9,10 +9,10 @@
               </div>
                <div class='basicinfo_message'>
                      <div class="message_div" v-show='switchStatus'>
-                         <messageBoard ></messageBoard>
+<!--                         <messageBoard ></messageBoard>-->
                      </div>
                      <div class="switch-btn" @click="boardSwitch">
-                     {{$t('negotiation.text.messageBoard')}}
+                     {{$i.baseText.messageBoard}}
                      <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                     </div>
                    
@@ -21,17 +21,16 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-         <v-payment 
-         ></v-payment>
+<!--         <v-payment></v-payment>-->
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
-                 {{$t('order.productinfo.productInfo')}}
+                 {{$i.baseText.productInfo    }}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='disabled'>{{$t('order.buttonname.addProduct')}}</el-button>
-                  <el-button type='danger' :disabled='disabled'>{{$t('order.buttonname.remove')}}</el-button>
-                  <el-button  @click='placeLogisticPlan' :disabled='disabled'>{{$t('order.buttonname.placeLogisticPlan')}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='disabled'>{{$i.baseText.addproduct}}</el-button>
+                  <el-button type='danger' :disabled='disabled'>{{$i.baseText.remove}}</el-button>
+
              </div>
              <div class="pro_table">
                    <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1},{label: 'history', type: 2}]" 
@@ -45,28 +44,26 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='disabled'>
-                 <el-button  @click='modify'>{{$t('order.buttonname.modify')}}</el-button>
-                 <el-button >{{$t('order.buttonname.confirm')}}</el-button>
-<!--                 <el-button type='primary' >{{$t('order.buttonname.copy')}}</el-button>-->
-                 <el-button  :disabled='true'>{{$t('order.buttonname.cancelTheOrder')}}</el-button>
-                 <el-checkbox v-model="checked">{{$t('order.buttonname.markAsImportant')}}</el-checkbox>
-<!--
-                 <el-checkbox v-model="checked">{{$t('order.buttonname.hideTheSame')}}</el-checkbox>
-                 <el-checkbox v-model="checked">{{$t('order.buttonname.hightlightTheDifferent')}}</el-checkbox>
--->
+                 <el-button  @click='modify'>{{$i.baseText.modify}}</el-button>
+                 <el-button >{{$i.baseText.confirm}}</el-button>
+                 <el-button  :disabled='true'>{{$i.baseText.download}}</el-button>
+                  <el-button >{{$i.baseText.createorder}}</el-button>
+                   <el-button >{{$i.baseText.cancel}}</el-button>
+                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
+                 <el-checkbox v-model="checked">{{$i.baseText.highlightTheDifferent}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
-                 <el-button >{{$t('order.buttonname.send')}}</el-button>
-                 <el-button type='danger' @click='cancel'>{{$t('order.buttonname.cancel')}}</el-button>
+                 <el-button >{{$i.baseText.send}}</el-button>
+                 <el-button type='danger' @click='cancel'>{{$i.baseText.cancel}}</el-button>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$t('order.buttonname.addProduct')" :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$i.baseText.addproduct" :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$t('order.buttonname.fromNewSearch')" name="FromNewSearch">
+                        <el-tab-pane :label="$i.baseText.fromNewSearch" name="FromNewSearch">
                             <FromNewSearch></FromNewSearch>
                         </el-tab-pane>
-                        <el-tab-pane :label="$t('order.buttonname.fromMyBookmark')" name="FromMyBookmark">
+                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
                             <FromBookmark></FromBookmark>
                         </el-tab-pane>
                       </el-tabs>
