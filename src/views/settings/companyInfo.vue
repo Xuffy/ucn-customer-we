@@ -1,7 +1,7 @@
 <template>
     <div class="company-info">
         <div class="title">
-            <span><span style="color:red;font-weight: bold">供应商!!! </span>{{$lang.setting.companyInfo}}</span>
+            <span><span style="color:red;font-weight: bold">供应商!!! </span>{{$i.setting.companyInfo}}</span>
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
@@ -42,14 +42,14 @@
                 </el-row>
             </el-form>
             <div class="summary-btn">
-                <el-button @click="modifySummary">{{$lang.setting.modify}}</el-button>
+                <el-button @click="modifySummary">{{$i.setting.modify}}</el-button>
             </div>
         </div>
         <div class="section">
             <el-tabs type="border-card">
-                <el-tab-pane :label="$lang.setting.address">
+                <el-tab-pane :label="$i.setting.address">
                     <div class="section-btn">
-                        <el-button @click="addAddress" type="primary">{{$lang.setting.add}}</el-button>
+                        <el-button @click="addAddress" type="primary">{{$i.setting.add}}</el-button>
                     </div>
                     <el-table
                             :data="companyInfo.address"
@@ -58,51 +58,51 @@
                         <el-table-column
                                 prop="name"
                                 align="center"
-                                :label="$lang.setting.factoryName">
+                                :label="$i.setting.factoryName">
                         </el-table-column>
                         <el-table-column
                                 prop="address"
                                 align="center"
-                                :label="$lang.setting.factoryAddress">
+                                :label="$i.setting.factoryAddress">
                         </el-table-column>
                         <el-table-column
                                 prop="exportPort"
                                 align="center"
-                                :label="$lang.setting.exportPort">
+                                :label="$i.setting.exportPort">
                         </el-table-column>
                         <el-table-column
                                 prop="contactPerson1"
                                 align="center"
-                                :label="$lang.setting.contactPerson1">
+                                :label="$i.setting.contactPerson1">
                         </el-table-column>
                         <el-table-column
                                 prop="concatPhone1"
                                 align="center"
-                                :label="$lang.setting.contactPhoneNo1">
+                                :label="$i.setting.contactPhoneNo1">
                         </el-table-column>
                         <el-table-column
                                 prop="contactPerson2"
                                 align="center"
-                                :label="$lang.setting.contactPerson2">
+                                :label="$i.setting.contactPerson2">
                         </el-table-column>
                         <el-table-column
                                 prop="contactPhone2"
                                 align="center"
-                                :label="$lang.setting.contactPhoneNo2">
+                                :label="$i.setting.contactPhoneNo2">
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                :label="$lang.setting.action">
+                                :label="$i.setting.action">
                             <template slot-scope="scope">
-                                <el-button @click="modifyAddreess(scope.row)" type="text">{{$lang.setting.modify}}</el-button>
-                                <el-button @click="deleteAddress(scope.row)" type="text">{{$lang.setting.delete}}</el-button>
+                                <el-button @click="modifyAddreess(scope.row)" type="text">{{$i.setting.modify}}</el-button>
+                                <el-button @click="deleteAddress(scope.row)" type="text">{{$i.setting.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.setting.accountInfo">
+                <el-tab-pane :label="$i.setting.accountInfo">
                     <div class="section-btn">
-                        <el-button @click="addAccount" type="primary">{{$lang.setting.add}}</el-button>
+                        <el-button @click="addAccount" type="primary">{{$i.setting.add}}</el-button>
                     </div>
                     <el-table
                             :data="companyInfo.accounts"
@@ -111,51 +111,51 @@
                         <el-table-column
                                 prop="beneficiaryName"
                                 align="center"
-                                :label="$lang.setting.beneficiaryName">
+                                :label="$i.setting.beneficiaryName">
                         </el-table-column>
                         <el-table-column
                                 prop="beneficiaryAccount"
                                 align="center"
-                                :label="$lang.setting.beneficiaryAccount">
+                                :label="$i.setting.beneficiaryAccount">
                         </el-table-column>
                         <el-table-column
                                 prop="beneficiaryAddress"
                                 align="center"
-                                :label="$lang.setting.beneficiaryAddress">
+                                :label="$i.setting.beneficiaryAddress">
                         </el-table-column>
                         <el-table-column
                                 prop="beneficiaryBankName"
                                 align="center"
-                                :label="$lang.setting.beneficiaryBankName">
+                                :label="$i.setting.beneficiaryBankName">
                         </el-table-column>
                         <el-table-column
                                 prop="beneficiaryBankSwift"
                                 align="center"
-                                :label="$lang.setting.beneficiaryBankSWIFT">
+                                :label="$i.setting.beneficiaryBankSWIFT">
                         </el-table-column>
                         <el-table-column
                                 prop="accountType"
                                 align="center"
-                                :label="$lang.setting.accountType">
+                                :label="$i.setting.accountType">
                         </el-table-column>
                         <el-table-column
                                 prop="currency"
                                 align="center"
-                                :label="$lang.setting.currency">
+                                :label="$i.setting.currency">
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                :label="$lang.setting.action">
+                                :label="$i.setting.action">
                             <template slot-scope="scope">
-                                <el-button @click="modifyAccount(scope.row)" type="text">{{$lang.setting.modify}}</el-button>
-                                <el-button @click="deleteAccount(scope.row)" type="text">{{$lang.setting.delete}}</el-button>
+                                <el-button @click="modifyAccount(scope.row)" type="text">{{$i.setting.modify}}</el-button>
+                                <el-button @click="deleteAccount(scope.row)" type="text">{{$i.setting.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.setting.contactInfo">
+                <el-tab-pane :label="$i.setting.contactInfo">
                     <div class="section-btn">
-                        <el-button @click="addContact" type="primary">{{$lang.setting.add}}</el-button>
+                        <el-button @click="addContact" type="primary">{{$i.setting.add}}</el-button>
                     </div>
                     <el-table
                             :data="companyInfo.concats"
@@ -164,97 +164,97 @@
                         <el-table-column
                                 prop="name"
                                 align="center"
-                                :label="$lang.setting.name">
+                                :label="$i.setting.name">
                         </el-table-column>
                         <el-table-column
                                 prop="deptName"
                                 align="center"
-                                :label="$lang.setting.department">
+                                :label="$i.setting.department">
                         </el-table-column>
                         <el-table-column
                                 prop="gender"
                                 align="center"
-                                :label="$lang.setting.gender">
+                                :label="$i.setting.gender">
                         </el-table-column>
                         <el-table-column
                                 prop="cellphone"
                                 align="center"
-                                :label="$lang.setting.mobileNumber">
+                                :label="$i.setting.mobileNumber">
                         </el-table-column>
                         <el-table-column
                                 prop="telphone"
                                 align="center"
-                                :label="$lang.setting.telNumber">
+                                :label="$i.setting.telNumber">
                         </el-table-column>
                         <el-table-column
                                 prop="fax"
                                 align="center"
-                                :label="$lang.setting.faxNumber">
+                                :label="$i.setting.faxNumber">
                         </el-table-column>
                         <el-table-column
                                 prop="email"
                                 align="center"
-                                :label="$lang.setting.emailAddress">
+                                :label="$i.setting.emailAddress">
                         </el-table-column>
                         <el-table-column
                                 prop="skype"
                                 align="center"
-                                :label="$lang.setting.skype">
+                                :label="$i.setting.skype">
                         </el-table-column>
                         <el-table-column
                                 prop="qq"
                                 align="center"
-                                :label="$lang.setting.QQ">
+                                :label="$i.setting.QQ">
                         </el-table-column>
                         <el-table-column
                                 align="center"
-                                :label="$lang.setting.action">
+                                :label="$i.setting.action">
                             <template slot-scope="scope">
-                                <el-button @click="modifyAccount(scope.row)" type="text">{{$lang.setting.modify}}</el-button>
-                                <el-button @click="deleteAccount(scope.row)" type="text">{{$lang.setting.delete}}</el-button>
+                                <el-button @click="modifyAccount(scope.row)" type="text">{{$i.setting.modify}}</el-button>
+                                <el-button @click="deleteAccount(scope.row)" type="text">{{$i.setting.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.setting.attachment">定时任务补偿</el-tab-pane>
+                <el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>
             </el-tabs>
         </div>
 
-        <el-dialog width="70%" :title="$lang.setting.address" :visible.sync="addressDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.address" :visible.sync="addressDialogVisible">
             <el-form label-width="100px" :model="addressData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$lang.setting.factoryName">
+                        <el-form-item prop="name" :label="$i.setting.factoryName">
                             <el-input size="mini" v-model="addressData.name" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="address" :label="$lang.setting.factoryAddress">
+                        <el-form-item prop="address" :label="$i.setting.factoryAddress">
                             <el-input size="mini" v-model="addressData.address" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="exportPort" :label="$lang.setting.exportPort">
+                        <el-form-item prop="exportPort" :label="$i.setting.exportPort">
                             <el-input size="mini" v-model="addressData.exportPort" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson1" :label="$lang.setting.contactPerson1">
+                        <el-form-item prop="contactPerson1" :label="$i.setting.contactPerson1">
                             <el-input size="mini" v-model="addressData.contactPerson1" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone1" :label="$lang.setting.contactPhoneNo1">
+                        <el-form-item prop="concatPhone1" :label="$i.setting.contactPhoneNo1">
                             <el-input size="mini" v-model="addressData.concatPhone1" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson2" :label="$lang.setting.contactPerson2">
+                        <el-form-item prop="contactPerson2" :label="$i.setting.contactPerson2">
                             <el-input size="mini" v-model="addressData.contactPerson2" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone2" :label="$lang.setting.contactPhoneNo2">
+                        <el-form-item prop="concatPhone2" :label="$i.setting.contactPhoneNo2">
                             <el-input size="mini" v-model="addressData.concatPhone2" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
@@ -265,41 +265,41 @@
                 <el-button :loading="allowAddAddress" type="primary" @click="sureAddAddress">确 定</el-button>
             </div>
         </el-dialog>
-        <el-dialog width="70%" :title="$lang.setting.accountInfo" :visible.sync="accountDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
             <el-form label-width="100px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$lang.setting.beneficiaryName">
+                        <el-form-item prop="name" :label="$i.setting.beneficiaryName">
                             <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="address" :label="$lang.setting.beneficiaryAccount">
+                        <el-form-item prop="address" :label="$i.setting.beneficiaryAccount">
                             <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="exportPort" :label="$lang.setting.beneficiaryAddress">
+                        <el-form-item prop="exportPort" :label="$i.setting.beneficiaryAddress">
                             <el-input size="mini" v-model="accountData.beneficiaryAddress" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson1" :label="$lang.setting.beneficiaryBankName">
+                        <el-form-item prop="contactPerson1" :label="$i.setting.beneficiaryBankName">
                             <el-input size="mini" v-model="accountData.beneficiaryBankName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone1" :label="$lang.setting.beneficiaryBankSWIFT">
+                        <el-form-item prop="concatPhone1" :label="$i.setting.beneficiaryBankSWIFT">
                             <el-input size="mini" v-model="accountData.beneficiaryBankSwift" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson2" :label="$lang.setting.accountType">
+                        <el-form-item prop="contactPerson2" :label="$i.setting.accountType">
                             <el-input size="mini" v-model="accountData.accountType" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone2" :label="$lang.setting.currency">
+                        <el-form-item prop="concatPhone2" :label="$i.setting.currency">
                             <el-input size="mini" v-model="accountData.currency" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
@@ -310,41 +310,41 @@
                 <el-button :loading="allowAddAccount" type="primary" @click="sureAddAccount">确 定</el-button>
             </div>
         </el-dialog>
-        <el-dialog width="70%" :title="$lang.setting.contactInfo" :visible.sync="contactDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
             <el-form label-width="100px" :model="accountData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$lang.setting.beneficiaryName">
+                        <el-form-item prop="name" :label="$i.setting.beneficiaryName">
                             <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="address" :label="$lang.setting.beneficiaryAccount">
+                        <el-form-item prop="address" :label="$i.setting.beneficiaryAccount">
                             <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="exportPort" :label="$lang.setting.beneficiaryAddress">
+                        <el-form-item prop="exportPort" :label="$i.setting.beneficiaryAddress">
                             <el-input size="mini" v-model="accountData.beneficiaryAddress" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson1" :label="$lang.setting.beneficiaryBankName">
+                        <el-form-item prop="contactPerson1" :label="$i.setting.beneficiaryBankName">
                             <el-input size="mini" v-model="accountData.beneficiaryBankName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone1" :label="$lang.setting.beneficiaryBankSWIFT">
+                        <el-form-item prop="concatPhone1" :label="$i.setting.beneficiaryBankSWIFT">
                             <el-input size="mini" v-model="accountData.beneficiaryBankSwift" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson2" :label="$lang.setting.accountType">
+                        <el-form-item prop="contactPerson2" :label="$i.setting.accountType">
                             <el-input size="mini" v-model="accountData.accountType" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone2" :label="$lang.setting.currency">
+                        <el-form-item prop="concatPhone2" :label="$i.setting.currency">
                             <el-input size="mini" v-model="accountData.currency" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>

@@ -12,11 +12,11 @@
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 {{$lang.productInfo}}
+                 {{$i.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true">{{$lang.baseText.addproduct}}</el-button>
-                  <el-button type='danger'>{{$lang.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true">{{$i.baseText.addproduct}}</el-button>
+                  <el-button type='danger'>{{$i.baseText.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  :data="tabData" data-key="supplier.tableData" :buttons="[{label: 'detail', type: 1},{label: 'history', type: 2}]" 
@@ -30,23 +30,23 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$lang.baseText.send}}</el-button>
-                 <el-button >{{$lang.baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$lang.baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="checked">{{$lang.baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i.baseText.send}}</el-button>
+                 <el-button >{{$i.baseText.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i.baseText.quickCreate}}</el-button>
+                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$lang.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
+          <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
 <!--             <VQuickCreate></VQuickCreate>-->
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$lang.baseText.addproduct"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i.baseText.addproduct"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$lang.baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i.baseText.addproduct" name="FromNewSearch">
                             <VFromNewSearch></VFromNewSearch>
                         </el-tab-pane>
-                        <el-tab-pane :label="$lang.baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
                             <VFromBookmark></VFromBookmark>
                         </el-tab-pane>
                       </el-tabs>

@@ -39,16 +39,16 @@
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button>{{$lang.product.createInquiry}}</el-button>
-                    <el-button>{{$lang.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$lang.product.addToCompare}}</el-button>
-                    <el-button @click="addToBookmark">{{$lang.product.addToBookmark}}</el-button>
+                    <el-button>{{$i.product.createInquiry}}</el-button>
+                    <el-button>{{$i.product.createOrder}}</el-button>
+                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
+                    <el-button @click="addToBookmark">{{$i.product.addToBookmark}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$lang.product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
@@ -61,7 +61,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -72,14 +72,14 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$lang.product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -90,7 +90,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -101,7 +101,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -113,13 +113,13 @@
                     </el-form>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$lang.product.tradeHistory" name="History">
+                <el-tab-pane :label="$i.product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.attachment" name="Attachment">
+                <el-tab-pane :label="$i.product.attachment" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.remark" name="Remark">
+                <el-tab-pane :label="$i.product.remark" name="Remark">
                     <add-table></add-table>
                 </el-tab-pane>
 

@@ -1,16 +1,17 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $lang.inquiry.inquiryDetailTitle }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
         </div>
+        <drop-down-single />
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $lang.baseText.basicInfo }}</h5>
+                        <h5>{{ $i.baseText.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="0">{{ $lang.baseText.hideTheSame }}</el-checkbox>
-                            <el-checkbox :label="1">{{ $lang.baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
@@ -25,33 +26,33 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $lang.baseText.productInfo }}</h5>
+                        <h5>{{ $i.baseText.productInfo }}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="1">{{ $lang.baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="newSearchDialogVisible = true">{{ $lang.baseText.addProduct }}</el-button>
-                            <el-button type="danger">{{ $lang.baseText.remove }}</el-button>
+                            <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
+                            <el-button type="danger">{{ $i.baseText.remove }}</el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <v-table 
-                        :data="tabData"
+                        :data="productTabData"
                         :buttons="productInfoBtn" 
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button>{{ $lang.baseText.accept }}</el-button>
-                        <el-button @click="windowOpen('/order/creatOrder')">{{ $lang.baseText.createOrder }}</el-button>
-                        <el-button @click="compareConfig.showCompareList = true;">{{ $lang.baseText.addToCompare }}</el-button>
-                        <el-button @click="modifyAction">{{ $lang.baseText.modify }}</el-button>
-                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $lang.baseText.createInquiry }}</el-button>
-                        <el-button type="info">{{ $lang.baseText.cancel }}</el-button>
+                        <el-button>{{ $i.baseText.accept }}</el-button>
+                        <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
+                        <el-button @click="compareConfig.showCompareList = true;">{{ $i.baseText.addToCompare }}</el-button>
+                        <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
+                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createInquiry }}</el-button>
+                        <el-button type="info">{{ $i.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $lang.baseText.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $lang.baseText.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i.baseText.submit }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -59,32 +60,33 @@
             <div class="message-board-wrap">
                 <div class="con"><message-board :list="list" @sub="submit" /></div>
                 <div class="switch-btn" @click="boardSwitch">
-                    {{ $lang.baseText.messageBoard }}
+                    {{ $i.baseText.messageBoard }}
                     <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                 </div>
             </div>
         </div>
         <v-compare-list :config="compareConfig" />
         <el-dialog
-                :title="$lang.baseText.addProduct"
+                :title="$i.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="0">{{ $lang.baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="1">{{ $lang.baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="0">{{ $i.baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="1">{{ $i.baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
             <v-product :hideBtns="true"></v-product>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $lang.baseText.ok }}</el-button>
-                <el-button @click="newSearchDialogVisible = false">{{ $lang.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i.baseText.ok }}</el-button>
+                <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
         <v-history 
             :oSwitch.sync="oSwitch" 
-            :tableData="HistotyData" 
-            :tableColumn="tableColumn" 
+            :list.sync="historyData" 
+            :tableColumn="tableColumn"
+            :title="msgTitle"
         />
     </div>
 </template>
@@ -100,18 +102,16 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
-                tableColumn: 'negotiation.tableBasicInfo',
-                HistotyData: [],
-                productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtns: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtnModify: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}, {label: 'Modify', type: 'modify'}],
+                msgTitle: '',
+                historyData: [],
+                productTabData: [],
                 radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
@@ -145,7 +145,8 @@
                     id: '6',
                     label: 'Vendor SKU description'
                 }],
-                list:[]
+                list:[],
+                tableColumn: ''
             }
         },
         components: {
@@ -154,7 +155,8 @@
             'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList,
-            'v-history': VHistory
+            'v-history': VHistory,
+            'drop-down-single': dropDownSingle
         },
         created() {
             this.getInquiryDetail();
@@ -167,11 +169,10 @@
                 console.log(val);
             }
         },
-        
         methods: {
             getInquiryDetail() {
                 if(!this.$route.query.id) return this.$message('地址错误');
-                this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
+                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
@@ -188,7 +189,8 @@
                     data.push(res);
                     data.push(json);
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
-                })
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
+                });
             },
             selectChange(val) {
                 console.log(val)
@@ -204,48 +206,49 @@
                 this.switchStatus = !this.switchStatus;
             },
             modifyCancel() {
-                this.productInfoBtn = this.productInfoBtns;
                 this.statusModify = false;
             },
             basicInfoBtn(item) {
-                if(item.id) return [{ 
-                    label: 'histoty',
+                if(item.id.value && this.statusModify) return [{
+                    label: 'Modify',
+                    type: 'modify'
+                }, { 
+                    label: 'Histoty',
+                    type: 'histoty'
+                }];
+
+                if(item.id.value) return [{ 
+                    label: 'Histoty',
                     type: 'histoty'
                 }];
             }, 
+            productInfoBtn (item) {
+                if(this.statusModify) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+            },
             modify() {
                 this.statusModify = false;
-                this.productInfoBtn = this.productInfoBtns;
             },
             fromChange(val) {
                console.log(val)
-           },
-           modifyAction() {
-                this.productInfoBtn = this.productInfoBtnModify;
-                this.statusModify = true;
-           },
-           fnBasicInfoHistoty(item) {
-               console.log(item)
-               this.oSwitch = true;
-                return this.HistotyData = [
-                    {
-                        id: 0,
-                        tenantId: 0,
-                        inquiryNo: 1,
-                        quotationNo: 2,
-                        time: 4,
-                        shippingMethod: 5
-                    },
-                    {
-                        id: 1,
-                        tenantId: 1,
-                        inquiryNo: 0,
-                        quotationNo: 0,
-                        time: 0,
-                        shippingMethod: 0
-                    }
-                ]
-                this.HistotyData = this.item;
+            },
+            modifyAction() {
+                    this.statusModify = true;
+            },
+            fnBasicInfoHistoty(item) {
+                if(item.histoty) {
+                    this.oSwitch = true;
+                    this.historyData = item.histoty;
+                    return false;
+                };
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    item.histoty = res;
+                    this.historyData = res;
+                    this.oSwitch = true;
+                });
            },
            fnBasicInfoModify(item) {
                console.log(item)
@@ -253,9 +256,11 @@
            basicInfoAction(data, type) {
                switch(type) {
                     case 'histoty':
+                        this.msgTitle = 'Histoty';
                         this.fnBasicInfoHistoty(data);
                         break;
                     case 'modify':
+                        this.msgTitle = 'Modify';
                         this.fnBasicInfoModify(data);
                         break;
                }

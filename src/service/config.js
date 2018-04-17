@@ -4,12 +4,8 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       BASE_API: '',
-
       BASE_DHC: 'http://192.168.51.111:18100',
-      BASE_HCJ:'http://192.168.51.173:18003', 
-
-      BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
-
+      BASE_HCJ:'http://192.168.51.173:18003',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
     develop: {

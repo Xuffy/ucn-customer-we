@@ -1,6 +1,7 @@
 import language from '../language/index';
 import workbench from './workbench/index';
 import product from './product/index';
+import logistic from './logistic';
 
 import inquiryOverview from './inquiry';
 import order from './order/index';
@@ -10,6 +11,7 @@ const db = {
   workbench,
   product,
   inquiryOverview,
+  logistic,
   order,
   supplier
 };
