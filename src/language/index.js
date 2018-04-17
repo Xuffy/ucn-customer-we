@@ -22,7 +22,13 @@ export default _.extend(
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/detail/basicInfo.pending`),
   require(`/${lang}/inquiry/create/basicInfo.pending`),
-  require(`./${lang}/supplier/overview`),
-  {order: require(`./${lang}/order/overview`)},
-  require(`/${lang}/order/basicinfo.pending`),
+  require(`./${lang}/supplier/overview`) ,
+  require(`./${lang}/supplier/detail.pending`) ,  
+   { order: require(`./${lang}/order/overview`) },
+     require(`/${lang}/order/basicinfo.pending`),
+
+ 
+
+
+
 )

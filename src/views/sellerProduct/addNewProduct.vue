@@ -1,9 +1,5 @@
 <template>
     <div class="add-product">
-        <!--<div class="title">-->
-            <!--<span>{{$i.product.addNewProduct}}</span>-->
-        <!--</div>-->
-
         <div class="title">{{$i.product.basicInformation}}</div>
         <div class="addPic">
             <div class="name">
@@ -61,7 +57,7 @@
                             </el-input-number>
                         </div>
                         <div v-if="v.showType==='dropdown'">
-                            <drop-down class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down :defaultProps="defaultProps" class="speInputNumber" v-model="productForm[v.key]" :list="dropData" ref="dropDown"></drop-down>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -514,7 +510,7 @@
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
-                    status: 0,                      //0下架 1上架
+                    status: 1,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
                     nameCn: "",
@@ -553,7 +549,7 @@
                     otherPackInfoEn: "",
                     adjustPackage: 2,
                     lengthWidthHeight: "",
-                    recycle: 2,
+                    recycle: false,                     //只有在recycleBin里才是false
                     categoryId: '',                      //类型id
                     rateValueAddedTax: 1,               //增值税率
                     taxRefundRate: 1,
@@ -1167,18 +1163,33 @@
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
-                this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
                 this.disabledSubmit=true;
-                this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
-                    this.$message({
-                        message: '新增成功',
-                        type: 'success'
+
+
+                if(this.$route.query.id && this.$route.query.isEdit){
+                    //代表是编辑
+                    this.$ajax.post(this.$apis.get_productDetail,this.productForm).then(res=>{
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/sellerProduct/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
                     });
-                    this.disabledSubmit=false;
-                    this.$router.push('/sellerProduct/overview');
-                }).catch(err=>{
-                    this.disabledSubmit=false;
-                });
+                }else{
+                    this.$ajax.post(this.$apis.add_newSKU,this.productForm).then(res=>{
+                        this.$message({
+                            message: '新增成功',
+                            type: 'success'
+                        });
+                        this.disabledSubmit=false;
+                        this.$router.push('/sellerProduct/overview');
+                    }).catch(err=>{
+                        this.disabledSubmit=false;
+                    });
+                }
             },
 
             //获取产品详情
@@ -1192,11 +1203,15 @@
             },
         },
         created(){
-            this.getCategoryId();
-            let id=this.$route.query.id;
-            if(id){
-                this.getGoodsData();
-            }
+            this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
+                this.dropData=res;
+                let id=this.$route.query.id;
+                if(id){
+                    this.getGoodsData();
+                }
+            }).catch(err=>{
+                console.log(err)
+            });
         },
     }
 </script>

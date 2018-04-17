@@ -1,9 +1,9 @@
 export default {
     id:{
-
+        _hide:true
     },
     pic: {
-        
+
     },
     status: {
 
@@ -343,7 +343,7 @@ export default {
         
     },
     adjustPackage:{
-        
+
     },
 
 }
