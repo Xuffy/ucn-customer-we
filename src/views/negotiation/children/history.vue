@@ -16,6 +16,7 @@
                     :key="index"
                     :label="item.label"
                     :prop="item.key"
+                    :width="item.width || 130"
                 >
                     
                 </el-table-column>
@@ -59,9 +60,12 @@
                 }
             },
             filtColumn() {
-                let list = this.$db.inquiryOverview.basicInfo;
-                console.log(list)
-                return this.$db.inquiryOverview.basicInfo;
+                let column = [], 
+                    data = this.$db.inquiryOverview.basicInfo;
+                for(let key in data) {
+                    if(key !== 'id') column.push(data[key]);
+                };
+                return column;
             }
         },
         watch: {

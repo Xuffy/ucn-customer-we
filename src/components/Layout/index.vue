@@ -7,7 +7,7 @@
 
       <section class="app-main">
         <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
-          <transition name="el-zoom-in-top">
+          <transition name="el-fade-in">
             <router-view :key="key"></router-view>
           </transition>
         </div>

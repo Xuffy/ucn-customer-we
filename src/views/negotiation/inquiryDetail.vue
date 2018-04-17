@@ -3,6 +3,7 @@
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
         </div>
+        <drop-down-single />
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
@@ -84,7 +85,8 @@
         <v-history 
             :oSwitch.sync="oSwitch" 
             :list.sync="historyData" 
-            :tableColumn="tableColumn" 
+            :tableColumn="tableColumn"
+            :title="msgTitle"
         />
     </div>
 </template>
@@ -100,13 +102,14 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                msgTitle: '',
                 historyData: [],
                 productTabData: [],
                 radio: 'From New Search',
@@ -152,7 +155,8 @@
             'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList,
-            'v-history': VHistory
+            'v-history': VHistory,
+            'drop-down-single': dropDownSingle
         },
         created() {
             this.getInquiryDetail();
@@ -186,7 +190,7 @@
                     data.push(json);
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
                     this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
-                })
+                });
             },
             selectChange(val) {
                 console.log(val)
@@ -252,9 +256,11 @@
            basicInfoAction(data, type) {
                switch(type) {
                     case 'histoty':
+                        this.msgTitle = 'Histoty';
                         this.fnBasicInfoHistoty(data);
                         break;
                     case 'modify':
+                        this.msgTitle = 'Modify';
                         this.fnBasicInfoModify(data);
                         break;
                }
