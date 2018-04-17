@@ -6,12 +6,13 @@
                 width="70%"
                 lock-scroll
             >
+            
             <el-table
-                    :data="tableData"
+                    :data="filterData"
                     style="width: 100%"
                 >
                 <el-table-column
-                    v-for="(item, index) in this.filterColumn(this.tableColumn)"
+                    v-for="(item, index) in filtColumn"
                     :key="index"
                     :label="item.label"
                     :prop="item.key"
@@ -33,16 +34,10 @@
                 type: Boolean,
                 default: false
             },
-            tableData: {
+            list: {
                 type: Array,
                 default: () => {
                     return [];
-                }
-            },
-            tableColumn: {
-                type: String,
-                default: () => {
-                    return '';
                 }
             }
         },
@@ -54,6 +49,19 @@
                 set(val) {
                     this.$emit('update:oSwitch', val);
                 }
+            },
+            filterData: {
+                get() {;
+                    return this.list;
+                },
+                set(val) {
+                    console.log(val)
+                }
+            },
+            filtColumn() {
+                let list = this.$db.inquiryOverview.basicInfo;
+                console.log(list)
+                return this.$db.inquiryOverview.basicInfo;
             }
         },
         watch: {
@@ -65,9 +73,7 @@
             
         },
         methods: {
-            filterColumn(str) {
-                
-            }
+            
         }
     }
 </script>

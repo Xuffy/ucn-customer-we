@@ -81,11 +81,11 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <!-- <v-history 
+        <v-history 
             :oSwitch.sync="oSwitch" 
-            :tableData="HistotyData" 
+            :list.sync="historyData" 
             :tableColumn="tableColumn" 
-        /> -->
+        />
     </div>
 </template>
 <script>
@@ -107,11 +107,8 @@
         name:'inquiryDetail',
         data() {
             return {
+                historyData: [],
                 productTabData: [],
-                HistotyData: [],
-                productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtns: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtnModify: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}, {label: 'Modify', type: 'modify'}],
                 radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
@@ -145,7 +142,8 @@
                     id: '6',
                     label: 'Vendor SKU description'
                 }],
-                list:[]
+                list:[],
+                tableColumn: ''
             }
         },
         components: {
@@ -167,11 +165,10 @@
                 console.log(val);
             }
         },
-        
         methods: {
             getInquiryDetail() {
                 if(!this.$route.query.id) return this.$message('地址错误');
-                this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
+                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
@@ -205,7 +202,6 @@
                 this.switchStatus = !this.switchStatus;
             },
             modifyCancel() {
-                this.productInfoBtn = this.productInfoBtns;
                 this.statusModify = false;
             },
             basicInfoBtn(item) {
@@ -222,39 +218,33 @@
                     type: 'histoty'
                 }];
             }, 
+            productInfoBtn (item) {
+                if(this.statusModify) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+            },
             modify() {
                 this.statusModify = false;
-                this.productInfoBtn = this.productInfoBtns;
             },
             fromChange(val) {
                console.log(val)
-           },
-           modifyAction() {
-                
-                this.productInfoBtn = this.productInfoBtnModify;
-                this.statusModify = true;
-           },
-           fnBasicInfoHistoty(item) {
-               this.oSwitch = true;
-                return this.HistotyData = [
-                    {
-                        id: 0,
-                        tenantId: 0,
-                        inquiryNo: 1,
-                        quotationNo: 2,
-                        time: 4,
-                        shippingMethod: 5
-                    },
-                    {
-                        id: 1,
-                        tenantId: 1,
-                        inquiryNo: 0,
-                        quotationNo: 0,
-                        time: 0,
-                        shippingMethod: 0
-                    }
-                ]
-                this.HistotyData = this.item;
+            },
+            modifyAction() {
+                    this.statusModify = true;
+            },
+            fnBasicInfoHistoty(item) {
+                if(item.histoty) {
+                    this.oSwitch = true;
+                    this.historyData = item.histoty;
+                    return false;
+                };
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    item.histoty = res;
+                    this.historyData = res;
+                    this.oSwitch = true;
+                });
            },
            fnBasicInfoModify(item) {
                console.log(item)
