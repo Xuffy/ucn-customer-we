@@ -15,9 +15,10 @@
 
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
-        <v-table ref="pendingTable" :data="dataList" data-key="negotiation.tableProductInfo"
+        <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
+                 selection-radio
                  @action="onAction"
                  @filter-value="onFilterValue"
                  @change-checked="changeChecked">

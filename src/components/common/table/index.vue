@@ -16,7 +16,7 @@
     <div class="table-container" :style="{height:height + 'px'}">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
-        <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
+        <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
       </div>
       <div class="fixed-right" v-if="buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
@@ -28,12 +28,14 @@
           <thead ref="tableTitle">
           <tr>
             <td ref="tableCheckbox" v-if="selection">
-              <div style="visibility: hidden"><input type="checkbox" @change="changeCheck()"/></div>
+              <div style="visibility: hidden">
+                <input type="checkbox" :class="{visibility:selectionRadio}"/>
+              </div>
             </td>
             <td>
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide">
+            <td v-for="item in dataColumn" v-if="!item._hide && item.key">
               <div v-text="item.label">
               </div>
             </td>
@@ -49,14 +51,14 @@
               <div>
                 <input type="checkbox" ref="checkbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
-                       @change="changeCheck()"
+                       @change="changeCheck(item)"
                        v-model="item._checked"/>
               </div>
             </td>
             <td>
               <div v-text="index + 1"></div>
             </td>
-            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide"
+            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="{'background-color':cItem._highlight}">
               <div v-text="cItem.value"></div>
             </td>
@@ -143,6 +145,10 @@
         type: [Function, Boolean],
         default: true,
       },
+      selectionRadio: {
+        type: Boolean,
+        default: false,
+      },
       pageSizes: {
         type: Array,
         default() {
@@ -163,6 +169,7 @@
         dataList: [],
         dataColumn: [],
         checkedAll: false,
+        tableAttr: {},
       }
     },
     watch: {
@@ -221,10 +228,13 @@
           sl = e.target.scrollLeft;
           sw = e.target.scrollWidth;
         } else {
-          st = 0;
-          sl = 0;
+          st = this.tableAttr.st;
+          sl = this.tableAttr.sl;
           sw = this.$refs.tableBody.offsetWidth;
         }
+
+        this.tableAttr.st = st;
+        this.tableAttr.sl = sl;
 
         if (this.selection) {
           this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
@@ -243,11 +253,19 @@
         });
         this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
       },
-      changeCheck() {
+      changeCheck(item) {
+        if (this.selectionRadio) {
+          this.dataList = _.map(this.dataList, val => {
+            val._checked = false;
+            return val;
+          });
+          item._checked = true;
+        }
         this.$emit('change-checked', this.getSelected());
       },
       getSelected() {
-        return _.where(this.dataList, {_checked: true});
+        return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
+          _.where(this.dataList, {_checked: true});
       }
     }
   }
@@ -261,6 +279,10 @@
     position: relative;
     margin-bottom: 10px;
     width: 100%;
+  }
+
+  .ucn-table .visibility {
+    visibility: hidden !important;
   }
 
   .ucn-table.fixed-left-box .fixed-left,
