@@ -39,8 +39,16 @@
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
             @action="action" 
-            @page-change="pageChange" 
-            :loading="tabLoad" ref="tab"
+            :loading="tabLoad" 
+            ref="tab"
+        />
+        <el-pagination
+            @size-change="handleSizeChange"
+            :currentPage.sync="params.pn"
+            :page-sizes="pazeSize"
+            :page-size="params.ps"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageTotal"
         />
     </div>
 </template>
@@ -54,6 +62,7 @@
         name:'',
         data() {
             return {
+                pazeSize: [10, 20, 30, 40, 50, 100],
                 searchLoad: false,
                 options: [{
                     id: 'INQUIRY_NO',
@@ -82,7 +91,8 @@
                     ps: 10,
                     pn: 1
                 },
-                tabLoad:false
+                tabLoad:false,
+                pageTotal: 0
             }
         },
         components: {
@@ -127,6 +137,7 @@
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
+                    this.pageTotal = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;   
                     this.searchLoad = false; 
@@ -167,7 +178,7 @@
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: item.id
+                        id: item.id.value
                     }
                 });
             },
@@ -190,6 +201,9 @@
             },
             pageChange(No) {
                 console.log(No)
+            },
+            handleSizeChange(val) {
+                this.params.ps = val;
             }
         }
     }

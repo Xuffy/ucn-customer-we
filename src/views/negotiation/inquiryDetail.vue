@@ -38,7 +38,7 @@
                         <select-search :options="options" />
                     </div>
                     <v-table 
-                        :data="tabData"
+                        :data="productTabData"
                         :buttons="productInfoBtn" 
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
@@ -81,11 +81,11 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $lang.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <v-history 
+        <!-- <v-history 
             :oSwitch.sync="oSwitch" 
             :tableData="HistotyData" 
             :tableColumn="tableColumn" 
-        />
+        /> -->
     </div>
 </template>
 <script>
@@ -107,7 +107,7 @@
         name:'inquiryDetail',
         data() {
             return {
-                tableColumn: 'negotiation.tableBasicInfo',
+                productTabData: [],
                 HistotyData: [],
                 productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
                 productInfoBtns: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
@@ -188,6 +188,7 @@
                     data.push(res);
                     data.push(json);
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
                 })
             },
             selectChange(val) {
@@ -208,8 +209,16 @@
                 this.statusModify = false;
             },
             basicInfoBtn(item) {
-                if(item.id) return [{ 
-                    label: 'histoty',
+                if(item.id.value && this.statusModify) return [{
+                    label: 'Modify',
+                    type: 'modify'
+                }, { 
+                    label: 'Histoty',
+                    type: 'histoty'
+                }];
+
+                if(item.id.value) return [{ 
+                    label: 'Histoty',
                     type: 'histoty'
                 }];
             }, 
@@ -221,11 +230,11 @@
                console.log(val)
            },
            modifyAction() {
+                
                 this.productInfoBtn = this.productInfoBtnModify;
                 this.statusModify = true;
            },
            fnBasicInfoHistoty(item) {
-               console.log(item)
                this.oSwitch = true;
                 return this.HistotyData = [
                     {

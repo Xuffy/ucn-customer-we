@@ -20,5 +20,6 @@ export default _.extend(
   require(`./${lang}/inquiry/viewByInqury.pending`),
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/detail/basicInfo.pending`),
-  require(`/${lang}/inquiry/create/basicInfo.pending`)
+  require(`/${lang}/inquiry/create/basicInfo.pending`),
+  require(`./${lang}/logistic/plan/basicInfo.pending`)
 )

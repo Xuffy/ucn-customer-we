@@ -29,5 +29,8 @@
     "fromNewSearch": "From New Search",
     "FromMyBookmark": "From my bookmark",
     "basicInfo": "Basic Info",
-    "productInfo": "Product Info"
+    "productInfo": "Product Info",
+    "placeNewLogisticPlan": "Place New Logistic Plan",
+    "sentAsOrder": "Sent as order",
+    "containerInfo": "Container info"
 }
