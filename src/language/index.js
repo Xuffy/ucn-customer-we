@@ -31,7 +31,7 @@ export default _.extend(
 
 
   require(`./${lang}/supplier/overview`) ,
-    
+  require(`./${lang}/supplier/detail.pending`) , 
     
    { order: require(`./${lang}/order/overview`) },
      require(`/${lang}/order/basicinfo.pending`),

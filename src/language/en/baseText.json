@@ -33,7 +33,7 @@
     "process":"process",
     "downloadSelected":"downloadSelected",
     "order":"order",
-    "createorder":"Create Order",
+    "creatOrder":"Create Order",
     "downloadall":"Download All",
     "addproduct":"Add Product",
     "send":"send",
@@ -45,6 +45,12 @@
     "modify":"Modify",
     "messageBoard":"messageBoard",
     "confirm":"confirm",
-    "download":"download"
-    
+    "download":"download",
+    "creatInquiry":"Creat Inquiry",
+    "creatOrder":"Creat Order",
+    "addToBookmark":"Add To Bookmark",
+    "downloadSelected":"download Selected",
+    "search":"Search",
+    "clear":"Clear",
+    "supplierProducts":"Supplier's Products"
 }

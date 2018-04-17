@@ -39,7 +39,7 @@
                 <el-button >{{($lang.baseText.downloadall)}}</el-button>
 <!--                <el-button >{{($lang.baseText.accept)}}</el-button>-->
 <!--                <el-button>{{($lang.baseText.copy)}}</el-button>-->
-                <el-button @click='creat_order'>{{($lang.baseText.createorder)}}</el-button>
+                <el-button @click='creat_order'>{{($lang.baseText.createOrder)}}</el-button>
                 <el-button type='danger' :disabled='disabled'>{{($lang.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
@@ -138,7 +138,7 @@
             //get_orderlist数据
             getdata(){
                 this.loading = true
-                this.$ajax.get(this.$apis.get_orderlist,this.params )
+             this.$ajax.get(this.$apis.get_orderlist,this.params )
                 .then((res) => {
                       console.log(res);
                 })
