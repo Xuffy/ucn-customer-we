@@ -1,15 +1,19 @@
 import language from '../language/index';
 import workbench from './workbench/index';
+import product from './product/index';
+
 import inquiryOverview from './inquiry';
 import payment from './payment/index';
+import message from './message/index';
 
 
 const db = {
   workbench,
   payment,
-  inquiryOverview
+  inquiryOverview,
+  product,
+  message
 };
-
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {

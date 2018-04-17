@@ -1,99 +1,111 @@
 <template>
   <div class='peosonalSetting'>
-      <el-form :model="peosonalForm" label-width="190px" class='peosonalForm'>
-                <el-row class="speZone">
-                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="email" :label="$t('setting.personal.email')">                          
-                            <el-input size="mini" v-model="peosonalForm.email"></el-input>
-                        </el-form-item>
-                    </el-col>
-                   <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="username" :label="$t('setting.personal.username')">
-                            <el-input size="mini" v-model="peosonalForm.username"></el-input>
-                        </el-form-item>
-                    </el-col>
-                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="password" :label="$t('setting.personal.password')">
-                            <el-input size="mini" v-model="peosonalForm.password"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="tel" :label="$t('setting.personal.tel')">
-                            <el-input size="mini" v-model="peosonalForm.tel"></el-input>
-                        </el-form-item>
-                    </el-col>
-                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="gender":label="$t('setting.personal.gender')">
-                            <el-select size="mini" v-model="peosonalForm.gender" placeholder="请选择">
-<!--
-                                <el-option
-                                        v-for="item in readilyAvailableOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
--->
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="birthday":label="$t('setting.personal.birthday')">                          
-                                <el-date-picker
-                                      v-model="value1"
-                                      type="date"
-                                      placeholder="选择日期">
-                                    </el-date-picker>                          
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="language":label="$t('setting.personal.language')">
-                            <el-select size="mini" v-model="peosonalForm.language" placeholder="请选择">
-<!--
-                                <el-option
-                                        v-for="item in readilyAvailableOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
--->
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="department":label="$t('setting.personal.department')">
-                            <el-select size="mini" v-model="peosonalForm.department" placeholder="请选择">
-<!--
-                                <el-option
-                                        v-for="item in readilyAvailableOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
--->
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item prop="role":label="$t('setting.personal.role')">
-                            <el-select size="mini" v-model="peosonalForm.role" placeholder="请选择">
-<!--
-                                <el-option
-                                        v-for="item in readilyAvailableOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
--->
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+    <el-form :model="peosonalForm" label-width="190px" class='peosonalForm'>
+        <el-row>
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="email" label="email">                          
+                    <el-input style="max-width:200px"></el-input>
+                </el-form-item>
+             </el-col>
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="email" label="User Name">                          
+                    <el-input style="max-width:200px"></el-input>
+                </el-form-item>
+             </el-col>
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="email" label="Password">                          
+                    <el-input style="max-width:130px;vertical-align: middle"></el-input>
+                    <!-- <span style="width:60px;height:30px;border:1px solid #ccc;display:inline-block;">Replace</span> -->
+                    <el-button style=" vertical-align: middle" @click="dialogVisible = true">Replace</el-button>
+                </el-form-item>
+             </el-col>
+             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="email" label="Tel">                          
+                    <el-input style="max-width:200px"></el-input>
+                </el-form-item>
+             </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="gender" label="gender">
+                    <el-select v-model="peosonalForm.gender" placeholder="请选择" >
+                        <!-- <el-option
+                                v-for="item in readilyAvailableOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option> -->
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                 <el-form-item label="活动时间">
+                    <div style="display: flex;max-width:200px;">
+                        <el-date-picker type="date" placeholder="选择日期" style="max-width:300px;"></el-date-picker>
+                    </div>
+                 </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="language" label="language">
+                    <el-select v-model="peosonalForm.language" placeholder="请选择">
+                        <!-- <el-option
+                                v-for="item in readilyAvailableOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option> -->
+                    </el-select>
+                </el-form-item>
+            </el-col>
+                <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="department" label="department">
+                    <el-select  v-model="peosonalForm.department" placeholder="请选择">
+                        <!-- <el-option
+                                v-for="item in readilyAvailableOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option> -->
+                    </el-select>
+                </el-form-item>
+            </el-col>
+                <el-col :span="12">
+                <el-form-item prop="role" label="role">
+                    <el-select  v-model="peosonalForm.role" placeholder="请选择">
+                        <!-- <el-option
+                                v-for="item in readilyAvailableOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option> -->
+                    </el-select>
+                </el-form-item>
+            </el-col>
+        </el-row>       
+    </el-form>
      <div class="button_div">
           <el-button >Modify</el-button>
           <el-button  type="danger">Cancel</el-button>
      </div>
-      
+    <el-dialog
+            class="speDialog"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+         <el-form :model="form">
+           <el-form-item label="Old Password" :label-width="formLabelWidth">
+               <el-input auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="New Password" :label-width="formLabelWidth">
+               <el-input auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="Confirm password" :label-width="formLabelWidth">
+               <el-input auto-complete="off"></el-input>
+            </el-form-item>
+         </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogVisible = false">OK</el-button>
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -112,8 +124,19 @@
               language:'',
               department:'',
               role:'',
-          }
-
+          },
+        dialogVisible: false,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '140px'
       }
     },
     created() {
@@ -140,4 +163,7 @@
     .el-input{
         max-width: 400px;
     }
+    .el-input--small {
+        font-size: 0;
+    }   
 </style>

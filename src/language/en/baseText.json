@@ -31,5 +31,8 @@
     "productInfo": "Product Info",
     "logisticOrder": "Logistic Order",
     "purchaseOrder":"Purchase Order",
-    "qcOrder":"QC Order"
+    "qcOrder":"QC Order",
+    "messageManagement":"message management",
+    "markAsRead":"Mark as Read",
+    "all":"All"
 }

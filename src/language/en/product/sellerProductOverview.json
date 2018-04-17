@@ -1,0 +1,69 @@
+{
+
+
+
+  "categoryId":"产品类型",
+  "nameCnLike":"产品中文名",
+  "isReadilyAvailable":"是否有现货",
+  "customerSkuCodeLike":"客户货号",
+  "exwPrice":"EXW价格",
+  "codeLike":"供应商货号",
+  "nameEnLike":"产品英文名",
+  "fobPrice":"FOB价格",
+  "materialEnLike":"产品英文材质",
+  "country":"国家",
+  "supplierNameLike":"供应商名称",
+  "outerCartonMethodEnLike":"外包装方式EN",
+  "methodPkgEnLike":"产品包装方式EN",
+  "deliveryDates":"交期",
+  "descEnLike":"产品英文描述",
+  "descCn":"产品中文描述",
+
+
+
+
+
+
+
+
+
+  "pic":"图片",
+  "status":"销售状态",
+  "code":"供应商货号",
+  "nameCn":"产品中文名",
+  "descCn":"产品中文描述",
+  "nameEn":"产品英文名",
+  "descEn":"产品英文描述",
+  "nameCustomer":"产品客户语言名",
+  "descCustomer":"产品客户语言描述",
+  "customerSkuCode":"客户货号",
+  "supplierName":"供应商名称",
+  "supplierCode":"供应商编号",
+  "unit":"计量单位",
+  "formation":"产品组成",
+  "materialEn":"英文材质",
+  "materialCn":"中文材质",
+  "colourEn":"英文颜色",
+  "colourCn":"中文颜色",
+  "minOrderQty":"起订量",
+  "deliveryDates":"交期",
+  "design":"产品设计",
+  "categoryId":"分类名称",
+  "categoryLevel1":"一级分类名称",
+  "categoryLevel2":"二级分类名称",
+  "categoryLevel3":"三级分类名称",
+  "categoryLevel4":"四级分类名称",
+  "barcode":"产品条码",
+  "readilyAvailable":"是否现货",
+  "availableQty":"现货数量",
+  "noneSellCountry":"不可销售国家",
+  "applicableAge":"适用年龄",
+  "expireDates":"保质期",
+  "expireUnit":"保质期单位",
+  "comments":"说明"
+
+
+
+
+
+}

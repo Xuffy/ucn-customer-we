@@ -1,58 +1,45 @@
 export default {
-    customerItemNumber: {
-      key: '',
-      type: 'String',
-      length: 10,
-      reg: '',
-      state: ''
+    name:{},
+    orderNo: {
+      key: 'orderNo'
     },
-    itemNoPLATE: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    orderType: {
+        key: 'orderType'
     },
-    manufacturer: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    orderStatus: {
+        key: 'status'
     },
-    photo: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    paymentUpdateDate: {
+        key: 'updateDt'
     },
-    purchaseOrderNumber: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    payable: {
+        key: 'planPayAmount'
     },
-    salesOrderNumber: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    paid: {
+        key: 'actualPayAmount'
     },
-    supplier: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    waitPayment: {
+        key: 'planReceiveAmount'
     },
-    vendorSKUCode: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
+    planDateOfPayment: {
+        key: 'planPayDt'
+    },
+    actualDateOfPayment: {
+        key: 'actualPayAmount'
+    },
+    receivable: {
+        key: 'planReceiveAmount'
+    },
+    received: {
+        key: 'actualReceiveAmount'
+    },
+    waitReceipt: {
+        key: 'actualReceiveAmount'
+    },
+    planPayDt: {
+       key:'asf'
+    },
+    actualDateOfReceipt: {
+        key: 'actualReceiveDt'
     }
   }

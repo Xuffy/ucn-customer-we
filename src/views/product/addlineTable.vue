@@ -93,18 +93,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose"
-                center>
-            <span>确定删除这条备注吗？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                <el-button @click="dialogVisible = false">取 消</el-button>
-            </span>
-        </el-dialog>
+
     </div>
 </template>
 
@@ -196,7 +185,6 @@
                 addRemarkFormVisible: false,          //新增备注弹出框显示隐藏
                 checkRemarkFormVisible:false,         //查看备注弹出框显示隐藏
                 editRemarkFormVisible:false,          //编辑备注弹出框显示隐藏
-                dialogVisible:false,                  //提示弹出框显示隐藏
                 formLabelWidth: '50px',            //弹出框input长度
 
             }
@@ -226,12 +214,18 @@
 
             //删除备注
             deleteRemark(){
-                // this.$confirm('确定删除这条备注吗？','',{
-                //     center: true
-                // }).then(_ => {
-                //     done();
-                // }).catch(_ => {});
-                this.dialogVisible=true;
+                this.$confirm('确定删除该备注?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+
+                });
             },
 
 

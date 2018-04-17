@@ -1,5 +1,6 @@
 {
-  "orderNO": "Order NO",
+  "name":"姓名",
+  "orderNo": "Order NO",
   "orderType": "Order Type",
   "orderStatus": "Order Status",
   "paymentUpdateDate": "Payment update date",
@@ -7,5 +8,10 @@
   "paid": "Paid",
   "waitPayment": "Wait Payment",
   "planDateOfPayment": "Plan Date of Payment",
-  "action": "Action"
+  "actualDateOfPayment":"Actual Date of Payment",
+  "receivable":"Receivable",
+  "received":"Received",
+  "waitReceipt":"Wait Receipt",
+  "planDateOfReceipt":"Plan Date of Receipt",
+  "actualDateOfReceipt":"Actual Date of Receipt"
 }
