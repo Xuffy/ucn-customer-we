@@ -27,13 +27,15 @@
 			</div>
 		</el-popover>
 		
-		<div class="checkInputBox" v-popover:popover5>
-			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
-			<div class="dataBox" v-show="selectedList">
-				<span>{{selectedList[defaultProps.label]}}</span>
-			</div>
-			<i class="el-icon-arrow-down"></i>
-		</div>
+		<el-input
+			:placeholder="checkInputBoxPl"
+			v-model="selectedList[defaultProps.label]"
+			v-popover:popover5
+			suffix-icon="el-icon-arrow-down"
+			:size="size"
+			readonly
+		>
+		</el-input>
     </div>
 </template>
 
@@ -99,6 +101,10 @@
 			value: {
 				type: [String, Number],
 				default: ''
+			},
+			size: {
+				type: String,
+				default: 'mini'
 			}
 		},
 		watch: {
