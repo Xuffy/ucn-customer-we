@@ -40,11 +40,26 @@
                 default: () => {
                     return [];
                 }
+            },
+            column: {
+                type: Object,
+                default: () => {
+                    return {};
+                }
+            },
+            msgTableType: {
+                type: Boolean,
+                default: () => {
+                    return false;
+                }
             }
         },
         computed: {
             value: {
                 get() {
+                    if(this.msgTableType) {
+                        console.log(this.column)
+                    };
                     return this.oSwitch;
                 },
                 set(val) {
@@ -61,7 +76,7 @@
             },
             filtColumn() {
                 let column = [], 
-                    data = this.$db.inquiryOverview.basicInfo;
+                    data = this.column;
                 for(let key in data) {
                     if(key !== 'id') column.push(data[key]);
                 };
