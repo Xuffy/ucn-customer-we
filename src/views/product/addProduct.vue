@@ -24,28 +24,6 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item prop="categoryId" :label="$t('productSeller.page.category')">-->
-                    <!--<drop-down class="" :list="dropData" ref="dropDown"></drop-down>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item prop="nameEn" :label="$t('productSeller.page.skuNameEN')">-->
-                    <!--<el-input size="mini" v-model="productForm.nameEn"></el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item prop="isReadilyAvailable":label="$t('productSeller.page.readilyAvailable')">-->
-                    <!--<el-select size="mini" v-model="productForm.isReadilyAvailable" placeholder="请选择">-->
-                    <!--<el-option-->
-                    <!--v-for="item in readilyAvailableOptions"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-                    <!--</el-option>-->
-                    <!--</el-select>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -161,10 +139,10 @@
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
-                <el-button>{{$lang.product.setUp}}</el-button>
-                <el-button>{{$lang.product.setDown}}</el-button>
-                <el-button>{{$lang.product.downloadSelected}}</el-button>
+                <el-button @click="addNewProduct">{{$lang.product.createInquiry}}</el-button>
+                <el-button>{{$lang.product.createOrder}}</el-button>
+                <el-button>{{$lang.product.compare}}</el-button>
+                <el-button>{{$lang.product.download+'(0)'}}</el-button>
                 <el-button type="danger">{{$lang.product.delete}}</el-button>
             </div>
 

@@ -123,5 +123,12 @@ export default {
         length: 10,
         belongPage:'sellerProductOverview'
     },
+    descCnLike:{
+        key: 'descCnLike',
+        type: 'String',
+        showType:'input',
+        length: 10,
+        belongPage:'sellerProductOverview'
+    }
 
 }
