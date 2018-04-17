@@ -42,7 +42,13 @@
                 </el-row>
             </el-form>
             <div class="summary-btn">
-                <el-button @click="modifySummary">{{$lang.setting.modify}}</el-button>
+                <div v-if="summaryDisabled">
+                    <el-button @click="modifySummary">{{$lang.setting.modify}}</el-button>
+                </div>
+                <div v-else>
+                    <el-button type="primary">保存</el-button>
+                    <el-button @click="cancelModifySummary">取消</el-button>
+                </div>
             </div>
         </div>
         <div class="section">
@@ -52,6 +58,7 @@
                         <el-button @click="addAddress" type="primary">{{$lang.setting.add}}</el-button>
                     </div>
                     <el-table
+                            v-if="companyInfo.address.length"
                             :data="companyInfo.address"
                             border
                             style="width: 100%">
@@ -105,6 +112,7 @@
                         <el-button @click="addAccount" type="primary">{{$lang.setting.add}}</el-button>
                     </div>
                     <el-table
+                            v-if="companyInfo.accounts.length"
                             :data="companyInfo.accounts"
                             border
                             style="width: 100%">
@@ -158,6 +166,7 @@
                         <el-button @click="addContact" type="primary">{{$lang.setting.add}}</el-button>
                     </div>
                     <el-table
+                            v-if="companyInfo.concats.length"
                             :data="companyInfo.concats"
                             border
                             style="width: 100%">
@@ -204,14 +213,14 @@
                         <el-table-column
                                 prop="qq"
                                 align="center"
-                                :label="$lang.setting.QQ">
+                                :label="$lang.setting.qq">
                         </el-table-column>
                         <el-table-column
                                 align="center"
                                 :label="$lang.setting.action">
                             <template slot-scope="scope">
-                                <el-button @click="modifyAccount(scope.row)" type="text">{{$lang.setting.modify}}</el-button>
-                                <el-button @click="deleteAccount(scope.row)" type="text">{{$lang.setting.delete}}</el-button>
+                                <el-button @click="modifyContact(scope.row)" type="text">{{$lang.setting.modify}}</el-button>
+                                <el-button @click="deleteContact(scope.row)" type="text">{{$lang.setting.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -311,48 +320,58 @@
             </div>
         </el-dialog>
         <el-dialog width="70%" :title="$lang.setting.contactInfo" :visible.sync="contactDialogVisible">
-            <el-form label-width="100px" :model="accountData">
+            <el-form label-width="100px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$lang.setting.beneficiaryName">
-                            <el-input size="mini" v-model="accountData.beneficiaryName" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="name" :label="$lang.setting.name">
+                            <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="address" :label="$lang.setting.beneficiaryAccount">
-                            <el-input size="mini" v-model="accountData.beneficiaryAccount" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="address" :label="$lang.setting.department">
+                            <el-input size="mini" v-model="contactData.deptName" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="exportPort" :label="$lang.setting.beneficiaryAddress">
-                            <el-input size="mini" v-model="accountData.beneficiaryAddress" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="exportPort" :label="$lang.setting.gender">
+                            <el-input size="mini" v-model="contactData.gender" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson1" :label="$lang.setting.beneficiaryBankName">
-                            <el-input size="mini" v-model="accountData.beneficiaryBankName" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="contactPerson1" :label="$lang.setting.mobileNumber">
+                            <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone1" :label="$lang.setting.beneficiaryBankSWIFT">
-                            <el-input size="mini" v-model="accountData.beneficiaryBankSwift" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="concatPhone1" :label="$lang.setting.telNumber">
+                            <el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="contactPerson2" :label="$lang.setting.accountType">
-                            <el-input size="mini" v-model="accountData.accountType" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="contactPerson2" :label="$lang.setting.faxNumber">
+                            <el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="concatPhone2" :label="$lang.setting.currency">
-                            <el-input size="mini" v-model="accountData.currency" placeholder="请输入内容"></el-input>
+                        <el-form-item prop="concatPhone2" :label="$lang.setting.emailAddress">
+                            <el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="concatPhone2" :label="$lang.setting.skype">
+                            <el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="concatPhone2" :label="$lang.setting.qq">
+                            <el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="contactDialogVisible=false">取 消</el-button>
-                <el-button :loading="allowAddAccount" type="primary" @click="sureAddAccount">确 定</el-button>
+                <el-button :loading="allowAddContact" type="primary" @click="sureAddContact">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -422,9 +441,17 @@
                 //btn loading状态
                 allowAddAddress:false,
                 allowAddAccount:false,
+                allowAddContact:false,
                 //是否正在修改地址标识，因为新增和修改都是用的同一个按钮，所以为了区分增加一个标识
                 isModifyAddress:false,
                 isModifyAccount:false,
+                isModifyContact:false,
+
+                /**
+                 * 手动设置的表格宽度
+                 * */
+                addressTableWidth:0,
+
 
                 //下拉选择框假数据
                 options: [
@@ -449,6 +476,9 @@
         methods:{
             //获取整个页面数据
             getWholeData(){
+                this.companyInfo.address=[];
+                this.companyInfo.accounts=[];
+                this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_supplierWhole,{}).then(res=>{
                     this.companyInfo=res;
                 }).catch(err=>{
@@ -459,6 +489,10 @@
             //修改顶部简介信息
             modifySummary(){
                 this.summaryDisabled=false;
+            },
+            cancelModifySummary(){
+                this.$refs['summary'].resetFields();
+                this.summaryDisabled=true;
             },
 
             /**
@@ -603,6 +637,68 @@
             addContact(){
                 this.contactDialogVisible=true;
             },
+            sureAddContact(){
+                this.allowAddContact=true;
+                this.contactData.supplierId=this.companyInfo.id;
+
+                if(this.isModifyContact){
+                    //表示是在修改account
+                    this.$ajax.post(`${this.$apis.update_contact}?id=${this.contactData.id}`,this.contactData).then(res=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        this.getWholeData();
+                        this.contactDialogVisible=false;
+                    }).catch(err=>{
+                        this.allowAddContact=false;
+                        this.contactDialogVisible=false;
+                    });
+                }else{
+                    //表示是在新增account
+                    this.$ajax.post(this.$apis.add_contact,this.contactData).then(res=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: '添加成功',
+                            type: 'success'
+                        });
+                        this.getWholeData();
+                        this.contactDialogVisible=false;
+                    }).catch(err=>{
+                        this.allowAddContact=false;
+                        this.$message({
+                            message: err,
+                            type: 'success'
+                        });
+                        this.contactDialogVisible=false;
+                    });
+                }
+            },
+            modifyContact(e){
+                this.isModifyContact=true;      //标识正在修改contact
+                this.contactData=Object.assign({}, e);
+                this.contactDialogVisible=true;
+            },
+            deleteContact(e){
+                this.$confirm('确定删除该联系人?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.delete_contact,{id:e.id}).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.getWholeData();
+                    }).catch(err=>{
+                        console.log(err)
+                    });
+                }).catch(() => {
+
+                });
+            },
         },
         created(){
             this.getWholeData();
@@ -622,6 +718,14 @@
                         this.$set(this.accountData,k,'');
                     });
                     this.isModifyAccount=false;
+                }
+            },
+            contactDialogVisible(n){
+                if(!n){
+                    _.map(this.contactData,(v,k)=>{
+                        this.$set(this.contactData,k,'');
+                    });
+                    this.isModifyContact=false;
                 }
             },
         }
@@ -644,7 +748,6 @@
     }
     .summary-btn{
         text-align: center;
-
     }
     .section-btn{
         margin-bottom: 10px;
@@ -653,6 +756,14 @@
     .section{
         margin-top: 20px;
     }
+
+    /*表格样式调整*/
+    /*.companyInfo >>> .el-table__header-wrapper>table{*/
+        /*width: 100% !important;*/
+    /*}*/
+    /*.companyInfo >>> .el-table__header-wrapper>table thead tr th{*/
+        /*width: 12.5% !important;*/
+    /*}*/
 
     /*弹出框样式*/
     .dialog-footer{
