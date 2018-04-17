@@ -13,6 +13,12 @@
       <el-col :span="12">
         <!--<v-table-data></v-table-data>-->
       </el-col>
+      <el-col :span="12">
+        <!--<v-table-data></v-table-data>-->
+      </el-col>
+      <el-col :span="12">
+        <!--<v-table-data></v-table-data>-->
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -21,24 +27,43 @@
   import VQuickLink from './quickLink'
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
+  import VBasicInfo from './basicInfo'
 
   export default {
     name: 'workbench',
     data() {
-      return {
-      }
+      return {}
     },
     components: {
       VQuickLink,
       VDataDashboard,
       VTableData,
+      VBasicInfo,
     },
-    created() {
+    mounted() {
+      const h = this.$createElement;
+      this.$notify.closeAll();
 
+      this.$notify({
+        title: 'Wellcome! Please set your basic info',
+        duration: 0,
+        offset: 60,
+        dangerouslyUseHTMLString: true,
+        message: h(VBasicInfo)
+      });
     },
     methods: {}
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .workbench .el-col-12 {
+    margin-bottom: 20px;
+  }
+
+</style>
+<style>
+  /*.workbench-notify {
+    !*width: 250px;*!
+  }*/
 </style>

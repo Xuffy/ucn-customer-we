@@ -77,15 +77,11 @@
       </div>
     </div>
 
-    <el-pagination
-      :style="{visibility: !dataColumn.length ? 'hidden' : ''}"
-      @size-change="size => {$emit('page-size-change', size)}"
-      @current-change="page => {$emit('page-change', page)}"
-      :page-sizes="pageSizes"
-      :page-size="pageSize"
-      :total="pageTotal"
-      layout="prev, pager, next,sizes, jumper,total">
-    </el-pagination>
+    <!--分页-->
+    <v-pagination :data="dataList"
+                  :page-sizes="pageSizes"
+                  :page-size="pageSize"
+                  :page-total="pageTotal"></v-pagination>
   </div>
 </template>
 
@@ -114,11 +110,12 @@
 
 
   import VTableFilter from './filter'
+  import VPagination from './pagination'
   // import VFilterValue from './filterValue'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter},
+    components: {VTableFilter, VPagination},
     props: {
       data: {
         type: Array,
@@ -176,9 +173,7 @@
       data(val) {
         this.dataList = val;
         this.dataColumn = this.filterColumn(val);
-        this.$nextTick(() => {
-          this.updateTable();
-        });
+        this.updateTable();
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
@@ -188,28 +183,23 @@
         this.changeCheck();
       },
       buttons() {
-        this.$nextTick(() => {
-          this.updateTable();
-        });
+        this.updateTable();
       },
       selection() {
-        this.$nextTick(() => {
-          this.updateTable();
-        });
+        this.updateTable();
       },
     },
     mounted() {
       this.dataList = this.data;
       this.dataColumn = this.filterColumn(this.dataList);
-      this.$nextTick(() => {
-        this.updateTable();
-      });
+      this.updateTable();
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
     },
     methods: {
       onFilterColumn(checked) {
         this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
         this.dataColumn = this.filterColumn(this.dataList);
+        this.updateTable();
       },
       filterColumn(data) {
         if (_.isEmpty(data)) {
@@ -219,39 +209,42 @@
         }
       },
       updateTable(e) {
-        if (!this.$refs.tableBody) return false;
+        this.$nextTick(() => {
+          if (!this.$refs.tableBody) return false;
 
-        let trs = this.$refs.tableBody.children;
-        let st, sl, sw;
-        if (e) {
-          st = e.target.scrollTop;
-          sl = e.target.scrollLeft;
-          sw = e.target.scrollWidth;
-        } else {
-          st = this.tableAttr.st;
-          sl = this.tableAttr.sl;
-          sw = this.$refs.tableBody.offsetWidth;
-        }
+          let trs = this.$refs.tableBody.children;
+          let st, sl, sw;
+          if (e) {
+            st = e.target.scrollTop;
+            sl = e.target.scrollLeft;
+            sw = e.target.scrollWidth;
+          } else {
+            st = this.tableAttr.st || 0;
+            sl = this.tableAttr.sl || 0;
+            sw = this.$refs.tableBody.offsetWidth;
+          }
 
-        this.tableAttr.st = st;
-        this.tableAttr.sl = sl;
+          this.tableAttr.st = st;
+          this.tableAttr.sl = sl;
 
-        if (this.selection) {
-          this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
-        }
-
-        if (this.buttons) {
-          this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
-        }
-        _.map(trs, (val) => {
           if (this.selection) {
-            val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
+            this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
           }
+
           if (this.buttons) {
-            val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
+            this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
           }
+          _.map(trs, (val) => {
+            if (this.selection) {
+              val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
+            }
+            if (this.buttons) {
+              val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
+            }
+          });
+          this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
+
         });
-        this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
       },
       changeCheck(item) {
         if (this.selectionRadio) {
