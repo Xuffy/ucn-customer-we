@@ -115,6 +115,7 @@
 				this.$emit('input', val.id);
 			},
 			value(val) {
+				if(!val) return this.val = '';
 				this.setInput(this.list, this.value);
 			}
 		},
