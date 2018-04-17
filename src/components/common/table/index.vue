@@ -177,7 +177,7 @@
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          val._checked = value;
+          val._checked = val._disabled ? false : value;
           return val;
         });
         this.changeCheck();
