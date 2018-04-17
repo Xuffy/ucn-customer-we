@@ -1,34 +1,68 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $t('negotiation.text.inquiryDetail') }}</h3>
+        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
         <!-- <time-selection v-model="dateTime" /> -->
-        
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $t('negotiation.text.basicInfo') }}</h4>
-            <div class="select-main">
-                <el-form ref="ruleform" >
-                    <el-row :gutter="10">                    
-                        <el-col v-for="(item, index) in basicInfoForm" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
-                            <el-form-item  :label="item.label" :prop="item.label" :rules="item.rules" :label-width="item.width">
-                                <el-input v-model="item.value" :placeholder="item.placeholder" v-if="item.type === 'text'" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
+            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
+            <el-form ref="ruleform" :model="fromArg">
+                <el-row :gutter="10">                    
+                    <el-col v-for="(item, index) in $db.inquiryOverview.createbBasicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
+                        <el-form-item  
+                                :label="item.label" 
+                                :prop="item.key" 
+                                :rules="item.rules" 
+                                :label-width="item.width || '150px'"
+                            >
+                            <el-input 
+                                v-model="fromArg[item.key]" 
+                                :size="item.size || 'mini'"
+                                :placeholder="item.placeholder" 
+                                v-if="item.type === 'text'" 
+                                :disabled="item.disabled"
+                            />
+
+                            <el-select
+                                    v-model="fromArg[item.key]" 
+                                    :size="item.size || 'mini'"
+                                    :placeholder="item.placeholder" 
+                                    v-if="item.type === 'select'"
+                                    style="width:100%;"
+                                >
+                                <el-option
+                                    v-for="nodes in []"
+                                    :key="nodes.value"
+                                    :label="nodes.label"
+                                    :value="nodes.value"
+                                />
+                            </el-select>
+                            <el-input
+                                type="textarea"
+                                v-model="fromArg[item.key]"
+                                :rows="item.rows || 4"
+                                :size="item.size || 'mini'"
+                                :placeholder="item.placeholder"
+                                v-if="item.type === 'attachment' || item.type === 'textarea'"
+                                resize="none"
+                                :disabled="item.disabled"
+                            />
+                            <v-up-load v-if="item.type === 'remark' || item.type === 'upData'"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
-        <h4 class="content-hd">{{ $t('negotiation.text.productInfo') }}</h4>
+        <h4 class="content-hd">{{ $i.baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $t('negotiation.btn.addProduct') }}</el-button>
-                <el-button type="danger">{{ $t('negotiation.btn.remove') }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $i.baseText.addProduct }}</el-button>
+                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
             </div>
             <select-search :options="[]" />
         </div>
         <v-table :data="tabData" :data-key="tabColumn"></v-table>
         <div class="bom-btn-wrap">
-            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.submit') }}</el-button>
-            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $t('negotiation.btn.saveAsDraft') }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -59,27 +93,7 @@
                 dialogTableVisible: false, //Add Product switch
 
                 basicInfoForm: [ //Basic Info
-                    {
-                        label: `${this.$t('negotiation.basicInfo.shippingMethod')}`,
-                        placeholder: 'Please select',
-                        value: '',
-                        rules: [
-                            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-                        ],
-                        width: '150px',
-                        type: 'text',
-                        state: 0
-                    },
-                    {
-                        label: `${this.$t('negotiation.basicInfo.time')}`,
-                        placeholder: 'Please select',
-                        value: '',
-                        rules: [],
-                        width: '150px',
-                        type: 'date',
-                        state: 0
-                    }
+                
                 ], 
                 
                 tabColumn: '', //tab top
@@ -129,15 +143,31 @@
             //     this.tabColumn =  'negotiation.tableProductInfo';
             // });
         },
+        computed: {
+            fromArg() {
+                let json = {};
+                for(let key in this.$db.inquiryOverview.createbBasicInfo) {
+                    json[key] = '';
+                };
+                return json;
+            }
+        },
         methods: {
             fromChange(val) {
                 console.log(val)
             },
-            submitForm(ruleform) {
+            submitForm(type) {
+                if(type === 'draft') {
+                    
+                } else {
+
+                }
+                //this.$router.push('/negotiation/inquiryDetail');
                 this.$refs.ruleform.validate((valid) => {
-                    if (valid === false) {
-                        return false
-                    }
+                    if(!valid) return this.$message({
+                        message: '请完成填写',
+                        type: 'warning'
+                    });
                 });
             }
         }

@@ -25,7 +25,6 @@
     "createNewInquiry": "Create New Inquiry",
     "cancelTheInquiry": "Cancel the Inquiry",
     "messageBoard": "messageBoard",
-    "fromNewSearch": "From New Search",
     "FromMyBookmark": "From my bookmark",
     "basicInfo": "Basic Info",
     "productInfo": "Product Info",
@@ -34,5 +33,20 @@
     "qcOrder":"QC Order",
     "messageManagement":"message management",
     "markAsRead":"Mark as Read",
-    "all":"All"
+    "all":"All",
+    "process":"process",
+    "downloadSelected":"downloadSelected",
+    "order":"order",
+    "createorder":"Create Order",
+    "downloadall":"Download All",
+    "addproduct":"Add Product",
+    "send":"send",
+    "saveAsDraft":"saveAsDraft",
+    "quickCreate":"quickCreate",
+     "markAsImportant":"markAsImportant",
+    "fromNewSearch":"From New Search",
+    "fromMyBookmark":"From My Bookmark",
+    "confirm":"confirm",
+    "download":"download"
+    
 }

@@ -7,15 +7,16 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value :data="dataColumn"></v-filter-value>
-        <v-filter-column :data="dataColumn"></v-filter-column>
+        <v-table-filter ref="tableFilter"
+                        @filter-column="onFilterColumn"
+                        @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
 
     <div class="table-container" :style="{height:height + 'px'}">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
-        <input type="checkbox" v-model="checkedAll" ref="checkboxAll"/>
+        <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
       </div>
       <div class="fixed-right" v-if="buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
@@ -27,12 +28,14 @@
           <thead ref="tableTitle">
           <tr>
             <td ref="tableCheckbox" v-if="selection">
-              <div style="visibility: hidden"><input type="checkbox" @change="changeCheck()"/></div>
+              <div style="visibility: hidden">
+                <input type="checkbox" :class="{visibility:selectionRadio}"/>
+              </div>
             </td>
             <td>
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn">
+            <td v-for="item in dataColumn" v-if="!item._hide && item.key">
               <div v-text="item.label">
               </div>
             </td>
@@ -48,14 +51,15 @@
               <div>
                 <input type="checkbox" ref="checkbox"
                        v-if="typeof selection === 'function' ? selection(item) : true"
-                       @change="changeCheck()"
+                       @change="changeCheck(item)"
                        v-model="item._checked"/>
               </div>
             </td>
             <td>
               <div v-text="index + 1"></div>
             </td>
-            <td v-for="(cItem,cKey) in item">
+            <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
+                :style="{'background-color':cItem._highlight}">
               <div v-text="cItem.value"></div>
             </td>
             <td v-if="buttons">
@@ -109,12 +113,12 @@
    */
 
 
-  import VFilterColumn from './filterColumn'
-  import VFilterValue from './filterValue'
+  import VTableFilter from './filter'
+  // import VFilterValue from './filterValue'
 
   export default {
     name: 'VTable',
-    components: {VFilterColumn, VFilterValue},
+    components: {VTableFilter},
     props: {
       data: {
         type: Array,
@@ -141,6 +145,10 @@
         type: [Function, Boolean],
         default: true,
       },
+      selectionRadio: {
+        type: Boolean,
+        default: false,
+      },
       pageSizes: {
         type: Array,
         default() {
@@ -161,6 +169,7 @@
         dataList: [],
         dataColumn: [],
         checkedAll: false,
+        tableAttr: {},
       }
     },
     watch: {
@@ -168,7 +177,7 @@
         this.dataList = val;
         this.dataColumn = this.filterColumn(val);
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
       checkedAll(value) {
@@ -180,12 +189,12 @@
       },
       buttons() {
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
       selection() {
         this.$nextTick(() => {
-          this.scrollListener();
+          this.updateTable();
         });
       },
     },
@@ -193,11 +202,15 @@
       this.dataList = this.data;
       this.dataColumn = this.filterColumn(this.dataList);
       this.$nextTick(() => {
-        this.scrollListener();
+        this.updateTable();
       });
-      this.$refs.tableBox.addEventListener('scroll', this.scrollListener);
+      this.$refs.tableBox.addEventListener('scroll', this.updateTable);
     },
     methods: {
+      onFilterColumn(checked) {
+        this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
+        this.dataColumn = this.filterColumn(this.dataList);
+      },
       filterColumn(data) {
         if (_.isEmpty(data)) {
           return [];
@@ -205,7 +218,7 @@
           return _.values(data[0]);
         }
       },
-      scrollListener(e) {
+      updateTable(e) {
         if (!this.$refs.tableBody) return false;
 
         let trs = this.$refs.tableBody.children;
@@ -215,10 +228,13 @@
           sl = e.target.scrollLeft;
           sw = e.target.scrollWidth;
         } else {
-          st = 0;
-          sl = 0;
+          st = this.tableAttr.st;
+          sl = this.tableAttr.sl;
           sw = this.$refs.tableBody.offsetWidth;
         }
+
+        this.tableAttr.st = st;
+        this.tableAttr.sl = sl;
 
         if (this.selection) {
           this.$refs.fixedLeft.style.width = `${this.$refs.tableCheckbox.offsetWidth}px`;
@@ -237,11 +253,19 @@
         });
         this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
       },
-      changeCheck() {
+      changeCheck(item) {
+        if (this.selectionRadio) {
+          this.dataList = _.map(this.dataList, val => {
+            val._checked = false;
+            return val;
+          });
+          item._checked = true;
+        }
         this.$emit('change-checked', this.getSelected());
       },
       getSelected() {
-        return _.where(this.dataList, {_checked: true});
+        return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
+          _.where(this.dataList, {_checked: true});
       }
     }
   }
@@ -255,6 +279,10 @@
     position: relative;
     margin-bottom: 10px;
     width: 100%;
+  }
+
+  .ucn-table .visibility {
+    visibility: hidden !important;
   }
 
   .ucn-table.fixed-left-box .fixed-left,
@@ -351,12 +379,12 @@
 
   .ucn-table thead tr:nth-child(even) td,
   .ucn-table tbody tr:nth-child(even) td {
-    background-color: #F7F8F9 !important;
+    background-color: #F7F8F9;
   }
 
   .ucn-table tbody tr td:hover,
   .ucn-table tbody tr:hover td {
-    background-color: #ebeff1 !important;
+    /*background-color: #ebeff1 !important;*/
   }
 
   .ucn-table.fixed-left-box tbody tr td:first-child,

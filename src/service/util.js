@@ -29,7 +29,7 @@ export default {
     /**
      * 国际化语言配置
      */
-    Vue.prototype.$lang = language;
+    Vue.prototype.$i = language;
 
     /**
      * 字段配置
@@ -53,11 +53,59 @@ export default {
 
         });
         list.push(obj);
-        // list.push(_.values(obj));
       });
       return list;
     };
 
+
+    Vue.prototype.$table = {
+      contrast(data, type) {
+        if (_.isEmpty(data)) return [];
+
+        let first = data[0], keyData = {};
+
+        _.map(data, value => {
+          _.mapObject(value, (val, key) => {
+            if (type === 'same') {
+              keyData[key] = first[key].value === val.value;
+            } else if (type === 'def') {
+              if (first[key].value !== val.value) {
+                keyData[key] = true;
+              }
+            }
+          });
+        });
+        return keyData;
+      },
+      setHighlight(data) {
+        let keyData = this.contrast(data, 'def')
+          , len = _.values(keyData).length
+          , i = 0;
+        keyData = _.mapObject(keyData, (val) => {
+          let z = 200 - ((255 / len) * i);
+          val = `rgba(${z},255,255,1)`;
+          i++;
+          return val;
+        });
+        return _.map(data, value => {
+          return _.mapObject(value, (val, key) => {
+            val._highlight = keyData[key] || '';
+            return val;
+          });
+        });
+      },
+      setHideSame(data) {
+        let keyData = this.contrast(data, 'same');
+        return _.map(data, value => {
+          return _.mapObject(value, (val, key) => {
+            if (keyData[key]) {
+              val._hide = keyData[key];
+            }
+            return val;
+          });
+        });
+      }
+    };
 
     /**
      *

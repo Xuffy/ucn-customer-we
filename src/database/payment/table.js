@@ -1,5 +1,4 @@
 export default {
-    name:{},
     orderNo: {
       key: 'orderNo'
     },
@@ -9,35 +8,38 @@ export default {
     orderStatus: {
         key: 'status'
     },
+    ordercreatedate: {
+        key: 'orderEntryDt'
+    },
     paymentUpdateDate: {
         key: 'updateDt'
     },
     payable: {
-        key: 'planPayAmount'
+        key: 'planPayAmount' //应付
     },
     paid: {
         key: 'actualPayAmount'
     },
     waitPayment: {
-        key: 'planReceiveAmount'
+        key: 'planPayAmount-actualPayAmount' //待付
     },
-    planDateOfPayment: {
+    planDateOfPayment: {   //应付时间
         key: 'planPayDt'
     },
     actualDateOfPayment: {
-        key: 'actualPayAmount'
+        key: 'actualPayDt'
     },
     receivable: {
-        key: 'planReceiveAmount'
+        key: 'planReceiveAmount'  //应收
     },
     received: {
         key: 'actualReceiveAmount'
     },
     waitReceipt: {
-        key: 'actualReceiveAmount'
+        key: 'planReceiveAmount-actualReceiveAmount'  //待收
     },
-    planPayDt: {
-       key:'asf'
+    planDateOfReceipt: {  //应收时间
+       key:'planReceiveDt'
     },
     actualDateOfReceipt: {
         key: 'actualReceiveDt'

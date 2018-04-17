@@ -485,7 +485,17 @@ export const routerMap = [
             log: true,
           },
           component: () => import('../views/settings/personalSetting')
-        }
+        },
+          {
+              path: 'companyInfo',
+              name: 'Company Info',
+              meta: {
+                  draft: true,
+                  recycleBin: true,
+                  log: true,
+              },
+              component: () => import('../views/settings/companyInfo')
+          },
       ]
     },
     {

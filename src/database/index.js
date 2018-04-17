@@ -1,31 +1,33 @@
 import language from '../language/index';
 import workbench from './workbench/index';
 import product from './product/index';
+import logistic from './logistic';
 
 import inquiryOverview from './inquiry';
 import payment from './payment/index';
 import message from './message/index';
+import order from './order/index';
+import supplier from './supplier/index'
+
 
 
 const db = {
   workbench,
   payment,
-  inquiryOverview,
   product,
+  inquiryOverview,
+  logistic,
+  order,
+  supplier,
   message
+
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {
-      if (_.isUndefined(v.k)) {
-        v.key = k;
-      }
-      if (_.isUndefined(v.type)) {
-        v.type = 'String';
-      }
-      if (_.isUndefined(v.length)) {
-        v.length = 10;
-      }
+      if (!v.key) v.key = k;
+      if (!v.type) v.type = 'String';
+      if (!v.length) v.length = 10;
       v.label = language[k];
       return v;
     });

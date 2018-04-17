@@ -1,16 +1,31 @@
 <template>
     <div class="select-wrap">
         <div class="select" v-if="selectHide">
-            <el-select v-model="value" placeholder="select" @change="selectChange">
+            <el-select v-model="keyType" placeholder="select">
                 <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.label"
-                :value="item.id" />
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.label"
+                    :value="item.id" 
+                />
             </el-select>
         </div>
         <div class="search">
-            <el-input v-model="keyWord" clearable placeholder="search" style="max-width:150px;" @change="inputChange" @keyup.enter.native="inputEnter" /><el-button type="primary" slot="append" icon="el-icon-search" @click="inputEnter" :loading="searchLoad"></el-button>
+            <el-input 
+                v-model="keyWord" 
+                clearable 
+                placeholder="search" 
+                style="max-width:150px;" 
+                @change="inputChange" 
+                @keyup.enter.native="inputEnter" 
+            />
+            <el-button 
+                type="primary" 
+                slot="append" 
+                icon="el-icon-search" 
+                @click="inputEnter" 
+                :loading="searchLoad" 
+            />
         </div>
     </div>
 </template>
@@ -19,7 +34,7 @@
         name:'selectSearch',
         data() {
             return {
-                value:'',
+                keyType:'',
                 keyWord:''
             }
         },
@@ -40,17 +55,17 @@
             }
         },
         methods: {
-            selectChange() {
-                this.$emit('selectChange', this.value);
-            },
             inputChange() {
-                this.$emit('inputChange', this.keyWord);
+                this.$emit('inputChange', {
+                    key: this.keyWord,
+                    keyType: this.keyType
+                });
             },
             inputEnter() {
-                this.$emit('inputEnter', this.keyWord);
-            },
-            iconClick() {
-                this.$emit('iconClick');
+                this.$emit('inputChange', {
+                    key: this.keyWord,
+                    keyType: this.keyType
+                });
             }
         }
     }

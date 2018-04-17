@@ -1,68 +1,87 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-            {{$t("supplier.title.supplierSourcing")}}
+              supplier Sourcing
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
             <div>
                 <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                     <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                            <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
-                                <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                           v-for='(item,index) in $db.supplier.overview'
+                           :key='item'
+                           v-if='item.isbasic==true'
+                           >
+                            <el-form-item class="form-list" 
+                             v-if="item.showType==='text'"
+                            :label="item.label" 
+                            :prop="item.key"                    
+                            >
+                                <el-input v-model="formItem[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
-                         </el-col>
-    <!--                    下拉选择businessScope-->
-                        <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                            <el-form-item class="form-list" :label="$t('supplier.input.businessScope')"  prop="businessScope">
-                                <el-select v-model="formItem.businessScope" placeholder="Enter something..."></el-select>
+                            <el-form-item class="form-list"  v-if="item.showType==='select'"
+                            :label="item.label" 
+                            :prop="item.key" >
+                                <el-select v-model="formItem[item.key]"></el-select>
                                </el-form-item>
-                        </el-col>
-    <!--                    下拉选择category-->
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                            <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
+                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
+                                :label="item.label" 
+                                :prop="item.key">
                                  <div class="speDropdown">
-                                     <drop-down  :list="dropData" ref="dropDown"></drop-down>
+                                     <drop-down   ref="dropDown"></drop-down>
                                 </div>
                             </el-form-item>
-                        </el-col>
+                         </el-col>
+
                         </el-row>
     </el-form>
             </div>
             <div class="body" :class="{hide:hideBody}">
+                    
                      <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
                      <el-row>
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.supplierType')" prop="supplierType">
-                            <el-select v-model="formItem.supplierType" placeholder="Enter something..."></el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUname')" prop="vendorSKUname">
-                            <el-input v-model="formItem.vendorSKUname" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUcode')" prop="vendorSKUcode">
-                            <el-input v-model="formItem.vendorSKUcode" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.description')" prop="description">
-                            <el-input v-model="formItem.description" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
+                     
+                                <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                           v-for='(item,index) in $db.supplier.overview'
+                           key='item'
+                            v-if='item.isbasic==false'
+                           >
+                            <el-form-item class="form-list" 
+                             v-if="item.showType==='text'"
+                            :label="item.label" 
+                            :prop="item.key"                    
+                            >
+                                <el-input v-model="formItem[item.key]" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                            <el-form-item class="form-list"  v-if="item.showType==='select'"
+                            :label="item.label" 
+                            :prop="item.key" >
+                                <el-select v-model="formItem[item.key]"></el-select>
+                               </el-form-item>
+                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
+                                :label="item.label" 
+                                :prop="item.key">
+                                 <div class="speDropdown">
+                                     <drop-down   ref="dropDown"></drop-down>
+                                </div>
+                            </el-form-item>
+                         </el-col>
+                     
+                     
+
                 </el-row>
             </el-form>
         </div>
+<!--
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search">{{$t('supplier.buttonname.search')}}</el-button>
             <el-button @click="clear('formItem')">{{$t('supplier.buttonname.clear')}}</el-button>
         </div>
+-->
 <!--      搜索结果  -->
             <div>
-<!--            跳转按钮行-->
+<!--
              <div class="btnline">
                   <el-button   @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
                   <el-button   @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
@@ -70,12 +89,13 @@
                   <el-button  >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
                   <el-button   >{{$t('supplier.buttonname.downloadTheSelectedSupplier')}}</el-button>
               </div>  
+-->
               <div>
                  
               </div>          
         </div>
 <!--        表格-->
-             <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+<!--             <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>-->
     </div>
 </template>
 
@@ -105,11 +125,10 @@
                     businessScope: '',
                     category: '',
                     supplierType: '',
-                    vendorSKUname: '',
-                    vendorSKUcode: '',
+                    SKUnameEN: '',
+                    SKUcode: '',
                     description: '',
                 },
-                tabColumn: [],
                 tabData: []
             }
         },
@@ -157,16 +176,16 @@
             }
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
-
-                })
-                .catch((res) => {
-
-                });
+            //            this.ajax.get(this.$apis.supplier_overview, {
+            //                    params: {}
+            //                })
+            //                .then(res => {
+            //                    this.tabData = res
+            //
+            //                })
+            //                .catch((res) => {
+            //
+            //                });
         },
         watch: {
             hideBody(n) {

@@ -1,30 +1,30 @@
 <template>
     <div class="payment">
         <div class="title">
-            {{$lang.payment.orderOverview}}
+            {{$db.payment.title.orderOverview.key}}
         </div>
         <div class="body">
             <div class="head">
                 <div>
                     <span class="text">Status : </span>
-                    <el-radio-group size="mini" v-model="radio">
-                        <el-radio-button label="All" border></el-radio-button>
-                        <el-radio-button label="已逾期" border></el-radio-button>
-                        <el-radio-button label="未逾期" border></el-radio-button>
+                    <el-radio-group size="mini" v-model="status">
+                        <el-radio-button label="-1" border>{{$i.baseText.all}}</el-radio-button>
+                        <el-radio-button label="1" >已逾期</el-radio-button>
+                        <el-radio-button label="0" >未逾期</el-radio-button>
                     </el-radio-group>
                 </div>
                 <div class="spe-div">
                     <div class="View">
                         <span class="text">View : </span>
                         <el-radio-group size="mini"  v-model="viewByStatus" >
-                            <el-radio-button label="0">{{$lang.baseText.all}}</el-radio-button>
-                            <el-radio-button label="1">{{$lang.baseText.logisticOrder}}</el-radio-button>
-                            <el-radio-button label="2">{{$lang.baseText.purchaseOrder}}</el-radio-button>
-                            <el-radio-button label="3">{{$lang.baseText.qcOrder}}</el-radio-button>
+                            <el-radio-button label="" border>{{$i.baseText.all}}</el-radio-button>
+                            <el-radio-button label="30">{{$i.baseText.logisticOrder}}</el-radio-button>
+                            <el-radio-button label="10">{{$i.baseText.purchaseOrder}}</el-radio-button>
+                            <el-radio-button label="20">{{$i.baseText.qcOrder}}</el-radio-button>
                         </el-radio-group>
                     </div>
                     <div class="search">
-                        <select-search :selectHide="false" class="search"></select-search>
+                        <select-search :selectHide="false" class="search" v-model="orderNo"></select-search>
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -36,16 +36,16 @@
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
-                                :picker-options="dateOptions">
+                                :picker-options="dateOptions">                       
                         </el-date-picker>
                     </div>
                 </div>
             </div>
             <br>
-            <!-- ref="tab"  @page-change="pageChange" -->
+            <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
                 <v-table :data="tableDataList" :buttons="[{label: 'urging payment', type: 'urging payment'},{label: 'detail', type: 'detail'}]"
-                @action="action" :loading="tabLoad" 
+                 :loading="tabLoad" @action="action" 
                 ></v-table>
             </div>
         </div>
@@ -55,7 +55,6 @@
 
     import selectSearch from '@/components/common/fnCompon/selectSearch';
     import VTable from '@/components/common/table/index'
-
     export default {
         name:'payment',
         components:{
@@ -64,7 +63,9 @@
         },
         data(){
             return{
-                radio:'已逾期',
+                status:-1,
+                orderNo:'',
+                time:1523959983,
                 viewByStatus:'',
                 date:'',
                 searchValue:'',
@@ -100,44 +101,53 @@
                 tableDataList:[]
             }
         },
-        methods:{
-            // watch: {
-            //     viewByStatus() {
-            //         // this. getList();
-            //     },
-            // },
+        computed: {
+            
+        },
+        watch: {
+            status(){
+                this. getList();
+            },
+            viewByStatus() {
+                this.getList();
+            },
+            date(){
+                console.log(this.date)
+                console.log(2)
+            }
+        },
+        methods:{    
             getList() {
                 // this.tabLoad = true;
                 const params ={
-                                "conditions": {
-                                    "orderEntryEndDt": "",
-                                    "orderEntryStartDt": "",
-                                    "orderNoLike": "",
-                                    "overdue": 0
-                                },
-                                "pn": 1,
-                                "ps": 10,
-                                "sorts": [
-                                    {
-                                    "nativeSql": true,
-                                    "orderBy": "id",
-                                    "orderType": "desc",
-                                    "resultMapId": ""
-                                    }
-                                ]
-                            }
+                    "conditions": {
+                        "orderEntryEndDt":"",
+                        "orderEntryStartDt": "",
+                        "orderNoLike": this.orderNo,
+                        "orderType": this.viewByStatus,
+                        "overdue": this.status  //-1所有 0未逾期 1已逾期
+                    },
+                    "pn": 1,  //每页大小
+                    "ps": 10, //页码
+                    "sorts": [
+                        {
+                        "nativeSql": true,
+                        "orderBy": "id",
+                        "orderType": "desc",
+                        "resultMapId": ""
+                        }
+                    ]
+                }
                 this.$ajax.post(this.$apis.post_ledgerPage, params)
                 .then(res => {
-                      console.log(res.datas)
-                      console.log(this.$db)
-                      this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
-                      console.log(this.tableDataList)
+                    //   for(var i=0; i<res.datas.length; i++){
+                    //       console.log(formatDate(res.datas[i].planDateOfPayment))
+                    //     // res.datas[i].planDateOfPayment = 
+                    //   }
+                    this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
                 });
             },
         },
-        // pageChange(No) {
-        //     console.log(No)
-        // },
         action(item, type) {
             switch(type) {
                 case 'detail':
@@ -158,12 +168,13 @@
             });
         },
         urgingPayment(item) {
+            console.log(item)
             //  催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
             // 当待付款金额不为0时，催款按钮可操作；③ 当待付金额为0时，催款按钮为禁用，不可操作
         },
         created(){
             // this.viewByStatus = 0;
-            this.getList();
+             this.getList();
         },
     }
 </script>
