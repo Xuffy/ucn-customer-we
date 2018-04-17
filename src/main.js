@@ -15,6 +15,7 @@ import store from './store';
 import database from './database/index';
 import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
+import 'element-ui/lib/theme-chalk/base.css';
 
 // 引入样式
 // import 'vue-easytable/libs/themes-base/index.css'

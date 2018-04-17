@@ -22,18 +22,18 @@ export default {
       BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
-  
+
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,
 
   // 是否mock
-  IS_MOCK: false,
+  IS_MOCK: true,
 
   // 请求超时
   TIMEOUT: 60000,
 
   // 项目版本号
-  VERSION: `3.3.4.${process.env.VERSION}`,
+  VERSION: `2.0.${process.env.VERSION}`,
 
   // 本地store缓存 前缀
   STORE_PREFIX: 'ucn_'
