@@ -36,6 +36,10 @@ const apis = {
   add_account:['/supplier/account','BASE_CS'],
   update_account:['/supplier/account/{id}','BASE_CS'],
   delete_account:['/supplier/delAccount/{id}','BASE_CS'],
+  delete_contact:['/supplier/delContact/{id}','BASE_CS'],
+  update_contact:['/supplier/contact/{id}','BASE_CS'],
+  add_contact:['/supplier/contact','BASE_CS'],
+  update_supplier:['/supplier/{id}','BASE_CS'],
   //order
   get_orderlist:['/order/page','BASE_HCJ'],
   //supplier

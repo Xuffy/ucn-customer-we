@@ -141,7 +141,8 @@
   "otherPackInfoCn":"其他包装信息CN",
   "otherPackInfoEn":"其他包装信息EN",
   "adjustPackage":"产品或包装可否调整",
-
+  "descCnLike":"产品中文描述",
+  "statusName":"销售状态",
 
   "incoterm":"价格条款",
   "incotermArea":"价格条款区域",

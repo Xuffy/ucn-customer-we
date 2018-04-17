@@ -1,6 +1,12 @@
 <template>
     <div>
-        <product :title="title"></product>
+        <product
+                :title="title"
+                :type="type"
+                :hideBtn="false"
+                :disabledLine="disabledLine"
+                @handleOK="getList"
+                @handleCancel="handleCancel"></product>
     </div>
 </template>
 <script>
@@ -14,11 +20,18 @@
         },
         data(){
             return{
-                title:'哇哈哈'
+                title:this.$i.product.title,
+                type:'product',
+                disabledLine:[3]
             }
         },
         methods:{
-
+            getList(e){
+                console.log(e)
+            },
+            handleCancel(){
+                console.log(1)
+            },
         }
     }
 </script>

@@ -34,7 +34,17 @@ export default {
         type: 'Boolean',
         showType:'select',
         isDefaultShow:true,               //是否是默认显示
-        belongPage:'sellerProductOverview'
+        belongPage:'sellerProductOverview',
+        options:[
+            {
+                label:'是',
+                value:true
+            },
+            {
+                label:'否',
+                value:false
+            }
+        ],
     },
     customerSkuCodeLike: {
         key: 'customerSkuCodeLike',
@@ -86,7 +96,17 @@ export default {
         type: 'String',
         showType:'select',
         length: 10,
-        belongPage:'sellerProductOverview'
+        belongPage:'sellerProductOverview',
+        options:[
+            {
+                label:'中国',
+                value:1
+            },
+            {
+                label:'美国',
+                value:2
+            }
+        ],
     },
     supplierNameLike:{
         key: 'supplierNameLike',
