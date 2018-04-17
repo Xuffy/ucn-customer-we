@@ -46,10 +46,10 @@
           </thead>
 
           <tbody ref="tableBody">
-          <tr v-for="(item,index) in dataList">
+          <tr v-for="(item,index) in dataList" :style="{opacity:item._disabled ? 0.5 : 1}">
             <td v-if="selection">
               <div>
-                <input type="checkbox" ref="checkbox"
+                <input type="checkbox" ref="checkbox" :disabled="item._disabled"
                        v-if="typeof selection === 'function' ? selection(item) : true"
                        @change="changeCheck(item)"
                        v-model="item._checked"/>
