@@ -2,148 +2,71 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img src='../../../assets/images/logo.jpg'/> 
-                <span>name</span>
+                <img :src='basicDate.logo'/> 
+                <span>{{basicDate.name}}</span>
             </div>
             <div class="detail">             
                  <el-form  label-width="190px">          
                     <el-row>             
                         <el-row class="right">
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">                           
-                                    <el-form-item prop="SupplierName" :label="$t('supplier.detail.supplierName')+' :'">
-                                        xxxx
+                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
+                                   v-for='(item,index) in $db.supplier.detail'
+                                   :key='item'
+                                   >                         
+                                    <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                                       {{basicDate[item.key]}}
                                     </el-form-item>
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="SupplierNo" :label="$t('supplier.detail.SupplierNo')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                    <el-form-item prop="SupplierType" :label="$t('supplier.detail.supplierType')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="Country" :label="$t('supplier.detail.country')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                    <el-form-item prop="City" :label="$t('supplier.detail.city')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                    <el-form-item prop="ProvideIncoterm" :label="$t('supplier.detail.provideIncoterm')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="ExportLicense" :label="$t('supplier.detail.exportLicense')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="MainBusinessScope" :label="$t('supplier.detail.mainBusinessScope')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                                
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                    <el-form-item prop="Category" :label="$t('supplier.detail.category')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="Currency" :label="$t('supplier.detail.currency')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                               
-                            </el-col>
-                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                   <el-form-item prop="PaymentItem" :label="$t('supplier.detail.paymentItem')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                              
-                            </el-col>                     
-                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
-                                     <el-form-item prop="description" :label="$t('supplier.detail.description')+' :'">
-                                        xxxx
-                                    </el-form-item>
-                              
-                            </el-col>
-                            
+                            </el-col>                          
                         </el-row>
 
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                    <el-button @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                    <el-button @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                    <el-button @click='addToCompare'>{{$t('supplier.buttonname.addToCompare')}}</el-button>
-                    <el-button @click='supplierProducts'>{{$t('supplier.buttonname.supplierProducts')}}</el-button>
-                    <el-button >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
+                    <el-button @click='createInquiry'>{{$lang.baseText.createInquiry}}</el-button>
+                    <el-button @click='createOrder'>{{$lang.baseText.createOrder}}</el-button>
+                    <el-button @click='addToCompare'>{{$lang.baseText.addToCompare}}</el-button>
+                    <el-button @click='supplierProducts'>{{$lang.baseText.supplierProducts}}</el-button>
+                    <el-button >{{$lang.baseText.addToBookmark}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">Finish</el-button>
-                    <el-button @click="cancelEdit" type="info">Cancel</el-button>
+                    <el-button @click="finishEdit" type="primary">{{$lang.baseText.finish}}</el-button>
+                    <el-button @click="cancelEdit" type="info">{{$lang.baseText.cancel}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
-            <el-tabs v-model="tabName" type="card" >
-                
-                <el-tab-pane :label="$t('supplier.detail.address')" name="address">
-                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+            <el-tabs v-model="tabName" type="card" >          
+                <el-tab-pane :label="$lang.address" name="address">
+                    <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.accountInfo')"  name="accountInfo">
-                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                <el-tab-pane :label="$lang.accountInfo"  name="accountInfo">
+                    <v-table  :data="accounts"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.contactInfo')" name="contactInfo">
-                    <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                <el-tab-pane :label="$lang.contactInfo" name="contactInfo">
+                    <v-table  :data="concats"   style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.tradeHistory')"  name="tradeHistory">
-                  <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+                <el-tab-pane :label="$lang.tradeHistory"  name="tradeHistory">
+<!--                  <v-table  :data="tabData"   style='marginTop:10px'/>-->
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.inquireHistory')"  name="inquireHistory">
-                  <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/> 
+                <el-tab-pane :label="$lang.inquireHistory"  name="inquireHistory">
+<!--                  <v-table  :data="tabData"   style='marginTop:10px'/> -->
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.remark')" name="remark">
-                    <v-remark   style='marginTop:10px'/>
+                <el-tab-pane :label="$lang.remark" name="remark">
+                    <v-remark  
+                     style='marginTop:10px'
+                     :tableData='remarkData'
+                     />
                 </el-tab-pane>
-                <el-tab-pane :label="$t('supplier.detail.attchment')" name="attchment">
-<!--
-                  <div class="attchment">
-                   <div class="attchment_item">
-                    <div class="attchment_item_content">
-                        <i class="el-icon-document"></i>
-                         <p>产品介绍</p>
-                        <i class="el-icon-download"></i>
-                    </div>
-                    </div>
-                    <div class="attchment_item">
-                    <div class="attchment_item_content">
-                        <i class="el-icon-document"></i>
-                         <p>产品介绍</p>
-                        <i class="el-icon-download"></i>
-                    </div>
-                    </div>
-                    </div>
--->
+                <el-tab-pane :label="$lang.attchment" name="attchment">
+
+
                    <v-attachment></v-attachment>
                 </el-tab-pane>
+
             </el-tabs>
         </div>
 
-        <VCompareList :config="compareConfig"></VCompareList>
+<!--     <VCompareList :config="compareConfig"></VCompareList>-->
 
     </div>
 </template>
@@ -167,8 +90,13 @@
         data() {
             return {
                 noEdit: true,
+                id: this.$route.query.id,
                 tabName: 'address', //默认打开的tab
-                tabData: [],
+                basicDate: '',
+                accounts: [],
+                concats: [],
+                address: [],
+                remarkData: [],
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
@@ -197,18 +125,57 @@
             supplierProducts() {
 
             },
+            //..................获取数据
+            get_data() {
+                this.$ajax.get(this.$apis.get_supplier_id, {
+                        id: this.id
+                    })
+                    .then(res => {
+                        this.basicDate = res;
+                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
+                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
+                        this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                    })
+                    .catch((res) => {
+
+                    });
+            },
+            //.......获取remark列表
+            get_remark() {
+                this.$ajax.post(this.$apis.post_supplier_list_remark, {
+                    id: this.id,
+                    pn: 1,
+                    ps: 10,
+
+                }).then((res) => {               
+                   
+                }).catch((res) => {
+                    console.log(res)
+                })
+            },
+            //.........增加remark
+         add_Remark(){
+               this.$ajax.post(this.$apis.post_supplier_list_remark, {
+                }).then((res) => {               
+                    
+                }).catch((res) => {
+                    console.log(res)
+                })
+         },
+            //.........删除remark
+         delete_Remark(){
+             this.$ajax.post(this.$apis.post_supplier_list_remark, {
+                    
+                }).then((res) => {               
+                   
+                }).catch((res) => {
+                    console.log(res)
+                })
+         }
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
-
-                })
-                .catch((res) => {
-
-                });
+            this.get_data()
+            this.get_remark()
         },
     }
 
@@ -310,7 +277,7 @@
         width: 80%;
     }
 
-/*
+    /*
     .attchment {
         display: flex;
         justify-content: flex-start;

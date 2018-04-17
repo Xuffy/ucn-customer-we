@@ -1,16 +1,16 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-              supplier Sourcing
+              Supplier Sourcing
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
-            <div>
-                <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
+            <div style='marginTop:20px;'>
+                <el-form ref="parms" :model="parms" label-width="200px" size="mini">
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="8" 
                            v-for='(item,index) in $db.supplier.overview'
-                           :key='item'
+                           :key='index'
                            v-if='item.isbasic==true'
                            >
                             <el-form-item class="form-list" 
@@ -18,18 +18,18 @@
                             :label="item.label" 
                             :prop="item.key"                    
                             >
-                                <el-input v-model="formItem[item.key]" placeholder="Enter something..."></el-input>
+                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
                             :label="item.label" 
                             :prop="item.key" >
-                                <el-select v-model="formItem[item.key]"></el-select>
+                                <el-select v-model="parms[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
                                 :label="item.label" 
                                 :prop="item.key">
                                  <div class="speDropdown">
-                                     <drop-down   ref="dropDown"></drop-down>
+                                     <drop-down ref="dropDown"  v-model="parms[item.key]" :list="dropData"></drop-down>
                                 </div>
                             </el-form-item>
                          </el-col>
@@ -37,65 +37,63 @@
                         </el-row>
     </el-form>
             </div>
-            <div class="body" :class="{hide:hideBody}">
-                    
-                     <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
-                     <el-row>
-                     
+            <div class="body" :class="{hide:hideBody}">             
+                     <el-form ref="parms" :model="parms" label-width="200px" size="mini">
+                     <el-row>                 
                                 <el-col :xs="24" :sm="12" :md="8" :lg="8" 
                            v-for='(item,index) in $db.supplier.overview'
-                           key='item'
-                            v-if='item.isbasic==false'
+                           :key='index'
+                            v-if='!item.isbasic'
                            >
                             <el-form-item class="form-list" 
                              v-if="item.showType==='text'"
                             :label="item.label" 
                             :prop="item.key"                    
                             >
-                                <el-input v-model="formItem[item.key]" placeholder="Enter something..."></el-input>
+                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
                             :label="item.label" 
                             :prop="item.key" >
-                                <el-select v-model="formItem[item.key]"></el-select>
+                                <el-select v-model="parms[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
                                 :label="item.label" 
                                 :prop="item.key">
                                  <div class="speDropdown">
-                                     <drop-down   ref="dropDown"></drop-down>
+                                     <drop-down ref="dropDown" v-model="parms[item.key]" :list="dropData"></drop-down>
                                 </div>
                             </el-form-item>
-                         </el-col>
-                     
-                     
+                         </el-col>                
 
                 </el-row>
             </el-form>
         </div>
-<!--
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search">{{$t('supplier.buttonname.search')}}</el-button>
-            <el-button @click="clear('formItem')">{{$t('supplier.buttonname.clear')}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$lang.baseText.search}}</el-button>
+            <el-button @click="clear('parms')">{{$lang.baseText.clear}}</el-button>
         </div>
--->
 <!--      搜索结果  -->
             <div>
-<!--
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button   @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button  @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>
-                  <el-button  >{{$t('supplier.buttonname.addToBookmark')}}</el-button>
-                  <el-button   >{{$t('supplier.buttonname.downloadTheSelectedSupplier')}}</el-button>
+                  <el-button   @click='createInquiry'>{{$lang.baseText.creatInquiry}}</el-button>
+                  <el-button   @click='createOrder'>{{$lang.baseText.creatOrder}}</el-button>
+                  <el-button  @click='compare'>{{$lang.baseText.compare}}</el-button>
+                  <el-button  >{{$lang.baseText.addToBookmark}}</el-button>
+                  <el-button   >{{$lang.baseText.downloadSelected}}</el-button>
               </div>  
--->
               <div>
                  
               </div>          
         </div>
 <!--        表格-->
-<!--             <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>-->
+             <v-table 
+                   :height=360
+                    :data="tabData" 
+                    :buttons="[{label: 'detail', type: 1}]"
+                    @action="detail" 
+                    @change-checked='checked'
+                    style='marginTop:10px'/>
     </div>
 </template>
 
@@ -120,15 +118,51 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
-                formItem: {
-                    supplierName: '',
-                    businessScope: '',
-                    category: '',
-                    supplierType: '',
-                    SKUnameEN: '',
-                    SKUcode: '',
-                    description: '',
+                //                parms: {
+                //                    name: '',
+                //                    mainBusiness: '',
+                //                    category: '',
+                //                    type: '',
+                //                    skuNameEn: '',
+                //                    skuCode: '',
+                //                    description: '',
+                //                },
+                parms: {
+                    conditions: {},
+                    description: "",
+                    //                    mainBusiness: [],
+                    name: '',
+                    pn: 1,
+                    ps: 10,
+                    skuCode: "",
+                    skuNameEn: "",
+                    type: ''
                 },
+                dropData: [{
+                    id: 1,
+                    label: '一级 1',
+                    children: [{
+                        id: 4,
+                        label: '二级 1-1',
+                        children: [{
+                            id: 9,
+                            label: '三级 1-1-1'
+                        }, {
+                            id: 10,
+                            label: '三级 1-1-2'
+                        }]
+                    }]
+                }, {
+                    id: 2,
+                    label: '一级 2',
+                    children: [{
+                        id: 5,
+                        label: '二级 2-1'
+                    }, {
+                        id: 6,
+                        label: '二级 2-2'
+                    }]
+                }],
                 tabData: []
             }
         },
@@ -145,7 +179,8 @@
 
             //搜查
             search() {
-                this.$router.push('/product/detail');
+                console.log(this.parms)
+                this.get_data()
             },
             //....跳入createInquiry
             createInquiry() {
@@ -173,19 +208,31 @@
 
                     }
                 })
+            },
+            //...........进入detail
+            detail(item) {
+                this.windowOpen('/supplier/sourcingDetail', {
+                    id: item.id.value
+                });
+            },
+            //.........checked
+            checked(item) {
+                console.log(item)
+            },
+            get_data() {
+                this.$ajax.post(this.$apis.get_listSupplier, this.parms)
+                    .then(res => {
+                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
             }
         },
         created() {
-            //            this.ajax.get(this.$apis.supplier_overview, {
-            //                    params: {}
-            //                })
-            //                .then(res => {
-            //                    this.tabData = res
-            //
-            //                })
-            //                .catch((res) => {
-            //
-            //                });
+            this.get_data()
+            console.log(this.parms)
         },
         watch: {
             hideBody(n) {

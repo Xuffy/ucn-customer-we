@@ -41,7 +41,14 @@ const apis = {
   add_contact:['/supplier/contact','BASE_CS'],
   update_supplier:['/supplier/{id}','BASE_CS'],
   //order
-  get_orderlist:['/customer/order/page','BASE_HCJ']
+  get_orderlist:['/order/page','BASE_HCJ'],
+  //supplier
+  get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],
+  get_supplier_id:['/purchase/supplier/{id}','BASE_CS_cgs'],
+  post_supplier_list_remark:['/purchase/supplier/listRemarks','BASE_CS_cgs'],
+  post_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
+  get_supplier_remark_de:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+  post_supplier_delete_remark:['/purchase/supplier/deleteRemark/{id}','BASE_CS_cgs']
 
 };
 
