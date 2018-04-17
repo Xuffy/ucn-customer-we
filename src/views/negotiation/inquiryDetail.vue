@@ -3,7 +3,6 @@
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
         </div>
-        <drop-down-single />
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
@@ -34,13 +33,15 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger">{{ $i.baseText.remove }}</el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.remove }} <span>({{checkedAll.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <v-table 
                         :data="productTabData"
                         :buttons="productInfoBtn" 
+                        @action="producInfoAction"
+                        @change-checked="changeChecked"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button>{{ $i.baseText.accept }}</el-button>
@@ -87,6 +88,8 @@
             :list.sync="historyData" 
             :tableColumn="tableColumn"
             :title="msgTitle"
+            :column="historyColumn"
+            :msgTableType="msgTableType"
         />
     </div>
 </template>
@@ -109,6 +112,9 @@
         name:'inquiryDetail',
         data() {
             return {
+                checkedAll: '',
+                msgTableType: false,
+                historyColumn: {},
                 msgTitle: '',
                 historyData: [],
                 productTabData: [],
@@ -235,7 +241,12 @@
             modifyAction() {
                     this.statusModify = true;
             },
-            fnBasicInfoHistoty(item) {
+            fnBasicInfoHistoty(item, type) {
+                if(type) {
+                    this.msgTableType = true;
+                } else {
+                    this.msgTableType = false;
+                }
                 if(item.histoty) {
                     this.oSwitch = true;
                     this.historyData = item.histoty;
@@ -250,20 +261,49 @@
                     this.oSwitch = true;
                 });
            },
-           fnBasicInfoModify(item) {
-               console.log(item)
-           },
            basicInfoAction(data, type) {
-               switch(type) {
-                    case 'histoty':
-                        this.msgTitle = 'Histoty';
-                        this.fnBasicInfoHistoty(data);
-                        break;
-                    case 'modify':
-                        this.msgTitle = 'Modify';
-                        this.fnBasicInfoModify(data);
-                        break;
-               }
+                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                switch(type) {
+                        case 'histoty':
+                            this.msgTitle = 'Histoty';
+                            this.fnBasicInfoHistoty(data);
+                            break;
+                        case 'modify':
+                            this.msgTitle = 'Modify';
+                            this.fnBasicInfoHistoty(data, 'modify');
+                            break;
+                }
+           },
+           producInfoAction(data, type) {
+                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                switch(type) {
+                        case 'histoty':
+                            this.msgTitle = 'Histoty';
+                            this.producInfoHistoty(data);
+                            break;
+                        case 'modify':
+                            this.msgTitle = 'Modify';
+                            this.producInfoHistoty(data, 'modify');
+                            break;
+                }
+           },
+           producInfoHistoty(item) {
+               if(item.histoty) {
+                    this.oSwitch = true;
+                    this.historyData = item.histoty;
+                    return false;
+                };
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    item.histoty = res;
+                    this.historyData = res;
+                    this.oSwitch = true;
+                });
+           },
+           changeChecked(item) {
+               this.checkedAll = item;
            }
         }
     }

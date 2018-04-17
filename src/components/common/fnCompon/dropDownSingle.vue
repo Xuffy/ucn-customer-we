@@ -26,11 +26,10 @@
 				</div>
 			</div>
 		</el-popover>
-		
 		<el-input
 			:placeholder="checkInputBoxPl"
-			v-model="selectedList[defaultProps.label]"
 			v-popover:popover5
+			v-model="val[defaultProps.label]"
 			suffix-icon="el-icon-arrow-down"
 			:size="size"
 			readonly
@@ -56,7 +55,8 @@
 			return {
 				selectedList:'',
 				data:[],
-				visible: false
+				visible: false,
+				val: ''
 			};
 		},
 		props: {
@@ -113,13 +113,26 @@
 			},
 			selectedList(val) {
 				this.$emit('input', val.id);
+			},
+			value(val) {
+				if(!val) return this.val = '';
+				this.setInput(this.list, this.value);
 			}
+		},
+		mounted() {
+			this.setInput(this.list, this.value);
 		},
 		methods: {
 			getChecked(item) {
 				if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
 				this.selectedList = item;
 				this.visible = false;
+			},
+			setInput(item, val) {
+				item.forEach(data => {
+					if(val === data.id) return this.val = data;
+					if(data[this.defaultProps.children] && data[this.defaultProps.children].length) this.setInput(data.children, val);
+				});
 			}
 		}
 	};
