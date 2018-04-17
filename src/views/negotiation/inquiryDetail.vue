@@ -1,6 +1,5 @@
 <template>
     <div class="inquiryDetail">
-        <drop-down-single v-model="a" :list="ss" />
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
         </div>
@@ -113,8 +112,6 @@
         name:'inquiryDetail',
         data() {
             return {
-                a:3,
-                ss: [{children:[{label: '22', id: 2, children: [{label: '44', id: 4}]}], label:'333', id: 3}],
                 checkedAll: '',
                 msgTableType: false,
                 historyColumn: {},
