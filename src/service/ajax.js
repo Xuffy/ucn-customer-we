@@ -7,6 +7,11 @@ import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from 'service/store';
 
+
+/**
+ *
+ * @type {any}
+ */
 const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
@@ -25,7 +30,7 @@ const $ajax = (config) => {
     let p = {};
     if (!_.isEmpty(params)) {
       _.mapObject(params, (val, key) => {
-        if (url.indexOf(`{${key}`) < 0) {
+        if (url.indexOf(`{${key}}`) < 0) {
           p[key] = val;
         }
       });
@@ -33,16 +38,72 @@ const $ajax = (config) => {
     }
     return {url, params};
   }
-}
 
+
+  this.getCache = (url, params, config, fn) => {
+    let resCache = sessionStore.get('request_cache'), data = false;
+
+    if (config._cache) {
+      if (!_.isEmpty(resCache) && _.isArray(resCache)) {
+        _.map(resCache, val => {
+          let p = params.params || params
+          if (url === val.url && _.isEqual(p, val.params)) {
+            data = val;
+          }
+        });
+      }
+    }
+
+    if (data) {
+      return new Promise(function (resolve, reject) {
+        return resolve(data.data.content);
+      });
+    } else {
+      return fn(url, params, config);
+    }
+
+
+  }
+}
+/**
+ * 合并请求
+ * @param list
+ * @returns {Promise<[any , any , any , any , any , any , any , any , any , any]>}
+ */
 $ajax.prototype.all = (list) => {
   return Promise.all(list);
 }
 
+/**
+ * GET请求
+ * @param url
+ * @param params
+ * @param config
+ */
 $ajax.prototype.get = (url, params = {}, config = {}) => {
-  let data = this.setUrl(url, params)
-  return axios.get(data.url, _.extend(config, {params: data.params}));
+  let data = this.setUrl(url, params);
+
+  return this.getCache(
+    data.url,
+    _.extend(config, {params: data.params}),
+    config,
+    axios.get
+  );
+  /*if (config._cache) {
+  } else {
+    return axios.get(data.url, _.extend(config, {params: data.params}));
+  }*/
+
+
 }
+
+/**
+ * POST请求
+ * @param url
+ * @param params
+ * @param config
+ * @returns {*}
+ */
 $ajax.prototype.post = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params)
     , options = {method: 'POST', headers: {}, url: data.url, data: data.params};
@@ -83,7 +144,10 @@ axios.interceptors.request.use(config => {
  */
 axios.interceptors.response.use(
   response => {
+    let config = response.config, resCache;
+
     NProgress.done();
+
     if (_.isEmpty(response.data)) {
       throw new Error('api data is undefined');
     }
@@ -97,6 +161,21 @@ axios.interceptors.response.use(
       Message.warning(response.data.errorMsg || '数据返回异常，请重试！');
       throw new Error(`[code - ${response.data.status || '000'}] ${response.data.errorMsg || 'api request data unsuccessful'}`);
     }
+
+    // 缓存设置
+    resCache = sessionStore.get('request_cache') || [];
+
+    if (config._cache) {
+      let rcList = [];
+      _.map(resCache, val => {
+        if (config.url !== val.url || !_.isEqual(config.params, val.params)) {
+          rcList.push(val);
+        }
+      });
+      rcList.push({url: config.url, params: config.params, data: response.data});
+      sessionStore.set('request_cache', rcList);
+    }
+
 
     // _fullData 判断时候返回完整数据
     if (response.config._fullData) {

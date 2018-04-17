@@ -156,8 +156,8 @@
       },
       getConfig() {
         this.$ajax.all([
-          this.$ajax.get(this.$apis.gridfieldsetting),
-          this.$ajax.get(this.$apis.get_itemfavoriteList),
+          this.$ajax.get(this.$apis.gridfieldsetting,{},{_cache:true}),
+          this.$ajax.get(this.$apis.get_itemfavoriteList,{},{_cache:true}),
         ]).then(data => {
           this.dataList = data[0];
 
