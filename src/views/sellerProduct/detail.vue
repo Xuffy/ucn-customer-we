@@ -42,16 +42,16 @@
                     </el-col>
                 </el-row>
                 <div class="btns">
-                    <el-button @click="editProduct">{{$lang.product.edit}}</el-button>
+                    <el-button @click="editProduct">{{$i.product.edit}}</el-button>
                     <el-button :loading="disabledSetupBtn" @click="setUpDown">{{btnInfo}}</el-button>
-                    <el-button @click="addNewProduct">{{$lang.product.addNewProduct}}</el-button>
-                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$lang.product.delete}}</el-button>
+                    <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
+                    <el-button :loading="disabledDeleteBtn" type="danger" @click="deleteProduct">{{$i.product.delete}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$lang.product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="200px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -67,7 +67,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -78,13 +78,13 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -95,7 +95,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="260px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -106,7 +106,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="250px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -118,10 +118,10 @@
                     </el-form>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$lang.product.tradeHistory" name="History">
+                <el-tab-pane :label="$i.product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.product.attachment" name="Attachment">
+                <el-tab-pane :label="$i.product.attachment" name="Attachment">
 
                 </el-tab-pane>
                 <!--<el-tab-pane :label="$t('productSeller.page.remark')" name="Remark">-->
@@ -290,7 +290,7 @@
                 //用于展示的table数据
                 tableData:[],
                 //上下架按钮文字切换
-                btnInfo:this.$lang.product.setUp,
+                btnInfo:this.$i.product.setUp,
 
                 //btn禁用状态组
                 disabledDeleteBtn:false,
@@ -333,9 +333,9 @@
                         }
                     });
                     if(this.productForm.status===1){
-                        this.btnInfo=this.$lang.product.setDown;
+                        this.btnInfo=this.$i.product.setDown;
                     }else if(this.productForm.status===0){
-                        this.btnInfo=this.$lang.product.setUp;
+                        this.btnInfo=this.$i.product.setUp;
                     }
                     this.tableData = this.$getDB(this.$db.product.detailPriceTable, this.productForm.price);
                     loading.close();
@@ -377,10 +377,10 @@
                         });
                         if(status===1){
                             this.$set(this.productForm,'status',1);
-                            this.btnInfo=this.$lang.product.setDown;
+                            this.btnInfo=this.$i.product.setDown;
                         }else if(status===0){
                             this.$set(this.productForm,'status',0);
-                            this.btnInfo=this.$lang.product.setUp;
+                            this.btnInfo=this.$i.product.setUp;
                         }
                     }).catch(err=>{
                         this.disabledSetupBtn=false;

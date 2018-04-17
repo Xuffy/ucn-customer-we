@@ -1,65 +1,68 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $lang.inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
         <!-- <time-selection v-model="dateTime" /> -->
-        
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $lang.inquiry.basicInfo }}</h4>
-            <div class="select-main">
-                <el-form ref="ruleform" >
-                    <el-row :gutter="10">                    
-                        <el-col v-for="(item, index) in $db.inquiryOverview.createbBasicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
-                            <el-form-item  :label="item.label" :prop="item.label" :rules="item.rules" :label-width="item.width">
-                                <el-input 
-                                    v-model="item.value" 
+            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
+            <el-form ref="ruleform" :model="fromArg">
+                <el-row :gutter="10">                    
+                    <el-col v-for="(item, index) in $db.inquiryOverview.createbBasicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
+                        <el-form-item  
+                                :label="item.label" 
+                                :prop="item.key" 
+                                :rules="item.rules" 
+                                :label-width="item.width || '150px'"
+                            >
+                            <el-input 
+                                v-model="fromArg[item.key]" 
+                                :size="item.size || 'mini'"
+                                :placeholder="item.placeholder" 
+                                v-if="item.type === 'text'" 
+                                :disabled="item.disabled"
+                            />
+
+                            <el-select
+                                    v-model="fromArg[item.key]" 
                                     :size="item.size || 'mini'"
                                     :placeholder="item.placeholder" 
-                                    v-if="item.type === 'text'" 
-                                    :disabled="item.disabled"
+                                    v-if="item.type === 'select'"
+                                    style="width:100%;"
+                                >
+                                <el-option
+                                    v-for="nodes in []"
+                                    :key="nodes.value"
+                                    :label="nodes.label"
+                                    :value="nodes.value"
                                 />
-
-                                <el-select
-                                        v-model="item.key" 
-                                        :size="item.size || 'mini'"
-                                        :placeholder="item.placeholder" 
-                                        v-if="item.type === 'select'"
-                                        style="width:100%;"
-                                    >
-                                    <el-option
-                                        v-for="nodes in []"
-                                        :key="nodes.value"
-                                        :label="nodes.label"
-                                        :value="nodes.value"
-                                    />
-                                </el-select>
-                                <el-input
-                                    type="textarea"
-                                    :rows="item.rows || 4"
-                                    :size="item.size || 'mini'"
-                                    :placeholder="item.placeholder"
-                                    v-if="item.type === 'attachment' || item.type === 'textarea'"
-                                    resize="none"
-                                    :disabled="item.disabled"
-                                />
-                                <v-up-load v-if="item.type === 'remark' || item.type === 'upData'"/>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </div>
+                            </el-select>
+                            <el-input
+                                type="textarea"
+                                v-model="fromArg[item.key]"
+                                :rows="item.rows || 4"
+                                :size="item.size || 'mini'"
+                                :placeholder="item.placeholder"
+                                v-if="item.type === 'attachment' || item.type === 'textarea'"
+                                resize="none"
+                                :disabled="item.disabled"
+                            />
+                            <v-up-load v-if="item.type === 'remark' || item.type === 'upData'"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
-        <h4 class="content-hd">{{ $lang.baseText.productInfo }}</h4>
+        <h4 class="content-hd">{{ $i.baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $lang.baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $lang.baseText.remove }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $i.baseText.addProduct }}</el-button>
+                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
             </div>
             <select-search :options="[]" />
         </div>
         <v-table :data="tabData" :data-key="tabColumn"></v-table>
         <div class="bom-btn-wrap">
-            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $lang.baseText.submit }}</el-button>
-            <el-button @click="$router.push('/negotiation/inquiryDetail')">{{ $lang.baseText.saveAsDraft }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -140,15 +143,31 @@
             //     this.tabColumn =  'negotiation.tableProductInfo';
             // });
         },
+        computed: {
+            fromArg() {
+                let json = {};
+                for(let key in this.$db.inquiryOverview.createbBasicInfo) {
+                    json[key] = '';
+                };
+                return json;
+            }
+        },
         methods: {
             fromChange(val) {
                 console.log(val)
             },
-            submitForm(ruleform) {
+            submitForm(type) {
+                if(type === 'draft') {
+                    
+                } else {
+
+                }
+                //this.$router.push('/negotiation/inquiryDetail');
                 this.$refs.ruleform.validate((valid) => {
-                    if (valid === false) {
-                        return false
-                    }
+                    if(!valid) return this.$message({
+                        message: '请完成填写',
+                        type: 'warning'
+                    });
                 });
             }
         }

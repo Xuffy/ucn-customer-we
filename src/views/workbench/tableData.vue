@@ -15,13 +15,13 @@
 
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
-
-        <v-table ref="pendingTable" :data="dataList" data-key="negotiation.tableProductInfo"
+        <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
+                 selection-radio
                  @action="onAction"
+                 @filter-value="onFilterValue"
                  @change-checked="changeChecked">
-          <div slot="header">asdasd</div>
         </v-table>
       </el-tab-pane>
       <el-tab-pane label="Order">
@@ -41,13 +41,14 @@
 </template>
 
 <script>
-  import {VSimpleTable, VTable} from '@/components/index';
+  import {VSimpleTable, VTable, VTableFilter} from '@/components/index';
 
   export default {
     name: 'VTableData',
     components: {
       VSimpleTable,
       VTable,
+      VTableFilter,
     },
     data() {
       return {
@@ -81,10 +82,12 @@
       changeChecked(list) {
         console.log(list)
       },
+      onFilterValue(val) {
+        console.log(val);
+      },
       getList() {
-        this.$ajax.get(this.$apis.get_listTest).then((data) => {
-          this.dataList = this.$getDB(this.$db.workbench.pending, data);
-          console.log(this.dataList)
+        this.$ajax.get(this.$apis.get_listTest, {}, {_cache: true}).then((data) => {
+          this.dataList = this.$table.setHighlight(this.$getDB(this.$db.workbench.pending, data));
         });
       }
     }

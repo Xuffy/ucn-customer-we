@@ -9,7 +9,7 @@ export default {
         _hide: true
     },
     inquiryNo: {
-
+        key: ''
     },
     quotationNo: {
 
@@ -30,7 +30,7 @@ export default {
 
     },
     currency: {
-
+        key: 'currency'
     },
     totalQTY: {
 

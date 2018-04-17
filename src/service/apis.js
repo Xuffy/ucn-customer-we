@@ -2,9 +2,12 @@ const version = ['/web/v1', '/web/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
+  get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
+  update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
   sys_category: ['/sys/category', 'BASE_CS'],
-  get_quickLink: ['/getQuickLink', 'BASE_API'],
+  GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
   mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory:['/sys/category','BASE_CS'],              //暂时使用
@@ -14,11 +17,17 @@ const apis = {
   get_productDetail:['/sku/{id}','BASE_CS'],
   delete_product:['/sku/{id}/delete','BASE_CS'],
   change_productStatus:['/sku/{id}/status','BASE_CS'],
-  inquiry_list: ['/inquiry/list', 'BASE_DHC'],
+  inquiry_list: ['/inquiry/list', 'BASE_DH C'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
+  POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
+  POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_DHC'],
+  POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_DHC'],
+  GET_INQIIRY_DETAIL: ['/inquiry', 'BASE_DHC'],
+  GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_DHC'],
+  GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
   get_supplierWhole:['/supplierWhole','BASE_CS'],
   add_address:['/supplier/address','BASE_CS'],

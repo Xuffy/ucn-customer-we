@@ -6,15 +6,17 @@
                 width="70%"
                 lock-scroll
             >
+            
             <el-table
-                    :data="tableData"
+                    :data="filterData"
                     style="width: 100%"
                 >
                 <el-table-column
-                    v-for="(item, index) in this.filterColumn(this.tableColumn)"
+                    v-for="(item, index) in filtColumn"
                     :key="index"
                     :label="item.label"
                     :prop="item.key"
+                    :width="item.width || 130"
                 >
                     
                 </el-table-column>
@@ -33,27 +35,52 @@
                 type: Boolean,
                 default: false
             },
-            tableData: {
+            list: {
                 type: Array,
                 default: () => {
                     return [];
                 }
             },
-            tableColumn: {
-                type: String,
+            column: {
+                type: Object,
                 default: () => {
-                    return '';
+                    return {};
+                }
+            },
+            msgTableType: {
+                type: Boolean,
+                default: () => {
+                    return false;
                 }
             }
         },
         computed: {
             value: {
                 get() {
+                    if(this.msgTableType) {
+                        console.log(this.column)
+                    };
                     return this.oSwitch;
                 },
                 set(val) {
                     this.$emit('update:oSwitch', val);
                 }
+            },
+            filterData: {
+                get() {;
+                    return this.list;
+                },
+                set(val) {
+                    console.log(val)
+                }
+            },
+            filtColumn() {
+                let column = [], 
+                    data = this.column;
+                for(let key in data) {
+                    if(key !== 'id') column.push(data[key]);
+                };
+                return column;
             }
         },
         watch: {
@@ -65,9 +92,7 @@
             
         },
         methods: {
-            filterColumn(str) {
-                
-            }
+            
         }
     }
 </script>

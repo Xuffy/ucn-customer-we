@@ -26,14 +26,15 @@
 				</div>
 			</div>
 		</el-popover>
-		
-		<div class="checkInputBox" v-popover:popover5>
-			<div class="checkInputBoxPl" v-if="selectedList.length <= 0">{{checkInputBoxPl}}</div>
-			<div class="dataBox" v-show="selectedList">
-				<span>{{selectedList[defaultProps.label]}}</span>
-			</div>
-			<i class="el-icon-arrow-down"></i>
-		</div>
+		<el-input
+			:placeholder="checkInputBoxPl"
+			v-popover:popover5
+			v-model="val[defaultProps.label]"
+			suffix-icon="el-icon-arrow-down"
+			:size="size"
+			readonly
+		>
+		</el-input>
     </div>
 </template>
 
@@ -54,7 +55,8 @@
 			return {
 				selectedList:'',
 				data:[],
-				visible: false
+				visible: false,
+				val: ''
 			};
 		},
 		props: {
@@ -97,8 +99,12 @@
 				default: false
 			},
 			value: {
-				type: String,
+				type: [String, Number],
 				default: ''
+			},
+			size: {
+				type: String,
+				default: 'mini'
 			}
 		},
 		watch: {
@@ -107,13 +113,26 @@
 			},
 			selectedList(val) {
 				this.$emit('input', val.id);
+			},
+			value(val) {
+				if(!val) return this.val = '';
+				this.setInput(this.list, this.value);
 			}
+		},
+		mounted() {
+			this.setInput(this.list, this.value);
 		},
 		methods: {
 			getChecked(item) {
 				if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
 				this.selectedList = item;
 				this.visible = false;
+			},
+			setInput(item, val) {
+				item.forEach(data => {
+					if(val === data.id) return this.val = data;
+					if(data[this.defaultProps.children] && data[this.defaultProps.children].length) this.setInput(data.children, val);
+				});
 			}
 		}
 	};

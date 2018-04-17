@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
+import { Notification } from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -666,6 +667,8 @@ router.beforeResolve((to, from, next) => {
     sessionStore.set('cache_router_param', cacheParam);
 
   }
+
+  Notification.closeAll();
 
   next();
 });
