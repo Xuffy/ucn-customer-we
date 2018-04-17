@@ -59,7 +59,7 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
             <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
@@ -68,16 +68,41 @@
                 <el-button @click="setUp">{{$i.product.setUp}}</el-button>
                 <el-button @click="setDown">{{$i.product.setDown}}</el-button>
                 <el-button>{{$i.product.downloadSelected}}</el-button>
-                <el-button type="danger">{{$i.product.delete}}</el-button>
+                <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
             </div>
 
             <v-table
                     ref="vTable"
                     :data="tableDataList"
                     :buttons="[{label: 'Detail', type: 1}]"
-                    @change-checked=""
+                    @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>
+
+
+        <el-dialog
+                class="speDialog"
+                title="提示"
+                :visible.sync="partDialogVisible"
+                width="30%">
+            <span>当前所选有上架产品，是否下架该产品?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="partDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="partDialogVisible = false">跳过上架产品</el-button>
+                <el-button type="primary" @click="partDialogVisible = false">下架产品</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                class="speDialog"
+                title="提示"
+                :visible.sync="allDialogVisible"
+                width="30%">
+            <span>当前所选是上架产品，是否先下架产品?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="allDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="allDialogVisible = false">下架产品</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -98,10 +123,12 @@
         },
         data(){
             return{
-
+                partDialogVisible:false,       //弹出框显示隐藏
+                allDialogVisible:false,        //弹出框显示隐藏
                 hideBody:true,            //是否显示body
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
-
+                disabledSearch:false,                 //是否禁止搜索，默认false
+                disabledDeleteGoods:true,             //默认没有选中商品的时候是不能点击删除的
                 //表格字段绑定
                 productForm: {
                     categoryId: '',
@@ -120,32 +147,26 @@
                     nameCnLike: "",
                     // nameCustomerLike: "",    没有发现这个字段
                     nameEnLike: "",
-                    operatorFilters: [
-                        {
-                            operator: "",
-                            property: "",
-                            value: {}
-                        }
-                    ],
+                    //初始搜索的时候不传，当有筛选条件之后再传
+                    // operatorFilters: [
+                    //     {
+                    //         operator: "",
+                    //         property: "",
+                    //         value: {}
+                    //     }
+                    // ],
                     outerCartonMethodEnLike: "",
                     pn: 1,
                     ps: 50,
                     readilyAvailable: true,
-                    recycle: false,             //recycleBin里传true
-                    sortParam: {
-                        sorts: [
-                            {
-                                orderBy: "",
-                                orderType: "",
-                            }
-                        ]
-                    },
-                    sorts: [
-                        {
-                            orderBy: "",
-                            orderType: "",
-                        }
-                    ],
+                    recycle: false,             //recycleBin里传true,其他地方传false
+                    //初始搜索的时候不传，当有筛选条件之后再传
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
                     supplierNameLike: "",
                 },
                 //表格验证参数
@@ -154,17 +175,9 @@
                         { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
                     ],
                 },
-                //表格配置参数
-                // readilyAvailableOptions: [
-                //     {
-                //         label: 'not ready',
-                //         value: false
-                //     },
-                //     {
-                //         label: 'ready',
-                //         value: true
-                //     },
-                // ],
+
+                //表格选中的条目
+                selectGroups:[],
 
 
                 //Category下拉组件数据
@@ -216,6 +229,11 @@
                 this.hideBody=!this.hideBody;
             },
 
+            //表格check状态变更时触发事件
+            changeChecked(e){
+                this.selectGroups=e;
+            },
+
             //清除填写的表格数据
             clear(){
                 this.$refs.dropDown[0].selectedList=[];
@@ -227,11 +245,22 @@
                 this.$set(this.productForm,'maxFobPrice','');
             },
 
-            //搜查
+            //搜索
             search(){
-                console.log(this.productForm)
-
-
+                this.disabledSearch=true;
+                this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
+                    res.datas.forEach(v=>{
+                        if(v.status===0){
+                            v.status='下架';
+                        }else if(v.status===1){
+                            v.status='上架';
+                        }
+                    });
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    this.disabledSearch=false;
+                }).catch(err=>{
+                    this.disabledSearch=false;
+                });
 
             },
 
@@ -241,7 +270,9 @@
 
             //获取table数据
             getData() {
-                this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
+                this.$ajax.post(this.$apis.get_productList,{
+                    recycle:false,
+                }).then(res=>{
                     res.datas.forEach(v=>{
                         if(v.status===0){
                             v.status='下架';
@@ -268,6 +299,53 @@
             //设为下架
             setDown(){},
 
+            //删除商品
+            deleteGood(){
+                this.$confirm('确定删除选中商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let hasUp=false;            //是否有上架商品，默认为false
+                    let allUp=true;             //假设全部都是上架商品
+                    this.selectGroups.forEach(v=>{
+                        if(v.status.value==='上架'){
+                            hasUp=true;
+                        }else if(v.status.value==='下架'){
+                            allUp=false;        //有一个下架商品就代表不是全部都是上架
+                        }
+                    })
+                    if(hasUp){
+                        if(allUp){
+                            //如果全部都是上架商品
+                            this.allDialogVisible=true;
+                        }else{
+                            //部分上架商品
+                            this.partDialogVisible=true;
+                        }
+
+
+                        //
+                        // this.$confirm('当前所选有上架产品，是否下架该产品?', '提示', {
+                        //     confirmButtonText: '下架产品',
+                        //     cancelButtonText: '跳过上架产品',
+                        //     type: 'warning'
+                        // }).then(() => {
+                        //
+                        // }).catch(() => {
+                        //
+                        // });
+                    }else{
+                        this.$message({
+                            message: '删除成功，被删除的产品可在回收站中找回',
+                            type: 'success'
+                        });
+                    }
+                }).catch(() => {
+
+                });
+            },
+
             //表格check状态改变
             handleCheckChange(e){
                 console.log(e)
@@ -283,7 +361,6 @@
         },
         created(){
             this.getData();
-            console.log(this.$db.product.sellerBasic)
         },
 
         watch:{
@@ -294,6 +371,13 @@
                     this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
             },
+            selectGroups(n){
+                if(n.length>=1){
+                    this.disabledDeleteGoods=false;
+                }else{
+                    this.disabledDeleteGoods=true;
+                }
+            }
         }
     }
 </script>
@@ -410,6 +494,9 @@
 
     .speSelect{
         width: 100%;
+    }
+    .speDialog >>> .el-dialog__footer{
+        text-align: center;
     }
 
 
