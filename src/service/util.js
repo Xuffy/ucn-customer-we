@@ -38,6 +38,9 @@ export default {
 
     /**
      * 字段配置
+     * @param db
+     * @param data
+     * @returns {Array}
      */
     Vue.prototype.$getDB = (db, data) => {
       let list = [];
@@ -57,7 +60,18 @@ export default {
       return list;
     };
 
+    /*Vue.prototype.$dataBackfill = (data, oldData) => {
+      console.log(data, oldData)
+      _.map(data, value => {
 
+        console.log(value)
+      });
+    }*/
+
+    /**
+     * table 数据过滤
+     * @type {{contrast(*=, *=): *, setHighlight(*=): *, setHideSame(*=): *}}
+     */
     Vue.prototype.$table = {
       contrast(data, type) {
         if (_.isEmpty(data)) return [];
@@ -107,18 +121,6 @@ export default {
       }
     };
 
-    /**
-     *
-     * @param value
-     * @returns {string}
-     */
-    Vue.prototype.$getI18n = function () {
-      // this.$i18n.
-      // let data = this.$i18n.getLocaleMessage(this.$i18n.locale);
-      // console.log([
-      //   {p:'',b:''}
-      // ])
-    }
 
     /**
      * 获取 table 配置列名
