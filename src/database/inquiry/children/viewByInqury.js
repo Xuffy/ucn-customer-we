@@ -2,10 +2,16 @@ export default {
     companyId: {
         _hide: true
     },
-    id: {
+    updateId: {
         _hide: true
     },
-    updateId: {
+    tenantId: {
+        _hide: true
+    },
+    ownerId: {
+        _hide: true
+    },
+    id: {
         _hide: true
     },
     inquiryNo: {
@@ -14,34 +20,31 @@ export default {
     quotationNo: {
 
     },
-    sequence: {
-
-    },
     status: {
         
     },
-    supplier: {
+    supplierName: {
 
     },
-    SKUQty: {
-
+    quantity: {
+        key: 'skuQty'
     },
-    orderValue: {
-
+    inquiryValue: {
+        key: 'inquiryAmount'
     },
     currency: {
         key: 'currency'
     },
-    totalQTY: {
-
-    },
     incoterm: {
 
     },
-    port: {
+    departurePort: {
 
     },
-    remark: {
-        
+    destinationPort: {
+
+    },
+    inquiryRemark: {
+        key: 'remark'
     }
 };

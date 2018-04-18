@@ -9,17 +9,17 @@
                 border
                 style="width: 100%">
             <el-table-column
-                    prop="time"
+                    prop="remark"
                     :label="$i.product.remark"
                     align="center">
             </el-table-column>
             <el-table-column
-                    prop="remark"
+                    prop="updateName"
                     :label="$i.product.operator"
                     align="center">
             </el-table-column>
             <el-table-column
-                    prop="submiter"
+                    prop="updateDt"
                     :label="$i.product.time"
                     align="center">
             </el-table-column>
@@ -28,8 +28,8 @@
                     :label="$i.product.action"
                     align="center">
                 <template slot-scope="scope">
-                    <el-button @click="editRemark" type="text" size="small">{{$i.product.modify}}</el-button>
-                    <el-button @click="deleteRemark" type="text" size="small">{{$i.product.delete}}</el-button>
+                    <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
+                    <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -45,18 +45,18 @@
         </el-pagination>
 
         <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
-            <el-form :model="form">
+            <el-form :model="parms">
                 <el-form-item label="备注:" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="4"
                             placeholder="请输入内容"
-                            v-model="form.name">
+                            v-model="parms.remark">
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addRemarkFormVisible = false">提交</el-button>
+                <el-button type="primary" @click="createRemarkSubmit">提交</el-button>
                 <el-button @click="addRemarkFormVisible = false">取 消</el-button>
             </div>
         </el-dialog>
@@ -76,18 +76,18 @@
         <!--</el-dialog>-->
 
         <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
-            <el-form :model="form">
+            <el-form :model="parms">
                 <el-form-item label="备注:" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="4"
                             placeholder="请输入内容"
-                            v-model="form.name">
+                            v-model="parms.remark">
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="editRemarkFormVisible = false">提交</el-button>
+                <el-button type="primary" @click="edit_submit">提交</el-button>
                 <el-button @click="editRemarkFormVisible = false">取 消</el-button>
             </div>
         </el-dialog>
@@ -97,57 +97,84 @@
 </template>
 
 <script>
-
+/* 
+   传入url 和id
+   remark后台的字段    remark :remark    time:updateDt    operator:updateName
+   赞未做分页
+*/
 
     export default {
         name: "addline-table",
+        props:{
+            add_url:{
+                type:String,
+                default:'post_add_supplier_remark'
+            },
+            delete_url:{
+                 type:String,
+                default:'post_supplier_delete_remark'
+            },
+            updata_url:{
+                type:String,
+                default:'get_update_supplier_remark'
+            },
+            get_url:{
+                 type:String,
+                default:'post_supplier_list_remark'
+            },
+            //....传入的id
+            id:{
+                type:Number,
+                default:1
+            }
+        },
         data(){
             return{
-                columns:[
-                    {
-                        title: '备注',
-                        key: 'remark',
-                        align:'center',
-                    },
-                    {
-                        title: '操作人',
-                        key: 'submiter',
-                        align:'center',
-                    },
-                    {
-                        title: '操作时间',
-                        key: 'time',
-                        align:'center',
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        align:'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, '修改'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, '删除')
-                            ]);
-                        }
-                    }
-
-                ],
+//                columns:[
+//                    {
+//                        title: '备注',
+//                        key: 'remark',
+//                        align:'center',
+//                    },
+//                    {
+//                        title: '操作人',
+//                        key: 'submiter',
+//                        align:'center',
+//                    },
+//                    {
+//                        title: '操作时间',
+//                        key: 'time',
+//                        align:'center',
+//                    },
+//                    {
+//                        title: '操作',
+//                        key: 'action',
+//                        align:'center',
+//                        render: (h, params) => {
+//                            return h('div', [
+//                                h('Button', {
+//                                    props: {
+//                                        type: 'text',
+//                                        size: 'small'
+//                                    }
+//                                }, '查看'),
+//                                h('Button', {
+//                                    props: {
+//                                        type: 'text',
+//                                        size: 'small'
+//                                    }
+//                                }, '修改'),
+//                                h('Button', {
+//                                    props: {
+//                                        type: 'text',
+//                                        size: 'small'
+//                                    }
+//                                }, '删除')
+//                            ]);
+//                        }
+//                    }
+//
+//                ],
                 data:[
                     {
                         remark: '只有充钱你才能变得更强',
@@ -162,30 +189,31 @@
                 ],
                 value:'',       //输入框内容
                 currentPage1:1,     //当前页
-                tableData:[
-                    {
-                        time:'2018-02-23',
-                        remark:'这是一条操作',
-                        submiter:'麻花藤',
-                    }
-                ],
-
-                form: {
-                    name: '按时发生付款静安寺浩哥看暗示过看',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
-
+                tableData:[],  //表格数据
+//
+//                form: {
+//                    name: '按时发生付款静安寺浩哥看暗示过看',
+//                    region: '',
+//                    date1: '',
+//                    date2: '',
+//                    delivery: false,
+//                    type: [],
+//                    resource: '',
+//                    desc: ''
+//                },
+                  parms:{
+                      "entryDt": "",
+                      "entryId": '',
+                      "entryName": "",
+                      "id": '',
+                      "remark": "",
+                      "supplierId": this.id,
+                    },
                 addRemarkFormVisible: false,          //新增备注弹出框显示隐藏
                 checkRemarkFormVisible:false,         //查看备注弹出框显示隐藏
                 editRemarkFormVisible:false,          //编辑备注弹出框显示隐藏
                 formLabelWidth: '50px',            //弹出框input长度
-
+                
             }
         },
         methods:{
@@ -195,42 +223,85 @@
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
             },
-
+            
             //新增备注
-            createRemark() {
+            createRemark() {             
                 this.addRemarkFormVisible=true;
             },
-
+            createRemarkSubmit(){ this.$ajax.post(this.$apis[this.add_url],this.parms).then((res) => {                                  
+                      this.get_remark()
+                    }).catch((res) => {
+                        console.log(res)
+                    })
+                this.addRemarkFormVisible = false
+            },
             //查看备注
             checkRemark(){
                 this.checkRemarkFormVisible=true;
             },
 
             //修改备注
-            editRemark(){
+            editRemark(index, row){
+                this.parms.id=row.id
+                 this.parms.remark=''
                 this.editRemarkFormVisible=true;
             },
-
+            edit_submit(){
+                this.$ajax.post(this.$apis[this.updata_url],this.parms).then((res) => {               
+                    this.get_remark()
+                }).catch((res) => {
+                    console.log(res)
+                })
+                this.editRemarkFormVisible=false;
+            },
             //删除备注
-            deleteRemark(){
+            deleteRemark(index, row){           
                 this.$confirm('确定删除该备注?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+                    this.$ajax.post(this.$apis[this.delete_url], {id:row.id }).then((res) => {               
+                             console.log(res)
+                           this.get_remark()
+                            this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch((res) => {
+                        console.log(res)
+                    })
+                    
+                    
+                    
                 }).catch(() => {
 
                 });
             },
+            //获取remark数据列表
+             get_remark() {
+                this.$ajax.post(this.$apis[this.get_url], {
+                    id: 1,
+                    pn: 1,
+                    ps: 100,
 
-
-            handleClose(){
-
+                }).then((res) => {  
+                    this.tableData=res.datas
+                }).catch((res) => {
+                    console.log(res)
+                })
             },
+            //.........增加remark
+             add_Remark(){
+                   
+             },
+            //.........删除remark
+             delete_Remark(){
+                
+             }, 
+        },
+        created(){
+            this.get_remark()
         }
     }
 </script>

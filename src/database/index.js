@@ -7,15 +7,17 @@ import inquiryOverview from './inquiry';
 import order from './order/index';
 import supplier from './supplier/index'
 import setting from './setting/index';
+import common from './common/index';
 
 const db = {
+  common,
   workbench,
   product,
   inquiryOverview,
   logistic,
   order,
   supplier,
-    setting
+  setting
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {

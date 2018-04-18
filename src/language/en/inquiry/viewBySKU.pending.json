@@ -1,15 +1,14 @@
 {
     "inquiryNo": "Inquiry No.",
     "quotationNo": "Quotation No.",
-    "sequence": "Sequence",
     "status": "Status",
-    "supplier": "Supplier",
-    "SKUCode": "SKU code",
-    "SKUName": "SKU name",
+    "supplierName": "Supplier name",
+    "skuCode": "sku code",
+    "skuNameEN": "SKU name EN",
     "price": "Price",
     "currency": "Currency",
-    "totalQTY": "Total QTY",
     "incoterm": "Incoterm",
-    "port": "Port",
-    "remark": "Remark"
+    "departurePort": "departure port",
+    "destinationPort": "destination port",
+    "remark": "Inquiry remark"
 }

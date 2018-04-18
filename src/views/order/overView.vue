@@ -4,48 +4,35 @@
         <div class="status">
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
-                      <el-radio-group v-model="status" size="mini">
-                            <el-radio-button label="TBCByCustomer"> {{ $lang.baseText.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="TBCBySupplier">{{($lang.baseText.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="process">{{($lang.baseText.process)}}</el-radio-button>
-                            <el-radio-button label="finish">{{($lang.baseText.finish)}}</el-radio-button>
-                            <el-radio-button label="cancel">{{($lang.baseText.cancel)}}</el-radio-button>
+                      <el-radio-group v-model="params.status" size="mini">
+                            <el-radio-button label="1"> {{ $i.baseText.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="2">{{($i.baseText.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="3">{{($i.baseText.process)}}</el-radio-button>
+                            <el-radio-button label="4">{{($i.baseText.finish)}}</el-radio-button>
+                            <el-radio-button label="5">{{($i.baseText.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
-<!--
-                <div class="select">
-                    <el-select v-model="value" placeholder="select" @change="selectChange">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.id"
-                        :label="item.label"
-                        :value="item.id" />
-                    </el-select>
-                </div>
-                 <el-input v-model="keyWord" style="width:250px;">
-                     <el-button slot="append" icon="el-icon-search" style='width:20px;'></el-button>              
-                 </el-input>
--->
                <selectSearch 
                     :options=options
                     @selectChange="selectChange"
-                    @inputEnter="inputEnter"
+                    @inputChange="inputEnter"
                  ></selectSearch>
             </div>
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{($lang.baseText.downloadall)}}</el-button>
+                <el-button >{{($i.baseText.downloadall)}}</el-button>
 
-                <el-button @click='creat_order'>{{($lang.baseText.createOrder)}}</el-button>
-                <el-button type='danger' :disabled='disabled'>{{($lang.baseText.delete)}}</el-button>
+                <el-button @click='creat_order'>{{($i.baseText.createOrder)}}</el-button>
+                 <el-button :disabled='prodisabled'>finish</el-button>
+                <el-button type='danger' :disabled='disabled'>{{($i.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
-                   <el-radio-group v-model="view" size="mini">
-                            <el-radio-button label=1>{{($lang.baseText.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($lang.baseText.SKU)}}</el-radio-button>
+                   <el-radio-group v-model="params.view" size="mini">
+                            <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
                 <div class="set">
                 </div>
@@ -53,14 +40,12 @@
         </div>
         <!--form-->
           <v-table  
-          ref='vtable'
+           ref='vtable'
           :data="tabData" 
-          data-key="supplier.tableData" 
           :buttons="[{label: 'detail', type: 1}]" 
            @action="onAction"
           :loading='loading'
-           style='marginTop:10px'/>
-       
+           style='marginTop:10px'/>     
     </div>
 </template>
 <script>
@@ -89,84 +74,100 @@
             return {
                 value: '',
                 keyWord: '',
-                status: '', //status的按钮组
-                view: 2, //view by的按钮组
-                disabled:false, //delete的状态
+                disabled: false, //delete的状态
+                prodisabled: true, // finish的状态
                 tabData: [],
                 loading: false,
                 options: [{
                     id: '1',
-                    label: 'orderNo'
+                    label: 'Order No'
                 }, {
                     id: '2',
-                    label: 'skuCode'
+                    label: 'Sku Code'
                 }],
-               
-                 keyType: '',
-                 params: {
-                        status:'',
-                        orderNo:'',
-                        skuCode:'',
-                        view:'',
-                        ps: 10,
-                        pn: 1
-                    }
+                keyType: '',
+                params: {
+                    status: '', //status的按钮组
+                    orderNo: '',
+                    skuCode: '',
+                    view: '1', //view by的按钮组
+                    ps: 10,
+                    pn: 1
+                }
             }
         },
         methods: {
             onAction(item, type) {
-               console.log(item)
+                console.log(item)
             },
-            creat_order(){
-                  this.$router.push('/order/creat');
+            creat_order() {
+                this.$router.push('/order/creat');
             },
             selectChange(val) {
                 this.keyType = val;
             },
             inputEnter(val) {
-                if(!this.keyType) return this.$message('请选中搜索类型');
-                if(!val) return this.$message('搜索内容不能为空');
-                console.log(this.keyType)
-                 if(this.keyType=='1'){
-                      this.params.orderNo=val
-                  }else{
-                      this.params.skuCode=val
-                  }
-               console.log(this.params)
+                //                if(!this.keyType) return this.$message('请选中搜索类型');
+                //                if(!val) return this.$message('搜索内容不能为空');
+                console.log(val)
+                if (val.keyType == '1') {
+                    this.params.orderNo = val.key
+                } else {
+                    this.params.skuCode = val.key
+                }
+                console.log(this.params)
             },
             //get_orderlist数据
-            getdata(){
+            getdata() {
                 this.loading = true
-              this.$ajax.get(this.$apis.get_orderlist,this.params )
-                .then((res) => {
-                      console.log(res);
-                })
-                .catch((res) => {
-                    console.log(res);
-                });
+                this.$ajax.post(this.$apis.get_orderlist, {
+                        status: '', //status的按钮组
+                        orderNo: '',
+                        skuCode: '',
+                        view: '2', //view by的按钮组
+                        ps: 10,
+                        pn: 1
+                    })
+                    .then((res) => {
+                        console.log(res)
+                        this.tabData =
+                            this.$getDB(this.$db.order.overview, res.datas);
+
+                    })
+                    .catch((res) => {
+                        console.log(res);
+                    });
             }
         },
-        computed:{
- 
+        computed: {
+
         },
         created() {
-         this.getdata()
-            
+            this.getdata()
+
         },
         mounted() {
             this.loading = false
         },
-        updated(){
-             
+        updated() {
+
         },
-        watch:{
-           status(curVal,oldVal){
-　　　　　　　　　if(curVal==this.$lang.baseText.cancel){
-                    this.disabled=false
-                }else{
-                    this.disabled=true
-                }
-　　　　　　　　},
+        watch: {　
+            params: {　　　　　　　　　　
+                handler(curVal, oldVal) {　　　　　　　　　　　　
+                    console.log(curVal, oldVal)
+                    if (curVal.status == 5) {
+                        this.disabled = false
+                    } else if (curVal.status == 3) {
+                        this.prodisabled = false
+                        this.disabled = true
+                    } else {
+                        this.disabled = true
+                        this.prodisabled = true
+                    }　　　　　　　　　　
+                },
+                　deep: true　　　　　　　　
+            }
         }
     }
 
