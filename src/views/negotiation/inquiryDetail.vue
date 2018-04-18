@@ -48,7 +48,7 @@
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
                         <el-button @click="compareConfig.showCompareList = true;">{{ $i.baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
-                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createInquiry }}</el-button>
+                        <el-button @click="toCreateInquire">{{ $i.baseText.createInquiry }}</el-button>
                         <el-button type="info">{{ $i.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
@@ -304,7 +304,14 @@
            },
            changeChecked(item) {
                this.checkedAll = item;
-           }
+           },
+            toCreateInquire() {
+                let arr = [];
+                this.checkedAll.forEach(item => {
+                    arr.push(item.id.value);
+                });
+                console.log(arr)
+            }
         }
     }
 </script>

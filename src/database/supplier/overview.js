@@ -1,14 +1,14 @@
 export default {
     //overview
     supplierName: {
-        key: 'supplierName',
+        key: 'name',
         type: 'String',
         showType: 'text',
         isbasic: true,
         rule: []
     },
     businessScope: {
-        key: 'businessScope',
+        key: 'mainBusiness',
         type: 'String',
         showType: 'select',
         isbasic: true,
@@ -22,21 +22,21 @@ export default {
         rule: []
     },
     supplierType: {
-        key: 'supplierType',
+        key: 'type',
         type: 'String',
         showType: 'select',
         isbasic: false,
         rule: []
     },
     SKUnameEN: {
-        key: 'SKUnameEN',
+        key: 'skuNameEn',
         type: 'String',
         showType: 'text',
         isbasic: false,
         rule: []
     },
     SKUcode: {
-        key: 'SKUcode',
+        key: 'skuCode',
         type: 'String',
         showType: 'text',
         isbasic: false,
@@ -48,5 +48,6 @@ export default {
         showType: 'text',
         isbasic: false,
         rule: []
-    }
+    },
+
 }

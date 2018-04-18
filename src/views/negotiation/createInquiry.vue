@@ -59,7 +59,12 @@
             </div>
             <select-search :options="[]" />
         </div>
-        <v-table :data="tabData" :data-key="tabColumn"></v-table>
+        <v-table 
+            :data="tabData"
+            :buttons="['detail']" 
+            @action="action"
+            @change-checked="changeChecked"
+        />
         <div class="bom-btn-wrap">
             <el-button @click="submitForm('draft')">{{ $i.baseText.submit }}</el-button>
             <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
@@ -169,7 +174,13 @@
                         type: 'warning'
                     });
                 });
-            }
+            },
+            action(data, type) {
+                
+            },
+            changeChecked(item) {
+               this.checkedAll = item;
+           }
         }
     }
 </script>

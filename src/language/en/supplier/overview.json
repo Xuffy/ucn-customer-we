@@ -1,9 +1,22 @@
 {
-    "supplierName": "supplierName",
-    "businessScope": "businessScope",
-    "categoryId": "categoryId",
-    "supplierType": "supplierType",
-    "SKUnameEN": "SKUnameEN",
-    "SKUcode": "SKUcode",
-    "description": "description"
+    "supplierName": "Supplier Name",
+    "businessScope": "Main Business Scope",
+    "categoryId": "Category",
+    "supplierType": "Supplier Type",
+    "SKUnameEN": "SKU Name(EN)",
+    "SKUcode": "SKU Code",
+    "description": "description",
+
+
+    "SKUcode": "Supplier NO",
+    "suppliername": "supplier name",
+    "suppliertype": "Supplier type",
+    "country": "country",
+    "mainbusinessscope": "main business scope",
+
+    "category": "category",
+    "provideincoterm": "Provide incoterm",
+    "exportlicense": "Export license",
+    "description": "description",
+    "id": "id"
 }

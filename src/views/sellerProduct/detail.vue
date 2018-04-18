@@ -346,7 +346,7 @@
 
             //编辑产品
             editProduct(){
-                this.windowOpen('/sellerProduct/addNewProduct',{id:1});
+                this.windowOpen('/sellerProduct/addNewProduct',{id:this.productForm.id,isEdit:true});
             },
 
             //设置商品上/下架状态
