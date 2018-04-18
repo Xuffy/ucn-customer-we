@@ -22,10 +22,10 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button  @click="toCompare">{{ $i.baseText.compare }}</el-button>
-                <el-button  @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry">{{ $i.baseText.cancelTheInquiry }}</el-button>
-                <el-button @click="deleteInquiry" type="danger">{{ $i.baseText.delete }}</el-button>
+                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.baseText.viewBy }}&nbsp;</span>
@@ -39,6 +39,7 @@
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
             @action="action" 
+            @change-checked="changeChecked"
             :loading="tabLoad" 
             ref="tab"
         />
@@ -62,6 +63,7 @@
         name:'',
         data() {
             return {
+                checkedData:[],
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 searchLoad: false,
                 options: [{
@@ -129,10 +131,10 @@
                 let url, column;
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.inquiry_list;
+                    url = this.$apis.POST_INQIIRY_LIST;
                     column = this.$db.inquiryOverview.viewByInqury;
                 } else {
-                    url = this.$apis.inquiry_list_sku;
+                    url = this.$apis.POST_INQIIRY_LIST_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
@@ -148,23 +150,23 @@
                 })
             },
             cancelInquiry() { //取消询价单
-                const argId = this.getChildrenTab('id');
-                if(argId <= 0) return this.$message('请勾选询价单');
-                this.$ajax.post(this.$apis.inquiry_cancel, {
-                    id:argId
+                const argId = this.getChildrenId();
+                this.$ajax.post(`${this.$apis.POST_INQUIRY_ACTION}`, {
+                    action: 'cancel',
+                    ids:argId
                 })
                 .then(res => {
-                    
+                    console.log(res)
                 });
             },
             deleteInquiry() { //删除询价单
-                const argId = this.getChildrenTab('id');
-                if(argId <= 0) return this.$message('请勾选询价单');
-                this.$ajax.post(this.$apis.inquiry_delete, {
-                    id: argId
+                const argId = this.getChildrenId();
+                this.$ajax.post(`${this.$apis.POST_INQUIRY_ACTION}`, {
+                    action: 'delete',
+                    ids:argId
                 })
                 .then(res => {
-                    
+                    console.log(res)
                 });
             },
             action(item, type) {
@@ -182,16 +184,18 @@
                     }
                 });
             },
-            getChildrenTab(key) {
+            getChildrenId(type) {
                 let arr = [];
-                this.$refs.tab.dataList.forEach(item => {
-                    if(item._checked) arr.push(item[key]);
+                this.checkedData.forEach(item => {
+                    arr.push(item.id.value)
                 });
+                if(typeof type === 'string') arr.join(',')
                 return arr;
             },
             toCompare() {
-                let argId = this.getChildrenTab('id');
-                if(argId.length < 2) return this.$message('请至少勾选两个以上');
+                let argId = this.getChildrenId('str');
+                return;
+                //if(argId.length < 2) return this.$message('请至少勾选两个以上');
                 this.$router.push({
                     path: '/negotiation/compare',
                     query: {
@@ -204,6 +208,9 @@
             },
             handleSizeChange(val) {
                 this.params.ps = val;
+            },
+            changeChecked(item) { //tab 勾选
+                this.checkedData = item;
             }
         }
     }

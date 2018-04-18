@@ -7,17 +7,16 @@
                        type="text">{{btnInfo}}
             </el-button>
         </div>
-
         <div>
             <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.sellerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down class="speDropDown" v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
-                                        v-for="item in readilyAvailableOptions"
+                                        v-for="item in v.options"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -37,7 +36,7 @@
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                 <el-option
-                                        v-for="item in readilyAvailableOptions"
+                                        v-for="item in v.options"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -56,86 +55,11 @@
                             <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>
                         </el-form-item>
                     </el-col>
-
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="customerSkuCode" :label="$t('productSeller.page.customerSkuCode')">-->
-                            <!--<el-input size="mini" v-model="productForm.customerSkuCode"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<div class="section-number">-->
-                            <!--<el-form-item :label="$t('productSeller.page.exwPrice')">-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>-->
-                            <!--</el-form-item>-->
-                        <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="code" :label="$t('productSeller.page.skuCode')">-->
-                            <!--<el-input size="mini" v-model="productForm.code"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="nameCn" :label="$t('productSeller.page.skuNameCN')">-->
-                            <!--<el-input size="mini" v-model="productForm.nameCn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<div class="section-number">-->
-                            <!--<el-form-item class="section-item1" :label="$t('productSeller.page.fobPrice')">-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>-->
-                                <!--<div class="section-line">&#45;&#45;</div>-->
-                                <!--<el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>-->
-                            <!--</el-form-item>-->
-                        <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="materialEn" :label="$t('productSeller.page.skuMaterialsEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.materialEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="country" :label="$t('productSeller.page.country')">-->
-                            <!--<el-input size="mini" v-model="productForm.country"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="supplierName" :label="$t('productSeller.page.supplierName')">-->
-                            <!--<el-input size="mini" v-model="productForm.supplierName"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="outerCartonMethodEn"  :label="$t('productSeller.page.packingMethodOfOuterCartonEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.outerCartonMethodEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="methodPkgEn"  :label="$t('productSeller.page.packingMethodEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.methodPkgEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="deliveryDates"  :label="$t('productSeller.page.deliveryDays')">-->
-                            <!--<el-input size="mini" v-model="productForm.deliveryDates"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="descEn" :label="$t('productSeller.page.skuDescriptionEN')">-->
-                            <!--<el-input size="mini" v-model="productForm.descEn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="descCn":label="$t('productSeller.page.skuDescriptionCN')">-->
-                            <!--<el-input size="mini" v-model="productForm.descCn"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-
                 </el-row>
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
             <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
@@ -144,16 +68,41 @@
                 <el-button @click="setUp">{{$i.product.setUp}}</el-button>
                 <el-button @click="setDown">{{$i.product.setDown}}</el-button>
                 <el-button>{{$i.product.downloadSelected}}</el-button>
-                <el-button type="danger">{{$i.product.delete}}</el-button>
+                <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
             </div>
 
             <v-table
                     ref="vTable"
                     :data="tableDataList"
                     :buttons="[{label: 'Detail', type: 1}]"
-                    @change-checked=""
+                    @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>
+
+
+        <el-dialog
+                class="speDialog"
+                title="提示"
+                :visible.sync="partDialogVisible"
+                width="30%">
+            <span>当前所选有上架产品，是否下架该产品?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="partDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="partDialogVisible = false">跳过上架产品</el-button>
+                <el-button type="primary" @click="partDialogVisible = false">下架产品</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                class="speDialog"
+                title="提示"
+                :visible.sync="allDialogVisible"
+                width="30%">
+            <span>当前所选是上架产品，是否先下架产品?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="allDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="allDialogVisible = false">下架产品</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -174,57 +123,51 @@
         },
         data(){
             return{
-
+                partDialogVisible:false,       //弹出框显示隐藏
+                allDialogVisible:false,        //弹出框显示隐藏
                 hideBody:true,            //是否显示body
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
-
+                disabledSearch:false,                 //是否禁止搜索，默认false
+                disabledDeleteGoods:true,             //默认没有选中商品的时候是不能点击删除的
                 //表格字段绑定
                 productForm: {
                     categoryId: '',
-                    nameCnLike: "",
-                    readilyAvailable: '',
-                    customerSkuCodeLike: "",
-                    minExwPrice: '',
-                    maxExwPrice: '',
                     codeLike: "",
-                    nameEnLike: "",
-                    minFobPrice: '',
-                    maxFobPrice: '',
-                    materialEnLike: "",
                     country: '',
-                    supplierNameLike: "",
-                    outerCartonMethodEnLike: "",
-                    methodPkgEnLike: "",
+                    customerSkuCodeLike: "",
                     deliveryDates: '',
-                    descEnLike: "",
                     descCnLike: "",
-
-
-
-
-
-
-
+                    descEnLike: "",
+                    materialEnLike: "",
+                    maxExwPrice: '',
+                    maxFobPrice: '',
+                    methodPkgEnLike: "",
+                    minExwPrice: '',
+                    minFobPrice: '',
+                    nameCnLike: "",
+                    // nameCustomerLike: "",    没有发现这个字段
+                    nameEnLike: "",
+                    //初始搜索的时候不传，当有筛选条件之后再传
+                    // operatorFilters: [
+                    //     {
+                    //         operator: "",
+                    //         property: "",
+                    //         value: {}
+                    //     }
+                    // ],
+                    outerCartonMethodEnLike: "",
                     pn: 1,
                     ps: 50,
-
-
-                    recycle: false,         //是否是在recycle bin里请求
-                    operatorFilters: [
-                        {
-                            operator: "",
-                            property: "",
-                            value: {}
-                        }
-                    ],
-
-                    sorts: [
-                        {
-                            orderBy: "",
-                            orderType: "",
-                        }
-                    ],
-
+                    readilyAvailable: true,
+                    recycle: false,             //recycleBin里传true,其他地方传false
+                    //初始搜索的时候不传，当有筛选条件之后再传
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                    supplierNameLike: "",
                 },
                 //表格验证参数
                 productFormRules:{
@@ -232,17 +175,10 @@
                         { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
                     ],
                 },
-                //表格配置参数
-                readilyAvailableOptions: [
-                    {
-                        label: 'not ready',
-                        value: false
-                    },
-                    {
-                        label: 'ready',
-                        value: true
-                    },
-                ],
+
+                //表格选中的条目
+                selectGroups:[],
+
 
                 //Category下拉组件数据
                 dropData:[
@@ -293,6 +229,11 @@
                 this.hideBody=!this.hideBody;
             },
 
+            //表格check状态变更时触发事件
+            changeChecked(e){
+                this.selectGroups=e;
+            },
+
             //清除填写的表格数据
             clear(){
                 this.$refs.dropDown[0].selectedList=[];
@@ -304,12 +245,22 @@
                 this.$set(this.productForm,'maxFobPrice','');
             },
 
-            //搜查
+            //搜索
             search(){
-                console.log(this.productForm)
-                // this.$set(this.productForm,'categoryId',this.$refs.dropDown.selectedList.id);
-                //
-                // this.$ajax.post(this.$apis.get_productList,{});
+                this.disabledSearch=true;
+                this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
+                    res.datas.forEach(v=>{
+                        if(v.status===0){
+                            v.status='下架';
+                        }else if(v.status===1){
+                            v.status='上架';
+                        }
+                    });
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    this.disabledSearch=false;
+                }).catch(err=>{
+                    this.disabledSearch=false;
+                });
 
             },
 
@@ -319,7 +270,9 @@
 
             //获取table数据
             getData() {
-                this.$ajax.post(this.$apis.get_productList,{}).then(res=>{
+                this.$ajax.post(this.$apis.get_productList,{
+                    recycle:false,
+                }).then(res=>{
                     res.datas.forEach(v=>{
                         if(v.status===0){
                             v.status='下架';
@@ -346,6 +299,53 @@
             //设为下架
             setDown(){},
 
+            //删除商品
+            deleteGood(){
+                this.$confirm('确定删除选中商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let hasUp=false;            //是否有上架商品，默认为false
+                    let allUp=true;             //假设全部都是上架商品
+                    this.selectGroups.forEach(v=>{
+                        if(v.status.value==='上架'){
+                            hasUp=true;
+                        }else if(v.status.value==='下架'){
+                            allUp=false;        //有一个下架商品就代表不是全部都是上架
+                        }
+                    })
+                    if(hasUp){
+                        if(allUp){
+                            //如果全部都是上架商品
+                            this.allDialogVisible=true;
+                        }else{
+                            //部分上架商品
+                            this.partDialogVisible=true;
+                        }
+
+
+                        //
+                        // this.$confirm('当前所选有上架产品，是否下架该产品?', '提示', {
+                        //     confirmButtonText: '下架产品',
+                        //     cancelButtonText: '跳过上架产品',
+                        //     type: 'warning'
+                        // }).then(() => {
+                        //
+                        // }).catch(() => {
+                        //
+                        // });
+                    }else{
+                        this.$message({
+                            message: '删除成功，被删除的产品可在回收站中找回',
+                            type: 'success'
+                        });
+                    }
+                }).catch(() => {
+
+                });
+            },
+
             //表格check状态改变
             handleCheckChange(e){
                 console.log(e)
@@ -371,11 +371,31 @@
                     this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
             },
+            selectGroups(n){
+                if(n.length>=1){
+                    this.disabledDeleteGoods=false;
+                }else{
+                    this.disabledDeleteGoods=true;
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
+    .speDropDown{
+        height: 32px;
+    }
+    .speDropDown >>> .checkInputBox{
+        height: 28px;
+    }
+    .speDropDown >>> .checkInputBox .dataBox{
+        height: 28px;
+        line-height: 28px;
+    }
+
+
+
     .bookmark{
         padding-right: 20px;
     }
@@ -474,6 +494,9 @@
 
     .speSelect{
         width: 100%;
+    }
+    .speDialog >>> .el-dialog__footer{
+        text-align: center;
     }
 
 

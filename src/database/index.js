@@ -8,6 +8,7 @@ import payment from './payment/index';
 import message from './message/index';
 import order from './order/index';
 import supplier from './supplier/index'
+import setting from './setting/index';
 
 
 
@@ -19,8 +20,8 @@ const db = {
   logistic,
   order,
   supplier,
-  message
-
+  message,
+  setting
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {

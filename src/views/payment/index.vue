@@ -24,7 +24,7 @@
                         </el-radio-group>
                     </div>
                     <div class="search">
-                        <select-search :selectHide="false" class="search" v-model="orderNo"></select-search>
+                        <select-search :selectHide="false" class="search"  @inputChange="getList"></select-search>
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -64,12 +64,11 @@
         data(){
             return{
                 status:-1,
-                orderNo:'',
                 time:1523959983,
                 viewByStatus:'',
                 date:'',
-                searchValue:'',
                 tabLoad:false,
+                disabled:false,
                 dateOptions:{
                     shortcuts: [{
                         text: '最近一周',
@@ -101,9 +100,6 @@
                 tableDataList:[]
             }
         },
-        computed: {
-            
-        },
         watch: {
             status(){
                 this. getList();
@@ -113,64 +109,127 @@
             },
             date(){
                 console.log(this.date)
-                console.log(2)
             }
         },
         methods:{    
-            getList() {
-                // this.tabLoad = true;
-                const params ={
-                    "conditions": {
-                        "orderEntryEndDt":"",
-                        "orderEntryStartDt": "",
-                        "orderNoLike": this.orderNo,
-                        "orderType": this.viewByStatus,
-                        "overdue": this.status  //-1所有 0未逾期 1已逾期
-                    },
-                    "pn": 1,  //每页大小
-                    "ps": 10, //页码
-                    "sorts": [
-                        {
-                        "nativeSql": true,
-                        "orderBy": "id",
-                        "orderType": "desc",
-                        "resultMapId": ""
-                        }
-                    ]
+            getList(item){
+                if(item){
+                    const params ={
+                        "conditions": {
+                            "orderEntryEndDt":"",
+                            "orderEntryStartDt": "",
+                            "orderNoLike": item.key,
+                            "orderType": this.viewByStatus,
+                            "overdue": this.status  //-1所有 0未逾期 1已逾期
+                        },
+                        "pn": 1,  //每页大小
+                        "ps": 50, //页码
+                        "sorts": [
+                            {
+                            "nativeSql": true,
+                            "orderBy": "id",
+                            "orderType": "desc",
+                            "resultMapId": ""
+                            }
+                        ]
+                    }
+                    this.$ajax.post(this.$apis.post_ledgerPage, params)
+                    .then(res => {
+                        res.datas = _.map(res.datas,val=>{
+                            val.waitPayment = val.planPayAmount-val.actualPayAmount;
+                            val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
+                            return val;
+                        });
+                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
+                    }); 
+                }else{
+                    const params ={
+                        "conditions": {
+                            "orderEntryEndDt":"",
+                            "orderEntryStartDt": "",
+                            "orderNoLike": '',
+                            "orderType": this.viewByStatus,
+                            "overdue": this.status  //-1所有 0未逾期 1已逾期
+                        },
+                        "pn": 1,  //每页大小
+                        "ps": 50, //页码
+                        "sorts": [
+                            {
+                            "nativeSql": true,
+                            "orderBy": "id",
+                            "orderType": "desc",
+                            "resultMapId": ""
+                            }
+                        ]
+                    }
+                    this.$ajax.post(this.$apis.post_ledgerPage, params)
+                    .then(res => {
+                        res.datas = _.map(res.datas,val=>{
+                            val.waitPayment = val.planPayAmount-val.actualPayAmount;
+                            val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
+                            return val;
+                        });
+                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
+                    }); 
                 }
-                this.$ajax.post(this.$apis.post_ledgerPage, params)
-                .then(res => {
-                    //   for(var i=0; i<res.datas.length; i++){
-                    //       console.log(formatDate(res.datas[i].planDateOfPayment))
-                    //     // res.datas[i].planDateOfPayment = 
-                    //   }
-                    this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
-                });
             },
-        },
-        action(item, type) {
-            switch(type) {
-                case 'detail':
-                    this.detail(item);
-                    break;
-                case 'urging payment':
-                    this.urgingPayment(item);
-                    break;
-            }
-        },
-        detail(item) {
-            //点击进入对应po detail、lo detail、QC order detail页面
-            this.$router.push({
-                path: '/',
-                // query: {
-                //     id: item.id
-                // }
-            });
-        },
-        urgingPayment(item) {
-            console.log(item)
-            //  催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
-            // 当待付款金额不为0时，催款按钮可操作；③ 当待付金额为0时，催款按钮为禁用，不可操作
+            action(item, type) {
+                switch(type) {
+                    case 'detail':
+                        this.detail(item);
+                        break;
+                    case 'urging payment':
+                        this.urgingPayment(item);
+                        break;
+                }
+            },
+            detail(item) {
+                //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
+                if(item.orderType.value == 10){
+                    this.$router.push({
+                        path: '/',
+                        query: {
+                            // orderNo: item.orderNo
+                        }
+                    });
+                }else if(item.orderType.value == 20){
+                    this.$router.push({
+                        path: '/',
+                        query: {
+                            // orderNo: item.orderNo
+                        }
+                    });
+                }else{
+                    this.$router.push({
+                        path: '/',
+                        query: {
+                            // orderNo: item.orderNo
+                        }
+                    });
+                }              
+            },
+            urgingPayment(item) {
+                const count = 0
+                // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
+                // ② 当待付款金额不为0时，催款按钮可操作；
+                // ③ 当待付金额为0时，催款按钮为禁用，不可操作；
+                // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+                if(item.waitPayment.value != 0){
+                    if(count >= 3) {
+                        this.disabled = true
+                        return false;
+                    }else{
+                        this.$message({
+                            type: 'success',
+                            message: '发送成功!'
+                        });
+                       this.count ++ 
+                    }
+                }else{
+                     this.disabled = true
+                }
+              
+            },
         },
         created(){
             // this.viewByStatus = 0;

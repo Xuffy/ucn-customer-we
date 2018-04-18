@@ -33,13 +33,15 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger">{{ $i.baseText.remove }}</el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.remove }} <span>({{checkedAll.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <v-table 
                         :data="productTabData"
                         :buttons="productInfoBtn" 
+                        @action="producInfoAction"
+                        @change-checked="changeChecked"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button>{{ $i.baseText.accept }}</el-button>
@@ -81,11 +83,14 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <!-- <v-history 
+        <v-history 
             :oSwitch.sync="oSwitch" 
-            :tableData="HistotyData" 
-            :tableColumn="tableColumn" 
-        /> -->
+            :list.sync="historyData" 
+            :tableColumn="tableColumn"
+            :title="msgTitle"
+            :column="historyColumn"
+            :msgTableType="msgTableType"
+        />
     </div>
 </template>
 <script>
@@ -100,18 +105,19 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                checkedAll: '',
+                msgTableType: false,
+                historyColumn: {},
+                msgTitle: '',
+                historyData: [],
                 productTabData: [],
-                HistotyData: [],
-                productInfoBtn: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtns: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}],
-                productInfoBtnModify: [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}, {label: 'Modify', type: 'modify'}],
                 radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
@@ -145,7 +151,8 @@
                     id: '6',
                     label: 'Vendor SKU description'
                 }],
-                list:[]
+                list:[],
+                tableColumn: ''
             }
         },
         components: {
@@ -154,7 +161,8 @@
             'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList,
-            'v-history': VHistory
+            'v-history': VHistory,
+            'drop-down-single': dropDownSingle
         },
         created() {
             this.getInquiryDetail();
@@ -167,11 +175,10 @@
                 console.log(val);
             }
         },
-        
         methods: {
             getInquiryDetail() {
                 if(!this.$route.query.id) return this.$message('地址错误');
-                this.$ajax.get(`${this.$apis.inquiry_detail}/{id}`, {
+                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
@@ -189,7 +196,7 @@
                     data.push(json);
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
                     this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
-                })
+                });
             },
             selectChange(val) {
                 console.log(val)
@@ -205,7 +212,6 @@
                 this.switchStatus = !this.switchStatus;
             },
             modifyCancel() {
-                this.productInfoBtn = this.productInfoBtns;
                 this.statusModify = false;
             },
             basicInfoBtn(item) {
@@ -222,52 +228,82 @@
                     type: 'histoty'
                 }];
             }, 
+            productInfoBtn (item) {
+                if(this.statusModify) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+            },
             modify() {
                 this.statusModify = false;
-                this.productInfoBtn = this.productInfoBtns;
             },
             fromChange(val) {
                console.log(val)
-           },
-           modifyAction() {
-                
-                this.productInfoBtn = this.productInfoBtnModify;
-                this.statusModify = true;
-           },
-           fnBasicInfoHistoty(item) {
-               this.oSwitch = true;
-                return this.HistotyData = [
-                    {
-                        id: 0,
-                        tenantId: 0,
-                        inquiryNo: 1,
-                        quotationNo: 2,
-                        time: 4,
-                        shippingMethod: 5
-                    },
-                    {
-                        id: 1,
-                        tenantId: 1,
-                        inquiryNo: 0,
-                        quotationNo: 0,
-                        time: 0,
-                        shippingMethod: 0
-                    }
-                ]
-                this.HistotyData = this.item;
-           },
-           fnBasicInfoModify(item) {
-               console.log(item)
+            },
+            modifyAction() {
+                    this.statusModify = true;
+            },
+            fnBasicInfoHistoty(item, type) {
+                if(type) {
+                    this.msgTableType = true;
+                } else {
+                    this.msgTableType = false;
+                }
+                if(item.histoty) {
+                    this.oSwitch = true;
+                    this.historyData = item.histoty;
+                    return false;
+                };
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    item.histoty = res;
+                    this.historyData = res;
+                    this.oSwitch = true;
+                });
            },
            basicInfoAction(data, type) {
-               switch(type) {
-                    case 'histoty':
-                        this.fnBasicInfoHistoty(data);
-                        break;
-                    case 'modify':
-                        this.fnBasicInfoModify(data);
-                        break;
-               }
+                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                switch(type) {
+                        case 'histoty':
+                            this.msgTitle = 'Histoty';
+                            this.fnBasicInfoHistoty(data);
+                            break;
+                        case 'modify':
+                            this.msgTitle = 'Modify';
+                            this.fnBasicInfoHistoty(data, 'modify');
+                            break;
+                }
+           },
+           producInfoAction(data, type) {
+                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                switch(type) {
+                        case 'histoty':
+                            this.msgTitle = 'Histoty';
+                            this.producInfoHistoty(data);
+                            break;
+                        case 'modify':
+                            this.msgTitle = 'Modify';
+                            this.producInfoHistoty(data, 'modify');
+                            break;
+                }
+           },
+           producInfoHistoty(item) {
+               if(item.histoty) {
+                    this.oSwitch = true;
+                    this.historyData = item.histoty;
+                    return false;
+                };
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    item.histoty = res;
+                    this.historyData = res;
+                    this.oSwitch = true;
+                });
+           },
+           changeChecked(item) {
+               this.checkedAll = item;
            }
         }
     }

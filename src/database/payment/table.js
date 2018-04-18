@@ -21,7 +21,7 @@ export default {
         key: 'actualPayAmount'
     },
     waitPayment: {
-        key: 'planPayAmount-actualPayAmount' //待付
+        key: '' //待付
     },
     planDateOfPayment: {   //应付时间
         key: 'planPayDt'
@@ -36,7 +36,7 @@ export default {
         key: 'actualReceiveAmount'
     },
     waitReceipt: {
-        key: 'planReceiveAmount-actualReceiveAmount'  //待收
+        key: ''  //待收
     },
     planDateOfReceipt: {  //应收时间
        key:'planReceiveDt'

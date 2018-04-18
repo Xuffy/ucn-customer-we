@@ -22,7 +22,6 @@
                  @action="onAction"
                  @filter-value="onFilterValue"
                  @change-checked="changeChecked">
-          <div slot="header">asdasd</div>
         </v-table>
       </el-tab-pane>
       <el-tab-pane label="Order">
@@ -83,14 +82,12 @@
       changeChecked(list) {
         console.log(list)
       },
-      onFilterValue(val){
+      onFilterValue(val) {
         console.log(val);
       },
       getList() {
-        this.$ajax.get(this.$apis.get_listTest).then((data) => {
+        this.$ajax.get(this.$apis.get_listTest, {}, {_cache: true}).then((data) => {
           this.dataList = this.$table.setHighlight(this.$getDB(this.$db.workbench.pending, data));
-          // this.dataList = this.$table.setHideSame(this.dataList);
-          // console.log(this.dataList)
         });
       }
     }

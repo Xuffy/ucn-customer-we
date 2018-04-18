@@ -4,7 +4,8 @@
         <el-row>
              <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                 <el-form-item prop="email" label="email">                          
-                    <el-input style="max-width:200px"></el-input>
+                    <el-input style="max-width:130px;vertical-align: middle"></el-input>
+                    <el-button style=" vertical-align: middle" @click="dialogVisible = true">Replace</el-button>
                 </el-form-item>
              </el-col>
              <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
@@ -15,7 +16,6 @@
              <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                 <el-form-item prop="email" label="Password">                          
                     <el-input style="max-width:130px;vertical-align: middle"></el-input>
-                    <!-- <span style="width:60px;height:30px;border:1px solid #ccc;display:inline-block;">Replace</span> -->
                     <el-button style=" vertical-align: middle" @click="dialogVisible = true">Replace</el-button>
                 </el-form-item>
              </el-col>
@@ -24,18 +24,7 @@
                     <el-input style="max-width:200px"></el-input>
                 </el-form-item>
              </el-col>
-            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                <el-form-item prop="gender" label="gender">
-                    <el-select v-model="peosonalForm.gender" placeholder="请选择" >
-                        <!-- <el-option
-                                v-for="item in readilyAvailableOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option> -->
-                    </el-select>
-                </el-form-item>
-            </el-col>
+           
             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                  <el-form-item label="活动时间">
                     <div style="display: flex;max-width:200px;">
@@ -55,7 +44,7 @@
                     </el-select>
                 </el-form-item>
             </el-col>
-                <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                 <el-form-item prop="department" label="department">
                     <el-select  v-model="peosonalForm.department" placeholder="请选择">
                         <!-- <el-option
@@ -67,9 +56,21 @@
                     </el-select>
                 </el-form-item>
             </el-col>
-                <el-col :span="12">
+            <el-col :span="12">
                 <el-form-item prop="role" label="role">
                     <el-select  v-model="peosonalForm.role" placeholder="请选择">
+                        <!-- <el-option
+                                v-for="item in readilyAvailableOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option> -->
+                    </el-select>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                <el-form-item prop="gender" label="gender">
+                    <el-select v-model="peosonalForm.gender" placeholder="请选择" >
                         <!-- <el-option
                                 v-for="item in readilyAvailableOptions"
                                 :key="item.value"
@@ -142,7 +143,12 @@
     created() {
     },
     methods: {
-
+        getUserProfile(){
+            this.$ajax.get(this.$apis.get_userProfile)
+            .then(res => {
+                this.peosonalForm = res.content
+            });
+        }
     },
   }
 </script>
