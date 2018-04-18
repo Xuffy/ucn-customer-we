@@ -22,11 +22,6 @@ export default {
     Vue.prototype.$dateFormat = DateFormat;
 
     /**
-     * 格式化日期
-     */
-    Vue.prototype.$dateFormat = DateFormat;
-
-    /**
      * 国际化语言配置
      */
     Vue.prototype.$i = language;
@@ -40,9 +35,10 @@ export default {
      * 字段配置
      * @param db
      * @param data
+     * @param cb
      * @returns {Array}
      */
-    Vue.prototype.$getDB = (db, data) => {
+    Vue.prototype.$getDB = (db, data, cb) => {
       let list = [];
       db = _.values(db);
       _.map(data, value => {
@@ -55,6 +51,9 @@ export default {
           }
 
         });
+
+        if (cb) obj = _.extend(obj, cb(obj));
+
         list.push(obj);
       });
       return list;

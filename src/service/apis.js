@@ -2,6 +2,7 @@ const version = ['/web/v1', '/web/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  GET_CODE_PART: ['/code/part', 'BASE_JML'],
   gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
