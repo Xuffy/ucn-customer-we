@@ -6,10 +6,9 @@ export default {
       BASE_API: '',
       BASE_CS_cgs:'http://192.168.51.33:11007', 
       BASE_DHC: 'http://192.168.51.111:18100',
-      BASE_HCJ:'http://192.168.51.173:18100', 
+      BASE_HCJ:'http://dev.upurchase-facade.ucnholding.com', 
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_DHC: 'http://192.168.51.111:18100',
-      BASE_HCJ:'http://192.168.51.173:18003',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
     },
     develop: {

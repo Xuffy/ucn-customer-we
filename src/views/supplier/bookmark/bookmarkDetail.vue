@@ -11,7 +11,7 @@
                         <el-row class="right">
                             <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
                                    v-for='(item,index) in $db.supplier.detail'
-                                   :key='item'
+                                   :key='index'
                                    >                         
                                     <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
                                        {{basicDate[item.key]}}
@@ -22,45 +22,45 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                    <el-button @click='createInquiry'>{{$lang.baseText.createInquiry}}</el-button>
-                    <el-button @click='createOrder'>{{$lang.baseText.createOrder}}</el-button>
-                    <el-button @click='addToCompare'>{{$lang.baseText.addToCompare}}</el-button>
-                    <el-button @click='supplierProducts'>{{$lang.baseText.supplierProducts}}</el-button>
-                    <el-button >{{$lang.baseText.addToBookmark}}</el-button>
+                    <el-button @click='createInquiry'>{{$i.baseText.createInquiry}}</el-button>
+                    <el-button @click='createOrder'>{{$i.baseText.createOrder}}</el-button>
+                    <el-button @click='addToCompare'>{{$i.baseText.addToCompare}}</el-button>
+                    <el-button @click='supplierProducts'>{{$i.baseText.supplierProducts}}</el-button>
+                    <el-button @click='remove' type='danger'>{{$i.baseText.remove}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">{{$lang.baseText.finish}}</el-button>
-                    <el-button @click="cancelEdit" type="info">{{$lang.baseText.cancel}}</el-button>
+                    <el-button @click="finishEdit" type="primary">{{$i.baseText.finish}}</el-button>
+                    <el-button @click="cancelEdit" type="info">{{$i.baseText.cancel}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card" >          
-                <el-tab-pane :label="$lang.address" name="address">
+                <el-tab-pane :label="$i.address" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.accountInfo"  name="accountInfo">
+                <el-tab-pane :label="$i.accountInfo"  name="accountInfo">
                     <v-table  :data="accounts"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.contactInfo" name="contactInfo">
+                <el-tab-pane :label="$i.contactInfo" name="contactInfo">
                     <v-table  :data="concats"   style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$lang.tradeHistory"  name="tradeHistory">
+                <el-tab-pane :label="$i.tradeHistory"  name="tradeHistory">
 <!--                  <v-table  :data="tabData"   style='marginTop:10px'/>-->
                 </el-tab-pane>
 <!--
-                <el-tab-pane :label="$lang.inquireHistory"  name="inquireHistory">
+                <el-tab-pane :label="$i.inquireHistory"  name="inquireHistory">
                   <v-table  :data="tabData"   style='marginTop:10px'/> 
                 </el-tab-pane>
 -->
-                <el-tab-pane :label="$lang.remark" name="remark">
+                <el-tab-pane :label="$i.remark" name="remark">
                     <v-remark  
                      style='marginTop:10px'
                      :tableData='remarkData'
                      />
                 </el-tab-pane>
 <!--
-                <el-tab-pane :label="$lang.attchment" name="attchment">
+                <el-tab-pane :label="$i.attchment" name="attchment">
 
 
                    <v-attachment></v-attachment>
@@ -108,26 +108,37 @@
         },
         methods: {
             createInquiry() {
-                this.$router.push({
-                    name: 'createInquiry',
-                    query: {
-
-                    }
-                })
+               this.windowOpen('/negotiation/createInquiry', {
+                    supplierId:this.id   //供应商信息将被带入
+                });
             },
             createOrder() {
-                this.$router.push({
-                    name: 'creatOrder',
-                    query: {
-
-                    }
-                })
+                this.windowOpen('/order/creat', {
+                    supplierId:this.id   //供应商信息将被带入
+                });
             },
             addToCompare() {
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-
+                 this.windowOpen('/product/sourcing', {
+                    supplierId:this.id   //供应商信息将被带入
+                });
+            },
+            remove(){          
+               this.$ajax.post(this.$apis.post_supplier_deletebookmark,{
+                    id:this.id
+                }).then((res)=>{
+                   this.$message({
+                          message: 'success',
+                          type: 'success',
+                           onClose:(()=>{
+                                this.$router.push('/supplier/bookmark')
+                            })
+                        });                  
+                }).catch((res)=>{
+                    console.log(res)
+                })
             },
             //..................获取数据
             get_data() {
@@ -139,43 +150,12 @@
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                       console.log(res)
                     })
                     .catch((res) => {
 
                     });
             },
-            //.......获取remark列表
-            get_remark() {
-                this.$ajax.post(this.$apis.post_supplier_list_remark, {
-                    id: this.id,
-                    pn: 1,
-                    ps: 10,
-
-                }).then((res) => {               
-                   
-                }).catch((res) => {
-                    console.log(res)
-                })
-            },
-            //.........增加remark
-         add_Remark(){
-               this.$ajax.post(this.$apis.post_supplier_list_remark, {
-                }).then((res) => {               
-                    
-                }).catch((res) => {
-                    console.log(res)
-                })
-         },
-            //.........删除remark
-         delete_Remark(){
-             this.$ajax.post(this.$apis.post_supplier_list_remark, {
-                    
-                }).then((res) => {               
-                   
-                }).catch((res) => {
-                    console.log(res)
-                })
-         }
         },
         created() {
             this.get_data()

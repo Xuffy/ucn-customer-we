@@ -28,23 +28,27 @@ export default {
         key: "contactPhone2",
         belong: "address"
     },
-    //    
-    //    id:{
-    //      key:"id",
-    //      _hide:true
-    //    },
-    //    supplierId:{
-    //      key:"supplierId",
-    //         _hide:true
-    //    },
-    //    unifyUser:{
-    //      key:"unifyUser",
-    //         _hide:true
-    //    },
-    //    version:{
-    //      key:"version",
-    //         _hide:true
-    //    }
+
+    id: {
+        _hide: true,
+        key: "id",
+
+    },
+    supplierId: {
+        _hide: true,
+        key: "supplierId",
+
+    },
+    unifyUser: {
+        _hide: true,
+        key: "unifyUser",
+
+    },
+    version: {
+        _hide: true,
+        key: "version",
+
+    },
 
     //...........account info
     beneficiaryName: {
@@ -68,31 +72,39 @@ export default {
     currency: {
         key: "currency"
     },
-    //    companyId: {
-    //        key: "accountType"
-    //    },
-    //   
-    //    id: {
-    //        key: "accountType"
-    //    },
-    //    ownerId: {
-    //        key: "accountType"
-    //    },
-    //    status: {
-    //        key: "accountType"
-    //    },
-    //    supplierId: {
-    //        key: "accountType"
-    //    },
-    //    tenantId: {
-    //        key: "accountType"
-    //    },
-    //    unifyUser: {
-    //        key: "accountType"
-    //    },
-    //    version: {
-    //        key: "accountType"
-    //    },
+    companyId: {
+        _hide: true,
+        key: "accountType"
+    },
+
+    id: {
+        _hide: true,
+        key: "accountType"
+    },
+    ownerId: {
+        _hide: true,
+        key: "accountType"
+    },
+    status: {
+        _hide: true,
+        key: "accountType"
+    },
+    supplierId: {
+        _hide: true,
+        key: "accountType"
+    },
+    tenantId: {
+        _hide: true,
+        key: "accountType"
+    },
+    unifyUser: {
+        _hide: true,
+        key: "accountType"
+    },
+    version: {
+        _hide: true,
+        key: "accountType"
+    },
 
     //.............concats
     name: {
