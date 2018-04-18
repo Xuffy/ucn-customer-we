@@ -8,17 +8,16 @@
             >
             
             <el-table
-                    :data="filterData"
+                    :data="filtColumn"
                     style="width: 100%"
                 >
                 <el-table-column
-                    v-for="(item, index) in filtColumn"
+                    v-for="(item, index) in filterData"
                     :key="index"
                     :label="item.label"
                     :prop="item.key"
                     :width="item.width || 130"
                 >
-                    
                 </el-table-column>
             </el-table>
         </el-dialog>
@@ -68,6 +67,7 @@
             },
             filterData: {
                 get() {;
+                console.log(this.list)
                     return this.list;
                 },
                 set(val) {

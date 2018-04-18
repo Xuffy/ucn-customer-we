@@ -158,6 +158,7 @@
             //     this.tabData = res.inquiry;
             //     this.tabColumn = 'negotiation.tableViewByInquiry';
             // });
+            console.log(this.$db.logistic.basicInfo)
         },
         components: {
             "v-table": VTable,
@@ -239,7 +240,7 @@
         }
         .fix-btn {
             position: fixed;
-            left:220px;
+            left:180px;
             bottom:0;
             background:#fff;
             width: 100%;

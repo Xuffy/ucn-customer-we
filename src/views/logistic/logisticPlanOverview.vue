@@ -1,46 +1,59 @@
 <template>
     <div class="logistic-plan-overview">
         <div class="status">
-            <div class="btn-wrap">
-                <span>{{ $t('logistic.status.index') }}:</span>
+            <div></div>
+            <!-- <div class="btn-wrap">
+                <span>{{ $i.baseText.logisticsPlanOverview }}:</span>
                 <el-radio-group v-model="radioStatus" size="mini">
                     <el-radio-button :label="$t('logistic.status.TBCByCustomer')"></el-radio-button>
                     <el-radio-button :label="$t('logistic.status.finish')"></el-radio-button>
                     <el-radio-button :label="$t('logistic.status.canceled')"></el-radio-button>
                 </el-radio-group>
-            </div>
+            </div> -->
             <div class="select-search-wrap">
                 <select-search :options="options" />
             </div>
         </div>
         <div class="btn-wrap">
             <div class="fn btn">
-                <el-button>{{ $t('logistic.btn.downloadSelected') }}</el-button>
-                <el-button>{{ $t('logistic.btn.sentAsOrder') }}</el-button>
-                <el-button type="danger">{{ $t('logistic.btn.delete') }}</el-button>
+                <el-button>{{ $i.baseText.downloadSelected }}</el-button>
+                <el-button>{{ $i.baseText.sentAsOrder }}</el-button>
+                <el-button type="danger">{{ $i.baseText.delete }}</el-button>
             </div>
             <div class="view-by-btn">
-                <span>{{ $t('logistic.viewBy.index') }}&nbsp;</span>
+                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewBy" size="mini">
-                    <el-radio-button :label="$t('logistic.viewBy.plan')"></el-radio-button>
-                    <el-radio-button :label="$t('logistic.viewBy.transportationUnit')"></el-radio-button>
-                    <el-radio-button :label="$t('logistic.viewBy.SKU')"></el-radio-button>
+                    <el-radio-button 
+                        v-for="item in $db.logistic.overviewBtn" 
+                        :key="item.index"
+                        :label="item.index"
+                    >
+                        {{ item.label }}
+                    </el-radio-button>
                 </el-radio-group>
             </div>
         </div>
-        <v-simple-table :column="tabColumn" :data.sync="tabData" />
+        <v-table 
+            :data="tabData" 
+            :buttons="[{label: 'detail', type: 'detail'}]" 
+            @action="action" 
+            @change-checked="changeChecked"
+            :loading="tabLoad" 
+            ref="tab"
+        />
     </div>
 </template>
 <script>
-    import { selectSearch, VSimpleTable } from '@/components/index';
+    import { selectSearch, VTable } from '@/components/index';
     export default {
         name:'logisticPlanOverview',
         data() {
             return {
+                tabLoad: true,
                 radioStatus: '',
                 tabColumn: [],
                 tabData: [],
-                viewBy: '',
+                viewBy: 0,
                 options: [
                     {
                         id: '1',
@@ -59,17 +72,24 @@
         },
         components: {
             'select-search': selectSearch,
-            "v-simple-table": VSimpleTable
+            'v-table': VTable
         },
         created() {
-            this.viewBy = 'Plan';
+            this.viewByChange(this.viewBy);
         },
         watch: {
             viewBy (newVal, oldVal) {
+                console.log(newVal)
                 this.viewByChange(newVal);
             }
         },
         methods: {
+            changeChecked() {
+
+            },
+            action() {
+
+            },
             viewByChange(str) {
                 this.ajax({
                     url: '/Compare',
