@@ -187,6 +187,9 @@
     height: 30px;
     font-size: 12px;
     color: #FFFFFF;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     background-color: inherit !important;
   }
 

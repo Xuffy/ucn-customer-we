@@ -18,6 +18,7 @@
         <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
+                 :rowspan="2"
                  selection-radio
                  @action="onAction"
                  @filter-value="onFilterValue"
@@ -88,6 +89,7 @@
       getList() {
         this.$ajax.get(this.$apis.get_listTest, {}, {_cache: true}).then((data) => {
           this.dataList = this.$table.setHighlight(this.$getDB(this.$db.workbench.pending, data));
+          // this.$dataBackfill(data, this.dataList);
         });
       }
     }

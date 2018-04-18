@@ -11,11 +11,11 @@ export default {
         state: 0
     },
     time: {
-        placeholder: 'Please select',
+        placeholder: 'Please select time',
         value: '',
         rules: [],
         width: '150px',
-        type: 'text',
+        type: 'dateTime',
         state: 0
     },
     InquiryNo: {
