@@ -2,6 +2,7 @@ import {localStore} from 'service/store';
 
 const lang = localStore.get('language') || 'en';
 export default _.extend(
+  require(`./${lang}/common/quickLinks`),
   {workbench: require(`./${lang}/workbench`)},
   require(`./${lang}/workbench.pending`),
   {product: require(`./${lang}/product/product.basic`)},
@@ -23,10 +24,10 @@ export default _.extend(
   require(`./${lang}/inquiry/detail/basicInfo.pending`),
   require(`/${lang}/inquiry/create/basicInfo.pending`),
   require(`./${lang}/supplier/overview`) ,
-  require(`./${lang}/supplier/detail.pending`) ,  
+  require(`./${lang}/supplier/detail.pending`) ,
    { order: require(`./${lang}/order/overview`) },
      require(`/${lang}/order/basicinfo.pending`),
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
   require(`./${lang}/logistic/plan/basicInfo.pending`)
- 
+
 )

@@ -18,6 +18,7 @@
         <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
+                 :rowspan="2"
                  selection-radio
                  @action="onAction"
                  @filter-value="onFilterValue"
