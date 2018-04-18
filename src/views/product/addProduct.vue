@@ -212,7 +212,7 @@
             search(){
                 console.log(this.productForm)
                 this.disabledSearch=true;
-                this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
+                this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
                     res.datas.forEach(v=>{
                         if(v.status===0){
                             v.status='下架(暂时中文)';
@@ -256,7 +256,8 @@
 
             //获取table数据
             getData() {
-                this.$ajax.post(this.$apis.get_productList,{
+
+                this.$ajax.post(this.$apis.get_buyerProductList,{
                     recycle:false
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
@@ -284,7 +285,7 @@
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/product/detail',{id:item.id.value});
+                    this.windowOpen('/product/sourcingDetail',{id:item.id.value});
                 }
             },
 

@@ -48,8 +48,12 @@ const apis = {
   post_supplier_list_remark:['/purchase/supplier/listRemarks','BASE_CS_cgs'],
   post_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_supplier_remark_de:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
-  post_supplier_delete_remark:['/purchase/supplier/deleteRemark/{id}','BASE_CS_cgs']
-
+  post_supplier_delete_remark:['/purchase/supplier/deleteRemark/{id}','BASE_CS_cgs'],
+  //settings
+  get_department:['/department','BASE_LYF'],
+  get_departmentUser:['/user/list','BASE_LYF'],
+  //product buyer
+  get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
 };
 
 let list = _.mapObject(apis, val => {

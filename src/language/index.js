@@ -8,6 +8,7 @@ export default _.extend(
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/workbench.pending`),
   {setting: require(`./${lang}/setting`)},
+    {departmentSetting:require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
   {baseText: require(`./${lang}/baseText`)},
   {basePlaceholder: require(`./${lang}/basePlaceholder`)},

@@ -6,7 +6,7 @@
         <div class="body">
             <el-row>
                 <el-col :offset="1" :span="7">
-                    <div class="card">
+                    <div class="card department">
                         <div class="title">Department</div>
                         <div class="handler">
                             <el-row>
@@ -25,15 +25,15 @@
                             </el-row>
                         </div>
                         <div class="list">
+                            <div class="list-title">All <span>({{departmentUserTotal}}人)</span></div>
                             <el-tree
-                                    class="speTree"
+                                    class="departmentTree"
                                     ref="departmentTree"
                                     :data="departmentData"
-                                    show-checkbox
-                                    node-key="id"
+                                    :props="departmentProps"
+                                    node-key="deptId"
                                     default-expand-all
                                     :expand-on-click-node="false"
-                                    :default-checked-keys="[1]"
                                     :render-content="renderDepartment"
                                     :filter-node-method="filterDepartment"
                                     @node-click="departmentClick"
@@ -43,35 +43,39 @@
                     </div>
                 </el-col>
                 <el-col :span="7">
-                    <div class="card">
+                    <div class="card role">
                         <div class="title">Role</div>
                         <div class="handler">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-button @click="addRole" size="small" type="primary">Add</el-button>
+                                    <el-button :disabled="!userData.deptId" @click="addRole" size="small" type="primary">Add</el-button>
                                 </el-col>
                                 <el-col :span="16">
                                     <el-input
                                             size="small"
                                             placeholder="请输入"
-                                            v-model="searchRole">
+                                            v-model="searchRole"
+                                            clearable>
                                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                                     </el-input>
                                 </el-col>
                             </el-row>
                         </div>
                         <div class="list">
+                            <div class="list-title">All <span>({{roleUserTotal}}人)</span></div>
                             <el-tree
                                     class="speTree"
                                     ref="roleTree"
                                     :data="roleData"
+                                    :props="roleProps"
                                     show-checkbox
-                                    node-key="id"
+                                    node-key="roleId"
                                     default-expand-all
                                     :expand-on-click-node="false"
                                     :render-content="renderRole"
                                     :filter-node-method="filterRole"
-                                    @node-click="roleClick">
+                                    @node-click="roleClick"
+                                    @check-change="checkChange">
                             </el-tree>
                         </div>
                     </div>
@@ -85,7 +89,7 @@
                                     <el-input
                                             size="small"
                                             placeholder="请输入"
-                                            v-model="value1">
+                                            v-model="searchPrivs">
                                         <i slot="suffix" class="el-input__icon el-icon-search"></i>
                                     </el-input>
                                 </el-col>
@@ -108,122 +112,192 @@
         <div class="footer">
             <div class="title">Belonging Users</div>
             <div class="content">
-                <el-form ref="form" :model="form" label-width="100px">
+                <el-form ref="userData" :model="userData" label-width="100px">
                     <el-row>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item label="User Name">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item prop="email" :label="$i.departmentSetting.email">
+                                <el-input size="mini" v-model="userData.email"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item label="Email">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item prop="userName" :label="$i.departmentSetting.userName">
+                                <el-input size="mini" v-model="userData.userName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item label="Tel">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item prop="gender" :label="$i.departmentSetting.gender">
+                                <el-select size="mini" v-model="userData.gender" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in genderOptions"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item label="Gender">
-                                <el-input v-model="form.name"></el-input>
+                            <el-form-item prop="status" :label="$i.departmentSetting.status">
+                                <el-select size="mini" v-model="userData.status" placeholder="请选择">
+                                    <el-option
+                                            v-for="item in statusOptions"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
                 <div class="btn">
-                    <el-button class="serachBtn" type="primary">查询</el-button>
+                    <el-button @click="searchUser" :loading="disabledSearch" class="serachBtn" type="primary">{{$i.departmentSetting.search}}</el-button>
                 </div>
+
+
+                <v-table
+                        ref="vTable"
+                        :data="copyDataList"
+                        :buttons="setButton"
+                        @change-checked="changeChecked"
+                        @action="btnClick"></v-table>
+
 
             </div>
         </div>
+
+        <el-dialog
+                class="speDialog"
+                title="修改"
+                :visible.sync="editUserVisible"
+                width="30%">
+            <el-form :model="editUser">
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input v-model="editUser.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                    <el-select v-model="editUser.region" placeholder="请选择活动区域">
+                        <el-option label="区域一" value="shanghai"></el-option>
+                        <el-option label="区域二" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="editUserVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editUserVisible = false">确 定</el-button>
+            </div>
+            <!--<span slot="footer" class="dialog-footer">-->
+                <!--<el-button @click="editUserVisible = false">取 消</el-button>-->
+                <!--<el-button type="primary" @click="editUserVisible = false">下架产品</el-button>-->
+            <!--</span>-->
+        </el-dialog>
     </div>
 </template>
 
 <script>
+
+    import VTable from '@/components/common/table/index'
+
     export default {
         name: "department-setting",
+        components:{
+            VTable
+        },
         data() {
-            const department = [
-                {
-                    id: 1,
-                    label: '全部',
-                    children: [
-                        {
-                            id: 1,
-                            label: 'Department1',
-                        },
-                        {
-                            id: 2,
-                            label: 'Department2',
-                        },
-                        {
-                            id: 3,
-                            label: 'Department3',
-                        },
-                        {
-                            id: 4,
-                            label: 'Department4',
-                        },
-                        {
-                            id: 5,
-                            label: 'Department5',
-                        },
-                        {
-                            id: 6,
-                            label: 'Department6',
-                        },
-                        {
-                            id: 7,
-                            label: 'Department7',
-                        },
-                        {
-                            id: 8,
-                            label: 'Department8',
-                        },
-                        {
-                            id: 9,
-                            label: 'Department8',
-                        },
-                        {
-                            id: 10,
-                            label: 'Department8',
-                        },
-                    ]
-                },
-            ];
-            const role=[
-                {
-                    id: 1,
-                    label: '全部',
-                    children: [
-                        {
-                            id: 1,
-                            label: 'Role1',
-                        },
-                        {
-                            id: 2,
-                            label: 'Role2',
-                            isActive:true
-                        },
-                        {
-                            id: 3,
-                            label: 'Role3',
-                        },
-                        {
-                            id: 4,
-                            label: 'Role4',
-                        },
-                    ]
-                },
-            ];
             return {
-                departmentData: JSON.parse(JSON.stringify(department)),
-                roleData:JSON.parse(JSON.stringify(role)),
-                value1: '',
+                //基础配置
+                disabledSearch:false,
+                editUserVisible:false,
+
+                /**
+                 * Department data定义
+                 * */
+                departmentData: [],
+                departmentProps:{
+                    label:'deptName',
+                },
+                departmentUserTotal:0,          //department总人数
+
+                /**
+                 * Role data定义
+                 * */
+                roleData:[
+                    {
+                        id:1,
+                        roleName:'全部',
+                        children:[]
+                    }
+                ],
+                roleProps:{
+                    label:'roleName'
+                },
+                roleUserTotal:0,                //role总人数
+
+                /**
+                 * 搜索内容
+                 * */
                 searchDepartment:'',            //搜索的部门名称
                 searchRole:'',                  //搜索的role名称
+                searchPrivs: '',                //搜索的priv的名称
+
+                /**
+                 * 底部user数据绑定
+                 * */
+                userData:{
+                    email:'',
+                    userName:'',
+                    gender:null,
+                    status:null,
+                    ps:50,
+                    pn:1,
+                    deptId:null,
+                    roleId:null
+                },
+                tableDataList:[],
+                copyDataList:[],            //用于克隆一份table数据
+                editUser:{
+                    id: 0,
+                    deptId: 0,
+                    roleId: 0,
+                    userName: "string",
+                    lang: "string",
+                    email: "string",
+                    tel: "string",
+                    gender: 0,
+                    birthday: "string",
+                    remark: "string"
+                },
+                /**
+                 * 人造字典表
+                 * */
+                genderOptions:[
+                    {
+                        label:'男',
+                        value:0,
+                    },
+                    {
+                        label:'女',
+                        value:1,
+                    },
+                    {
+                        label:'未知性别',
+                        value:2,
+                    },
+                ],
+                statusOptions:[
+                    {
+                        label:'未激活',
+                        value:0,
+                    },
+                    {
+                        label:'已激活',
+                        value:1,
+                    },
+                    {
+                        label:'禁用',
+                        value:2,
+                    },
+                ],
 
                 data2: [
                     {
@@ -266,27 +340,17 @@
                     children: 'children',
                     label: 'label'
                 },
-
-
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
             }
         },
         methods: {
-            //render按钮
+            /**
+             * render按钮生成
+             * */
             renderDepartment(h, { node, data, store }) {
                 if(!data.children){
                     return (
                         <span class="custom-tree-node">
-                            <span>{node.label}</span>
+                            <span>{`${node.label} (${node.data.deptUserCount}人)`}</span>
                             <span>
                                 <el-button
                                     class="treeBtn"
@@ -313,7 +377,7 @@
                 if(!data.children){
                     return (
                         <span class="custom-tree-node">
-                            <span>{node.label}</span>
+                            <span>{`${node.label} (${node.data.roleUserCount}人)`}</span>
                             <span>
                                 <el-button
                                     class="treeBtn"
@@ -337,52 +401,178 @@
                 }
             },
 
-            //department节点点击事件
+            /**
+             * 获取页面数据
+             * */
+            getDepartmentData(){
+                this.$ajax.get(this.$apis.get_department).then(res=>{
+                    this.departmentData=res;
+                    this.departmentData.forEach(v=>{
+                        this.departmentUserTotal+=v.deptUserCount;
+                    });
+                });
+            },
+            getDepartmentUser(){
+                this.$ajax.post(this.$apis.get_departmentUser,{
+                    ps: 50,
+                    pn: 1,
+                    deptId: null,
+                    roleId: null,
+                    userName: '',
+                    email: '',
+                    gender:null,
+                    status:null
+                }).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                    this.copyDataList=this.$copyArr(this.tableDataList);
+                }).catch(err=>{
+
+                });
+            },
+            setButton(e){
+                // console.log(e,'????')
+                return [
+                    {label:'Edit',type:1},
+                    {label:e.tel.value==='13158687582'?'Enable':'Disabled',type:2}
+                ]
+            },
+
+            /**
+             * tree节点点击事件
+             * */
             departmentClick(data,node,com){
-                if(data.children){
-                    return;
-                }
-                this.$refs.departmentTree.setChecked(data,!node.checked,false)
-            },
+                this.userData.deptId=data.deptId;
+                //清空底部搜索条件
+                this.userData.roleId=null;
+                this.userData.pn=1;
+                this.userData.email='';
+                this.userData.userName='';
+                this.userData.gender=null;
+                this.userData.status=null;
+                this.roleData[0].children=this.$copyArr(data.deptRoles);
+                this.roleUserTotal=0;
+                this.departmentData.forEach(v=>{
+                    if(this.userData.deptId===v.deptId){
+                        v.deptRoles.forEach(m=>{
+                            this.roleUserTotal+=m.roleUserCount;
+                        })
+                    }
+                });
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    target:'.role'
+                });
+                this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                    this.copyDataList=this.$copyArr(this.tableDataList);
+                    this.$nextTick(()=>{
+                        this.roleData[0].children.forEach(v=>{
+                            this.$refs.roleTree.setChecked(v,true,false)
+                        });
+                        loading.close();
+                    });
+                }).catch(err=>{
 
-            //Role节点点击事件
+                });
+            },
             roleClick(data,node,com){
-                if(data.children){
-                    return;
+                // console.log(data)
+                // let me=this;
+                // let id='';
+                // if(data.children){
+                //     return;
+                // }
+                // me.$refs.roleTree.setChecked(data,!node.checked,false)
+                // setTimeout(()=>{
+                //     let checkedNodes=me.$refs.roleTree.getCheckedNodes(true);
+                //     checkedNodes.forEach(v=>{
+                //         id=v.roleId;
+                //     })
+                //     console.log(id,'id')
+                //
+                //     me.userData.roleId=id;
+                //     // console.log(me.userData,"????")
+                // },0)
+            },
+            checkChange(){
+                let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
+                let id=[];
+                this.copyDataList=[];
+                checkedNode.forEach(v=>{
+                    id.push(v.roleId)
+                    this.tableDataList.forEach(m=>{
+                        if(m.roleId.value===v.roleId){
+                            this.copyDataList.push(m);
+                        }
+                    })
+                });
+                if(id.length){
+                    // this.userData.roleId=id;
+                    this.userData.roleId=null;
+                }else{
+                    this.userData.roleId=null;
                 }
-                this.$refs.roleTree.setChecked(data,!node.checked,false)
             },
 
-            //新增department
+            /**
+             * add事件
+             * */
             addDepartment(){
                 this.$prompt('请输入Department名称', 'Add Department', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
+                    closeOnHashChange:false,
                     inputValidator:(data)=>{
                         if(!data || data===''){
                             return '请输入';
                         }
                     }
                 }).then(({ value }) => {
-                    let id=this.departmentData[0].children+1;
-
-                    // this.$refs.departmentTree.insertBefore({
-                    //     id:id,
-                    //     label:value,
-                    // },1);
-
-                    this.departmentData[0].children.unshift({
-                        id:id,
-                        label:value,
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
+                    let repeat=false;
+                    this.departmentData.forEach(v=>{
+                        if(v.deptName===value){
+                            repeat=true;
+                        }
                     });
+                    if(repeat){
+                        this.$message({
+                            message: '部门名称不能重复',
+                            type: 'warning'
+                        });
+                    }else{
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            background: 'rgba(255, 255, 255, 0.7)',
+                            target:'.department'
+                        });
+                        this.$ajax.post(this.$apis.get_department,{
+                            deptName:value
+                        }).then(res=>{
+                            this.$message({
+                                message: '新增成功',
+                                type: 'success'
+                            });
+                            this.$ajax.get(this.$apis.get_department).then(res=>{
+                                this.departmentUserTotal=0;
+                                this.departmentData=res;
+                                this.departmentData.forEach(v=>{
+                                    this.departmentUserTotal+=v.deptUserCount;
+                                });
+                                loading.close();
+                            }).catch(err=>{
+
+                            });
+                        }).catch(err=>{
+
+                        });
+                    }
+                }).catch(() => {
+
                 });
             },
-            //新增role
             addRole(){
                 this.$prompt('请输入Role', 'Add Role', {
                     confirmButtonText: '确定',
@@ -412,40 +602,72 @@
                 });
             },
 
-            //筛选department
+            /**
+             * 筛选事件
+             * */
             filterDepartment(value, data) {
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data.deptName.indexOf(value) !== -1;
             },
-
-            //筛选role
             filterRole(value, data){
                 if (!value) return true;
-                return data.label.indexOf(value) !== -1;
+                return data.roleName.indexOf(value) !== -1;
             },
 
-            //修改编辑部门名称
+            /**
+             * 编辑事件
+             * */
             modifyDepartment(e,node){
-                node.checked=!node.checked;     //不让编辑或者删除改变选中状态
                 this.$prompt('请输入Department', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    inputValue:e.label
+                    inputValue:e.deptName,
                 }).then(({ value }) => {
-                    e.label=value;
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '你的邮箱是: ' + value
-                    // });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
+                    let repeat=false;
+                    this.departmentData.forEach(v=>{
+                        if(v.deptName===value){
+                            repeat=true;
+                        }
                     });
+                    if(repeat){
+                        this.$message({
+                            message: '部门名称不能重复',
+                            type: 'warning'
+                        });
+                    }else{
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            background: 'rgba(255, 255, 255, 0.7)',
+                            target:'.department'
+                        });
+
+                        this.$ajax.put(this.$apis.get_department,{
+                            deptId:e.deptId,
+                            deptName:value
+                        }).then(res=>{
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.$ajax.get(this.$apis.get_department).then(res=>{
+                                this.departmentUserTotal=0;
+                                this.departmentData=res;
+                                this.departmentData.forEach(v=>{
+                                    this.departmentUserTotal+=v.deptUserCount;
+                                });
+                                loading.close();
+                            }).catch(err=>{
+
+                            });
+                        }).catch(err=>{
+
+                        });
+                    }
+                }).catch(() => {
+
                 });
             },
-
-            //修改role名称
             modifyRole(e,node){
                 node.checked=!node.checked;     //不让编辑或者删除改变选中状态
                 this.$prompt('请输入Role', '提示', {
@@ -466,7 +688,9 @@
                 });
             },
 
-            //删除部门
+            /**
+             * 删除事件
+             * */
             deleteDepartment(e,node){
                 node.checked=!node.checked;       //不让编辑或者删除改变选中状态
                 this.$confirm('确定删除该部门?', '提示', {
@@ -486,8 +710,6 @@
                     });
                 });
             },
-
-            //删除role
             deleteRole(e,node){
                 node.checked=!node.checked;       //不让编辑或者删除改变选中状态
                 this.$confirm('确定删除该Role?', '提示', {
@@ -507,14 +729,53 @@
                     });
                 });
             },
+
+            /**
+             * 底部user部分事件
+             * */
+            changeChecked(e){
+                console.log(e)
+            },
+            btnClick(e,type){
+                if(type===1){
+                    //edit
+                    console.log(e)
+                    this.editUserVisible=true;
+                }else{
+                    //enable/disabled
+                }
+            },
+
+            searchUser(){
+                let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
+                if(checkedNode.length===0 && this.userData.deptId){
+                    console.log('不调接口');
+                }else{
+                    this.disabledSearch=true;
+                    this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                        this.copyDataList=this.$copyArr(this.tableDataList);
+                        this.disabledSearch=false;
+                    }).catch(err=>{
+                        console.log(err)
+                        this.disabledSearch=false;
+                    });
+                }
+            },
+
+
+        },
+        created(){
+            this.getDepartmentData();
+            this.getDepartmentUser();
         },
         mounted(){
             //加载完成后选中数据中isActive的项
-            _.map(this.roleData[0].children,e=>{
-                if(e.isActive){
-                    this.$refs.roleTree.setChecked(e,true,false)
-                }
-            });
+            // _.map(this.roleData[0].children,e=>{
+            //     if(e.isActive){
+            //         this.$refs.roleTree.setChecked(e,true,false)
+            //     }
+            // });
         },
         watch:{
             searchDepartment(val){
@@ -562,8 +823,31 @@
         height: 320px;
         overflow-y: scroll;
     }
+    .body .card .list .list-title{
+        font-weight: bold;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 15px;
+        font-size: 18px;
+    }
+    .body .card .list .list-title span{
+        font-weight: normal;
+        font-size: 14px;
+        margin-left: 10px;
+    }
 
 
+    /*tree样式调整*/
+    .departmentTree{
+
+    }
+    /*.departmentTree >>> .el-tree-node{*/
+        /*height: 40px;*/
+    /*}*/
+    .departmentTree >>> .el-tree-node .el-tree-node__content{
+        height: 40px;
+        border-bottom: 1px solid #e0e0e0;
+    }
 
     >>> .custom-tree-node {
         flex: 1;

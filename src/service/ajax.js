@@ -16,7 +16,8 @@ const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
-    'Content-Type': 'application/json;charset=utf-8'
+    'Content-Type': 'application/json;charset=utf-8',
+      // 'U-Session-Token':'askjhasjkhgkajshg'
   },
   transformRequest: [function (data) {
     // return JSON.stringify(data);
@@ -117,7 +118,6 @@ $ajax.prototype.post = (url, params = {}, config = {}) => {
   }
   return axios(options);
 }
-
 
 NProgress.configure({
   // showSpinner: false
