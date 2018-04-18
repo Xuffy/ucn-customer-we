@@ -150,23 +150,19 @@
                 })
             },
             cancelInquiry() { //取消询价单
-                const argId = this.getChildrenId();
-                this.$ajax.post(`${this.$apis.POST_INQUIRY_ACTION}`, {
-                    action: 'cancel',
-                    ids:argId
-                })
-                .then(res => {
-                    console.log(res)
-                });
+                this.ajaxInqueryAction('cancel')
             },
             deleteInquiry() { //删除询价单
+                this.ajaxInqueryAction('delete');
+            },
+            ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
-                this.$ajax.post(`${this.$apis.POST_INQUIRY_ACTION}`, {
-                    action: 'delete',
+                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                    action: type,
                     ids:argId
                 })
                 .then(res => {
-                    console.log(res)
+                    this.gettabData();
                 });
             },
             action(item, type) {

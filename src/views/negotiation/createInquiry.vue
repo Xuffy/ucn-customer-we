@@ -45,6 +45,13 @@
                                 resize="none"
                                 :disabled="item.disabled"
                             />
+                            <el-date-picker
+                                style="width:100%;"
+                                v-model="fromArg[item.key]"
+                                type="datetime"
+                                :placeholder="item.placeholder"
+                                v-if="item.type === 'dateTime'"
+                            />
                             <v-up-load v-if="item.type === 'remark' || item.type === 'upData'"/>
                         </el-form-item>
                     </el-col>
@@ -79,11 +86,15 @@
                 <el-radio-button label="From New Search"></el-radio-button>
                 <el-radio-button label="From my bookmark"></el-radio-button>
             </el-radio-group>
-            <v-product :hideBtns="true"></v-product>
-             <span slot="footer" class="dialog-footer">
+            <v-product 
+                :hideBtns="true"
+                :hideBtn="true"
+                @handleOK="getList"
+            ></v-product>
+             <!-- <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="dialogTableVisible = false">OK</el-button>
                 <el-button @click="dialogTableVisible = false">Cancel</el-button>
-            </span>
+            </span> -->
         </el-dialog>
     </div>
 </template>
@@ -96,16 +107,10 @@
             return {
                 radio: 'From New Search',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
-
-                basicInfoForm: [ //Basic Info
-                
-                ], 
                 
                 tabColumn: '', //tab top
                 tabData: [], //tab Data
-                
-                textarea: '', //Remarks
-
+                textarea:'',
                 pickerOptions:{
                     disabledDate(time) {
                         return time.getTime() < Date.now();
@@ -140,13 +145,7 @@
             'v-up-load': Upload
         },
         created() {
-            // this.ajax({
-            //     url: '/tableProductInfo',
-            //     method: 'get'
-            // }).then(res => {
-            //     this.tabData = res.content;
-            //     this.tabColumn =  'negotiation.tableProductInfo';
-            // });
+            
         },
         computed: {
             fromArg() {
@@ -158,6 +157,9 @@
             }
         },
         methods: {
+            getProduct() {
+
+            },
             fromChange(val) {
                 console.log(val)
             },
@@ -180,6 +182,15 @@
             },
             changeChecked(item) {
                this.checkedAll = item;
+           },
+           getList(item) {
+               let tabData = [];
+               item.forEach(items => {
+                   items._checked = false;
+                   tabData.push(Object.assign({},items))
+               });
+               this.tabData = tabData;
+               this.dialogTableVisible = false;
            }
         }
     }

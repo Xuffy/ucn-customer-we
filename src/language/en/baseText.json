@@ -29,9 +29,7 @@
     "basicInfo": "Basic Info",
     "productInfo": "Product Info",
     "process":"process",
-    "downloadSelected":"downloadSelected",
     "order":"order",
-    "creatOrder":"Create Order",
     "downloadall":"Download All",
     "addproduct":"Add Product",
     "send":"send",
@@ -48,5 +46,7 @@
     "downloadSelected":"download Selected",
     "search":"Search",
     "clear":"Clear",
-    "supplierProducts":"Supplier's Products"
+    "supplierProducts":"Supplier's Products",
+    "sentAsOrder": "sent as order",
+    "logisticsPlanOverview": "Logistics Plan Overview"
 }
