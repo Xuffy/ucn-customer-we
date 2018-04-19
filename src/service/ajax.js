@@ -92,10 +92,10 @@ const $ajax = (config) => {
       });
     } else {
       _options = _.extend(...this.sethHeader(options, config));
-      
+
       switch (_options.method) {
         case 'DELETE':
-          return axios.delete(_options.url);
+          return axios.delete(_options.url,{params:_options.data});
         case 'PUT':
           return axios.put(_options.url);
         default:
