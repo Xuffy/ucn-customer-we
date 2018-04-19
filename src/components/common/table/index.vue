@@ -8,7 +8,9 @@
       </div>
       <div class="fixed">
         <v-table-filter ref="tableFilter"
-                        @filter-column="onFilterColumn" 
+                        :hide-filter-column="hideFilterColumn"
+                        :hide-filter-value="hideFilterValue"
+                        @filter-column="onFilterColumn"
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
@@ -61,7 +63,8 @@
             </td>
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="{'background-color':cItem._highlight}">
-              <div v-text="cItem.value"></div>
+              <div v-if="!cItem._image" v-text="cItem.value"></div>
+              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)">
             </td>
             <td v-if="buttons && (index % rowspan === 0) " :rowspan="rowspan">
               <div style="white-space: nowrap;">
@@ -85,6 +88,9 @@
                   :page-sizes="pageSizes"
                   :page-size="pageSize"
                   :page-total="pageTotal"></v-pagination>
+
+
+    <v-view-picture ref="viewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -114,10 +120,11 @@
 
   import VTableFilter from './filter'
   import VPagination from './pagination'
+  import VViewPicture from '../viewPicture/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VPagination},
+    components: {VTableFilter, VPagination, VViewPicture},
     props: {
       data: {
         type: Array,
@@ -166,6 +173,15 @@
         type: Number,
         default: 1,
       },
+      hideFilterValue: {
+        type: Boolean,
+        default: false,
+      },
+      hideFilterColumn: {
+        type: Boolean,
+        default: false,
+      },
+
     },
     data() {
       return {
@@ -252,6 +268,15 @@
           this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
 
         });
+      },
+      getImage(value, split = ',') {
+        if (_.isEmpty(value)) return false;
+
+        if (_.toString(value)) {
+          value = value.split(split);
+        }
+
+        return value[0];
       },
       changeCheck(item) {
         if (this.selectionRadio) {
@@ -374,7 +399,14 @@
   }
 
   .ucn-table tbody td {
-    padding: 10px;
+    padding: 5px;
+  }
+
+  .ucn-table tbody td img {
+    max-height: 30px;
+    max-width: 30px;
+    vertical-align: middle;
+    cursor: pointer;
   }
 
   .ucn-table thead tr:nth-child(even) td,

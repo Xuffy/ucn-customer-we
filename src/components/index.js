@@ -12,6 +12,7 @@ import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
+import VViewPicture from './common/viewPicture/index';
 // import product from '../views/product/addProduct';
 import compareList from '@/views/product/compareList';
 
@@ -40,6 +41,7 @@ export {
   selectSearch,
   // product,                      //product页面组件
   bigPhoto,
+  VViewPicture,
   compareList,
   containerInfo,
   dropDownSingle,
