@@ -250,7 +250,7 @@
     height: 60px;
     position: fixed;
     width: 100%;
-    z-index: 9999;
+    z-index: 910;
     min-width: 1260px;
     overflow: hidden;
   }
