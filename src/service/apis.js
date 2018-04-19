@@ -27,6 +27,7 @@ const apis = {
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_DHC'],
   GET_INQIIRY_DETAIL: ['/inquiry', 'BASE_DHC'],
   GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_DHC'],
+  POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_DHC'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
   get_supplierWhole:['/supplierWhole','BASE_CS'],

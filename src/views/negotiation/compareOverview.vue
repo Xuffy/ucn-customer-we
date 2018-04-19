@@ -1,16 +1,17 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $t('negotiation.text.compareOverview') }}</h3>
+        <h3 class="hd">{{ $i.baseText.compareOverview }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button>{{ $t('negotiation.text.downloadSelectedCompare') }}</el-button>
-                <el-button type="danger">{{ $t('negotiation.text.delete') }}</el-button>
+                <el-button>{{ $i.baseText.downloadSelectedCompare }}</el-button>
+                <el-button type="danger">{{ $i.baseText.delete }}</el-button>
             </div>
-            <select-search :options="options" />
+            <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <v-table 
             :data="tabData" 
             :data-key="tabColumn"
+            :loading="tabLoad" 
         />
     </div>
 </template>
@@ -24,8 +25,33 @@
                 tabData: [],
                 options:[{
                     id:'1',
-                    label:'dada'
-                }]
+                    label:'Compare Name'
+                }, {
+                    id: '2',
+                    label: 'Compare Item'
+                }],
+                bodyData: {
+                    key: '',
+                    keyType: '',
+                    // operatorFilters: { //筛选条件
+                    //     columnName: '',
+                    //     operator: '',
+                    //     property: '',
+                    //     resultMapId: '',
+                    //     value: {}
+                    // },
+                    ps: 10,
+                    pn: 1,
+                    sorts: [
+                        {
+                            nativeSql: true,
+                            orderBy: "string",
+                            orderType: "string",
+                            resultMapId: "string"
+                        }
+                    ]
+                },
+                tabLoad: false
             }
         },
         components: {
@@ -33,16 +59,29 @@
             'v-table': VTable
         },
         methods: {
-            
+            getList() {
+                this.tabLoad = true;
+                this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
+                .then(res => {
+                    this.tabLoad = false;
+                    console.log(res)
+                });
+            },
+            searchEnter(item) {
+                this.bodyData.key = item.key;
+                this.bodyData.keyType = item.keyType;
+            }
+        },
+        watch: {
+            bodyData: {
+                handler(val) {
+                    this.getList();
+                },
+                deep: true
+            }
         },
         created() {
-            this.ajax({
-                url: '/tableCompareOverview',
-                method: 'get'
-            }).then(res => {
-                this.tabData = res;
-                this.tabColumn = 'negotiation.tableCompareOverview';
-            });
+            this.getList();
         }
     }
 </script>

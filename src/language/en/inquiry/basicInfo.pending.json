@@ -1,9 +1,10 @@
 {
+    "remarkDate": "Remark date",
     "operater": "operater",
-    "time": "time",
+    "timeZone": "Time zone",
+    "time": "Time",
     "InquiryNo": "Inquiry No.",
     "QuotationNo": "Quotation No.",
-    "createTime": "Time",
     "inquiryStatus": "inquiry status",
     "transportationWay": "transportation way",
     "payment": "payment",
@@ -19,5 +20,6 @@
     "exportLicense": "export license",
     "attachment": "Attachment",
     "inquiryRemark": "Inquiry remark",
+    "createTime": "Create time",
     "relatedOrderNO": "related order NO."
 }

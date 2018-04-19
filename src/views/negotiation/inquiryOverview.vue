@@ -104,6 +104,7 @@
         },
         created() {
             this.viewByStatus = 0;
+                    console.log(this.$db.inquiryOverview.basicInfo)
         },
         watch: {
             viewByStatus() {

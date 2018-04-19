@@ -8,7 +8,7 @@
       </div>
       <div class="fixed">
         <v-table-filter ref="tableFilter"
-                        @filter-column="onFilterColumn"
+                        @filter-column="onFilterColumn" 
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
