@@ -54,7 +54,7 @@
                 <el-tab-pane :label="$i.remark" name="remark">
                     <v-remark  
                      style='marginTop:10px'
-                     :tableData='remarkData'
+                     :id=id              
                      />
                 </el-tab-pane>
                 <el-tab-pane :label="$i.attchment" name="attchment">
@@ -90,7 +90,7 @@
         data() {
             return {
                 noEdit: true,
-                id: this.$route.query.id,
+                id: Number(this.$route.query.id),
                 tabName: 'address', //默认打开的tab
                 basicDate: '',
                 accounts: [],
@@ -100,141 +100,73 @@
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
-                parms:{
-                      "entryDt": "",
-                      "entryId": '',
-                      "entryName": "",
-                      "id":'',
-                      "remark": "texttext",
-                      "supplierId": 1,
-//                      "unifyUser": {
-//                        "admin": true,
-//                        "companyId": 0,
-//                        "customer": true,
-//                        "dataPrivileges": {
-//                          "additionalProp1": [
-//                            0
-//                          ],
-//                          "additionalProp2": [
-//                            0
-//                          ],
-//                          "additionalProp3": [
-//                            0
-//                          ]
-//                        },
-//                        "deptId": 0,
-//                        "id": 0,
-//                        "partnerType": 0,
-//                        "realName": "string",
-//                        "roleId": 0,
-//                        "serviceProvider": true,
-//                        "supplier": true,
-//                        "tenantId": 0,
-//                        "tenantType": 0,
-//                        "type": 0,
-//                        "userName": "string"
-//                      },
-                      "updateDt": "",
-                      "updateId": '',
-                      "updateName": " ",
-                      "version": ''
-                    }
+                code: '',
+                loading: false
             }
         },
         methods: {
             createInquiry() {
-                 this.windowOpen('/negotiation/createInquiry', {
-                    supplierId:this.id   //供应商信息将被带入
+                this.windowOpen('/negotiation/createInquiry', {
+                    supplierCode: this.code //供应商信息将被带入
                 });
             },
             createOrder() {
-                  this.windowOpen('/order/creat', {
-                    supplierId:this.id   //供应商信息将被带入
+                this.windowOpen('/order/creat', {
+                    supplierCode: this.code //供应商信息将被带入
                 });
             },
             addToCompare() {
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-                  this.windowOpen('/product/sourcing', {
-                    supplierId:this.id   //供应商信息将被带入
+                this.windowOpen('/product/sourcing', {
+                    supplierCode: this.code //供应商信息将被带入
                 });
             },
-            addToBookmark(){
-                 this.$ajax.post(this.$apis.post_supplier_addbookmark, {
-                      ids:[this.id]
-                  })
+            addToBookmark() {
+                this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
                     .then(res => {
                         console.log(res)
-                     
+
                         this.$message({
-                          message: 'success',
-                          type: 'success',
-                           onClose:(()=>{
-                               this.$router.push({path:'/supplier/bookmark',query:{id:this.id}})
+                            message: 'success',
+                            type: 'success',
+                            onClose: (() => {
+                                this.$router.push({
+                                    path: '/supplier/bookmark',
+                                    query: {
+                                        id: this.id
+                                    }
+                                })
                             })
-                        }); 
+                        });
                     })
                     .catch((res) => {
                         console.log(res)
-                  });
+                    });
             },
             //..................获取数据
-            get_data() {this.$ajax.get(this.$apis.get_supplier_id, {
+            get_data() {
+                this.loading = true
+                this.$ajax.get(this.$apis.get_supplier_id, {
                         id: this.id
                     })
                     .then(res => {
+                        this.code = res.code
                         this.basicDate = res;
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                        this.loading = false
                     })
                     .catch((res) => {
-
+                        this.loading = false
                     });
             },
-            //.......获取remark列表
-            get_remark() {
-                this.$ajax.post(this.$apis.post_supplier_list_remark, {
-                    id: this.id,
-                    pn: 1,
-                    ps: 100,
-
-                }).then((res) => {               
-                    console.log(res)
-                }).catch((res) => {
-                    console.log(res)
-                })
-            },
-            //.........增加remark
-         add_Remark(){
-               this.$ajax.post(this.$apis.post_add_supplier_remark,this.parms).then((res) => {               
-                    console.log(res)
-                }).catch((res) => {
-                    console.log(res)
-                })
-         },
-            //.........删除remark
-         delete_Remark(){
-             this.$ajax.post(this.$apis.post_supplier_delete_remark, {
-                 id:3
-                }).then((res) => {               
-                   console.log(res)
-                }).catch((res) => {
-                    console.log(res)
-                })
-         },     
-            //.........修改remark
-         update_Remark(){       this.$ajax.post(this.$apis.get_update_supplier_remark,this.parms).then((res) => {               
-                   
-                }).catch((res) => {
-                    console.log(res)
-                })
-         },
         },
         created() {
             this.get_data()
-            this.get_remark()
+
         },
     }
 
