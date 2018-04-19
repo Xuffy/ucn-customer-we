@@ -17,7 +17,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-      // 'U-Session-Token':'askjhasjkhgkajshg'
+    // 'U-Session-Token':'askjhasjkhgkajshg'
   },
   transformRequest: [function (data) {
     // return JSON.stringify(data);
@@ -54,13 +54,11 @@ const $ajax = (config) => {
    * @returns {*[]}
    */
   this.sethHeader = (options, config) => {
-    if (options.method !== 'GET') {
-      if (config._contentType === 'F') {
-        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        options.data = Qs.stringify(options.data);
-      } else {
-        options.data = JSON.stringify(options.data);
-      }
+    if (config._contentType === 'F') {
+      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      options.data = Qs.stringify(options.data);
+    } else {
+      options.data = JSON.stringify(options.data);
     }
     return [options, config]
   }
@@ -74,7 +72,8 @@ const $ajax = (config) => {
   this.getCache = (options, config) => {
     let {url, data} = options
       , resCache = sessionStore.get('request_cache')
-      , resData = false;
+      , resData = false
+      , _options;
 
     if (config._cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
@@ -92,7 +91,16 @@ const $ajax = (config) => {
         return resolve(resData.data.content);
       });
     } else {
-      return axios(_.extend(...this.sethHeader(options, config)));
+      _options = _.extend(...this.sethHeader(options, config));
+      
+      switch (_options.method) {
+        case 'DELETE':
+          return axios.delete(_options.url);
+        case 'PUT':
+          return axios.put(_options.url);
+        default:
+          return axios(_options);
+      }
     }
   }
 }

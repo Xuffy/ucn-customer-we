@@ -98,7 +98,7 @@
    * @param {Number} [pageSize]    - 每页条数  例：200
    * @param {Number} [pageTotal]    - 总条数  例：200
    * @param {Function, Array} [buttons]    - 设置action按钮，可传入函数判断按钮是否显示，返回Array
-   *                                         例：[{label: 'detail', type: 1}, {label: 'history', type: 2}]
+   *                                         例：[{label: 'detail', type: 1,style:''}, {label: 'history', type: 2}]
    *                                         例：['detail', 'history']
    *
    * @method @change-checked(checkedList)   - checkbox改变时调用
