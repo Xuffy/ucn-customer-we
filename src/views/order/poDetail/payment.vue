@@ -80,14 +80,14 @@
 
 <el-table-column label="Action" align="center" width="120">
     <template slot-scope="scope">
-                    <div v-if="type==='complex'">
+                    
                         <!--新增行时显示的按钮-->
                         <div v-if="scope.row.isNew">
                             <el-button type="text" @click="saveNewLine(scope.row)">保存</el-button>
                             <el-button type="text" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[6].prop]===1 || scope.row[columns[6].prop]===2">
+                            <div v-if="scope.row[columns[10].prop]===1 || scope.row[columns[10].prop]===2">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" @click="saveLine(scope.row)">保存</el-button>
@@ -99,13 +99,13 @@
                                 </div>
                             </div>
                             <!--作废时显示-->
-                            <div v-if="scope.row[columns[6].prop]===3">
+                            <div v-if="scope.row[columns[10].prop]===3">
                                 <el-button type="text" @click="recoverLine(scope.row)">恢复</el-button>
                             </div>
                         </div>
-                    </div>
+                   
                     <div v-if="type==='simple'">
-                        <div v-if="scope.row[columns[6].prop]!==2">
+                        <div v-if="scope.row[columns[10].prop]!==2">
                             <el-button type="text" @click="confirmLine(scope.row)">确认</el-button>
                         </div>
                     </div>
@@ -118,12 +118,6 @@
     export default {
         name: 'payment-table',
         props: {
-
-
-            type: {
-                type: String,
-                default: 'complex'
-            },
             btnInfo: {
                 type: String,
                 default: '申请付款'
@@ -195,6 +189,33 @@
 
                     },
                     {
+                        label: '预计退款日期',
+                        prop: 'estRefundDate',
+                        type: 'Date',
+                        width: 150
+                    },
+                    {
+                        label: '预计退款金额',
+                        prop: 'estRefundAmount',
+                        type: 'Number',
+                        width: 150
+
+                    },
+                    {
+                        label: '实际退款日期',
+                        prop: 'actRefundDate',
+                        type: 'Number',
+                        width: 150
+
+                    },
+                    {
+                        label: '实际退款金额',
+                        prop: 'actRefundAmount',
+                        type: 'Number',
+                        width: 150
+
+                    },
+                    {
                         label: '有效性',
                         prop: 'available',
                         type: 'Text'
@@ -229,7 +250,7 @@
                 row,
                 rowIndex
             }) {
-                if (row[this.columns[6].prop] === 3) {
+                if (row[this.columns[10].prop] === 3) {
                     return 'warning-row';
                 }
                 return '';

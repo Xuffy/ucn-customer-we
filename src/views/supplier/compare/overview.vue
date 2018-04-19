@@ -48,9 +48,33 @@
                     id: '2',
                     label: "scompareItem"
                 }],
-                tabColumn: [],
+                params: {
+                    id: 1,
+                    name: "",
+                    //                      "operatorFilters": [
+                    //                        {
+                    //                          "columnName": "string",
+                    //                          "operator": "string",
+                    //                          "property": "string",
+                    //                          "resultMapId": "string",
+                    //                          "value": {}
+                    //                        }
+                    //                      ],
+                    pn: 1,
+                    ps: 10,
+                    //                      "recycle": true,
+                    //                      "sorts": [
+                    //                        {
+                    //                          "nativeSql": true,
+                    //                          "orderBy": "string",
+                    //                          "orderType": "string",
+                    //                          "resultMapId": "string"
+                    //                        }
+                    //                      ]
+                },
                 tabData: [],
-                selectedData:[]
+                selectedData: [],
+                selectedNumber: []
             }
         },
         components: {
@@ -59,41 +83,42 @@
             selectSearch
         },
         methods: {
-            inputEnter(keyWord){
+            inputEnter(keyWord) {
                 console.log(keyWord)
-               
+
             },
             checked(item) {
                 console.log(item)
-                this.selectedData=item
+                this.selectedData = item
             },
             detail(item) {
                 console.log(item)
-                this.windowOpen('/supplier/bookmarkDetail', {
-                    id: item.id.value
+                this.windowOpen('/supplier/compareDetail', {
+                    id: item.id.value,
+                    name: item.name.value
                 });
             },
             get_data() {
+                this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
+                    .then(res => {
+                        this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas);
+                        console.log(res)
+                    })
+                    .catch((res) => {
+
+                    });
+            },
+            downloadSelected() {
                 this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
                     .then(res => {
-                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         console.log(res.datas)
                     })
                     .catch((res) => {
 
                     });
             },
-            downloadSelected(){
-                 this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
-                    .then(res => {
-                        console.log(res.datas)
-                    })
-                    .catch((res) => {
-
-                    });
-            },
-            remove(){
-                 this.$ajax.post(this.$apis.post_supplier_deleteCompare)
+            remove() {
+                this.$ajax.post(this.$apis.post_supplier_deleteCompare, [this.selectedNumber])
                     .then(res => {
                         console.log(res.datas)
                     })
@@ -103,7 +128,7 @@
             }
         },
         created() {
-//            this.get_data()
+            this.get_data()
         },
     }
 

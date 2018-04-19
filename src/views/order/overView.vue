@@ -4,7 +4,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
-                      <el-radio-group v-model="params.status" size="mini">
+                      <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
                             <el-radio-button label="1"> {{ $i.baseText.TBCByCustomer }}</el-radio-button>
                             <el-radio-button label="2">{{($i.baseText.TBCBySupplier)}}</el-radio-button>
                             <el-radio-button label="3">{{($i.baseText.process)}}</el-radio-button>
@@ -22,15 +22,14 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{($i.baseText.downloadall)}}</el-button>
-
-                <el-button @click='creat_order'>{{($i.baseText.createOrder)}}</el-button>
+                <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
+                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i.baseText.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled'>finish</el-button>
                 <el-button type='danger' :disabled='disabled'>{{($i.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
-                   <el-radio-group v-model="params.view" size="mini">
+                   <el-radio-group v-model="params.view" size="mini" @change='changeView'>
                             <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
                             <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
@@ -45,6 +44,10 @@
           :buttons="[{label: 'detail', type: 1}]" 
            @action="onAction"
           :loading='loading'
+          :pageTotal='pageTotal'
+          @change-checked='checked'
+          @page-size-change(size)='pagesizechange'
+          @page-change(page)='pagechange'
            style='marginTop:10px'/>     
     </div>
 </template>
@@ -78,6 +81,8 @@
                 prodisabled: true, // finish的状态
                 tabData: [],
                 loading: false,
+                pageTotal: 1,
+                rowspan: 1,
                 options: [{
                     id: '1',
                     label: 'Order No'
@@ -90,15 +95,33 @@
                     status: '', //status的按钮组
                     orderNo: '',
                     skuCode: '',
-                    view: '1', //view by的按钮组
+                    view: 1, //view by的按钮组
                     ps: 10,
                     pn: 1
-                }
+                },
+                selectedDate: [],
+                id: ''
             }
         },
         methods: {
             onAction(item, type) {
-                console.log(item)
+                this.id = item.id.value
+                this.$ajax.post(this.$apis.detail_order, {
+                        orderId: this.id
+                    })
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        this.loading = false
+
+                    });
+            },
+            pagesizechange() {
+
+            },
+            pagechange() {
+
             },
             creat_order() {
                 this.$router.push('/order/creat');
@@ -106,36 +129,47 @@
             selectChange(val) {
                 this.keyType = val;
             },
+            checked(item) {
+                this.selectedDate = item
+                console.log(item)
+            },
+            changeStatus() {
+                this.getdata()
+            },
+            changeView() {
+                this.getdata()
+            },
             inputEnter(val) {
-                //                if(!this.keyType) return this.$message('请选中搜索类型');
-                //                if(!val) return this.$message('搜索内容不能为空');
-                console.log(val)
+                if (!val.keyType) return this.$message('请选中搜索类型');
+                if (!val.key) return this.$message('搜索内容不能为空');
                 if (val.keyType == '1') {
                     this.params.orderNo = val.key
                 } else {
                     this.params.skuCode = val.key
                 }
-                console.log(this.params)
+                this.getdata()
+            },
+            download() {
+                this.$ajax.post(this.$apis.download_order, [1, 2])
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
             },
             //get_orderlist数据
             getdata() {
                 this.loading = true
-                this.$ajax.post(this.$apis.get_orderlist, {
-                        status: '', //status的按钮组
-                        orderNo: '',
-                        skuCode: '',
-                        view: '2', //view by的按钮组
-                        ps: 10,
-                        pn: 1
-                    })
+                this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
-                        console.log(res)
-                        this.tabData =
-                            this.$getDB(this.$db.order.overview, res.datas);
+                        this.loading = false
+                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
 
                     })
                     .catch((res) => {
-                        console.log(res);
+                        this.loading = false
+
                     });
             }
         },
@@ -155,8 +189,7 @@
         watch: {　
             params: {　　　　　　　　　　
                 handler(curVal, oldVal) {　　　　　　　　　　　　
-                    console.log(curVal, oldVal)
-                    if (curVal.status == 5) {
+                    if (curVal.view == 1 && curVal.status == 5) {
                         this.disabled = false
                     } else if (curVal.status == 3) {
                         this.prodisabled = false
