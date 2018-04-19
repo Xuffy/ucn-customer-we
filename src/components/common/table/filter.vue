@@ -1,7 +1,9 @@
 <template>
   <div class="filter-value">
-    <i class="el-icon-search" @click="visible = !visible"></i>
-    <v-filter-column :data="setFiledData" @filter-column="onFilterColumn">
+    <i class="el-icon-search" @click="visible = !visible" v-if="!hideFilterValue"></i>
+
+    <v-filter-column :data="setFiledData" @filter-column="onFilterColumn"
+                     v-if="!hideFilterColumn">
     </v-filter-column>
 
     <el-dialog title="Table filter" :visible.sync="visible" width="1000px">
@@ -94,6 +96,14 @@
           return [];
         },
       },
+      hideFilterValue: {
+        type: Boolean,
+        default: false,
+      },
+      hideFilterColumn: {
+        type: Boolean,
+        default: false,
+      },
     },
     components: {VFilterColumn},
     data() {
@@ -127,11 +137,9 @@
             label: '区间'
           }
         ],
-        computeType: '',
         conditionList: [
           {property: '', operator: '', value: '', sort: '', tooltipShow: false}
         ],
-        value8: '',
       }
     },
     watch: {},

@@ -15,7 +15,6 @@
 
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
-        <v-table-filter></v-table-filter>
         <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
                  :selection="filterSelection"

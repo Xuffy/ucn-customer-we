@@ -8,6 +8,8 @@
       </div>
       <div class="fixed">
         <v-table-filter ref="tableFilter"
+                        :hide-filter-column="hideFilterColumn"
+                        :hide-filter-value="hideFilterValue"
                         @filter-column="onFilterColumn"
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
@@ -170,6 +172,14 @@
       rowspan: {
         type: Number,
         default: 1,
+      },
+      hideFilterValue: {
+        type: Boolean,
+        default: false,
+      },
+      hideFilterColumn: {
+        type: Boolean,
+        default: false,
       },
 
     },
