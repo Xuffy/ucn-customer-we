@@ -56,8 +56,10 @@ const apis = {
   get_supplier_remark_de:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
   post_supplier_delete_remark:['/purchase/supplier/deleteRemark/{id}','BASE_CS_cgs'],
   //settings
+  get_departmentOverview:['/department/overview','BASE_LYF'],
   get_department:['/department','BASE_LYF'],
   get_departmentUser:['/user/list','BASE_LYF'],
+  delete_department:['/department/{deptId}','BASE_LYF'],
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],

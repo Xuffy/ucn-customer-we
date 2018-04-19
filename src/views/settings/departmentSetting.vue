@@ -197,6 +197,7 @@
 <script>
 
     import VTable from '@/components/common/table/index'
+    import axios from 'axios'
 
     export default {
         name: "department-setting",
@@ -208,7 +209,7 @@
                 //基础配置
                 disabledSearch:false,
                 editUserVisible:false,
-
+                formLabelWidth:'100px',
                 /**
                  * Department data定义
                  * */
@@ -251,14 +252,14 @@
                     ps:50,
                     pn:1,
                     deptId:null,
-                    roleId:null
+                    roleIds:null
                 },
                 tableDataList:[],
                 copyDataList:[],            //用于克隆一份table数据
                 editUser:{
                     id: 0,
                     deptId: 0,
-                    roleId: 0,
+                    roleIds: 0,
                     userName: "string",
                     lang: "string",
                     email: "string",
@@ -405,7 +406,7 @@
              * 获取页面数据
              * */
             getDepartmentData(){
-                this.$ajax.get(this.$apis.get_department).then(res=>{
+                this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
                     this.departmentData=res;
                     this.departmentData.forEach(v=>{
                         this.departmentUserTotal+=v.deptUserCount;
@@ -417,7 +418,7 @@
                     ps: 50,
                     pn: 1,
                     deptId: null,
-                    roleId: null,
+                    roleIds: null,
                     userName: '',
                     email: '',
                     gender:null,
@@ -443,7 +444,7 @@
             departmentClick(data,node,com){
                 this.userData.deptId=data.deptId;
                 //清空底部搜索条件
-                this.userData.roleId=null;
+                this.userData.roleIds=null;
                 this.userData.pn=1;
                 this.userData.email='';
                 this.userData.userName='';
@@ -509,10 +510,9 @@
                     })
                 });
                 if(id.length){
-                    // this.userData.roleId=id;
-                    this.userData.roleId=null;
+                    this.userData.roleIds=id;
                 }else{
-                    this.userData.roleId=null;
+                    this.userData.roleIds=null;
                 }
             },
 
@@ -555,7 +555,7 @@
                                 message: '新增成功',
                                 type: 'success'
                             });
-                            this.$ajax.get(this.$apis.get_department).then(res=>{
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
                                 this.departmentUserTotal=0;
                                 this.departmentData=res;
                                 this.departmentData.forEach(v=>{
@@ -642,15 +642,18 @@
                             target:'.department'
                         });
 
+
                         this.$ajax.put(this.$apis.get_department,{
                             deptId:e.deptId,
                             deptName:value
                         }).then(res=>{
+
+                        }).catch(err=>{
                             this.$message({
                                 message: '修改成功',
                                 type: 'success'
                             });
-                            this.$ajax.get(this.$apis.get_department).then(res=>{
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
                                 this.departmentUserTotal=0;
                                 this.departmentData=res;
                                 this.departmentData.forEach(v=>{
@@ -660,8 +663,6 @@
                             }).catch(err=>{
 
                             });
-                        }).catch(err=>{
-
                         });
                     }
                 }).catch(() => {
@@ -675,7 +676,7 @@
                     cancelButtonText: '取消',
                     inputValue:e.label
                 }).then(({ value }) => {
-                    e.label=value;
+                    console.log(value,'???')
                     // this.$message({
                     //     type: 'success',
                     //     message: '你的邮箱是: ' + value
@@ -692,17 +693,48 @@
              * 删除事件
              * */
             deleteDepartment(e,node){
-                node.checked=!node.checked;       //不让编辑或者删除改变选中状态
                 this.$confirm('确定删除该部门?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$refs.departmentTree.remove(e);
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+                    console.log(e)
+                    if(e.deptRoles.length!==0){
+                        this.$message({
+                            message: '请先移除本部门下的角色和用户',
+                            type: 'warning'
+                        });
+                    }else{
+
+                        this.$ajax.delete(this.$apis.delete_department,{
+                            deptId:e.deptId
+                        }).then(res=>{
+
+                        }).catch(err=>{
+                            const loading = this.$loading({
+                                lock: true,
+                                text: 'Loading',
+                                background: 'rgba(255, 255, 255, 0.7)',
+                                target:'.department'
+                            });
+
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
+                                this.departmentUserTotal=0;
+                                this.departmentData=res;
+                                this.departmentData.forEach(v=>{
+                                    this.departmentUserTotal+=v.deptUserCount;
+                                });
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                loading.close();
+                            }).catch(err=>{
+
+                            });
+                        });
+                    }
+
                 }).catch(() => {
                     this.$message({
                         type: 'info',
