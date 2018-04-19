@@ -121,6 +121,31 @@ export default {
     };
 
 
+
+    Vue.prototype.$copyArr=(arr)=>{
+        return arr.map((e) => {
+            if (typeof e === 'object') {
+                return Object.assign({}, e)
+            } else {
+                return e
+            }
+        })
+    }
+
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    Vue.prototype.$getI18n = function () {
+      // this.$i18n.
+      // let data = this.$i18n.getLocaleMessage(this.$i18n.locale);
+      // console.log([
+      //   {p:'',b:''}
+      // ])
+    }
+
     /**
      * 获取 table 配置列名
      * @param {Object/Array} [data]    - 数据集合

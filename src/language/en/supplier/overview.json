@@ -1,4 +1,8 @@
 {
+    "compareOverview":"Compare Overview",
+    "supplierBookmark":"Supplier Bookmark",
+    "supplierSourcing":" Supplier Sourcing",
+    
     "supplierName": "Supplier Name",
     "businessScope": "Main Business Scope",
     "categoryId": "Category",

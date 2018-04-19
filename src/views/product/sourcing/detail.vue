@@ -300,14 +300,27 @@
             }
         },
         methods:{
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            },
+
             handleClick(){
                 //切换tab页
+            },
+
+            /**
+             *  table操作
+             * */
+            getTableData(){
+                // const loading = this.$loading({
+                //     target:'.detail',
+                //     lock: true,
+                //     text: 'Loading',
+                //     // spinner: 'el-icon-loading',
+                //     background: 'rgba(255, 255, 255, .8)'
+                // });
+                this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
+                    this.productForm=res;
+                }).catch(err=>{
+                    console.log(err)
+                })
             },
 
             //添加比较
@@ -323,7 +336,10 @@
                     }
                 });
             },
-        }
+        },
+        created(){
+            this.getTableData();
+        },
     }
 </script>
 
