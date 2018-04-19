@@ -44,8 +44,8 @@
             <br>
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
-                <v-table :data="tableDataList" :buttons="[{label: 'urging payment', type: 'urging payment'},{label: 'detail', type: 'detail'}]"
-                 :loading="tabLoad" @action="action" 
+                <v-table :data="tableDataList" 
+                 :loading="tabLoad" @action="action" :buttons="setButton"
                 ></v-table>
             </div>
         </div>
@@ -135,15 +135,19 @@
                     }
                     this.$ajax.post(this.$apis.post_ledgerPage, params)
                     .then(res => {
-                        res.datas = _.map(res.datas,val=>{
-                            val.waitPayment = val.planPayAmount-val.actualPayAmount;
-                            val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
-                            return val;
+                        // res.datas = _.map(res.datas,val=>{
+                        //     val.waitPayment = val.planPayAmount-val.actualPayAmount;
+                        //     val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
+                        //     return val;
+                        // });
+                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
+                            item.waitPayment = item.planPayAmount-item.actualPayAmount;
+                            item.waitReceipt = item.planReceiveAmount-item.actualReceiveAmount;
+                            return item;
                         });
-                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
                     }); 
                 }else{
-                    const params ={
+                    const params = {
                         "conditions": {
                             "orderEntryEndDt":"",
                             "orderEntryStartDt": "",
@@ -230,6 +234,13 @@
                 }
               
             },
+            setButton(e){
+                // console.log(e) disabled
+                return [
+                    {label:e.waitPayment.value != 0 ? 'urging payment' :'urging payment',type:1},
+                    {label:'detail',type:2}
+                ]
+            }
         },
         created(){
             // this.viewByStatus = 0;

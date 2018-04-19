@@ -19,6 +19,7 @@
                             :selection="false" 
                             :buttons="basicInfoBtn"
                             :height="200"
+                            :loading="tableLoad"
                             @action="basicInfoAction"
                         />
                     </div>
@@ -33,23 +34,24 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.remove }} <span>({{checkedAll.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
                     <v-table 
-                        :data="productTabData"
-                        :buttons="productInfoBtn" 
+                        :data.sync="productTabData"
+                        :buttons="productInfoBtn"
+                        :loading="tableLoad"
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button>{{ $i.baseText.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')">{{ $i.baseText.accept }}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
                         <el-button @click="compareConfig.showCompareList = true;">{{ $i.baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
-                        <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createInquiry }}</el-button>
-                        <el-button type="info">{{ $i.baseText.cancel }}</el-button>
+                        <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i.baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.baseText.submit }}</el-button>
@@ -112,6 +114,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                tableLoad: true,
                 checkedAll: '',
                 msgTableType: false,
                 historyColumn: {},
@@ -152,7 +155,10 @@
                     label: 'Vendor SKU description'
                 }],
                 list:[],
-                tableColumn: ''
+                tableColumn: '',
+                submitData: {
+                    deleteDetailIds: []
+                }
             }
         },
         components: {
@@ -166,6 +172,7 @@
         },
         created() {
             this.getInquiryDetail();
+            this.submitData.id = this.$route.query.id
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -194,8 +201,12 @@
                     };
                     data.push(res);
                     data.push(json);
+                    this.tableLoad = false;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
                     this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
+                })
+                .catch(err => {
+                    this.tableLoad = false;
                 });
             },
             selectChange(val) {
@@ -210,9 +221,6 @@
             },
             boardSwitch() {
                 this.switchStatus = !this.switchStatus;
-            },
-            modifyCancel() {
-                this.statusModify = false;
             },
             basicInfoBtn(item) {
                 if(item.id.value && this.statusModify) return [{
@@ -229,17 +237,14 @@
                 }];
             }, 
             productInfoBtn (item) {
-                if(this.statusModify) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
                 return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-            },
-            modify() {
-                this.statusModify = false;
             },
             fromChange(val) {
                console.log(val)
             },
             modifyAction() {
-                    this.statusModify = true;
+                this.statusModify = true;
             },
             fnBasicInfoHistoty(item, type) {
                 if(type) {
@@ -304,7 +309,65 @@
            },
            changeChecked(item) {
                this.checkedAll = item;
-           }
+           },
+            toCreateInquire() {
+                let arr = [];
+                this.checkedAll.forEach(item => {
+                    arr.push(item.id.value);
+                });
+                this.$router.push({
+                    path: '/negotiation/createInquiry',
+                    query: {
+                        id :arr.join(',')
+                    }
+                });
+            },
+            ajaxInqueryAction(type) {
+                const argId = [];
+                argId.push(this.$route.query.id);
+                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                    action: type,
+                    ids:argId
+                })
+                .then(res => {
+                    console.log(res)
+                });
+            },
+            removeProduct() {
+                this.productTabData.forEach((item, index) => {
+                    if(item._checked) {
+                        item._disabled = true;
+                        this.$set(this.productTabData, index, item);
+                    };
+                });
+            },
+            modifyCancel() {
+                this.productTabData.forEach((item, index) => {
+                    if(!item._remove && item._disabled) {
+                        item._disabled = false;
+                        item._remove = false;
+                    };
+                    this.$set(this.productTabData, index, item);
+                });
+                this.statusModify = false;
+            },
+            modify() {
+                this.productTabData.forEach((item, index) => {
+                    if(!item._remove && item._disabled) {
+                        item._remove = true;
+                        this.submitData.deleteDetailIds.push(item);
+                    };
+                    this.$set(this.productTabData, index, item);
+                });
+                this.statusModify = false;
+            },
+            filtersProduct(list) {
+                let arr = [];
+                list.forEach(item => {
+                    if(item._remove) arr.push(item);
+                });
+                return arr;
+            }
         }
     }
 </script>

@@ -5,37 +5,34 @@ export default {
     quotationNo: {
 
     },
-    sequence: {
-
-    },
     status: {
 
     },
-    supplier: {
+    supplierName: {
 
     },
-    SKUCode: {
+    skuCode: {
 
     },
-    SKUName: {
-
+    skuNameEN: {
+        key: 'skuNameEn'
     },
     price: {
-
+        key: 'skuPrice'
     },
     currency: {
-
-    },
-    totalQTY: {
 
     },
     incoterm: {
 
     },
-    port: {
+    departurePort: {
 
     },
-    remark: {
-        
+    destinationPort: {
+
+    },
+    inquiryRemark: {
+        key: 'remark'
     }
 }

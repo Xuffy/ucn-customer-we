@@ -73,7 +73,7 @@
     },
     methods: {
       getQuickLink() {
-        this.$ajax.get(this.$apis.GET_QUICKLINK).then((data) => {
+        this.$ajax.post(this.$apis.GET_CODE_PART,['QUICK_LINK']).then((data) => {
           this.$store.state.quickLink.list = data;
         });
       }

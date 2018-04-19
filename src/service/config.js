@@ -4,11 +4,15 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       BASE_API: '',
-      BASE_DHC: 'http://192.168.51.111:18100',
+      // BASE_DHC: 'http://192.168.51.111:18100',
+      // BASE_HCJ: 'http://192.168.51.173:18003',
+      BASE_CS_cgs: 'http://192.168.51.33:11007',
+      BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_HCJ: 'http://192.168.51.173:18003',
+      BASE_JML: 'http://dev.umeta-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18300/',
-      BASE_LYF: 'http://dev.uuser-facade.ucnholding.com/web/v1'
+      BASE_LYF: 'http://dev.uuser-facade.ucnholding.com'
     },
     develop: {
       BASE_API: 'http://192.168.11.215:30704'

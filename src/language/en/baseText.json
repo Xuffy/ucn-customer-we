@@ -35,9 +35,7 @@
     "markAsRead":"Mark as Read",
     "all":"All",
     "process":"process",
-    "downloadSelected":"downloadSelected",
     "order":"order",
-    "createorder":"Create Order",
     "downloadall":"Download All",
     "addproduct":"Add Product",
     "send":"send",
@@ -47,6 +45,14 @@
     "fromNewSearch":"From New Search",
     "fromMyBookmark":"From My Bookmark",
     "confirm":"confirm",
-    "download":"download"
-    
+    "download":"download",
+    "creatInquiry":"Creat Inquiry",
+    "creatOrder":"Creat Order",
+    "addToBookmark":"Add To Bookmark",
+    "downloadSelected":"download Selected",
+    "search":"Search",
+    "clear":"Clear",
+    "supplierProducts":"Supplier's Products",
+    "sentAsOrder": "sent as order",
+    "logisticsPlanOverview": "Logistics Plan Overview"
 }

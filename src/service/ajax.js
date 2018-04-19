@@ -28,7 +28,7 @@ const $ajax = (config) => {
 
   this.setUrl = (url, params) => {
     let p = {};
-    if (!_.isEmpty(params)) {
+    if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
           p[key] = val;
@@ -39,30 +39,52 @@ const $ajax = (config) => {
     return {url, params};
   }
 
+  /*
+    this.getCache = (url, params, config, fn) => {
+      let resCache = sessionStore.get('request_cache'), data = false;
 
-  this.getCache = (url, params, config, fn) => {
-    let resCache = sessionStore.get('request_cache'), data = false;
+      if (config._cache) {
+        if (!_.isEmpty(resCache) && _.isArray(resCache)) {
+          _.map(resCache, val => {
+            let p = params.params || params
+            if (url === val.url && _.isEqual(p, val.params)) {
+              data = val;
+            }
+          });
+        }
+      }
+
+      if (data) {
+        return new Promise(function (resolve, reject) {
+          return resolve(data.data.content);
+        });
+      } else {
+        return fn(url, params, config);
+      }
+    }*/
+  this.getCache = (options, config) => {
+    let {url, data} = options
+      , resCache = sessionStore.get('request_cache')
+      , resData = false;
 
     if (config._cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
         _.map(resCache, val => {
-          let p = params.params || params
+          let p = data.params || data;
           if (url === val.url && _.isEqual(p, val.params)) {
-            data = val;
+            resData = val;
           }
         });
       }
     }
 
-    if (data) {
+    if (resData) {
       return new Promise(function (resolve, reject) {
-        return resolve(data.data.content);
+        return resolve(resData.data.content);
       });
     } else {
-      return fn(url, params, config);
+      return axios(_.extend(options, config));
     }
-
-
   }
 }
 /**
@@ -83,17 +105,7 @@ $ajax.prototype.all = (list) => {
 $ajax.prototype.get = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params);
 
-  return this.getCache(
-    data.url,
-    _.extend(config, {params: data.params}),
-    config,
-    axios.get
-  );
-  /*if (config._cache) {
-  } else {
-    return axios.get(data.url, _.extend(config, {params: data.params}));
-  }*/
-
+  return this.getCache({method: 'GET', url: data.url, data: data.params}, config);
 
 }
 
@@ -115,7 +127,8 @@ $ajax.prototype.post = (url, params = {}, config = {}) => {
     // options.headers['Content-Type'] = 'application/json;charset=utf-8';
     options.data = JSON.stringify(options.data);
   }
-  return axios(options);
+  return this.getCache(options, config);
+
 }
 
 

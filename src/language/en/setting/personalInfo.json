@@ -1,0 +1,11 @@
+{
+    "email":"Email",
+    "userName":"User Name",
+    "password":"Password",
+    "tel":"Tel",
+    "gender":"Gender",
+    "language":"Language",
+    "department":"Department",
+    "role":"Role",
+    "birthday":"Birthday"
+  }

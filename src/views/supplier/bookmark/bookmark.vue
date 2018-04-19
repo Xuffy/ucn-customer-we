@@ -1,83 +1,99 @@
 <template>
-    <div class="SupplierBookmark">
-        <div class="title">
-             {{$t("supplier.title.supplierBookmark")}}
+    <div class="SupplierSourcing">
+            <div class="title">
+              Supplier Bookmark
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
-       <div>
-            <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
-                <el-row>
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.supplierName')" prop="SkuName">
-                            <el-input v-model="formItem.SkuName" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                     </el-col>
-<!--                    下拉选择businessScope-->
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.businessScope')"  prop="businessScope">
-                            <el-select v-model="formItem.businessScope" placeholder="Enter something..."></el-select>
-                           </el-form-item>
-                    </el-col>
-<!--                    下拉选择category-->
-                  <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list"  :label="$t('supplier.input.category')"  prop="category">
-                             <div class="speDropdown">
-                              <drop-down :list="dropData" ref="dropDown"></drop-down>
-                              </div>
-                        </el-form-item>
-                    </el-col>
-                    </el-row>
-</el-form>
+            <div style='marginTop:20px;'>
+                <el-form ref="parms" :model="parms" label-width="200px" size="mini">
+                    <el-row>
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                           v-for='(item,index) in $db.supplier.overview'
+                           :key='index'
+                           v-if='item.isbasic==true'
+                           >
+                            <el-form-item class="form-list" 
+                             v-if="item.showType==='text'"
+                            :label="item.label" 
+                            :prop="item.key"                    
+                            >
+                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                            <el-form-item class="form-list"  v-if="item.showType==='select'"
+                            :label="item.label" 
+                            :prop="item.key" >
+                                <el-select v-model="parms[item.key]"></el-select>
+                               </el-form-item>
+                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
+                                :label="item.label" 
+                                :prop="item.key">
+                                 <div class="speDropdown">
+                                     <drop-down ref="dropDown"  v-model="parms[item.key]" :list="dropData"></drop-down>
+                                </div>
+                            </el-form-item>
+                         </el-col>
+
+                        </el-row>
+    </el-form>
             </div>
-            <div class="body" :class="{hide:hideBody}">
-                     <el-form ref="formItem" :model="formItem" label-width="140px" size="mini">
-                     <el-row>
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.supplierType')" prop="supplierType">
-                            <el-select v-model="formItem.supplierType" placeholder="Enter something..."></el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUname')" prop="vendorSKUname">
-                            <el-input v-model="formItem.vendorSKUname" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.vendorSKUcode')" prop="vendorSKUcode">
-                            <el-input v-model="formItem.vendorSKUcode" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="8" :lg="8">
-                        <el-form-item class="form-list" :label="$t('supplier.input.description')" prop="description">
-                            <el-input v-model="formItem.description" placeholder="Enter something..."></el-input>
-                        </el-form-item>
-                    </el-col>
+            <div class="body" :class="{hide:hideBody}">             
+                     <el-form ref="parms" :model="parms" label-width="200px" size="mini">
+                     <el-row>                 
+                                <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                           v-for='(item,index) in $db.supplier.overview'
+                           :key='index'
+                            v-if='!item.isbasic'
+                           >
+                            <el-form-item class="form-list" 
+                             v-if="item.showType==='text'"
+                            :label="item.label" 
+                            :prop="item.key"                    
+                            >
+                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
+                            </el-form-item>
+                            <el-form-item class="form-list"  v-if="item.showType==='select'"
+                            :label="item.label" 
+                            :prop="item.key" >
+                                <el-select v-model="parms[item.key]"></el-select>
+                               </el-form-item>
+                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
+                                :label="item.label" 
+                                :prop="item.key">
+                                 <div class="speDropdown">
+                                     <drop-down ref="dropDown" v-model="parms[item.key]" :list="dropData"></drop-down>
+                                </div>
+                            </el-form-item>
+                         </el-col>                
+
                 </el-row>
             </el-form>
         </div>
-        <div class="btn-group">
-            <el-button @click="search" type="primary" class="search">{{$t('supplier.buttonname.search')}}</el-button>
-            <el-button @click="clear('formItem')">{{$t('supplier.buttonname.clear')}}</el-button>
+            <div class="btn-group">
+            <el-button @click="search" type="primary" class="search" >{{$lang.baseText.search}}</el-button>
+            <el-button @click="clear('parms')">{{$lang.baseText.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
-        <div>
-<!--            跳转按钮行-->
+            <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$t('supplier.buttonname.createInquiry')}}</el-button>
-                  <el-button   @click='createOrder'>{{$t('supplier.buttonname.createOrder')}}</el-button>
-                  <el-button   @click='compare'>{{$t('supplier.buttonname.compare')}}</el-button>             
-                  <el-button  >{{$t('supplier.buttonname.downloadTheSelectedOverview')}}</el-button>
-<!--                  remove按钮-->
-                   <el-button  :disabled='disabled' type="danger">{{$t('supplier.buttonname.remove')}}</el-button>
+                  <el-button   @click='createInquiry'>{{$lang.baseText.creatInquiry}}</el-button>
+                  <el-button   @click='createOrder'>{{$lang.baseText.creatOrder}}</el-button>
+                  <el-button  @click='compare'>{{$lang.baseText.compare}}</el-button>
+                  <el-button   >{{$lang.baseText.downloadSelected}}</el-button>
+                      <el-button  type='danger'>{{$lang.baseText.remove}}</el-button>
               </div>  
               <div>
                  
-                
               </div>          
         </div>
-        <!--        表格-->
-            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+<!--        表格-->
+             <v-table 
+                   :height=360
+                    :data="tabData" 
+                    :buttons="[{label: 'detail', type: 1}]"
+                    @action="detail" 
+                    @change-checked='checked'
+                    style='marginTop:10px'/>
     </div>
 </template>
 
@@ -102,18 +118,51 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
-                formItem: {
-                    SupplierName: '',
-                    businessScope: '',
-                    category: '',
-                    supplierType: '',
-                    vendorSKUname: '',
-                    vendorSKUcode: '',
-                    description: '',
+                //                parms: {
+                //                    name: '',
+                //                    mainBusiness: '',
+                //                    category: '',
+                //                    type: '',
+                //                    skuNameEn: '',
+                //                    skuCode: '',
+                //                    description: '',
+                //                },
+                parms: {
+                    conditions: {},
+                    description: "",
+                    //                    mainBusiness: [],
+                    name: '',
+                    pn: 1,
+                    ps: 10,
+                    skuCode: "",
+                    skuNameEn: "",
+                    type: ''
                 },
-                //                remove
-                disabled: true,
-                tabColumn: [],
+                dropData: [{
+                    id: 1,
+                    label: '一级 1',
+                    children: [{
+                        id: 4,
+                        label: '二级 1-1',
+                        children: [{
+                            id: 9,
+                            label: '三级 1-1-1'
+                        }, {
+                            id: 10,
+                            label: '三级 1-1-2'
+                        }]
+                    }]
+                }, {
+                    id: 2,
+                    label: '一级 2',
+                    children: [{
+                        id: 5,
+                        label: '二级 2-1'
+                    }, {
+                        id: 6,
+                        label: '二级 2-2'
+                    }]
+                }],
                 tabData: []
             }
         },
@@ -127,11 +176,13 @@
             clear(name) {
                 this.$refs[name].resetFields();
             },
+
             //搜查
             search() {
-                this.$router.push('/product/detail');
+                console.log(this.parms)
+                this.get_data()
             },
-            //........跳入createInquiry
+            //....跳入createInquiry
             createInquiry() {
                 this.$router.push({
                     name: 'createInquiry',
@@ -140,7 +191,7 @@
                     }
                 })
             },
-            //........跳入createOrder
+            //....跳入createOrder
             createOrder() {
                 this.$router.push({
                     name: 'creatOrder',
@@ -149,7 +200,7 @@
                     }
                 })
             },
-            //........跳入createInquiry
+            //........跳入compare
             compare() {
                 this.$router.push({
                     name: 'SupplierCompare',
@@ -157,19 +208,31 @@
 
                     }
                 })
+            },
+            //...........进入detail
+            detail(item) {
+                this.windowOpen('/supplier/bookmarkDetail', {
+                    id: item.id.value
+                });
+            },
+            //.........checked
+            checked(item) {
+                console.log(item)
+            },
+            get_data() {
+                this.$ajax.post(this.$apis.get_listSupplier, this.parms)
+                    .then(res => {
+                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
             }
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
-
-                })
-                .catch((res) => {
-
-                });
+            this.get_data()
+            console.log(this.parms)
         },
         watch: {
             hideBody(n) {
@@ -178,7 +241,7 @@
                 } else {
                     this.btnInfo = 'Hide the Advance';
                 }
-            },
+            }
         }
     }
 
@@ -195,7 +258,6 @@
         height: 32px;
         line-height: 32px;
         color: #666666;
-
     }
 
     .title-btn {
@@ -216,7 +278,7 @@
     }
 
     .hide {
-        max-height: 0px;
+        max-height: 0;
 
     }
 
@@ -266,5 +328,11 @@
         max-width: 200px;
         height: 30px;
     }
+
+    /*
+    .vtable {
+        margin-top: 20px;
+    }
+*/
 
 </style>

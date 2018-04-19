@@ -8,6 +8,7 @@ export default _.extend(
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/workbench.pending`),
   {setting: require(`./${lang}/setting`)},
+  {personalInfo: require(`./${lang}/setting/personalInfo`)},
   require(`./${lang}/setting/setting.basic`),
   {baseText: require(`./${lang}/baseText`)},
   {basePlaceholder: require(`./${lang}/basePlaceholder`)},
@@ -29,7 +30,11 @@ export default _.extend(
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/detail/basicInfo.pending`),
   require(`/${lang}/inquiry/create/basicInfo.pending`),
-  require(`./${lang}/supplier/overview`),
-  {order: require(`./${lang}/order/overview`)},
-  require(`/${lang}/order/basicinfo.pending`),
+  require(`./${lang}/supplier/overview`) ,
+  require(`./${lang}/supplier/detail.pending`) ,  
+   { order: require(`./${lang}/order/overview`) },
+     require(`/${lang}/order/basicinfo.pending`),
+  require(`./${lang}/logistic/plan/overviewBtn.pending`),
+  require(`./${lang}/logistic/plan/basicInfo.pending`)
+ 
 )

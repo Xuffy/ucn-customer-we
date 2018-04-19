@@ -2,11 +2,14 @@
     <div>
         <product
                 :title="title"
-                :type="type"
-                :hideBtn="false"
-                :disabledLine="disabledLine"
-                @handleOK="getList"
-                @handleCancel="handleCancel"></product>
+                :type="type"></product>
+        <!--<product-->
+                <!--:title="title"-->
+                <!--:type="type"-->
+                <!--:hideBtn="false"-->
+                <!--:disabledLine="disabledLine"-->
+                <!--@handleOK="getList"-->
+                <!--@handleCancel="handleCancel"></product>-->
     </div>
 </template>
 <script>

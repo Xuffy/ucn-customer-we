@@ -1,0 +1,81 @@
+{
+    "SupplierCode": "Supplier Code",
+    "Suppliercompanyname": "Supplier company name",
+    "Suppliertype": "Supplier type",
+    "country": "country",
+    "city": "city",
+    "Provideincoterm": "Provide incoterm",
+    "Exportlicense": "Export license",
+    "businessscope": "business scope",
+    "category": "category",
+    "currency": "currency",
+    "paymentterm": "payment term",
+    "Suppliershortname": "Supplier short name",
+    "description": "description",
+
+
+
+    "address": "Address",
+    "accountInfo": "Account Info",
+    "contactInfo": "Contact Info",
+    "tradeHistory": "Trade History",
+    "inquireHistory": "Inquire History",
+    "remark": "Remark",
+    "attchment": "Attchment",
+
+    "factoryName": "Factory Name",
+    "factoryAddress": "Factory Address",
+    "exportPort": "Export Port",
+    "contactPerson1": "Contact Person1",
+    "concatPhone1": "Concat Phone No",
+    "contactPerson2": "Contact Person2",
+    "contactPhone2": "Contact Phone No",
+
+
+    "beneficiaryName": "Beneficiary name",
+    "beneficiaryAccount": "Beneficiary account",
+    "beneficiaryAddress": "Beneficiary address",
+    "beneficiaryBankName": "Beneficiary bank name",
+    "beneficiaryBankSwift": "Beneficiary bank SWIFT",
+    "accountType": "Account type",
+    "currency": "Currency",
+
+
+    "name": "name",
+    "department": "department",
+    "gender": "gender",
+    "position": "position",
+    "mobileNumber": "mobile number",
+    "telNumber": "tel number",
+    "faxNumber": "fax number",
+    "emailAddress": "email address",
+    "skype": "skype",
+    "QQ": "QQ",
+
+
+    "OrderNo": "Order No",
+    "orderStatus": "order status",
+    "orderDate": "order date",
+    "currency": "currency",
+    "purchasingPerson": "purchasing person",
+    "SKUCode": "SKU code",
+    "orderPrice": "order price",
+    "orderQuantity": "order quantity",
+    "amount": "amount",
+    "totalNetWeight": "total net weight",
+    " totalGrossWeight": " total gross weight",
+    "totalVolume": "total volume",
+
+
+    "InquiryNumber": "Inquiry number",
+    "inquiryDate": "inquiry date",
+    "payment": "payment",
+    "departurePort": "departure port",
+    "destinationPort": "destination port",
+    "quantity": "quantity",
+
+
+    "remark": "Remark",
+    "date": "Date",
+    "operater": "Operater"
+}

@@ -32,7 +32,7 @@
                 <input type="checkbox" :class="{visibility:selectionRadio}"/>
               </div>
             </td>
-            <td>
+            <td v-if="rowspan < 2">
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && item.key">
@@ -46,8 +46,9 @@
           </thead>
 
           <tbody ref="tableBody">
-          <tr v-for="(item,index) in dataList" :style="{opacity:item._disabled ? 0.5 : 1}">
-            <td v-if="selection">
+          <tr v-for="(item,index) in dataList" :style="{opacity:item._disabled ? 0.5 : 1}"
+              :class="{rowspan:index % rowspan !== 0}">
+            <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan">
               <div>
                 <input type="checkbox" ref="checkbox" :disabled="item._disabled"
                        v-if="typeof selection === 'function' ? selection(item) : true"
@@ -55,14 +56,14 @@
                        v-model="item._checked"/>
               </div>
             </td>
-            <td>
+            <td v-if="rowspan < 2" :rowspan="rowspan">
               <div v-text="index + 1"></div>
             </td>
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="{'background-color':cItem._highlight}">
               <div v-text="cItem.value"></div>
             </td>
-            <td v-if="buttons">
+            <td v-if="buttons && (index % rowspan === 0) " :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button" v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
                       @click="$emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
@@ -111,7 +112,6 @@
 
   import VTableFilter from './filter'
   import VPagination from './pagination'
-  // import VFilterValue from './filterValue'
 
   export default {
     name: 'VTable',
@@ -157,6 +157,10 @@
         default: 10,
       },
       pageTotal: {
+        type: Number,
+        default: 1,
+      },
+      rowspan: {
         type: Number,
         default: 1,
       },
@@ -234,11 +238,12 @@
           if (this.buttons) {
             this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
           }
-          _.map(trs, (val) => {
-            if (this.selection) {
+          _.map(trs, (val, index) => {
+            if (index % this.rowspan !== 0) return false;
+            if (this.selection && val.firstChild.style) {
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
-            if (this.buttons) {
+            if (this.buttons && val.lastChild.style) {
               val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
             }
           });
@@ -380,14 +385,14 @@
     /*background-color: #ebeff1 !important;*/
   }
 
-  .ucn-table.fixed-left-box tbody tr td:first-child,
-  .ucn-table.fixed-right-box tbody tr td:last-child {
+  .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child,
+  .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child {
     background-color: #FFFFFF;
     position: relative;
   }
 
-  .ucn-table.fixed-right-box tbody tr td:last-child:after,
-  .ucn-table.fixed-left-box tbody tr td:first-child:after {
+  .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child:after,
+  .ucn-table.fixed-left-box tbody tr:not(.rowspan) td:first-child:after {
     content: '';
     position: absolute;
     height: 100%;
@@ -398,7 +403,7 @@
     box-shadow: 3px 0 10px rgba(0, 0, 0, .4);
   }
 
-  .ucn-table.fixed-right-box tbody tr td:last-child:after {
+  .ucn-table.fixed-right-box tbody tr:not(.rowspan) td:last-child:after {
     left: 0;
     box-shadow: -3px 0 10px rgba(0, 0, 0, .2);
   }
