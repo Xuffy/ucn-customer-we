@@ -239,6 +239,7 @@
 
             //emit数据
             postData(){
+                this.$refs.productFormTop.resetFields();
                 this.$emit('handleOK',this.selectList);
             },
             cancel(){
