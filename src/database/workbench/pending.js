@@ -8,6 +8,7 @@ export default {
     length: 10,
     reg: '',
     state: '',
+    _image: true,
   },
   descripition: {
     key: '',

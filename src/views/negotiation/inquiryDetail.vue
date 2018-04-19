@@ -20,6 +20,7 @@
                             :buttons="basicInfoBtn"
                             :height="200"
                             :loading="tableLoad"
+                            :rowspan="2"
                             @action="basicInfoAction"
                         />
                     </div>
@@ -44,6 +45,7 @@
                         :loading="tableLoad"
                         @action="producInfoAction"
                         @change-checked="changeChecked"
+                        :rowspan="2"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')">{{ $i.baseText.accept }}</el-button>
@@ -172,7 +174,7 @@
         },
         created() {
             this.getInquiryDetail();
-            this.submitData.id = this.$route.query.id
+            this.submitData.id = this.$route.query.id;
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -189,21 +191,11 @@
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    let json = {}, data = [];
-                    for(let k in res) {
-                        for(let key in res.fieldRemark) {
-                            if(k === key) {
-                                json[k] = res.fieldRemark[key];
-                            } else {
-                                json[k] = null;
-                            }
-                        }
-                    };
-                    data.push(res);
-                    data.push(json);
+                    //Basic Info
                     this.tableLoad = false;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, data);
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, res.details);
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
+                    //Product Info
+                    this.productTabData = this.$getDB(this.$db.product.indexTable, this.$filterRemark(res.details, 'fieldRemark'));
                 })
                 .catch(err => {
                     this.tableLoad = false;
@@ -238,7 +230,7 @@
             }, 
             productInfoBtn (item) {
                 if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                if(!item._disabled) return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
             },
             fromChange(val) {
                console.log(val)
@@ -275,12 +267,13 @@
                             break;
                         case 'modify':
                             this.msgTitle = 'Modify';
-                            this.fnBasicInfoHistoty(data, 'modify');
+                            this.fnBasicInfoHistoty(data);
+                            this.oSwitch = true;
                             break;
                 }
            },
            producInfoAction(data, type) {
-                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                this.historyColumn = this.$db.product.indexTable;
                 switch(type) {
                         case 'histoty':
                             this.msgTitle = 'Histoty';
@@ -288,7 +281,8 @@
                             break;
                         case 'modify':
                             this.msgTitle = 'Modify';
-                            this.producInfoHistoty(data, 'modify');
+                            this.oSwitch = true;
+                            this.fnBasicInfoHistoty(data);
                             break;
                 }
            },
