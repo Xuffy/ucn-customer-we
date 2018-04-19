@@ -1,6 +1,6 @@
 <template>
   <div class="tableData">
-    <h3 class="ucn-content-title">Pending Task</h3>
+    <h3 class="ucn-content-title" @click="$refs.viewPicture.show('')">Pending Task</h3>
 
     <div style="position: absolute;right: 0;top: -5px">
       <!--<el-input placeholder="请输入内容" class="input-with-select">
@@ -15,6 +15,7 @@
 
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
+        <v-table-filter></v-table-filter>
         <v-table ref="pendingTable" :data="dataList"
                  :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
@@ -38,11 +39,13 @@
         <!--<v-simple-table></v-simple-table>-->
       </el-tab-pane>
     </el-tabs>
+
+
   </div>
 </template>
 
 <script>
-  import {VSimpleTable, VTable, VTableFilter} from '@/components/index';
+  import {VSimpleTable, VTable, VTableFilter, VViewPicture} from '@/components/index';
 
   export default {
     name: 'VTableData',
@@ -50,9 +53,11 @@
       VSimpleTable,
       VTable,
       VTableFilter,
+      VViewPicture,
     },
     data() {
       return {
+        pictureVisible: true,
         dataList: [],
         dataColumn: [],
       }
@@ -106,4 +111,5 @@
     font-size: 12px;
     padding: 0 10px;
   }
+
 </style>

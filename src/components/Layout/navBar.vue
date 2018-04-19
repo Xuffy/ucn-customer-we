@@ -50,7 +50,7 @@
     height: 40px;
     top: 60px;
     position: fixed;
-    z-index: 905;
+    z-index: 9999;
     padding-left: 15px;
   }
   .el-breadcrumb{
