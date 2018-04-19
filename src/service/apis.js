@@ -63,8 +63,18 @@ const apis = {
   delete_department:['/department/{deptId}','BASE_LYF'],
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
+  add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
+  add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
+  delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
+
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+
+
+
+
+
   post_supplier_addbookmark:['/purchase/supplier/bookmark','BASE_CS_cgs'],
   post_supplier_deletebookmark:['/purchase/supplier/deleteBookmark/{id}','BASE_CS_cgs'],
   post_supplier_listbookmark:['/purchase/supplier/listBookmarks','BASE_CS_cgs'], 

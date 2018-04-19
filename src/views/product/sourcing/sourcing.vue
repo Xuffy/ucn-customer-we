@@ -15,7 +15,6 @@
 <script>
 
     import product from '../addProduct'
-    console.log('sourcing')
     export default {
         name:"sourcing",
         components:{

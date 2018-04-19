@@ -64,7 +64,7 @@
         </div>
         <div class="footer">
             <div class="btns" v-if="!hideBtn">
-                <el-button @click="addNewProduct">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
                 <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                 <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
@@ -222,6 +222,7 @@
                     });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
+                    this.selectList=[];
                 }).catch(err=>{
                     this.disabledSearch=false;
                 });
@@ -278,7 +279,18 @@
              * 按钮组操作
              * */
             addToBookmark(){
-                console.log(this.selectList)
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                console.log(id)
+                // this.$ajax.post(this.$apis.add_bookmark,{
+                //     ids:id
+                // }).then(res=>{
+                //     console.log(res)
+                // }).catch(err=>{
+                //
+                // });
             },
 
             //表格按钮点击
@@ -288,8 +300,8 @@
                 }
             },
 
-            addNewProduct(){
-
+            createInquiry(){
+                console.log(1234)
             },
         },
         created(){

@@ -74,8 +74,8 @@
                                     :expand-on-click-node="false"
                                     :render-content="renderRole"
                                     :filter-node-method="filterRole"
-                                    @node-click="roleClick"
-                                    @check-change="checkChange">
+                                    @check="roleCheckClick"
+                                    @node-click="roleClick">
                             </el-tree>
                         </div>
                     </div>
@@ -156,8 +156,9 @@
 
 
                 <v-table
+                        class="speTable"
                         ref="vTable"
-                        :data="copyDataList"
+                        :data="tableDataList"
                         :buttons="setButton"
                         @change-checked="changeChecked"
                         @action="btnClick"></v-table>
@@ -210,6 +211,7 @@
                 disabledSearch:false,
                 editUserVisible:false,
                 formLabelWidth:'100px',
+                allowRoleGetData:false,             //是否允许切换role的选中状态来获取数据
                 /**
                  * Department data定义
                  * */
@@ -255,7 +257,6 @@
                     roleIds:null
                 },
                 tableDataList:[],
-                copyDataList:[],            //用于克隆一份table数据
                 editUser:{
                     id: 0,
                     deptId: 0,
@@ -425,7 +426,6 @@
                     status:null
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                    this.copyDataList=this.$copyArr(this.tableDataList);
                 }).catch(err=>{
 
                 });
@@ -442,6 +442,8 @@
              * tree节点点击事件
              * */
             departmentClick(data,node,com){
+                //选中部门就让他为false，避免触发全选时的多次重复事件
+                this.allowRoleGetData=false;
                 this.userData.deptId=data.deptId;
                 //清空底部搜索条件
                 this.userData.roleIds=null;
@@ -467,7 +469,6 @@
                 });
                 this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                    this.copyDataList=this.$copyArr(this.tableDataList);
                     this.$nextTick(()=>{
                         this.roleData[0].children.forEach(v=>{
                             this.$refs.roleTree.setChecked(v,true,false)
@@ -477,6 +478,53 @@
                 }).catch(err=>{
 
                 });
+            },
+            roleCheckClick(){
+                let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
+                let id=[];
+                checkedNode.forEach(v=>{
+                    if(!v.children){
+                        id.push(v.roleId);
+                    }
+                })
+                if(id.length){
+                    this.userData.roleIds=id;
+                }else{
+                    this.userData.roleIds=[];
+                }
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    target:'.speTable'
+                });
+                this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                    loading.close();
+                }).catch(err=>{
+
+                });
+
+
+
+
+                // if(e.children){
+                //     //表示点的是全选
+                //
+                //     let id=[];
+                //     checkedNode.forEach(v=>{
+                //         id.push(v.roleId)
+                //     });
+                //     if(id.length){
+                //         this.userData.roleIds=id;
+                //     }else{
+                //         this.userData.roleIds=null;
+                //     }
+                //     console.log(this.userData)
+                // }else{
+                //     //表示点的单选
+                //     console.log('单选')
+                // }
             },
             roleClick(data,node,com){
                 // console.log(data)
@@ -496,24 +544,6 @@
                 //     me.userData.roleId=id;
                 //     // console.log(me.userData,"????")
                 // },0)
-            },
-            checkChange(){
-                let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
-                let id=[];
-                this.copyDataList=[];
-                checkedNode.forEach(v=>{
-                    id.push(v.roleId)
-                    this.tableDataList.forEach(m=>{
-                        if(m.roleId.value===v.roleId){
-                            this.copyDataList.push(m);
-                        }
-                    })
-                });
-                if(id.length){
-                    this.userData.roleIds=id;
-                }else{
-                    this.userData.roleIds=null;
-                }
             },
 
             /**
@@ -786,7 +816,6 @@
                     this.disabledSearch=true;
                     this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                        this.copyDataList=this.$copyArr(this.tableDataList);
                         this.disabledSearch=false;
                     }).catch(err=>{
                         console.log(err)

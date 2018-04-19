@@ -2,9 +2,9 @@
     <div class="Details">
         <div class="head">
             <div class="title">
-                （SKU name)
+                {{productForm.nameEn}}
             </div>
-            <div class="detail">
+            <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
@@ -43,6 +43,7 @@
                     <el-button>{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark">{{$i.product.addToBookmark}}</el-button>
+                    <el-button>download</el-button>
                 </div>
             </div>
         </div>
@@ -91,7 +92,7 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
-                    <el-form class="speForm" label-width="260px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="280px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
@@ -102,7 +103,7 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
-                    <el-form class="speForm" label-width="250px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                 <el-form-item :label="v.label+':'">
@@ -120,13 +121,97 @@
 
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
-                    <add-table></add-table>
+                    <!--<add-table-->
+                            <!--:get_url="getRemarkUrl"-->
+                            <!--:id="parseInt($route.query.id)"></add-table>-->
+                    <div>
+                        <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
+                    </div>
+                    <br>
+                    <el-table
+                            :data="remarkTableData"
+                            border
+                            style="width: 100%">
+                        <el-table-column
+                                prop="remark"
+                                :label="$i.product.remark"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                prop="operatorName"
+                                :label="$i.product.operator"
+                                align="center">
+                        </el-table-column>
+                        <el-table-column
+                                prop="operatorDate"
+                                :label="$i.product.time"
+                                align="center">
+                            <template slot-scope="scope">
+                                {{$dateFormat(scope.row.operatorDate,'yyyy-mm-dd hh:mm:ss')}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                fixed="right"
+                                :label="$i.product.action"
+                                align="center">
+                            <template slot-scope="scope">
+                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
+                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <br>
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage1"
+                            :page-sizes="[100, 200, 300, 400]"
+                            :page-size="100"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="400">
+                    </el-pagination>
+                    <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
+                        <el-form :model="addRemarkData">
+                            <el-form-item label="备注:" :label-width="formLabelWidth">
+                                <el-input
+                                        type="textarea"
+                                        :rows="4"
+                                        placeholder="请输入内容"
+                                        v-model="addRemarkData.remark">
+                                </el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">提交</el-button>
+                            <el-button @click="addRemarkFormVisible = false">取 消</el-button>
+                        </div>
+                    </el-dialog>
+                    <!--<el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">-->
+                        <!--<el-form :model="parms">-->
+                            <!--<el-form-item label="备注:" :label-width="formLabelWidth">-->
+                                <!--<el-input-->
+                                        <!--type="textarea"-->
+                                        <!--:rows="4"-->
+                                        <!--placeholder="请输入内容"-->
+                                        <!--v-model="parms.remark">-->
+                                <!--</el-input>-->
+                            <!--</el-form-item>-->
+                        <!--</el-form>-->
+                        <!--<div slot="footer" class="dialog-footer">-->
+                            <!--<el-button type="primary" @click="edit_submit">提交</el-button>-->
+                            <!--<el-button @click="editRemarkFormVisible = false">取 消</el-button>-->
+                        <!--</div>-->
+                    <!--</el-dialog>-->
+
                 </el-tab-pane>
 
             </el-tabs>
         </div>
-
-        <compare-list :config="compareConfig"></compare-list>
+weqweqewww
+        <compare-list
+                v-if="showCompareList"
+                :data="compareData"
+                @closeTag="handleClose"></compare-list>
 
     </div>
 </template>
@@ -290,13 +375,28 @@
                 //用于展示的table数据
                 tableData:[],
 
+                /**
+                 * compareList配置
+                 * */
+                showCompareList:false,      //是否显示比较列表
+                compareData:[],
+                // compareConfig:{
+                //
+                // },
 
-                currentPage1:1,
-
-                //compareList配置
-                compareConfig:{
-                    showCompareList:false,      //是否显示比较列表
+                /**
+                 * remark data
+                 * */
+                formLabelWidth:'50px',
+                remarkTableData:[],
+                addRemarkData:{
+                    id: null,
+                    remark: "",
+                    skuId: 0,
                 },
+                currentPage1:1,
+                addRemarkFormVisible:false,
+                disableCreateRemark:false,      //是否禁用提交按钮
             }
         },
         methods:{
@@ -305,27 +405,112 @@
                 //切换tab页
             },
 
-            /**
-             *  table操作
-             * */
             getTableData(){
                 // const loading = this.$loading({
-                //     target:'.detail',
                 //     lock: true,
                 //     text: 'Loading',
-                //     // spinner: 'el-icon-loading',
-                //     background: 'rgba(255, 255, 255, .8)'
+                //     background: 'rgba(255, 255, 255, 0.7)',
+                //     target:'.head-detail'
                 // });
-                this.$ajax.get(this.$apis.get_productDetail,{id:this.$route.query.id}).then(res=>{
+                this.$ajax.get(this.$apis.get_productDetail,{
+                    id:Number(this.$route.query.id)
+                }).then(res=>{
                     this.productForm=res;
+                    // loading.close();
                 }).catch(err=>{
                     console.log(err)
                 })
             },
+            /**
+             *  remark操作
+             * */
+            getRemarkData(){
+                this.$ajax.post(this.$apis.get_buyerRemarkList,{
+                    id:Number(this.$route.query.id),
+                    pn: 1,
+                    ps: 50,
+                }).then(res=>{
+                    this.remarkTableData=res.datas;
+                });
+            },
+            handleSizeChange(e){
+
+            },
+            handleCurrentChange(e){
+
+            },
+            createRemark(){
+                this.addRemarkFormVisible=true;
+                this.addRemarkData.id=null;     //新增的时候要置为null
+                this.addRemarkData.skuId=this.productForm.id;
+                this.addRemarkData.remark='';
+
+            },
+            createRemarkSubmit(){
+                this.disableCreateRemark=true;
+                this.$ajax.post(this.$apis.add_buyerProductRemark,this.addRemarkData).then(res=>{
+                    this.disableCreateRemark=false;
+                    this.addRemarkFormVisible=false;
+                    this.$message({
+                        message: '新增成功',
+                        type: 'success'
+                    });
+                    this.getRemarkData();
+                }).catch(err=>{
+                    this.disableCreateRemark=false;
+                    this.addRemarkFormVisible=false;
+                });
+
+            },
+            deleteRemark(index, row){
+                this.$confirm('确定删除该备注?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.delete_buyerProductRemark,{
+                        id:row.id
+                    }).then(res=>{
+                        this.$message({
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        this.getRemarkData();
+                    }).catch(err=>{
+                        console.log(err)
+                    });
+                }).catch(() => {
+
+                });
+            },
 
             //添加比较
             addCompare(){
-                this.compareConfig.showCompareList=true;
+                this.showCompareList=true;
+                let compareList=this.$localStore.get('compareProductList');
+                let hasAdd=false;
+                if(!compareList){
+                    compareList=[];
+                }
+                compareList.forEach(v=>{
+                    if(v.id===this.productForm.id){
+                        //代表该商品已经添加了
+                        hasAdd=true;
+                    }
+                });
+                if(hasAdd){
+                    this.$message({
+                        message: '该商品已经添加到列表了',
+                        type: 'warning'
+                    });
+                }else{
+                    compareList.push({
+                        name:this.productForm.nameEn,
+                        id:this.productForm.id
+                    });
+                    this.compareData=compareList;
+                    this.$localStore.set('compareProductList',compareList)
+                }
             },
 
             addToBookmark(){
@@ -336,9 +521,33 @@
                     }
                 });
             },
+
+            /**
+             * compare-list操作
+             * */
+            getCompareList(){
+                let data=this.$localStore.get('compareProductList');
+                if(!data){
+                    this.compareData=[];
+                }else{
+                    this.compareData=data;
+                }
+            },
+            handleClose(e){
+                let key;
+                this.compareData.forEach((v,k)=>{
+                    if(v.id===e.id){
+                        key=k;
+                    }
+                });
+                this.compareData.splice(key,1);
+                this.$localStore.set('compareProductList',this.compareData);
+            },
         },
         created(){
             this.getTableData();
+            this.getRemarkData();
+            this.getCompareList();
         },
     }
 </script>
