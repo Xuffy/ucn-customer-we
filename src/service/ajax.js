@@ -16,7 +16,8 @@ const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
-    'Content-Type': 'application/json;charset=utf-8'
+    'Content-Type': 'application/json;charset=utf-8',
+    // 'U-Session-Token':'askjhasjkhgkajshg'
   },
   transformRequest: [function (data) {
     // return JSON.stringify(data);
@@ -26,9 +27,15 @@ const axios = Axios.create({
 
 const $ajax = (config) => {
 
+  /**
+   * 设置restful 地址参数
+   * @param url
+   * @param params
+   * @returns {*}
+   */
   this.setUrl = (url, params) => {
     let p = {};
-    if (!_.isEmpty(params)) {
+    if (!_.isEmpty(params) && !params.length) {
       _.mapObject(params, (val, key) => {
         if (url.indexOf(`{${key}}`) < 0) {
           p[key] = val;
@@ -40,29 +47,61 @@ const $ajax = (config) => {
   }
 
 
-  this.getCache = (url, params, config, fn) => {
-    let resCache = sessionStore.get('request_cache'), data = false;
+  /**
+   * 设置header信息
+   * @param options
+   * @param config
+   * @returns {*[]}
+   */
+  this.sethHeader = (options, config) => {
+    if (config._contentType === 'F') {
+      options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      options.data = Qs.stringify(options.data);
+    } else {
+      options.data = JSON.stringify(options.data);
+    }
+    return [options, config]
+  }
+
+  /**
+   * 获取缓存接口
+   * @param options
+   * @param config
+   * @returns {*}
+   */
+  this.getCache = (options, config) => {
+    let {url, data} = options
+      , resCache = sessionStore.get('request_cache')
+      , resData = false
+      , _options;
 
     if (config._cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
         _.map(resCache, val => {
-          let p = params.params || params
+          let p = data.params || data;
           if (url === val.url && _.isEqual(p, val.params)) {
-            data = val;
+            resData = val;
           }
         });
       }
     }
 
-    if (data) {
+    if (resData) {
       return new Promise(function (resolve, reject) {
-        return resolve(data.data.content);
+        return resolve(resData.data.content);
       });
     } else {
-      return fn(url, params, config);
+      _options = _.extend(...this.sethHeader(options, config));
+
+      switch (_options.method) {
+        case 'DELETE':
+          return axios.delete(_options.url,{params:_options.data});
+        case 'PUT':
+          return axios.put(_options.url);
+        default:
+          return axios(_options);
+      }
     }
-
-
   }
 }
 /**
@@ -83,17 +122,7 @@ $ajax.prototype.all = (list) => {
 $ajax.prototype.get = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params);
 
-  return this.getCache(
-    data.url,
-    _.extend(config, {params: data.params}),
-    config,
-    axios.get
-  );
-  /*if (config._cache) {
-  } else {
-    return axios.get(data.url, _.extend(config, {params: data.params}));
-  }*/
-
+  return this.getCache({method: 'GET', url: data.url, data: data.params}, config);
 
 }
 
@@ -108,16 +137,39 @@ $ajax.prototype.post = (url, params = {}, config = {}) => {
   let data = this.setUrl(url, params)
     , options = {method: 'POST', headers: {}, url: data.url, data: data.params};
 
-  if (config._contentType === 'F') {
-    options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-    options.data = Qs.stringify(options.data);
-  } else {
-    // options.headers['Content-Type'] = 'application/json;charset=utf-8';
-    options.data = JSON.stringify(options.data);
-  }
-  return axios(options);
+  return this.getCache(options, config);
+
 }
 
+/**
+ * PUT请求
+ * @param url
+ * @param params
+ * @param config
+ * @returns {*}
+ */
+$ajax.prototype.put = (url, params = {}, config = {}) => {
+  let data = this.setUrl(url, params)
+    , options = {method: 'PUT', headers: {}, url: data.url, data: data.params};
+
+  return this.getCache(options, config);
+
+}
+
+/**
+ * DELETE请求
+ * @param url
+ * @param params
+ * @param config
+ * @returns {*}
+ */
+$ajax.prototype.delete = (url, params = {}, config = {}) => {
+  let data = this.setUrl(url, params)
+    , options = {method: 'DELETE', headers: {}, url: data.url, data: data.params};
+
+  return this.getCache(options, config);
+
+}
 
 NProgress.configure({
   // showSpinner: false

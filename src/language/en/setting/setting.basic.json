@@ -9,5 +9,23 @@
   "currencySetting":"币种",
   "paymentTermSetting":"付款方式",
   "supplierShortNameSetting":"供应商简称",
-  "descriptionSetting":"供应商描述"
+  "descriptionSetting":"供应商描述",
+
+  "userName":"User Name",
+  "email":"Email",
+  "deptName":"Department Name",
+  "roleName":"Role Name",
+  "tel":"Tel",
+  "gender":"Gender",
+  "birthday":"Birthday",
+  "lang":"Language",
+  "status":"Active",
+  "remark":"Remark"
+
+
+
+
+
+
+
 }

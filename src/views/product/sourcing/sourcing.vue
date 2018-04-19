@@ -25,16 +25,10 @@
             return{
                 title:this.$i.product.title,
                 type:'product',
-                disabledLine:[3]
             }
         },
         methods:{
-            getList(e){
-                console.log(e)
-            },
-            handleCancel(){
-                console.log(1)
-            },
+
         }
     }
 </script>
