@@ -8,7 +8,7 @@
       </div>
       <div class="fixed">
         <v-table-filter ref="tableFilter"
-                        @filter-column="onFilterColumn"
+                        @filter-column="onFilterColumn" 
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
@@ -65,8 +65,10 @@
             </td>
             <td v-if="buttons && (index % rowspan === 0) " :rowspan="rowspan">
               <div style="white-space: nowrap;">
-                <span class="button" v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
-                      @click="$emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
+                <span class="button"
+                      v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      :class="{disabled:aItem.disabled}"
+                      @click="!aItem.disabled && $emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
               </div>
             </td>
           </tr>
@@ -98,7 +100,7 @@
    * @param {Number} [pageSize]    - 每页条数  例：200
    * @param {Number} [pageTotal]    - 总条数  例：200
    * @param {Function, Array} [buttons]    - 设置action按钮，可传入函数判断按钮是否显示，返回Array
-   *                                         例：[{label: 'detail', type: 1,style:''}, {label: 'history', type: 2}]
+   *                                         例：[{label: 'detail', type: 1}, {label: 'history', type: 2}]
    *                                         例：['detail', 'history']
    *
    * @method @change-checked(checkedList)   - checkbox改变时调用
@@ -413,6 +415,10 @@
     cursor: pointer;
     display: inline-block;
     margin-right: 10px;
+  }
+
+  .ucn-table .button.disabled {
+    color: #c0c4cc;
   }
 
   .ucn-table .button:last-child {
