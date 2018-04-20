@@ -129,7 +129,11 @@ export default {
               if(k === key) {
                   json[k] = list[remark][key];
               } else {
-                  json[k] = null;
+                  if(k == 'id') {
+                    json._id = list[k];
+                  } else {
+                    json[k] = null;
+                  }
               }
           }
         };

@@ -6,7 +6,15 @@
             <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
-                    <el-col v-for="(item, index) in $db.inquiryOverview.createbBasicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
+                    <el-col 
+                            v-for="(item, index) in $db.inquiryOverview.basicInfo" 
+                            :key="index" 
+                            :xs="item.xs || 8" 
+                            :sm="item.sm || 8" 
+                            :md="item.md || 8" 
+                            :lg="item.lg || 8"
+                            v-if="!item._hide"
+                        >
                         <el-form-item  
                                 :label="item.label" 
                                 :prop="item.key" 

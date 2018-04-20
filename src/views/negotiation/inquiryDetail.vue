@@ -94,6 +94,7 @@
             :title="msgTitle"
             :column="historyColumn"
             :msgTableType="msgTableType"
+            @isModify="isModify"
         />
     </div>
 </template>
@@ -116,6 +117,8 @@
         name:'inquiryDetail',
         data() {
             return {
+                producInfoModify: [],
+                basicModify: [],
                 tableLoad: true,
                 checkedAll: '',
                 msgTableType: false,
@@ -195,7 +198,7 @@
                     this.tableLoad = false;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
                     //Product Info
-                    this.productTabData = this.$getDB(this.$db.product.indexTable, this.$filterRemark(res.details, 'fieldRemark'));
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInf, this.$filterRemark(res.details, 'fieldRemark'));
                 })
                 .catch(err => {
                     this.tableLoad = false;
@@ -244,21 +247,19 @@
                 } else {
                     this.msgTableType = false;
                 }
-                if(item.histoty) {
-                    this.oSwitch = true;
-                    this.historyData = item.histoty;
-                    return false;
-                };
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
                     id: item.id.value
                 })
                 .then(res => {
-                    item.histoty = res;
                     this.historyData = res;
                     this.oSwitch = true;
                 });
            },
            basicInfoAction(data, type) {
+                this._id = {
+                    id: data.id.value,
+                    type: 'basicInfo'
+                };
                 this.historyColumn = this.$db.inquiryOverview.basicInfo;
                 switch(type) {
                         case 'histoty':
@@ -273,7 +274,11 @@
                 }
            },
            producInfoAction(data, type) {
-                this.historyColumn = this.$db.product.indexTable;
+                this._id = {
+                    id: data.id.value,
+                    type: 'producInfo'
+                };
+                this.historyColumn = this.$db.inquiryOverview.productInf;
                 switch(type) {
                         case 'histoty':
                             this.msgTitle = 'Histoty';
@@ -361,6 +366,48 @@
                     if(item._remove) arr.push(item);
                 });
                 return arr;
+            },
+            isModify(data) {
+                if(this._id.type === 'producInfo') {
+                    let ptd = [];
+
+                    let hDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.history]);
+
+                    let rDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.remark]);
+
+                    _.map(this.productTabData, item=>{
+                        if(item.id&&item.id.value === this._id.id && !_.isEmpty(hDB)){
+                            ptd.push(_.extend(item, hDB[0]));
+                        }
+                        if(item._id&&item._id.value === this._id.id && !_.isEmpty(rDB)){
+                            ptd.push(_.extend(item, rDB[0]));
+                        }
+
+                    });
+                    
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.productTabData, item=>{
+                        if(item.id && item.id === ptd[0].id){
+                            item=ptd[1]
+                        }
+                        if(item._id && item._id === ptd[1]._id){
+                            item=ptd[0]
+                        }
+                        return item;
+                    });
+                } else {
+                    let tabData = _.clone(this.tabData);
+                    tabData.forEach(item => {
+                        if(item.id) {
+                            for(let k in item) {
+                                if(data.remark[k]) item[k].value = data.remark[k];
+                            }
+                        } else if(item._id) {
+                            for(let k in item) {
+                                if(data.history[k]) item[k].value = data.history[k];
+                            }
+                        }
+                    });
+                }
             }
         }
     }
