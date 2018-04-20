@@ -1,5 +1,7 @@
 <template>
     <div class="inquiryDetail">
+        
+        {{oSwitch}}
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
@@ -87,7 +89,7 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <v-history 
+        <!-- <v-history 
             :oSwitch.sync="oSwitch" 
             :list.sync="historyData" 
             :tableColumn="tableColumn"
@@ -95,7 +97,8 @@
             :column="historyColumn"
             :msgTableType="msgTableType"
             @isModify="isModify"
-        />
+        /> -->
+        <v-history-modify :visible.sync="oSwitch" :data="historyData"></v-history-modify>
     </div>
 </template>
 <script>
@@ -110,7 +113,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
@@ -173,7 +176,8 @@
             'v-product': product,
             'v-compare-list': compareList,
             'v-history': VHistory,
-            'drop-down-single': dropDownSingle
+            'drop-down-single': dropDownSingle,
+            VHistoryModify
         },
         created() {
             this.getInquiryDetail();
@@ -247,8 +251,8 @@
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
                     this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
                     //Product Info
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInf, this.$filterRemark(res.details, 'fieldRemark'));
-                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInf, this.$filterRemark(res.details, 'fieldRemark'));
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$filterRemark(res.details, 'fieldRemark'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$filterRemark(res.details, 'fieldRemark'));
                 })
                 .catch(err => {
                     this.tableLoad = false;
