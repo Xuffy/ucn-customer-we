@@ -1,1 +1,49 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><title>TAILORX STORE</title><link href=/static/css/app.4448827f043917017985c7474afe74b2.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/static/js/manifest.47a4d6117d4f3dbca49a.js></script><script type=text/javascript src=/static/js/vendor.50038cf35dbae1e3f9e0.js></script><script type=text/javascript src=/static/js/app.da798303a609c6dee103.js></script></body></html>
+Html Webpack Plugin:
+<pre>
+  Error: Parse Error: <meta name=”viewport” content=”width=device-width, initial-scale=1, maximum-scale=1″> 
+      <meta charset="utf-8"> 
+      <title>TAILORX STORE</title> 
+    <link href="/static/css/app.fb5cf59af835b2fb7e34af08a939e1a6.css" rel="stylesheet"></head> 
+    <body> 
+      <div id="app"></div> 
+      <!-- built files will be auto injected --> 
+    <script type="text/javascript" src="/static/js/manifest.bfe3a9ed3453b4fe856e.js"></script><script type="text/javascript" src="/static/js/vendor.1f53db97697d170de  f9b.js"></script><script type="text/javascript" src="/static/js/app.079f7fc8d35e0955a9e2.js"></script></body> 
+  </html>
+  
+  - htmlparser.js:240 new HTMLParser
+    [customer-web]/[_html-minifier@3.5.14@html-minifier]/src/htmlparser.js:240:13
+  
+  - htmlminifier.js:944 minify
+    [customer-web]/[_html-minifier@3.5.14@html-minifier]/src/htmlminifier.js:944:3
+  
+  - htmlminifier.js:1304 exports.minify
+    [customer-web]/[_html-minifier@3.5.14@html-minifier]/src/htmlminifier.js:1304:10
+  
+  - index.js:296 
+    [customer-web]/[_html-webpack-plugin@2.30.1@html-webpack-plugin]/index.js:296:16
+  
+  - util.js:16 tryCatcher
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/util.js:16:23
+  
+  - promise.js:512 Promise._settlePromiseFromHandler
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/promise.js:512:31
+  
+  - promise.js:569 Promise._settlePromise
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/promise.js:569:18
+  
+  - promise.js:614 Promise._settlePromise0
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/promise.js:614:10
+  
+  - promise.js:693 Promise._settlePromises
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/promise.js:693:18
+  
+  - async.js:133 Async._drainQueue
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/async.js:133:16
+  
+  - async.js:143 Async._drainQueues
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/async.js:143:10
+  
+  - async.js:17 Immediate.Async.drainQueues
+    [customer-web]/[_bluebird@3.5.1@bluebird]/js/release/async.js:17:14
+  
+</pre>
