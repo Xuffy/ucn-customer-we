@@ -76,12 +76,16 @@
     },
     watch: {
       data(val){
+console.log(2,this.data)
         this.dataList = this.getFilterData(val);
         this.dataColumn = this.dataList[0];
+        console.log(this.dataList)
       }
     },
     mounted() {
 
+
+console.log(1,this.data)
 
       this.dataList = this.getFilterData(this.data);
       this.dataColumn = this.dataList[0];
@@ -106,7 +110,7 @@
         list = [list[0], list[1]].concat(list);
 
         return this.$getDB(
-          this.$db.inquiryOverview.productInfo, list,
+          this.$db.inquiryOverview.basicInfo, list,
           (item, index) => {
             if (item.updateDt) {
               item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');

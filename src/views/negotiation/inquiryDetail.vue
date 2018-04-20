@@ -98,7 +98,12 @@
             :msgTableType="msgTableType"
             @isModify="isModify"
         /> -->
-        <v-history-modify :visible.sync="oSwitch" :data="historyData"></v-history-modify>
+        <v-history-modify 
+                :visible.sync="oSwitch" 
+                :data="historyData" 
+                @save="save"
+            >
+        </v-history-modify>
     </div>
 </template>
 <script>
@@ -196,6 +201,9 @@
             }
         },
         methods: {
+            save(data) {
+                
+            },
             startCompare() { //前往比较
                 let arr = [];
                 this.compareConfig.forEach(item => {
@@ -306,6 +314,7 @@
                 })
                 .then(res => {
                     this.historyData = res;
+                    console.log(this.historyData)
                     this.oSwitch = true;
                 });
            },
