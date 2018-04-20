@@ -60,10 +60,19 @@
     watch: {},
     mounted() {
       this.dataList = testData.content.details;
-      console.log(this.dataList)
-      console.log(this.$getDB(this.$db.inquiryOverview.productInfo, this.dataList))
+      // console.log(this.dataList)
+      // console.log(this.$getDB(this.$db.inquiryOverview.productInfo, this.dataList))
+      this.getFilterData(this.dataList);
     },
-    methods: {}
+    methods: {
+      getFilterData(list) {
+        let _list=[];
+        _.map(list, value => {
+          console.log(value)
+          // _list.push()
+        });
+      }
+    }
   }
 </script>
 
