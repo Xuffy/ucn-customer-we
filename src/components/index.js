@@ -2,6 +2,7 @@ import VTable from './common/table/index';
 import VTableFilter from './common/table/filter';
 import VSimpleTable from './common/table/simple';
 import VComplexTable from './common/table/complex';
+import VHistoryModify from './common/historyModify';
 import dropDown from './common/fnCompon/dropDown';
 import Expand from './common/table/expand';
 import FilterColumn from './common/table/filterColumn';
@@ -24,6 +25,7 @@ import paymentTable from '@/views/warehouse/paymentTable';
 import VHistory from '@/views/negotiation/children/history';
 // import timeSelection from './common/fnCompon/timeSelection';
 export {
+  VHistoryModify,
   VAddQuickLink,
   VTable,
   VTableFilter,
@@ -47,5 +49,5 @@ export {
   dropDownSingle,
   paymentTable,
   VHistory,
-  //timeSelection
+//timeSelection
 }
