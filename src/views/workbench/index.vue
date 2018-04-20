@@ -46,7 +46,7 @@
     name: 'workbench',
     data() {
       return {
-        visible: true
+        visible: false
       }
     },
     components: {
