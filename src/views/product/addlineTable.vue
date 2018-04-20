@@ -130,51 +130,6 @@
         },
         data(){
             return{
-//                columns:[
-//                    {
-//                        title: '备注',
-//                        key: 'remark',
-//                        align:'center',
-//                    },
-//                    {
-//                        title: '操作人',
-//                        key: 'submiter',
-//                        align:'center',
-//                    },
-//                    {
-//                        title: '操作时间',
-//                        key: 'time',
-//                        align:'center',
-//                    },
-//                    {
-//                        title: '操作',
-//                        key: 'action',
-//                        align:'center',
-//                        render: (h, params) => {
-//                            return h('div', [
-//                                h('Button', {
-//                                    props: {
-//                                        type: 'text',
-//                                        size: 'small'
-//                                    }
-//                                }, '查看'),
-//                                h('Button', {
-//                                    props: {
-//                                        type: 'text',
-//                                        size: 'small'
-//                                    }
-//                                }, '修改'),
-//                                h('Button', {
-//                                    props: {
-//                                        type: 'text',
-//                                        size: 'small'
-//                                    }
-//                                }, '删除')
-//                            ]);
-//                        }
-//                    }
-//
-//                ],
                 data:[
                     {
                         remark: '只有充钱你才能变得更强',
@@ -217,52 +172,53 @@
             }
         },
         methods:{
-            handleSizeChange(val) {
+             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
+             },
+             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
-            },
+             },
             
-            //新增备注
-            createRemark() {             
+             //新增备注
+             createRemark() {
                 this.addRemarkFormVisible=true;
             },
-            createRemarkSubmit(){ this.$ajax.post(this.$apis[this.add_url],this.parms).then((res) => {                                  
+             createRemarkSubmit(){
+                this.$ajax.post(this.$apis[this.add_url],this.parms).then((res) => {
                       this.get_remark()
                     }).catch((res) => {
                         console.log(res)
                     })
                 this.addRemarkFormVisible = false
             },
-            //查看备注
-            checkRemark(){
-                this.checkRemarkFormVisible=true;
-            },
+             //查看备注
+             checkRemark(){
+                 this.checkRemarkFormVisible=true;
+             },
 
-            //修改备注
-            editRemark(index, row){
+             //修改备注
+             editRemark(index, row){
                 this.parms.id=row.id
                  this.parms.remark=''
                 this.editRemarkFormVisible=true;
             },
-            edit_submit(){
-                this.$ajax.post(this.$apis[this.updata_url],this.parms).then((res) => {               
+             edit_submit(){
+                this.$ajax.post(this.$apis[this.updata_url],this.parms).then((res) => {
                     this.get_remark()
                 }).catch((res) => {
                     console.log(res)
                 })
                 this.editRemarkFormVisible=false;
             },
-            //删除备注
-            deleteRemark(index, row){           
+             //删除备注
+             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis[this.delete_url], {id:row.id }).then((res) => {               
-                             console.log(res)
+
                            this.get_remark()
                             this.$message({
                             type: 'success',
@@ -278,30 +234,36 @@
 
                 });
             },
-            //获取remark数据列表
+             //获取remark数据列表
              get_remark() {
                 this.$ajax.post(this.$apis[this.get_url], {
-                    id: 1,
+                    id: this.id,
                     pn: 1,
-                    ps: 100,
-
-                }).then((res) => {  
+                    ps: 50,
+                    sorts: [
+                        {
+                            orderBy: "",        //默认传空
+                            orderType: "",
+                        }
+                    ]
+                }).then((res) => {
                     this.tableData=res.datas
                 }).catch((res) => {
                     console.log(res)
                 })
-            },
-            //.........增加remark
+             },
+             //.........增加remark
              add_Remark(){
                    
              },
-            //.........删除remark
+             //.........删除remark
              delete_Remark(){
                 
              }, 
         },
         created(){
             this.get_remark()
+
         }
     }
 </script>

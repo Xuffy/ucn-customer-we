@@ -21,7 +21,7 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='disabled'></responsibility>
 <!--         payment-->
-<!--         <v-payment></v-payment>-->
+         <v-payment></v-payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -47,7 +47,7 @@
                  <el-button  @click='modify'>{{$i.baseText.modify}}</el-button>
                  <el-button >{{$i.baseText.confirm}}</el-button>
                  <el-button  :disabled='true'>{{$i.baseText.download}}</el-button>
-                  <el-button >{{$i.baseText.createorder}}</el-button>
+                  <el-button >{{$i.baseText.createOrder}}</el-button>
                    <el-button >{{$i.baseText.cancel}}</el-button>
                  <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
                  <el-checkbox v-model="checked">{{$i.baseText.highlightTheDifferent}}</el-checkbox>

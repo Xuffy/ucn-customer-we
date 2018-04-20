@@ -76,11 +76,11 @@
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}</el-button>
+                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}({{selectNumber.length}})</el-button>
                   <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.baseText.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.baseText.addToBookmark}}</el-button>
-                  <el-button :disabled='!selectedData.length>0'>{{$i.baseText.downloadSelected}}</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}({{selectNumber.length}})</el-button>
+                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.baseText.addToBookmark}}({{selectNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'>{{$i.baseText.downloadSelected}}({{selectNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -88,7 +88,8 @@
         </div>
 <!--        表格-->
              <v-table 
-                   :height=360
+                    :height=360
+                    :loading='loading'
                     :data="tabData" 
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail" 
@@ -118,15 +119,9 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
-                //                parms: {
-                //                    name: '',
-                //                    mainBusiness: '',
-                //                    category: '',
-                //                    type: '',
-                //                    skuNameEn: '',
-                //                    skuCode: '',
-                //                    description: '',
-                //                },
+                loading: false,
+                pageTotal:"",
+                endpn:"",
                 parms: {
                     conditions: {},
                     description: "",
@@ -164,7 +159,8 @@
                     }]
                 }],
                 tabData: [],
-                selectedData:[]
+                selectedData:[],
+                selectNumber:[]
             }
         },
         methods: {
@@ -195,9 +191,26 @@
                    selectedData:this.selectedData
                 });
             },
-            //........跳入compare
-            compare() {
-               
+            //........compare
+            compare() {          this.$ajax.post(this.$apis.post_supplier_addCompare, {
+                      "compares": [
+                        {
+                          "id": 0,
+                          "name": ""
+                        },
+                        {
+                          "id": 1,
+                          "name": ""
+                        }
+                      ],
+                      "name": ""
+                    })
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+
+                    });
             },
             //...........进入detail
             detail(item) {
@@ -213,25 +226,27 @@
             },
             //.....拿数据
             get_data() {
+                 this.loading = true
                 this.$ajax.post(this.$apis.get_listSupplier, this.parms)
                     .then(res => {
+                     this.pageTotal=res.datas.tc
+                     this.endpn=res.datas.end
+                     this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
-                        console.log(res.datas)
+                       
                     })
                     .catch((res) => {
-
+                     this.loading = false
                     });
             },
             //...........addToBookmark
-            addToBookmark(){
-                  this.$ajax.post(this.$apis.post_supplier_addbookmark, {
-                      ids:[1]
-                  })
+            addToBookmark(){                  this.$ajax.post(this.$apis.post_supplier_addbookmark, this.selectNumber
+                  )
                     .then(res => {
                         console.log(res)
                     })
                     .catch((res) => {
-                        console.log(res)
+                        console.slog(res)
                   });
             },
         },

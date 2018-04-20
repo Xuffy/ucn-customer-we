@@ -1,10 +1,10 @@
 <template>
-    <div class="compare-zone" :class="{isTransparent:change}" v-if="config.showCompareList">
+    <div class="compare-zone" :class="{isTransparent:change}">
         <div class="compare-list" :class="{show:change}">
-            <el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>
+            <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
             <el-tag
                     class="tag"
-                    v-for="tag in tags"
+                    v-for="tag in data"
                     :key="tag.name"
                     closable
                     :type="tag.type"
@@ -26,9 +26,6 @@
      *  Time 2018-03-26
      *  @param { config }  -组件配置
      *
-     *  {
-     *      showCompareList:false,          //是否显示对比列表，默认为false
-     *  }
      *
      *  @param { tags }  -对比列表的内容
      *
@@ -38,25 +35,17 @@
     export default {
         name: "compare-list",
         props:{
-            config:{
-                type:Object,
-                default:{
-                    showCompareList:false
-                }
+            data:{
+                type:Array,
+                default:[]
             }
         },
         data(){
             return{
                 show:true,
-                tags: [
-                    { name: '标签一', type: '' },
-                    { name: '标签二', type: '' },
-                    { name: '标签三', type: '' },
-                    { name: '标签四', type: '' },
-                    { name: '标签五', type: '' }
-                ],
-
+                tags: [],
                 change:false,
+                disabledBtn:true,              //是否能点击compare按钮
             }
         },
         methods:{
@@ -72,8 +61,24 @@
 
             //删除所选中的项
             handleClose(tag){
-                this.tags.splice(this.tags.indexOf(tag), 1);
+                this.$emit('closeTag',tag);
             },
+        },
+        created(){
+            if(this.data.length>=2){
+                this.disabledBtn=false;
+            }else{
+                this.disabledBtn=true;
+            }
+        },
+        watch:{
+            data(n){
+                if(n.length>=2){
+                    this.disabledBtn=false;
+                }else{
+                    this.disabledBtn=true;
+                }
+            }
         }
     }
 </script>

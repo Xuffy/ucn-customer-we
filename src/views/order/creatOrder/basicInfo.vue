@@ -222,8 +222,8 @@
                     return {}
                 }
             },
-            podisabled:{
-                 type: Boolean,
+            podisabled: {
+                type: Boolean,
                 default: false
             }
         },
@@ -351,7 +351,7 @@
 
         },
         created() {
-            console.log(this.$i)
+
         }
     }
 

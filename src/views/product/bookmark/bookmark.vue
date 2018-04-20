@@ -236,20 +236,10 @@
 
             //获取table数据
             getData() {
-
                 this.$ajax.post(this.$apis.get_buyerProductList,{
                     recycle:false
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    if(this.disabledLine.length>0){
-                        this.disabledLine.forEach(v=>{
-                            this.tableDataList.forEach(m=>{
-                                if(m.id.value===v){
-                                    m._disabled=true;
-                                }
-                            })
-                        })
-                    }
                 }).catch(err=>{
                     console.log(err)
                 });
