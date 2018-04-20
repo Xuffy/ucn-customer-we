@@ -50,5 +50,6 @@
     "sentAsOrder": "sent as order",
     "logisticsPlanOverview": "Logistics Plan Overview",
     "compareOverview": "Compare Overview",
-    "downloadSelectedCompare": "Download Selected Compare"
+    "downloadSelectedCompare": "Download Selected Compare",
+    "compareBy": "Compare by"
 }

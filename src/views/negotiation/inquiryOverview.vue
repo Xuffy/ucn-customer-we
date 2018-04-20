@@ -94,7 +94,8 @@
                     pn: 1
                 },
                 tabLoad:false,
-                pageTotal: 0
+                pageTotal: 0,
+                _id: ''
             }
         },
         components: {
@@ -104,7 +105,6 @@
         },
         created() {
             this.viewByStatus = 0;
-                    console.log(this.$db.inquiryOverview.basicInfo)
         },
         watch: {
             viewByStatus() {
@@ -191,12 +191,10 @@
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
-                return;
-                //if(argId.length < 2) return this.$message('请至少勾选两个以上');
                 this.$router.push({
-                    path: '/negotiation/compare',
+                    path: '/negotiation/compareDetail',
                     query: {
-                        id: argId
+                        id: argId.join(',')
                     }
                 })
             },
