@@ -1165,7 +1165,6 @@
                 this.$set(this.productForm,'lengthWidthHeight',size);
                 this.disabledSubmit=true;
 
-
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑
                     this.$ajax.post(this.$apis.get_productDetail,this.productForm).then(res=>{

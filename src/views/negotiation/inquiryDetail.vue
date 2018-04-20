@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <v-compare-list :data="compareConfig" />
+        <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @startCompare="startCompare" />
         <el-dialog
                 :title="$i.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
@@ -192,6 +192,19 @@
             }
         },
         methods: {
+            startCompare() { //前往比较
+                console.log(this.compareConfig)
+            },
+            clerCompare() {   //clear
+                this.compareConfig = [];
+                this.$localStore.set('$inquiryCompare', this.compareConfig);
+            },
+            handleClose(item) { //删除
+                this.compareConfig.forEach((items, index) => {
+                    if(items.id === item.id) this.compareConfig.splice(index, 1)
+                });
+                this.$localStore.set('$inquiryCompare', this.compareConfig);
+            },
             addToCompare() {
                 if(!this.tabData[0]) return this.$message({
                     message: '请加载完毕再操作',

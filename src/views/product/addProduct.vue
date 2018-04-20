@@ -212,6 +212,26 @@
             //搜查
             search(){
                 this.disabledSearch=true;
+                if(!this.productForm.maxExwPrice){
+                    this.productForm.maxExwPrice=null;
+                }else{
+                    this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
+                }
+                if(!this.productForm.minExwPrice){
+                    this.productForm.minExwPrice=null;
+                }else{
+                    this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
+                }
+                if(!this.productForm.maxFobPrice){
+                    this.productForm.maxFobPrice=null;
+                }else{
+                    this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
+                }
+                if(!this.productForm.minFobPrice){
+                    this.productForm.minFobPrice=null;
+                }else{
+                    this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
+                }
                 this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
                     res.datas.forEach(v=>{
                         if(v.status===0){
@@ -240,6 +260,11 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
+                // this.selectList=[];
+                // console.log(this.selectList)
+                // this.selectList.forEach(v=>{
+                //     this.$set(v,'_checked',false);
+                // });
                 this.$emit('handleOK',this.selectList);
             },
             cancel(){
@@ -260,7 +285,14 @@
                 this.$ajax.post(this.$apis.get_buyerProductList,{
                     recycle:false
                 }).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                        if(e.status.value===1){
+                            e.status.value='上架';
+                        }else if(e.status.value===0){
+                            e.status.value='下架';
+                        }
+                        return e;
+                    });
                     if(this.disabledLine.length>0){
                         this.disabledLine.forEach(v=>{
                             this.tableDataList.forEach(m=>{

@@ -1,19 +1,29 @@
 <template>
     <div class="compare-zone" :class="{show:change}">
-        <div class="compare-list">
-            <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
-            <el-tag
-                    class="tag"
-                    v-for="tag in data"
-                    :key="tag.name"
-                    closable
-                    :type="tag.type"
-                    @close="handleClose(tag)">
-                {{tag.name}}
-            </el-tag>
-            <!--<el-button @click="startCompare" class="btn" type="primary" size="mini">Go Compare</el-button>-->
+        <div class="compare-main" :class="{show:change}">
+            <div class="btnGroup">
+                <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
+                <el-button @click="clearData" class="clearBtn" type="danger" size="mini">Clear</el-button>
+            </div>
+            <div class="compare-list" style="float: left;">
+                <div class="treeList">
+                    <el-tag
+                            class="tag"
+                            v-for="tag in data"
+                            :key="tag.ids"
+                            closable
+                            :type="tag.type"
+                            @close="handleClose(tag)">
+                        {{tag.name}}
+                    </el-tag>
+                    <span style="display: inline-block;width: 40px"></span>
+                </div>
+            </div>
         </div>
-        <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change}"></i>
+
+        <div class="speIcon" :class="{speDiv:change}">
+            <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change}"></i>
+        </div>
     </div>
 
 </template>
@@ -43,7 +53,9 @@
         data(){
             return{
                 show:true,
-                tags: [],
+                tags: [
+                    {name:'1',id:1}
+                ],
                 change:false,
                 disabledBtn:true,              //是否能点击compare按钮
             }
@@ -56,12 +68,19 @@
 
             //前往比较页面开始比较
             startCompare(){
-                this.$router.push('/product/compare');
+
+                this.$emit('startCompare');
+                // this.$router.push('/product/compare');
             },
 
             //删除所选中的项
             handleClose(tag){
                 this.$emit('closeTag',tag);
+            },
+
+            //清空选项
+            clearData(){
+                this.$emit('clearData');
             },
         },
         created(){
@@ -89,17 +108,29 @@
         bottom: 0;
         left: 0;
         right: 0;
+        width: 100%;
         z-index: 2000;
-        height: 40px;
+        height: 50px;
         line-height: 40px;
         transition: all linear .3s;
         background: rgba(0, 0, 0, 0.6);
+    }
+    .compare-main{
+        transition: all linear .3s;
+    }
+    .compare-main .btnGroup{
+        float:left;width: 16%;
+        padding-left: 10px;
+        box-sizing: border-box
     }
     .isTransparent{
         background: transparent !important;
     }
     .compare-list{
-        margin-left: 40px;
+        width: 84%;
+        position: relative;
+        overflow: auto;
+        /*margin-left: 40px;*/
         transition: all linear .3s;
     }
     .show{
@@ -107,12 +138,27 @@
         transition: all linear .3s;
         /*background: red;*/
     }
+    .speIcon{
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        bottom: 10px;
+        right: 0;
+        background-color: #666666;
+        text-align: center;
+        transition: all linear .3s;
+    }
+    .speDiv{
+        background-color: transparent;
+        transition: all linear .3s;
+        left:0;
+    }
     i{
+        position: absolute;
         color: #ffffff;
         font-size: 20px;
-        position: absolute;
-        bottom: 10px;
-        right: 20px;
+        top:10px;
+        right: 10px;
         transition: all linear .3s;
         cursor: pointer;
     }
@@ -122,25 +168,41 @@
         color:#636363;
         left:0;
     }
-    /*.compare-list .icon{*/
-        /*color:#999999;*/
-        /*font-weight: bold;*/
-        /*position: absolute;*/
-        /*left: 20px;*/
-        /*top:10px;*/
-    /*}*/
-    /*.compare-list .tag{*/
-        /*margin-right: 20px;*/
-    /*}*/
-    .compare-list .btn{
+    .compare-main .btn{
         float: left;
         margin-top: 6px;
         margin-right: 20px;
+    }
+    .compare-main .clearBtn{
+        float: left;
+        margin-top: 8px;
+        margin-right: 20px;
+        padding: 5px 10px;
+    }
+    .compare-list .treeList{
+        white-space:nowrap;
     }
     .compare-list .el-tag{
         background-color: #ffffff;
         color: #666666;
         border:1px solid #f4f4f4;
         margin-left: 10px;
+        z-index:200;
+    }
+    /*.compare-list .treeList{*/
+
+    /*}*/
+
+
+    /*滚动条样式设置*/
+    .compare-zone ::-webkit-scrollbar {
+        width: 14px;
+        height: 8px;
+        padding: 0;
+        background-color: transparent;
+    }
+    .compare-zone ::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 1)
     }
 </style>

@@ -490,7 +490,7 @@
                 if(id.length){
                     this.userData.roleIds=id;
                 }else{
-                    this.userData.roleIds=[];
+                    this.userData.roleIds=[-1];
                 }
                 const loading = this.$loading({
                     lock: true,
@@ -504,46 +504,9 @@
                 }).catch(err=>{
 
                 });
-
-
-
-
-                // if(e.children){
-                //     //表示点的是全选
-                //
-                //     let id=[];
-                //     checkedNode.forEach(v=>{
-                //         id.push(v.roleId)
-                //     });
-                //     if(id.length){
-                //         this.userData.roleIds=id;
-                //     }else{
-                //         this.userData.roleIds=null;
-                //     }
-                //     console.log(this.userData)
-                // }else{
-                //     //表示点的单选
-                //     console.log('单选')
-                // }
             },
             roleClick(data,node,com){
-                // console.log(data)
-                // let me=this;
-                // let id='';
-                // if(data.children){
-                //     return;
-                // }
-                // me.$refs.roleTree.setChecked(data,!node.checked,false)
-                // setTimeout(()=>{
-                //     let checkedNodes=me.$refs.roleTree.getCheckedNodes(true);
-                //     checkedNodes.forEach(v=>{
-                //         id=v.roleId;
-                //     })
-                //     console.log(id,'id')
-                //
-                //     me.userData.roleId=id;
-                //     // console.log(me.userData,"????")
-                // },0)
+
             },
 
             /**
@@ -735,20 +698,16 @@
                             type: 'warning'
                         });
                     }else{
-
                         this.$ajax.delete(this.$apis.delete_department,{
                             deptId:e.deptId
                         }).then(res=>{
-
-                        }).catch(err=>{
                             const loading = this.$loading({
                                 lock: true,
                                 text: 'Loading',
                                 background: 'rgba(255, 255, 255, 0.7)',
                                 target:'.department'
                             });
-
-                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
+                                this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
                                 this.departmentUserTotal=0;
                                 this.departmentData=res;
                                 this.departmentData.forEach(v=>{
@@ -762,6 +721,7 @@
                             }).catch(err=>{
 
                             });
+                        }).catch(err=>{
                         });
                     }
 
@@ -811,7 +771,7 @@
             searchUser(){
                 let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
                 if(checkedNode.length===0 && this.userData.deptId){
-                    console.log('不调接口');
+
                 }else{
                     this.disabledSearch=true;
                     this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{

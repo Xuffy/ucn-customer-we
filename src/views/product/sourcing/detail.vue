@@ -4,7 +4,7 @@
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail">
+            <div class="detail head-detail" v-loading="notLoadingDone">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
@@ -28,6 +28,9 @@
                                             <span v-if="v.key==='incotermPrice'">
                                                 {{fobPrice}}
                                             </span>
+                                            <span v-if="v.key==='status'">
+                                                {{productForm[v.key]===1?'上架':'下架'}}
+                                            </span>
                                             <span v-else>
                                                 {{productForm[v.key]}}
                                             </span>
@@ -38,12 +41,12 @@
                         </el-form>
                     </el-col>
                 </el-row>
-                <div class="btns">
+                <div class="btns" v-show="!notLoadingDone">
                     <el-button>{{$i.product.createInquiry}}</el-button>
                     <el-button>{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark">{{$i.product.addToBookmark}}</el-button>
-                    <el-button>download</el-button>
+                    <el-button>{{$i.product.download}}</el-button>
                 </div>
             </div>
         </div>
@@ -55,7 +58,12 @@
                             <el-row>
                                 <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                     <el-form-item :label="v.label+' :'">
-                                        {{productForm[v.key]}}
+                                        <span v-if="v.key==='status'">
+                                           {{productForm[v.key]===1?'上架':'下架'}}
+                                        </span>
+                                        <span v-else>
+                                            {{productForm[v.key]}}
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -170,6 +178,7 @@
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="400">
                     </el-pagination>
+
                     <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
                         <el-form :model="addRemarkData">
                             <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -186,31 +195,33 @@
                             <el-button @click="addRemarkFormVisible = false">取 消</el-button>
                         </div>
                     </el-dialog>
-                    <!--<el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">-->
-                        <!--<el-form :model="parms">-->
-                            <!--<el-form-item label="备注:" :label-width="formLabelWidth">-->
-                                <!--<el-input-->
-                                        <!--type="textarea"-->
-                                        <!--:rows="4"-->
-                                        <!--placeholder="请输入内容"-->
-                                        <!--v-model="parms.remark">-->
-                                <!--</el-input>-->
-                            <!--</el-form-item>-->
-                        <!--</el-form>-->
-                        <!--<div slot="footer" class="dialog-footer">-->
-                            <!--<el-button type="primary" @click="edit_submit">提交</el-button>-->
-                            <!--<el-button @click="editRemarkFormVisible = false">取 消</el-button>-->
-                        <!--</div>-->
-                    <!--</el-dialog>-->
+
+
+                    <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
+                        <el-form :model="editRemarkData">
+                            <el-form-item label="备注:" :label-width="formLabelWidth">
+                                <el-input
+                                        type="textarea"
+                                        :rows="4"
+                                        placeholder="请输入内容"
+                                        v-model="editRemarkData.remark">
+                                </el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">提交</el-button>
+                            <el-button @click="editRemarkFormVisible = false">取 消</el-button>
+                        </div>
+                    </el-dialog>
 
                 </el-tab-pane>
 
             </el-tabs>
         </div>
-weqweqewww
         <compare-list
                 v-if="showCompareList"
                 :data="compareData"
+                @clearData="clearData"
                 @closeTag="handleClose"></compare-list>
 
     </div>
@@ -233,7 +244,7 @@ weqweqewww
                 value1: 0,
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
-
+                notLoadingDone:true,
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
@@ -379,7 +390,9 @@ weqweqewww
                  * compareList配置
                  * */
                 showCompareList:false,      //是否显示比较列表
-                compareData:[],
+                compareData:[
+
+                ],
                 // compareConfig:{
                 //
                 // },
@@ -394,9 +407,16 @@ weqweqewww
                     remark: "",
                     skuId: 0,
                 },
+                editRemarkData:{
+                    id: null,
+                    remark: "",
+                    skuId: 0,
+                },
                 currentPage1:1,
                 addRemarkFormVisible:false,
+                editRemarkFormVisible:false,
                 disableCreateRemark:false,      //是否禁用提交按钮
+                disableModifyRemark:false
             }
         },
         methods:{
@@ -406,19 +426,14 @@ weqweqewww
             },
 
             getTableData(){
-                // const loading = this.$loading({
-                //     lock: true,
-                //     text: 'Loading',
-                //     background: 'rgba(255, 255, 255, 0.7)',
-                //     target:'.head-detail'
-                // });
                 this.$ajax.get(this.$apis.get_productDetail,{
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
-                    // loading.close();
+                    this.notLoadingDone=false;
                 }).catch(err=>{
                     console.log(err)
+                    this.notLoadingDone=false;
                 })
             },
             /**
@@ -461,6 +476,35 @@ weqweqewww
                     this.addRemarkFormVisible=false;
                 });
 
+            },
+
+            editRemark(index,row){
+                this.editRemarkData.id=row.id;
+                this.editRemarkData.skuId=this.productForm.id;
+                this.editRemarkData.remark=row.remark;
+                this.editRemarkFormVisible=true;
+            },
+            editRemarkSubmit(){
+                this.disableModifyRemark=true;
+                this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
+                    .then(res=>{
+                        this.$ajax.post(this.$apis.get_buyerRemarkList,{
+                            id:Number(this.$route.query.id),
+                            pn: 1,
+                            ps: 50,
+                        }).then(res=>{
+                            this.remarkTableData=res.datas;
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.disableModifyRemark=false;
+                            this.editRemarkFormVisible=false;
+                        });
+                }).catch(err=>{
+                    this.disableModifyRemark=false;
+                    this.editRemarkFormVisible=false;
+                });
             },
             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {
@@ -514,12 +558,21 @@ weqweqewww
             },
 
             addToBookmark(){
-                this.$router.push({
-                    path:'/product/bookmark/detail',
-                    query:{
 
-                    }
+                this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+                    console.log(err)
                 });
+
+
+
+                // this.$router.push({
+                //     path:'/product/bookmark/detail',
+                //     query:{
+                //
+                //     }
+                // });
             },
 
             /**
@@ -542,6 +595,12 @@ weqweqewww
                 });
                 this.compareData.splice(key,1);
                 this.$localStore.set('compareProductList',this.compareData);
+            },
+
+            //清空数据
+            clearData(){
+                this.$localStore.remove('compareProductList');
+                this.compareData=[];
             },
         },
         created(){
