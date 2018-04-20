@@ -54,5 +54,7 @@
 
     "compareOverview": "Compare Overview",
     "downloadSelectedCompare": "Download Selected Compare",
-    "compareBy": "Compare by"
+    "compareBy": "Compare by",
+    "saveTheCompare": "Save the Compare",
+    "deleteTheCompare": "Delete the Compare"
 }

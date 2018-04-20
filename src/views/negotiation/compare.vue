@@ -24,14 +24,17 @@
             :data-key="tabColumn"
             :loading="tabLoad"
         />
-        <el-form :inline="true" class="demo-form-inline">
-            <el-form-item label="Compare Name">
-                <el-input v-model="compareName"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">Delete the Compare</el-button>
-            </el-form-item>
-        </el-form>
+        <div style="display:flex; justify-content: center; padding:10px 0;">
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="Compare Name">
+                    <el-input v-model="compareName"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="onSubmit">{{ $i.baseText.saveTheCompare }}</el-button>
+                    <!--deleteTheCompare-->
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 </template>
 <script>

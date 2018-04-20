@@ -1,7 +1,7 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle + tabData[0].inquiryNo.value }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
@@ -15,7 +15,7 @@
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
-                            :data="tabData" 
+                            :data="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
                             :height="200"
@@ -40,7 +40,7 @@
                         <select-search :options="options" />
                     </div>
                     <v-table 
-                        :data.sync="productTabData"
+                        :data.sync="newProductTabData"
                         :buttons="productInfoBtn"
                         :loading="tableLoad"
                         @action="producInfoAction"
@@ -117,6 +117,8 @@
         name:'inquiryDetail',
         data() {
             return {
+                newTabData: [],
+                newProductTabData: [],
                 producInfoModify: [],
                 basicModify: [],
                 tableLoad: true,
@@ -197,8 +199,10 @@
                     //Basic Info
                     this.tableLoad = false;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
+                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
                     //Product Info
                     this.productTabData = this.$getDB(this.$db.inquiryOverview.productInf, this.$filterRemark(res.details, 'fieldRemark'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInf, this.$filterRemark(res.details, 'fieldRemark'));
                 })
                 .catch(err => {
                     this.tableLoad = false;
@@ -333,30 +337,30 @@
                 });
             },
             removeProduct() {
-                this.productTabData.forEach((item, index) => {
+                this.newProductTabData.forEach((item, index) => {
                     if(item._checked) {
                         item._disabled = true;
-                        this.$set(this.productTabData, index, item);
+                        this.$set(this.newProductTabData, index, item);
                     };
                 });
             },
             modifyCancel() {
-                this.productTabData.forEach((item, index) => {
+                this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._disabled = false;
                         item._remove = false;
                     };
-                    this.$set(this.productTabData, index, item);
+                    this.$set(this.newProductTabData, index, item);
                 });
                 this.statusModify = false;
             },
             modify() {
-                this.productTabData.forEach((item, index) => {
+                this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._remove = true;
                         this.submitData.deleteDetailIds.push(item);
                     };
-                    this.$set(this.productTabData, index, item);
+                    this.$set(this.newProductTabData, index, item);
                 });
                 this.statusModify = false;
             },
@@ -375,36 +379,26 @@
 
                     let rDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.remark]);
 
-                    _.map(this.productTabData, item=>{
-                        if(item.id&&item.id.value === this._id.id && !_.isEmpty(hDB)){
-                            ptd.push(_.extend(item, hDB[0]));
-                        }
-                        if(item._id&&item._id.value === this._id.id && !_.isEmpty(rDB)){
+                    _.map(this.newProductTabData, item=>{
+                        if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
                             ptd.push(_.extend(item, rDB[0]));
                         }
-
-                    });
-                    
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.productTabData, item=>{
-                        if(item.id && item.id === ptd[0].id){
-                            item=ptd[1]
+                        if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
+                            ptd.push(_.extend(item, hDB[0]));
                         }
-                        if(item._id && item._id === ptd[1]._id){
-                            item=ptd[0]
-                        }
-                        return item;
                     });
                 } else {
-                    let tabData = _.clone(this.tabData);
-                    tabData.forEach(item => {
-                        if(item.id) {
-                            for(let k in item) {
-                                if(data.remark[k]) item[k].value = data.remark[k];
-                            }
-                        } else if(item._id) {
-                            for(let k in item) {
-                                if(data.history[k]) item[k].value = data.history[k];
-                            }
+                    let ptd = [];
+                    let hDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.history]);
+
+                    let rDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.remark]);
+
+                    _.map(this.newTabData, item=>{
+                        if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
+                            ptd.push(_.extend(item, rDB[0]));
+                        }
+                        if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
+                            ptd.push(_.extend(item, hDB[0]));
                         }
                     });
                 }

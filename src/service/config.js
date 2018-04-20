@@ -8,9 +8,6 @@ export default {
       BASE_CS_cgs:'http://192.168.51.33:11007',
       BASE_HCJ:'http://dev.upurchase-facade.ucnholding.com',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
-
-      BASE_DHC: 'http://192.168.51.111:18100',
-
       BASE_LYF:'http://dev.uuser-facade.ucnholding.com',
 
       BASE_JML:'http://dev.umeta-facade.ucnholding.com',

@@ -49,7 +49,7 @@
                                 :rows="item.rows || 4"
                                 :size="item.size || 'mini'"
                                 :placeholder="item.placeholder"
-                                v-if="item.type === 'attachment' || item.type === 'textarea'"
+                                v-if="item.type === 'textarea'"
                                 resize="none"
                                 :disabled="item.disabled"
                             />
@@ -60,7 +60,10 @@
                                 :placeholder="item.placeholder"
                                 v-if="item.type === 'dateTime'"
                             />
-                            <v-up-load v-if="item.type === 'remark' || item.type === 'upData'"/>
+                            <span v-if="item.type === '%'" style="display:flxe;">
+                                <el-input-number v-model="fromArg[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false" /> %
+                            </span>
+                            <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -35,6 +35,7 @@ export default {
         _disabled: true
     },
     InquiryNo: { //询价单号 系统带入
+        key: 'inquiryNo',
         placeholder: 'Please select',
         rules: [],
         width: '150px',
