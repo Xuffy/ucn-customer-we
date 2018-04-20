@@ -1,6 +1,6 @@
 <template>
-    <div class="compare-zone" :class="{isTransparent:change}">
-        <div class="compare-list" :class="{show:change}">
+    <div class="compare-zone" :class="{show:change}">
+        <div class="compare-list">
             <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
             <el-tag
                     class="tag"
@@ -103,7 +103,7 @@
         transition: all linear .3s;
     }
     .show{
-        transform: translateX(110%);
+        transform: translateX(95%);
         transition: all linear .3s;
         /*background: red;*/
     }
@@ -120,6 +120,7 @@
         transform: rotate(180deg);
         transition: all linear .3s;
         color:#636363;
+        left:0;
     }
     /*.compare-list .icon{*/
         /*color:#999999;*/

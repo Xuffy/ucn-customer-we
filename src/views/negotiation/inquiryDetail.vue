@@ -1,7 +1,7 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle + tabData[0].inquiryNo.value }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
@@ -50,7 +50,7 @@
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')">{{ $i.baseText.accept }}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
-                        <el-button @click="compareConfig.showCompareList = true;">{{ $i.baseText.addToCompare }}</el-button>
+                        <el-button @click="addToCompare">{{ $i.baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
                         <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
                         <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i.baseText.cancel }}</el-button>
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <v-compare-list :config="compareConfig" />
+        <v-compare-list :data="compareConfig" />
         <el-dialog
                 :title="$i.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
@@ -134,9 +134,7 @@
                 newSearchDialogVisible:false,
                 tabColumn: '',
                 tabData: [],
-                compareConfig:{
-                    showCompareList:false,      //是否显示比较列表
-                },
+                compareConfig:[],
                 ChildrenCheckList:[],
                 ProductCheckList:[],
                 keyWord:'',
@@ -180,6 +178,10 @@
         created() {
             this.getInquiryDetail();
             this.submitData.id = this.$route.query.id;
+            
+            if(this.$localStore.get('$inquiryCompare')) {
+                this.compareConfig = this.$localStore.get('$inquiryCompare');
+            }
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -190,6 +192,26 @@
             }
         },
         methods: {
+            addToCompare() {
+                if(!this.tabData[0]) return this.$message({
+                    message: '请加载完毕再操作',
+                    type: 'warning'
+                });
+                let config = {
+                    name: this.tabData[0].inquiryNo.value,
+                    id: this.tabData[0].id.value
+                };
+
+                for(let i = 0; i < this.compareConfig.length; i++) {
+                    if(this.compareConfig[i].id === config.id) return this.$message({
+                        message: '这个订单已经添加到对比',
+                        type: 'warning'
+                    });
+                }
+                this.compareConfig.push(config);
+                //storePrefix
+                this.$localStore.set('$inquiryCompare', this.compareConfig);
+            },
             getInquiryDetail() {
                 if(!this.$route.query.id) return this.$message('地址错误');
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
