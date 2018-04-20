@@ -1,6 +1,6 @@
 {
     "add": "Add",
-    "save": "save",
+    "save": "Save",
     "delete": "Delete",
     "ok": "ok",
     "state": "state",
@@ -56,5 +56,6 @@
     "downloadSelectedCompare": "Download Selected Compare",
     "compareBy": "Compare by",
     "saveTheCompare": "Save the Compare",
-    "deleteTheCompare": "Delete the Compare"
+    "deleteTheCompare": "Delete the Compare",
+    "addNew": "add New"
 }

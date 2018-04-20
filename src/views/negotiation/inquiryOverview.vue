@@ -191,12 +191,13 @@
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
+                this.$sessionStore.set('$compareType', 'new')
                 this.$router.push({
                     path: '/negotiation/compareDetail',
                     query: {
                         id: argId.join(',')
                     }
-                })
+                });
             },
             pageChange(No) {
                 console.log(No)

@@ -193,11 +193,21 @@
         },
         methods: {
             startCompare() { //前往比较
-                console.log(this.compareConfig)
+                let arr = [];
+                this.compareConfig.forEach(item => {
+                    arr.push(item.id);
+                });
+                this.$sessionStore.set('$compareType', 'new')
+                this.$router.push({
+                    path: '/negotiation/compareDetail',
+                    query: {
+                        id: arr.join(',')
+                    }
+                });
             },
             clerCompare() {   //clear
                 this.compareConfig = [];
-                this.$localStore.set('$inquiryCompare', this.compareConfig);
+                this.$localStore.remove('$inquiryCompare');
             },
             handleClose(item) { //删除
                 this.compareConfig.forEach((items, index) => {
@@ -222,6 +232,7 @@
                     });
                 }
                 this.compareConfig.push(config);
+                this.$message('添加对比成功！');
                 //storePrefix
                 this.$localStore.set('$inquiryCompare', this.compareConfig);
             },
