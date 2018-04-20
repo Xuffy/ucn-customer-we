@@ -14,7 +14,9 @@ export default {
     //    responsibility: {
     //        key: '',
     //    },
-
+    id:{
+        key:'id'
+    },
     archive: {
         key: 'archive',
     },

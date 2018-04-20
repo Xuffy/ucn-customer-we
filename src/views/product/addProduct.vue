@@ -64,11 +64,11 @@
         </div>
         <div class="footer">
             <div class="btns" v-if="!hideBtn">
-                <el-button @click="addNewProduct">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
                 <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                 <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                 <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
             </div>
 
@@ -123,16 +123,17 @@
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 selectList:[],
-                downloadBtnInfo:'All',
+                downloadBtnInfo:'0',
                 //btn禁用状态
                 disabledAddBookmark:true,
                 disabledCompare:true,
+                disabledDownload:true,
 
                 //表格字段绑定
                 productForm: {
-                    categoryId: '',
+                    categoryId: null,
                     nameCnLike: "",
-                    readilyAvailable: '',
+                    readilyAvailable: null,
                     customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -141,11 +142,11 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: '',
+                    country: null,
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
-                    deliveryDates: '',
+                    deliveryDates: null,
                     descEnLike: "",
                     descCnLike: "",
 
@@ -200,17 +201,16 @@
             clear(){
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
-                this.$set(this.productForm,'categoryId','');
-                this.$set(this.productForm,'minExwPrice','');
-                this.$set(this.productForm,'maxExwPrice','');
-                this.$set(this.productForm,'minFobPrice','');
-                this.$set(this.productForm,'maxFobPrice','');
+                this.$set(this.productForm,'categoryId',null);
+                this.$set(this.productForm,'minExwPrice',null);
+                this.$set(this.productForm,'maxExwPrice',null);
+                this.$set(this.productForm,'minFobPrice',null);
+                this.$set(this.productForm,'maxFobPrice',null);
             },
 
 
             //搜查
             search(){
-                console.log(this.productForm)
                 this.disabledSearch=true;
                 this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
                     res.datas.forEach(v=>{
@@ -222,10 +222,10 @@
                     });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
+                    this.selectList=[];
                 }).catch(err=>{
                     this.disabledSearch=false;
                 });
-
             },
 
             handleChange(value) {
@@ -257,7 +257,6 @@
 
             //获取table数据
             getData() {
-
                 this.$ajax.post(this.$apis.get_buyerProductList,{
                     recycle:false
                 }).then(res=>{
@@ -280,7 +279,18 @@
              * 按钮组操作
              * */
             addToBookmark(){
-                console.log(this.selectList)
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                console.log(id)
+                // this.$ajax.post(this.$apis.add_bookmark,{
+                //     ids:id
+                // }).then(res=>{
+                //     console.log(res)
+                // }).catch(err=>{
+                //
+                // });
             },
 
             //表格按钮点击
@@ -290,8 +300,8 @@
                 }
             },
 
-            addNewProduct(){
-
+            createInquiry(){
+                console.log(1234)
             },
         },
         created(){
@@ -309,11 +319,13 @@
             },
             selectList(n){
                 if(n.length===0){
-                    this.downloadBtnInfo='All';
+                    this.downloadBtnInfo=0;
                     this.disabledAddBookmark=true;
+                    this.disabledDownload=true;
                 }else{
                     this.downloadBtnInfo=n.length;
                     this.disabledAddBookmark=false;
+                    this.disabledDownload=false;
                 }
 
                 if(n.length>=2){

@@ -16,6 +16,7 @@
 
     <v-add-quick-link></v-add-quick-link>
 
+
   </div>
 </template>
 
@@ -23,8 +24,7 @@
   import VHeader from './Header'
   import VMenu from './Menu'
   import NavBar from './navBar'
-  import {VAddQuickLink} from '@/components/index'
-  import {mapState} from 'vuex'
+  import {VAddQuickLink, VViewPicture} from '@/components/index'
 
   export default {
     name: 'layout',
@@ -32,7 +32,8 @@
       VHeader,
       VMenu,
       NavBar,
-      VAddQuickLink
+      VAddQuickLink,
+      VViewPicture,
     },
     data() {
       return {}
