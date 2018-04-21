@@ -133,6 +133,10 @@
 					if(val === data.id) return this.val = data;
 					if(data[this.defaultProps.children] && data[this.defaultProps.children].length) this.setInput(data.children, val);
 				});
+			},
+			filterNode(value, data) {
+				if (!value) return true;
+				return data.label.indexOf(value) !== -1;
 			}
 		}
 	};

@@ -107,7 +107,7 @@
                 this.tabData.forEach(item => {
                     arr.push(item.id.value)
                 });
-                if(!this.compareName) return this.$message({
+                if(!this.compareName && this.compareType === 'new') return this.$message({
                     message: '请填写Name',
                     type: 'warning'
                 });
@@ -131,7 +131,7 @@
                     url = this.$apis.POST_INQUIRY_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
-                this.$ajax.post(url, {
+                this.$ajax.post(`${url}/{id}`, {
                     id: this.compareId
                 })
                 .then(res => {
@@ -140,7 +140,6 @@
                 })
             },
             getNewList() {
-                console.log(222, '222')
                 let url, column;
                 this.tabLoad = true;
                 if(this.compareBy + '' === '0') {

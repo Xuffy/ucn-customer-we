@@ -9,7 +9,7 @@ export default {
     id: {
         _hide: true
     },
-    _id: {
+    _remark: {
         _hide: true
     },
     operater: { //修改人 系统带入
@@ -38,7 +38,7 @@ export default {
         _disabled: true,
         _inquiryHide: true
     },
-    InquiryNo: { //询价单号 系统带入
+    inquiryNo: { //询价单号 系统带入
         key: 'inquiryNo',
         placeholder: 'Please select',
         rules: [],
@@ -48,7 +48,7 @@ export default {
         _disabled: true,
         _inquiryHide: true
     },
-    QuotationNo: { //询价子单号 系统带入
+    quotationNo: { //询价子单号 系统带入
         placeholder: 'Please select',
         rules: [],
         width: '150px',
