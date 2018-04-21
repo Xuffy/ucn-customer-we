@@ -576,17 +576,7 @@
                         }
                     }
                 }).then(({ value }) => {
-                    let id=this.roleData[0].children+1;
-
-                    // this.$refs.departmentTree.insertBefore({
-                    //     id:id,
-                    //     label:value,
-                    // },1);
-
-                    this.roleData[0].children.unshift({
-                        id:id,
-                        label:value,
-                    })
+                    console.log(value,'????')
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -635,13 +625,10 @@
                             target:'.department'
                         });
 
-
                         this.$ajax.put(this.$apis.get_department,{
                             deptId:e.deptId,
                             deptName:value
                         }).then(res=>{
-
-                        }).catch(err=>{
                             this.$message({
                                 message: '修改成功',
                                 type: 'success'
@@ -656,6 +643,8 @@
                             }).catch(err=>{
 
                             });
+                        }).catch(err=>{
+
                         });
                     }
                 }).catch(() => {

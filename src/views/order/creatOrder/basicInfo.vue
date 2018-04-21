@@ -1,14 +1,12 @@
 <template>
     <div class="basicinfo">
              <div class="basicinfo_title">basicInfo</div>
-
              <div class="basicinfo_form">
                   <el-form ref='ruleform' :model="formItem" label-width="230px" :rules="rules" >
                     <el-row :gutter="10">                    
-                          <el-col :xs="24" :sm="12" :md="12" :lg="8" 
-                                                   
+                          <el-col :xs="24" :sm="12" :md="12" :lg="8"                                                 
                            >
-                                <el-form-item 
+                             <el-form-item 
                                     :label="$i.orderNo" 
                                      prop="orderNo">
                                     <el-input                       
@@ -64,14 +62,14 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.QuotationNo" prop="QuotationNo">
-                                 <el-input v-model="formItem.QuotationNo" :disabled=true placeholder="">
+                            <el-form-item class="form-list" :label=" $i.QuotationNo" prop="quotationNo">
+                                 <el-input v-model="formItem.quotationNo" :disabled=true placeholder="">
                                   </el-input>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.orderStatus" prop="orderStatus">
-                                 <el-select v-model="formItem.orderStatus" :disabled='disabled' placeholder="select">
+                            <el-form-item class="form-list" :label=" $i.orderStatus" prop="status">
+                                 <el-select v-model="formItem.status" :disabled='disabled' placeholder="select">
 <!--
                                     <el-option
                                       v-for="item in orderStatus"
@@ -84,10 +82,10 @@
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.deliveryDate" prop="deliveryDate">
+                            <el-form-item class="form-list" :label=" $i.deliveryDate" prop="deliveryDt">
                              <div style='display:flex;max-width:200px;'>
                             <el-date-picker
-                                      v-model="formItem.deliveryDate"
+                                      v-model="formItem.deliveryDt"
                                       type="date"
                                       :disabled='disabled'
                                       placeholder="选择日期">
@@ -170,24 +168,24 @@
                             </el-form-item>
                          </el-col>                        
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.transportationWay" prop="transportationWay">
-                                 <el-select v-model="formItem.transportationWay" :disabled=true placeholder="select">
+                            <el-form-item class="form-list" :label=" $i.transportationWay" prop="transport">
+                                 <el-select v-model="formItem.transport" :disabled=true placeholder="select">
                                     
                                   </el-select>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.customerAgreementNumber" prop="customerAgreementNumber">
-                                 <el-input v-model="formItem.customerAgreementNumber" :disabled='disabled' placeholder="select">
+                            <el-form-item class="form-list" :label=" $i.customerAgreementNumber" prop="customerAgreementNo">
+                                 <el-input v-model="formItem.customerAgreementNo" :disabled='disabled' placeholder="select">
                                    
                                   </el-input>
                             </el-form-item>
                          </el-col>
                           <el-col :xs="24" :sm="12" :md="12" :lg="8">
-                            <el-form-item class="form-list" :label=" $i.customerAgreementDate" prop="customerAgreementDate">
+                            <el-form-item class="form-list" :label=" $i.customerAgreementDate" prop="customerAgreementDt">
                                    <div style='display:flex;max-width:200px;'>
                                    <el-date-picker
-                                      v-model="formItem.customerAgreementDate"
+                                      v-model="formItem.customerAgreementDt"
                                       type="date"
                                       :disabled='disabled'
                                       placeholder="选择日期">
@@ -234,16 +232,16 @@
             return {
                 formItem: {
                     orderNo: '', //必填   系统生成 不可编辑
-                    orderDate: '', //必填    系统生成   可编辑   
+                    orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成 弹出框 
                     customerNo: '', //必填 系统生成 弹出框
                     supplierOrderNo: '',
                     supplierName: '', //必填 不可编辑 系统生成 
                     supplierNo: '', //必填 不可编辑 系统生成 
-                    QuotationNo: '', // 不可编辑
-                    orderStatus: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
-                    deliveryDate: '', //必填 
+                    quotationNo: '', // 不可编辑
+                    status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
+                    deliveryDt: '', //必填 
                     incoterm: '', //必填 
                     incortermAea: '', //必填 
                     payment: '', //必填 
@@ -252,11 +250,11 @@
                     paymentStatus: '', //不可编辑
                     departureCountry: '',
                     departurePort: '', //必填
-                    destinationCountry: '',
-                    destinationPort: '', //必填
-                    transportationWay: '海运', //不可编辑
-                    customerAgreementNumber: '',
-                    customerAgreementDate: '',
+                    destinationCountry: '', // ??????
+                    destinationPort: '', //必填   //?????
+                    transport: '海运', //不可编辑
+                    customerAgreementNo: '',
+                    customerAgreementDt: '',
                     remark: '',
                 },
                 //......................表单正则
@@ -281,7 +279,7 @@
                         message: '',
                         trigger: 'blur'
                     }, ],
-                    deliveryDate: [{
+                    deliveryDt: [{
                         required: true,
                         message: '',
                         trigger: 'blur'
