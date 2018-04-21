@@ -48,7 +48,7 @@
                     <el-button @click="editProduct">{{$i.product.editEn}}(还没做)</el-button>
                     <el-button type="danger" @click="deleteBookmark">{{$i.product.delete}}</el-button>
                     <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                    <el-button>{{$i.product.manuallyAdd}}</el-button>
+                    <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
                     <el-button>{{$i.product.downloadTheProduct}}</el-button>
                     <el-button>{{$i.product.uploadProduct}}</el-button>
                 </div>
@@ -234,12 +234,10 @@
             <product
                     :title="addProductTitle"
                     :type="addProductType"
+                    :disabledOkBtn="disabledOkBtn"
                     :hideBtn="true"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
-
-
-
     </div>
 </template>
 
@@ -270,6 +268,10 @@
                 addProductDialogVisible:false,      //新增产品弹出框显示隐藏
                 addProductTitle:'',
                 addProductType:'product',
+                disabledOkBtn:false,
+
+
+
 
                 productForm:{
                     id: null,                         //新增传空
@@ -470,7 +472,6 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-
                     this.$ajax.post(this.$apis.delete_buyerProductBookmark,[this.productForm.id]).then(res=>{
                         this.$message({
                             type: 'success',
@@ -490,6 +491,9 @@
             addProduct(){
                 this.addProductDialogVisible=true;
             },
+            manuallyAddProduct(){
+                this.windowOpen('/product/bookmarkManuallyAdd');
+            },
 
             handleOkClick(e){
                 if(e.length===0){
@@ -503,13 +507,18 @@
                     e.forEach(v=>{
                         id.push(v.id.value);
                     });
+                    this.disabledOkBtn=true;
                     this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
                         this.$message({
                             message: '添加成功',
                             type: 'success'
                         });
+                        this.disabledOkBtn=false;
+                        this.addProductDialogVisible=false;
                     }).catch(err=>{
                         console.log(err)
+                        this.disabledOkBtn=false;
+                        this.addProductDialogVisible=false;
                     });
                 }
             },

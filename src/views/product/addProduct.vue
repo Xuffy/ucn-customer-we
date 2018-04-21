@@ -78,7 +78,7 @@
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
             <div class="footer-btn" v-if="hideBtn">
-                <el-button type="primary" @click="postData">OK</el-button>
+                <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </div>
         </div>
@@ -115,7 +115,11 @@
                 default:function () {
                     return []
                 }
-            }
+            },
+            disabledOkBtn:{
+                type:Boolean,
+                default:false
+            },
         },
         data(){
             return{
@@ -233,14 +237,14 @@
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
                 this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架(暂时中文)';
-                        }else if(v.status===1){
-                            v.status='上架';
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                        if(e.status.value===1){
+                            e.status.value='上架';
+                        }else if(e.status.value===0){
+                            e.status.value='下架';
                         }
+                        return e;
                     });
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
                     this.selectList=[];
                 }).catch(err=>{

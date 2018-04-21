@@ -76,7 +76,7 @@ const apis = {
   delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
-
+  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
 
 
 
