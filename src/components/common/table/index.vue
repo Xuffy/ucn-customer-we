@@ -8,7 +8,7 @@
       </div>
       <div class="fixed">
         <v-table-filter ref="tableFilter"
-                        @filter-column="onFilterColumn"
+                        @filter-column="onFilterColumn" 
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
       </div>
     </div>
@@ -65,8 +65,10 @@
             </td>
             <td v-if="buttons && (index % rowspan === 0) " :rowspan="rowspan">
               <div style="white-space: nowrap;">
-                <span class="button" v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
-                      @click="$emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
+                <span class="button"
+                      v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      :class="{disabled:aItem.disabled}"
+                      @click="!aItem.disabled && $emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
               </div>
             </td>
           </tr>
@@ -413,6 +415,10 @@
     cursor: pointer;
     display: inline-block;
     margin-right: 10px;
+  }
+
+  .ucn-table .button.disabled {
+    color: #c0c4cc;
   }
 
   .ucn-table .button:last-child {

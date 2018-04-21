@@ -1,7 +1,9 @@
 export default {
     remarkDate: {
         key: 'updateDt',
-        label: ' '
+        label: ' ',
+        type: 'text',
+        _disabled: true
     },
     id: {
         _hide: true
@@ -10,42 +12,48 @@ export default {
         placeholder: 'Please select',
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _disabled: true
     },
     timeZone: { //时区 系统带入
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _disabled: true
     },
     time: { //时间 系统带入
         placeholder: 'Please select time',
         rules: [],
         width: '150px',
-        type: 'dateTime',
-        state: 0
+        type: 'text',
+        state: 0,
+        _disabled: true
     },
     InquiryNo: { //询价单号 系统带入
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _disabled: true
     },
     QuotationNo: { //询价子单号 系统带入
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _disabled: true
     },
     inquiryStatus: { //询价单状态
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _disabled: true
     },
     transportationWay: { //下拉选择 运输方式
         placeholder: 'Please select',
@@ -153,6 +161,14 @@ export default {
         md: 24,
         lg: 24
     },
+    createTime: { // 创建时间
+        key: 'entryDt',
+        placeholder: 'Please select',
+        rules: [],
+        width: '150px',
+        type: 'text',
+        state: 0
+    },
     inquiryRemark: { //询价备注
         key: 'remark',
         placeholder: 'Please select',
@@ -164,13 +180,5 @@ export default {
         sm: 24,
         md: 24,
         lg: 24
-    },
-    createTime: { // 创建时间
-        key: 'entryDt'
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0
     },
 }

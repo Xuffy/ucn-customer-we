@@ -54,5 +54,7 @@
     "clear":"Clear",
     "supplierProducts":"Supplier's Products",
     "sentAsOrder": "sent as order",
-    "logisticsPlanOverview": "Logistics Plan Overview"
+    "logisticsPlanOverview": "Logistics Plan Overview",
+    "compareOverview": "Compare Overview",
+    "downloadSelectedCompare": "Download Selected Compare"
 }

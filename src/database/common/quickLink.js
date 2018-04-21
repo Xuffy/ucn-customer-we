@@ -1,5 +1,5 @@
 export default {
-  createInquriy: {},
+  createInquiry: {},
   createOrder: {},
   addProduct: {},
   createInbound: {},
@@ -13,7 +13,7 @@ export default {
   compareInquiryOverview: {},
   supplierOverview: {},
   inquiryOverview: {},
-  orderoverview: {},
+  orderOverview: {},
   warehouse: {},
   inbound: {},
   outbound: {},
@@ -21,7 +21,7 @@ export default {
   logisticPlanOverview: {},
   logisticOverview: {},
   track: {},
-  comparesupplierOverview: {},
+  compareSupplierOverview: {},
   productOverview: {},
   customerOverview: {},
 }

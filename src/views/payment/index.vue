@@ -235,9 +235,9 @@
               
             },
             setButton(e){
-                // console.log(e) disabled
+                // console.log(e) disabled e.waitPayment.value != 0
                 return [
-                    {label:e.waitPayment.value != 0 ? 'urging payment' :'urging payment',type:1},
+                    {label:'urging payment',type:1},
                     {label:'detail',type:2}
                 ]
             }

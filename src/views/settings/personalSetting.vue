@@ -1,33 +1,35 @@
 <template>
   <div class="peosonalSetting">
-    <el-form label-width="190px" ref="form" :model="form" >
+    <el-form label-width="190px" ref="form" :model="form" :inline="true" >
         <el-row>
             <el-col :span="12">
                 <el-form-item :label="$i.personalInfo.email">                          
-                    <el-input style="max-width:120px;vertical-align: middle" v-model="form.email"></el-input>
-                    <el-button style=" vertical-align: middle" @click="dialogVisibleO = true">Replace</el-button>
+                    <el-input type="email" style="max-width:200px;" v-model="form.email" disabled="disabled"></el-input>
+                    <!-- <span  @click="dialogVisible = true">Replace</span> -->
+                    <!-- <el-button style=" " @click="dialogVisibleO = true">Replace</el-button> -->
                 </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" >
                 <el-form-item :label="$i.personalInfo.userName">                          
                     <el-input style="max-width:200px" v-model="form.userName"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item  label="Password">                          
-                    <el-input style="max-width:130px;vertical-align: middle" ></el-input>
-                    <el-button style=" vertical-align: middle" @click="dialogVisible = true">Replace</el-button>
+                    <el-input style="max-width:140px;" type="password"></el-input>
+                    <span  @click="dialogVisibleO = true">Replace</span>
+                    <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
                 </el-form-item>
-            </el-col>
-            <el-col :span="12">
+            </el-col> 
+             <el-col :span="12">
                 <el-form-item  :label="$i.personalInfo.tel">                          
                     <el-input style="max-width:200px" v-model="form.tel"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item :label="$i.personalInfo.birthday">
-                    <div style="display: flex;max-width:213px;">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="form.birthday"  style="max-width:300px;"></el-date-picker>
+                    <div style="display: flex;max-width:200px;">
+                        <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;"></el-date-picker>
                     </div>
                 </el-form-item>
             </el-col>
@@ -38,7 +40,7 @@
                                 v-for="item in departmentsOptions"
                                 :key="item.deptId"
                                 :label="item.deptName"
-                                :value="item.deptName">
+                                :value="item.deptId">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -46,12 +48,12 @@
             <el-col :span="12">
                 <el-form-item prop="language" :label="$i.personalInfo.language">
                     <el-select v-model="form.lang" placeholder="请选择">
-                        <!-- <el-option
-                                v-for="item in readilyAvailableOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option> -->
+                        <el-option
+                                v-for="item in language"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                        </el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
@@ -62,7 +64,7 @@
                                 v-for="item in roleOptions"
                                 :key="item.roleId"
                                 :label="item.roleName"
-                                :value="item.roleName">
+                                :value="item.roleId">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -85,21 +87,42 @@
         <el-button @click="putUserProfile">{{$i.baseText.modify}}</el-button>
         <el-button  type="danger">{{$i.baseText.cancel}}</el-button>
     </div>
+     <!-- <el-dialog
+        class="speDialog"
+        :visible.sync="dialogVisible"
+        width="30%"
+        :before-close="handleClose">
+        <el-form :model="form">
+            <el-form-item :label="$i.personalInfo.oldEmail" :label-width="formLabelWidth">
+                <el-input type="email" auto-complete="off" v-model="form.email"></el-input>
+            </el-form-item>
+            <el-form-item :label="$i.personalInfo.newEmail" :label-width="formLabelWidth">
+                <el-input type="email" auto-complete="off" v-model="modifyEmail.newEmail"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="putUserEmail">{{$i.baseText.ok}}</el-button>
+            <el-button @click="dialogVisible = false">{{$i.baseText.cancel}}</el-button>
+        </span>
+    </el-dialog> -->
     <el-dialog
         class="speDialog"
         :visible.sync="dialogVisibleO"
         width="30%"
         :before-close="handleClose">
-        <el-form :model="form">
-        <el-form-item label=" Old Email" :label-width="formLabelWidth">
-            <el-input auto-complete="off" v-model="form.email"></el-input>
-        </el-form-item>
-        <el-form-item label="New Email" :label-width="formLabelWidth">
-            <el-input auto-complete="off" v-model="modifyEmail.newEmail"></el-input>
-        </el-form-item>
+        <el-form :rules="rules"  ref="modifyPass" :model="modifyPass">
+            <el-form-item :label="$i.personalInfo.oldPassword" :label-width="formLabelWidth">
+                <el-input type="password" auto-complete="off" v-model="modifyPass.password"></el-input>
+            </el-form-item>
+            <el-form-item :label="$i.personalInfo.newPassword" prop="newPassword"  :label-width="formLabelWidth">
+                <el-input type="password" auto-complete="off" v-model="modifyPass.newPassword"></el-input>
+            </el-form-item>
+            <el-form-item :label="$i.personalInfo.confirmPassword" prop="comfirmNewPassword" :label-width="formLabelWidth">
+                <el-input type="password" auto-complete="off" v-model="modifyPass.comfirmNewPassword"></el-input>
+            </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" >{{$i.baseText.ok}}</el-button>
+            <el-button type="primary" @click="putUserPassword">{{$i.baseText.ok}}</el-button>
             <el-button @click="dialogVisibleO = false">{{$i.baseText.cancel}}</el-button>
         </span>
     </el-dialog>
@@ -107,11 +130,30 @@
 </template>
 
 <script>
-  export default {
-    name: 'peosonalSetting',
+export default {
     data() {
+        var validatePass = (rule, value, callback) => {
+            if (value === '') {
+            callback(new Error('请输入密码'));
+            } else {
+            if (this.modifyPass.comfirmNewPassword !== '') {
+                this.$refs.modifyPass.validateField('comfirmNewPassword');
+            }
+            callback();
+            }
+        };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+            callback(new Error('请再次输入密码'));
+            } else if (value !== this.modifyPass.newPassword) {
+                console.log(value,this.modifyPass.newPassword)
+            callback(new Error('两次输入密码不一致!'));
+            } else {
+            callback();
+            }
+        };
       return {
-          form:{
+           form: {
               email:'',
               userName:'',
               password:'',
@@ -121,54 +163,69 @@
               lang:'',
               deptName:'',
               roleName:'',
-          },
-          modifyPass:{
+            },
+            modifyPass:{
               password:'',
               newPassword:'',
               comfirmNewPassword:''
-          },
-          modifyEmail:{
-             newEmail:''
-
-          },
-          genderOptions:[{
-            value: '男',
-            label: 'Man',
-            key: 0
-            }, {
-            value: '女',
-            label: 'Woman',
-            key: 1
-            }, {
-            value: '未知',
-            label: 'Unknown',
-            key: 2 
-          }],
-        dialogVisible: false,
-        dialogVisibleO:false,
-        formLabelWidth: '140px',
-        departmentsOptions:[],
-        roleOptions:[]
-      }
+            },
+            modifyEmail:{
+              newEmail:''
+            },
+            genderOptions:[{
+                value: '男',
+                label: 'Man',
+                key: 0
+                }, {
+                value: '女',
+                label: 'Woman',
+                key: 1
+                }, {
+                value: '未知',
+                label: 'Unknown',
+                key: 2 
+           }],
+           rules: {
+                newPassword: [
+                    { validator: validatePass, trigger: 'blur' }
+                ],
+                comfirmNewPassword: [
+                    { validator: validatePass2, trigger: 'blur' }
+                ],  
+            },
+            dialogVisible: false,
+            dialogVisibleO:false,
+            formLabelWidth: '140px',
+            departmentsOptions:[],
+            roleOptions:[],
+            language:[]
+        };
     },
     methods: {
-        //获取角色 部门
+          //获取角色 部门 语言 
         getDepartment(){
             this.$ajax.get(this.$apis.get_department)
             .then(res => {
-                this.departmentsOptions = res.content
+                this.departmentsOptions = res
             });
         },
         getRole(){
             this.$ajax.get(this.$apis.get_role)
             .then(res => {
-                this.roleOptions = res.content
+                this.roleOptions = res
+            });
+        },
+        postLanguage(){
+            this.$ajax.post(this.$apis.post_codePart,['LANGUAGE'])
+            .then(res => {
+                this.language = res[0].codes
             });
         },
         getUserProfile(){
             this.$ajax.get(this.$apis.get_userProfile)
             .then(res => {
-                this.peosonalForm = res.content
+                console.log(res)
+                this.form = this.$getDB(this.$db.payment.table, res);
             });
         },
         putUserProfile(){
@@ -178,48 +235,54 @@
                 "gender": this.form.gender,
                 "birthday": this.form.birthday,
                 "lang": this.form.lang,
-                "deptId": this.form.deptId,
-                "roleId": this.form.roleId
+                "deptId": this.form.deptName,
+                "roleId": this.form.role
             }
+            console.log(params)
             this.$ajax.put(this.$apis.put_userProfile,params)
             .then(res => {
-                this.form = res.content
+                this.$message({
+                    type: 'success',
+                    message: '修改成功!'
+                });
             });
         },
         putUserPassword(){
             const params = this.modifyPass
+            console.log(params)
             this.$ajax.put(this.$apis.put_userProfilePassword,params)
             .then(res => {
-               if(res.status = 'SUCCESS'){
-                    this.$message({
-                        type: 'success',
-                        message: '修改成功!'
-                    });
-               }
+                this.$message({
+                    type: 'success',
+                    message: '修改成功!'
+                });
             });
         },
-        putUserEmail(){
-            const params = this.modifyEmail
-            this.$ajax.put(this.$apis.put_userProfileEmail,params)
-            .then(res => {
-                if(res.status = 'SUCCESS'){
-                    this.$message({
-                        type: 'success',
-                        message: '修改成功!'
-                    });
-                }
-            });
-        },
+        // putUserEmail(){
+        //     const params = this.modifyEmail
+        //     console.log(params)
+        //     this.$ajax.put(this.$apis.put_userProfileEmail,params)
+        //     .then(res => {
+        //         if(res.status = 'SUCCESS'){
+        //             this.$message({
+        //                 type: 'success',
+        //                 message: '修改成功!'
+        //             });
+        //         }
+        //     });
+        // },
         handleClose(){
-
+            this.dialogVisibleO = false;
+            this.dialogVisible = false;
         }
     },
     created(){
         // this.getUserProfile()
-        this.getDepartment();
+        // this.getDepartment();
         // this.getRole()
+        // this.postLanguage()
     }
-  }
+}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
@@ -229,13 +292,7 @@
         margin-top: 60px;
         margin-bottom: 80px;
     }
-    .peosonalForm{
-      
+    span {
+        cursor:pointer;
     }
-    .peosonalSetting{      
-        padding-top: 20px;
-    }
-    .el-input--small {
-        font-size: 0;
-    }   
 </style>

@@ -1,38 +1,32 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{$t("supplier.title.compareOverview")}}</h3>
+        <h3 class="hd">{{$i.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button >{{$t("supplier.buttonname.downloadSelectedCompare")}}</el-button>
-                <el-button type="danger">{{$t("supplier.buttonname.delete")}}</el-button>
+                <el-button  :disabled='!selectedData.length>0'
+                 @click='downloadSelected'
+                >{{$i.baseText.downloadSelected}}</el-button>
+                <el-button type="danger" :disabled='!selectedData.length>0'
+                @click='remove'
+                >{{$i.baseText.delete}}</el-button>
             </div>
 
        <div class="select-wrap">       
-<!--
-                <el-select v-model="value" placeholder="select" @change="selectChange">
-                    <el-option
-                    v-for="item in options"
-                    :key="item.id"
-                    :label="item.label"
-                    :value="item.id" />
-                </el-select>               
-                <el-input v-model="keyWord" style="width:150px;margin-left:10px;">
-                    
-                </el-input>
--->
-                   <selectSearch></selectSearch>
+                   <selectSearch :options='options' @inputChange='inputEnter'></selectSearch>
                 <div>
-<!--
-                <i class="el-icon-setting" @click='hiddenDropDown'>
-                </i>
-                <drop-down :class="showdropDown?'speDropdownshow':'speDropdown'"  ref="dropDown"></drop-down>
--->
+
                 </div>
             </div>
         </div>
         <!--from-->
           <!--        表格-->
-           <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+           <v-table 
+                :height=360
+                :data="tabData" 
+                :buttons="[{label: 'detail', type: 1}]"
+                @action="detail" 
+                @change-checked='checked'
+                style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -49,14 +43,14 @@
             return {
                 options: [{
                     id: '1',
-                    label: this.$t("supplier.compare.compareName")
+                    label: 'compareName'
                 }, {
-                    id: '1',
-                    label: this.$t("supplier.compare.compareItem")
+                    id: '2',
+                    label: "scompareItem"
                 }],
-                //                showdropDown: false,
                 tabColumn: [],
-                tabData: []
+                tabData: [],
+                selectedData:[]
             }
         },
         components: {
@@ -65,22 +59,51 @@
             selectSearch
         },
         methods: {
-            selectChange() {
-
+            inputEnter(keyWord){
+                console.log(keyWord)
+               
             },
-            //  hiddenDropDown() { // this.showdropDown = !this.showdropDown // }
+            checked(item) {
+                console.log(item)
+                this.selectedData=item
+            },
+            detail(item) {
+                console.log(item)
+                this.windowOpen('/supplier/bookmarkDetail', {
+                    id: item.id.value
+                });
+            },
+            get_data() {
+                this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
+                    .then(res => {
+                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
+            },
+            downloadSelected(){
+                 this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
+                    .then(res => {
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
+            },
+            remove(){
+                 this.$ajax.post(this.$apis.post_supplier_deleteCompare)
+                    .then(res => {
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
+            }
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
-
-                })
-                .catch((res) => {
-
-                });
+//            this.get_data()
         },
     }
 

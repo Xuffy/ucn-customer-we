@@ -1,7 +1,8 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-              Supplier Bookmark
+             {{$i.supplierBookmark}}
+              
             <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
         </div>
 <!--        搜索条件-->
@@ -10,7 +11,7 @@
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="8" 
                            v-for='(item,index) in $db.supplier.overview'
-                           :key='index'
+                           :key="index"
                            v-if='item.isbasic==true'
                            >
                             <el-form-item class="form-list" 
@@ -70,17 +71,17 @@
             </el-form>
         </div>
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$lang.baseText.search}}</el-button>
-            <el-button @click="clear('parms')">{{$lang.baseText.clear}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$i.baseText.search}}</el-button>
+            <el-button @click="clear('parms')">{{$i.baseText.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$lang.baseText.creatInquiry}}</el-button>
-                  <el-button   @click='createOrder'>{{$lang.baseText.creatOrder}}</el-button>
-                  <el-button  @click='compare'>{{$lang.baseText.compare}}</el-button>
-                  <el-button   >{{$lang.baseText.downloadSelected}}</el-button>
-                      <el-button  type='danger'>{{$lang.baseText.remove}}</el-button>
+                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}</el-button>
+                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.baseText.creatOrder}}</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}</el-button>
+                  <el-button  :disabled='!selectedData.length>0' >{{$i.baseText.downloadSelected}}</el-button>
+                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i.baseText.remove}}</el-button>
               </div>  
               <div>
                  
@@ -163,7 +164,8 @@
                         label: '二级 2-2'
                     }]
                 }],
-                tabData: []
+                tabData: [],
+                selectedData:[]
             }
         },
         methods: {
@@ -184,30 +186,19 @@
             },
             //....跳入createInquiry
             createInquiry() {
-                this.$router.push({
-                    name: 'createInquiry',
-                    query: {
-
-                    }
-                })
+            this.windowOpen('/negotiation/createInquiry', {
+                   selectedData:this.selectedData
+                });
             },
             //....跳入createOrder
             createOrder() {
-                this.$router.push({
-                    name: 'creatOrder',
-                    query: {
-
-                    }
-                })
+               this.windowOpen('/order/creat', {
+                   selectedData:this.selectedData
+                });
             },
             //........跳入compare
             compare() {
-                this.$router.push({
-                    name: 'SupplierCompare',
-                    query: {
-
-                    }
-                })
+                
             },
             //...........进入detail
             detail(item) {
@@ -217,12 +208,26 @@
             },
             //.........checked
             checked(item) {
-                console.log(item)
+                
+                this.selectedData=item
+                console.log(this.selectedData)
             },
             get_data() {
-                this.$ajax.post(this.$apis.get_listSupplier, this.parms)
+                this.$ajax.post(this.$apis.post_supplier_listbookmark,this.parms)
                     .then(res => {
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
+                        console.log(res.datas)
+                    })
+                    .catch((res) => {
+
+                    });
+            },
+            //..........remove
+            remove(){
+                  this.$ajax.post(this.$apis.post_supplier_deletebookmark,{
+                      ids:[]
+                  })
+                    .then(res => {                   
                         console.log(res.datas)
                     })
                     .catch((res) => {
@@ -232,7 +237,6 @@
         },
         created() {
             this.get_data()
-            console.log(this.parms)
         },
         watch: {
             hideBody(n) {

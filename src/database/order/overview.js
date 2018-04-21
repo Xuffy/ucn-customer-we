@@ -1,186 +1,129 @@
 export default {
     //.........................by order
     //?????
-    sequenceNumber: {
-        key: '',
-    },
+    //    sequenceNumber: {
+    //        key: '',
+    //    },
     important: {
-        key: '',
+        key: 'important',
     },
     attachment: {
-        key: '',
+        key: 'attachment',
     },
-    responsibility: {
-        key: '',
-    },
+
+    //    responsibility: {
+    //        key: '',
+    //    },
+
     archive: {
-        key: '',
+        key: 'archive',
     },
     orderNo: {
-        key: '',
+        key: 'orderNo',
     },
+
     orderDate: {
         key: '',
     },
+
     status: {
-        key: '',
+        key: 'status',
     },
     customerName: {
-        key: '',
+        key: 'customerName',
     },
     customerOrderNo: {
-        key: '',
+        key: 'customerOrderNo',
     },
     supplierName: {
-        key: '',
+        key: 'supplierName',
     },
     supplierOrderNo: {
-        key: '',
+        key: 'supplierOrderNo',
     },
     incoterm: {
-        key: '',
+        key: 'incoterm',
     },
     incotermArea: {
-        key: '',
+        key: 'incotermArea',
     },
     lcNo: {
-        key: '',
+        key: 'lcNo',
     },
     payment: {
-        key: '',
+        key: 'payment',
     },
     currency: {
-        key: '',
+        key: 'currency',
     },
     deliveryDt: {
-        key: '',
+        key: 'deliveryDt',
     },
     //??????
+    countryofShipmentOrigin:{
+    
+    },
     destCountry: {
-        key: '',
+        key: 'destCountry',
     },
     customerAgreementNo: {
-        key: '',
+        key: 'customerAgreementNo',
     },
     customerAgreementDt: {
-        key: '',
+        key: 'customerAgreementDt',
     },
-    //?????????
-    comments: {
-        key: '',
-    },
+    //???????
+    //    comments: {
+    //
+    //    },
+
     paymentRemark: {
-        key: '',
+        _hide: true,
+        key: 'paymentRemark',
     },
     totalSkuPrice: {
-        key: '',
+        key: 'totalSkuPrice',
     },
     paidAmount: {
-        key: '',
+        key: 'paidAmount',
     },
     unpaidAmount: {
-        key: '',
+        key: 'unpaidAmount',
     },
     inboundQty: {
-        key: '',
+        key: 'inboundQty',
     },
     deliveredQty: {
-        key: '',
+        key: 'deliveredQty',
     },
     //?????
-    modifyTime: {
-        key: '',
-    },
+    //    modifyTime: {
+    //        key: '',
+    //    },
     //?????
-    createTime: {
-        key: '',
-    },
+    //    createTime: {
+    //        key: '',
+    //    },
     quotationNo: {
-        key: '',
+        key: 'quotationNo',
     },
     totalQty: {
-        key: '',
+        key: 'totalQty',
     },
     totalOuterCartonQty: {
-        key: '',
+        key: 'totalOuterCartonQty',
     },
     totalNetWeight: {
-        key: '',
+        key: 'totalNetWeight',
     },
     totalVolume: {
-        key: '',
+        key: 'totalVolume',
     },
     skuQty: {
-        key: '',
+        key: 'skuQty',
     },
 
 
 
-    //.........................by sku
-    orderNo: {
-        key: '',
-    },
-    CustomerSKUCode: {
-        key: '',
-    },
-    SKUBarCode: {
-        key: '',
-    },
-    SKUcode: {
-        key: '',
-    },
-    supplierName: {
-        key: '',
-    },
-    SKUEnglishname: {
-        key: '',
-    },
-    SKUdescriptionincustomerlanguage: {
-        key: '',
-    },
-    Material: {
-        key: '',
-    },
-    martialEN: {
-        key: '',
-    },
-    UnitPrice: {
-        key: '',
-    },
-    TotalQuantity: {
-        key: '',
-    },
-    TotalPrice: {
-        key: '',
-    },
-    OrderDate: {
-        key: '',
-    },
-    DeliveryDate: {
-        key: '',
-    },
-    DepartureDate: {
-        key: '',
-    },
-    DeliveredQuantity: {
-        key: '',
-    },
-    ProductStatus: {
-        key: '',
-    },
-    incoterm: {
-        key: '',
-    },
-    incotermarea: {
-        key: '',
-    },
-    CreateTime: {
-        key: '',
-    },
-    ModifyTime: {
-        key: '',
-    },
-    Comments: {
-        key: '',
-    },
+   
 };

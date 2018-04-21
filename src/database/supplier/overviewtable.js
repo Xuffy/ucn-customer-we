@@ -13,6 +13,7 @@ export default {
         key: 'country'
     },
     companyId: {
+        _hide: true,
         key: 'companyId'
     },
     //    category: {
@@ -32,17 +33,18 @@ export default {
     },
 
     id: {
+        _hide: true,
         key: 'id',
 
     },
-    //    logo: {
-    //
-    //    },
-    //    payment: {
-    //
-    //    },
-    //
-    //    recycle: {
-    //
-    //    }
+    logo: {
+        _hide: true,
+    },
+    payment: {
+        _hide: true,
+    },
+
+    recycle: {
+        _hide: true,
+    }
 }

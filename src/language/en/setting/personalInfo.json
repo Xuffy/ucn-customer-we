@@ -7,5 +7,10 @@
     "language":"Language",
     "department":"Department",
     "role":"Role",
-    "birthday":"Birthday"
+    "birthday":"Birthday",
+    "oldEmail":"Old Email",
+    "newEmail":"New Email",
+    "oldPassword":"Old Password",
+    "newPassword":"New Password",
+    "confirmPassword":"Confirm Password"
   }

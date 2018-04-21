@@ -4,24 +4,26 @@ import product from './product/index';
 import logistic from './logistic';
 
 import inquiryOverview from './inquiry';
-import payment from './payment/index';
-import message from './message/index';
 import order from './order/index';
-import supplier from './supplier/index'
+import supplier from './supplier/index';
 import setting from './setting/index';
-
-
+import common from './common/index';
+import message from './message/index';
+import payment from './payment/index';
+import logs from './logs/index';
 
 const db = {
+  common,
   workbench,
-  payment,
   product,
   inquiryOverview,
   logistic,
   order,
   supplier,
+  setting,
   message,
-  setting
+  payment,
+  logs
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
