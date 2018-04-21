@@ -68,11 +68,7 @@
 
             //前往比较页面开始比较
             startCompare(){
-
-                console.log(this.data,'????')
-
-
-                // this.$router.push('/product/compare');
+                this.$emit('goCompare');
             },
 
             //删除所选中的项
