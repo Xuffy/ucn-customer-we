@@ -124,6 +124,8 @@
             val._edit = index < 2;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || '';
+            val.value=_.isBoolean(val.value) ? '' :val.value;
+            console.log(val.value,'++++')
             return val;
           });
 

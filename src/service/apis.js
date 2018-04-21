@@ -25,6 +25,7 @@ const apis = {
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
   POST_INQUIRY_COMPARE: ['/inquiry/compare', 'BASE_DHC'],
+  POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
   POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
   POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_DHC'],

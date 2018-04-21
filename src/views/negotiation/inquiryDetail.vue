@@ -98,7 +98,8 @@
         /> -->
         <v-history-modify 
                 :visible.sync="oSwitch" 
-                :data="historyData" 
+                :data="historyData"
+                :config="historyColumn" 
                 @save="save"
             >
         </v-history-modify>
@@ -354,7 +355,7 @@
            },
            producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInf;
+                this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch(type) {
                         case 'histoty':
                             //this.msgTitle = 'Histoty';
@@ -417,7 +418,7 @@
                 });
             },
             modifyCancel() { //页面编辑取消
-                this.newTabDat = this.tabData;
+                this.newTabData = this.tabData;
                 this.newProductTabData = this.productTabData;
                 this.productCancel();
                 this.statusModify = false;
@@ -445,39 +446,7 @@
                     };
                     this.$set(this.newProductTabData, index, item);
                 });
-            },
-            // isModify(data) {
-            //     if(this._id.type === 'producInfo') {
-            //         let ptd = [];
-
-            //         let hDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.history]);
-
-            //         let rDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.remark]);
-
-            //         _.map(this.newProductTabData, item=>{
-            //             if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
-            //                 ptd.push(_.extend(item, rDB[0]));
-            //             }
-            //             if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
-            //                 ptd.push(_.extend(item, hDB[0]));
-            //             }
-            //         });
-            //     } else {
-            //         let ptd = [];
-            //         let hDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.history]);
-
-            //         let rDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.remark]);
-
-            //         _.map(this.newTabData, item=>{
-            //             if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
-            //                 ptd.push(_.extend(item, rDB[0]));
-            //             }
-            //             if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
-            //                 ptd.push(_.extend(item, hDB[0]));
-            //             }
-            //         });
-            //     }
-            // }
+            }
         }
     }
 </script>
