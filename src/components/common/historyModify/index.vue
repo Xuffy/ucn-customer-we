@@ -3,7 +3,8 @@
     <el-dialog
       title="提示"
       width="80%"
-      :visible.sync="visible">
+      @close="() => {$emit('update:visible', false)}"
+      :visible.sync="showDialog">
 
       <el-table
         :data="dataList"
@@ -40,7 +41,7 @@
       </el-table>
 
       <div slot="footer">
-        <el-button @click="$emit('update:visible',false)">取 消</el-button>
+        <el-button @click="showDialog = false">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
@@ -48,7 +49,6 @@
 </template>
 
 <script>
-  import testData from './test'
 
   // testData = testData.content.details;
 
@@ -66,34 +66,39 @@
         type: Boolean,
         default: false
       },
+      config: {
+        type: Object,
+        default() {
+          return {};
+        }
+      },
 
     },
     data() {
       return {
+        showDialog: false,
         dataList: [],
         dataColumn: [],
       }
     },
     watch: {
-      data(val){
-console.log(2,this.data)
+      data(val) {
         this.dataList = this.getFilterData(val);
         this.dataColumn = this.dataList[0];
-        console.log(this.dataList)
+      },
+      visible(val) {
+        this.showDialog = val;
       }
     },
     mounted() {
-
-
-console.log(1,this.data)
-
       this.dataList = this.getFilterData(this.data);
       this.dataColumn = this.dataList[0];
     },
     methods: {
       submit() {
-        this.$emit('save', this.dataList);
-        this.$emit('update:visible', false);
+        this.$emit('save', [this.dataList[0], this.dataList[1]]);
+        // this.$emit('update:visible', false);
+        this.showDialog = false;
       },
       getFilterData(data) {
         let list = [];
@@ -109,24 +114,25 @@ console.log(1,this.data)
 
         list = [list[0], list[1]].concat(list);
 
-        return this.$getDB(
-          this.$db.inquiryOverview.basicInfo, list,
-          (item, index) => {
-            if (item.updateDt) {
-              item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-            }
-            // 初始化可编辑行
+        return this.$getDB(this.config, list, (item, index) => {
+          if (item.updateDt) {
+            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+          }
+          // 初始化可编辑行
 
-            item = _.mapObject(item, val => {
-              val._edit = index < 2;
-              val.type = index === 1 ? 'String' : val.type;
-              val.value = val.value || '';
-              return val;
-            });
-
-            return item;
+          item = _.mapObject(item, val => {
+            val._edit = index < 2;
+            val.type = index === 1 ? 'String' : val.type;
+            val.value = val.value || '';
+            return val;
           });
 
+          return item;
+        });
+
+      },
+      closeDialog(){
+        this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 0) {
