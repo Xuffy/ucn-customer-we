@@ -222,6 +222,7 @@
                 v-if="showCompareList"
                 :data="compareData"
                 @clearData="clearData"
+                @goCompare="goCompare"
                 @closeTag="handleClose"></compare-list>
 
     </div>
@@ -601,6 +602,9 @@
             clearData(){
                 this.$localStore.remove('compareProductList');
                 this.compareData=[];
+            },
+            goCompare(){
+                console.log(123)
             },
         },
         created(){
