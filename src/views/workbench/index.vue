@@ -2,7 +2,7 @@
   <div class="workbench">
 
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
+      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink" @click="visible = true"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -31,7 +31,11 @@
         <!--<v-table-data></v-table-data>-->
       </el-col>
     </el-row>
-    <v-history-modify :visible.sync="visible"></v-history-modify>
+
+    <v-history-modify :visible.sync="visible"
+                      :data="testData"
+                      :config="$db.inquiryOverview.productInfo">
+    </v-history-modify>
   </div>
 </template>
 
@@ -41,12 +45,14 @@
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
   import {VHistoryModify} from '@/components/index';
+  import testData from './test'
 
   export default {
     name: 'workbench',
     data() {
       return {
-        visible: true
+        visible: false,
+        testData:testData.content.details
       }
     },
     components: {

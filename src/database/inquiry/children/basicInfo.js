@@ -3,7 +3,8 @@ export default {
         key: 'updateDt',
         label: ' ',
         type: 'text',
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     id: {
         _hide: true
@@ -16,7 +17,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     timeZone: { //时区 系统带入
         placeholder: 'Please select',
@@ -24,7 +26,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     time: { //时间 系统带入
         placeholder: 'Please select time',
@@ -32,7 +35,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     InquiryNo: { //询价单号 系统带入
         key: 'inquiryNo',
@@ -41,7 +45,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     QuotationNo: { //询价子单号 系统带入
         placeholder: 'Please select',
@@ -49,7 +54,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     inquiryStatus: { //询价单状态
         placeholder: 'Please select',
@@ -57,7 +63,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     transportationWay: { //下拉选择 运输方式
         placeholder: 'Please select',
@@ -125,7 +132,8 @@ export default {
         rules: [],
         width: '150px',
         type: 'text',
-        state: 0
+        state: 0,
+        _inquiryHide: true
     },
     destinationPort: { //目的港口 ok
         placeholder: 'Please select',
@@ -151,6 +159,7 @@ export default {
     exportLicense: { //出口资质 ok
         placeholder: 'Please select',
         rules: [],
+        select: ['是', '否'],
         width: '150px',
         type: 'select',
         state: 0

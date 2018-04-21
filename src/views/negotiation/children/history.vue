@@ -22,9 +22,9 @@
                         v-if="!item._hide"
                     >
                     <template slot-scope="scope">
-                        <el-select 
-                                v-model="remarkJson[item.key]" 
-                                :placeholder="item.placeholder" 
+                        <el-select
+                                v-model="remarkJson[item.key]"
+                                :placeholder="item.placeholder"
                                 v-if="item.type === 'select' && scope.row[item.key] && scope.row[item.key].history"
                             >
                             <el-option
@@ -32,7 +32,7 @@
                                     :key="items"
                                     :value="items"
                                 >
-                                
+
                             </el-option>
                         </el-select>
                         <span v-if="scope.row[item.key] && !scope.row[item.key].remark && !scope.row[item.key].history">{{scope.row[item.key] ? scope.row[item.key].value : ''}}</span>
@@ -50,7 +50,7 @@
                 </el-table-column>
             </el-table>
             <VTable :data.sync="history" :rowspan="2" :selection="false" v-if="title === 'Histoty'" />
-            
+
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="modify" v-if="title !== 'Histoty'">{{ $i.baseText.ok }}</el-button>
                 <el-button @click="value = false">{{ $i.baseText.cancel }}</el-button>
@@ -111,7 +111,7 @@
                 }
             },
             filtColumn() {
-                let column = [], 
+                let column = [],
                     data = this.column;
                 for(let key in data) {
                     if(key !== 'id') column.push(data[key]);
@@ -166,7 +166,7 @@
             // })
         },
         mounted() {
-            
+
         },
         methods: {
             arraySpanMethod({ row, column, rowIndex, columnIndex }) {

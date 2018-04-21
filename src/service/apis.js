@@ -24,7 +24,8 @@ const apis = {
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
-  inquiryIds: ['/inquiry/compare', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE: ['/inquiry/compare', 'BASE_DHC'],
+  POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
   POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_DHC'],
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_DHC'],
@@ -50,7 +51,7 @@ const apis = {
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
   add_order:['/order/add','BASE_HCJ'], 
-  detail_order:['/order/detail','BASE_HCJ'],
+  detail_order:['/order/detail/{id}','BASE_HCJ'],
   //supplier
   get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],
   get_supplier_id:['/purchase/supplier/{id}','BASE_CS_cgs'],
