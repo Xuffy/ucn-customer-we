@@ -1,7 +1,7 @@
 <template>
     <div class="warehouse">
         <div class="title">
-            {{$t('product.page.warehouseOverview')}}
+            {{$i.warehouse.warehouseOverview}}
         </div>
         <div class="body">
             <div class="select">

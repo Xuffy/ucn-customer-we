@@ -100,22 +100,14 @@
                     pn: 1
                 },
                 selectedDate: [],
-                id: ''
+
             }
         },
         methods: {
             onAction(item, type) {
-                this.id = item.id.value
-                this.$ajax.post(this.$apis.detail_order, {
-                        orderId: this.id
-                    })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        this.loading = false
-
-                    });
+                this.windowOpen('/order/detail', {
+                    id: item.id.value
+                });
             },
             pagesizechange() {
 
@@ -124,7 +116,9 @@
 
             },
             creat_order() {
-                this.$router.push('/order/creat');
+                this.windowOpen('/order/detail', {
+                    selectedDate: this.selectedDate
+                });
             },
             selectChange(val) {
                 this.keyType = val;
@@ -164,7 +158,11 @@
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+                        this.tabData = this.$getDB(this.$db.order.overview, res.datas, item => {
+                            return _.mapObject(item, val => {
+                                val._checked = true
+                            })
+                        });
 
                     })
                     .catch((res) => {

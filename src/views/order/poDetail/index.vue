@@ -99,88 +99,18 @@
         },
         data() {
             return {
-                textarea: "", //order remark输入内容
                 markAsImportant: true, //底部单选 mark as important
                 hideTheSame: true, //底部单选 Hide The Same
-                hightlightTheDifferent: true, //底部单选hightlightTheDifferent
+                hightlightTheDifferent: true, //底选hightlightTheDifferent
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
-                value: '',
-                keyWord: '',
                 disabled: true, //页面输入框是否可写
                 checked: false,
-                options: [{
-                    id: '1',
-                    label: 'Order No'
-                }, {
-                    id: '2',
-                    label: 'Sku Code'
-                }, ],
                 switchStatus: false,
+                Data: [],
                 tabData: [],
                 loading: false, //表格加载
-                tableColumns: [{
-                        label: '付款编号',
-                        prop: 'paymentNumber',
-                        type: 'Text',
-                        width: 180
-                    },
-                    {
-                        label: '款项名称',
-                        prop: 'paymentItem',
-                        type: 'Input',
-                        width: 150
-                    },
-                    {
-                        label: '预计付款日期',
-                        prop: 'estPayDate',
-                        type: 'Date',
-                        width: 150
-                    },
-                    {
-                        label: '预计付款金额',
-                        prop: 'estAmount',
-                        type: 'Number',
-                        width: 130
-                    },
-                    {
-                        label: '实际付款日期',
-                        prop: 'actPayDate',
-                        type: 'Date',
-                        width: 150
-                    },
-                    {
-                        label: '实际付款金额',
-                        prop: 'actAmount',
-                        type: 'Number',
-                        width: 130
-
-                    },
-                    {
-                        label: '有效性',
-                        prop: 'available',
-                        type: 'Text'
-                    },
-                ],
-
-
-
-
             }
-        },
-        mounted() {
-            //            console.log(this.$refs.responsibility.tableData)
-        },
-        created() {
-            //            this.$ajax.get(this.$apis.supplier_overview, {
-            //                    params: {}
-            //                })
-            //                .then((res) => {
-            //                    this.tabData = res
-            //                })
-            //                .catch((res) => {
-            //                    console.log(res);
-            //                });
         },
         methods: {
             //..............messageboard的缩进
@@ -191,18 +121,6 @@
             modify() {
                 this.disabled = false
             },
-            //.............跳入placeLogisticPlan
-            placeLogisticPlan() {
-                const {
-                    href
-                } = this.$router.resolve({
-                    name: 'placeLogisticPlan',
-                    query: {
-
-                    }
-                })
-                window.open(href, '_blank')
-            },
             //..............底部cancel
             cancel() {
                 this.disabled = true
@@ -211,8 +129,44 @@
                 console.log(item, type)
 
             },
-
-
+            //........获取数据
+            get_data() {
+                this.$ajax.get(this.$apis.detail_order, {
+                        id: this.$route.query.id
+                    })
+                    .then((res) => {
+                        console.log(res)
+                        this.Data = res
+                        this.$refs.basicinfo.formItem = res;
+                        this.$refs.responsibility.tableData = this.translate(res.orderResponsibilityList)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            //  主要用于responsibility的数据前端的转换
+            translate(d) {
+                return this.$getDB(this.$db.order.responsibility, d, item => {
+                    return _.mapObject(item, val => {
+                        if (val.value) {
+                            val.edit = false;
+                        } else {
+                            val.edit = true;
+                        }
+                        return val;
+                    });
+                });
+            }
+        },
+        mounted() {
+            //            var b = {
+            //                name: "1",
+            //                age: "2"
+            //            }
+            //            console.log(...b)
+        },
+        created() {
+            this.get_data()
         },
         watch: {
 
