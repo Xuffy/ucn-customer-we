@@ -6,6 +6,9 @@ export default {
     _disabled: true,
     _title: 'remark'
   },
+  _remark: {
+    _hide: true
+  },
   id: {
     key: 'id',
     _hide: true
