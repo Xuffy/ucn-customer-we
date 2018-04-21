@@ -35,7 +35,7 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">f{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @startCompare="startCompare" />
+        <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @startCompare="startCompare" v-if="compareLists" />
         <el-dialog
                 :title="$i.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
@@ -124,6 +124,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                compareLists: false,
                 tabData: [],
                 productTabData: [],
                 newTabData: [],
@@ -257,6 +258,7 @@
                     message: '请加载完毕再操作',
                     type: 'warning'
                 });
+                this.compareLists = true;
                 let config = {
                     name: this.tabData[0].inquiryNo.value,
                     id: this.tabData[0].id.value

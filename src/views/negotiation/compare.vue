@@ -35,8 +35,8 @@
         />
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i.baseText.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="onSubmit" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modity'">{{ $i.baseText.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="onSubmit" v-show="compareType === 'modity'">{{ $i.baseText.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
     </div>
 </template>
 <script>
@@ -75,6 +75,12 @@
             if(this.$route.query.id) {
                 this.params.ids = this.$route.query.id.split(',');
             }
+            
+            if(this.$sessionStore.get('$compare_id')) {
+                this.compareId = this.$sessionStore.get('$compare_id');
+            } else {
+                this.compareId = this.$route.query.companyId;
+            };
         },
         watch: {
             compareBy () {
@@ -94,9 +100,6 @@
                     this.getNewList();
                 } else {
                     this.getCompareList();
-                }
-                if(this.$sessionStore.get('$compare_id')) {
-                    this.params.ids.concat(this.$sessionStore.get('$compare_id'))
                 }
             },
             onSubmit() {
@@ -162,7 +165,7 @@
             changeChecked(item) {
                 let arr = [];
                 item.forEach(item => {
-                    arr.push(item.id);
+                    arr.push(item.id.value);
                 });
                 this.checkedArg = arr;
             },
