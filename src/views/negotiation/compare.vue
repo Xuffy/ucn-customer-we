@@ -5,7 +5,7 @@
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
-                    <el-input v-model="compareName" size="mini"></el-input>
+                    <el-input v-model="compareName" size="mini" :disabled="compareType === 'only'"></el-input>
                 </el-form-item>
             </el-form>
         </div>

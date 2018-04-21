@@ -93,7 +93,7 @@ console.log(1,this.data)
     methods: {
       submit() {
         this.$emit('save', this.dataList);
-        $emit('update:visible', false);
+        this.$emit('update:visible', false);
       },
       getFilterData(data) {
         let list = [];

@@ -1,7 +1,5 @@
 <template>
     <div class="inquiryDetail">
-        
-        {{oSwitch}}
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
@@ -17,7 +15,7 @@
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
-                            :data="newTabData" 
+                            :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
                             :height="200"
@@ -37,7 +35,7 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">f{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
@@ -125,23 +123,20 @@
         name:'inquiryDetail',
         data() {
             return {
+                tabData: [],
+                productTabData: [],
                 newTabData: [],
                 newProductTabData: [],
-                producInfoModify: [],
-                basicModify: [],
                 tableLoad: true,
                 checkedAll: '',
                 msgTableType: false,
                 historyColumn: {},
                 msgTitle: '',
                 historyData: [],
-                productTabData: [],
                 radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
-                tabColumn: '',
-                tabData: [],
                 compareConfig:[],
                 ChildrenCheckList:[],
                 ProductCheckList:[],
@@ -171,7 +166,8 @@
                 tableColumn: '',
                 submitData: {
                     deleteDetailIds: []
-                }
+                },
+                id_type: ''
             }
         },
         components: {
@@ -201,8 +197,36 @@
             }
         },
         methods: {
-            save(data) {
-                
+            save(data) { //modify 编辑完成反填数据
+                //console.log(data, '====')
+                if(this.id_type === 'basicInfo') { //反填 basicInfo
+                    this.newTabData.forEach((item, index) => {
+                        if(item.id && item.id.value) { //反填最新订单数据
+                            for(let k in item) {
+                                item[k] = data[0][k]
+                            }
+                        } else if(item._id && item._id.value) { //反填最新remark数据
+                            for(let k in item) {
+                                item[k] = data[1][k] ? data[1][k] : item[k];
+                            }
+                        }
+                    }); 
+                } else if(this.id_type === 'producInfo') { // 反填 productTabData
+                    this.newProductTabData.forEach((item, index) => {
+                        if(item.id && item.id.value) { //反填最新订单数据
+                            // item[index].rm = data[0];
+                            console.log()
+                            for(let k in item) {
+                                item[k] = data[0][k]
+                            }
+                        } else if(item._id && item._id.value) { //反填最新remark数据
+                            // item[index].rm = data[1];
+                            for(let k in item) {
+                                item[k] = data[1][k] ? data[1][k] : item[k];
+                            }
+                        }
+                    }); 
+                }
             },
             startCompare() { //前往比较
                 let arr = [];
@@ -227,7 +251,7 @@
                 });
                 this.$localStore.set('$inquiryCompare', this.compareConfig);
             },
-            addToCompare() {
+            addToCompare() { //添加对比
                 if(!this.tabData[0]) return this.$message({
                     message: '请加载完毕再操作',
                     type: 'warning'
@@ -245,10 +269,9 @@
                 }
                 this.compareConfig.push(config);
                 this.$message('添加对比成功！');
-                //storePrefix
                 this.$localStore.set('$inquiryCompare', this.compareConfig);
             },
-            getInquiryDetail() {
+            getInquiryDetail() { //获取 Inquiry detail 数据
                 if(!this.$route.query.id) return this.$message('地址错误');
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
@@ -266,20 +289,17 @@
                     this.tableLoad = false;
                 });
             },
-            selectChange(val) {
-                console.log(val)
-            },
-            submit(str) {
+            submit(str) { //留言板发布
                 let json = {};
                 json.time = getData(new Date(), 6);
                 json.name = '罗涛';
                 json.content = str;
                 this.list.push(json);
             },
-            boardSwitch() {
+            boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
             },
-            basicInfoBtn(item) {
+            basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
                     label: 'Modify',
                     type: 'modify'
@@ -293,17 +313,17 @@
                     type: 'histoty'
                 }];
             }, 
-            productInfoBtn (item) {
+            productInfoBtn (item) { //Product info 按钮创建
                 if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
                 if(!item._disabled) return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
             },
             fromChange(val) {
                console.log(val)
             },
-            modifyAction() {
+            modifyAction() { //打开页面编辑状态
                 this.statusModify = true;
             },
-            fnBasicInfoHistoty(item, type) {
+            fnBasicInfoHistoty(item, type) { //Basic info 历史记录
                 if(type) {
                     this.msgTableType = true;
                 } else {
@@ -314,52 +334,45 @@
                 })
                 .then(res => {
                     this.historyData = res;
-                    console.log(this.historyData)
                     this.oSwitch = true;
                 });
            },
-           basicInfoAction(data, type) {
-                this._id = {
-                    id: data.id.value,
-                    type: 'basicInfo'
-                };
+           basicInfoAction(data, type) { // basic info 按钮操作 
+                this.id_type = 'basicInfo';
                 this.historyColumn = this.$db.inquiryOverview.basicInfo;
                 switch(type) {
                         case 'histoty':
-                            this.msgTitle = 'Histoty';
+                            //this.msgTitle = 'Histoty';
                             this.fnBasicInfoHistoty(data);
                             break;
                         case 'modify':
-                            this.msgTitle = 'Modify';
+                            //this.msgTitle = 'Modify';
                             this.fnBasicInfoHistoty(data);
                             this.oSwitch = true;
                             break;
                 }
            },
-           producInfoAction(data, type) {
-                this._id = {
-                    id: data.id.value,
-                    type: 'producInfo'
-                };
+           producInfoAction(data, type) { //Produc info 按钮操作
+                this.id_type = 'producInfo';
                 this.historyColumn = this.$db.inquiryOverview.productInf;
                 switch(type) {
                         case 'histoty':
-                            this.msgTitle = 'Histoty';
+                            //this.msgTitle = 'Histoty';
                             this.producInfoHistoty(data);
                             break;
                         case 'modify':
-                            this.msgTitle = 'Modify';
+                            //this.msgTitle = 'Modify';
                             this.oSwitch = true;
-                            this.fnBasicInfoHistoty(data);
+                            this.producInfoHistoty(data);
                             break;
                 }
            },
-           producInfoHistoty(item) {
-               if(item.histoty) {
-                    this.oSwitch = true;
-                    this.historyData = item.histoty;
-                    return false;
-                };
+           producInfoHistoty(item) { //Produc info 历史记获取
+            //    if(item.histoty) {
+            //         this.oSwitch = true;
+            //         this.historyData = item.histoty;
+            //         return false;
+            //     };
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
                     id: item.id.value
                 })
@@ -369,10 +382,10 @@
                     this.oSwitch = true;
                 });
            },
-           changeChecked(item) {
+           changeChecked(item) { //获取选中的单 集合
                this.checkedAll = item;
            },
-            toCreateInquire() {
+            toCreateInquire() { //创建单
                 let arr = [];
                 this.checkedAll.forEach(item => {
                     arr.push(item.id.value);
@@ -384,7 +397,7 @@
                     }
                 });
             },
-            ajaxInqueryAction(type) {
+            ajaxInqueryAction(type) { //接受单
                 const argId = [];
                 argId.push(this.$route.query.id);
                 this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
@@ -395,7 +408,7 @@
                     console.log(res)
                 });
             },
-            removeProduct() {
+            removeProduct() { //删除product 某个单
                 this.newProductTabData.forEach((item, index) => {
                     if(item._checked) {
                         item._disabled = true;
@@ -403,7 +416,19 @@
                     };
                 });
             },
-            modifyCancel() {
+            modifyCancel() { //页面编辑取消
+                this.newTabDat = this.tabData;
+                this.newProductTabData = this.productTabData;
+                this.productCancel();
+                this.statusModify = false;
+            },
+            modify() { //页面编辑提交
+                this.tabData = this.newTabData;
+                this.productTabData = this.newProductTabData;
+                this.productModify();
+                this.statusModify = false;
+            },
+            productCancel() { //  取消 product 编辑 
                 this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._disabled = false;
@@ -411,9 +436,8 @@
                     };
                     this.$set(this.newProductTabData, index, item);
                 });
-                this.statusModify = false;
             },
-            modify() {
+            productModify() { //  提交 product 编辑 
                 this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._remove = true;
@@ -421,47 +445,39 @@
                     };
                     this.$set(this.newProductTabData, index, item);
                 });
-                this.statusModify = false;
             },
-            filtersProduct(list) {
-                let arr = [];
-                list.forEach(item => {
-                    if(item._remove) arr.push(item);
-                });
-                return arr;
-            },
-            isModify(data) {
-                if(this._id.type === 'producInfo') {
-                    let ptd = [];
+            // isModify(data) {
+            //     if(this._id.type === 'producInfo') {
+            //         let ptd = [];
 
-                    let hDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.history]);
+            //         let hDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.history]);
 
-                    let rDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.remark]);
+            //         let rDB=this.$getDB(this.$db.inquiryOverview.productInf,[data.remark]);
 
-                    _.map(this.newProductTabData, item=>{
-                        if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
-                            ptd.push(_.extend(item, rDB[0]));
-                        }
-                        if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
-                            ptd.push(_.extend(item, hDB[0]));
-                        }
-                    });
-                } else {
-                    let ptd = [];
-                    let hDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.history]);
+            //         _.map(this.newProductTabData, item=>{
+            //             if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
+            //                 ptd.push(_.extend(item, rDB[0]));
+            //             }
+            //             if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
+            //                 ptd.push(_.extend(item, hDB[0]));
+            //             }
+            //         });
+            //     } else {
+            //         let ptd = [];
+            //         let hDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.history]);
 
-                    let rDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.remark]);
+            //         let rDB=this.$getDB(this.$db.inquiryOverview.basicInfo, [data.remark]);
 
-                    _.map(this.newTabData, item=>{
-                        if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
-                            ptd.push(_.extend(item, rDB[0]));
-                        }
-                        if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
-                            ptd.push(_.extend(item, hDB[0]));
-                        }
-                    });
-                }
-            }
+            //         _.map(this.newTabData, item=>{
+            //             if(item.id && item.id.value === this._id.id && !_.isEmpty(rDB)){
+            //                 ptd.push(_.extend(item, rDB[0]));
+            //             }
+            //             if(item._id && item._id.value === this._id.id && !_.isEmpty(hDB)){
+            //                 ptd.push(_.extend(item, hDB[0]));
+            //             }
+            //         });
+            //     }
+            // }
         }
     }
 </script>
