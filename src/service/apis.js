@@ -1,4 +1,4 @@
-const version = ['/web/v1', '/web/v2', '/web/v3'];
+const version = ['/web/v1', '/api/v1', '/web/v3'];
 import config from './config';
 
 const apis = {
@@ -90,6 +90,9 @@ const apis = {
   post_supplier_deleteCompareDetails:['/purchase/supplier/deleteCompareDetails','BASE_CS_cgs'],
   post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
   post_supplier_recoverCompare:['/purchase/supplier/recoverCompare','BASE_CS_cgs'],
+
+  //seller warehouse
+  get_inboundData:['/inbound/page','BASE_HSM',1],
 };
 
 let list = _.mapObject(apis, val => {
