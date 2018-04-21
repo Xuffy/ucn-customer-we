@@ -4,8 +4,8 @@
 <!--         basicinfo-->
          <div class="basic">
                <div class='basicinfo_input'>                
-                   <basicinfo :disabled='disabled' :podisabled=true ref='basicinfo'></basicinfo>
-                   <attchment :disabled='disabled'></attchment>                       
+                   <basicinfo :disabled='statusModify' :podisabled=true ref='basicinfo'></basicinfo>
+                   <attchment :disabled='statusModify'></attchment>                       
               </div>
                <div class='basicinfo_message'>
                      <div class="message_div" v-show='switchStatus'>
@@ -19,17 +19,17 @@
                 </div>
         </div>
  <!--             responsibility     -->
-<!--         <responsibility ref='responsibility' :disabled='disabled'></responsibility>-->
+         <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
 <!--         <v-payment></v-payment>-->
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
-                 {{$i.baseText.productInfo    }}
+                 {{$i.baseText.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='disabled'>{{$i.baseText.addproduct}}</el-button>
-                  <el-button type='danger' :disabled='disabled'>{{$i.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i.baseText.addproduct}}</el-button>
+                  <el-button type='danger' :disabled='statusModify'>{{$i.baseText.remove}}</el-button>
 
              </div>
              <div class="pro_table">
@@ -40,10 +40,10 @@
              </div>
          </div>
 <!--         caculate-->
-         <v-caculate :disabled='disabled'></v-caculate>
+         <v-caculate :disabled='statusModify'></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
-             <div class="footer_button" v-if='disabled'>
+             <div class="footer_button" v-if='statusModify'>
                  <el-button  @click='modify'>{{$i.baseText.modify}}</el-button>
                  <el-button >{{$i.baseText.confirm}}</el-button>
                  <el-button  :disabled='true'>{{$i.baseText.download}}</el-button>
@@ -68,6 +68,12 @@
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
+           
+            <v-history-modify 
+               
+                ref="HM"
+            >
+        </v-history-modify>
   </div>
 </template>
 
@@ -82,7 +88,8 @@
 
     import {
         VTable,
-        messageBoard
+        messageBoard,
+        VHistoryModify
     } from '@/components/index';
     export default {
         name: 'poOrder',
@@ -95,7 +102,8 @@
             VPayment,
             VTable,
             messageBoard,
-            VCaculate
+            VCaculate,
+            VHistoryModify
         },
         data() {
             return {
@@ -104,12 +112,14 @@
                 hightlightTheDifferent: true, //底选hightlightTheDifferent
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
-                disabled: true, //页面输入框是否可写
+                statusModify: true, //页面输入框是否可写
                 checked: false,
                 switchStatus: false,
                 Data: [],
                 tabData: [],
                 loading: false, //表格加载
+                id_type: '',
+                historyColumn: {},
             }
         },
         methods: {
@@ -119,11 +129,11 @@
             },
             //..............编辑状态
             modify() {
-                this.disabled = false
+                this.statusModify = false
             },
             //..............底部cancel
             cancel() {
-                this.disabled = true
+                this.statusModify = true
             },
             onAction(item, type) {
                 console.log(item, type)
@@ -134,38 +144,59 @@
                 this.$ajax.get(this.$apis.detail_order, {
                         id: this.$route.query.id
                     })
-                    .then((res) => {
-                        this.Data = res
+                    .then((res) => {                
+                        var copy = Object.assign({}, res);
+                       delete copy.orderResponsibilityList
+                       delete copy.skuList
+                     
                         //..........basicinfo
-                        this.$refs.basicinfo.formItem = this.deldeteArr(res);
+                        this.$refs.basicinfo.formItem =copy;                      
                         //..........responsibility
                         this.$refs.responsibility.tableData = res.orderResponsibilityList
                         //..........attachment
-
                         //..........productinfo
-
                         //..........calculate
                     })
                     .catch((res) => {
                         console.log(res)
                     });
             },
-          //........剔除对象中的数组
-            deleteArr(data){
-                for(let k in data) {
-                    if(data[k].length) {
-                        delete data[k]
-                    }
-                }
-                return data
+          //.............product 按钮
+             producInfoAction(data, type) { //Produc info 按钮操作
+            this.id_type = 'producInfo';
+            this.historyColumn = this.$db.inquiryOverview.productInfo;
+            switch(type) {
+                    case 'histoty':
+                       
+//                        this.fnBasicInfoHistoty(data, 'productInfo');
+                        break;
+                    case 'modify':
+                      
+//                        this.oSwitch = true;
+//                        this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+//                        break;
             }
+         },
+      //.........按钮操作
+          producInfoAction(data, type) { //Produc info 按钮操作
+        this.id_type = 'producInfo';
+        this.historyColumn = this.$db.inquiryOverview.productInfo;
+        switch(type) {
+                case 'histoty':
+//                    this.fnBasicInfoHistoty(data, 'productInfo');
+                    break;
+                case 'modify':
+//                    this.oSwitch = true;
+//                    this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                    break;
+        }
+   },
         },
         mounted() {
 
         },
         created() {
-            //            this.get_data()
-            this.translate()
+            this.get_data()
         },
         watch: {
 

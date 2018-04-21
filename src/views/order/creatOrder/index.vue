@@ -129,13 +129,7 @@
             },
             //..........addproduct 弹窗
               getList(item) {
-               let tabData = [];
-               item.forEach(items => {
-                   items._checked = false;
-                   tabData.push(Object.assign({},items))
-               });
-               this.tabData = tabData;
-               this.dialogAddproduct = false;
+                  console.log(item)
            },
         
         },
