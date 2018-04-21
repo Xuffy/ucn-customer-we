@@ -222,6 +222,7 @@
                 v-if="showCompareList"
                 :data="compareData"
                 @clearData="clearData"
+                @goCompare="goCompare"
                 @closeTag="handleClose"></compare-list>
 
     </div>
@@ -244,7 +245,7 @@
                 value1: 0,
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
-                notLoadingDone:true,
+                notLoadingDone:false,
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
@@ -601,6 +602,9 @@
             clearData(){
                 this.$localStore.remove('compareProductList');
                 this.compareData=[];
+            },
+            goCompare(){
+                console.log(123)
             },
         },
         created(){

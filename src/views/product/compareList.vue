@@ -1,5 +1,5 @@
 <template>
-    <div class="compare-zone" :class="{show:change}">
+    <div class="compare-zone" :class="{isTransparent:change}">
         <div class="compare-main" :class="{show:change}">
             <div class="btnGroup">
                 <el-button :disabled="disabledBtn" @click="startCompare" class="btn" type="primary" size="mini">Go Compare ({{data.length}})</el-button>
@@ -21,9 +21,9 @@
             </div>
         </div>
 
-        <div class="speIcon" :class="{speDiv:change}">
-            <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change}"></i>
-        </div>
+        <!--<div class="speIcon" :class="{speDiv:change}">-->
+            <i @click="hideList" class="el-icon-d-arrow-right" :class="{iconShow:change,iconHide:!change}"></i>
+        <!--</div>-->
     </div>
 
 </template>
@@ -68,9 +68,7 @@
 
             //前往比较页面开始比较
             startCompare(){
-
-                this.$emit('startCompare');
-                // this.$router.push('/product/compare');
+                this.$emit('goCompare');
             },
 
             //删除所选中的项
@@ -125,6 +123,8 @@
     }
     .isTransparent{
         background: transparent !important;
+        transform: translateX(100%);
+        /*left:0;*/
     }
     .compare-list{
         width: 84%;
@@ -134,7 +134,7 @@
         transition: all linear .3s;
     }
     .show{
-        transform: translateX(95%);
+        transform: translateX(110%);
         transition: all linear .3s;
         /*background: red;*/
     }
@@ -151,22 +151,24 @@
     .speDiv{
         background-color: transparent;
         transition: all linear .3s;
-        left:0;
     }
     i{
         position: absolute;
         color: #ffffff;
         font-size: 20px;
         top:10px;
-        right: 10px;
         transition: all linear .3s;
         cursor: pointer;
+        z-index: 2000;
+    }
+    .iconHide{
+        right: 20px;
     }
     .iconShow{
         transform: rotate(180deg);
         transition: all linear .3s;
         color:#636363;
-        left:0;
+        left:-30px;
     }
     .compare-main .btn{
         float: left;

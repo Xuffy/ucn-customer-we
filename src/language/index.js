@@ -27,7 +27,14 @@ export default _.extend(
   require(`./${lang}/order/overview`) ,
   require(`/${lang}/order/basicinfo.pending`),
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
-  require(`./${lang}/logistic/plan/basicInfo.pending`)
+  require(`./${lang}/logistic/plan/basicInfo.pending`),
+  require(`/${lang}/inquiry/compare.pending`),
+
+  {warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
+
+
+    //CN配置
+    // {warehouse:require(`./${lang}/warehouse/warehouse.basic`)}
 
 
 )

@@ -615,6 +615,36 @@ export const routerMap = [
         }
       ]
     },
+
+    {
+        path: '/sellerWarehouse',
+        component: Layout,
+        redirect: '/sellerWarehouse/overview',
+        name: 'SellerWarehouse',
+        noDropdown: false,
+        children: [
+            {
+                path: 'overview',
+                name: 'Warehouse Overview',
+                meta: {
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/warehouseOverview.vue'),
+            },
+            {
+                path:'inbound',
+                name:'Inbound Overview',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inboundOverview.vue'),
+            }
+        ]
+    },
   ]
 ;
 

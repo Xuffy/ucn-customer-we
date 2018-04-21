@@ -94,8 +94,8 @@
                 width="80%"
                 lock-scroll>
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="From New Search"></el-radio-button>
-                <el-radio-button label="From my bookmark"></el-radio-button>
+                <el-radio-button label="0">From New Search</el-radio-button>
+                <el-radio-button label="1">From my bookmark</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"
@@ -118,28 +118,28 @@
         data() {
             return {
                 fromArg: {
-                    supplierId: "供应商ID",
-                    supplierType: "供应商类型",
-                    supplierName: "供应商名称",
-                    skuQty: "产品数量",
-                    inquiryAmount: "询价总金额",
-                    discountRate: "折扣率",
-                    currency: "币种",
-                    paymentMethod: "付款方式",
-                    paymentTerm: "付款期限",
-                    incoterm: "价格条款",
-                    transport: "运输方式",
-                    destinationCountry: "目标国家",
-                    destinationPort: "目标港口",
-                    departureCountry: "发货国家",
-                    departurePort: "发货港口",
-                    exportLicense: "是否有出口许可证",
+                    supplierId: "", //供应商ID
+                    supplierType: "", //供应商类型
+                    supplierName: "", //供应商名称
+                    skuQty: "", //产品数量
+                    inquiryAmount: "", //询价总金额
+                    discountRate: "", //折扣率
+                    currency: "", //币种
+                    paymentMethod: "", //付款方式
+                    paymentTerm: "", //付款期限
+                    incoterm: "", //价格条款
+                    transport: "", //运输方式
+                    destinationCountry: "", //目标国家
+                    destinationPort: "", //目标港口
+                    departureCountry: "", //发货国家
+                    departurePort: "", //发货港口
+                    exportLicense: "", //是否有出口许可证
                     remark: "备注",
-                    draft: "是否草稿0:否，1:是",
+                    draft: "", //是否草稿0:否，1:是
                     suppliers: [{
-                        supplierId: "供应商ID",
-                        supplierType: "供应商类型",
-                        supplierName: "供应商名称"
+                        supplierId: "", //供应商ID
+                        supplierType: "", //供应商类型
+                        supplierName: "" //供应商名称
                     }],
                     details: [{
                         // 商品基本数据
@@ -273,7 +273,7 @@
                     // 询价单字段备注
                     fieldRemark: ''
                 },
-                radio: 'From New Search',   //Add Product status
+                radio: '0',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
                 tabColumn: '', //tab top
@@ -327,18 +327,22 @@
             },
             submitForm(type) {
                 console.log(this.fromArg)
-                if(type === 'draft') {
-                    
+                if(type === 'draft') { //是否保存为草稿
+                    this.fromArg.draft = 1;
                 } else {
-
+                    this.fromArg.draft = 0;
                 }
-                //this.$router.push('/negotiation/inquiryDetail');
                 this.$refs.ruleform.validate((valid) => {
                     if(!valid) return this.$message({
                         message: '请完成填写',
                         type: 'warning'
                     });
                 });
+                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.fromArg)
+                .then(res => {
+                    console.log(res)
+                });
+                //this.$router.push('/negotiation/inquiryDetail');
             },
             action(data, type) {
                 

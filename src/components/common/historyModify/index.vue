@@ -83,38 +83,50 @@
     },
     watch: {
       data(val) {
-        this.dataList = this.getFilterData(val);
-        this.dataColumn = this.dataList[0];
+        // this.dataList = this.getEditData(val);
       },
       visible(val) {
         this.showDialog = val;
       }
     },
     mounted() {
-      this.dataList = this.getFilterData(this.data);
-      this.dataColumn = this.dataList[0];
+      // this.dataList = this.getEditData(this.data);
+      // console.log(this.dataList)
     },
     methods: {
       submit() {
         this.$emit('save', [this.dataList[0], this.dataList[1]]);
-        // this.$emit('update:visible', false);
         this.showDialog = false;
       },
-      getFilterData(data) {
-        let list = [];
-        _.map(data, value => {
-          list.push(value);
-          list.push(_.extend(_.mapObject(value, (val, key) => {
-            if (key !== 'id') {
-              val = '';
-            }
+      edit(editData, history = [], visible = true) {
+        let ed = [];
+        if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+
+        // 初始化可编辑行
+        ed = _.map(editData, value => {
+          return _.mapObject(value, (val, index) => {
+            val._edit = true;
+            val.type = index === 1 ? 'String' : val.type;
+            val.value = val.value || '';
+            val.value = _.isBoolean(val.value) ? '' : val.value; // todo 屏蔽Boolean
             return val;
-          }), value.fieldRemark || {}));
+          });
         });
+
+        this.dataList = ed.concat(history);
+        this.dataColumn = this.dataList[0];
+        this.showDialog = visible;
+
+        console.log(this.dataList)
+
+      },
+      /*getEditData(data) {
+        let list = this.getFilterData(data)
+          , dateList;
 
         list = [list[0], list[1]].concat(list);
 
-        return this.$getDB(this.config, list, (item, index) => {
+        dateList = this.$getDB(this.config, list, (item, index) => {
           if (item.updateDt) {
             item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
           }
@@ -124,15 +136,33 @@
             val._edit = index < 2;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || '';
+            val.value=_.isBoolean(val.value) ? '' :val.value;
+            console.log(val.value,'++++')
             return val;
           });
 
           return item;
         });
 
-      },
-      closeDialog(){
-        this.$emit('update:visible', false);
+        this.dataColumn = dateList[0];
+
+        return dateList;
+      },*/
+      getFilterData(data) {
+        let list = [];
+        _.map(data, value => {
+          console.log(value)
+          list.push(value);
+          value.fieldRemark = value.fieldRemark || {};
+          value.fieldRemark._remark = true;
+          list.push(_.extend(_.mapObject(value, (val, key) => {
+            if (key !== 'id') {
+              val = '';
+            }
+            return val;
+          }), value.fieldRemark));
+        });
+        return list;
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 0) {
