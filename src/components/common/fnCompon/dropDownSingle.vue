@@ -21,6 +21,7 @@
 						:props="defaultProps"
 						:expand-on-click-node="false"
 						@node-click="getChecked"
+						:filter-node-method="filterNode"
 					>
 					</el-tree>
 				</div>
@@ -28,7 +29,6 @@
 		</el-popover>
 		<el-input
 			:placeholder="checkInputBoxPl"
-			:filter-node-method="filterNode"
 			v-popover:popover5
 			v-model="val[defaultProps.label]"
 			suffix-icon="el-icon-arrow-down"
@@ -57,11 +57,11 @@
 				selectedList:'',
 				data:[],
 				visible: false,
+				filterText: '',
 				val: ''
 			};
 		},
 		props: {
-			filterText: '',
 			emptyText: {
 				type: String,
 				default: 'no data'
@@ -137,7 +137,7 @@
 			},
 			filterNode(value, data) {
 				if (!value) return true;
-				return data[defaultProps.label].indexOf(value) !== -1;
+				return data[this.defaultProps.label].indexOf(value) !== -1;
 			}
 		}
 	};
