@@ -28,6 +28,7 @@
 		</el-popover>
 		<el-input
 			:placeholder="checkInputBoxPl"
+			:filter-node-method="filterNode"
 			v-popover:popover5
 			v-model="val[defaultProps.label]"
 			suffix-icon="el-icon-arrow-down"
