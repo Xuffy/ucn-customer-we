@@ -49,7 +49,7 @@ const apis = {
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
   add_order:['/order/add','BASE_HCJ'], 
-  detail_order:['/order/detail','BASE_HCJ'],
+  detail_order:['/order/detail/{id}','BASE_HCJ'],
   //supplier
   get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],
   get_supplier_id:['/purchase/supplier/{id}','BASE_CS_cgs'],

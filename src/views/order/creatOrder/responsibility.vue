@@ -7,11 +7,12 @@
               <div class="r_table">
    <el-table :data="tableData" style="width: 100%">
       <el-table-column
-        prop="item"
-        label="item"
-        width="140">
+        prop="type"
+        label="Type"
+        width="240">
       </el-table-column>
-   <el-table-column prop="item1"  :label="$i.NeedLabelDesignInfoDate"  width="240"> 
+<!--
+<el-table-column prop="item1"  :label="$i.NeedLabelDesignInfoDate"  width="240"> 
          <template slot-scope="scope"  >
                <el-date-picker
                   v-model="scope.row.item1"
@@ -25,7 +26,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item2"  :label="$i.LableDesignDate"  width="240">
+<el-table-column prop="item2" :label="$i.LableDesignDate" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item2"
@@ -39,7 +40,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item3"  :label="$i.DesignNeedConfirmDate" width="240">
+<el-table-column prop="item3" :label="$i.DesignNeedConfirmDate" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item3"
@@ -54,7 +55,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item4"  :label="$i.ReceiveSampleDate"  width="240">
+<el-table-column prop="item4" :label="$i.ReceiveSampleDate" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item4"
@@ -69,7 +70,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item5"  :label="$i.SampleNeedConfirmDate"  width="240">
+<el-table-column prop="item5" :label="$i.SampleNeedConfirmDate" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item5"
@@ -83,7 +84,7 @@
                 </el-input>
         </template>
 </el-table-column>
-<el-table-column prop="item6"  :label="$i.OtherDate"  width="240">
+<el-table-column prop="item6" :label="$i.OtherDate" width="240">
     <template slot-scope="scope">
                <el-date-picker
                   v-model="scope.row.item6"
@@ -95,6 +96,48 @@
                 </el-date-picker>
                 <el-input v-model="scope.row.item6" :disabled='disabled' v-else>
                 </el-input>
+        </template>
+</el-table-column>
+-->
+<el-table-column prop="customer" label="Me" width="240">
+    <template slot-scope="scope">
+               <el-date-picker
+                  v-model="scope.row.customer.value"
+                  type="datetime"
+                  placeholder=" "                                 :disabled="scope.$index==1||scope.$index==3||disabled||scope.row.customer.edit===false"                           
+                  >    
+                </el-date-picker>
+                
+        </template>
+</el-table-column>
+<el-table-column prop="supplier" label="Supplier" width="240">
+    <template slot-scope="scope">
+               <el-date-picker
+                  v-model="scope.row.supplier.value"
+                  type="datetime"
+                  placeholder=""             
+                   :disabled=true  
+                  >
+                </el-date-picker>
+               
+        </template>
+</el-table-column>
+<el-table-column prop="remark" label="Remark" width="240">
+    <template slot-scope="scope">
+            <el-input
+                  v-model="scope.row.remark.value"               :disabled='disabled||scope.row.customer.edit===false'           
+            ></el-input>
+        </template>
+</el-table-column>
+<el-table-column prop="actualDt" label="Actual Date" width="240">
+    <template slot-scope="scope">
+               <el-date-picker
+                  v-model="scope.row.actualDt.value"
+                  type="datetime"
+                  placeholder=""                 :disabled='disabled||scope.row.customer.edit===false'             
+                  >
+                </el-date-picker>
+               
         </template>
 </el-table-column>
 </el-table>
@@ -118,52 +161,133 @@
         data() {
             return {
                 tableData: [{
-                    item: 'Me',
-                    item1: {
-                        value:'123',
-                        disabled:true
+                    type: 'NeedLabelDesignInfoDate',
+                    customer: {
+                        value: '1',
+                        edit: false
                     },
-                    item2: {
-                        value:'',
-                        disabled:false
+                    supplier: {
+                        value: '',
+                        edit: true
                     },
-                    item3: '',
-                    item4: '',
-                    item5: '',
-                    item6: '',
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
                 }, {
-                    item: 'Supplier',
-                    item1: '',
-                    item2: '',
-                    item3: '',
-                    item4: '',
-                    item5: '',
-                    item6: '',
+                    type: 'LableDesignDate',
+                    customer: {
+                        value: '',
+                        edit: true
+                    },
+                    supplier: {
+                        value: '',
+                        edit: true
+                    },
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
+
                 }, {
-                    item: 'Remark',
-                    item1: '',
-                    item2: '',
-                    item3: '',
-                    item4: '',
-                    item5: '',
-                    item6: '',
+                    type: 'DesignNeedConfirmDate',
+                    customer: {
+                        value: '',
+                        edit: true
+                    },
+                    supplier: {
+                        value: '',
+                        edit: true
+                    },
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
+
                 }, {
-                    item: 'Actual Date',
-                    item1: '',
-                    item2: '',
-                    item3: '',
-                    item4: '',
-                    item5: '',
-                    item6: '',
+                    type: 'ReceiveSampleDate',
+                    customer: {
+                        value: '',
+                        edit: true
+                    },
+                    supplier: {
+                        value: '',
+                        edit: true
+                    },
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
+
+                }, {
+                    type: 'SampleNeedConfirmDate',
+                    customer: {
+                        value: '',
+                        edit: true
+                    },
+                    supplier: {
+                        value: '',
+                        edit: true
+                    },
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
+
+                }, {
+                    type: 'OtherDate',
+                    customer: {
+                        value: '',
+                        edit: true
+                    },
+                    supplier: {
+                        value: '',
+                        edit: true
+                    },
+
+                    remark: {
+                        value: '',
+                        edit: true
+                    },
+                    actualDt: {
+                        value: '',
+                        edit: true
+                    },
                 }],
-                value1: '',
             }
-        },    
+        },
         methods: {
-            text(scope) {
-                console.log(scope)
-                console.log(scope.row.item1)
-            }
+
         },
         　watch: {　　　　　　　},
     }
