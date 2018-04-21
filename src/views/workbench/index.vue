@@ -2,7 +2,8 @@
   <div class="workbench">
 
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink" @click="visible = true"></h3>
+      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"
+          @click="$refs.historyModify.edit(mockData,historyData)"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -32,9 +33,7 @@
       </el-col>
     </el-row>
 
-    <v-history-modify :visible.sync="visible"
-                      :data="testData"
-                      :config="$db.inquiryOverview.productInfo">
+    <v-history-modify ref="historyModify" @save="save">
     </v-history-modify>
   </div>
 </template>
@@ -52,7 +51,9 @@
     data() {
       return {
         visible: false,
-        testData:testData.content.details
+        testData: testData.content.details, // todo 测试
+        mockData: [], // todo 测试
+        historyData: [], // todo 测试
       }
     },
     components: {
@@ -62,6 +63,28 @@
       VHistoryModify,
     },
     mounted() {
+      this.mockData = this.$getDB(
+        this.$db.inquiryOverview.productInfo,
+        this.$refs.historyModify.getFilterData([this.testData[0]]),
+        item => {
+          if (item.updateDt) {
+            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+          }
+          return item;
+        }
+      );
+      this.historyData = this.$getDB(
+        this.$db.inquiryOverview.productInfo,
+        this.$refs.historyModify.getFilterData(this.testData),
+        item => {
+          if (item.updateDt) {
+            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+          }
+          return item;
+        }
+      );
+
+
       const h = this.$createElement;
       this.$notify.closeAll();
 
@@ -73,7 +96,11 @@
         message: h(VBasicInfo)
       });
     },
-    methods: {}
+    methods: {
+      save(data){
+        console.log(data)
+      }
+    }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
