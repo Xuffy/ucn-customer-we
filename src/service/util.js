@@ -41,7 +41,7 @@ export default {
     Vue.prototype.$getDB = (db, data, cb) => {
       let list = [];
       db = _.values(db);
-      _.map(data, value => {
+      _.map(data, (value, index) => {
         let obj = {};
         _.mapObject(value, (val, key) => {
           let dbValue = _.clone(_.findWhere(db, {key: key}));
@@ -52,7 +52,7 @@ export default {
 
         });
 
-        if (cb) obj = _.extend(obj, cb(obj));
+        if (cb) obj = _.extend(obj, cb(obj, index));
 
         list.push(obj);
       });
@@ -121,34 +121,39 @@ export default {
     };
     /**
      * filterRemark 遍历 remark   list = json arr  remark = remark字段名
-    */
+     */
     const getRemark = (list, remark) => {
-        let json = {};
-        for(let k in list) {
-          for(let key in list[remark]) {
-              if(k === key) {
-                  json[k] = list[remark][key];
-              } else {
-                  json[k] = null;
-              }
+      let json = {};
+      for (let k in list) {
+        for (let key in list[remark]) {
+          if (k === key) {
+            json[k] = list[remark][key];
+          } else {
+            if (k == 'id') {
+              json._id = list[k];
+            } else {
+              json[k] = null;
+            }
           }
-        };
-        return json;
+        }
+      }
+      ;
+      return json;
     };
 
     Vue.prototype.$filterRemark = (list, remark) => {
       let data = [];
-      if(!list) return console.log('请传输list');
-      if(list.length && list) {
+      if (!list) return console.log('请传输list');
+      if (list.length && list) {
         list.forEach(item => {
-          if(item.updateDt) item.updateDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
-          if(item.entryDt) item.entryDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
+          if (item.updateDt) item.updateDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
+          if (item.entryDt) item.entryDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
           data.push(item);
           data.push(getRemark(item, remark))
         });
-      } else if(typeof list === "object" && !(list instanceof Array)) {
-        if(list.updateDt) list.updateDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
-        if(list.entryDt) list.entryDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
+      } else if (typeof list === "object" && !(list instanceof Array)) {
+        if (list.updateDt) list.updateDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
+        if (list.entryDt) list.entryDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
         data.push(list);
         data.push(getRemark(list, remark));
       }
@@ -156,14 +161,14 @@ export default {
     };
 
 
-    Vue.prototype.$copyArr=(arr)=>{
-        return arr.map((e) => {
-            if (typeof e === 'object') {
-                return Object.assign({}, e)
-            } else {
-                return e
-            }
-        })
+    Vue.prototype.$copyArr = (arr) => {
+      return arr.map((e) => {
+        if (typeof e === 'object') {
+          return Object.assign({}, e)
+        } else {
+          return e
+        }
+      })
     }
 
 

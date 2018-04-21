@@ -6,15 +6,14 @@
                 width="70%"
                 lock-scroll
             >
-            <v-simple-table />
-            <!-- <el-table
-                    :data="data"
+            <el-table
+                    :data="history"
                     style="width: 100%"
                     v-if="title === 'Modify'"
                     :span-method="arraySpanMethod"
                     :row-class-name="tableRowClassName"
                 >
-                <el-table-column type="index" />
+                <!-- <el-table-column type="index" /> -->
                 <el-table-column
                         :label="item.label"
                         :width="item.wdith || 120"
@@ -23,31 +22,52 @@
                         v-if="!item._hide"
                     >
                     <template slot-scope="scope">
-                        <el-select v-model="scope.row[item.key]" :placeholder="item.placeholder" v-if="item.type === 'select' && scope.row[item.key] && scope.row[item.key].sta === 'remark'">
+                        <el-select
+                                v-model="remarkJson[item.key]"
+                                :placeholder="item.placeholder"
+                                v-if="item.type === 'select' && scope.row[item.key] && scope.row[item.key].history"
+                            >
                             <el-option
                                     v-for="items in item.select"
                                     :key="items"
                                     :value="items"
                                 >
-                                {{ items }}
+
                             </el-option>
                         </el-select>
-                        <el-input v-if="scope.row[item.key] && scope.row[item.key].sta === 'histoty'" placeholder="Please select"></el-input>
+                        <span v-if="scope.row[item.key] && !scope.row[item.key].remark && !scope.row[item.key].history">{{scope.row[item.key] ? scope.row[item.key].value : ''}}</span>
+
+                        <el-input v-if="scope.row[item.key] && scope.row[item.key].remark && item.key != 'updateDt'" :disabled="item._disabled" placeholder="Please select" v-model="historyJson[item.key]" size="mini"></el-input>
+
+                        <el-input v-if="scope.row[item.key] && scope.row[item.key].history && (item.type === 'text' || item.type === 'textarea') && item.key != 'updateDt'" placeholder="Please select" :disabled="item._disabled" v-model="remarkJson[item.key]" size="mini"></el-input>
+
+                        <span v-if="scope.row[item.key] && scope.row[item.key].history && item.key === 'discountRate'" style="display:flex; item-align:center;">
+                            <el-input-number v-model="remarkJson[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false"></el-input-number> %
+                        </span>
+
+                        <v-up-load v-if="item.type === 'attachment' && scope.row[item.key] &&scope.row[item.key].history"/>
                     </template>
                 </el-table-column>
-            </el-table> -->
-            <h3 v-if="title === 'Modify'">Histoty</h3>
-            <VTable :data.sync="history" :rowspan="2" :selection="false" />
+            </el-table>
+            <VTable :data.sync="history" :rowspan="2" :selection="false" v-if="title === 'Histoty'" />
+
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="modify" v-if="title !== 'Histoty'">{{ $i.baseText.ok }}</el-button>
+                <el-button @click="value = false">{{ $i.baseText.cancel }}</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
 <script>
     import VTable from '@/components/common/table/index';
     import VSimpleTable from '@/components/common/table/simple';
+    import Upload from '@/components/common/upload/upload';
     export default {
         data() {
             return {
-                data: []
+                data: [],
+                remarkJson: {},
+                historyJson: {}
             }
         },
         props: {
@@ -91,7 +111,7 @@
                 }
             },
             filtColumn() {
-                let column = [], 
+                let column = [],
                     data = this.column;
                 for(let key in data) {
                     if(key !== 'id') column.push(data[key]);
@@ -99,42 +119,54 @@
                 return column;
             },
             history() {
+                let arr = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(this.list, 'fieldRemark'));
                 if(this.title === 'Modify') {
-                    let arr = [];
-                    for(let i = 0; i <= 1; i ++) {
-                        let json = {};
-                        for(let key in this.column) {
-                            if(i <= 0) {
-                                json[key] = {
-                                    label: null,
-                                    key: key,
-                                    sta: 'remark'
-                                };
-                            } else {
-                                json[key] = {
-                                    label: null,
-                                    key: key,
-                                    sta: 'histoty'
+                    let json = {};
+                    for(let key in this.column) {
+                        if(this.column[key].key === 'id') {
+                            let jsons = {};
+                            for(let k in this.column) {
+                                jsons[this.column[k].key] = {
+                                    key: this.column[k].key,
+                                    remark: true
                                 };
                             }
-                        }
-                        arr.push(json);
+                            arr.unshift(jsons);
+                        };
+                        json[this.column[key].key] = {
+                            key: this.column[key].key,
+                            history: true
+                        };
                     };
-                    this.data = arr;
+                    arr.unshift(json);
                 };
-                return this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(this.list, 'fieldRemark'));
+                return arr;
             }
         },
         watch: {
             oSwitch(val) {
+                let json = {};
+                for(let key in this.column) {
+                    json[key] = null;
+                };
+                this.historyJson = json;
+                let jsons = {};
+                for(let key in this.column) {
+                    json[key] = null;
+                };
+                this.historyJson = jsons;
                 this.$emit('update:oSwitch', val);
             }
         },
         created() {
-            
+            // this.$nextTick(() => {
+            //     document.onclick = () => {
+            //         console.log(this.remarkJson.operater)
+            //     }
+            // })
         },
         mounted() {
-            
+
         },
         methods: {
             arraySpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -154,11 +186,14 @@
             },
             tableRowClassName(row, index) {
                 row.index = index
+            },
+            modify() {
+                this.$emit('isModify', {history: this.historyJson, remark: this.remarkJson});
             }
         },
         components: {
             VTable,
-            VSimpleTable
+            "v-up-load": Upload
         }
     }
 </script>

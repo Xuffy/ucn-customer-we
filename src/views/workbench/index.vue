@@ -1,8 +1,19 @@
 <template>
   <div class="workbench">
 
+    <div class="quickLink">
+      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink" @click="visible = true"></h3>
+      <el-button size="mini" type="primary" icon="el-icon-plus"
+                 style="display: inline-block;margin-left: 30px!important;"
+                 @click="$store.state.quickLink.show = true"></el-button>
+      <br/>
+      <el-button size="mini" v-for="item in $store.state.quickLink.list" :key="item.id">
+        {{item.label}}
+      </el-button>
+
+    </div>
     <!--<v-table-data></v-table-data>-->
-    <v-quick-link></v-quick-link>
+    <!--<v-quick-link></v-quick-link>-->
     <br/><br/>
     <v-data-dashboard></v-data-dashboard>
     <br/><br/>
@@ -20,25 +31,35 @@
         <!--<v-table-data></v-table-data>-->
       </el-col>
     </el-row>
+
+    <v-history-modify :visible.sync="visible"
+                      :data="testData"
+                      :config="$db.inquiryOverview.productInfo">
+    </v-history-modify>
   </div>
 </template>
 
 <script>
-  import VQuickLink from './quickLink'
+  // import VQuickLink from './quickLink'
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
+  import {VHistoryModify} from '@/components/index';
+  import testData from './test'
 
   export default {
     name: 'workbench',
     data() {
-      return {}
+      return {
+        visible: false,
+        testData:testData.content.details
+      }
     },
     components: {
-      VQuickLink,
       VDataDashboard,
       VTableData,
       VBasicInfo,
+      VHistoryModify,
     },
     mounted() {
       const h = this.$createElement;
@@ -61,6 +82,9 @@
     margin-bottom: 20px;
   }
 
+  .quickLink .el-button {
+    margin-top: 10px;
+  }
 </style>
 <style>
   /*.workbench-notify {

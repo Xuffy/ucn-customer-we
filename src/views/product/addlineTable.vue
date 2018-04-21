@@ -201,7 +201,7 @@
                 this.parms.id=row.id
                  this.parms.remark=''
                 this.editRemarkFormVisible=true;
-            },
+             },
              edit_submit(){
                 this.$ajax.post(this.$apis[this.updata_url],this.parms).then((res) => {
                     this.get_remark()
@@ -209,7 +209,7 @@
                     console.log(res)
                 })
                 this.editRemarkFormVisible=false;
-            },
+             },
              //删除备注
              deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {

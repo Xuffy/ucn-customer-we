@@ -24,6 +24,8 @@ const apis = {
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE: ['/inquiry/compare', 'BASE_DHC'],
+  POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
   POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_DHC'],
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_DHC'],
@@ -64,11 +66,14 @@ const apis = {
   delete_department:['/department/{deptId}','BASE_LYF'],
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
+  get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
+  add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
   add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
   get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
   add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
+  update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
   delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
-
+  delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
 

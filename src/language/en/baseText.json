@@ -1,6 +1,6 @@
 {
     "add": "Add",
-    "save": "save",
+    "save": "Save",
     "delete": "Delete",
     "ok": "ok",
     "state": "state",
@@ -53,6 +53,9 @@
     "highLightTheDifferent":"High Light The Different",
 
     "compareOverview": "Compare Overview",
-    "downloadSelectedCompare": "Download Selected Compare"
-
+    "downloadSelectedCompare": "Download Selected Compare",
+    "compareBy": "Compare by",
+    "saveTheCompare": "Save the Compare",
+    "deleteTheCompare": "Delete the Compare",
+    "addNew": "add New"
 }

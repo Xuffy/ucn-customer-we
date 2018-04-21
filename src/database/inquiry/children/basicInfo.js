@@ -3,9 +3,13 @@ export default {
         key: 'updateDt',
         label: ' ',
         type: 'text',
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     id: {
+        _hide: true
+    },
+    _id: {
         _hide: true
     },
     operater: { //修改人 系统带入
@@ -13,7 +17,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     timeZone: { //时区 系统带入
         placeholder: 'Please select',
@@ -21,7 +26,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     time: { //时间 系统带入
         placeholder: 'Please select time',
@@ -29,15 +35,18 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     InquiryNo: { //询价单号 系统带入
+        key: 'inquiryNo',
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     QuotationNo: { //询价子单号 系统带入
         placeholder: 'Please select',
@@ -45,7 +54,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     inquiryStatus: { //询价单状态
         placeholder: 'Please select',
@@ -53,7 +63,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _disabled: true
+        _disabled: true,
+        _inquiryHide: true
     },
     transportationWay: { //下拉选择 运输方式
         placeholder: 'Please select',
@@ -115,6 +126,15 @@ export default {
         type: 'text',
         state: 0
     },
+    createTime: { // 创建时间
+        key: 'entryDt',
+        placeholder: 'Please select',
+        rules: [],
+        width: '150px',
+        type: 'text',
+        state: 0,
+        _inquiryHide: true
+    },
     destinationPort: { //目的港口 ok
         placeholder: 'Please select',
         rules: [],
@@ -139,6 +159,7 @@ export default {
     exportLicense: { //出口资质 ok
         placeholder: 'Please select',
         rules: [],
+        select: ['是', '否'],
         width: '150px',
         type: 'select',
         state: 0
@@ -154,27 +175,19 @@ export default {
         placeholder: 'Please select',
         rules: [],
         width: '150px',
-        type: 'textarea',
+        type: 'attachment',
         state: 0,
         xs: 24,
         sm: 24,
         md: 24,
         lg: 24
     },
-    createTime: { // 创建时间
-        key: 'entryDt',
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0
-    },
     inquiryRemark: { //询价备注
         key: 'remark',
         placeholder: 'Please select',
         rules: [],
         width: '150px',
-        type: 'remark',
+        type: 'textarea',
         state: 0,
         xs: 24,
         sm: 24,

@@ -110,9 +110,9 @@
 
                 //表格字段绑定
                 productForm: {
-                    categoryId: '',
+                    categoryId: null,
                     nameCnLike: "",
-                    readilyAvailable: '',
+                    readilyAvailable: null,
                     customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -121,11 +121,11 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: '',
+                    country: null,
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
-                    deliveryDates: '',
+                    deliveryDates: null,
                     descEnLike: "",
                     descCnLike: "",
 
@@ -149,7 +149,6 @@
                     //         orderType: "",
                     //     }
                     // ],
-
                 },
                 //表格验证参数
                 productFormRules:{
@@ -192,14 +191,36 @@
             search(){
                 console.log(this.productForm)
                 this.disabledSearch=true;
-                this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架(暂时中文)';
-                        }else if(v.status===1){
-                            v.status='上架';
-                        }
-                    });
+
+                if(!this.productForm.maxExwPrice){
+                    this.productForm.maxExwPrice=null;
+                }else{
+                    this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
+                }
+                if(!this.productForm.minExwPrice){
+                    this.productForm.minExwPrice=null;
+                }else{
+                    this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
+                }
+                if(!this.productForm.maxFobPrice){
+                    this.productForm.maxFobPrice=null;
+                }else{
+                    this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
+                }
+                if(!this.productForm.minFobPrice){
+                    this.productForm.minFobPrice=null;
+                }else{
+                    this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
+                }
+
+                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
+                    // res.datas.forEach(v=>{
+                    //     if(v.status===0){
+                    //         v.status='下架(暂时中文)';
+                    //     }else if(v.status===1){
+                    //         v.status='上架';
+                    //     }
+                    // });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
                 }).catch(err=>{
@@ -236,7 +257,7 @@
 
             //获取table数据
             getData() {
-                this.$ajax.post(this.$apis.get_buyerProductList,{
+                this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                     recycle:false
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
@@ -252,7 +273,7 @@
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/product/sourcingDetail',{id:item.id.value});
+                    this.windowOpen('/product/bookmarkDetail',{id:item.id.value});
                 }
             },
 
