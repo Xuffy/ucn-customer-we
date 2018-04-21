@@ -1,7 +1,7 @@
 <template>
     <div class="compare-overview">
         <h3 class="hd">{{ $i.baseText.compare }}</h3>
-        
+        <drop-down-single :list="[{label: '2323', children: [{label: 'dasdsa'}]}, {label: '2323'}]" />
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-    import { VTable } from '@/components/index';
+    import { VTable, dropDownSingle } from '@/components/index';
     export default {
         name:'compareOverview',
         data() {
@@ -68,7 +68,8 @@
             }
         },
         components: {
-            "v-table": VTable
+            "v-table": VTable,
+            dropDownSingle
         },
         created() {
             this.compareBy = 0;
