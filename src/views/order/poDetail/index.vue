@@ -19,9 +19,9 @@
                 </div>
         </div>
  <!--             responsibility     -->
-         <responsibility ref='responsibility' :disabled='disabled'></responsibility>
+<!--         <responsibility ref='responsibility' :disabled='disabled'></responsibility>-->
 <!--         payment-->
-         <v-payment></v-payment>
+<!--         <v-payment></v-payment>-->
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -135,38 +135,37 @@
                         id: this.$route.query.id
                     })
                     .then((res) => {
-                        console.log(res)
                         this.Data = res
-                        this.$refs.basicinfo.formItem = res;
-                        this.$refs.responsibility.tableData = this.translate(res.orderResponsibilityList)
+                        //..........basicinfo
+                        this.$refs.basicinfo.formItem = this.deldeteArr(res);
+                        //..........responsibility
+                        this.$refs.responsibility.tableData = res.orderResponsibilityList
+                        //..........attachment
+
+                        //..........productinfo
+
+                        //..........calculate
                     })
                     .catch((res) => {
                         console.log(res)
                     });
             },
-            //  主要用于responsibility的数据前端的转换
-            translate(d) {
-                return this.$getDB(this.$db.order.responsibility, d, item => {
-                    return _.mapObject(item, val => {
-                        if (val.value) {
-                            val.edit = false;
-                        } else {
-                            val.edit = true;
-                        }
-                        return val;
-                    });
-                });
+          //........剔除对象中的数组
+            deleteArr(data){
+                for(let k in data) {
+                    if(data[k].length) {
+                        delete data[k]
+                    }
+                }
+                return data
             }
         },
         mounted() {
-            //            var b = {
-            //                name: "1",
-            //                age: "2"
-            //            }
-            //            console.log(...b)
+
         },
         created() {
-            this.get_data()
+            //            this.get_data()
+            this.translate()
         },
         watch: {
 
