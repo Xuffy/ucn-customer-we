@@ -97,6 +97,14 @@ const apis = {
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_HSM',1],
+
+  // logistic
+  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
+  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
+  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
+
+  // logistic dictionary
+  get_container_type: ['/containertype/all', 'BASE_dictionary']
 };
 
 let list = _.mapObject(apis, val => {
