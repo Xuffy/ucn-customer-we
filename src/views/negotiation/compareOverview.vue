@@ -44,6 +44,7 @@
                     // },
                     ps: 10,
                     pn: 1,
+                    recycle: 0,
                     // sorts: [
                     //     {
                     //         nativeSql: true,
@@ -83,10 +84,11 @@
                 } else {
                     this.$sessionStore.set('$compareType', 'modify');
                 }
+                this.$sessionStore.remove('$compare_id');
                 this.$router.push({
                     path: '/negotiation/compareDetail',
                     query: {
-                        companyId: item.companyId.value
+                        compareId: item.id.value
                     }
                 });
             },
@@ -98,11 +100,15 @@
                 this.checkedArg = arr;
             },
             compareDelete() { //删除compare
-                this.$ajax.delete(this.$apis.POST_INQUIRY_COMPARE, {
-                    ids: this.checkedArg
-                })
+                let arr = [24, 25];
+                
+                this.tabData.forEach(item => {
+                    console.log(item)
+                }); 
+                return;
+                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
                 .then(res => {
-                    console.log(res)
+                    
                 })
             }
         },
