@@ -1,36 +1,35 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            {{$t('product.page.compareDetail')}}
+            <span>{{$i.product.compareDetail}}</span>
         </div>
-        <div class="btn-groups">
-            <el-button>{{$t('product.page.createInquiry')}}</el-button>
-            <el-button>{{$t('product.page.createOrder')}}</el-button>
-            <el-checkbox-group v-model="checkList" class="checkbox-group">
-                <el-checkbox :label="$t('product.page.hideTheSame')"></el-checkbox>
-                <el-checkbox :label="$t('product.page.highlightTheDifference')"></el-checkbox>
-            </el-checkbox-group>
-        </div>
-        <div>
-            <v-simple-table
-                    class="speTable"
-                    :data.sync="tableDataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table>
-        </div>
+        <!--<div class="btn-groups">-->
+            <!--<el-button>{{$t('product.page.createInquiry')}}</el-button>-->
+            <!--<el-button>{{$t('product.page.createOrder')}}</el-button>-->
+            <!--<el-checkbox-group v-model="checkList" class="checkbox-group">-->
+                <!--<el-checkbox :label="$t('product.page.hideTheSame')"></el-checkbox>-->
+                <!--<el-checkbox :label="$t('product.page.highlightTheDifference')"></el-checkbox>-->
+            <!--</el-checkbox-group>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<v-simple-table-->
+                    <!--class="speTable"-->
+                    <!--:data.sync="tableDataList"-->
+                    <!--:column="dataColumn"-->
+                    <!--@sort-change="getSort"-->
+                    <!--@page-change="pageChange">-->
+            <!--</v-simple-table>-->
+        <!--</div>-->
     </div>
 </template>
 
 <script>
 
-    import VSimpleTable from '@/components/common/table/simple'
 
     export default {
         name: "compare",
         components:{
-            VSimpleTable
+
         },
         data(){
             return{
@@ -50,10 +49,7 @@
 
 
             getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.tableDataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-                })
+
             },
         },
         created(){

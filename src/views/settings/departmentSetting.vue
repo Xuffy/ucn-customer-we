@@ -442,6 +442,7 @@
              * tree节点点击事件
              * */
             departmentClick(data,node,com){
+                console.log(data)
                 //选中部门就让他为false，避免触发全选时的多次重复事件
                 this.allowRoleGetData=false;
                 this.userData.deptId=data.deptId;
@@ -576,7 +577,76 @@
                         }
                     }
                 }).then(({ value }) => {
-                    console.log(value,'????')
+                    let repeat=false;
+                    this.roleData[0].children.forEach(v=>{
+                        if(v.roleName===value){
+                            repeat=true;
+                        }
+                    });
+                    if(repeat){
+                        this.$message({
+                            message: 'role名称不能重复',
+                            type: 'warning'
+                        });
+                    }else{
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            background: 'rgba(255, 255, 255, 0.7)',
+                            target:'.department'
+                        });
+                        this.$ajax.post(this.$apis.add_departmentRole,{
+                            deptId: this.userData.deptId,
+                            roleName: value
+                        }).then(res=>{
+                            //新增成功之后重新获取总的数据然后找到该department重新渲染roleList
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
+                                this.departmentData=res;
+                                this.departmentData.forEach(v=>{
+                                    this.departmentUserTotal+=v.deptUserCount;
+                                });
+                                let data;
+                                this.departmentData.forEach(v=>{
+                                    if(v.deptId===this.userData.deptId){
+                                        data=v;
+                                    }
+                                });
+                                this.roleData[0].children=this.$copyArr(data.deptRoles);
+                                this.roleUserTotal=0;
+                                data.deptRoles.forEach(v=>{
+                                    this.roleUserTotal+=v.roleUserCount;
+                                });
+                                this.$nextTick(()=>{
+                                    this.roleData[0].children.forEach(v=>{
+                                        this.$refs.roleTree.setChecked(v,true,false)
+                                    });
+                                    //处理好role的展示之后要请求底部对应的user数据
+                                    this.userData.roleIds=null;
+                                    this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
+                                        this.$message({
+                                            message: '新增成功',
+                                            type: 'success'
+                                        });
+                                        loading.close();
+                                        this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+
+                                    }).catch(err=>{
+                                        loading.close();
+                                    });
+                                });
+
+                            }).catch(err=>{
+                                loading.close();
+                            });
+                        }).catch(err=>{
+                            loading.close();
+                        });
+                    }
+
+                    // this.$ajax.post(this.$apis.add_departmentRole,{
+                    //     deptId: this.userData.deptId,
+                    //     roleName: value
+                    // });
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -652,22 +722,61 @@
                 });
             },
             modifyRole(e,node){
-                node.checked=!node.checked;     //不让编辑或者删除改变选中状态
                 this.$prompt('请输入Role', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputValue:e.label
                 }).then(({ value }) => {
-                    console.log(value,'???')
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '你的邮箱是: ' + value
-                    // });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消输入'
+                    let repeat=false;
+                    this.roleData[0].children.forEach(v=>{
+                        if(v.roleName===value){
+                            repeat=true;
+                        }
                     });
+                    if(repeat){
+                        this.$message({
+                            message: 'role名称不能重复',
+                            type: 'warning'
+                        });
+                    }else{
+                        const loading = this.$loading({
+                            lock: true,
+                            text: 'Loading',
+                            background: 'rgba(255, 255, 255, 0.7)',
+                            target:'.role'
+                        });
+
+                        this.$ajax.put(this.$apis.add_departmentRole,{
+                            roleId:e.roleId,
+                            roleName:value
+                        }).then(res=>{
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
+                                this.departmentUserTotal=0;
+                                this.departmentData=res;
+                                this.departmentData.forEach(v=>{
+                                    this.departmentUserTotal+=v.deptUserCount;
+                                });
+
+
+                                this.roleData[0].children.forEach(v=>{
+                                    if(v.roleId===e.roleId){
+                                        v.roleName=value;
+                                    }
+                                });
+                                this.$message({
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
+                                loading.close();
+                            }).catch(err=>{
+                                loading.close();
+                            });
+                        }).catch(err=>{
+
+                        });
+                    }
+                }).catch(() => {
+
                 });
             },
 
@@ -675,70 +784,132 @@
              * 删除事件
              * */
             deleteDepartment(e,node){
-                this.$confirm('确定删除该部门?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    console.log(e)
-                    if(e.deptRoles.length!==0){
-                        this.$message({
-                            message: '请先移除本部门下的角色和用户',
-                            type: 'warning'
-                        });
-                    }else{
-                        this.$ajax.delete(this.$apis.delete_department,{
-                            deptId:e.deptId
-                        }).then(res=>{
-                            const loading = this.$loading({
-                                lock: true,
-                                text: 'Loading',
-                                background: 'rgba(255, 255, 255, 0.7)',
-                                target:'.department'
+                if(e.deptUserCount){
+                    this.$message({
+                        message: '请先移除本部门下的角色和用户',
+                        type: 'warning'
+                    });
+                }else{
+                    this.$confirm('确定删除该部门?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        console.log(e)
+                        if(e.deptRoles.length!==0){
+                            this.$message({
+                                message: '请先移除本部门下的角色和用户',
+                                type: 'warning'
                             });
+                        }else{
+                            this.$ajax.delete(this.$apis.delete_department,{
+                                deptId:e.deptId
+                            }).then(res=>{
+                                const loading = this.$loading({
+                                    lock: true,
+                                    text: 'Loading',
+                                    background: 'rgba(255, 255, 255, 0.7)',
+                                    target:'.department'
+                                });
                                 this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
-                                this.departmentUserTotal=0;
+                                    this.departmentUserTotal=0;
+                                    this.departmentData=res;
+                                    this.departmentData.forEach(v=>{
+                                        this.departmentUserTotal+=v.deptUserCount;
+                                    });
+                                    this.$message({
+                                        type: 'success',
+                                        message: '删除成功!'
+                                    });
+                                    loading.close();
+                                }).catch(err=>{
+
+                                });
+                            }).catch(err=>{
+                            });
+                        }
+
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                }
+            },
+            deleteRole(e,node){
+                if(e.roleUserCount){
+                    this.$message({
+                        message: '请先移除本部门下用户',
+                        type: 'warning'
+                    });
+                }else{
+                    this.$confirm('确定删除该Role?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$ajax.delete(this.$apis.delete_departmentRole,{
+                            deptId:this.userData.deptId,
+                            roleId:e.roleId
+                        }).then(res=>{
+                            //先从页面上删除该节点
+                            let key;
+                            this.roleData[0].children.forEach((v,k)=>{
+                                if(v.roleId===e.roleId){
+                                    key=k;
+                                }
+                            });
+                            this.roleData[0].children.splice(key,1);
+
+                            //更新department对应的数据
+                            this.$ajax.get(this.$apis.get_departmentOverview).then(res=>{
                                 this.departmentData=res;
                                 this.departmentData.forEach(v=>{
                                     this.departmentUserTotal+=v.deptUserCount;
                                 });
-                                this.$message({
-                                    type: 'success',
-                                    message: '删除成功!'
-                                });
-                                loading.close();
+                                //把对应的roleId以及底部userData同步更新
+                                this.$nextTick(()=>{
+                                    let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
+                                    let id=[];
+                                    checkedNode.forEach(v=>{
+                                        if(!v.children){
+                                            id.push(v.roleId);
+                                        }
+                                    });
+                                    if(id.length){
+                                        this.userData.roleIds=id;
+                                    }else{
+                                        this.userData.roleIds=[-1];
+                                    }
+                                    const loading = this.$loading({
+                                        lock: true,
+                                        text: 'Loading',
+                                        background: 'rgba(255, 255, 255, 0.7)',
+                                        target:'.speTable'
+                                    });
+                                    this.$ajax.post(this.$apis.get_departmentUser,this.userData).then(res=>{
+                                        this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                                        this.$message({
+                                            type: 'success',
+                                            message: '删除成功!'
+                                        });
+                                        loading.close();
+                                    }).catch(err=>{
+                                        loading.close();
+                                    });
+                                })
                             }).catch(err=>{
 
                             });
                         }).catch(err=>{
-                        });
-                    }
 
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
+                        });
+
+                    }).catch(() => {
+
                     });
-                });
-            },
-            deleteRole(e,node){
-                node.checked=!node.checked;       //不让编辑或者删除改变选中状态
-                this.$confirm('确定删除该Role?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$refs.roleTree.remove(e);
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                }
             },
 
             /**
@@ -780,12 +951,7 @@
             this.getDepartmentUser();
         },
         mounted(){
-            //加载完成后选中数据中isActive的项
-            // _.map(this.roleData[0].children,e=>{
-            //     if(e.isActive){
-            //         this.$refs.roleTree.setChecked(e,true,false)
-            //     }
-            // });
+
         },
         watch:{
             searchDepartment(val){

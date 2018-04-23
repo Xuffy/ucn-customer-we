@@ -65,6 +65,8 @@ const apis = {
   get_department:['/department','BASE_LYF'],
   get_departmentUser:['/user/list','BASE_LYF'],
   delete_department:['/department/{deptId}','BASE_LYF'],
+  add_departmentRole:['/role','BASE_LYF'],
+  delete_departmentRole:['/role/{deptId}/{roleId}','BASE_LYF'],
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
   get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
@@ -77,9 +79,9 @@ const apis = {
   delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
-
-
-
+  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
+  get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
+  recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
 
 
   post_supplier_addbookmark:['/purchase/supplier/bookmark','BASE_CS_cgs'],

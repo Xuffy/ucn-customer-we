@@ -158,12 +158,12 @@
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.order.overview, res.datas, item => {
-                            return _.mapObject(item, val => {
-                                val._checked = true
-                            })
-                        });
-
+                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+//                        , item => {
+//                            return _.mapObject(item, val => {
+//                                val._checked = true
+//                            })
+//                        }
                     })
                     .catch((res) => {
                         this.loading = false

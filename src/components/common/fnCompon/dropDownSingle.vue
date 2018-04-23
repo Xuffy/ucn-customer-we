@@ -21,6 +21,7 @@
 						:props="defaultProps"
 						:expand-on-click-node="false"
 						@node-click="getChecked"
+						:filter-node-method="filterNode"
 					>
 					</el-tree>
 				</div>
@@ -56,11 +57,11 @@
 				selectedList:'',
 				data:[],
 				visible: false,
+				filterText: '',
 				val: ''
 			};
 		},
 		props: {
-			filterText: '',
 			emptyText: {
 				type: String,
 				default: 'no data'
@@ -133,6 +134,10 @@
 					if(val === data.id) return this.val = data;
 					if(data[this.defaultProps.children] && data[this.defaultProps.children].length) this.setInput(data.children, val);
 				});
+			},
+			filterNode(value, data) {
+				if (!value) return true;
+				return data[this.defaultProps.label].indexOf(value) !== -1;
 			}
 		}
 	};

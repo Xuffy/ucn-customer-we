@@ -127,6 +127,7 @@
       getFilterData(data) {
         let list = [];
         _.map(data, value => {
+          console.log(value)
           list.push(value);
           value.fieldRemark = value.fieldRemark || {};
           value.fieldRemark._remark = true;

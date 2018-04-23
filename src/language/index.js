@@ -28,6 +28,7 @@ export default _.extend(
   require(`/${lang}/order/basicinfo.pending`),
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
   require(`./${lang}/logistic/plan/basicInfo.pending`),
+  require(`/${lang}/inquiry/compare.pending`),
 
   {warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
 

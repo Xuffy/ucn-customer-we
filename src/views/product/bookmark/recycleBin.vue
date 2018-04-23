@@ -1,6 +1,9 @@
 <template>
     <div>
-        <product :hideBtns="true" :showRecover="true"></product>
+        <product
+                :title="title"
+                :type="type"
+                :hideBtn="true"></product>
     </div>
 </template>
 
@@ -15,7 +18,8 @@
         },
         data(){
             return{
-
+                title:'Product Recycle Bin',
+                type:'recycle'
             }
         },
         methods:{

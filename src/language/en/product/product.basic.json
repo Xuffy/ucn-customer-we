@@ -30,6 +30,15 @@
   "tradeHistory":"Trade History",
   "remark":"Remark",
   "finish":"完成",
+  "finishEn":"Finish",
+  "remove":"Remove",
+  "upload":"Upload",
+  "recover":"Recover",
+
+
+
+  "compareOverview":"Compare Overview",
+  "compareDetail":"Compare Detail",
 
 
 
@@ -42,7 +51,6 @@
   "otherIncotermPrice":"其他价格条款单价",
   "otherIncotermArea":"其他价格条款区域",
   "otherIncotermCurrency":"其他价格条款币种",
-
 
 
   "add":"Add",

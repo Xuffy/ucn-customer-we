@@ -94,8 +94,8 @@
                 width="80%"
                 lock-scroll>
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="From New Search"></el-radio-button>
-                <el-radio-button label="From my bookmark"></el-radio-button>
+                <el-radio-button label="0">From New Search</el-radio-button>
+                <el-radio-button label="1">From my bookmark</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"
@@ -273,7 +273,7 @@
                     // 询价单字段备注
                     fieldRemark: ''
                 },
-                radio: 'From New Search',   //Add Product status
+                radio: '0',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
                 tabColumn: '', //tab top
