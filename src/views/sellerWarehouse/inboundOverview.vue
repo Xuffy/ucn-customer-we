@@ -5,7 +5,7 @@
         </div>
         <div class="body">
             <div class="head">
-                <span>入库类型</span>
+                <span>{{$i.warehouse.inboundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="1">采购入库</el-radio-button>
                     <el-radio-button label="2">验货入库</el-radio-button>
@@ -53,16 +53,7 @@
             },
 
             getInboundData(){
-                this.$ajax.get(this.$apis.get_inboundData,{
-                    sorts:[
-                        {
-
-                        }
-                    ],
-                    inboundNo:1,
-                    ps:50,
-                    pn:1
-                }).then(res=>{
+                this.$ajax.get(`${this.$apis.get_inboundData}?pn=${1}&ps=${50}&inboundNo=${1}`).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.log(err)

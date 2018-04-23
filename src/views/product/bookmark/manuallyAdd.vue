@@ -1,7 +1,7 @@
 <template>
     <div class="manually-add">
         <div class="title">
-            {{$t('product.page.basicInfo')}}
+            {{$i.product.basicInformation}}
         </div>
         <div class="addPic">
             <div class="name">
@@ -15,1165 +15,321 @@
                 <!--<el-button @click="addPic">Add</el-button>-->
             </div>
         </div>
-        <el-form class="speForm" label-width="290px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="basicInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuSaleStatus')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="'*'+$t('product.page.skuCode')+':'">
-                        系统生成
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuNameCN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuNameEN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.skuDescriptionEN')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuNameInCustomerLanguage')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.skuDescriptionInCustomerLanguage')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.customerSkuCode')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.supplierName')+':'">
-                        系统带入
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.supplierCode')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unit')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.productFormation')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.martialEN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.martialCN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.colourEN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.colourCN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.minimumOrderQuantity')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1" :max="10"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.deliveryDays')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1" :max="10"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.productDesign')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="'*'+$t('product.page.categoryLevel1')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.categoryLevel2')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.categoryLevel3')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.categoryLevel4')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.barCode')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName"
-                                clearable>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.readilyAvailable')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuAvailable')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1" :max="10"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.restrictedSellingCountry')+':'">
-                        <el-select v-model="value5" multiple placeholder="请选择">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.applicableAge')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1" :max="10"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.expirationDate')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1" :max="10"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.expirationDateUnit')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.explain')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm[v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm[v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    :defaultProps="defaultProps"
+                                    v-model="productForm[v.key]"
+                                    ref="dropDown"></drop-down>
+                        </div>
+
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.customInfo')}}
+            {{$i.product.customerInfo}}
         </div>
-        <el-form class="speForm" label-width="290px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="customerInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.rateOfValueAddedTax')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.taxRefundRate')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.hsCode')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.customsDeclarationNameInChinese')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.customsDeclarationNameInEnglish')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.chineseTradeMark')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.englishTradeMark')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.commodityInspectionChineseName')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.commodityInspectionEnglishName')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.declareElements')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.origin')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.inspectionAndQuarantineCategory')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.brand')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.relatedBrand')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.brandRemark')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.certificat')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='customerInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm[v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm[v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    ref="dropDown"></drop-down>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.priceInfo')}}
+            {{$i.product.priceInfo}}
         </div>
-        <el-form class="speForm" label-width="290px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="priceInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.fobCurrency')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.fobPrice')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.fobPort')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.exwPrice')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.exwCurrency')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.otherIncoterm')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.otherIncotermPrice')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.otherIncotermArea')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.otherIncotermCurrency')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='priceInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm.price[0][v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm.price[0][v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    ref="dropDown"></drop-down>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.packingInfo')}}
+            {{$i.product.packingInfo}}
         </div>
-        <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="packingInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unitOfWeight')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unitOfLength')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unitOfVolume')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuLength')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuBreadth')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuHeight')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuNetWeight')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuVolume')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.packingMethodCN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.packingMethodEN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unitOfMediumPackage')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuQuantityOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.lengthOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.breadthOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.heightOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.netWeightOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.roughWeightOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.volumeOfMediumPackage')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.descriptionOfMediumPackage')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.packingMethodOfMediumPackageCN')+':'">
-                        <el-input
-                                clearable
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.packingMethodOfMediumPackageEN')+':'">
-                        <el-input
-                                clearable
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.unitOfOuterBox')+':'">
-                        <el-input
-                                clearable
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.descriptionOfOuterBox')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.mediumPackageOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuQuantityOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.lengthOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.breadthOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.heightOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.netWeightOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.roughWeightOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.volumeOfOuterBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :max="100"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.outerPackingMethodCN')+':'">
-                        <el-input
-                                clearable
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.outerPackingMethodEN')+':'">
-                        <el-input
-                                clearable
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.oem')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='packingInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm[v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm[v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    ref="dropDown"></drop-down>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.logisticInfo')}}
+            {{$i.product.logisticInfo}}
         </div>
-        <el-form class="speForm" label-width="260px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="logisticInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="'20'+$t('product.page.gpSKUQuantity')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="'40'+$t('product.page.gpSKUQuantity')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="'40'+$t('product.page.hqSKUQuantity')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.trayDimension')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuQuantityPerTray')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.inventoryCostCalculationMethod')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.specialTransportRequirements')+':'">
-                        <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="请输入内容"
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.defaultWarehouse')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.warehouseQuantity')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.safeStock')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.minimumStock')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.maximumBatch')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字"></el-input-number>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='logisticInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm[v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm[v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    ref="dropDown"></drop-down>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.otherInfo')}}
+            {{$i.product.otherInfo}}
         </div>
-        <el-form class="speForm" label-width="250px" :label-position="labelPosition">
+        <el-form :modal="productForm" ref="otherInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.mainSaleCountry')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.mainSaleArea')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.productionTime')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.qualityStander')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.yearOfListed')+':'">
-                        <el-date-picker
-                                v-model="month"
-                                type="month"
-                                placeholder="选择月">
-                        </el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.useDisplayBoxOrNot')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.skuQuantityInDisplayBox')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.lengthWidthAndHeight')+':'">
-                        <el-input-number
-                                v-model="skuEnglishName"
-                                :min="1"
-                                :controls="false"
-                                label="描述文字">
-                        </el-input-number>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.otherPackingInformationCN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$t('product.page.otherPackingInformationEN')+':'">
-                        <el-input
-                                placeholder="请输入内容"
-                                clearable
-                                v-model="skuEnglishName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col class="list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-                    <el-form-item :label="$t('product.page.adjustSKUAndPackageOrNot')+':'">
-                        <el-select v-model="skuStatus" placeholder="请选择">
-                            <el-option
-                                    v-for="item in skuStatusOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
+                <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='otherInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                    <el-form-item :prop="v.key" :label="v.label">
+                        <div v-if="v.showType==='input'">
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                        </div>
+                        <div v-else-if="v.showType==='select'">
+                            <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-option
+                                        v-for="item in v.options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="v.showType==='textarea'">
+                            <el-input
+                                    class="speInput"
+                                    type="textarea"
+                                    autosize
+                                    placeholder="please input"
+                                    v-model="productForm[v.key]">
+                            </el-input>
+                        </div>
+                        <div v-else-if="v.showType==='number'">
+                            <el-input-number
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="productForm[v.key]"
+                                    :controls="false"
+                                    :min="0"
+                                    label="please input"></el-input-number>
+                        </div>
+                        <div v-else-if="v.showType==='dropdown'">
+                            <drop-down
+                                    class="speInput"
+                                    :list="dropData"
+                                    ref="dropDown"></drop-down>
+                        </div>
+                        <div v-else-if="v.showType==='date'">
+                            <el-date-picker
+                                    class="speInput"
+                                    v-model="productForm[v.key]"
+                                    align="right"
+                                    type="date"
+                                    :editable="false"
+                                    placeholder="please choose"
+                                    :picker-options="pickerOptions1">
+                            </el-date-picker>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
 
         <div class="title">
-            {{$t('product.page.attachment')}}
+            {{$i.product.attachment}}
         </div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum dolorem, earum eligendi expedita explicabo fuga fugit iste laudantium nostrum numquam optio praesentium quasi, qui, quidem saepe sit totam voluptate voluptatum.
 
 
 
-        <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
+        <!--<input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">-->
 
         <div class="footBtn">
-            <el-button type="primary">{{$t('product.page.finish')}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
         </div>
     </div>
 </template>
@@ -1181,52 +337,184 @@
 <script>
     import upLoad from '@/components/common/upload/upload'
     import imgHandler from './imgHandler'
+    import {dropDownSingle} from '@/components/index'
 
     export default {
         name: "manually-add",
         components:{
             imgHandler,
-            upLoad
+            upLoad,
+            dropDown:dropDownSingle
         },
         data(){
             return{
+                /**
+                 * 页面基础配置
+                 * */
                 labelPosition:'left',
                 imgGroup:[],
-                month:'',                       //月份选择
-                skuStatusOption:[
-                    {
-                        value: '选项1',
-                        label: '上架'
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
                     },
-                    {
-                        value: '选项2',
-                        label: '下架'
-                    }
-                ],
-                skuStatus:'',                   //skuStatus
-                skuEnglishName:'',              //skuEnglishName
-
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
-
-                value5: [],
-
-
-
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                picker.$emit('pick', new Date());
+                            }
+                        },
+                        {
+                            text: '昨天',
+                            onClick(picker) {
+                                const date = new Date();
+                                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                                picker.$emit('pick', date);
+                            }
+                        },
+                        {
+                            text: '一周前',
+                            onClick(picker) {
+                                const date = new Date();
+                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                                picker.$emit('pick', date);
+                            }
+                        }
+                    ]
+                },
+                disabledSubmit:false,
+                defaultProps:{
+                    label:'name',
+                    children:'children'
+                },
+                //categoryID配置
+                dropData:[],
+                //整个页面数据配置
+                productForm:{
+                    adjustPackage: true,
+                    applicableAge: 0,
+                    availableQty: 0,
+                    barcode: "",
+                    brand: "",
+                    brandRelated: "",
+                    brandRemark: "",
+                    categoryId: 0,
+                    certificat: "",
+                    code: "",
+                    colourCn: "",
+                    colourEn: "",
+                    comments: "",
+                    commodityInspectionCn: "",
+                    commodityInspectionEn: "",
+                    customerCreate: true,
+                    customerSkuCode: "",
+                    customsCode: "",
+                    customsNameCn: "",
+                    customsNameEn: "",
+                    declareElement: "",
+                    deliveryDates: 0,
+                    descCn: "",
+                    descCustomer: "",
+                    descEn: "",
+                    design: "",
+                    displayBoxQty: 0,
+                    expireDates: 0,
+                    expireUnit: null,
+                    formation: "",
+                    gp20SkuQty: 0,
+                    gp40SkuQty: 0,
+                    height: 0,
+                    hq40SkuQty: 0,
+                    id: null,
+                    innerCartonDesc: "",
+                    innerCartonHeight: 0,
+                    innerCartonLength: 0,
+                    innerCartonMethodCn: "",
+                    innerCartonMethodEn: "",
+                    innerCartonOuterNum: 0,
+                    innerCartonQty: 0,
+                    innerCartonRoughWeight: 0,
+                    innerCartonUnit: "",
+                    innerCartonVolume: 0,
+                    innerCartonWeightNet: 0,
+                    innerCartonWidth: 0,
+                    inspectQuarantineCategory: "",
+                    inventory: 0,
+                    inventoryCostMethod: "",
+                    length: 0,
+                    lengthWidthHeight: "",
+                    logisticId: null,
+                    mainSaleArea: "",
+                    mainSaleCountry: 0,
+                    materialCn: "",
+                    materialEn: "",
+                    methodPkgCn: "",
+                    methodPkgEn: "",
+                    minInventory: 0,
+                    minOrderQty: 0,
+                    nameCn: "",
+                    nameCustomer: "",
+                    nameEn: "",
+                    netWeight: 0,
+                    noneSellCountry: 0,
+                    oem: true,
+                    origin: "",
+                    otherPackInfoCn: "",
+                    otherPackInfoEn: "",
+                    outerCartonDesc: "",
+                    outerCartonHeight: 0,
+                    outerCartonLength: 0,
+                    outerCartonMethodCn: "",
+                    outerCartonMethodEn: "",
+                    outerCartonNetWeight: 0,
+                    outerCartonQty: 0,
+                    outerCartonRoughWeight: 0,
+                    outerCartonUnit: "",
+                    outerCartonVolume: 0,
+                    outerCartonWidth: 0,
+                    pic: "what the fuck",
+                    pkgId: null,
+                    price: [
+                        {
+                            exwCurrency: 0,
+                            exwPrice: 0,
+                            fobCurrency: 0,
+                            fobPort: "",
+                            fobPrice: 0,
+                            id: null,
+                            otherIncoterm: 0,
+                            otherIncotermArea: 0,
+                            otherIncotermCurrency: 0,
+                            otherIncotermPrice: 0,
+                            status: 2,          //1:基础报价，2:成本价
+                        }
+                    ],
+                    productionDates: 0,
+                    qualityStander: "",
+                    rateValueAddedTax: 0,
+                    readilyAvailable: true,
+                    recycle: true,
+                    safeInventory: 0,
+                    skuQtyPerTray: 0,
+                    specialTransportRequire: "",
+                    status: 0,
+                    supplierCode: "",
+                    supplierId: null,
+                    supplierName: "",
+                    taxRefundRate: 0,
+                    tradeMarkCn: "",
+                    tradeMarkEn: "",
+                    tryDimension: 0,
+                    unit: null,
+                    unitLength: 0,
+                    unitVolume: 0,
+                    unitWeight: 0,
+                    useDisplayBox: true,
+                    volume: 0,
+                    warehourceDefault: "",
+                    width: 0,
+                    yearListed: "2018-04-21T03:45:53.903Z"
+                },
 
             }
         },
@@ -1249,7 +537,30 @@
             addPic(){
                 document.getElementById('pic').click();
             },
-        }
+
+            //获取类别数据
+            getCategoryId(){
+                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
+                    this.dropData=res;
+                }).catch(err=>{
+                    console.log(err)
+                });
+            },
+
+            //完成新增
+            finish(){
+                this.disabledSubmit=true;
+                this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
+                    this.disabledSubmit=false;
+                    this.$router.push('/product/sourcing');
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
+            },
+        },
+        created(){
+            this.getCategoryId();
+        },
     }
 </script>
 
@@ -1282,9 +593,15 @@
     }
 
     .speForm .el-form-item--small.el-form-item{
-        margin-bottom: 0;
+        /*margin-bottom: 0;*/
     }
     .speForm .el-row .list .el-input{
+        width: 80%;
+    }
+    .speCol{
+        min-height: 51px;
+    }
+    .speInput{
         width: 80%;
     }
 
@@ -1297,6 +614,6 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        text-align: center;
+        text-align: left;
     }
 </style>

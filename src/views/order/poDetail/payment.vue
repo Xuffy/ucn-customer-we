@@ -2,10 +2,11 @@
     <div class="payment-table">
         <div class="payment-btn">
             <el-button :disabled="disabledBtn" @click="handleClick" type="primary">{{btnInfo}}</el-button>
+             <el-button :disabled="disabledBtn"  type="primary">提醒供应商退款</el-button>
         </div>
         <el-table
                 class="speTable"
-                :data="paymentData"
+                :data="paymentdata"
                 height="250"
                 border
                 :summary-method="getSummaries"
@@ -32,24 +33,26 @@
                             {{scope.row[v.prop]}}   
                         </div>
                     </div>
-                    <div v-if="v.type==='Date'">
-                        <div v-if="(scope.row.isEdit || scope.row.isNew)&&v.belong=='supplier'">
-                            <el-date-picker
-                                    class="chooseDate"
-                                    size="mini"
-                                    v-model="scope.row[v.prop]"
-                                    align="right"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    value-format="yyyy-MM-dd"
-                                    :picker-options="pickerOptions1">
-                            </el-date-picker>
-                        </div>
-                        <div v-else>
-                            {{scope.row[v.prop]}}   
-                        </div>
+                    <div v-else-if="v.type==='Date'&&v.belong==='customer'">
+                            <div v-if="(scope.row.isEdit || scope.row.isNew)">
+                                <el-date-picker
+                                        class="chooseDate"
+                                        size="mini"
+                                        v-model="scope.row[v.prop]"
+                                        align="right"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        value-format="yyyy-MM-dd"
+                                        :picker-options="pickerOptions1">
+                                </el-date-picker>
+                          </div>
+                   
+                          <div v-else>
+                                {{scope.row[v.prop]}}   
+                          </div>   
+                       
                     </div>
-                    <div v-if="v.type==='Input'">
+                    <div v-else-if="v.type==='Input'&&v.belong==='customer'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input
                                     placeholder="请输入内容"
@@ -61,7 +64,7 @@
                             {{scope.row[v.prop]}}
                         </div>
                     </div>
-                    <div v-if="v.type==='Number'">
+                    <div v-else-if="v.type==='Number'&&v.belong==='customer'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input-number
                                     class="speInputNumber"
@@ -75,6 +78,9 @@
                             {{scope.row[v.prop]}}
                         </div>
                     </div>
+                    <div v-else>
+                         {{scope.row[v.prop]}}
+                    </div>
                 </template>
 </el-table-column>
 
@@ -83,30 +89,30 @@
                     
                         <!--新增行时显示的按钮-->
                         <div v-if="scope.row.isNew">
-                            <el-button type="text" @click="saveNewLine(scope.row)">保存</el-button>
-                            <el-button type="text" @click="cancelSaveNewLine(scope.row)">取消</el-button>
+                            <el-button type="text" :disabled="disabledBtn" @click="saveNewLine(scope.row)">保存</el-button>
+                            <el-button type="text" :disabled="disabledBtn" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
                             <div v-if="scope.row[columns[10].prop]===1 || scope.row[columns[10].prop]===2">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
-                                    <el-button type="text" @click="saveLine(scope.row)">保存</el-button>
-                                    <el-button type="text" @click="cancelSaveLine(scope.row)">取消</el-button>
+                                    <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
+                                    <el-button type="text" :disabled="disabledBtn" @click="cancelSaveLine(scope.row)">取消</el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button type="text" @click="changeLine(scope.row)">修改</el-button>
-                                    <el-button type="text" @click="abandonLine(scope.row)">作废</el-button>
+                                    <el-button type="text" :disabled="disabledBtn" @click="changeLine(scope.row)">修改</el-button>
+                                    <el-button type="text" :disabled="disabledBtn" @click="abandonLine(scope.row)">作废</el-button>
                                 </div>
                             </div>
                             <!--作废时显示-->
                             <div v-if="scope.row[columns[10].prop]===3">
-                                <el-button type="text" @click="recoverLine(scope.row)">恢复</el-button>
+                                <el-button type="text" :disabled="disabledBtn" @click="recoverLine(scope.row)">恢复</el-button>
                             </div>
                         </div>
                    
                     <div v-if="type==='simple'">
                         <div v-if="scope.row[columns[10].prop]!==2">
-                            <el-button type="text" @click="confirmLine(scope.row)">确认</el-button>
+                            <el-button type="text"  :disabled="disabledBtn" @click="confirmLine(scope.row)">确认</el-button>
                         </div>
                     </div>
                 </template>
@@ -122,10 +128,13 @@
                 type: String,
                 default: '申请付款'
             },
+            disabledBtn: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {
-                disabledBtn: false,
                 pickerOptions1: { //日期组件使用
                     shortcuts: [{
                             text: '今天',
@@ -229,7 +238,7 @@
                         type: 'Text'
                     },
                 ],
-                paymentData: [{
+                paymentdata: [{
                         paymentNumber: 1512547574887,
                         paymentItem: 'QC预付款',
                         estPayDate: '2018-02-23', //预计付款时间
@@ -296,9 +305,9 @@
                     if (index === 0) {
                         sums[index] = '总价';
                         return;
-                    } else if (index === 4 || index === 6) {
+                    } else if (index === 4 || index === 6 || index == 8 || index == 10) {
                         const values = data.map(item => {
-                            if (item[this.columns[6].prop] === 2) {
+                            if (item[this.columns[10].prop] === 2) {
                                 return Number(item[column.property])
                             }
                         });
@@ -311,8 +320,9 @@
                                     return prev;
                                 }
                             }, 0);
-                            // sums[index] += ' 元';
+                            //                             sums[index] += ' 元';
                         } else {
+
                             sums[index] = '0';
                         }
                     }

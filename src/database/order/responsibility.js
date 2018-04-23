@@ -15,5 +15,8 @@ export default {
         _hide: true,
         key: 'id'
     },
+    type: {
+        key: 'id'
+    }
 
 }

@@ -22,7 +22,7 @@
 
   "id":"",
   "pic":"pic",
-  "status":"SKU sale status",
+  "saleStatus":"SKU sale status",
   "code":"sku code",
   "nameCn":"SKU Name CN",
   "descCn":"SKU Description CN",
@@ -32,7 +32,7 @@
   "descCustomer":"sku description in customer language",
   "customerSkuCode":"customer sku code",
   "supplierName":"supplier name",
-  "supplierCode":"supplier code",
+  "supplierNo":"supplier No",
   "unit":"unit",
   "formation":"product formation",
   "materialEn":"martial(EN)",

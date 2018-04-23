@@ -98,7 +98,7 @@ export const routerMap = [
           component: () => import('../views/product/bookmark/manuallyAdd'),
         },
         {
-          path: 'bookmarkRecycleBin',
+          path: 'recycleBin',
           name: 'Bookmark RecycleBin',
           hidden: true,
           meta: {
