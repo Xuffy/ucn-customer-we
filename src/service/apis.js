@@ -51,7 +51,7 @@ const apis = {
   delete_order:['/order/delete','BASE_HCJ'],
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
-  add_order:['/order/add','BASE_HCJ'], 
+  add_order:['/order/save','BASE_HCJ'], 
   detail_order:['/order/detail/{id}','BASE_HCJ'],
   //supplier
   get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],

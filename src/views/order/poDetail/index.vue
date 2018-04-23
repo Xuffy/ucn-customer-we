@@ -21,7 +21,7 @@
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
-<!--         <v-payment></v-payment>-->
+         <v-payment></v-payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
