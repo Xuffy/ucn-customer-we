@@ -1,7 +1,6 @@
 <template>
     <div class="compare-overview">
         <h3 class="hd">{{ $i.baseText.compare }}</h3>
-        <drop-down-single :list="[{label: '2323', children: [{label: 'dasdsa'}]}, {label: '2323'}]" />
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
@@ -11,8 +10,9 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button @click="addNewCopare">{{ $i.baseText.addNew }}</el-button>
-                <el-button type="danger" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
+                <el-button type="primary" @click="compareType = 'modify'" v-show="compareType === 'only'">{{ $i.baseText.modify }}</el-button>
+                <el-button @click="addNewCopare" v-if="compareType !== 'only'">{{ $i.baseText.addNew }}</el-button>
+                <el-button type="danger" v-if="compareType !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
                 <el-checkbox-group v-model="ChildrenCheckList" size="mini">
                     <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
                     <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
@@ -29,14 +29,13 @@
         </div>
         <v-table 
             :data="tabData" 
-            :data-key="tabColumn"
             :loading="tabLoad"
             @change-checked="changeChecked"
         />
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i.baseText.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="onSubmit" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
     </div>
 </template>
 <script>
@@ -47,7 +46,6 @@
             return {
                 compareName: '',
                 tabLoad: false,
-                tabColumn: '',
                 tabData: [],
                 checkList: [],
                 options:[{
@@ -73,15 +71,12 @@
         },
         created() {
             this.compareBy = 0;
-            if(this.$route.query.id) {
-                this.params.ids = this.$route.query.id.split(',');
-            }
+            // if(this.$route.query.id) {
+            //     this.params.ids = this.$route.query.id.split(',');
+            // }
             
-            if(this.$sessionStore.get('$compare_id')) {
-                this.compareId = this.$sessionStore.get('$compare_id');
-            } else {
-                this.compareId = this.$route.query.companyId;
-            };
+            this.$route.query.compareId ? this.compareId = this.$route.query.compareId : '';
+            this.compareType = this.$sessionStore.get('$compareType');
         },
         watch: {
             compareBy () {
@@ -96,14 +91,17 @@
                 this.compareBy = str;
             },
             upData() {
-                if(this.$sessionStore.get('$compareType')) this.compareType = this.$sessionStore.get('$compareType');
-                if(this.$sessionStore.get('$compareType') === 'new') {
+                // if(this.$sessionStore.get('$compareType')) this.compareType = this.$sessionStore.get('$compareType');
+                if(this.compareType === 'new') {
                     this.getNewList();
                 } else {
                     this.getCompareList();
                 }
             },
-            onSubmit() {
+            cancel() {
+                this.compareType = 'only';
+            },
+            onSubmit() { //保存Compare 
                 let arr = [];
                 this.tabData.forEach(item => {
                     arr.push(item.id.value)
@@ -112,14 +110,15 @@
                     message: '请填写Name',
                     type: 'warning'
                 });
-                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE, {
+                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
                     inquiryIds: arr,
+                    id:this.compareId,
                     compareName: this.compareName
                 })
                 .then(res => {
                     this.compareType = 'only';
                     this.$sessionStore.set('$compareType', 'only');
-                    this.$sessionStore.set('$compare_id', res.id);
+                    this.$sessionStore.set('$compare_id', res.appendant.id);
                 });
             },
             getCompareList() {
@@ -132,10 +131,12 @@
                     url = this.$apis.POST_INQUIRY_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
-                this.$ajax.post(`${url}/{id}`, {
-                    id: this.compareId
-                })
+                let params = _.clone(this.params);
+                delete params.ids;
+                params.id = this.compareId;
+                this.$ajax.post(url, params)
                 .then(res => {
+                    this.compareName = res.appendant.compareName;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                 })
@@ -172,7 +173,7 @@
             addNewCopare() {
                 console.log(1)
             },
-            deleteCompare() {
+            deleteCompare(type) {
                 if(this.compareType === 'new') {
                     this.checkedArg.forEach((item) => {
                         this.tabData.forEach((items, index) => {
@@ -180,8 +181,16 @@
                         });
                     });
                     return;
-                }
-                this.$ajax.delete(this.$apis.POST_INQUIRY_COMPARE, this.checkedArg)
+                };
+                let arr = [];
+                if(type === 'all') {
+                    this.tabData.forEach(item => {
+                        arr.push(item.id.value);
+                    });
+                } else {
+                    arr = this.checkedArg;
+                };
+                this.$ajax.delete(this.$apis.DELETE_INQUIRY_COMPARE, arr)
                 .then(res => {
                     console.log(res)
                 })
