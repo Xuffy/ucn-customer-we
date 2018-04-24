@@ -60,7 +60,6 @@
     watch: {},
     mounted() {
       this.getQuickLink();
-      console.log(this.$db.common.quickLink);
     },
     methods: {
       getQuickLink() {
