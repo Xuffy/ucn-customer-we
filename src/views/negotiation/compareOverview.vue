@@ -95,7 +95,7 @@
                         type: types
                     },
                     query: {
-                        id: item.id.value
+                        id: _.findWhere(item, { 'key': 'id' }).value
                     }
                 });
             },

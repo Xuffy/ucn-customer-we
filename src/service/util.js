@@ -41,6 +41,24 @@ export default {
     Vue.prototype.$getDB = (db, data, cb) => {
       let list = [];
       db = _.values(db);
+
+      _.map(data, value => {
+        let o = [];
+        _.map(db, val => {
+          let v = value[val.key]
+            , obj = _.clone(val);
+          if (!_.isUndefined(v)) {
+            obj.value = v;
+            o.push(obj);
+          }
+        })
+        list.push(o);
+      })
+
+      return list;
+
+      /*let list = [];
+      db = _.values(db);
       _.map(data, (value, index) => {
         let obj = {};
         _.mapObject(value, (val, key) => {
@@ -56,7 +74,7 @@ export default {
 
         list.push(obj);
       });
-      return list;
+      return list; */
     };
 
     /*Vue.prototype.$dataBackfill = (data, oldData) => {
@@ -119,6 +137,24 @@ export default {
         });
       }
     };
+    /**
+     * $window.open
+    */
+    Vue.prototype.$windowOpen = (config) => {
+      // const {href} = router.resolve({
+      //   path: url,
+      //   query: config
+      // });
+      // window.open(href, '_blank')
+      if(_.isUndefined(config.name)) {
+          const {href} = router.resolve({
+            path: config.path,
+            query: config.query
+          });
+          window.open(href, '_blank')
+      }
+    };
+
     /**
      * filterRemark 遍历 remark   list = json arr  remark = remark字段名
      */

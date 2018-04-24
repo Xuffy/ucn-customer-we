@@ -23,7 +23,7 @@
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="$windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
@@ -186,25 +186,33 @@
                 }
             },
             detail(item) {
+                // this.$windowOpen({
+                //     name: 'sdasd',
+                //     query: {
+                //         id: ''
+                //     },
+                //     params: {
+                //         cd: ''
+                //     }
+                // })
+                // return;
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: item.id.value
+                        id: _.findWhere(item, {'key': 'id'}).value
                     }
                 });
             },
             getChildrenId(type) {
                 let arr = [];
-                // _.map(this.checkedData, item => {
-                //     if(!_.isUndefined(_.findWhere(item, {'key': 'id'}))) console.log(item)
-                // });
-                // return;
+                _.map(this.checkedData, item => {
+                    arr.push(_.findWhere(item, {'key': 'id'}).value)
+                });
                 if(typeof type === 'string') arr.join(',')
                 return arr;
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
-                return console.log(argId)
                 this.$router.push({
                     name: 'inquiryCompareDetail',
                     params: {   
