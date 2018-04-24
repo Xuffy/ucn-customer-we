@@ -319,10 +319,10 @@
             save(data) { //modify 编辑完成反填数据
                 if(this.id_type === 'basicInfo') { //反填 basicInfo
                     this.newTabData = _.map(this.newTabData, val => {
-                        if(val.id.value === data[0].id.value && !val._remark && !data[0]._remark) {
+                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
-                        } else if(val.id.value === data[1].id.value && val._remark && data[1]._remark) {
+                        } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
                         }
@@ -330,17 +330,17 @@
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
-                        if(val.id.value === data[0].id.value && !val._remark && !data[0]._remark) {
+                        if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[0], {'key': 'id'}).value + '' && !val._remark && !data[0]._remark) {
+                            console.log(val)
                             val = data[0];
                             val._modify = true;
-                        } else if(val.id.value === data[1].id.value && val._remark && data[1]._remark) {
+                        } else if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[1], {'key': 'id'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
                         }
                         return val;
                     });
                 }
-                console.log(this.newTabData)
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
