@@ -23,7 +23,7 @@
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.baseText.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
@@ -142,7 +142,7 @@
                 .then(res => {
                     this.pageTotal = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;   
+                    this.tabLoad = false;
                     this.searchLoad = false; 
                 })
                 .catch(() => {
@@ -195,17 +195,19 @@
             },
             getChildrenId(type) {
                 let arr = [];
-                this.checkedData.forEach(item => {
-                    arr.push(item.id.value)
+                _.map(this.checkedData, item => {
+                    if(!_.isUndefined(item)) console.log(_.findWhere(item, {'key': 'id'}).value)
                 });
+                return;
                 if(typeof type === 'string') arr.join(',')
                 return arr;
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
+                return console.log(argId)
                 this.$router.push({
                     name: 'inquiryCompareDetail',
-                    params: {
+                    params: {   
                         type: 'new'
                     },
                     query: {

@@ -97,9 +97,13 @@
         this.$ajax.get(this.$apis.get_listTest, {}, {_cache: true}).then((data) => {
           // this.dataList = this.$table.setHighlight(this.$getDB(this.$db.workbench.pending, data));
           this.dataList = this.$getDB(this.$db.workbench.pending, data);
-          this.totalRow = _.clone(this.dataList[0]);
+          this.totalRow = this.$getDB(this.$db.workbench.pending, [data[0]], item => {
+            item._totalRow = {label: '总计'};
+            return item;
+          })
+          /*this.totalRow = _.clone(this.dataList[0]);
           this.totalRow = [{key: '_total', value: '', label: '总计'}].concat(this.totalRow);
-          this.totalRow = [this.totalRow];
+          this.totalRow = [this.totalRow];*/
           // console.log(this.summary);
           /*let a = this.dataList[0];
           this.summary = this.$getDB(this.$db.workbench.pending, [], item => {

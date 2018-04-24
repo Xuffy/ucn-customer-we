@@ -60,15 +60,6 @@ _.templateSettings = {
   interpolate: /\{(.+?)\}/g
 };
 
-
-Vue.prototype.windowOpen = (url, config) => {
-  const {href} = router.resolve({
-    path: url,
-    query: config
-  });
-  window.open(href, '_blank')
-};
-
 new Vue({
   el: '#app',
   store,
