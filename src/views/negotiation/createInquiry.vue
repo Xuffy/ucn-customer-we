@@ -1,7 +1,6 @@
 <template>
     <div class="create-inquiry">
         <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
-        <!-- <time-selection v-model="dateTime" /> -->
         <div class="select-wrap">
             <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
@@ -39,8 +38,8 @@
                                 <el-option
                                     v-for="nodes in item.select"
                                     :key="nodes.value"
-                                    :label="nodes"
-                                    :value="nodes"
+                                    :label="nodes.label"
+                                    :value="nodes.value"
                                 />
                             </el-select>
                             <el-input
@@ -78,10 +77,12 @@
             <select-search :options="[]" />
         </div>
         <v-table 
-            :data="tabData"
-            :buttons="['detail']" 
-            @action="action"
+            :data.sync="tabData"
+            :buttons="productInfoBtn"
+            :loading="tableLoad"
+            @action="producInfoAction"
             @change-checked="changeChecked"
+            :rowspan="2"
         />
         <div class="bom-btn-wrap">
             <el-button @click="submitForm()">{{ $i.baseText.submit }}</el-button>
@@ -102,10 +103,6 @@
                 :hideBtn="true"
                 @handleOK="getList"
             ></v-product>
-             <!-- <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogTableVisible = false">OK</el-button>
-                <el-button @click="dialogTableVisible = false">Cancel</el-button>
-            </span> -->
         </el-dialog>
         
     </div>
@@ -117,161 +114,158 @@
         name:'createInquiry',
         data() {
             return {
+                tableLoad: false,
                 fromArg: {
-                    supplierId: "", //供应商ID
-                    supplierType: "", //供应商类型
-                    supplierName: "", //供应商名称
-                    skuQty: "", //产品数量
-                    inquiryAmount: "", //询价总金额
-                    discountRate: "", //折扣率
-                    currency: "", //币种
-                    paymentMethod: "", //付款方式
-                    paymentTerm: "", //付款期限
-                    incoterm: "", //价格条款
-                    transport: "", //运输方式
-                    destinationCountry: "", //目标国家
-                    destinationPort: "", //目标港口
-                    departureCountry: "", //发货国家
-                    departurePort: "", //发货港口
-                    exportLicense: "", //是否有出口许可证
-                    remark: "备注",
-                    draft: "", //是否草稿0:否，1:是
-                    suppliers: [{
-                        supplierId: "", //供应商ID
-                        supplierType: "", //供应商类型
-                        supplierName: "" //供应商名称
-                    }],
+                    //supplierId: [], //供应商ID
+                    //supplierType: null, //供应商类型
+                    //supplierName: null, //供应商名称
+                    skuQty: 0, //产品数量
+                    inquiryAmount: 0, //询价总金额
+                    timeZone: 0, //时区
+                    entryDt: 0, //时间
+                    discountRate: null, //折扣率
+                    currency: null, //币种
+                    paymentMethod: null, //付款方式
+                    paymentTerm: 0, //付款期限
+                    incoterm: null, //价格条款
+                    transport: null, //运输方式
+                    destinationCountry: null, //目标国家
+                    destinationPort: null, //目标港口
+                    departureCountry: null, //发货国家
+                    departurePort: null, //发货港口
+                    exportLicense: null, //是否有出口许可证
+                    remark: null,
+                    draft: null, //是否草稿0:否，1:是
+                    // suppliers: [{
+                    //     supplierId: int, //供应商ID
+                    //     supplierType: int, //供应商类型
+                    //     supplierName: string //供应商名称
+                    //     supplierCode: 'string'
+                    // }],
                     details: [{
-                        // 商品基本数据
-                        inquiryNo: null,
-                        quotationNo: null,
-                        skuId: null,
-                        skuCode: null,
-                        deleteDisplayStatus: null,
-                        skuPic: null,
-                        skuStatus: null,
-                        skuBarcode: null,
-                        skuNameCn: null,
-                        skuNameEn: null,
-                        skuDescCn: null,
-                        skuDescEn: null,
-                        skuDescCustomer: null,
-                        skuNameCustomer: null,
-                        skuCustomerSkuCode: null,
-                        skuSupplierCode: null,
-                        skuSupplierName: null,
-                        skuUnit: null,
-                        skuProductFormation: null,
-                        skuMaterialEn: null,
-                        skuMaterialCn: null,
-                        skuColourEn: null,
-                        skuColourCn: null,
-                        skuMinOrderQty: null,
-                        skuDeliveryDates: null,
-                        skuProductDesign: null,
-                        skuCodeneSellCountry: null,
-                        skuApplicableAge: null,
-                        skuExpireDates: null,
-                        skuExpireUnit: null,
-                        skuComments: null,
-                        skuReadilyAvailable: null,
-                        skuAvailableQty: null,
-                        skuMainSaleCountry: null,
-                        skuMainSaleArea: null,
-                        skuProductionDates: null,
-                        skuQualityStander: null,
-                        skuYearListed: null,
-                        skuUseDisplayBox: null,
-                        skuQuantityDisplayBox: null,
-                        skuOtherPackInfoCn: null,
-                        skuOtherPackInfoEn: null,
-                        skuAdjustPackage: null,
-                        skuLengthWidthHeight: null,
-                        skuCategoryId: null,
-                        skuPurchaseCreate: null,
-                        // 商品价格数据
-                        skuFobCurrency: null,
-                        skuFobPrice: null,
-                        skuFobPort: null,
-                        skuExwPrice: null,
-                        skuExwCurrency: null,
-                        skuOtherIncoterm: null,
-                        skuOtherIncotermPrice: null,
-                        skuOtherIncotermArea: null,
-                        skuOtherIncotermCurrency: null,
-                        skuPriceType: null,
-                        // 商品包装数据
-                        skuUnitWeight: null,
-                        skuUnitLength: null,
-                        skuUnitVolume: null,
-                        skuSkuLength: null,
-                        skuSkuWidth: null,
-                        skuSkuHeight: null,
-                        skuSkuNetWeight: null,
-                        skuSkuVolume: null,
-                        skuMethodPkgCn: null,
-                        skuMethodPkgEn: null,
-                        skuInnerCartonUnit: null,
-                        skuInnerCartonQuantity: null,
-                        skuInnerCartonLength: null,
-                        skuInnerCartonWidth: null,
-                        skuInnerCartonHeight: null,
-                        skuInnerCartonWeightNet: null,
-                        skuInnerCartonRoughWeight: null,
-                        skuInnerCartonVolume: null,
-                        skuInnerCartonDesc: null,
-                        skuInnerCartonMethodCn: null,
-                        skuInnerCartonMethodEn: null,
-                        skuUnitOuterCarton: null,
-                        skuDescOuterCarton: null,
-                        skuInnerCartonOuterNum: null,
-                        skuOuterCartonQuantity: null,
-                        skuOuterCartonLength: null,
-                        skuOuterCartonWidth: null,
-                        skuOuterCartonHeight: null,
-                        skuOuterCartonNetWeight: null,
-                        skuOuterCartonRoughWeight: null,
-                        skuOuterCartonVolume: null,
-                        skuOuterCartonMethodCn: null,
-                        skuOuterCartonMethodEn: null,
-                        skuOem: null,
-                        // 商品运输数据
-                        skuRateValueAddedTax: null,
-                        skuTaxRefundRate: null,
-                        skuCustomsCode: null,
-                        skuCustomsNameCn: null,
-                        skuCustomsNameEn: null,
-                        skuTradeMarkCn: null,
-                        skuTradeMarkEn: null,
-                        skuCommodityInspectionCn: null,
-                        skuCommodityInspectionEn: null,
-                        skuDeclareElement: null,
-                        skuOrigin: null,
-                        skuInspectQuarantineCategory: null,
-                        skuBrand: null,
-                        skuBrandRemark: null,
-                        skuBrandRelated: null,
-                        skuCertificat: null,
-                        skuGp20SkuQuantity: null,
-                        skuGp40SkuQuantity: null,
-                        skuHq40SkuQuantity: null,
-                        skuTryDimension: null,
-                        skuSkuQuantityPerTray: null,
-                        skuSpecialTransportRequire: null,
-                        skuInventoryCostMethod: null,
-                        skuWarehourceDefault: null,
-                        skuInventory: null,
-                        skuSafeStock: null,
-                        skuMinStock: null,
-                        // 商品字段备注
-                        fieldRemark: {
-                            field1: "详细备注内容1",
-                            field3: "详细备注内容3",
-                            field2: "详细备注内容2"
+                        "skuId": 11,
+                        "skuRecycle": 0,
+                        "skuSysCode": 'sad',
+                        "skuCode": "dxtxnfhs",
+                        "deleteDisplayStatus": "0",
+                        "skuPic": "0",
+                        "skuStatus": "0",
+                        "skuBarcode": "0",
+                        "skuNameCn": "苹果",
+                        "skuNameEn": "Apple",
+                        "skuDescCn": "一种水果",
+                        "skuDescEn": "A kind of friut",
+                        "skuDescCustomer": "0",
+                        "skuNameCustomer": "0",
+                        "skuCustomerSkuCode": "0",
+                        "skuSupplierCode": "0",
+                        "skuSupplierName": "0",
+                        "skuUnit": "0",
+                        "skuProductFormation": "0",
+                        "skuMaterialEn": "0",
+                        "skuMaterialCn": "0",
+                        "skuColourEn": "0",
+                        "skuColourCn": "0",
+                        "skuMinOrderQty": "0",
+                        "skuDeliveryDates": "0",
+                        "skuProductDesign": "0",
+                        "skuCodeneSellCountry": "0",
+                        "skuApplicableAge": "0",
+                        "skuExpireDates": "0",
+                        "skuExpireUnit": "0",
+                        "skuComments": "0",
+                        "skuReadilyAvailable": "0",
+                        "skuAvailableQty": "0",
+                        "skuMainSaleCountry": "0",
+                        "skuMainSaleArea": "0",
+                        "skuProductionDates": "0",
+                        "skuQualityStander": "0",
+                        "skuYearListed": "0",
+                        "skuUseDisplayBox": 0,
+                        "skuQuantityDisplayBox": "0",
+                        "skuOtherPackInfoCn": "0",
+                        "skuOtherPackInfoEn": "0",
+                        "skuAdjustPackage": 0,
+                        "skuLengthWidthHeight": "0",
+                        "skuCategoryId": "0",
+                        "skuPurchaseCreate": 1,
+                        "skuFobCurrency": 1,
+                        "skuFobPrice": "0",
+                        "skuFobPort": "0",
+                        "skuExwPrice": "0",
+                        "skuExwCurrency": "0",
+                        "skuOtherIncoterm": "0",
+                        "skuOtherIncotermPrice": "0",
+                        "skuOtherIncotermArea": "0",
+                        "skuOtherIncotermCurrency": "0",
+                        "skuPriceType": "0",
+                        "skuUnitWeight": "0",
+                        "skuUnitLength": "0",
+                        "skuUnitVolume": "0",
+                        "skuSkuLength": "0",
+                        "skuSkuWidth": "0",
+                        "skuSkuHeight": "0",
+                        "skuSkuNetWeight": "0",
+                        "skuSkuVolume": "0",
+                        "skuMethodPkgCn": "0",
+                        "skuMethodPkgEn": "0",
+                        "skuInnerCartonUnit": "0",
+                        "skuInnerCartonQuantity": "0",
+                        "skuInnerCartonLength": "0",
+                        "skuInnerCartonWidth": "0",
+                        "skuInnerCartonHeight": "0",
+                        "skuInnerCartonWeightNet": "0",
+                        "skuInnerCartonRoughWeight": "0",
+                        "skuInnerCartonVolume": "0",
+                        "skuInnerCartonDesc": "0",
+                        "skuInnerCartonMethodCn": "0",
+                        "skuInnerCartonMethodEn": "0",
+                        "skuUnitOuterCarton": "0",
+                        "skuDescOuterCarton": "0",
+                        "skuInnerCartonOuterNum": "0",
+                        "skuOuterCartonQuantity": "0",
+                        "skuOuterCartonLength": "0",
+                        "skuOuterCartonWidth": "0",
+                        "skuOuterCartonHeight": "0",
+                        "skuOuterCartonNetWeight": "0",
+                        "skuOuterCartonRoughWeight": "0",
+                        "skuOuterCartonVolume": "0",
+                        "skuOuterCartonMethodCn": "0",
+                        "skuOuterCartonMethodEn": "0",
+                        "skuOem": 0,
+                        "skuRateValueAddedTax": "0",
+                        "skuTaxRefundRate": "0",
+                        "skuCustomsCode": "0",
+                        "skuCustomsNameCn": "0",
+                        "skuCustomsNameEn": "0",
+                        "skuTradeMarkCn": "0",
+                        "skuTradeMarkEn": "0",
+                        "skuCommodityInspectionCn": "0",
+                        "skuCommodityInspectionEn": "0",
+                        "skuDeclareElement": "0",
+                        "skuOrigin": "0",
+                        "skuInspectQuarantineCategory": "0",
+                        "skuBrand": "0",
+                        "skuBrandRemark": "0",
+                        "skuBrandRelated": "0",
+                        "skuCertificat": "0",
+                        "skuGp20SkuQuantity": "0",
+                        "skuGp40SkuQuantity": "0",
+                        "skuHq40SkuQuantity": "0",
+                        "skuTryDimension": "0",
+                        "skuSkuQuantityPerTray": "0",
+                        "skuSpecialTransportRequire": "0",
+                        "skuInventoryCostMethod": "0",
+                        "skuWarehourceDefault": "0",
+                        "skuInventory": "0",
+                        "skuSafeStock": "0",
+                        "skuMinStock": "0",
+                        "fieldRemark": {
+                            "skuNameEn": "备注内容A",
+                            "skuNameCn": "备注内容B",
+                            "skuCode": "备注内容C"
                         }
-                    }],
-                    // 询价单字段备注
-                    fieldRemark: ''
+                    }]
                 },
                 radio: '0',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
@@ -344,20 +338,79 @@
                 });
                 //this.$router.push('/negotiation/inquiryDetail');
             },
-            action(data, type) {
-                
-            },
             changeChecked(item) {
-               this.checkedAll = item;
+                this.checkedAll = item;
+            },
+            getList(item) {
+                let tabData = [];
+                item.forEach(items => {
+                    tabData.push(items.id.value);
+                });
+                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
+                .then(res => {
+                    console.log(res)
+                });
+                this.tabData = tabData;
+                this.dialogTableVisible = false;
+            },
+            producInfoAction(data, type) { //Produc info 按钮操作
+                    this.id_type = 'producInfo';
+                    this.historyColumn = this.$db.inquiryOverview.productInfo;
+                    switch(type) {
+                            case 'histoty':
+                                //this.msgTitle = 'Histoty';
+                                this.fnBasicInfoHistoty(data, 'productInfo');
+                                break;
+                            case 'modify':
+                                //this.msgTitle = 'Modify';
+                                this.oSwitch = true;
+                                this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                                break;
+                    }
+            },
+            productInfoBtn (item) { //Product info 按钮创建
+                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                if(!item._disabled) return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+            },
+            fnBasicInfoHistoty(item, type, id) { //查看历史记录
+                let column;
+                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                    id: item.id.value
+                })
+                .then(res => {
+                    let arr = [];
+                    if(type === 'basicInfo') {
+                        column = this.$db.inquiryOverview.basicInfo;
+                        this.newTabData.forEach((items, index) => {
+                            if(items.id.value === id) {
+                                arr.push(items);
+                            }
+                        });
+                    } else {
+                        column = this.$db.inquiryOverview.productInfo;
+                        this.newProductTabData.forEach((items, index) => {
+                            if(items.id.value === id) {
+                                arr.push(items);
+                            }
+                        });
+                    }
+                    this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
+                });
            },
-           getList(item) {
-               let tabData = [];
-               item.forEach(items => {
-                   items._checked = false;
-                   tabData.push(Object.assign({},items))
-               });
-               this.tabData = tabData;
-               this.dialogTableVisible = false;
+           producInfoAction(data, type) { //Produc info 按钮操作
+                this.id_type = 'producInfo';
+                this.historyColumn = this.$db.inquiryOverview.productInfo;
+                switch(type) {
+                        case 'histoty':
+                            //this.msgTitle = 'Histoty';
+                            this.fnBasicInfoHistoty(data, 'productInfo');
+                            break;
+                        case 'modify':
+                            //this.msgTitle = 'Modify';
+                            this.oSwitch = true;
+                            this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                            break;
+                }
            }
         }
     }

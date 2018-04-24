@@ -1,18 +1,18 @@
 <template>
     <div class="compare-overview">
         <h3 class="hd">{{ $i.baseText.compare }}</h3>
-        <drop-down-single :list="[{label: '2323', children: [{label: 'dasdsa'}]}, {label: '2323'}]" />
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
-                    <el-input v-model="compareName" size="mini" :disabled="compareType === 'only'"></el-input>
+                    <el-input v-model="compareName" size="mini" :disabled="compareType  === 'only'"></el-input>
                 </el-form-item>
             </el-form>
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button @click="addNewCopare">{{ $i.baseText.addNew }}</el-button>
-                <el-button type="danger" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
+                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i.baseText.modify }}</el-button>
+                <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i.baseText.addNew }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
                 <el-checkbox-group v-model="ChildrenCheckList" size="mini">
                     <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
                     <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
@@ -25,29 +25,30 @@
                     <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
-            <el-button type="text">Compare History</el-button>
         </div>
         <v-table 
             :data="tabData" 
-            :data-key="tabColumn"
             :loading="tabLoad"
             @change-checked="changeChecked"
+            :buttons="[{label: 'detail', type: 'detail'}]" 
+            @action="action" 
         />
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i.baseText.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="onSubmit" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="onSubmit" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
+        <add-new-inqury v-model="addNew" @addInquiry="addCopare" />
     </div>
 </template>
 <script>
-    import { VTable, dropDownSingle } from '@/components/index';
+    import { VTable, dropDownSingle, addNewInqury } from '@/components/index';
     export default {
         name:'compareOverview',
         data() {
             return {
+                addNew: false,
                 compareName: '',
                 tabLoad: false,
-                tabColumn: '',
                 tabData: [],
                 checkList: [],
                 options:[{
@@ -59,9 +60,7 @@
                 ChildrenCheckList: '',
                 checkedArg: [],
                 compareType: '',
-                compareId: '',
                 params: {
-                    ids: [],
                     ps: 10,
                     pn: 1
                 }
@@ -69,19 +68,18 @@
         },
         components: {
             "v-table": VTable,
+            "add-new-inqury": addNewInqury,
             dropDownSingle
         },
         created() {
             this.compareBy = 0;
-            if(this.$route.query.id) {
-                this.params.ids = this.$route.query.id.split(',');
-            }
-            
-            if(this.$sessionStore.get('$compare_id')) {
-                this.compareId = this.$sessionStore.get('$compare_id');
-            } else {
-                this.compareId = this.$route.query.companyId;
+            if(this.$route.query.ids) {
+                this.params.ids = this.$route.query.ids.split(',');
+            } else if(this.$route.query.id) {
+                this.params.id = this.$route.query.id;
             };
+
+            this.$route.params.type ? this.compareType = this.$route.params.type : '';
         },
         watch: {
             compareBy () {
@@ -96,30 +94,72 @@
                 this.compareBy = str;
             },
             upData() {
-                if(this.$sessionStore.get('$compareType')) this.compareType = this.$sessionStore.get('$compareType');
-                if(this.$sessionStore.get('$compareType') === 'new') {
+                if(this.$route.query.ids) {
                     this.getNewList();
                 } else {
                     this.getCompareList();
                 }
             },
-            onSubmit() {
+            cancel() {
+                this.tabData.forEach((items, index) => {
+                    delete items._disabled;
+                    this.$set(this.tabData, index, items);
+                });
+                this.compareType = 'only';
+            },
+            onSubmit(type) { //保存Compare 
                 let arr = [];
                 this.tabData.forEach(item => {
-                    arr.push(item.id.value)
+                    if(!item._disabled) arr.push(item.id.value)
                 });
-                if(!this.compareName && this.compareType === 'new') return this.$message({
+
+                if(!this.compareName) return this.$message({
                     message: '请填写Name',
                     type: 'warning'
                 });
-                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE, {
-                    inquiryIds: arr,
-                    compareName: this.compareName
-                })
-                .then(res => {
-                    this.compareType = 'only';
-                    this.$sessionStore.set('$compareType', 'only');
-                    this.$sessionStore.set('$compare_id', res.id);
+                
+                this.$confirm('此操作将会保存编辑是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
+                        inquiryIds: arr,
+                        id:this.$route.query.id,
+                        compareName: this.compareName
+                    })
+                    .then(res => {
+                        if(type === 'save') return this.compareType = 'only';
+                        this.$router.push({
+                            name: 'inquiryCompareDetail',
+                            params: {
+                                type: 'only'
+                            },
+                            query: {
+                                id: res.id
+                            }
+                        });
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
+            },
+            action(item, type) {
+                switch(type) {
+                    case 'detail':
+                        this.detail(item);
+                        break;
+                }
+            },
+            detail(item) {
+                this.$router.push({
+                    path: '/negotiation/inquiryDetail',
+                    query: {
+                        id: item.id.value
+                    }
                 });
             },
             getCompareList() {
@@ -132,10 +172,10 @@
                     url = this.$apis.POST_INQUIRY_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
-                this.$ajax.post(`${url}/{id}`, {
-                    id: this.compareId
-                })
+
+                this.$ajax.post(url, this.params)
                 .then(res => {
+                    this.compareName = res.appendant.compareName;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                 })
@@ -170,21 +210,41 @@
                 this.checkedArg = arr;
             },
             addNewCopare() {
-                console.log(1)
+                this.addNew = true;
             },
-            deleteCompare() {
-                if(this.compareType === 'new') {
+            deleteCompare(type) { //删除
+                if(type === 'all') {
+                    this.$confirm('此操作将删除对比, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id])
+                        .then(res => {
+                            this.$router.push('/negotiation/compare')
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });          
+                    });
+                } else {
                     this.checkedArg.forEach((item) => {
                         this.tabData.forEach((items, index) => {
-                            if(item.value === items.id.value) this.tabData.splice(1, index);
+                            if(item === items.id.value) {
+                                items._disabled = true;
+                                this.$set(this.tabData, index, items);
+                            };
                         });
                     });
-                    return;
-                }
-                this.$ajax.delete(this.$apis.POST_INQUIRY_COMPARE, this.checkedArg)
-                .then(res => {
-                    console.log(res)
-                })
+                };
+            },
+            addCopare(arg) { //add new compare
+                if(!arg.length) return this.$message('请先选择inquiry');
+                arg = arg.concat(this.tabData);
+                this.tabData = arg;
+                this.addNew = false;
             }
         }
     }

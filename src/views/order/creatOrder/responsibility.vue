@@ -10,6 +10,16 @@
         prop="type"
         label="Type"
         width="240">
+        <template slot-scope="scope">
+            <span  v-model="scope.row.type">
+                  <span v-if="scope.row.type==0">NeedLabelDesignInfoDate</span>
+                  <span v-else-if="scope.row.type==1">LableDesignDate</span>
+                  <span v-else-if="scope.row.type==2">DesignNeedConfirmDate</span>
+                  <span v-else-if="scope.row.type==3">ReceiveSampleDate</span>
+                  <span v-else-if="scope.row.type==4">SampleNeedConfirmDate</span>
+                  <span v-else-if="scope.row.type==5">OtherDate</span>
+            </span>
+        </template>
       </el-table-column>
 <el-table-column prop="customer" label="Me" width="240">
     <template slot-scope="scope">
@@ -59,7 +69,7 @@
 </template>
 <script>
     /*
- 0=>NeedLabelDesignInfoDate 1=>LableDesignDate 2=>DesignNeedConfirmDate 3=>ReceiveSampleDate 4=>SampleNeedConfirmDate 5=>OtherDate */
+     0=>NeedLabelDesignInfoDate 1=>LableDesignDate 2=>DesignNeedConfirmDate 3=>ReceiveSampleDate 4=>SampleNeedConfirmDate 5=>OtherDate */
     export default {
         name: 'responsibility',
         components: {
@@ -74,45 +84,49 @@
         data() {
             return {
                 tableData: [{
-                    type: '',
+                    type: '0',
                     id: '',
-                    customer: '1',
-                    supplier: '1',
-                    remark: '1',
-                    actualDt: '1',
-                }, {
-                    type: '',
-                    id: '',
-                    customer: '',
-                    supplier: '',
-                    remark: '',
-                    actualDt: '',
-
-                }, {
-                    type: '',
-                    id: '',
+                    orderId: '',
                     customer: '',
                     supplier: '',
                     remark: '',
                     actualDt: '',
                 }, {
-                    type: '',
+                    type: '1',
                     id: '',
+                    orderId: '',
                     customer: '',
                     supplier: '',
                     remark: '',
                     actualDt: '',
                 }, {
-                    type: '',
+                    type: '2',
                     id: '',
+                    orderId: '',
                     customer: '',
                     supplier: '',
                     remark: '',
                     actualDt: '',
-
                 }, {
-                    type: '',
+                    type: '3',
                     id: '',
+                    orderId: '',
+                    customer: '',
+                    supplier: '',
+                    remark: '',
+                    actualDt: '',
+                }, {
+                    type: '4',
+                    id: '',
+                    orderId: '',
+                    customer: '',
+                    supplier: '',
+                    remark: '',
+                    actualDt: '',
+                }, {
+                    type: '5',
+                    id: '',
+                    orderId: '',
                     customer: '',
                     supplier: '',
                     remark: '',
@@ -126,7 +140,7 @@
         },
         created() {
             this.copyData = this.$copyArr(this.tableData)
-           
+
         }
     }
 

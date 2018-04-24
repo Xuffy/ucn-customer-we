@@ -1,56 +1,59 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
-        <div class="status">
-            <div class="state">
-                <span>{{ $i.baseText.state }}</span>
-                <el-checkbox-group v-model="status">
-                    <el-checkbox-button 
-                            v-for="item in $db.inquiryOverview.overoiewState"
-                            :label="item.id"
-                            :key="item.id"
-                        >
-                        {{ item.text }}
-                    </el-checkbox-button>
-                </el-checkbox-group>
-            </div>
-            <select-search 
-                :options="options" 
-                @inputChange="inputEnter"
-                :searchLoad="searchLoad"
-            />
-        </div>
-        <div class="fn">
-            <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-            </div>
-            <div class="viewBy">
-                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
-                </el-radio-group>
-            </div>
-        </div>
-        <v-table 
-            :data="tabData" 
-            :buttons="[{label: 'detail', type: 'detail'}]" 
-            @action="action" 
-            @change-checked="changeChecked"
-            :loading="tabLoad" 
-            ref="tab"
-        />
-        <el-pagination
-            @size-change="handleSizeChange"
-            :currentPage.sync="params.pn"
-            :page-sizes="pazeSize"
-            :page-size="params.ps"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageTotal"
-        />
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="80%"
+            >
+                <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
+                <div class="status">
+                    <div class="state">
+                        <span>{{ $i.baseText.state }}</span>
+                        <el-checkbox-group v-model="status">
+                            <el-checkbox-button 
+                                    v-for="item in $db.inquiryOverview.overoiewState"
+                                    :label="item.id"
+                                    :key="item.id"
+                                >
+                                {{ item.text }}
+                            </el-checkbox-button>
+                        </el-checkbox-group>
+                    </div>
+                    <select-search 
+                        :options="options" 
+                        @inputChange="inputEnter"
+                        :searchLoad="searchLoad"
+                    />
+                </div>
+                <div class="fn">
+                    <div class="viewBy">
+                        <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+                        <el-radio-group v-model="viewByStatus"  size="mini">
+                            <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
+                            <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                        </el-radio-group>
+                    </div>
+                </div>
+                <v-table 
+                    :data="tabData" 
+                    @change-checked="changeChecked"
+                    :loading="tabLoad" 
+                    :selection-radio="selectionRadio"
+                    ref="tab"
+                />
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    :currentPage.sync="params.pn"
+                    :page-sizes="pazeSize"
+                    :page-size="params.ps"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="pageTotal"
+                />
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">{{ $i.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="addCompare">{{ $i.baseText.cancel }}</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -58,7 +61,8 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable } from '@/components/index';
+    import selectSearch from '@/components/common/fnCompon/selectSearch';
+    import VTable from '@/components/common/table/index';
     export default {
         name:'',
         data() {
@@ -106,6 +110,26 @@
         created() {
             this.viewByStatus = 0;
         },
+        props: {
+            value: {
+                type: Boolean,
+                default: false
+            },
+            selectionRadio: {
+                type: Boolean,
+                default: false
+            }
+        },
+        computed: {
+            dialogVisible : {
+                get() {
+                    return this.value;
+                },
+                set(val) {
+                    this.$emit('input', val);
+                }
+            }
+        },
         watch: {
             viewByStatus() {
                 this.gettabData();
@@ -118,9 +142,16 @@
             },
             status(val) {
                 this.params.statuses = val;
-            }
+            },
         },
         methods: {
+            addCompare() {
+                let arg = this.$copyArr(this.checkedData);
+                this.checkedData.forEach((item, index) => {
+                    delete arg[index]._checked;
+                });
+                this.$emit('addInquiry', arg);
+            },
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
                 if(!val.key) return this.$message('搜索内容不能为空');
@@ -176,21 +207,6 @@
                 .then(res => {
                     this.gettabData();
                     this.checkedData = [];
-                });
-            },
-            action(item, type) {
-                switch(type) {
-                    case 'detail':
-                        this.detail(item);
-                        break;
-                }
-            },
-            detail(item) {
-                this.$router.push({
-                    path: '/negotiation/inquiryDetail',
-                    query: {
-                        id: item.id.value
-                    }
                 });
             },
             getChildrenId(type) {

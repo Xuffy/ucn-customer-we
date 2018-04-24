@@ -1,14 +1,13 @@
 export default {
-  id: {
-    _hide: true,
-  },
-  inquiryID: {
+  submiter: {
     key: '',
-    type: 'String',
+    type: 'Boolean',
     length: 10,
     reg: '',
     state: '',
-    _image: true,
+  },
+  id: {
+    _hide: true,
   },
   descripition: {
     key: '',
@@ -24,12 +23,13 @@ export default {
     reg: '',
     state: '',
   },
-  submiter: {
+  inquiryID: {
     key: '',
-    type: 'Boolean',
+    type: 'String',
     length: 10,
     reg: '',
     state: '',
+    _image: true,
   },
   actions: {
     key: '',
@@ -37,5 +37,6 @@ export default {
     length: 10,
     reg: '',
     state: '',
+    _hide: true
   },
 }

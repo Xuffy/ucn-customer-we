@@ -12,7 +12,9 @@ export default {
 
       BASE_JML:'http://dev.umeta-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
-      BASE_HSM:'http://dev.uwarehouse.ucnholding.com:18100'
+      BASE_HSM:'http://dev.uwarehouse.ucnholding.com:18100',
+      BASE_LJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_dictionary: 'http://dev.umeta-facade.ucnholding.com',
     },
     develop: {
       BASE_API: 'http://192.168.11.215:30704'
@@ -29,7 +31,7 @@ export default {
   ENV_FLAG: process.env.NODE_ENV,
 
   // 是否mock
-  IS_MOCK: false,
+  IS_MOCK: true,
 
   // 请求超时
   TIMEOUT: 60000,

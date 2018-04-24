@@ -7,7 +7,7 @@ export default {
     _title: 'remark'
   },
   _remark: {
-    _hide: true
+    _hide: true,
   },
   id: {
     key: 'id',

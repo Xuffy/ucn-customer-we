@@ -24,7 +24,10 @@ const apis = {
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
-  POST_INQUIRY_COMPARE: ['/inquiry/compare', 'BASE_DHC'],
+  POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_DHC'], 
   POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
   POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
@@ -51,7 +54,7 @@ const apis = {
   delete_order:['/order/delete','BASE_HCJ'],
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
-  add_order:['/order/add','BASE_HCJ'], 
+  add_order:['/order/save','BASE_HCJ'], 
   detail_order:['/order/detail/{id}','BASE_HCJ'],
   //supplier
   get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],
@@ -98,6 +101,14 @@ const apis = {
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_HSM',1],
+
+  // logistic
+  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
+  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
+  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
+
+  // logistic dictionary
+  get_container_type: ['/containertype/all', 'BASE_dictionary']
 };
 
 let list = _.mapObject(apis, val => {
