@@ -45,10 +45,11 @@ export default {
       _.map(data, value => {
         let o = [];
         _.map(db, val => {
-          let v = value[val.key];
-          if (v) {
-            val.value = v;
-            o.push(val);
+          let v = value[val.key]
+            , obj = _.clone(val);
+          if (!_.isUndefined(v)) {
+            obj.value = v;
+            o.push(obj);
           }
         })
         list.push(o);
