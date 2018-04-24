@@ -115,18 +115,18 @@ export default {
      * $window.open
     */
     Vue.prototype.$windowOpen = (config) => {
-      const {href} = router.resolve({
-        path: '/',
-      });
-      let url = {};
+      let url = `//${window.location.host}/#${config.url}`, p = {};
       if (!_.isEmpty(config.params) && !config.params.length) {
         _.mapObject(config.params, (val, key) => {
-          if (config.url.indexOf(`{${key}}`) < 0) {
-            url[key] = val;
+          if (url.indexOf(`{${key}}`) < 0) {
+            p[key] = val;
           }
         });
-      };
-      url = {url: _.template(`${window.location.host}${href}${config.url}`)(config.params || ''), query: url};
+      }
+      url = _.template(url)(config.params || {});
+      for(let k in p) {
+        url += `?${k}=${p[k]}`
+      }
       return window.open(url, '_blank');
     };
 

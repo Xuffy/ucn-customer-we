@@ -23,7 +23,7 @@
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="$windowOpen({url:'/negotiation/createInquiry', params: {}})">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.baseText.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
@@ -196,7 +196,7 @@
             getChildrenId(type) {
                 let arr = [];
                 _.map(this.checkedData, item => {
-                    console.log(item)
+                    if(!_.isUndefined(item)) console.log(_.findWhere(item, {'key': 'id'}).value)
                 });
                 return;
                 if(typeof type === 'string') arr.join(',')
