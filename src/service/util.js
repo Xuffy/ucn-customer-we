@@ -40,51 +40,26 @@ export default {
      * @returns {Array}
      */
     Vue.prototype.$getDB = (db, data, cb) => {
+
       let list = [];
-      db = _.values(db);
-
-      _.map(data, value => {
-        let o = [];
-        _.map(db, val => {
-          let v = value[val.key]
-            , obj = _.clone(val);
-          if (!_.isUndefined(v)) {
-            obj.value = v;
-            o.push(obj);
-          }
-        })
-        list.push(o);
-      })
-
-      return list;
-
-      /*let list = [];
       db = _.values(db);
       _.map(data, (value, index) => {
         let obj = {};
-        _.mapObject(value, (val, key) => {
-          let dbValue = _.clone(_.findWhere(db, {key: key}));
-          if (!_.isEmpty(dbValue)) {
-            dbValue.value = val;
-            obj[key] = dbValue;
+
+        _.map(db, val => {
+          let dv = value[val.key]
+            , cd = _.clone(val);
+          if (!_.isUndefined(dv)) {
+            cd.value = dv;
+            obj[val.key] = cd;
           }
-
         });
-
         if (cb) obj = _.extend(obj, cb(obj, index));
-
         list.push(obj);
       });
-      return list; */
+      return list;
     };
 
-    /*Vue.prototype.$dataBackfill = (data, oldData) => {
-      console.log(data, oldData)
-      _.map(data, value => {
-
-        console.log(value)
-      });
-    }*/
 
     /**
      * table 数据过滤
@@ -98,12 +73,10 @@ export default {
 
         _.map(data, value => {
           _.mapObject(value, (val, key) => {
-            if (type === 'same'&&first[key]) {
+            if (type === 'same' && first[key]) {
               keyData[key] = first[key].value === val.value;
-            } else if (type === 'def') {
-              if (first[key]&&first[key].value !== val.value) {
-                keyData[key] = true;
-              }
+            } else if (type === 'def' && first[key] && first[key].value !== val.value) {
+              keyData[key] = true;
             }
           });
         });
