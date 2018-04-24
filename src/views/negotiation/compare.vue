@@ -240,10 +240,10 @@
                     });
                 };
             },
-            addCopare(item) { //add new compare
-                if(!item.length) return this.$message('请先选择inquiry');
-                console.log(item)
-                return;
+            addCopare(arg) { //add new compare
+                if(!arg.length) return this.$message('请先选择inquiry');
+                arg = arg.concat(this.tabData);
+                this.tabData = arg;
                 this.addNew = false;
             }
         }
