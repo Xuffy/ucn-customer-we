@@ -111,10 +111,9 @@
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
                 keyWord: '',
-                productTabData: [],
-                newProductTabData: [], 
+                newProductTabData: [],
                 tableLoad: false, //表格加载状态  
-                statusModify: true,
+                statusModify: false,
                 id_type: '',
                 historyColumn: {},
                 oSwitch: false, //VHistory 组件开关状态
@@ -305,7 +304,6 @@
                 });
                 this.newProductTabData = tabData;
                 console.log(this.newProductTabData)
-                //                this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo);
                 this.dialogAddproduct = false;
             },
             basicInfoBtn(item) { //Basic info 按钮创建
@@ -333,12 +331,24 @@
                     label: 'Detail',
                     type: 'detail'
                 }];
-                if (!item._disabled) return [{
+                if (this.statusModify && item._disabled) return [{
+                    label: 'Modify',
+                    type: 'modify'
+                }, {
                     label: 'Histoty',
                     type: 'histoty'
                 }, {
                     label: 'Detail',
                     type: 'detail'
+                }];
+                if (!item._disabled) return [{
+                    label: 'Histoty',
+                    type: 'histoty',
+                    _disabled: false
+                }, {
+                    label: 'Detail',
+                    type: 'detail',
+                    _disabled: false
                 }];
             },
             producInfoAction(data, type) { //Produc info 按钮操作
@@ -346,12 +356,11 @@
                 this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch (type) {
                     case 'histoty':
-                        console.log('histoty')
                         this.fnBasicInfoHistoty(data, 'productInfo');
                         break;
                     case 'modify':
-                        this.oSwitch = true;               
-                        this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);                   
+                        this.oSwitch = true;
+                        this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
                         break;
                 }
             },
@@ -379,13 +388,13 @@
                     .then(res => {
                         let arr = [];
                         column = this.$db.inquiryOverview.productInfo;
-                        this.newProductTabData.forEach((items, index) => {                         
+                        this.newProductTabData.forEach((items, index) => {
                             if (items.id.value === id) {
-                               
+
                                 arr.push(items);
                             }
                         });
-                        
+
                         this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
                     });
             },
