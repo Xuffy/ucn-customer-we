@@ -72,6 +72,7 @@
               return val.itemCode;
             });
             this.$store.state.quickLink.list = list;
+
           });
       },
       updateQuickLink() {

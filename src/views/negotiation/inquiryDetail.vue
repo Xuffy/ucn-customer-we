@@ -96,7 +96,7 @@
             :msgTableType="msgTableType"
             @isModify="isModify"
         /> -->
-        <v-history-modify 
+        <v-history-modify
                 @save="save"
                 ref="HM"
             >
@@ -183,17 +183,22 @@
         created() {
             this.getInquiryDetail();
             this.submitData.id = this.$route.query.id;
-            
             if(this.$localStore.get('$inquiryCompare')) {
                 this.compareConfig = this.$localStore.get('$inquiryCompare');
             }
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
-                console.log(val);
+                val.forEach(item => {
+                    if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
+                    if(item + '' === '1') data = this.$table.setHighlight(this.tabData);
+                });
+                this.newTabData = data;
             },
             ProductCheckList(val, oldVal) {
-                console.log(val);
+                let arr = this.newProductTabData;
+                if(val[0] + '' === 0) this.newProductTabData = this.$table.setHighlight(this.newProductTabData);
+                this.newProductTabData = arr;
             }
         },
         methods: {
@@ -202,11 +207,14 @@
                 this.compareConfig.forEach(item => {
                     arr.push(item.id);
                 });
-                this.$sessionStore.set('$compareType', 'new')
+                //this.$sessionStore.set('$compareType', 'new')
                 this.$router.push({
-                    path: '/negotiation/compareDetail',
+                    name: 'inquiryCompareDetail',
+                    params: {
+                        type: 'new'
+                    },
                     query: {
-                        id: arr.join(',')
+                        ids: arr.join(',')
                     }
                 });
             },
@@ -239,7 +247,6 @@
                 }
                 this.compareConfig.push(config);
                 this.$message('添加对比成功！');
-                this.$localStore.set('$inquiryCompare', this.compareConfig);
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
                 if(!this.$route.query.id) return this.$message('地址错误');

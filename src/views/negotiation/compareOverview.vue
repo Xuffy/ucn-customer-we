@@ -4,7 +4,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button>{{ $i.baseText.downloadSelectedCompare }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
@@ -14,6 +14,8 @@
             :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
+            :height="350"
+            :page-total="pageTotal"
         />
     </div>
 </template>
@@ -23,6 +25,7 @@
         name:'',
         data() {
             return {
+                pageTotal:0,
                 checkedArg: [],
                 tabData: [],
                 options:[{
@@ -71,6 +74,7 @@
                     data.forEach(item => {
                         item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
                     });
+                    this.pageTotal = res.tc;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
                 });
             },
@@ -79,16 +83,19 @@
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
+                let types = '';
                 if(type === 'detail') {
-                    this.$sessionStore.set('$compareType', 'only');
+                    types = 'only';
                 } else {
-                    this.$sessionStore.set('$compareType', 'modify');
+                    types = 'modify';
                 }
-                this.$sessionStore.remove('$compare_id');
                 this.$router.push({
-                    path: '/negotiation/compareDetail',
+                    name: 'inquiryCompareDetail',
+                    params: {
+                        type: types
+                    },
                     query: {
-                        compareId: item.id.value
+                        id: _.findWhere(item, { 'key': 'id' }).value
                     }
                 });
             },
@@ -100,16 +107,27 @@
                 this.checkedArg = arr;
             },
             compareDelete() { //删除compare
-                let arr = [24, 25];
-                
-                this.tabData.forEach(item => {
-                    console.log(item)
-                }); 
-                return;
-                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
-                .then(res => {
-                    
-                })
+                this.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
+                    .then(res => {
+                        this.tabData.forEach((item, index) => {
+                            res.forEach(key => {
+                                if(item.id.value === key) {
+                                    this.tabData.splice(index, 1);
+                                }
+                            });
+                        });
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             }
         },
         watch: {

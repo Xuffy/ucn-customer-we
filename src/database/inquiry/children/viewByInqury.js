@@ -14,37 +14,37 @@ export default {
     id: {
         _hide: true
     },
-    inquiryNo: {
-        key: ''
-    },
-    quotationNo: {
-
-    },
-    status: {
+    inquiryNo: { //系统带入：当前询价单的母单号
         
     },
-    supplierName: {
+    quotationNo: { //系统带入：当前询价单的子单号
 
     },
-    quantity: {
+    status: { //系统带入，共四个状态：TOC-C;TOB-S;finish;cancel 
+        
+    },
+    supplierName: { //系统带入：当前询价单所选的供应商（如果有多个供应商用逗号隔开）
+
+    },
+    quantity: { //系统计算：当前询价单所有产品的数量
         key: 'skuQty'
     },
-    inquiryValue: {
+    inquiryValue: { //系统计算：当前询价单所有产品的总价
         key: 'inquiryAmount'
     },
-    currency: {
+    currency: { //系统带入，当前inquiry所选的币种
         key: 'currency'
     },
-    incoterm: {
+    incoterm: { //系统带入，当前inquiry所选的付款条款
 
     },
-    departurePort: {
+    departurePort: { //系统带入，当前inquiry所选的发运港口
 
     },
-    destinationPort: {
+    destinationPort: { //系统带入，当前inquiry所选目的港口
 
     },
-    inquiryRemark: {
+    inquiryRemark: { //询价备注 系统带入
         key: 'remark'
     }
 };
