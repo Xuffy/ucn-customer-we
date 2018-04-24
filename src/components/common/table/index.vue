@@ -143,12 +143,12 @@
           return [];
         },
       },
-      columns: {
+      /*columns: {
         type: Object,
         default() {
           return {};
         },
-      },
+      },*/
       dataKey: {
         type: String,
         default: '',
@@ -244,12 +244,13 @@
     methods: {
       onFilterColumn(checked) {
         // todo 需过滤column
-        this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
+        // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
         // this.filterColumn();
+        this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
         this.updateTable();
       },
       filterColumn() {
-        this.dataColumn = _.values(_.isEmpty(this.columns) ? this.dataList[0] : this.columns);
+        this.dataColumn = _.values(this.dataList[0]);
       },
       updateTable(e) {
         this.$nextTick(() => {
@@ -311,7 +312,7 @@
         }
         this.$emit('change-checked', this.getSelected());
       },
-      getTotalRow(data,cb) {
+      getTotalRow(data, cb) {
         // if (!_.isArray(data)) {
         //   return data;
         // }

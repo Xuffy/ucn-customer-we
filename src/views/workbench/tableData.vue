@@ -16,8 +16,7 @@
     <el-tabs type="border-card">
       <el-tab-pane label="Inquiry" style="min-height: 300px">
         <v-table ref="pendingTable"
-                 :data="dataList"
-                 :columns="$db.workbench.pending"
+                 :data.sync="dataList"
                  :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
                  :selection="filterSelection"
                  :rowspan="2"
