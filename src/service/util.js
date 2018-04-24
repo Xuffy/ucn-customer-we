@@ -2,6 +2,7 @@ import DateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
+import router from 'service/router'
 
 export default {
   install(Vue, options) {
@@ -39,33 +40,26 @@ export default {
      * @returns {Array}
      */
     Vue.prototype.$getDB = (db, data, cb) => {
+
       let list = [];
       db = _.values(db);
       _.map(data, (value, index) => {
         let obj = {};
-        _.mapObject(value, (val, key) => {
-          let dbValue = _.clone(_.findWhere(db, {key: key}));
-          if (!_.isEmpty(dbValue)) {
-            dbValue.value = val;
-            obj[key] = dbValue;
+
+        _.map(db, val => {
+          let dv = value[val.key]
+            , cd = _.clone(val);
+          if (!_.isUndefined(dv)) {
+            cd.value = dv;
+            obj[val.key] = cd;
           }
-
         });
-
         if (cb) obj = _.extend(obj, cb(obj, index));
-
         list.push(obj);
       });
       return list;
     };
 
-    /*Vue.prototype.$dataBackfill = (data, oldData) => {
-      console.log(data, oldData)
-      _.map(data, value => {
-
-        console.log(value)
-      });
-    }*/
 
     /**
      * table 数据过滤
@@ -79,12 +73,10 @@ export default {
 
         _.map(data, value => {
           _.mapObject(value, (val, key) => {
-            if (type === 'same') {
+            if (type === 'same' && first[key]) {
               keyData[key] = first[key].value === val.value;
-            } else if (type === 'def') {
-              if (first[key].value !== val.value) {
-                keyData[key] = true;
-              }
+            } else if (type === 'def' && first[key] && first[key].value !== val.value) {
+              keyData[key] = true;
             }
           });
         });
@@ -119,6 +111,25 @@ export default {
         });
       }
     };
+    /**
+     * $window.open
+    */
+    Vue.prototype.$windowOpen = (config) => {
+      let url = `//${window.location.host}/#${config.url}`, p = {};
+      if (!_.isEmpty(config.params) && !config.params.length) {
+        _.mapObject(config.params, (val, key) => {
+          if (url.indexOf(`{${key}}`) < 0) {
+            p[key] = val;
+          }
+        });
+      }
+      url = _.template(url)(config.params || {});
+      for(let k in p) {
+        url += `?${k}=${p[k]}`
+      }
+      return window.open(url, '_blank');
+    };
+
     /**
      * filterRemark 遍历 remark   list = json arr  remark = remark字段名
      */

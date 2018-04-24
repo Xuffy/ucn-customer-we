@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="btn-wraps">
-            <el-button @click="tabAppend" :disabled="isActive">{{ $t('logistic.btn.add') }}</el-button>
+            <el-button @click="tabAppend" :disabled="isActive">{{ 'logistic.btn.add' }}</el-button>
         </div>
         <div class="tab-wrap">
             <el-table
@@ -25,7 +25,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        :label="$t('logistic.containerInfo.containerType')"
+                        :label="'logistic.containerInfo.containerType'"
                         align="center">
                     <template slot-scope="scope">
                         <el-select v-model="containerSelect" placeholder="请选择" v-if="!scope.row.Product">
@@ -42,7 +42,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        :label="$t('logistic.containerInfo.containerQuantity')"
+                        :label="'logistic.containerInfo.containerQuantity'"
                         align="center">
                     <template slot-scope="scope">
                         <div v-if="!scope.row.containerAmount">
@@ -54,12 +54,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    :label="$t('logistic.containerInfo.actions')"
+                    :label="'logistic.containerInfo.actions'"
                     width="100"
                 >
                     <template slot-scope="scope">
                         <el-button type="text" size="small" @click="tailBtn('ok')" v-show="!scope.row.containerAmount">ok</el-button>
-                        <el-button type="text" size="small" @click="tabSplite(scope.row.index)" v-show="scope.row.containerAmount">{{ $t('logistic.btn.delete') }}</el-button>
+                        <el-button type="text" size="small" @click="tabSplite(scope.row.index)" v-show="scope.row.containerAmount">{{ 'logistic.btn.delete' }}</el-button>
                     </template>
                 </el-table-column>
             </el-table>

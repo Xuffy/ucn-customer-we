@@ -36,7 +36,7 @@
     @action="action"
     @change-checked="changeChecked"
     @page-change="pageChange"
-    :loading="!tabData || !tabData.length"
+    :loading="!tabData.length"
     ref="tab"
     />
 </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="ucn-history-modify">
     <el-dialog
-      title="提示"
+      :title="isModify ? 'Modify' : 'History'"
       width="80%"
       @close="() => {$emit('update:visible', false)}"
       :visible.sync="showDialog">
@@ -25,16 +25,19 @@
             </div>
 
             <div v-else>
-              <el-input v-if="scope.row[item.key].type !== 'Number'"
-                        placeholder="Please select" :disabled="scope.row[item.key]._disabled"
-                        v-model="scope.row[item.key].value" size="mini"></el-input>
+              <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
+              <div v-else>
+                <el-input v-if="scope.row[item.key].type !== 'Number'" clearable
+                          placeholder="Please select"
+                          v-model="scope.row[item.key].value" size="mini"></el-input>
 
-              <el-input-number v-if="scope.row[item.key].type === 'Number'"
-                               v-model="scope.row[item.key].value"
-                               :min="scope.row[item.key].min || 0"
-                               :max="scope.row[item.key].max || 99999999" controls-position="right" size="mini"
-                               :controls="false"></el-input-number>
-              <span v-if="scope.row[item.key].unit"></span>
+                <el-input-number v-if="scope.row[item.key].type === 'Number'"
+                                 v-model="scope.row[item.key].value"
+                                 :min="scope.row[item.key].min || 0"
+                                 :max="scope.row[item.key].max || 99999999" controls-position="right" size="mini"
+                                 :controls="false"></el-input-number>
+                <!--<span v-if="scope.row[item.key].unit"></span>-->
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -79,6 +82,7 @@
         showDialog: false,
         dataList: [],
         dataColumn: [],
+        isModify: false,
       }
     },
     watch: {
@@ -98,13 +102,14 @@
         this.$emit('save', [this.dataList[0], this.dataList[1]]);
         this.showDialog = false;
       },
-      edit(editData, history = [], visible = true) {
+      init(editData, history = [], isModify = true) {
         let ed = [];
         if (_.isEmpty(editData) || !_.isArray(editData)) return false;
 
         // 初始化可编辑行
         ed = _.map(editData, value => {
           return _.mapObject(value, (val, index) => {
+            if (!_.isObject(val)) return val;
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || '';
@@ -115,43 +120,13 @@
 
         this.dataList = ed.concat(history);
         this.dataColumn = this.dataList[0];
-        this.showDialog = visible;
-
-        console.log(this.dataList)
+        this.showDialog = true;
+        this.isModify = isModify;
 
       },
-      /*getEditData(data) {
-        let list = this.getFilterData(data)
-          , dateList;
-
-        list = [list[0], list[1]].concat(list);
-
-        dateList = this.$getDB(this.config, list, (item, index) => {
-          if (item.updateDt) {
-            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-          }
-          // 初始化可编辑行
-
-          item = _.mapObject(item, val => {
-            val._edit = index < 2;
-            val.type = index === 1 ? 'String' : val.type;
-            val.value = val.value || '';
-            val.value=_.isBoolean(val.value) ? '' :val.value;
-            console.log(val.value,'++++')
-            return val;
-          });
-
-          return item;
-        });
-
-        this.dataColumn = dateList[0];
-
-        return dateList;
-      },*/
       getFilterData(data) {
         let list = [];
         _.map(data, value => {
-          console.log(value)
           list.push(value);
           value.fieldRemark = value.fieldRemark || {};
           value.fieldRemark._remark = true;

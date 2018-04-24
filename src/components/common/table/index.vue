@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="table-container" :style="{height:height + 'px'}">
+    <div class="table-container" ref="tableContainer">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
@@ -25,7 +25,7 @@
         action
       </div>
 
-      <div class="table-box" id="table-box" ref="tableBox">
+      <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
         <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
@@ -64,9 +64,9 @@
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="{'background-color':cItem._highlight}">
               <div v-if="!cItem._image" v-text="cItem.value"></div>
-              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)">
+              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
             </td>
-            <td v-if="buttons && (index % rowspan === 0) " :rowspan="rowspan">
+            <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
@@ -76,6 +76,20 @@
             </td>
           </tr>
           </tbody>
+
+          <tfoot ref="tableFoot" v-if="totalRow">
+          <tr v-for="totalItem in totalRow">
+            <td v-if="totalItem._totalRow">
+              <div v-text="totalItem._totalRow.label"></div>
+            </td>
+            <td v-for="item in dataColumn" v-if="!item._hide">
+              <div v-text="item.value"></div>
+            </td>
+            <td v-if="buttons">
+              <div></div>
+            </td>
+          </tr>
+          </tfoot>
         </table>
         <div v-else class="empty">
           暂无数据
@@ -132,6 +146,12 @@
           return [];
         },
       },
+      /*columns: {
+        type: Object,
+        default() {
+          return {};
+        },
+      },*/
       dataKey: {
         type: String,
         default: '',
@@ -181,6 +201,10 @@
         type: Boolean,
         default: false,
       },
+      totalRow: {
+        type: [Boolean, Array],
+        default: false,
+      },
 
     },
     data() {
@@ -188,18 +212,23 @@
         dataList: [],
         dataColumn: [],
         checkedAll: false,
-        tableAttr: {},
+        tableAttr: {st: 0, sl: 0},
       }
     },
     watch: {
       data(val) {
         this.dataList = val;
-        this.dataColumn = this.filterColumn(val);
+        this.filterColumn();
         this.updateTable();
+      },
+      column() {
+        this.filterColumn();
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          val._checked = val._disabled ? false : value;
+          if (!val._disabled){
+            this.$set(val, '_checked', value);
+          }
           return val;
         });
         this.changeCheck();
@@ -213,39 +242,34 @@
     },
     mounted() {
       this.dataList = this.data;
-      this.dataColumn = this.filterColumn(this.dataList);
+      this.filterColumn();
       this.updateTable();
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
     },
     methods: {
       onFilterColumn(checked) {
-        this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
-        this.dataColumn = this.filterColumn(this.dataList);
+        // todo 需过滤column
+        // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
+        // this.filterColumn();
+        // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
+        this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
         this.updateTable();
       },
-      filterColumn(data) {
-        if (_.isEmpty(data)) {
-          return [];
-        } else {
-          return _.values(data[0]);
-        }
+      filterColumn() {
+        this.dataColumn = _.values(this.dataList[0]);
       },
       updateTable(e) {
         this.$nextTick(() => {
           if (!this.$refs.tableBody) return false;
 
-          let trs = this.$refs.tableBody.children;
-          let st, sl, sw;
-          if (e) {
-            st = e.target.scrollTop;
-            sl = e.target.scrollLeft;
-            sw = e.target.scrollWidth;
-          } else {
-            st = this.tableAttr.st || 0;
-            sl = this.tableAttr.sl || 0;
-            sw = this.$refs.tableBody.offsetWidth;
-          }
+          let ele = e ? e.target : this.$refs.tableBox
+            , trs = this.$refs.tableBody.children;
+          let st, sl, sw, sh;
 
+          st = e ? ele.scrollTop : this.tableAttr.st;
+          sl = e ? ele.scrollLeft : this.tableAttr.sl;
+          sw = ele.scrollWidth;
+          sh = ele.scrollHeight;
           this.tableAttr.st = st;
           this.tableAttr.sl = sl;
 
@@ -256,8 +280,14 @@
           if (this.buttons) {
             this.$refs.fixedRight.style.width = `${this.$refs.tableAction.offsetWidth}px`;
           }
+
+          if (this.$refs.tableFoot) {
+            this.$refs.tableFoot.style.transform = `translate3d(0,${-(sh - ele.clientHeight - st - 1)}px,0)`;
+          }
+
           _.map(trs, (val, index) => {
             if (index % this.rowspan !== 0) return false;
+
             if (this.selection && val.firstChild.style) {
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
@@ -265,6 +295,7 @@
               val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
             }
           });
+
           this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
 
         });
@@ -339,7 +370,6 @@
   }
 
   .ucn-table .table-box {
-    max-height: 100%;
     max-width: 100%;
     overflow-y: scroll;
     overflow-x: auto;
@@ -379,8 +409,45 @@
   .ucn-table thead td {
     background-color: #ECEFF1;
     color: #999999;
+  }
+
+  .ucn-table thead td,
+  .ucn-table tfoot td {
     word-break: keep-all;
     padding: 0 10px;
+  }
+
+  .ucn-table tfoot td {
+    /*border-top: 1px solid #ebeef5;*/
+    /*border-right: 1px solid #ebeef5;*/
+    box-sizing: border-box;
+    position: relative;
+    background-color: #f6f8f9;
+    color: #999999;
+  }
+
+  .ucn-table tfoot td:after {
+    content: '';
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #ebeef5;
+  }
+
+  .ucn-table tfoot td:before {
+    /*content: '';*/
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #999999;
+  }
+
+  .ucn-table tfoot tr td:last-child:before {
+    display: none;
   }
 
   .ucn-table td > div {
@@ -394,12 +461,17 @@
     white-space: nowrap;
   }
 
+  .ucn-table tfoot td > div {
+    line-height: 30px;
+    white-space: nowrap;
+  }
+
   .ucn-table thead tr td:first-child > div {
     width: 20px;
   }
 
   .ucn-table tbody td {
-    padding: 5px;
+    padding: 10px;
   }
 
   .ucn-table tbody td img {
@@ -411,7 +483,7 @@
 
   .ucn-table thead tr:nth-child(even) td,
   .ucn-table tbody tr:nth-child(even) td {
-    background-color: #F7F8F9;
+    /*background-color: #fafafa;*/
   }
 
   .ucn-table tbody tr td:hover,

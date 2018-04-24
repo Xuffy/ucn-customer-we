@@ -1,7 +1,6 @@
 <template>
     <div class="create-inquiry">
         <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
-        <!-- <time-selection v-model="dateTime" /> -->
         <div class="select-wrap">
             <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">

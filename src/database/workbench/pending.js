@@ -2,13 +2,12 @@ export default {
   id: {
     _hide: true,
   },
-  inquiryID: {
+  time: {
     key: '',
-    type: 'String',
+    type: 'Number',
     length: 10,
     reg: '',
     state: '',
-    _image: true,
   },
   descripition: {
     key: '',
@@ -17,12 +16,13 @@ export default {
     reg: '',
     state: '',
   },
-  time: {
+  inquiryID: {
     key: '',
-    type: 'Number',
+    type: 'String',
     length: 10,
     reg: '',
     state: '',
+    _image: true,
   },
   submiter: {
     key: '',
@@ -37,5 +37,6 @@ export default {
     length: 10,
     reg: '',
     state: '',
+    _hide: true
   },
 }

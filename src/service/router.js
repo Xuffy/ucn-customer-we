@@ -252,13 +252,14 @@ export const routerMap = [
           component: () => import('../views/negotiation/compareOverview')
         },
         {
-          path: 'compareDetail',
-          name: 'Compare Detail',
+          path: 'compareDetail/:type',
+          name: 'inquiryCompareDetail',
           hidden: true,
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
+            name: 'Compare Detail'
           },
           component: () => import('../views/negotiation/compare')
         }
@@ -408,7 +409,7 @@ export const routerMap = [
         {
           path: 'planDetail',
           name: 'Plan Detail',
-          hidden: true,
+          hidden: false,
           meta: {
             draft: true,
             recycleBin: true,
