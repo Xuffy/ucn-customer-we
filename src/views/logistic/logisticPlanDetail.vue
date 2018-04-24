@@ -231,7 +231,8 @@
         </div>
       </el-col>
       <attachment accept="all" ref="attachment"/>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+      <one-line :list="exchangeRateList"/>
+      <!-- <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
         <div class="input-item">
           <span>{{ $i.logistic.basicInfo.exchangeRate }}(￥-$)</span>
           <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
@@ -266,7 +267,7 @@
           <span>{{ $i.logistic.basicInfo.exchangeRate }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
     <div class="hd">{{ 'logistic.text.containerInfo' }}</div>
     <v-container-info 
@@ -312,6 +313,7 @@
 <script>
 import { VSimpleTable, containerInfo, selectSearch } from '@/components/index';
 import attachment from '@/components/base/attachment'
+import oneLine from '@/components/base/oneLine'
 
 export default {
   name: 'placeLogisticPlan',
@@ -319,6 +321,38 @@ export default {
     return {
       detailObj: {},
       isModify:false,
+      exchangeRateList: [
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        },
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        },
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        },
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        },
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        },
+        {
+          text: 'exchangeRate(￥-$)',
+          value: 0,
+          placeholder: 'Please enter content'
+        }
+      ],
       createDate:'2018-09-08',
       tabColumn: [],
       tabData: [],
@@ -360,7 +394,8 @@ export default {
     "v-simple-table": VSimpleTable,
     "v-container-info": containerInfo,
     "v-select-search": selectSearch,
-    attachment
+    attachment,
+    oneLine
   },
   mounted () {
     // console.log(this.$i)
