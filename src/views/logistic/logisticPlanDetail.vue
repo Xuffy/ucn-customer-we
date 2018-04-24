@@ -232,54 +232,66 @@
       </el-col>
       <attachment accept="all" ref="attachment"/>
       <one-line :list="exchangeRateList"/>
-      <!-- <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}(￥-$)</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}($-￥)</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col>
-      <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-        <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeRate }}</span>
-          <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input>
-        </div>
-      </el-col> -->
     </el-row>
-    <div class="hd">{{ 'logistic.text.containerInfo' }}</div>
-    <v-container-info 
-    :tableData="tableData"
-    @tabAppend="tabAppend"
-    @tailBtnCancel="tailBtnCancel"
-    @tailBtnOk="tailBtnOk"
-    @tabSplite="tabSplite"
-    />
+    <div class="hd"></div>
+    <div class="hd active">{{ $i.logistic.transportInfoTitle }}</div>
+    <el-row :gutter="10">
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.transportCompany }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.transportCompany"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.vesselName }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.vesselName"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.vesselNo }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.vesselNo"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.departureCountry }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.departureCountry"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.departurePort }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.departurePort"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.destinationCountry }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.destinationCountry"></el-input>
+        </div>
+      </el-col>
+      <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+        <div class="input-item">
+          <span>{{ $i.logistic.transportInfo.destinationPort }}</span>
+          <el-input placeholder="请输入内容" v-model="detailObj.destinationPort"></el-input>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="hd"></div>
+    <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
+    <containerTable/>
+    <!-- <v-container-info
+      :tableData="tableData"
+      @tabAppend="tabAppend"
+      @tailBtnCancel="tailBtnCancel"
+      @tailBtnOk="tailBtnOk"
+      @tabSplite="tabSplite"
+    /> -->
 
-    <div class="hd">{{ 'logistic.text.productInfo' }}</div>
-    <div class="btn-wrap">
+    <!-- <div class="hd">{{ 'logistic.text.productInfo' }}</div> -->
+    <!-- <div class="btn-wrap">
       <div>
         <el-button @click="newSearchDialogVisible = true">{{ 'logistic.btn.addProduct' }}</el-button>
         <el-button>{{ 'logistic.btn.remove' }}</el-button>
@@ -297,23 +309,24 @@
     </div>
     <div class="fix-btn-station"></div>
     <el-dialog
-    title="Add Product"
-    :visible.sync="newSearchDialogVisible"
-    width="80%"
-    lock-scroll>
-    <v-select-search :options="['1', 0]" />
-    <v-simple-table :column="tabColumn" :data.sync="tabData" />
-    <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="newSearchDialogVisible = false">{{ 'logistic.btn.ok' }}</el-button>
-      <el-button @click="newSearchDialogVisible = false">{{ 'logistic.btn.cancel' }}</el-button>
-    </span>
-  </el-dialog>
+      title="Add Product"
+      :visible.sync="newSearchDialogVisible"
+      width="80%"
+      lock-scroll>
+      <v-select-search :options="['1', 0]" />
+      <v-simple-table :column="tabColumn" :data.sync="tabData" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="newSearchDialogVisible = false">{{ 'logistic.btn.ok' }}</el-button>
+        <el-button @click="newSearchDialogVisible = false">{{ 'logistic.btn.cancel' }}</el-button>
+      </span>
+    </el-dialog> -->
 </div>
 </template>
 <script>
-import { VSimpleTable, containerInfo, selectSearch } from '@/components/index';
+import { VSimpleTable, selectSearch } from '@/components/index';
 import attachment from '@/components/base/attachment'
 import oneLine from '@/components/base/oneLine'
+import containerTable from '@/views/logistic/children/containerTable'
 
 export default {
   name: 'placeLogisticPlan',
@@ -328,27 +341,27 @@ export default {
           placeholder: 'Please enter content'
         },
         {
-          text: 'exchangeRate(￥-$)',
+          text: 'exchangeRate($-￥)',
           value: 0,
           placeholder: 'Please enter content'
         },
         {
-          text: 'exchangeRate(￥-$)',
+          text: 'exchangeRate(￥-€)',
           value: 0,
           placeholder: 'Please enter content'
         },
         {
-          text: 'exchangeRate(￥-$)',
+          text: 'exchangeRate(€-￥)',
           value: 0,
           placeholder: 'Please enter content'
         },
         {
-          text: 'exchangeRate(￥-$)',
+          text: 'exchangeRate($-€)',
           value: 0,
           placeholder: 'Please enter content'
         },
         {
-          text: 'exchangeRate(￥-$)',
+          text: 'exchangeRate(€-$)',
           value: 0,
           placeholder: 'Please enter content'
         }
@@ -392,10 +405,11 @@ export default {
   },
   components: {
     "v-simple-table": VSimpleTable,
-    "v-container-info": containerInfo,
+    // "v-container-info": containerInfo,
     "v-select-search": selectSearch,
     attachment,
-    oneLine
+    oneLine,
+    containerTable
   },
   mounted () {
     // console.log(this.$i)
