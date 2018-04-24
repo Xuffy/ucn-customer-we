@@ -189,28 +189,25 @@
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: item.id.value
+                        id: _.findWhere(item, {'key': 'id'}).value
                     }
                 });
             },
             getChildrenId(type) {
                 let arr = [];
                 _.map(this.checkedData, item => {
-                    if(!_.isUndefined(item)) console.log(_.findWhere(item, {'key': 'id'}).value)
+                    if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
                 });
-                return;
                 if(typeof type === 'string') arr.join(',')
+                return;
                 return arr;
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
-                return console.log(argId)
-                this.$router.push({
-                    name: 'inquiryCompareDetail',
+                this.$windowOpen({
+                    url: '/negotiation/compareDetail/{type}',
                     params: {   
-                        type: 'new'
-                    },
-                    query: {
+                        type: 'new',
                         ids: argId.join(',')
                     }
                 });
