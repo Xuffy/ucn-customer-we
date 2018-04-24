@@ -3,7 +3,7 @@
 
     <div class="quickLink">
       <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"
-          @click="$refs.historyModify.edit(mockData,historyData)"></h3>
+          @click="$refs.historyModify.edit(mockData,historyData, true)"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -97,7 +97,7 @@
       });
     },
     methods: {
-      save(data){
+      save(data) {
         console.log(data)
       }
     }

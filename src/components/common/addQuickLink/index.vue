@@ -60,6 +60,7 @@
     watch: {},
     mounted() {
       this.getQuickLink();
+      console.log(this.$db.common.quickLink);
     },
     methods: {
       getQuickLink() {
@@ -72,6 +73,7 @@
               return val.itemCode;
             });
             this.$store.state.quickLink.list = list;
+
           });
       },
       updateQuickLink() {
