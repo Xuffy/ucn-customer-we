@@ -164,8 +164,8 @@
       },
       getConfig() {
         this.$ajax.all([
-          this.$ajax.get(this.$apis.gridfieldsetting,{},{_cache:true}),
-          this.$ajax.get(this.$apis.get_itemfavoriteList,{},{_cache:true}),
+          this.$ajax.get(this.$apis.gridfieldsetting, {}, {_cache: true}),
+          this.$ajax.get(this.$apis.get_itemfavoriteList, {}, {_cache: true}),
         ]).then(data => {
           this.dataList = data[0];
 
@@ -229,8 +229,8 @@
       },
       getFilterColumn(dataList, checked) {
         return _.map(dataList, value => {
-          return _.mapObject(value, val => {
-            if(_.isObject(val)){
+          return _.map(value, val => {
+            if (_.isObject(val)) {
               val._hide = _.indexOf(checked, val.key) < 0;
             }
             return val;
