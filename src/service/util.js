@@ -79,10 +79,10 @@ export default {
 
         _.map(data, value => {
           _.mapObject(value, (val, key) => {
-            if (type === 'same') {
+            if (type === 'same'&&first[key]) {
               keyData[key] = first[key].value === val.value;
             } else if (type === 'def') {
-              if (first[key].value !== val.value) {
+              if (first[key]&&first[key].value !== val.value) {
                 keyData[key] = true;
               }
             }
