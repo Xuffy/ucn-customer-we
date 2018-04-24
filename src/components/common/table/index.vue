@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="table-container" ref="tableContainer" :style="{height:height + 'px'}">
+    <div class="table-container" ref="tableContainer">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
@@ -226,8 +226,9 @@
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          this.$set(val, '_checked', val._disabled ? false : value);
-          // val._checked = val._disabled ? false : value;
+          if (!val._disabled){
+            this.$set(val, '_checked', value);
+          }
           return val;
         });
         this.changeCheck();
@@ -286,6 +287,7 @@
 
           _.map(trs, (val, index) => {
             if (index % this.rowspan !== 0) return false;
+
             if (this.selection && val.firstChild.style) {
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
@@ -469,7 +471,7 @@
   }
 
   .ucn-table tbody td {
-    padding: 5px;
+    padding: 10px;
   }
 
   .ucn-table tbody td img {
