@@ -408,7 +408,7 @@ export const routerMap = [
         {
           path: 'planDetail',
           name: 'Plan Detail',
-          hidden: true,
+          hidden: false,
           meta: {
             draft: true,
             recycleBin: true,
