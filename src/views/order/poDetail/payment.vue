@@ -6,7 +6,7 @@
         </div>
         <el-table
                 class="speTable"
-                :data="paymentdata"
+                :data="paymentData"
                 height="250"
                 border
                 :summary-method="getSummaries"
@@ -26,14 +26,29 @@
     <template slot-scope="scope">
                     <div v-if="v.type==='Text'">
                         <!--有效性-->
-                        <div v-if="k===10">
-                            {{scope.row[v.prop]===1?'待确认':(scope.row[v.prop]===2?'已确认':'无效')}}
+                        <div v-if="k===11">
+<!--                            {{scope.row[v.prop]===1?'待确认':(scope.row[v.prop]===2?'已确认':'无效')}}-->
+                            <span v-if='scope.row[v.prop]===1'>
+                                待供应商确认
+                            </span>
+                            <span v-if='scope.row[v.prop]===2'>
+                                供应商已确认
+                            </span>
+                            <span v-if='scope.row[v.prop]===3'>
+                                待采购商确认
+                            </span>
+                            <span v-if='scope.row[v.prop]===4'>
+                                待采购商确认
+                            </span>
+                            <span v-if='scope.row[v.prop]===5'>
+                                无效
+                            </span>
                         </div>
                         <div v-else>
                             {{scope.row[v.prop]}}   
                         </div>
                     </div>
-                    <div v-else-if="v.type==='Date'&&v.belong==='customer'">
+                    <div v-else-if="v.type==='Date'&& v.belong==='customer'">
                             <div v-if="(scope.row.isEdit || scope.row.isNew)">
                                 <el-date-picker
                                         class="chooseDate"
@@ -85,15 +100,24 @@
 </el-table-column>
 
 <el-table-column label="Action" align="center" width="120">
-    <template slot-scope="scope">
-                    
+    <template slot-scope="scope">                  
                         <!--新增行时显示的按钮-->
                         <div v-if="scope.row.isNew">
                             <el-button type="text" :disabled="disabledBtn" @click="saveNewLine(scope.row)">保存</el-button>
                             <el-button type="text" :disabled="disabledBtn" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[10].prop]===1 || scope.row[columns[10].prop]===2">
+                            <div v-if="scope.row[columns[11].prop]===1 ">
+                                <!--处在编辑状态-->
+                                <div v-if="scope.row.isEdit">
+                                    <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
+                                    <el-button type="text" :disabled="disabledBtn" @click="cancelSaveLine(scope.row)">取消</el-button>
+                                </div>
+                                <div v-else>
+                                    <el-button type="text" :disabled="disabledBtn" @click="confirmLine(scope.row)">确认</el-button>
+                                </div>
+                            </div>
+                             <div v-else-if="scope.row[columns[11].prop]===2">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
@@ -105,22 +129,27 @@
                                 </div>
                             </div>
                             <!--作废时显示-->
-                            <div v-if="scope.row[columns[10].prop]===3">
+                            <div v-else-if="scope.row[columns[11].prop]===5">
                                 <el-button type="text" :disabled="disabledBtn" @click="recoverLine(scope.row)">恢复</el-button>
                             </div>
                         </div>
                    
+<!--
                     <div v-if="type==='simple'">
-                        <div v-if="scope.row[columns[10].prop]!==2">
+                        <div v-if="scope.row[columns[11].prop]!==2">
                             <el-button type="text"  :disabled="disabledBtn" @click="confirmLine(scope.row)">确认</el-button>
                         </div>
                     </div>
+-->
                 </template>
 </el-table-column>
 </el-table>
 </div>
 </template>
 <script>
+    /*
+    1:待采购商确认,2:采购商已确认,3:待供应商确认,4:供应商已确认,5:作废
+    */
     export default {
         name: 'payment-table',
         props: {
@@ -232,13 +261,20 @@
                         width: 150
 
                     },
+                   {
+                        label: '币种',
+                        prop: 'money',
+                        type: 'Text',
+                        width: 150
+
+                    },
                     {
                         label: '有效性',
                         prop: 'available',
                         type: 'Text'
                     },
                 ],
-                paymentdata: [{
+                paymentData: [{
                         paymentNumber: 1512547574887,
                         paymentItem: 'QC预付款',
                         estPayDate: '2018-02-23', //预计付款时间
@@ -249,7 +285,7 @@
                         estRefundAmount: '',
                         actRefundDate: '',
                         actRefundAmount: '',
-                        available: 2, //有效性,1:待确认,2:已确认,3:作废
+                        available: 1, //有效性,1:待确认,2:已确认,3:作废
                     },
                     {
                         paymentNumber: 1512547574887,
@@ -259,9 +295,9 @@
                         actPayDate: '2018-04-01', //实际付款时间
                         actAmount: 12345, //实际付款金额
                         estRefundDate: '',
-                        estRefundAmount: '',
+                        estRefundAmount: '123',
                         actRefundDate: '',
-                        actRefundAmount: '',
+                        actRefundAmount: '123',
                         available: 2, //有效性,1:待确认,2:已确认,3:作废
                     },
                     {
@@ -275,7 +311,7 @@
                         estRefundAmount: 1325456,
                         actRefundDate: '2018-03-11',
                         actRefundAmount: 213554,
-                        available: 3, //有效性,1:待确认,2:已确认,3:作废
+                        available: 5, //有效性,1:待确认,2:已确认,3:作废
                     },
                 ],
                 //用于备份data
@@ -288,7 +324,7 @@
                 row,
                 rowIndex
             }) {
-                if (row[this.columns[10].prop] === 3) {
+                if (row[this.columns[11].prop] === 3) {
                     return 'warning-row';
                 }
                 return '';
@@ -307,7 +343,7 @@
                         return;
                     } else if (index === 4 || index === 6 || index == 8 || index == 10) {
                         const values = data.map(item => {
-                            if (item[this.columns[10].prop] === 2) {
+                            if (item[this.columns[11].prop] === 2) {
                                 return Number(item[column.property])
                             }
                         });
@@ -333,8 +369,7 @@
 
             //处理顶部按钮点击
             handleClick() {
-
-                this.disabledBtn = true;
+//                this.disabledBtn = true;
                 this.paymentData.push({
                     paymentNumber: 890807,
                     paymentItem: '',
@@ -343,6 +378,7 @@
                     actPayDate: '', //实际付款时间
                     actAmount: 0, //实际付款金额
                     available: 1, //有效性,1:待确认,2:已确认,3:无效
+                    money:'',
                     isNew: true, //新增的数据全部处于新增状态
                 });
 
@@ -356,7 +392,7 @@
 
             //作废一行数据
             abandonLine(e) {
-                this.$set(e, 'available', 3);
+                this.$set(e, 'available', 5);
             },
 
             //恢复一行数据
@@ -369,6 +405,7 @@
                 let targetKey = this.columns[0].prop;
                 //先判断columns的前三个参数都不能为空
                 if (!e[this.columns[1].prop] || !e[this.columns[2].prop] || !e[this.columns[3].prop]) {
+
                     this.$message.error('XXX不能为空');
                 } else {
                     this.$set(e, 'isEdit', false);
@@ -402,7 +439,8 @@
 
             //保存新的一行
             saveNewLine(e) {
-                if (!e[this.columns[1].prop] || !e[this.columns[2].prop] || !e[this.columns[3].prop]) {
+                if (!e.estPayDate) {
+                    console.log(e.estPayDate)
                     this.$message.error('XXX不能为空');
                 } else {
                     this.$set(e, 'isNew', false);

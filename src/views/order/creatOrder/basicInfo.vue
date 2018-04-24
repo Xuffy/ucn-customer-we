@@ -231,7 +231,7 @@
         data() {
             return {
                 formItem: {
-                    orderNo: '', //必填   系统生成 不可编辑
+                    orderNo: '555555', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成 弹出框 
@@ -256,6 +256,9 @@
                     customerAgreementNo: '',
                     customerAgreementDt: '',
                     remark: '',
+                    
+                    
+                    
                 },
                 //......................表单正则
                 rules: {
