@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="table-container" ref="tableContainer" :style="{height:height + 'px'}">
+    <div class="table-container" ref="tableContainer">
       <div class="fixed-left" v-if="selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
