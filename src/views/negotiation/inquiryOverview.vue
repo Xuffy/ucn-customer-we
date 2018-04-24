@@ -142,7 +142,7 @@
                 .then(res => {
                     this.pageTotal = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;   
+                    this.tabLoad = false;
                     this.searchLoad = false; 
                 })
                 .catch(() => {
@@ -195,17 +195,19 @@
             },
             getChildrenId(type) {
                 let arr = [];
-                this.checkedData.forEach(item => {
-                    arr.push(item.id.value)
-                });
+                // _.map(this.checkedData, item => {
+                //     if(!_.isUndefined(_.findWhere(item, {'key': 'id'}))) console.log(item)
+                // });
+                // return;
                 if(typeof type === 'string') arr.join(',')
                 return arr;
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
+                return console.log(argId)
                 this.$router.push({
                     name: 'inquiryCompareDetail',
-                    params: {
+                    params: {   
                         type: 'new'
                     },
                     query: {

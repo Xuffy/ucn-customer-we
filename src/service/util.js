@@ -41,23 +41,6 @@ export default {
     Vue.prototype.$getDB = (db, data, cb) => {
       let list = [];
       db = _.values(db);
-
-      _.map(data, value => {
-        let o = [];
-        _.map(db, val => {
-          let v = value[val.key];
-          if (v) {
-            val.value = v;
-            o.push(val);
-          }
-        })
-        list.push(o);
-      })
-
-      return list;
-
-      /*let list = [];
-      db = _.values(db);
       _.map(data, (value, index) => {
         let obj = {};
         _.mapObject(value, (val, key) => {
@@ -66,13 +49,14 @@ export default {
             dbValue.value = val;
             obj[key] = dbValue;
           }
+
         });
 
         if (cb) obj = _.extend(obj, cb(obj, index));
 
         list.push(obj);
       });
-      return list;*/
+      return list;
     };
 
     /*Vue.prototype.$dataBackfill = (data, oldData) => {
@@ -95,10 +79,12 @@ export default {
 
         _.map(data, value => {
           _.mapObject(value, (val, key) => {
-            if (type === 'same' && first[key]) {
+            if (type === 'same'&&first[key]) {
               keyData[key] = first[key].value === val.value;
-            } else if (type === 'def' && first[key] && first[key].value !== val.value) {
-              keyData[key] = true;
+            } else if (type === 'def') {
+              if (first[key]&&first[key].value !== val.value) {
+                keyData[key] = true;
+              }
             }
           });
         });

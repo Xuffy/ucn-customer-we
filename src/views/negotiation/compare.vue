@@ -242,6 +242,7 @@
             },
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
+                console.log(...arg._checked = false)
                 arg = arg.concat(this.tabData);
                 this.tabData = arg;
                 this.addNew = false;
