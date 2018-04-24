@@ -25,7 +25,7 @@
             </div>
 
             <div v-else>
-              <span v-if="scope.row[item.key]._disabled || isModify" v-text="scope.row[item.key].value"></span>
+              <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
               <div v-else>
                 <el-input v-if="scope.row[item.key].type !== 'Number'" clearable
                           placeholder="Please select"
@@ -109,6 +109,7 @@
         // 初始化可编辑行
         ed = _.map(editData, value => {
           return _.mapObject(value, (val, index) => {
+            if (!_.isObject(val)) return val;
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || '';
@@ -121,7 +122,7 @@
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
-        console.log(this.dataList,'++++++')
+        console.log(this.dataList, '++++++')
 
       },
       getFilterData(data) {

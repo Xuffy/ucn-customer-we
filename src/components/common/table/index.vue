@@ -286,6 +286,7 @@
 
           _.map(trs, (val, index) => {
             if (index % this.rowspan !== 0) return false;
+
             if (this.selection && val.firstChild.style) {
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
@@ -469,7 +470,7 @@
   }
 
   .ucn-table tbody td {
-    padding: 5px;
+    padding: 10px;
   }
 
   .ucn-table tbody td img {
