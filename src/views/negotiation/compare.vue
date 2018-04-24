@@ -110,7 +110,7 @@
             onSubmit(type) { //保存Compare 
                 let arr = [];
                 this.tabData.forEach(item => {
-                    if(!item._disabled) arr.push(item.id.value)
+                    if(!item._disabled) arr.push(_findWhere(item, {'key': 'id'}).value)
                 });
 
                 if(!this.compareName) return this.$message({
@@ -158,7 +158,7 @@
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: item.id.value
+                        id: _.findWhere(item, { 'key': 'id' }).value
                     }
                 });
             },
@@ -205,7 +205,7 @@
             changeChecked(item) {
                 let arr = [];
                 item.forEach(item => {
-                    arr.push(item.id.value);
+                    arr.push(_.findWhere(item, {'key': 'id'}));
                 });
                 this.checkedArg = arr;
             },
@@ -232,7 +232,7 @@
                 } else {
                     this.checkedArg.forEach((item) => {
                         this.tabData.forEach((items, index) => {
-                            if(item === items.id.value) {
+                            if(item === _.findWhere(items, {'key': 'id'}).value.value) {
                                 items._disabled = true;
                                 this.$set(this.tabData, index, items);
                             };
@@ -242,6 +242,7 @@
             },
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
+                console.log(...arg._checked = false)
                 arg = arg.concat(this.tabData);
                 this.tabData = arg;
                 this.addNew = false;

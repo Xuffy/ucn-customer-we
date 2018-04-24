@@ -2,6 +2,7 @@ import DateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
+import router from 'service/router'
 
 export default {
   install(Vue, options) {
@@ -110,6 +111,32 @@ export default {
         });
       }
     };
+    /**
+     * $window.open
+    */
+    Vue.prototype.$windowOpen = (config) => {
+      // const {href} = router.resolve({
+      //   path: url,
+      //   query: config
+      // });
+      // window.open(href, '_blank')
+      if(_.isUndefined(config.name)) {
+          const { href } = router.resolve({
+            path: config.path,
+            query: config.query
+          });
+          window.open(href, '_blank')
+      } else {
+        const { href } = router.resolve({
+          name: config.name,
+          query: config.query,
+          params: config.params.cd
+        });
+        return console.log(href)
+        window.open(href, '_blank')
+      }
+    };
+
     /**
      * filterRemark 遍历 remark   list = json arr  remark = remark字段名
      */
