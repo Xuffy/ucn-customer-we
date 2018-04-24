@@ -29,7 +29,12 @@
                                 :label="item.label" 
                                 :prop="item.key">
                                  <div class="speDropdown">
-                                     <drop-down ref="dropDown"  v-model="parms[item.key]" :list="dropData"></drop-down>
+                                     <drop-down
+                                      ref="dropDown" 
+                                          
+                                       v-model="parms[item.key]" 
+                                     :defaultProps="defaultProps" 
+                                     :list="dropData"></drop-down>
                                 </div>
                             </el-form-item>
                          </el-col>
@@ -100,7 +105,7 @@
 
 <script>
     import {
-        dropDown
+        dropDownSingle
     } from '@/components/index'
     import {
         VTable
@@ -108,7 +113,7 @@
     export default {
         name: "SupplierSourcing",
         components: {
-            dropDown,
+            dropDown:dropDownSingle,
             VTable
         },
         props: {
@@ -160,7 +165,13 @@
                 }],
                 tabData: [],
                 selectedData:[],
-                selectNumber:[]
+                selectNumber:[],
+                 //Category下拉组件数据
+                dropData:[],
+                defaultProps:{
+                    label:'name',
+                    children:'children'
+                },
             }
         },
         methods: {
@@ -249,10 +260,18 @@
                         console.slog(res)
                   });
             },
+             getCategoryId(){
+                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
+                    this.dropData=res;
+                    console.log(res)
+                }).catch(err=>{
+                    console.log(err)
+                });
+            },
         },
         created() {
             this.get_data()
-            console.log(this.parms)
+            this.getCategoryId()
         },
         watch: {
             hideBody(n) {
