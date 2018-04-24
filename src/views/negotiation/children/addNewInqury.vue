@@ -146,7 +146,11 @@
         },
         methods: {
             addCompare() {
-                this.$emit('addInquiry', this.checkedData);
+                let arg = this.$copyArr(this.checkedData);
+                this.checkedData.forEach((item, index) => {
+                    delete arg[index]._checked;
+                });
+                this.$emit('addInquiry', arg);
             },
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
