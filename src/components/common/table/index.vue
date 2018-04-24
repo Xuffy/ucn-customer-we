@@ -15,13 +15,13 @@
       </div>
     </div>
 
-    <div class="table-container" ref="tableContainer">
+    <div class="table-container" ref="tableContainer" :style="{height:height + 'px'}">
       <div class="fixed-left" v-if="selection"
-           ref="fixedLeft" :class="{show:dataList.length}">
+           ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"/>
       </div>
       <div class="fixed-right" v-if="buttons"
-           ref="fixedRight" :class="{show:dataList.length}">
+           ref="fixedRight" :class="{show:dataColumn.length}">
         action
       </div>
 
@@ -79,8 +79,11 @@
 
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
-            <td v-for="item in totalItem" v-if="!item._hide">
-              <div v-text="item.key === '_total' ? item.label : item.value"></div>
+            <td v-if="totalItem._totalRow">
+              <div v-text="totalItem._totalRow.label"></div>
+            </td>
+            <td v-for="item in dataColumn" v-if="!item._hide">
+              <div v-text="item.value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -223,7 +226,8 @@
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          val._checked = val._disabled ? false : value;
+          this.$set(val, '_checked', val._disabled ? false : value);
+          // val._checked = val._disabled ? false : value;
           return val;
         });
         this.changeCheck();
@@ -246,6 +250,7 @@
         // todo 需过滤column
         // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
         // this.filterColumn();
+        // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
         this.updateTable();
       },
@@ -311,15 +316,6 @@
           item._checked = true;
         }
         this.$emit('change-checked', this.getSelected());
-      },
-      getTotalRow(data, cb) {
-        // if (!_.isArray(data)) {
-        //   return data;
-        // }
-        //
-        // _.map(data, val => {
-        //
-        // });
       },
       getSelected() {
         return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :

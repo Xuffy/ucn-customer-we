@@ -1,24 +1,17 @@
 export default {
-  submiter: {
-    key: '',
-    type: 'Boolean',
-    length: 10,
-    reg: '',
-    state: '',
-  },
   id: {
     _hide: true,
-  },
-  descripition: {
-    key: '',
-    type: 'Array',
-    length: 10,
-    reg: '',
-    state: '',
   },
   time: {
     key: '',
     type: 'Number',
+    length: 10,
+    reg: '',
+    state: '',
+  },
+  descripition: {
+    key: '',
+    type: 'Array',
     length: 10,
     reg: '',
     state: '',
@@ -30,6 +23,13 @@ export default {
     reg: '',
     state: '',
     _image: true,
+  },
+  submiter: {
+    key: '',
+    type: 'Boolean',
+    length: 10,
+    reg: '',
+    state: '',
   },
   actions: {
     key: '',
