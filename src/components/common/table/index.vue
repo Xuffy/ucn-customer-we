@@ -226,8 +226,9 @@
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          this.$set(val, '_checked', val._disabled ? false : value);
-          // val._checked = val._disabled ? false : value;
+          if (!val._disabled){
+            this.$set(val, '_checked', value);
+          }
           return val;
         });
         this.changeCheck();
