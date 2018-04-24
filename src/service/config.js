@@ -12,7 +12,7 @@ export default {
 
       BASE_JML:'http://dev.umeta-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
-      BASE_HSM:'http://192.168.51.27:8080'
+      BASE_HSM:'http://dev.uwarehouse.ucnholding.com:18100'
     },
     develop: {
       BASE_API: 'http://192.168.11.215:30704'

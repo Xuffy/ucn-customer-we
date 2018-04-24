@@ -66,7 +66,7 @@
             <div class="btns" v-if="!hideBtn">
                 <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                 <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
                 <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                 <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
@@ -394,6 +394,19 @@
 
             createInquiry(){
                 console.log(1234)
+            },
+
+            //对比product
+            compareProducts(){
+                let id='';
+                this.selectList.forEach((v,k)=>{
+                    if(k===this.selectList.length-1){
+                        id+=v.id.value;
+                    }else{
+                        id+=(v.id.value+',');
+                    }
+                });
+                this.windowOpen('/product/compareDetail',{id:id});
             },
 
             recover(){

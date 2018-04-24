@@ -1,4 +1,4 @@
-const version = ['/web/v1', '/api/v1', '/web/v3'];
+const version = ['/web/v1', '/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
@@ -82,6 +82,7 @@ const apis = {
   add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
+  get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
 
 
   post_supplier_addbookmark:['/purchase/supplier/bookmark','BASE_CS_cgs'],
