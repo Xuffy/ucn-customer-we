@@ -1,7 +1,7 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} </h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
@@ -301,7 +301,7 @@
                 this.switchStatus = !this.switchStatus;
             },
             basicInfoBtn(item) { //Basic info 按钮创建
-                if(_.findWhere(item, {'key':'id'}).value && this.statusModify) return [{
+                if(item.id.value && this.statusModify) return [{
                     label: 'Modify',
                     type: 'modify'
                 }, { 
@@ -309,7 +309,7 @@
                     type: 'histoty'
                 }];
 
-                if(_.findWhere(item, {'key':'id'}).value) return [{ 
+                if(item.id.value) return [{ 
                     label: 'Histoty',
                     type: 'histoty'
                 }];

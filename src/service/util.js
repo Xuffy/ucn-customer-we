@@ -142,26 +142,19 @@ export default {
      * $window.open
     */
     Vue.prototype.$windowOpen = (config) => {
-      // const {href} = router.resolve({
-      //   path: url,
-      //   query: config
-      // });
-      // window.open(href, '_blank')
-      if(_.isUndefined(config.name)) {
-          const { href } = router.resolve({
-            path: config.path,
-            query: config.query
-          });
-          window.open(href, '_blank')
-      } else {
-        const { href } = router.resolve({
-          name: config.name,
-          query: config.query,
-          params: config.params.cd
+      const {href} = router.resolve({
+        path: '/',
+      });
+      let url = {};
+      if (!_.isEmpty(config.params) && !config.params.length) {
+        _.mapObject(config.params, (val, key) => {
+          if (config.url.indexOf(`{${key}}`) < 0) {
+            url[key] = val;
+          }
         });
-        return console.log(href)
-        window.open(href, '_blank')
-      }
+      };
+      url = {url: _.template(`${window.location.host}${href}${config.url}`)(config.params || ''), query: url};
+      return window.open(url, '_blank');
     };
 
     /**
