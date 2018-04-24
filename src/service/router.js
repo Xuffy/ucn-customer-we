@@ -120,7 +120,7 @@ export const routerMap = [
           component: () => import('../views/product/compare/overview'),
         },
         {
-          path: 'compareDetail/:id',
+          path: 'compareDetail/:type',
           name: 'Compare Detail',
           hidden: true,
           meta: {

@@ -260,8 +260,10 @@
                         this.selectList=[];
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -300,7 +302,21 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
-                this.$emit('handleOK',this.selectList);
+                // this.selectList.forEach(v=>{
+                //     v._disabled=false;
+                // });
+
+                let arr=this.$copyArr(this.selectList);
+                arr.forEach(v=>{
+                    v._disabled=false;
+                });
+
+                this.tableDataList.forEach(v=>{
+                    v._checked=false;
+                });
+
+                this.$emit('handleOK',arr);
+                this.selectList=[];
             },
             cancel(){
                 this.$emit('handleCancel');
@@ -331,8 +347,10 @@
                         });
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v.id.value){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -341,11 +359,11 @@
                     }).catch(err=>{
                         console.log(err)
                     });
-                }else{
+                }
+                else{
                     this.$ajax.post(this.$apis.get_buyerProductList,{
                         recycle:false
                     }).then(res=>{
-                        console.log(res.datas)
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';
@@ -354,12 +372,14 @@
                             }
                             return e;
                         });
-                        console.log(this.disabledLine,'disabledLine')
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v.id.value){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
+                                        m._checked=true;
                                     }
                                 })
                             })
@@ -402,13 +422,21 @@
             compareProducts(){
                 let id='';
                 this.selectList.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
                     if(k===this.selectList.length-1){
-                        id+=v.id.value;
+                        id+=item.value;
                     }else{
-                        id+=(v.id.value+',');
+                        id+=(item.value+',');
                     }
                 });
-                this.windowOpen('/product/compareDetail',{id:id});
+
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        id:id,
+                        type:'new'
+                    }
+                });
             },
 
             recover(){
@@ -432,8 +460,10 @@
                         });
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v.id.value){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -485,7 +515,21 @@
                 }else{
                     this.disabledCompare=true;
                 }
-            }
+            },
+            disabledLine(n){
+                if(n.length>0){
+                    n.forEach(v=>{
+                        let id=_.findWhere(v,{key:'id'}).value;
+                        this.tableDataList.forEach(m=>{
+                            let newId=_.findWhere(m,{key:'id'}).value;
+                            if(id===newId){
+                                this.$set(m,'_disabled',true);
+                            }
+                        })
+                    })
+                    console.log(this.tableDataList,'this.tableDataList')
+                }
+            },
         }
     }
 </script>
