@@ -26,7 +26,7 @@
                 :data="tableDataList"
                 :buttons="[{label: 'detail', type: 1}]"
                 @action="btnClick"
-                :disabledLine="disabledLine"
+                @change-checked="changeChecked"
                 ></v-table>
         <div class="footBtn">
             <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
@@ -38,6 +38,7 @@
                     :title="addProductTitle"
                     :disabledOkBtn="false"
                     :hideBtn="true"
+                    :disabledLine="disabledLine"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
 
@@ -50,15 +51,6 @@
                 <!--<el-checkbox :label="$t('product.page.hideTheSame')"></el-checkbox>-->
                 <!--<el-checkbox :label="$t('product.page.highlightTheDifference')"></el-checkbox>-->
             <!--</el-checkbox-group>-->
-        <!--</div>-->
-        <!--<div>-->
-            <!--<v-simple-table-->
-                    <!--class="speTable"-->
-                    <!--:data.sync="tableDataList"-->
-                    <!--:column="dataColumn"-->
-                    <!--@sort-change="getSort"-->
-                    <!--@page-change="pageChange">-->
-            <!--</v-simple-table>-->
         <!--</div>-->
     </div>
 </template>
@@ -81,6 +73,8 @@
                 tableDataList:[],       //表格数据展示
                 addProductTitle:'哇哈哈',
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
+                selectList:[],          //保存选择的数剧
+
 
                 //弹出框显示状态
                 addProductDialogVisible:false,
@@ -94,7 +88,8 @@
         methods:{
             getList() {
                 let id=[];
-                this.$route.query.id.split(',').forEach(v=>{
+                console.log(this.$route)
+                this.$route.params.id.split(',').forEach(v=>{
                     id.push(Number(v));
                 });
                 this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
@@ -106,6 +101,7 @@
                         }
                         return e;
                     });
+                    this.disabledLine=this.tableDataList;
                 }).catch(err=>{
 
                 });
@@ -113,6 +109,10 @@
 
             btnClick(e){
                 this.windowOpen('/product/sourcingDetail',{id:e.id.value});
+            },
+
+            changeChecked(e){
+                this.selectList=e;
             },
 
 
@@ -128,19 +128,23 @@
                         type: 'warning'
                     });
                 }else{
-                    console.log(e)
-                    console.log(this.tableDataList)
+                    e.forEach(v=>{
+                        this.$set(v,'_checked',false);
+                        this.tableDataList.push(v);
+                    })
+                    this.addProductDialogVisible=false;
                 }
             },
 
             //保存该compare list
             saveCompare(){
-                this.$router.push({
-                    path:'/product/compareDetail',
-                    query:{
-                        isAdd:true
-                    }
-                });
+                console.log(this.selectList)
+                // this.$router.push({
+                //     path:'/product/compareDetail',
+                //     query:{
+                //         isAdd:true
+                //     }
+                // });
             },
 
             handleClick(e){

@@ -332,7 +332,7 @@
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    if(m.id.value===v.id.value){
                                         m._disabled=true;
                                     }
                                 })
@@ -345,6 +345,7 @@
                     this.$ajax.post(this.$apis.get_buyerProductList,{
                         recycle:false
                     }).then(res=>{
+                        console.log(res.datas)
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';
@@ -353,10 +354,11 @@
                             }
                             return e;
                         });
+                        console.log(this.disabledLine,'disabledLine')
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    if(m.id.value===v.id.value){
                                         m._disabled=true;
                                     }
                                 })
@@ -431,7 +433,7 @@
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    if(m.id.value===v.id.value){
                                         m._disabled=true;
                                     }
                                 })
