@@ -186,16 +186,16 @@
                 }
             },
             detail(item) {
-                // this.$windowOpen({
-                //     name: 'sdasd',
-                //     query: {
-                //         id: ''
-                //     },
-                //     params: {
-                //         cd: ''
-                //     }
-                // })
-                // return;
+                this.$windowOpen({
+                    name: 'inquiryCompareDetail',
+                    query: {
+                        id: '00'
+                    },
+                    params: {
+                        cd: '00'
+                    }
+                })
+                return;
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {

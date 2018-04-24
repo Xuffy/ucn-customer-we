@@ -231,13 +231,12 @@
                     });
                 } else {
                     this.checkedArg.forEach((item) => {
-                        console.log(item)
-                        // this.tabData.forEach((items, index) => {
-                        //     if(item === _.findWhere(items, {'key': 'id'}).value.value) {
-                        //         items._disabled = true;
-                        //         this.$set(this.tabData, index, items);
-                        //     };
-                        // });
+                        this.tabData.forEach((items, index) => {
+                            if(item === _.findWhere(items, {'key': 'id'}).value.value) {
+                                items._disabled = true;
+                                this.$set(this.tabData, index, items);
+                            };
+                        });
                     });
                 };
             },
