@@ -141,11 +141,15 @@
             addCompare() {
                 let arg = this.$copyArr(this.checkedData);
                 let arr = [];
-                arg.forEach((item, index) => {
-                    delete item._checked;
-                    if(!item._disabled) arr.push(item);
-                });
-                this.$emit('addInquiry', arr);
+                if(_.isObject(arg)) {
+                    arg.forEach((item, index) => {
+                        delete item._checked;
+                        if(!item._disabled) arr.push(item);
+                    });
+                    this.$emit('addInquiry', arr);
+                } else {
+                    this.$emit('addInquiry', arg);
+                }
             },
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
