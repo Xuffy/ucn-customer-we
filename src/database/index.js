@@ -9,6 +9,8 @@ import supplier from './supplier/index'
 import setting from './setting/index';
 import common from './common/index';
 
+import inbound from './warehouse/index';
+
 const db = {
   common,
   workbench,
@@ -17,7 +19,8 @@ const db = {
   logistic,
   order,
   supplier,
-  setting
+  setting,
+  inbound
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {

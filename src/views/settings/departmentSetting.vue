@@ -111,6 +111,11 @@
         </div>
         <div class="footer">
             <div class="title">Belonging Users</div>
+            <div class="btns">
+                <el-button @click="addUsers">Add</el-button>
+                <el-button>Invite</el-button>
+                <el-button>Download (all)</el-button>
+            </div>
             <div class="content">
                 <el-form ref="userData" :model="userData" label-width="100px">
                     <el-row>
@@ -153,8 +158,6 @@
                 <div class="btn">
                     <el-button @click="searchUser" :loading="disabledSearch" class="serachBtn" type="primary">{{$i.departmentSetting.search}}</el-button>
                 </div>
-
-
                 <v-table
                         class="speTable"
                         ref="vTable"
@@ -162,8 +165,6 @@
                         :buttons="setButton"
                         @change-checked="changeChecked"
                         @action="btnClick"></v-table>
-
-
             </div>
         </div>
 
@@ -192,6 +193,37 @@
                 <!--<el-button type="primary" @click="editUserVisible = false">下架产品</el-button>-->
             <!--</span>-->
         </el-dialog>
+
+        <el-dialog
+                class="speDialog"
+                title="Add New User"
+                :visible.sync="addUserVisible"
+                width="60%">
+            <el-form :model="addUser">
+                <el-row>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item label="活动名称" :label-width="formLabelWidth">
+                            <el-input v-model="addUser.name" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <!--<el-form-item label="活动区域" :label-width="formLabelWidth">-->
+                    <!--<el-select v-model="addUser.region" placeholder="请选择活动区域">-->
+                        <!--<el-option label="区域一" value="shanghai"></el-option>-->
+                        <!--<el-option label="区域二" value="beijing"></el-option>-->
+                    <!--</el-select>-->
+                <!--</el-form-item>-->
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addUserVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addUserVisible = false">确 定</el-button>
+            </div>
+            <!--<span slot="footer" class="dialog-footer">-->
+            <!--<el-button @click="editUserVisible = false">取 消</el-button>-->
+            <!--<el-button type="primary" @click="editUserVisible = false">下架产品</el-button>-->
+            <!--</span>-->
+        </el-dialog>
     </div>
 </template>
 
@@ -210,6 +242,7 @@
                 //基础配置
                 disabledSearch:false,
                 editUserVisible:false,
+                addUserVisible:false,
                 formLabelWidth:'100px',
                 allowRoleGetData:false,             //是否允许切换role的选中状态来获取数据
                 /**
@@ -261,6 +294,17 @@
                     id: 0,
                     deptId: 0,
                     roleIds: 0,
+                    userName: "string",
+                    lang: "string",
+                    email: "string",
+                    tel: "string",
+                    gender: 0,
+                    birthday: "string",
+                    remark: "string"
+                },
+                addUser:{
+                    deptId: 0,
+                    roleId: 0,
                     userName: "string",
                     lang: "string",
                     email: "string",
@@ -927,6 +971,9 @@
                     //enable/disabled
                 }
             },
+            addUsers(){
+                this.addUserVisible=true;
+            },
 
             searchUser(){
                 let checkedNode=this.$refs.roleTree.getCheckedNodes(true);
@@ -1064,5 +1111,8 @@
     }
     .footer .btn button{
         padding: 9px 25px !important;
+    }
+    .footer .btns{
+        margin-top: 5px;
     }
 </style>

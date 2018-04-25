@@ -3,8 +3,7 @@
     <el-row>
       <el-col :span="16">&nbsp;</el-col>
       <el-col :span="8" style="text-align: right;cursor: pointer">
-        <v-filter-column :data.sync="columnList">
-        </v-filter-column>
+        <v-filter-column :data.sync="columnList"></v-filter-column>
       </el-col>
     </el-row>
     <el-table

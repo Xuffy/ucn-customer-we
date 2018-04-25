@@ -18,7 +18,6 @@
                             :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
-                            :height="200"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
@@ -437,6 +436,8 @@
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 parentNode.details = this.dataFilter(this.newProductTabData);
+                console.log(this.$filterModify(parentNode))
+                return;
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, parentNode)
                 .then(res => {

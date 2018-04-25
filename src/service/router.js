@@ -120,7 +120,7 @@ export const routerMap = [
           component: () => import('../views/product/compare/overview'),
         },
         {
-          path: 'compareDetail',
+          path: 'compareDetail/:type',
           name: 'Compare Detail',
           hidden: true,
           meta: {
@@ -583,7 +583,7 @@ export const routerMap = [
       name: 'draft',
       redirect: '/draft/index',
       noDropdown: true,
-         hidden: true,
+      hidden: true,
       children: [
         {
           path: 'index',
@@ -642,8 +642,18 @@ export const routerMap = [
                     recycleBin: true,
                     log: true,
                 },
-                component: () => import('../views/sellerWarehouse/inboundOverview.vue'),
-            }
+                component: () => import('../views/sellerWarehouse/inbound/inboundOverview.vue'),
+            },
+            {
+                path:'createInbound',
+                name:'create Inbound',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inbound/createInbound'),
+            },
         ]
     },
   ]

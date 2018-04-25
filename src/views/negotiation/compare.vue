@@ -12,7 +12,7 @@
             <div class="box-l">
                 <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i.baseText.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i.baseText.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ $i.baseText.delete }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})` }}</el-button>
                 <el-checkbox-group v-model="ChildrenCheckList" size="mini">
                     <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
                     <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
@@ -50,7 +50,6 @@
                 compareName: '',
                 tabLoad: false,
                 tabData: [],
-                checkList: [],
                 options:[{
                     label:'wwww.baidu.com',
                     id:'1'
@@ -62,7 +61,8 @@
                 compareType: '',
                 params: {
                     ps: 10,
-                    pn: 1
+                    pn: 1,
+                    recycleCustomer: 0
                 },
                 argDisabled: []
             }
@@ -231,29 +231,32 @@
                         });          
                     });
                 } else {
-                    // this.checkedArg.forEach((item) => {
-                        
-                    // });
-                    console.log(_.findWhere(this.checkedArg, {'key': 'id'}));
-                    return;
-                    this.tabData.forEach((items, index) => {
-                        
-                        if(_.findWhere(item, {'key': 'id'}.value) === _.findWhere(items, {'key': 'id'}).value) {
+                    _.map(this.tabData, (items, index) => {
+                        if(items._checked) {
                             items._disabled = true;
                             this.$set(this.tabData, index, items);
-                        };
+                        }
                     });
                 };
             },
             mapTabData() {
                 let arr = [];
                 _.map(this.tabData, item => {
-                    arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 return arr;
             },
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
+                _.map(arg, items => {
+                    _.map(this.tabData, item => {
+                        if(_.findWhere(items, {'key': 'id'}).value === _.findWhere(item, {'key': 'id'}).value) {
+                            delete item._disabled;
+                            console.log(items)
+                        }
+                    });
+                });
+                return;
                 arg = arg.concat(this.tabData);
                 this.tabData = arg;
                 this.addNew = false;

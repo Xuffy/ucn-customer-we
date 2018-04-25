@@ -64,5 +64,11 @@
   "downloadTheProduct":"Download The Product",
   "uploadProduct":"Upload Product",
   "ok":"OK",
-  "cancel":"Cancel"
+  "cancel":"Cancel",
+  "accept":"Accept",
+  "addNew":"Add New",
+
+  "hideTheSame":"Hide The Same",
+  "highlightTheDifferent":"Highlight the Different",
+  "saveTheCompare":"Save The compare"
 }
