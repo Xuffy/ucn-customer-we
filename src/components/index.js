@@ -1,3 +1,5 @@
+// TODO 组件命名请以V开头
+
 import VTable from './common/table/index';
 import VTableFilter from './common/table/filter';
 import VSimpleTable from './common/table/simple';
@@ -12,6 +14,7 @@ import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
+import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
 import VViewPicture from './common/viewPicture/index';
 // import product from '../views/product/addProduct';
@@ -32,6 +35,7 @@ export {
   VTableFilter,
   VSimpleTable,
   VComplexTable,
+  VMessageBoard,
   dropDown,
   Expand,
   FilterColumn,

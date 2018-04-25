@@ -96,7 +96,11 @@
       getList() {
         this.$ajax.get(this.$apis.get_listTest, {}, {_cache: true}).then((data) => {
           // this.dataList = this.$table.setHighlight(this.$getDB(this.$db.workbench.pending, data));
-          this.dataList = this.$getDB(this.$db.workbench.pending, data);
+          this.dataList = this.$getDB(this.$db.workbench.pending, data, (item, index) => {
+
+            // item._disabled = true;
+            return item;
+          });
           this.totalRow = this.$getDB(this.$db.workbench.pending, [data[0]], item => {
             item._totalRow = {label: '总计'};
             return item;

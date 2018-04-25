@@ -43,7 +43,7 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
-  import {VHistoryModify} from '@/components/index';
+  import {VHistoryModify, VMessageBoard} from '@/components/index';
   import testData from './test'
 
   export default {
@@ -61,8 +61,15 @@
       VTableData,
       VBasicInfo,
       VHistoryModify,
+      VMessageBoard,
     },
     mounted() {
+
+      this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
+
+      });
+
+
       this.mockData = this.$getDB(
         this.$db.inquiryOverview.productInfo,
         this.$refs.historyModify.getFilterData([this.testData[0]]),
@@ -88,13 +95,13 @@
       const h = this.$createElement;
       this.$notify.closeAll();
 
-      this.$notify({
+      /*this.$notify({
         title: 'Wellcome! Please set your basic info',
         duration: 0,
         offset: 60,
         dangerouslyUseHTMLString: true,
         message: h(VBasicInfo)
-      });
+      });*/
     },
     methods: {
       save(data) {
