@@ -112,6 +112,10 @@ export default {
       }
     };
     /**
+     * 
+    */
+
+    /**
      * $window.open
     */
     Vue.prototype.$windowOpen = (config) => {

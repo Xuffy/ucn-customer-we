@@ -21,7 +21,7 @@
                                  :prop="item.key">
                                 <el-input                       
                                 v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit  placeholder=""></el-input>
-                                <i class="el-icon-more-outline" style='fontSize:20px' @click='dialogEdit'></i>
+                                <i class="el-icon-more-outline" style='fontSize:20px'  @click='dialogEdit'></i>
                             </el-form-item>                         
                              <el-form-item class="form-list"
                                    v-if='item.type=="datepicker"'
@@ -66,7 +66,6 @@
                  </el-form>
              </div>
                <el-dialog :visible.sync="dialogEditDiv" width='70%'>
-
                 </el-dialog>
          </div>  
 </template>

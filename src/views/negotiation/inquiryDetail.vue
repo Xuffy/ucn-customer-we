@@ -18,7 +18,6 @@
                             :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
-                            :height="200"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"

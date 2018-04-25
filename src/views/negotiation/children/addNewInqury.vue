@@ -25,15 +25,6 @@
                         :searchLoad="searchLoad"
                     />
                 </div>
-                <div class="fn">
-                    <div class="viewBy">
-                        <span>{{ $i.baseText.viewBy }}&nbsp;</span>
-                        <el-radio-group v-model="viewByStatus"  size="mini">
-                            <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
-                            <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
-                        </el-radio-group>
-                    </div>
-                </div>
                 <v-table 
                     :data="tabData" 
                     @change-checked="changeChecked"
@@ -51,7 +42,7 @@
                 />
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">{{ $i.baseText.cancel }}</el-button>
-                <el-button type="primary" @click="addCompare">{{ $i.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="addCompare">{{ $i.baseText.ok }}</el-button>
             </span>
         </el-dialog>
     </div>
@@ -99,16 +90,12 @@
                     recycleCustomer: 0
                 },
                 tabLoad:false,
-                pageTotal: 0,
-                _id: ''
+                pageTotal: 0
             }
         },
         components: {
             'select-search': selectSearch,
             'v-table': VTable
-        },
-        created() {
-            this.viewByStatus = 0;
         },
         props: {
             value: {
@@ -135,9 +122,6 @@
             }
         },
         watch: {
-            viewByStatus() {
-                this.gettabData();
-            },
             params: {
                 handler(val, oldVal) {
                     this.gettabData();
@@ -147,24 +131,19 @@
             status(val) {
                 this.params.statuses = val;
             },
-            argDisabled(val) {
-                _.map(val, id => {
-                    _.map(this.tabData, res => {
-                        if(id === _.findWhere(res, { 'key': 'id'}).value) {
-                            res._checked = false;
-                            res._disabled = true;
-                        }
-                    });
-                })
+            value() {
+                this.gettabData();
             }
         },
         methods: {
             addCompare() {
                 let arg = this.$copyArr(this.checkedData);
-                this.checkedData.forEach((item, index) => {
-                    delete arg[index]._checked;
+                let arr = [];
+                arg.forEach((item, index) => {
+                    delete item._checked;
+                    if(!item._disabled) arr.push(item);
                 });
-                this.$emit('addInquiry', arg);
+                this.$emit('addInquiry', arr);
             },
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
@@ -176,19 +155,21 @@
             gettabData() {
                 let url, column;
                 this.tabLoad = true;
-                if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.POST_INQIIRY_LIST;
-                    column = this.$db.inquiryOverview.viewByInqury;
-                } else {
-                    url = this.$apis.POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
-                };
-                this.$ajax.post(url, this.params)
+                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;   
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
+                    let arr = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    _.map(this.argDisabled, id => {
+                        _.map(arr, (items, index) => {
+                            if(_.findWhere(items, {'key': 'id'}).value + '' === id + '') {
+                                items._disabled = true;
+                                items._checked = true;
+                            }
+                        });
+                    });
+                    this.tabData = arr;
                 })
                 .catch(() => {
                     this.searchLoad = false; 
