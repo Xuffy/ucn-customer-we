@@ -108,7 +108,9 @@
             },
             argDisabled: {
                 type: Array,
-                default: []
+                default: () => {
+                    return [];
+                }
             }
         },
         computed: {
@@ -211,21 +213,6 @@
                 });
                 if(typeof type === 'string') arr.join(',')
                 return arr;
-            },
-            toCompare() {
-                let argId = this.getChildrenId('str');
-                this.$router.push({
-                    name: 'inquiryCompareDetail',
-                    params: {
-                        type: 'new'
-                    },
-                    query: {
-                        ids: argId.join(',')
-                    }
-                });
-            },
-            pageChange(No) {
-                console.log(No)
             },
             handleSizeChange(val) {
                 this.params.ps = val;
