@@ -118,6 +118,10 @@
             selectionRadio: {
                 type: Boolean,
                 default: false
+            },
+            argDisabled: {
+                type: Array,
+                default: []
             }
         },
         computed: {
@@ -143,6 +147,16 @@
             status(val) {
                 this.params.statuses = val;
             },
+            argDisabled(val) {
+                _.map(val, id => {
+                    _.map(this.tabData, res => {
+                        if(id === _.findWhere(res, { 'key': 'id'}).value) {
+                            res._checked = false;
+                            res._disabled = true;
+                        }
+                    });
+                })
+            }
         },
         methods: {
             addCompare() {

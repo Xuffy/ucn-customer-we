@@ -88,7 +88,7 @@
     import responsibility from '../creatOrder/responsibility.vue'
     import basicinfo from '../creatOrder/basicinfo.vue'
     import VProduct from '@/views/product/addProduct';
-    import attchment from '../creatOrder/attchment'
+    import attchment from '../creatOrder/attachment'
     import VCaculate from '../creatOrder/caculate'
     import VPayment from './payment.vue'
 
@@ -122,12 +122,14 @@
                 switchStatus: false,
                 Data: [],
                 tabData: [],
+                orderId:this.$route.query.orderId,
                 loading: false, //表格加载
                 id_type: '',
                 historyColumn: {},
                 newProductTabData: [],
                 productTabData: [],
                 tableLoad: false,
+                oSwitch: false, //VHistory 组件开关状态
             }
         },
         methods: {
@@ -150,7 +152,7 @@
             //........获取数据
             get_data() {
                 this.$ajax.get(this.$apis.detail_order, {
-                        id: this.$route.query.id
+                        id: this.$route.query.orderId
                     })
                     .then((res) => {
                         var copy = Object.assign({}, res);
@@ -162,6 +164,14 @@
                         this.$refs.responsibility.tableData = res.orderResponsibilityList
                         //..........attachment
                         //..........productinfo
+                        this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
+                            item => {
+                                return item;
+                            });
+                        this.productTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
+                            item => {
+                                return item;
+                            });
                         //..........calculate
                     })
                     .catch((res) => {
@@ -171,7 +181,7 @@
             //.........按钮操作
             producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInfo;
+                this.historyColumn = this.$db.order.productInfo;
                 switch (type) {
                     case 'histoty':
                         this.fnBasicInfoHistoty(data, 'productInfo');
@@ -180,7 +190,6 @@
 
                         this.oSwitch = true;
                         this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
-                        console.log(data)
                         break;
                 }
             },
@@ -226,47 +235,39 @@
                     tabData.push(Object.assign({}, items))
                 });
                 this.newProductTabData = tabData;
-                console.log(this.newProductTabData)
                 this.dialogAddproduct = false;
             },
             fnBasicInfoHistoty(item, type, id) { //查看历史记录
                 let column;
-                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                        id: item.id.value
+                this.$ajax.post(this.$apis.get_order_history, {
+                        skuId: item.id.value,
+                        orderId:this.orderId
                     })
                     .then(res => {
-                        //                        console.log(res)
                         let arr = [];
-                        column = this.$db.inquiryOverview.productInfo;
+                        column = this.$db.order.productInfo;
                         this.newProductTabData.forEach((items, index) => {
                             if (items.id.value === id) {
                                 arr.push(items);
                             }
                         });
-                        this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
+                        this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)));
                     });
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
-
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                         id: 16
                     })
                     .then(res => {
                         //Product Info
-
+                        console.log(res)
                         this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
                             item => {
-                                // if (item.updateDt) {
-                                //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                                // }
                                 return item;
                             });
 
                         this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
                             item => {
-                                // if (item.updateDt) {
-                                //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                                // }
                                 return item;
                             });
                         this.tableLoad = false;
@@ -291,8 +292,8 @@
 
         },
         created() {
-            //            this.get_data()
-            //            this.getInquiryDetail()
+            this.get_data()
+//            this.getInquiryDetail()
         },
         watch: {
 

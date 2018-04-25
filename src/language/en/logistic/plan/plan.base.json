@@ -39,6 +39,22 @@
       "remark": "Remark",
       "attachment": "Attachment",
       "exchangeRate": "Exchange Rate"
+    },
+    "transportInfoTitle": "Transport Info",
+    "transportInfo": {
+      "transportCompany": "Transport Company",
+      "vesselName": "Vessel Name",
+      "vesselNo": "Vessel No",
+      "departureCountry": "Departure Country",
+      "departurePort": "Departure Port",
+      "destinationCountry": "Destination Country",
+      "destinationPort": "Destination Port"
+    },
+    "containerInfoTitle": "Container Info",
+    "containerInfo": {
+      "add": "Add",
+      "delete": "Delete",
+      "containerNo": "Container No"
     }
   }
 }
