@@ -24,7 +24,7 @@
                         </el-radio-group>
                     </div>
                     <div class="search">
-                        <select-search :selectHide="false" class="search"  @inputChange="getList"></select-search>
+                        <select-search :selectHide="false" class="search"  @inputChange="getList" :searchLoad="searchLoad"></select-search>
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -36,6 +36,7 @@
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
+                                value-format="timestamp"
                                 :picker-options="dateOptions">                       
                         </el-date-picker>
                     </div>
@@ -44,9 +45,17 @@
             <br>
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
-                <v-table :data="tableDataList" 
-                 :loading="tabLoad" @action="action" :buttons="setButton"
+                <v-table :data="tableDataList" data-key="" 
+                :loading="tabLoad" @action="action" :buttons="setButton"
                 ></v-table>
+                <!-- <el-pagination
+                    @size-change="handleSizeChange"
+                    :currentPage.sync="params.pn"
+                    :page-sizes="pazeSize"
+                    :page-size="params.ps"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="pageTotal"
+                /> -->
             </div>
         </div>
     </div>
@@ -65,6 +74,9 @@
             return{
                 status:-1,
                 time:1523959983,
+                pazeSize: [10, 20, 30, 40, 50, 100],
+                pageTotal:0,
+                searchLoad: false,
                 viewByStatus:'',
                 date:'',
                 tabLoad:false,
@@ -111,25 +123,33 @@
                 console.log(this.date)
             }
         },
-        methods:{    
+        methods:{   
+            inputEnter(val) {
+                if(!val.keyType) return this.$message('请选中搜索类型');
+                if(!val.key) return this.$message('搜索内容不能为空');
+                this.params.keyType = val.keyType;
+                this.params.key = val.key;
+                this.searchLoad = true;
+            }, 
             getList(item){
+                this.tabLoad = true;
                 if(item){
                     const params ={
-                        "conditions": {
-                            "orderEntryEndDt":"",
-                            "orderEntryStartDt": "",
-                            "orderNoLike": item.key,
-                            "orderType": this.viewByStatus,
-                            "overdue": this.status  //-1所有 0未逾期 1已逾期
+                        conditions: {
+                            orderEntryEndDt:"",
+                            orderEntryStartDt: "",
+                            orderNoLike: item.key,
+                            orderType: this.viewByStatus,
+                            overdue: this.status  //-1所有 0未逾期 1已逾期
                         },
-                        "pn": 1,  //每页大小
-                        "ps": 50, //页码
-                        "sorts": [
+                        pn: 1,  //每页大小
+                        ps: 50, //页码
+                        sorts: [
                             {
-                            "nativeSql": true,
-                            "orderBy": "id",
-                            "orderType": "desc",
-                            "resultMapId": ""
+                            nativeSql: true,
+                            orderBy: "id",
+                            orderType: "desc",
+                            resultMapId: ""
                             }
                         ]
                     }
@@ -140,6 +160,9 @@
                         //     val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
                         //     return val;
                         // });
+                        this.pageTotal = res.tc;
+                        this.tabLoad = false; 
+                        this.searchLoad = false; 
                         this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
                             item.waitPayment = item.planPayAmount-item.actualPayAmount;
                             item.waitReceipt = item.planReceiveAmount-item.actualReceiveAmount;
@@ -148,21 +171,21 @@
                     }); 
                 }else{
                     const params = {
-                        "conditions": {
-                            "orderEntryEndDt":"",
-                            "orderEntryStartDt": "",
-                            "orderNoLike": '',
-                            "orderType": this.viewByStatus,
-                            "overdue": this.status  //-1所有 0未逾期 1已逾期
+                        conditions: {
+                            orderEntryEndDt:"",
+                            orderEntryStartDt: "",
+                            orderNoLike: '',
+                            orderType: this.viewByStatus,
+                            overdue: this.status  //-1所有 0未逾期 1已逾期
                         },
-                        "pn": 1,  //每页大小
-                        "ps": 50, //页码
-                        "sorts": [
+                        pn: 1,  //每页大小
+                        ps: 50, //页码
+                        sorts: [
                             {
-                            "nativeSql": true,
-                            "orderBy": "id",
-                            "orderType": "desc",
-                            "resultMapId": ""
+                            nativeSql: true,
+                            orderBy: "id",
+                            orderType: "desc",
+                            resultMapId: ""
                             }
                         ]
                     }
@@ -240,7 +263,11 @@
                     {label:'urging payment',type:1},
                     {label:'detail',type:2}
                 ]
-            }
+            },
+            handleSizeChange(val) {
+                this.params.ps = val;
+            },
+
         },
         created(){
             // this.viewByStatus = 0;

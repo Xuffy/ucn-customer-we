@@ -38,5 +38,6 @@ export default _.extend(
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
   require(`./${lang}/logistic/plan/basicInfo.pending`),
   {logs: require(`./${lang}/logs/logs.table`)},
-  {logBasic: require(`./${lang}/logs/logs.basic`)}
+  {logBasic: require(`./${lang}/logs/logs.basic`)},
+  {track: require(`./${lang}/track/trackBysku`)}
 )
