@@ -66,6 +66,25 @@
       "totalQuantityOfOuterCartonsInContainer": "Total Quantity of Outer Cartons in Container",
       "totalSkuPriceInContainer": "Total SKU Price in Container",
       "exchangeCurrency": "Exchange Currency"
+    },
+    "feeInfoTitle": "Fee Info",
+    "feeInfo": {
+      "fclTransportCharge": "FCL Transport Charge",
+      "fclTransportChargeCurrency": "FCL Transport Charge Currency",
+      "handlingCharges": "Handling Charges",
+      "handlingChargesCurrency": "Handling Charges Currency",
+      "otherPortCharges": "Other Port Charges",
+      "otherPortChargesCurrency": "Other Port Charges Currency",
+      "oceanFreight": "Ocean Freight",
+      "oceanFreightCurrency": "Ocean Freight Currency",
+      "insuranceCharges": "Insurance Charges",
+      "insuranceChargesCurrency": "Insurance Charges Currency",
+      "otherCharges": "Other Charges",
+      "otherChargesCurrency": "Other Charges Currency",
+      "otherChargesExchangeRate": "Other Charges Exchange Rate",
+      "otherChargesRemark": "Other Charges Remark",
+      "commissionCharges": "Commission Charges",
+      "commissionChargesCurrency": "Commission Charges Currency"
     }
   }
 }

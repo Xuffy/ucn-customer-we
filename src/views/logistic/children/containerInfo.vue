@@ -1,67 +1,102 @@
 <template>
   <div>
     <div class="btn-wraps">
-      <el-button type="primary" size="mini">{{ $i.logistic.containerInfo.add }}</el-button>
+      <el-button type="primary" size="mini" @click="tabAppend">{{ $i.logistic.containerInfo.add }}</el-button>
       <el-button type="danger" size="mini">{{ $i.logistic.containerInfo.delete }}</el-button>
-      <!-- <el-button @click="tabAppend" :disabled="isActive">{{ 'logistic.btn.add' }}</el-button> -->
     </div>
     <div class="tab-wrap">
-      <el-table
-      :data="tableData"
-      border
-      style="width: 100%; margin-top: 20px"
-      :row-class-name="tableRowClassName"
-      tooltip-effect="dark"
-      row-key
-      >
-        <el-table-column
-        type="selection"
-        width="40"
-        />
-        <el-table-column
-        label="#"
-        align="center"
-        width="50">
+      <el-table :data="tableData" border style="width: 100%; margin-top: 20px" :row-class-name="tableRowClassName" :show-summary="true" tooltip-effect="dark" sum-text="合计">
+        <el-table-column type="selection" width="40"/>
+        <el-table-column label="#" align="center" width="50">
           <template slot-scope="scope">
             {{scope.row.index + 1}}
           </template>
         </el-table-column>
         <el-table-column
-        :label="'logistic.containerInfo.containerType'"
+        :label="$i.logistic.containerInfo.containerNo"
         align="center">
           <template slot-scope="scope">
-            <el-select v-model="containerSelect" placeholder="请选择" v-if="!scope.row.Product">
-              <el-option
-              v-for="item in containerType"
-              :key="item.id"
-              :label="item.label"
-              :value="item.label"
-              />
+            <span>{{ scope.row.containerNo }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.sealNumber"
+        prop="sealNumber"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.sealNumber }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.containerWeight"
+        prop="containerWeight"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.containerWeight }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.containerType"
+        align="center">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.containerType" placeholder="请选择" >
+              <el-option v-for="item in containerType" :key="item.id" :label="item.label" :value="item.value"/>
             </el-select>
-            <div v-else>
-              {{scope.row.Product}}
-            </div>
           </template>
         </el-table-column>
         <el-table-column
-        :label="'logistic.containerInfo.containerQuantity'"
+        :label="$i.logistic.containerInfo.vgm"
+        prop="vgm"
         align="center">
           <template slot-scope="scope">
-            <div v-if="!scope.row.containerAmount">
-              <el-input-number v-model="containerNo" :min="1" label="描述文字"></el-input-number>
-            </div>
-            <div v-else>
-              {{scope.row.containerAmount}}
-            </div>
+            <span>{{ scope.row.vgm }}</span>
           </template>
         </el-table-column>
         <el-table-column
-        :label="'logistic.containerInfo.actions'"
-        width="100"
-        >
+        :label="$i.logistic.containerInfo.totalQuantityInContainer"
+        prop="totalQuantityInContainer"
+        align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="tailBtn('ok')" v-show="!scope.row.containerAmount">ok</el-button>
-            <el-button type="text" size="small" @click="tabSplite(scope.row.index)" v-show="scope.row.containerAmount">{{ 'logistic.btn.delete' }}</el-button>
+            <span>{{ scope.row.totalQuantityInContainer }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.totalVolumeInContainer"
+        prop="totalVolumeInContainer"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalVolumeInContainer }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.totalNetWeightInContainer"
+        prop="totalNetWeightInContainer"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalNetWeightInContainer }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.totalQuantityOfOuterCartonsInContainer"
+        prop="totalQuantityOfOuterCartonsInContainer"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalQuantityOfOuterCartonsInContainer }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.totalSkuPriceInContainer"
+        prop="totalSkuPriceInContainer"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.totalSkuPriceInContainer }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+        :label="$i.logistic.containerInfo.exchangeCurrency"
+        align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.exchangeCurrency }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -88,14 +123,14 @@ export default {
         return [
         {
           label: "dada",
-          id: "1"
+          value: "4"
         }
         ]
       }
     }
   },
   created() {
-    this.tabAppend();
+    // this.tabAppend();
   },
   methods: {
     tableRowClassName({row, rowIndex}) {
