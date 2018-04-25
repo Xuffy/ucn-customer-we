@@ -642,8 +642,18 @@ export const routerMap = [
                     recycleBin: true,
                     log: true,
                 },
-                component: () => import('../views/sellerWarehouse/inboundOverview.vue'),
-            }
+                component: () => import('../views/sellerWarehouse/inbound/inboundOverview.vue'),
+            },
+            {
+                path:'createInbound',
+                name:'create Inbound',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inbound/createInbound'),
+            },
         ]
     },
   ]

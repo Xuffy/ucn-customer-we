@@ -40,7 +40,8 @@
                     :hideBtn="true"
                     :disabledLine="disabledLine"
                     :forceUpdateNumber="forceUpdateNumber"
-                    @handleOK="handleOkClick"></product>
+                    @handleOK="handleOkClick"
+                    @handleCancel="handleCancel"></product>
         </el-dialog>
     </div>
 </template>
@@ -63,6 +64,7 @@
                 screenTableStatus:[],   //表格筛选状态
                 tableDataList:[],       //表格数据展示
                 addProductTitle:'哇哈哈',
+                totalDataList:[],       //因为要分页，所以先取一个全部数据
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
                 selectList:[],          //保存选择的数剧
 
@@ -75,6 +77,12 @@
             }
         },
         methods:{
+            getTotalData(){
+
+            },
+
+
+
             getList() {
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
@@ -176,18 +184,25 @@
 
             //删除product
             deleteProduct(){
-                this.tableDataList.forEach((v,k)=>{
+                this.selectList.forEach(v=>{
                     let id=_.findWhere(v,{key:'id'}).value;
-                    this.selectList.forEach(m=>{
+                    this.tableDataList.forEach(m=>{
                         let newId=_.findWhere(m,{key:'id'}).value;
                         if(id===newId){
-                            this.tableDataList.splice(k,1)
+                            this.$set(m,'_disabled',true);
+                            this.$set(m,'_checked',false);
                         }
                     })
                 });
-                // this.$nextTick(()=>{
-                //     this.disableDelete=true;
-                // });
+                this.$nextTick(()=>{
+                    this.disableDelete=true;
+                    this.disabledLine=[];
+                    this.tableDataList.forEach(v=>{
+                        if(!v._disabled){
+                            this.disabledLine.push(v);
+                        }
+                    });
+                });
             },
 
             handleOkClick(e){
@@ -197,13 +212,29 @@
                         type: 'warning'
                     });
                 }else{
+                    console.log(e)
+
                     e.forEach(v=>{
-                        if(!v._disabled){
+                        let id=_.findWhere(v,{key:'id'}).value;
+                        let isIn=false;
+                        this.tableDataList.forEach((m,index)=>{
+                            let newId=_.findWhere(m,{key:'id'}).value;
+                            if(id===newId){
+                                this.$set(m,'_disabled',false);
+                                isIn=true;
+                            }
+                        });
+                        if(!isIn){
                             this.tableDataList.push(v);
                         }
                     });
-                    console.log(this.tableDataList)
-                    this.disabledLine=this.tableDataList;
+
+                    // e.forEach(v=>{
+                    //     if(!v._disabled){
+                    //         this.tableDataList.push(v);
+                    //     }
+                    // });
+                    // this.disabledLine=this.tableDataList;
                     this.addProductDialogVisible=false;
                     // e.forEach(v=>{
                     //     this.$set(v,'_checked',false);
@@ -212,6 +243,10 @@
                     // this.disabledLine=this.tableDataList;
                     // this.addProductDialogVisible=false;
                 }
+            },
+
+            handleCancel(){
+                this.addProductDialogVisible=false;
             },
 
             //保存该compare list
@@ -257,8 +292,8 @@
 
         },
         created(){
+            this.getTotalData();
             this.getList();
-
         },
         watch:{
             selectList(n){
