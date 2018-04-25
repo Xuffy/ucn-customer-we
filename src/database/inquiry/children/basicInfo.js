@@ -20,15 +20,6 @@ export default {
         _disabled: true,
         _inquiryHide: true
     },
-    timeZone: { //时区 系统带入
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0,
-        _disabled: true,
-        _inquiryHide: true
-    },
     time: { //时间 系统带入
         key: 'entryDt',
         placeholder: 'Please select time',
@@ -57,6 +48,16 @@ export default {
         state: 0,
         _disabled: true,
         _inquiryHide: true
+    },
+    createTime: { // 创建时间
+        key: 'entryDt',
+        placeholder: 'Please select',
+        rules: [],
+        width: '150px',
+        type: 'text',
+        state: 0,
+        _inquiryHide: true,
+        _disabled: true
     },
     inquiryStatus: { //询价单状态
         placeholder: 'Please select',
@@ -142,7 +143,7 @@ export default {
         placeholder: 'Please select',
         rules: [],
         width: '150px',
-        type: '%',
+        type: 'Number',
         state: 0
     },
     departurePort: { //发运港口  ok
@@ -151,16 +152,6 @@ export default {
         width: '150px',
         type: 'text',
         state: 0
-    },
-    createTime: { // 创建时间
-        key: 'entryDt',
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0,
-        _inquiryHide: true,
-        _disabled: true
     },
     destinationPort: { //目的港口 ok
         placeholder: 'Please select',
@@ -197,13 +188,6 @@ export default {
         type: 'select',
         state: 0
     },
-    relatedOrderNO: { //关联订单号
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0
-    },
     attachment: { //上传附件
         placeholder: 'Please select',
         rules: [],
@@ -227,4 +211,11 @@ export default {
         md: 24,
         lg: 24
     },
+    relatedOrderNO: { //关联订单号
+        placeholder: 'Please select',
+        rules: [],
+        width: '150px',
+        type: 'text',
+        state: 0
+    }
 }

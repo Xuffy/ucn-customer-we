@@ -2,11 +2,21 @@
     <div class="compare-overview">
         <h3 class="hd">{{ $i.baseText.compareOverview }}</h3>
         <div class="status">
-            <div class="btn-wrap">
-                <el-button>{{ $i.baseText.downloadSelectedCompare }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
-            </div>
+            <div class="state"></div>
             <select-search :options="options" @inputChange="searchEnter" />
+        </div>
+        <div class="fn">
+            <div class="btn-wrap">
+                <el-button type="primary" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.submit}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="inquiryDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
+            </div>
+            <div class="viewBy">
+                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+                <el-radio-group v-model="viewByStatus"  size="mini">
+                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                </el-radio-group>
+            </div>
         </div>
         <v-table 
             :data="tabData" 
@@ -14,7 +24,6 @@
             :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
-            :height="350"
             :page-total="pageTotal"
         />
     </div>
@@ -25,6 +34,7 @@
         name:'',
         data() {
             return {
+                viewByStatus: 0,
                 pageTotal:0,
                 checkedArg: [],
                 tabData: [],
@@ -47,7 +57,7 @@
                     // },
                     ps: 10,
                     pn: 1,
-                    recycle: 0,
+                    recycle: 1,
                     // sorts: [
                     //     {
                     //         nativeSql: true,
@@ -99,35 +109,15 @@
                     }
                 });
             },
-            changeChecked(item) { //选中的compare
+            changeChecked(item) { //选中的data
                 let arr = [];
                 item.forEach(item => {
                     arr.push(item.id.value);
                 });
                 this.checkedArg = arr;
             },
-            compareDelete() { //删除compare
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
-                    .then(res => {
-                        this.tabData.forEach((item, index) => {
-                            res.forEach(key => {
-                                if(item.id.value === key) {
-                                    this.tabData.splice(index, 1);
-                                }
-                            });
-                        });
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+            inquiryDelete() { //删除
+                
             }
         },
         watch: {
@@ -136,6 +126,9 @@
                     this.getList();
                 },
                 deep: true
+            },
+            viewByStatus(val) {
+                this.getList();
             }
         },
         created() {
@@ -164,6 +157,32 @@
                 align-items: center;
                 span {
                     font-size:14px;
+                }
+            }
+        }
+        .fn {
+            display:flex;
+            justify-content:space-between;
+            padding:10px 15px;
+            box-sizing: border-box;
+            .viewBy {
+                display:flex;
+                align-items: center;
+                span {
+                    font-size:14px;
+                    color:#666;
+                }
+                button {
+                    cursor: pointer;
+                    padding:2px 5px;
+                }
+                .set {
+                    cursor: pointer;
+                    padding-left:18px;
+                    color:#999;
+                    i {
+                        font-size:25px;
+                    }
                 }
             }
         }
