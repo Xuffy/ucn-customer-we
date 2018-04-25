@@ -14,13 +14,16 @@ const state = {
   },
   layout: {
     hideMenu: false,
+  },
+  messageBoard: {
+    show: true,
+    code: null
   }
 };
 
 const actions = {};
 
-const mutations = {
-};
+const mutations = {};
 
 export default new Vuex.Store({
   state,

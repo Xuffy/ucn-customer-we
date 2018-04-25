@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
-import { Notification } from 'element-ui';
+import {Notification} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -22,9 +22,6 @@ export const routerMap = [
     },
     {
       path: '/workbench',
-      meta: {
-        name: 'Workbench'
-      },
       component: Layout,
       name: 'Workbench',
       redirect: '/workbench/index',
@@ -36,6 +33,8 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
+            messageBoard: 'code',
+            name: 'Workbench',
           },
           component: () => import('../views/workbench/index.vue')
         }
@@ -536,7 +535,7 @@ export const routerMap = [
           },
           component: () => import('../views/settings/CategorySetting')
         },
-           {
+        {
           path: 'Personal',
           name: 'Personal Setting',
           meta: {
@@ -547,17 +546,17 @@ export const routerMap = [
           },
           component: () => import('../views/settings/personalSetting')
         },
-          {
-              path: 'companyInfo',
-              name: 'Company Info',
-              meta: {
-                  draft: true,
-                  recycleBin: true,
-                  log: true,
-                  name: 'Company Info'
-              },
-              component: () => import('../views/settings/companyInfo')
+        {
+          path: 'companyInfo',
+          name: 'Company Info',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Company Info'
           },
+          component: () => import('../views/settings/companyInfo')
+        },
       ]
     },
     {
@@ -683,7 +682,7 @@ export const routerMap = [
         }
       ]
     },
-        //recycleBin  回收站路由
+    //recycleBin  回收站路由
     {
       path: '/recycle',
       component: Layout,
@@ -708,59 +707,59 @@ export const routerMap = [
     },
 
     {
-        path: '/sellerWarehouse',
-        component: Layout,
-        redirect: '/sellerWarehouse/overview',
-        name: 'SellerWarehouse',
-        meta: {
-          name: 'SellerWarehouse'
+      path: '/sellerWarehouse',
+      component: Layout,
+      redirect: '/sellerWarehouse/overview',
+      name: 'SellerWarehouse',
+      meta: {
+        name: 'SellerWarehouse'
+      },
+      noDropdown: false,
+      children: [
+        {
+          path: 'overview',
+          name: 'Warehouse Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            ame: 'Warehouse Overview'
+          },
+          component: () => import('../views/sellerWarehouse/warehouseOverview.vue'),
         },
-        noDropdown: false,
-        children: [
-            {
-                path: 'overview',
-                name: 'Warehouse Overview',
-                meta: {
-                    draft: true,
-                    recycleBin: true,
-                    log: true,
-                    ame: 'Warehouse Overview'
-                },
-                component: () => import('../views/sellerWarehouse/warehouseOverview.vue'),
-            },
-            {
-                path:'inbound',
-                name:'Inbound Overview',
-                meta:{
-                    draft: true,
-                    recycleBin: true,
-                    log: true,
-                    name:'Inbound Overview'
-                },
-                component: () => import('../views/sellerWarehouse/inbound/inboundOverview.vue'),
-            },
-            {
-                path:'createInbound',
-                name:'create Inbound',
-                meta:{
-                    draft: true,
-                    recycleBin: true,
-                    log: true,
-                    name:'create Inbound'
-                },
-                component: () => import('../views/sellerWarehouse/inbound/createInbound'),
-            },
-            {
-                path:'inboundDetail',
-                name:'inbound Detail',
-                meta:{
-                    draft: true,
-                    recycleBin: true,
-                    log: true,
-                },
-                component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
-            },
-        ]
+        {
+          path: 'inbound',
+          name: 'Inbound Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Inbound Overview'
+          },
+          component: () => import('../views/sellerWarehouse/inbound/inboundOverview.vue'),
+        },
+        {
+          path: 'createInbound',
+          name: 'create Inbound',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'create Inbound'
+          },
+          component: () => import('../views/sellerWarehouse/inbound/createInbound'),
+        },
+        {
+          path: 'inboundDetail',
+          name: 'inbound Detail',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
+          component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
+        },
+      ]
     },
   ]
 ;
