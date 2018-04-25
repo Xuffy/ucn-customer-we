@@ -7,9 +7,9 @@ export default {
       BASE_API: '',
       BASE_CS_cgs:'http://192.168.51.33:11007',
       BASE_HCJ:'http://dev.upurchase-facade.ucnholding.com',
+      BASE_JY:'http://192.168.51.198:18002',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_LYF:'http://dev.uuser-facade.ucnholding.com',
-
       BASE_JML:'http://dev.umeta-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       BASE_HSM:'http://192.168.51.27:8080',
