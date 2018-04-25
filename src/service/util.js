@@ -46,7 +46,6 @@ export default {
       _.map(data, (value, index) => {
         let obj = {};
         _.map(db, val => {
-
           let dv = value[val.key]
             , cd = _.clone(val);
           if (!_.isUndefined(dv) || val._important) {
