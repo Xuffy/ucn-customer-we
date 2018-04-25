@@ -1,7 +1,7 @@
 <template>
 <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
   <div class="upload-box">
-    <span>{{ $i.logistic.basicInfo.attachment }}</span>
+    <span>{{ title }}</span>
     <upload :accept="accept" @getres="getres" :action="action" :disabled="disabled"/>
     <ul class="el-upload-list el-upload-list--text el-input">
       <li tabindex="0" class="el-upload-list__item is-success file-list" v-for="(a, i) of fileList">
@@ -18,9 +18,13 @@ import { Upload } from '@/components/index'
 
 export default {
   props: {
+    title: String,
     accept: String,
     action: String,
-    disabled: Boolean
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     Upload
