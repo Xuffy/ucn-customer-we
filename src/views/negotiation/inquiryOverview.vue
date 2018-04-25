@@ -265,7 +265,6 @@
                 .select {
                     width: 110px;
                     margin-right:5px;
-                    input {}
                 }
             }
         }

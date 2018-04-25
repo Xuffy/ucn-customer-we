@@ -583,7 +583,7 @@ export const routerMap = [
       name: 'draft',
       redirect: '/draft/index',
       noDropdown: true,
-         hidden: true,
+      hidden: true,
       children: [
         {
           path: 'index',

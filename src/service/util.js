@@ -112,9 +112,30 @@ export default {
       }
     };
     /**
-     * 
+     * 删除带有前缀下划线数据
     */
+    const deleteArr = (list, fieldRemark) => {
+      _.map(list, item => {
+        if(item) deleteObject(item);
+        if(item[fieldRemark]) deleteObject(item[fieldRemark]);
+      });
+    };
 
+    const deleteObject = (list, fieldRemark, details) => {
+      _.mapObject(list, (val, key) => {
+        if(key.substring(0, 1) === '_') delete list[key];
+        if(list[fieldRemark]) deleteObject(list[fieldRemark]);
+        if(key === details) deleteArr(list[details], fieldRemark)
+      });
+    };
+
+    Vue.prototype.$filterModify = (list, remark, children) => {
+      let fieldRemark = remark || 'fieldRemark', 
+          details = children || 'details';
+      if(_.isObject(list, details)) deleteObject(list, fieldRemark, details);
+      if(_.isArray(list)) _.map(list, fieldRemark, details);
+      return list;
+    };
     /**
      * $window.open
     */
