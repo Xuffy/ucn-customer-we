@@ -103,8 +103,15 @@
         },
         methods: {
             onAction(item, type) {
-                this.windowOpen('/order/detail', {
-                    orderId: item.id.value
+                //                this.$windowOpen('', {
+                //                    orderId: item.id.value
+                //                });
+
+                this.$windowOpen({
+                    url: '/order/detail',
+                    params: {
+                        orderId: item.id.value
+                    }
                 });
             },
             pagesizechange() {
@@ -114,7 +121,7 @@
 
             },
             creat_order() {
-                this.windowOpen('/order/detail', {
+                this.$windowOpen('/order/detail', {
                     selectedDate: this.selectedDate
                 });
             },

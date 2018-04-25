@@ -28,7 +28,7 @@ export default {
   align-items: center;
   padding:10px 0;
   span {
-    width: 200px;
+    width: 130px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     display:inline-block;
     font-size:12px;
