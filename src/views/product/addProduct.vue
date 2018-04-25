@@ -66,7 +66,7 @@
             <div class="btns" v-if="!hideBtn">
                 <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                 <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
                 <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                 <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
@@ -124,6 +124,10 @@
                 type:Boolean,
                 default:false
             },
+            forceUpdateNumber:{
+                type:Number,
+                default:0
+            }
         },
         data(){
             return{
@@ -260,8 +264,10 @@
                         this.selectList=[];
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -300,7 +306,12 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
-                this.$emit('handleOK',this.selectList);
+
+                let arr=this.$copyArr(this.selectList);
+                arr.forEach(v=>{
+                    v._checked=false;
+                });
+                this.$emit('handleOK',arr);
             },
             cancel(){
                 this.$emit('handleCancel');
@@ -331,8 +342,10 @@
                         });
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -341,7 +354,8 @@
                     }).catch(err=>{
                         console.log(err)
                     });
-                }else{
+                }
+                else{
                     this.$ajax.post(this.$apis.get_buyerProductList,{
                         recycle:false
                     }).then(res=>{
@@ -355,13 +369,20 @@
                         });
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
+                                        m._checked=true;
                                     }
                                 })
                             })
                         }
+                        this.selectList=this.$copyArr(this.disabledLine);
+                        this.selectList.forEach(v=>{
+                            v._disabled=true;
+                        });
                     }).catch(err=>{
                         console.log(err)
                     });
@@ -396,6 +417,27 @@
                 console.log(1234)
             },
 
+            //对比product
+            compareProducts(){
+                let id='';
+                this.selectList.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectList.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        id:id,
+                        type:'new'
+                    }
+                });
+            },
+
             recover(){
                 let id=[];
                 this.selectList.forEach(v=>{
@@ -417,8 +459,10 @@
                         });
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
                                 this.tableDataList.forEach(m=>{
-                                    if(m.id.value===v){
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
                                         m._disabled=true;
                                     }
                                 })
@@ -470,7 +514,24 @@
                 }else{
                     this.disabledCompare=true;
                 }
-            }
+            },
+            disabledLine(n){
+                if(n.length>0){
+                    n.forEach(v=>{
+                        let id=_.findWhere(v,{key:'id'}).value;
+                        this.tableDataList.forEach(m=>{
+                            let newId=_.findWhere(m,{key:'id'}).value;
+                            if(id===newId){
+                                this.$set(m,'_disabled',true);
+                            }
+                        })
+                    })
+                    console.log(this.tableDataList,'this.tableDataList')
+                }
+            },
+            forceUpdateNumber(){
+                this.getData();
+            },
         }
     }
 </script>
