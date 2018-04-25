@@ -26,7 +26,6 @@ export default {
         type: 'String',
         showType:'input',
         isDefaultShow:true,               //是否是默认显示
-        length: 10,
         belongPage:'sellerProductOverview'
     },
     readilyAvailable: {

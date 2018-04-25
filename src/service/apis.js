@@ -5,7 +5,7 @@ const apis = {
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
-  POST_CODE_PART: ['code_part', 'BASE_JML'],
+  POST_CODE_PART: ['/code/part', 'BASE_JML'],
   gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],

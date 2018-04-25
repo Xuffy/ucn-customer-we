@@ -1,5 +1,14 @@
 {
   "inboundOverview":"入库总览",
   "inboundType":"入库类型",
-  "basicInfo":"基本信息"
+  "basicInfo":"基本信息",
+  "productInfo":"产品信息",
+  "addProduct":"增加产品",
+  "removeProduct":"移除产品",
+  "total":"总结",
+  "totalCartonQty":"产品箱数总数",
+  "totalGrossWeight":"产品毛重总数",
+  "totalVolume":"产品体积总数",
+  "totalNetWeight":"产品净重总数",
+  "totalSkuQty":"产品总数"
 }

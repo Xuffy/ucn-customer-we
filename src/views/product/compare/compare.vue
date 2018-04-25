@@ -32,7 +32,6 @@
             <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
         </div>
 
-
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
             <product
                     :title="addProductTitle"
@@ -132,39 +131,6 @@
 
                     });
                 }
-
-
-                // if(this.$route.query.id){
-                //
-                // }else{
-                //     console.log(this.$route.query)
-                //     let params={
-                //         id: this.$route.query.compareId,
-                //         // operatorFilters: [
-                //         //     {
-                //         //         "columnName": "string",
-                //         //         "operator": "string",
-                //         //         "property": "string",
-                //         //         "resultMapId": "string",
-                //         //         "value": {}
-                //         //     }
-                //         // ],
-                //         pn: 1,
-                //         ps: 50,
-                //         recycle: false,
-                //         // sorts: [
-                //         //     {
-                //         //         orderBy: "string",
-                //         //         orderType: "string",
-                //         //     }
-                //         // ]
-                //     };
-                //     this.$ajax.post(this.$apis.delete_buyerProductCompareDetail,params).then(res=>{
-                //         console.log(res)
-                //     }).catch(err=>{
-                //
-                //     });
-                // }
             },
 
             btnClick(e){
@@ -206,43 +172,23 @@
             },
 
             handleOkClick(e){
-                if(e.length===0){
-                    this.$message({
-                        message: '请选择一个商品',
-                        type: 'warning'
-                    });
-                }else{
-                    console.log(e)
+                console.log(e)
 
-                    e.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        let isIn=false;
-                        this.tableDataList.forEach((m,index)=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',false);
-                                isIn=true;
-                            }
-                        });
-                        if(!isIn){
-                            this.tableDataList.push(v);
+                e.forEach(v=>{
+                    let id=_.findWhere(v,{key:'id'}).value;
+                    let isIn=false;
+                    this.tableDataList.forEach((m,index)=>{
+                        let newId=_.findWhere(m,{key:'id'}).value;
+                        if(id===newId){
+                            this.$set(m,'_disabled',false);
                         }
-                    });
+                    })
+                });
 
-                    // e.forEach(v=>{
-                    //     if(!v._disabled){
-                    //         this.tableDataList.push(v);
-                    //     }
-                    // });
-                    // this.disabledLine=this.tableDataList;
-                    this.addProductDialogVisible=false;
-                    // e.forEach(v=>{
-                    //     this.$set(v,'_checked',false);
-                    //     this.tableDataList.push(v);
-                    // });
-                    // this.disabledLine=this.tableDataList;
-                    // this.addProductDialogVisible=false;
-                }
+                // e.forEach(v=>{
+                //     this.tableDataList.push(v);
+                // });
+                this.addProductDialogVisible=false;
             },
 
             handleCancel(){
@@ -297,7 +243,14 @@
         },
         watch:{
             selectList(n){
-                if(n.length>0 && (this.tableDataList.length-n.length)>=2){
+                let len=0;
+                this.tableDataList.forEach(v=>{
+                    if(!v._disabled){
+                        len++;
+                    }
+                });
+
+                if(n.length>0 && (len-n.length)>=2){
                     this.disableDelete=false;
                 }else{
                     this.disableDelete=true;

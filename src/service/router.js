@@ -750,6 +750,16 @@ export const routerMap = [
                 },
                 component: () => import('../views/sellerWarehouse/inbound/createInbound'),
             },
+            {
+                path:'inboundDetail',
+                name:'inbound Detail',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
+            },
         ]
     },
   ]
