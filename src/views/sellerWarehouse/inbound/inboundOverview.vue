@@ -22,7 +22,8 @@
                 </div>
                 <v-table
                         :data="tableDataList"
-                        :buttons="[{label: 'detail', type: 1}]">
+                        :buttons="[{label: '详情', type: 1}]"
+                        @action="btnClick">
                 </v-table>
             </div>
         </div>
@@ -71,6 +72,7 @@
                 this.getInboundData();
             },
 
+            //获取表格数据
             getInboundData(){
                 this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
                     console.log(res)
@@ -90,6 +92,10 @@
                 this.$windowOpen({
                     url:'/sellerWarehouse/createInbound'
                 });
+            },
+
+            btnClick(e){
+                console.log(e)
             },
         },
         created(){

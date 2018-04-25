@@ -308,10 +308,15 @@
                 this.$refs.productFormTop.resetFields();
 
                 let arr=this.$copyArr(this.selectList);
+                //这里只把选中并且没有置灰的数据抛出去，这肯定是新增的
+                let newArr=[];
                 arr.forEach(v=>{
-                    v._checked=false;
+                    if(v._checked && !v._disabled){
+                        v._checked=false;
+                        newArr.push(v);
+                    }
                 });
-                this.$emit('handleOK',arr);
+                this.$emit('handleOK',newArr);
             },
             cancel(){
                 this.$emit('handleCancel');
