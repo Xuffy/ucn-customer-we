@@ -5,7 +5,7 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         <VExchange :list='exchangeRateList'></VExchange>
+<!--         <VExchange :list='exchangeRateList'></VExchange>-->
    
 <!--             responsibility     -->
          <VResponsibility ref='responsibility'></VResponsibility>
@@ -43,8 +43,8 @@
 <!--              quickcreate弹窗区域-->
           <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
                 <VInquiry 
-                 v-model=dialogQuickcreate
-                :selectionRadio=true
+                   v-model=dialogQuickcreate
+                  :selectionRadio=true
                     @addInquiry='text'
                 ></VInquiry>
         </el-dialog>
@@ -83,7 +83,7 @@
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
-    import VExchange from '@/components/base/oneLine'
+    //    import VExchange from '@/components/base/oneLine'
     import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
@@ -101,7 +101,7 @@
             VCaculate,
             VHistoryModify,
             VProduct,
-            VExchange,
+            //            VExchange,
             VInquiry
         },
         data() {
@@ -156,7 +156,7 @@
             send() {
                 //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    "orderNo": "22822",
+                    "orderNo": "21552822123",
                     "customerOrderNo": "",
                     "customerNo": "",
                     "customerName": "",
@@ -166,7 +166,7 @@
                     "quotationNo": "",
                     "status": 9,
                     "deliveryDt": 1523477789000,
-                    //"actDeliveryDt": 1523477806000,
+                    "actDeliveryDt": 1523477806000,
                     "incoterm": -1,
                     "incotermArea": -1,
                     "payment": -1,
@@ -183,10 +183,10 @@
                     "remark": "",
                     "important": false,
                     "attachment": false,
-                    //"remind": false,
-                    //"archive": false,
+                    "remind": false,
+                    "archive": false,
                     "currency": 1,
-                    //"deliveredQty": 0,
+                    "deliveredQty": 0,
                     "skuList": [{
                         timeZone: 0,
                         "sukQty": 22,
