@@ -7,6 +7,7 @@
             <div class="head">
                 <span>{{$i.warehouse.inboundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
+                    <el-radio-button label="0">全部</el-radio-button>
                     <el-radio-button label="1">采购入库</el-radio-button>
                     <el-radio-button label="2">验货入库</el-radio-button>
                     <el-radio-button label="3">客户退货入库</el-radio-button>
@@ -17,7 +18,7 @@
             <div class="section">
                 <div class="btns">
                     <el-button>下载</el-button>
-                    <el-button>新建</el-button>
+                    <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
                         :data="tableDataList"
@@ -43,24 +44,51 @@
                 /**
                  * 页面基本配置
                  * */
-                inboundStatus:'1',
+                inboundStatus:'0',
                 tableDataList:[],
+                inboundConfig:{
+                    inboundNo: "",
+                    pn: 1,
+                    ps: 50,
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                    storageType: null
+                }
             }
         },
         methods:{
             changeStatus(e){
-                console.log(e)
+                let num=Number(e);
+                if(num===0){
+                    this.inboundConfig.storageType=null;
+                }else{
+                    this.inboundConfig.storageType=num;
+                }
+                this.getInboundData();
             },
 
             getInboundData(){
-                this.$ajax.post(this.$apis.get_inboundData,{
-                    pn:1,
-                    ps:50,
-                    inboundNo:''
-                }).then(res=>{
+                this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
                     console.log(res)
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        return e;
+                    });
                 }).catch(err=>{
                     console.log(err)
+                });
+            },
+
+            //新建入库单
+            createInbound(){
+                this.$windowOpen({
+                    url:'/sellerWarehouse/createInbound'
                 });
             },
         },

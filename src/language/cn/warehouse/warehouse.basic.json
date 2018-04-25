@@ -1,5 +1,8 @@
 {
   "inboundOverview":"入库总览",
   "inboundType":"入库类型",
-  "basicInfo":"基本信息"
+  "basicInfo":"基本信息",
+  "productInfo":"产品信息",
+  "addProduct":"增加产品",
+  "removeProduct":"移除产品"
 }
