@@ -20,7 +20,7 @@
     <br/><br/>
     <el-row :gutter="10">
       <el-col :span="12">
-        <v-table-data></v-table-data>
+        <!--<v-table-data :data="" :type=""></v-table-data>-->
       </el-col>
       <el-col :span="12">
         <!--<v-table-data></v-table-data>-->
@@ -51,6 +51,10 @@
     data() {
       return {
         visible: false,
+        pengdingTask: [],
+        futureTask: [],
+        fyiTask: [],
+        pushTask: [],
         testData: testData.content.details, // todo 测试
         mockData: [], // todo 测试
         historyData: [], // todo 测试
@@ -64,14 +68,16 @@
       VMessageBoard,
     },
     mounted() {
-
       this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
-
+        this.pengdingTask = data.pending_task;
+        this.futureTask = data.future_task;
+        this.fyiTask = data.fyi_task;
+        this.pushTask = data.push_task;
       });
 
-      this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
-
-      });
+      // this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
+      //
+      // });
 
 
       this.mockData = this.$getDB(
