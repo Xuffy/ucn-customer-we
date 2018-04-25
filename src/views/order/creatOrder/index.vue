@@ -156,7 +156,11 @@
             send() {
                 //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    "orderNo": "21552822123",
+                    "ownerId": 0,
+                    "companyId": 0,
+                    "tenantId": 0,
+                    "version": 0,
+                    "orderNo": "2311",
                     "customerOrderNo": "",
                     "customerNo": "",
                     "customerName": "",
@@ -175,7 +179,7 @@
                     "departurePort": "",
                     "destCountry": "",
                     "destPort": "",
-                    "transport": '',
+                    "transport": -1,
                     "customerAgreementNo": "1",
                     "customerAgreementDt": 1523477845000,
                     "paymentDays": 1,
@@ -186,7 +190,22 @@
                     "remind": false,
                     "archive": false,
                     "currency": 1,
+                    "paymentRemark": "1",
+                    "totalSkuPrice": 1,
+                    "paidAmount": 0,
+                    "unpaidAmount": 0,
+                    "totalQty": 1,
+                    "totalOuterCartonQty": 1,
+                    "totalGrossWeight": 1,
+                    "totalNetWeight": 1,
+                    "totalVolume": 1,
+                    "skuQty": 1,
+                    "inboundQty": 0,
                     "deliveredQty": 0,
+                    "draftCustomer": false,
+                    "draftSupplier": false,
+                    "recycleCustomer": true,
+                    "recycleSupplier": false,
                     "skuList": [{
                         timeZone: 0,
                         "sukQty": 22,
@@ -344,7 +363,7 @@
                         "sukPrice": 0,
                         "fieldRemark": null
                     }],
-                    responsibilityList: this.$refs.responsibility.tableData,
+                    //                    responsibilityList: this.$refs.responsibility.tableData,
                 }
                 // var basic = this.$refs.basicInfo.formItem
                 //   _.extendOwn(params, basic)
