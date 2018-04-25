@@ -1,10 +1,18 @@
 <template>
     <div class="QuickCreate">
        <div class="select_div">
+             <div class="viewBy">
+                <span>View by&nbsp</span>
+                   <el-radio-group v-model="params.view" size="mini" >
+                            <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
+                    </el-radio-group>
+            </div>
            <selectSearch></selectSearch>
-       </div>     
+       </div> 
         <div>
-             <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+             <v-table  :data="tabData" 
+              style='marginTop:10px'/>
         </div>
     </div>
 </template>
@@ -15,7 +23,7 @@
         selectSearch
     } from '@/components/index';
     export default {
-        name: "QuickCreate",
+        name: "dialogEdit",
         components: {
             VTable,
             selectSearch
@@ -27,33 +35,28 @@
             return {
                 options: [{
                     value: '选项1',
-                    label: this.$t('order.buttonname.skuDec')
+                    label:'选项1' 
                 }, {
                     value: '选项2',
-                    label: this.$t('order.buttonname.skuName')
+                    label: '选项1'
                 }, {
                     value: '选项3',
-                    label: this.$t('order.buttonname.skuCode')
+                    label: '选项1'
                 }],
                 value: '', //下拉框值
                 input: '', //输入框内容
                 tabColumn: [],
-                tabData: []
+                tabData: [],
+                params:{
+                    view:''
+                }
             }
         },
         methods: {
 
         },
         created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
-                })
-                .catch((res) => {
-                    console.log(res);
-                });
+       
         },
         watch: {
 
@@ -63,24 +66,11 @@
 </script>
 
 <style scoped>
-    .search_enter {
+
+    .select_div{
+        width: 100%;
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between
     }
-
-    .el-input {
-        width: 200px;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .el-select {
-        width: 140px;
-    }
-
-    .select_div {
-        display: flex;
-        justify-content: flex-end
-    }
-
+  
 </style>

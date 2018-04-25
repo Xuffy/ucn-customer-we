@@ -25,7 +25,7 @@
                 <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
                 <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i.baseText.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled'>finish</el-button>
-                <el-button type='danger' :disabled='disabled'>{{($i.baseText.delete)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
@@ -33,8 +33,6 @@
                             <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
                             <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
-                <div class="set">
-                </div>
             </div>
         </div>
         <!--form-->
@@ -100,13 +98,20 @@
                     pn: 1
                 },
                 selectedDate: [],
-
+                selectedNumber: []
             }
         },
         methods: {
             onAction(item, type) {
-                this.windowOpen('/order/detail', {
-                    id: item.id.value
+                //                this.$windowOpen('', {
+                //                    orderId: item.id.value
+                //                });
+
+                this.$windowOpen({
+                    url: '/order/detail',
+                    params: {
+                        orderId: item.id.value
+                    }
                 });
             },
             pagesizechange() {
@@ -116,7 +121,7 @@
 
             },
             creat_order() {
-                this.windowOpen('/order/detail', {
+                this.$windowOpen('/order/detail', {
                     selectedDate: this.selectedDate
                 });
             },
@@ -125,7 +130,10 @@
             },
             checked(item) {
                 this.selectedDate = item
-                console.log(item)
+
+                this.selectedDate.forEach(item => {
+                    this.selectedNumber.push(item.id.value);
+                });
             },
             changeStatus() {
                 this.getdata()
@@ -144,7 +152,16 @@
                 this.getdata()
             },
             download() {
-                this.$ajax.post(this.$apis.download_order, [1, 2])
+                this.$ajax.post(this.$apis.download_order, this.selectedNumber)
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            deleteOrder() {
+                this.$ajax.post(this.$apis.delete_order, this.selectedNumber)
                     .then((res) => {
                         console.log(res)
                     })
@@ -159,11 +176,11 @@
                     .then((res) => {
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.order.overview, res.datas);
-//                        , item => {
-//                            return _.mapObject(item, val => {
-//                                val._checked = true
-//                            })
-//                        }
+                        //                        , item => {
+                        //                            return _.mapObject(item, val => {
+                        //                                val._checked = true
+                        //                            })
+                        //                        }
                     })
                     .catch((res) => {
                         this.loading = false

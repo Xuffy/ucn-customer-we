@@ -59,8 +59,8 @@
                                 :placeholder="item.placeholder"
                                 v-if="item.type === 'dateTime'"
                             />
-                            <span v-if="item.type === '%'" style="display:flxe;">
-                                <el-input-number v-model="fromArg[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false" /> %
+                            <span v-if="item.type === 'Number'" style="display:flxe;">
+                                <el-input-number v-model="fromArg[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false" style="width:100%; padding-right:10px;" /> <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
                             </span>
                             <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
                         </el-form-item>
@@ -476,6 +476,16 @@
             height: 52px;
             width:100%;
         }
+    }
+</style>
+<style scoped>
+    .select-wrap .el-form {
+        padding: 10px;
+    }
+    .select-wrap .el-form-item >>> .el-form-item__label {
+        display:flex;
+        justify-content:flex-end;
+        text-align: left;
     }
 </style>
 

@@ -1,10 +1,9 @@
 {
-    "remarkDate": "Remark date",
     "operater": "operater",
-    "timeZone": "Time zone",
     "time": "Time",
     "InquiryNo": "Inquiry No.",
     "QuotationNo": "Quotation No.",
+    "createTime": "Create time",
     "inquiryStatus": "inquiry status",
     "transportationWay": "transportation way",
     "payment": "payment",
@@ -12,6 +11,7 @@
     "departureCountry": "Departure Country",
     "incoterm": "Incoterm",
     "currency": "Currency",
+    "exchangeRate": "exchange rate(xx--xx)",
     "discountRate": "discount rate",
     "departurePort": "departure port",
     "destinationPort": "destination port",
@@ -20,6 +20,6 @@
     "exportLicense": "export license",
     "attachment": "Attachment",
     "inquiryRemark": "Inquiry remark",
-    "createTime": "Create time",
-    "relatedOrderNO": "related order NO."
+    "relatedOrderNO": "related order NO.",
+    "remarkDate": ""
 }

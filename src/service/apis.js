@@ -1,10 +1,11 @@
-const version = ['/web/v1', '/api/v1', '/web/v3'];
+const version = ['/web/v1', '/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
+  POST_CODE_PART: ['code_part', 'BASE_JML'],
   gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
@@ -72,20 +73,25 @@ const apis = {
   add_departmentRole: ['/role', 'BASE_LYF'],
   delete_departmentRole: ['/role/{deptId}/{roleId}', 'BASE_LYF'],
   //product buyer
-  get_buyerProductList: ['/purchase/sku/listSkuByParams', 'BASE_CS1'],
-  get_buyerBookmarkList: ['/purchase/sku/listBookmark', 'BASE_CS1'],
-  add_buyerBookmark: ['/purchase/sku/bookmark', 'BASE_CS1'],
-  add_bookmark: ['/purchase/sku/bookmark', 'BASE_CS1'],
-  get_buyerRemarkList: ['/purchase/sku/listSkuRemark/{id}', 'BASE_CS1'],
-  add_buyerProductRemark: ['/purchase/sku/remark', 'BASE_CS1'],
-  update_buyerProductRemark: ['/purchase/sku/remark/{id}', 'BASE_CS1'],
-  delete_buyerProductRemark: ['/purchase/sku/deleteSkuRemark/{id}', 'BASE_CS1'],
-  delete_buyerProductBookmark: ['/purchase/sku/deleteBookmark', 'BASE_CS1'],
-  post_add_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
-  get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
-  add_customerSku: ['/purchase/sku/addCustomerSku', 'BASE_CS1'],
-  get_compareList: ['/purchase/sku/listCompare', 'BASE_CS1'],
-  recover_bookmark: ['/purchase/sku/recoverBookmark', 'BASE_CS1'],
+  get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
+  get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
+  add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
+  add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
+  update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
+  delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
+  delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
+  post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
+  get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
+  get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
+  recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
+  get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
+  add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
+  delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
+  get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
+
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -100,7 +106,7 @@ const apis = {
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
 
   //seller warehouse
-  get_inboundData: ['/inbound/page', 'BASE_HSM', 1],
+  get_inboundData:['/inbound/page','BASE_SELLER'],
 
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],

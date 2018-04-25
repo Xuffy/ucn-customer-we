@@ -1,5 +1,6 @@
 {
   "logistic": {
+    "placeholder": "Please enter content",
     "logisticPlan": "Logistic Plan",
     "basicInfo": {
       "logisticsNo": "Logistics No",
@@ -39,6 +40,32 @@
       "remark": "Remark",
       "attachment": "Attachment",
       "exchangeRate": "Exchange Rate"
+    },
+    "transportInfoTitle": "Transport Info",
+    "transportInfo": {
+      "transportCompany": "Transport Company",
+      "vesselName": "Vessel Name",
+      "vesselNo": "Vessel No",
+      "departureCountry": "Departure Country",
+      "departurePort": "Departure Port",
+      "destinationCountry": "Destination Country",
+      "destinationPort": "Destination Port"
+    },
+    "containerInfoTitle": "Container Info",
+    "containerInfo": {
+      "add": "Add",
+      "delete": "Delete",
+      "containerNo": "Container No",
+      "sealNumber": "Seal Number",
+      "containerWeight": "Container Weight",
+      "containerType": "Container Type",
+      "vgm": "VGM",
+      "totalQuantityInContainer": "Total Quantity in Container",
+      "totalVolumeInContainer": "Total Volume in Container",
+      "totalNetWeightInContainer": "Total Net Weight in Container",
+      "totalQuantityOfOuterCartonsInContainer": "Total Quantity of Outer Cartons in Container",
+      "totalSkuPriceInContainer": "Total SKU Price in Container",
+      "exchangeCurrency": "Exchange Currency"
     }
   }
 }

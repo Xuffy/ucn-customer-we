@@ -2,7 +2,7 @@
   <div v-if="list.length">
     <el-col :xs="raster" :sm="raster" :md="raster" :lg="raster" :xl="raster" v-for="(a, i) of list" :key="'list-' + i">
       <div class="right">
-        <span>{{ a.text }}</span>
+        <span>{{ `${ title }(${ a.text })`}}</span>
         <el-input :placeholder="a.placeholder" v-model="a.value"></el-input>
       </div>
     </el-col>
@@ -11,6 +11,7 @@
 <script>
 export default {
   props: {
+    title: String,
     raster: {
       type: Number,
       default: 4
@@ -28,7 +29,7 @@ export default {
   align-items: center;
   padding:10px 0;
   span {
-    width: 200px;
+    width: 140px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     display:inline-block;
     font-size:12px;

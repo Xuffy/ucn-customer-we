@@ -18,7 +18,6 @@
                             :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
-                            :height="200"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
@@ -87,15 +86,6 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <!-- <v-history 
-            :oSwitch.sync="oSwitch" 
-            :list.sync="historyData" 
-            :tableColumn="tableColumn"
-            :title="msgTitle"
-            :column="historyColumn"
-            :msgTableType="msgTableType"
-            @isModify="isModify"
-        /> -->
         <v-history-modify
                 @save="save"
                 ref="HM"
@@ -328,10 +318,10 @@
             save(data) { //modify 编辑完成反填数据
                 if(this.id_type === 'basicInfo') { //反填 basicInfo
                     this.newTabData = _.map(this.newTabData, val => {
-                        if(val.id.value === data[0].id.value && !val._remark && !data[0]._remark) {
+                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
-                        } else if(val.id.value === data[1].id.value && val._remark && data[1]._remark) {
+                        } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
                         }
@@ -339,19 +329,19 @@
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
-                        if(val.id.value === data[0].id.value && !val._remark && !data[0]._remark) {
+                        if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[0], {'key': 'id'}).value + '' && !val._remark && !data[0]._remark) {
+                            console.log(val)
                             val = data[0];
                             val._modify = true;
-                        } else if(val.id.value === data[1].id.value && val._remark && data[1]._remark) {
+                        } else if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[1], {'key': 'id'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
                         }
                         return val;
                     });
                 }
-                console.log(this.newTabData)
             },
-            fnBasicInfoHistoty(item, type, id) { //查看历史记录
+            fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
                     id: item.id.value
@@ -360,20 +350,20 @@
                     let arr = [];
                     if(type === 'basicInfo') {
                         column = this.$db.inquiryOverview.basicInfo;
-                        this.newTabData.forEach((items, index) => {
-                            if(items.id.value === id) {
-                                arr.push(items);
-                            }
+                        _.map(this.newTabData, items => {
+                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
                         });
                     } else {
                         column = this.$db.inquiryOverview.productInfo;
-                        this.newProductTabData.forEach((items, index) => {
-                            if(items.id.value === id) {
-                                arr.push(items);
-                            }
+                        _.map(this.newProductTabData, items => {
+                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
                         });
                     }
-                    this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
+                    if(config.type === 'histoty') {
+                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), false);
+                    } else {
+                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), true);
+                    }
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
@@ -381,12 +371,10 @@
                 this.historyColumn = this.$db.inquiryOverview.basicInfo;
                 switch(type) {
                         case 'histoty':
-                            //this.msgTitle = 'Histoty';
-                            this.fnBasicInfoHistoty(data, 'basicInfo');
+                            this.fnBasicInfoHistoty(data, 'basicInfo', { type: 'histoty', data: data.id.value});
                             break;
                         case 'modify':
-                            //this.msgTitle = 'Modify';
-                            this.fnBasicInfoHistoty(data, 'basicInfo', data.id.value);
+                            this.fnBasicInfoHistoty(data, 'basicInfo', { type:'modify', data: data.id.value });
                             this.oSwitch = true;
                             break;
                 }
@@ -396,13 +384,11 @@
                 this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch(type) {
                         case 'histoty':
-                            //this.msgTitle = 'Histoty';
-                            this.fnBasicInfoHistoty(data, 'productInfo');
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.id.value});
                             break;
                         case 'modify':
-                            //this.msgTitle = 'Modify';
                             this.oSwitch = true;
-                            this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.id.value });
                             break;
                 }
            },
@@ -450,6 +436,8 @@
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 parentNode.details = this.dataFilter(this.newProductTabData);
+                console.log(this.$filterModify(parentNode))
+                return;
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, parentNode)
                 .then(res => {

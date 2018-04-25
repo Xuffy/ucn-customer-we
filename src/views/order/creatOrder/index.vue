@@ -30,7 +30,7 @@
              </div>
          </div>
 <!--           caculate-->
-<!--         <v-caculate></v-caculate>-->
+         <v-caculate></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
@@ -42,7 +42,7 @@
          </div>
 <!--              quickcreate弹窗区域-->
           <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
-<!--             <VQuickCreate></VQuickCreate>-->
+                <VDialogEdit></VDialogEdit>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
            <el-dialog :title="$i.baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
@@ -63,9 +63,6 @@
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
-           <el-dialog  :visible.sync="dialogHistory" width='70%'>
-               
-           </el-dialog>
            <v-history-modify 
                 @save="save"
                 ref="HM"
@@ -78,10 +75,9 @@
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
     import VBasicinfo from './basicinfo.vue'
-    import VFromBookmark from './FromBookmark.vue'
-    import VQuickCreate from './QuickCreate.vue'
-    import VAttchment from './attchment'
+    import VAttchment from './attachment'
     import VCaculate from './caculate'
+    import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
     import {
         VTable,
@@ -93,10 +89,9 @@
             VResponsibility,
             VBasicinfo,
             VProduct,
-            VFromBookmark,
             VAttchment,
             VTable,
-            VQuickCreate,
+            VDialogEdit,
             VCaculate,
             VHistoryModify,
             VProduct
@@ -106,8 +101,8 @@
                 textarea: "", //order remark输入内容
                 checked: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
-                dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 dialogHistory: false, //弹出框 productinfo 弹窗区域
+                dialogAddproduct: false,
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
                 keyWord: '',
@@ -125,7 +120,57 @@
             send() {
                 //                if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
+
+                    "orderNo": "21111999857542222",
+                    "customerOrderNo": "",
+                    "customerNo": "",
+                    "customerName": "",
+                    "supplierOrderNo": "",
+                    "supplierName": "",
+                    "supplierNo": "",
+                    "quotationNo": "",
+                    "status": 9,
+                    "deliveryDt": 1523477789000,
+                    "actDeliveryDt": 1523477806000,
+                    "incoterm": -1,
+                    "incotermArea": -1,
+                    "payment": -1,
+                    "lcNo": "1",
+                    "departureCountry": "",
+                    "departurePort": "",
+                    "destCountry": "",
+                    "destPort": "",
+                    "transport": -1,
+                    "customerAgreementNo": "1",
+                    "customerAgreementDt": 1523477845000,
+                    "paymentDays": 1,
+                    "paymentStatus": -1,
+                    "remark": "",
+                    "importantCustomer": false,
+                    "importantSupplier": false,
+                    "attachment": false,
+                    "remind": false,
+                    "archive": false,
+                    "currency": 1,
+                    "paymentRemark": "1",
+                    "totalSkuPrice": 1,
+                    "paidAmount": 0,
+                    "unpaidAmount": 0,
+                    "totalQty": 1,
+                    "totalOuterCartonQty": 1,
+                    "totalGrossWeight": 1,
+                    "totalNetWeight": 1,
+                    "totalVolume": 1,
+                    "skuQty": 1,
+                    "inboundQty": 0,
+                    "deliveredQty": 0,
+                    "draftCustomer": false,
+                    "draftSupplier": false,
+                    "recycleCustomer": true,
+                    "recycleSupplier": false,
+                    timeZone: 0,
                     "skuList": [{
+                        timeZone: 0,
                         "sukQty": 22,
                         "skuFobPrice": 3,
                         "skuOuterCartonQty": 3,
@@ -141,41 +186,41 @@
                         "skuStatus": 0,
                         "skuBarcode": "1",
                         "skuNameCn": "1",
-                        "skuDescCn": "",
-                        "skuDescEn": "",
+                        "skuDescCn": "1",
+                        "skuDescEn": "1",
                         "skuRateValueAddedTax": 2,
-                        "skuDescCustomer": "",
-                        "skuNameCustomer": "",
-                        "skuCustomerSkuCode": "",
+                        "skuDescCustomer": "1",
+                        "skuNameCustomer": "1",
+                        "skuCustomerSkuCode": "1",
                         "skuSupplierCode": "1",
-                        "skuSupplierName": "",
-                        "skuCode": "",
-                        "skuUnit": "",
-                        "skuFormation": "",
-                        "skuMaterialEn": "",
+                        "skuSupplierName": "1",
+                        "skuCode": "1",
+                        "skuUnit": "1",
+                        "skuFormation": "1",
+                        "skuMaterialEn": "1",
                         "skuMaterialCn": "1",
-                        "skuColourEn": "",
+                        "skuColourEn": "1",
                         "skuColourCn": "1",
                         "skuDeliveryDates": 2,
-                        "skuDesign": "",
+                        "skuDesign": "1",
                         "skuNoneSellCountry": 2,
                         "skuApplicableAge": 3,
                         "skuExpireDates": 3,
-                        "skuExpireUnit": "",
+                        "skuExpireUnit": "1",
                         "skuComments": "3",
                         "skuReadilyAvailable": true,
                         "skuAvailableQty": 3,
                         "skuMainSaleCountry": 3,
-                        "skuMainSaleArea": "",
+                        "skuMainSaleArea": "1",
                         "skuProductionDates": 3,
-                        "skuQualityStander": "",
+                        "skuQualityStander": "1",
                         "skuYearListed": 1523404800000,
                         "skuUseDisplayBox": true,
                         "skuDisplayBoxQty": 3,
-                        "skuOtherPackInfoCn": "",
-                        "skuOtherPackInfoEn": "",
+                        "skuOtherPackInfoCn": "1",
+                        "skuOtherPackInfoEn": "1",
                         "skuAdjustPackage": true,
-                        "skuLengthWidthHeight": "",
+                        "skuLengthWidthHeight": "1",
                         "skuRecycle": false,
                         "skuCategoryId": 2,
                         "skuCustomerCreate": false,
@@ -205,24 +250,24 @@
                         "skuWarehourceDefault": "1",
                         "skuInventory": 1,
                         "skuSafeInventory": 1,
-                        "sukCategoryOne": "",
-                        "sukCategoryTwo": "",
-                        "sukCategoryThree": "",
-                        "sukCategoryFour": "",
+                        "sukCategoryOne": "1",
+                        "sukCategoryTwo": "1",
+                        "sukCategoryThree": "1",
+                        "sukCategoryFour": "1",
                         "sukSaleStatus": 2,
-                        "sukLabel": "",
-                        "sukBarCode": "",
-                        "sukInnerPackBarCode": "",
-                        "sukInnerPackLabel": "",
-                        "sukInnerPackCode": "",
-                        "sukShippingMarks": "",
-                        "sukOuterCartonBarCode": "",
-                        "sukOuterCartonCode": "",
-                        "sukLabelPic": "",
-                        "sukLabelDesc": "",
-                        "sukPkgMethodPic": "",
-                        "sukInnerCartonPic": "",
-                        "sukOuterCartonPic": "",
+                        "sukLabel": "1",
+                        "sukBarCode": "1",
+                        "sukInnerPackBarCode": "1",
+                        "sukInnerPackLabel": "1",
+                        "sukInnerPackCode": "1",
+                        "sukShippingMarks": "1",
+                        "sukOuterCartonBarCode": "1",
+                        "sukOuterCartonCode": "1",
+                        "sukLabelPic": "1",
+                        "sukLabelDesc": "1",
+                        "sukPkgMethodPic": "1",
+                        "sukInnerCartonPic": "1",
+                        "sukOuterCartonPic": "1",
                         "sukSample": true,
                         "sukSampleQty": 2,
                         "sukSamplePrice": 2,
@@ -281,12 +326,11 @@
                         "sukPrice": 0,
                         "fieldRemark": null
                     }],
-                    responsibilityList: this.$refs.responsibility.tableData,
+                    //                    responsibilityList: this.$refs.responsibility.tableData,
                 }
-                var basic = this.$refs.basicInfo.formItem
-                _.extendOwn(params, basic)
+                //                var basic = this.$refs.basicInfo.formItem
+                //                _.extendOwn(params, basic)
                 console.log(params)
-                return;
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -321,7 +365,7 @@
                 }];
             },
             productInfoBtn(item) { //Product info 按钮创建
-                if (this.statusModify && !item._disabled) return [{
+                if (!this.statusModify && !item._disabled) return [{
                     label: 'Modify',
                     type: 'modify'
                 }, {
@@ -398,10 +442,56 @@
                         this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
                     });
             },
+            //...........................................带入数据
+            //supplier带入
+            //inquiry带入
+            getInquiryDetail(id) { //获取 Inquiry detail 数据
+                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
+                        id: id
+                    })
+                    .then(res => {
+                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
+                        this.$refs.basicInfo.formItem.supplierName = res.supplierName
+                        this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
+                        this.$refs.basicInfo.formItem.incoterm = res.incoterm
+                        this.$refs.basicInfo.formItem.payment = res.payment
+                        this.$refs.basicInfo.formItem.departureCountry = res.departureCountry
+                        this.$refs.basicInfo.formItem.departurePort = res.departurePort
+                        this.$refs.basicInfo.formItem.destinationCountry = res.destinationCountry
+                        this.$refs.basicInfo.formItem.destinationPort = res.destinationPort
+                        this.$refs.basicInfo.formItem.transport = res.transport
+                        //Product Info
+                        this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.details),
+                            item => {
+                                return item;
+                            });
+                        this.tableLoad = false;
+                    })
+                    .catch(err => {
+                        this.tableLoad = false;
+                    });
+            },
+            //product带入
         },
-        created() {},
-        mounted() {
+        created() {
+            //判断从哪个地方带来的数据
+            let fromData = this.$route.query.type
+            switch (fromData) {
+                case 'supplier':
 
+                    break;
+                case 'inquiry':
+                    this.getInquiryDetail(this.$route.query.id)
+                    break;
+                case 'product':
+
+                    break;
+                default:
+                    console.log("裸进")
+            }
+        },
+        mounted() {
+            this.getInquiryDetail(16)
         },
     }
 
