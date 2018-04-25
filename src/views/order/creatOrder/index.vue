@@ -5,7 +5,7 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         
+         <VExchange :list='exchangeRateList'></VExchange>
    
 <!--             responsibility     -->
          <VResponsibility ref='responsibility'></VResponsibility>
@@ -42,7 +42,11 @@
          </div>
 <!--              quickcreate弹窗区域-->
           <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
-                <VDialogEdit></VDialogEdit>
+                <VInquiry 
+                 v-model=dialogQuickcreate
+                :selectionRadio=true
+                    @addInquiry='text'
+                ></VInquiry>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
            <el-dialog :title="$i.baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
@@ -79,6 +83,8 @@
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
+    import VExchange from '@/components/base/oneLine'
+    import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
         VHistoryModify
@@ -94,7 +100,9 @@
             VDialogEdit,
             VCaculate,
             VHistoryModify,
-            VProduct
+            VProduct,
+            VExchange,
+            VInquiry
         },
         data() {
             return {
@@ -113,15 +121,42 @@
                 historyColumn: {},
                 oSwitch: false, //VHistory 组件开关状态
                 checkedAll: '',
+                exchangeRateList: [{
+                        text: 'exchangeRate(￥-$)',
+                        value: '',
+                    },
+                    {
+                        text: 'exchangeRate($-￥)',
+                        value: '',
+                    },
+                    {
+                        text: 'exchangeRate(￥-€)',
+                        value: '',
+                    },
+                    {
+                        text: 'exchangeRate(€-￥)',
+                        value: '',
+                    },
+                    {
+                        text: 'exchangeRate($-€)',
+                        value: '',
+                    },
+                    {
+                        text: 'exchangeRate(€-$)',
+                        value: '',
+                    }
+                ],
             }
         },
         methods: {
+            text(data) {
+                console.log(data)
+            },
             //......................提交
             send() {
-                //                if (!this.$refs.basicInfo.submitForm()) { // return // }
+                //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-
-                    "orderNo": "21111999857542222",
+                    "orderNo": "22822",
                     "customerOrderNo": "",
                     "customerNo": "",
                     "customerName": "",
@@ -131,7 +166,7 @@
                     "quotationNo": "",
                     "status": 9,
                     "deliveryDt": 1523477789000,
-                    "actDeliveryDt": 1523477806000,
+                    //"actDeliveryDt": 1523477806000,
                     "incoterm": -1,
                     "incotermArea": -1,
                     "payment": -1,
@@ -140,35 +175,18 @@
                     "departurePort": "",
                     "destCountry": "",
                     "destPort": "",
-                    "transport": -1,
+                    "transport": '',
                     "customerAgreementNo": "1",
                     "customerAgreementDt": 1523477845000,
                     "paymentDays": 1,
                     "paymentStatus": -1,
                     "remark": "",
-                    "importantCustomer": false,
-                    "importantSupplier": false,
+                    "important": false,
                     "attachment": false,
-                    "remind": false,
-                    "archive": false,
+                    //"remind": false,
+                    //"archive": false,
                     "currency": 1,
-                    "paymentRemark": "1",
-                    "totalSkuPrice": 1,
-                    "paidAmount": 0,
-                    "unpaidAmount": 0,
-                    "totalQty": 1,
-                    "totalOuterCartonQty": 1,
-                    "totalGrossWeight": 1,
-                    "totalNetWeight": 1,
-                    "totalVolume": 1,
-                    "skuQty": 1,
-                    "inboundQty": 0,
-                    "deliveredQty": 0,
-                    "draftCustomer": false,
-                    "draftSupplier": false,
-                    "recycleCustomer": true,
-                    "recycleSupplier": false,
-                    timeZone: 0,
+                    //"deliveredQty": 0,
                     "skuList": [{
                         timeZone: 0,
                         "sukQty": 22,
@@ -326,11 +344,11 @@
                         "sukPrice": 0,
                         "fieldRemark": null
                     }],
-                    //                    responsibilityList: this.$refs.responsibility.tableData,
+                    responsibilityList: this.$refs.responsibility.tableData,
                 }
-                //                var basic = this.$refs.basicInfo.formItem
-                //                _.extendOwn(params, basic)
-                console.log(params)
+                // var basic = this.$refs.basicInfo.formItem
+                //   _.extendOwn(params, basic)
+                //  console.log(params)
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -338,17 +356,6 @@
                     .catch((res) => {
                         console.log(res)
                     });
-            },
-            //..........addproduct 弹窗
-            getList(item) {
-                let tabData = [];
-                item.forEach(items => {
-                    items._checked = false;
-                    tabData.push(Object.assign({}, items))
-                });
-                this.newProductTabData = tabData;
-                console.log(this.newProductTabData)
-                this.dialogAddproduct = false;
             },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if (item.id.value && this.statusModify) return [{
@@ -400,50 +407,133 @@
                 this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch (type) {
                     case 'histoty':
-                        this.fnBasicInfoHistoty(data, 'productInfo');
+                        this.fnBasicInfoHistoty(data, 'productInfo', {
+                            type: 'histoty',
+                            data: data.id.value
+                        });
                         break;
                     case 'modify':
                         this.oSwitch = true;
-                        this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                        this.fnBasicInfoHistoty(data, 'productInfo', {
+                            type: 'modify',
+                            data: data.id.value
+                        });
                         break;
                 }
             },
             changeChecked(item) { //获取选中的单 集合
                 this.checkedAll = item;
             },
+            //..........addproduct 弹窗
+            getList(item) {
+                let tabData = [];
+                item.forEach(items => {
+                    items._checked = false;
+                    tabData.push(Object.assign({}, items))
+                });
+                this.newProductTabData = tabData;
+                this.dialogAddproduct = false;
+            },
+            fnBasicInfoHistoty(item, type, config) { //查看历史记录
+                let column;
+                this.$ajax.post(this.$apis.get_order_history, {
+                        orderId: this.orderId,
+                        skuId: item.id.value
+                    })
+                    .then(res => {
+                        let arr = [];
+                        column = this.$db.inquiryOverview.productInfo;
+                        _.map(this.newProductTabData, items => {
+                            if (_.findWhere(items, {
+                                    'key': 'id'
+                                }).value === config.data) arr.push(items)
+                        });
+
+                        if (config.type === 'histoty') {
+                            this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)), false);
+                        } else {
+                            this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)), true);
+                        }
+                    });
+            },
+            productModify() { //  提交 product 编辑 
+                this.newProductTabData.forEach((item, index) => {
+                    if (!item._remove && item._disabled) {
+                        item._remove = true;
+                        this.submitData.deleteDetailIds.push(item);
+                    };
+                    this.$set(this.newProductTabData, index, item);
+                });
+            },
             save(data) { //modify 编辑完成反填数据
                 // 反填 productTabData
                 this.newProductTabData = _.map(this.newProductTabData, val => {
-                    if (val.id.value === data[0].id.value && !val._remark && !data[0]._remark) {
+                    if (_.findWhere(val, {
+                            'key': 'id'
+                        }).value + '' === _.findWhere(data[0], {
+                            'key': 'id'
+                        }).value + '' && !val._remark && !data[0]._remark) {
+                        console.log(val)
                         val = data[0];
                         val._modify = true;
-                    } else if (val.id.value === data[1].id.value && val._remark && data[1]._remark) {
+                    } else if (_.findWhere(val, {
+                            'key': 'id'
+                        }).value + '' === _.findWhere(data[1], {
+                            'key': 'id'
+                        }).value + '' && val._remark && data[1]._remark) {
                         val = data[1];
                         val._modify = true;
                     }
                     return val;
                 });
             },
-            fnBasicInfoHistoty(item, type, id) { //查看历史记录
-                let column;
-                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                        id: item.id.value
-                    })
-                    .then(res => {
-                        let arr = [];
-                        column = this.$db.inquiryOverview.productInfo;
-                        this.newProductTabData.forEach((items, index) => {
-                            if (items.id.value === id) {
-
-                                arr.push(items);
+            removeProduct() { //删除product 某个单
+                this.newProductTabData.forEach((item, index) => {
+                    if (item._checked) {
+                        item._disabled = true;
+                        this.$set(this.newProductTabData, index, item);
+                    };
+                });
+            },
+            dataFilter(data) {
+                let arr = [],
+                    jsons = {},
+                    json = {};
+                data.forEach(item => {
+                    jsons = {};
+                    if (item._remark) { //拼装remark 数据
+                        for (let k in item) {
+                            jsons[k] = item[k].value;
+                        }
+                        json.fieldRemark = jsons;
+                    } else {
+                        json = {};
+                        for (let k in item) {
+                            if (json[k] === 'fieldRemark') {
+                                json[k] = jsons;
+                            } else {
+                                json[k] = item[k].value;
                             }
-                        });
-
-                        this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
-                    });
+                        };
+                        arr.push(json);
+                    }
+                });
+                return arr;
+            },
+            productCancel() { //  取消 product 编辑 
+                this.newProductTabData.forEach((item, index) => {
+                    if (!item._remove && item._disabled) {
+                        item._disabled = false;
+                        item._remove = false;
+                    };
+                    this.$set(this.newProductTabData, index, item);
+                });
             },
             //...........................................带入数据
             //supplier带入
+            getSupplierDetail() {
+
+            },
             //inquiry带入
             getInquiryDetail(id) { //获取 Inquiry detail 数据
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
@@ -472,6 +562,9 @@
                     });
             },
             //product带入
+            getProductDetail() {
+
+            },
         },
         created() {
             //判断从哪个地方带来的数据

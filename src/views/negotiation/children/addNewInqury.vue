@@ -60,14 +60,14 @@
     /**
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
-    */
+     */
     import selectSearch from '@/components/common/fnCompon/selectSearch';
     import VTable from '@/components/common/table/index';
     export default {
-        name:'',
+        name: '',
         data() {
             return {
-                checkedData:[],
+                checkedData: [],
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 searchLoad: false,
                 options: [{
@@ -98,7 +98,7 @@
                     pn: 1,
                     recycleCustomer: 0
                 },
-                tabLoad:false,
+                tabLoad: false,
                 pageTotal: 0,
                 _id: ''
             }
@@ -125,7 +125,7 @@
             }
         },
         computed: {
-            dialogVisible : {
+            dialogVisible: {
                 get() {
                     return this.value;
                 },
@@ -150,7 +150,9 @@
             argDisabled(val) {
                 _.map(val, id => {
                     _.map(this.tabData, res => {
-                        if(id === _.findWhere(res, { 'key': 'id'}).value) {
+                        if (id === _.findWhere(res, {
+                                'key': 'id'
+                            }).value) {
                             res._checked = false;
                             res._disabled = true;
                         }
@@ -160,15 +162,17 @@
         },
         methods: {
             addCompare() {
+
                 let arg = this.$copyArr(this.checkedData);
+                return this.$emit('addInquiry', arg);
                 this.checkedData.forEach((item, index) => {
                     delete arg[index]._checked;
                 });
                 this.$emit('addInquiry', arg);
             },
             inputEnter(val) {
-                if(!val.keyType) return this.$message('请选中搜索类型');
-                if(!val.key) return this.$message('搜索内容不能为空');
+                if (!val.keyType) return this.$message('请选中搜索类型');
+                if (!val.key) return this.$message('搜索内容不能为空');
                 this.params.keyType = val.keyType;
                 this.params.key = val.key;
                 this.searchLoad = true;
@@ -176,7 +180,7 @@
             gettabData() {
                 let url, column;
                 this.tabLoad = true;
-                if(this.viewByStatus + '' === '0') {
+                if (this.viewByStatus + '' === '0') {
                     url = this.$apis.POST_INQIIRY_LIST;
                     column = this.$db.inquiryOverview.viewByInqury;
                 } else {
@@ -184,16 +188,16 @@
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
-                .then(res => {
-                    this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;   
-                    this.searchLoad = false; 
-                })
-                .catch(() => {
-                    this.searchLoad = false; 
-                    this.tabLoad = false;
-                })
+                    .then(res => {
+                        this.pageTotal = res.tc;
+                        this.tabData = this.$getDB(column, res.datas);
+                        this.tabLoad = false;
+                        this.searchLoad = false;
+                    })
+                    .catch(() => {
+                        this.searchLoad = false;
+                        this.tabLoad = false;
+                    })
             },
             cancelInquiry() { //取消询价单
                 this.ajaxInqueryAction('cancel')
@@ -209,26 +213,26 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });          
+                    });
                 });
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
                 this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
-                    action: type,
-                    ids:argId
-                })
-                .then(res => {
-                    this.gettabData();
-                    this.checkedData = [];
-                });
+                        action: type,
+                        ids: argId
+                    })
+                    .then(res => {
+                        this.gettabData();
+                        this.checkedData = [];
+                    });
             },
             getChildrenId(type) {
                 let arr = [];
                 this.checkedData.forEach(item => {
                     arr.push(item.id.value)
                 });
-                if(typeof type === 'string') arr.join(',')
+                if (typeof type === 'string') arr.join(',')
                 return arr;
             },
             toCompare() {
@@ -254,77 +258,79 @@
             }
         }
     }
+
 </script>
 <style lang="less" scoped>
     .inquiryOverview {
         .hd {
-            padding-left:15px;
+            padding-left: 15px;
             height: 50px;
-            line-height:50px;
-            color:#666;
-            border-bottom:1px solid #ccc;
+            line-height: 50px;
+            color: #666;
+            border-bottom: 1px solid #ccc;
         }
         .status {
-            display:flex;
+            display: flex;
             height: 60px;
             align-items: center;
-            justify-content:space-between;
-            padding:0 15px;
+            justify-content: space-between;
+            padding: 0 15px;
             box-sizing: border-box;
             .state {
-                display:flex;
+                display: flex;
                 align-items: center;
-                font-size:16px;
-                color:#666;
+                font-size: 16px;
+                color: #666;
             }
             span {
-                padding-right:5px;
+                padding-right: 5px;
             }
             .btn-wrap {
-                display:flex;
+                display: flex;
                 align-items: center;
                 span {
-                    font-size:14px;
+                    font-size: 14px;
                 }
                 button {
-                    padding:2px 5px;
+                    padding: 2px 5px;
                 }
             }
             .select-wrap {
-                display:flex;
-                align-items:center;
+                display: flex;
+                align-items: center;
                 .select {
                     width: 110px;
-                    margin-right:5px;
+                    margin-right: 5px;
                     input {}
                 }
             }
         }
         .fn {
-            display:flex;
-            justify-content:space-between;
-            padding:10px 15px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
             box-sizing: border-box;
             .viewBy {
-                display:flex;
+                display: flex;
                 align-items: center;
                 span {
-                    font-size:14px;
-                    color:#666;
+                    font-size: 14px;
+                    color: #666;
                 }
                 button {
                     cursor: pointer;
-                    padding:2px 5px;
+                    padding: 2px 5px;
                 }
                 .set {
                     cursor: pointer;
-                    padding-left:18px;
-                    color:#999;
+                    padding-left: 18px;
+                    color: #999;
                     i {
-                        font-size:25px;
+                        font-size: 25px;
                     }
                 }
             }
         }
     }
+
 </style>
