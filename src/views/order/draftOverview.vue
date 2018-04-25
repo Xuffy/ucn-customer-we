@@ -1,18 +1,6 @@
 <template>
-    <div class="orderOverview">
+    <div class="Overview">
         <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
-<!--
-<div class="status">
-    <div class="select-wrap">
-        <div class="select">
-            <el-select v-model="value" placeholder="select" @change="selectChange">
-                <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.id" />
-            </el-select>
-        </div>
-        <el-input v-model="keyWord" clearable prefix-icon="el-icon-search" placeholder="search" style="width:150px;"></el-input>
-    </div>
-</div>
--->
         <div class="fn">
             <div class="btn-wrap">
                 <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
@@ -23,7 +11,7 @@
         </div>
         <!--form-->
           <!--        表格-->
-            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+            <v-table  :data="tabData" />
     </div>
 </template>
 <script>

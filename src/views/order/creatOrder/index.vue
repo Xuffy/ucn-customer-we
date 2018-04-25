@@ -102,7 +102,7 @@
                 checked: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
                 dialogHistory: false, //弹出框 productinfo 弹窗区域
-                dialogAddproduct:false,
+                dialogAddproduct: false,
                 TabsAddproduct: 'FromNewSearch', //tab
                 value: '',
                 keyWord: '',
@@ -120,11 +120,8 @@
             send() {
                 //                if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    "ownerId": 0,
-                    "companyId": 0,
-                    "tenantId": 0,
-                    "version": 0,
-                    "orderNo": "299985754",
+
+                    "orderNo": "21111999857542222",
                     "customerOrderNo": "",
                     "customerNo": "",
                     "customerName": "",
@@ -150,7 +147,7 @@
                     "paymentStatus": -1,
                     "remark": "",
                     "importantCustomer": false,
-                    "importantSupplier":false,
+                    "importantSupplier": false,
                     "attachment": false,
                     "remind": false,
                     "archive": false,
@@ -171,9 +168,9 @@
                     "draftSupplier": false,
                     "recycleCustomer": true,
                     "recycleSupplier": false,
-                     timeZone:0,
+                    timeZone: 0,
                     "skuList": [{
-                         timeZone:0,
+                        timeZone: 0,
                         "sukQty": 22,
                         "skuFobPrice": 3,
                         "skuOuterCartonQty": 3,
@@ -329,11 +326,11 @@
                         "sukPrice": 0,
                         "fieldRemark": null
                     }],
-//                    responsibilityList: this.$refs.responsibility.tableData,
+                    //                    responsibilityList: this.$refs.responsibility.tableData,
                 }
-//                var basic = this.$refs.basicInfo.formItem
-//                _.extendOwn(params, basic)
-               console.log(params)
+                //                var basic = this.$refs.basicInfo.formItem
+                //                _.extendOwn(params, basic)
+                console.log(params)
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -448,26 +445,26 @@
             //...........................................带入数据
             //supplier带入
             //inquiry带入
-              getInquiryDetail(id) { //获取 Inquiry detail 数据
+            getInquiryDetail(id) { //获取 Inquiry detail 数据
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                         id: id
                     })
                     .then(res => {
-                   //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
-                    this.$refs.basicInfo.formItem.supplierName=res.supplierName
-                    this.$refs.basicInfo.formItem.quotationNo=res.quotationNo
-                    this.$refs.basicInfo.formItem.incoterm=res.incoterm
-                    this.$refs.basicInfo.formItem.payment=res.payment
-                    this.$refs.basicInfo.formItem.departureCountry=res.departureCountry
-                    this.$refs.basicInfo.formItem.departurePort=res.departurePort  
-                    this.$refs.basicInfo.formItem.destinationCountry=res.destinationCountry
-                    this.$refs.basicInfo.formItem.destinationPort=res.destinationPort
-                    this.$refs.basicInfo.formItem.transport=res.transport
-                    //Product Info
-                   this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.details),
+                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
+                        this.$refs.basicInfo.formItem.supplierName = res.supplierName
+                        this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
+                        this.$refs.basicInfo.formItem.incoterm = res.incoterm
+                        this.$refs.basicInfo.formItem.payment = res.payment
+                        this.$refs.basicInfo.formItem.departureCountry = res.departureCountry
+                        this.$refs.basicInfo.formItem.departurePort = res.departurePort
+                        this.$refs.basicInfo.formItem.destinationCountry = res.destinationCountry
+                        this.$refs.basicInfo.formItem.destinationPort = res.destinationPort
+                        this.$refs.basicInfo.formItem.transport = res.transport
+                        //Product Info
+                        this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.details),
                             item => {
                                 return item;
-                            });                  
+                            });
                         this.tableLoad = false;
                     })
                     .catch(err => {
@@ -481,7 +478,7 @@
             let fromData = this.$route.query.type
             switch (fromData) {
                 case 'supplier':
-                        
+
                     break;
                 case 'inquiry':
                     this.getInquiryDetail(this.$route.query.id)
@@ -494,7 +491,7 @@
             }
         },
         mounted() {
-                 this.getInquiryDetail(16) 
+            this.getInquiryDetail(16)
         },
     }
 
