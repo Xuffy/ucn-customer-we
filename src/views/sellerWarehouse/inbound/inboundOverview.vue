@@ -53,7 +53,11 @@
             },
 
             getInboundData(){
-                this.$ajax.get(`${this.$apis.get_inboundData}?pn=${1}&ps=${50}&inboundNo=${1}`).then(res=>{
+                this.$ajax.post(this.$apis.get_inboundData,{
+                    pn:1,
+                    ps:50,
+                    inboundNo:''
+                }).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.log(err)
