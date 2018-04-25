@@ -1,5 +1,6 @@
 {
   "logistic": {
+    "placeholder": "Please enter content",
     "logisticPlan": "Logistic Plan",
     "basicInfo": {
       "logisticsNo": "Logistics No",
@@ -54,7 +55,17 @@
     "containerInfo": {
       "add": "Add",
       "delete": "Delete",
-      "containerNo": "Container No"
+      "containerNo": "Container No",
+      "sealNumber": "Seal Number",
+      "containerWeight": "Container Weight",
+      "containerType": "Container Type",
+      "vgm": "VGM",
+      "totalQuantityInContainer": "Total Quantity in Container",
+      "totalVolumeInContainer": "Total Volume in Container",
+      "totalNetWeightInContainer": "Total Net Weight in Container",
+      "totalQuantityOfOuterCartonsInContainer": "Total Quantity of Outer Cartons in Container",
+      "totalSkuPriceInContainer": "Total SKU Price in Container",
+      "exchangeCurrency": "Exchange Currency"
     }
   }
 }

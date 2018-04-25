@@ -230,8 +230,8 @@
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="detailObj.remark"></el-input>
         </div>
       </el-col>
-      <attachment accept="all" ref="attachment"/>
-      <one-line :list="exchangeRateList"/>
+      <attachment accept="all" ref="attachment" :title="$i.logistic.basicInfo.attachment"/>
+      <one-line :list="exchangeRateList" :title="$i.logistic.basicInfo.exchangeRate"/>
     </el-row>
     <div class="hd"></div>
     <div class="hd active">{{ $i.logistic.transportInfoTitle }}</div>
@@ -281,7 +281,11 @@
     </el-row>
     <div class="hd"></div>
     <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-    <containerTable/>
+    <div class="btn-wraps">
+      <el-button type="primary" size="mini">{{ $i.logistic.containerInfo.add }}</el-button>
+      <el-button type="danger" size="mini">{{ $i.logistic.containerInfo.delete }}</el-button>
+    </div>
+    <v-table :hideFilterValue="true" :hideFilterColumn="true" :data="tabData"/>
     <!-- <v-container-info
       :tableData="tableData"
       @tabAppend="tabAppend"
@@ -323,10 +327,9 @@
 </div>
 </template>
 <script>
-import { VSimpleTable, selectSearch } from '@/components/index';
+import { VSimpleTable, selectSearch, VTable } from '@/components/index';
 import attachment from '@/components/base/attachment'
-import oneLine from '@/components/base/oneLine'
-import containerTable from '@/views/logistic/children/containerTable'
+import oneLine from '@/views/logistic/children/oneLine'
 
 export default {
   name: 'placeLogisticPlan',
@@ -336,43 +339,41 @@ export default {
       isModify:false,
       exchangeRateList: [
         {
-          text: 'exchangeRate(￥-$)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '￥-$',
+          value: 0
         },
         {
-          text: 'exchangeRate($-￥)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '$-￥',
+          value: 0
         },
         {
-          text: 'exchangeRate(￥-€)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '￥-€',
+          value: 0
         },
         {
-          text: 'exchangeRate(€-￥)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '€-￥',
+          value: 0
         },
         {
-          text: 'exchangeRate($-€)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '$-€',
+          value: 0
         },
         {
-          text: 'exchangeRate(€-$)',
-          value: 0,
-          placeholder: 'Please enter content'
+          text: '€-$',
+          value: 0
         }
       ],
       createDate:'2018-09-08',
       tabColumn: [],
-      tabData: [],
+      tabData: [
+        {
+          logisticsNo: '1212424'
+        }
+      ],
       fileList: [],
-      date:'',
-      newSearchDialogVisible:false,
-      pickerOptions:{
+      date: '',
+      newSearchDialogVisible: false,
+      pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
@@ -409,12 +410,15 @@ export default {
     "v-select-search": selectSearch,
     attachment,
     oneLine,
-    containerTable
+    VTable
   },
   mounted () {
+    console.log(this.$db.logistic)
+    this.tabData = this.$getDB(this.$db.logistic.containerInfo, this.tabData)
+    console.log(this.tabData)
     // console.log(this.$i)
   },
-  created() {
+  created () {
     // this.ajax({
     //     url: '/Compare',
     //     method: 'get'
