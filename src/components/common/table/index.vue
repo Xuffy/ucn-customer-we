@@ -80,8 +80,8 @@
 
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
-            <td v-if="totalItem._totalRow">
-              <div v-text="totalItem._totalRow.label"></div>
+            <td>
+              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : '总计'"></div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && typeof item === 'object'">
               <div v-text="item.value"></div>

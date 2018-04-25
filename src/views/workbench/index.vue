@@ -69,6 +69,10 @@
 
       });
 
+      this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
+
+      });
+
 
       this.mockData = this.$getDB(
         this.$db.inquiryOverview.productInfo,

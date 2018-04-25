@@ -101,8 +101,9 @@
             // item._disabled = true;
             return item;
           });
+
           this.totalRow = this.$getDB(this.$db.workbench.pending, [data[0]], item => {
-            item._totalRow = {label: '总计'};
+            // item._totalRow = {label: '总计'};
             return item;
           })
           /*this.totalRow = _.clone(this.dataList[0]);

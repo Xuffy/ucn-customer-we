@@ -33,7 +33,7 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            messageBoard: 'code',
+            // messageBoard: 'code',
             name: 'Workbench',
           },
           component: () => import('../views/workbench/index.vue')
