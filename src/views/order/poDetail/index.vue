@@ -108,7 +108,8 @@
             VTable,
             messageBoard,
             VCaculate,
-            VHistoryModify
+            VHistoryModify,
+
         },
         data() {
             return {
@@ -374,10 +375,12 @@
         created() {
             this.get_data()
             this.submitData.id = this.$route.query.id;
-            //            this.getInquiryDetail()
+            // this.getInquiryDetail()
         },
         watch: {
-
+            newProductTabData(val, old) {
+                console.log(val)
+            }
         }
     }
 
