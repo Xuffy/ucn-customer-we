@@ -86,6 +86,13 @@ export default {
         rules: [],
         type: 'select',
     },
+    currency: {
+        key: 'incoterm',
+        ismodify: false,
+        isDefaultEdit: false,
+        rules: [],
+        type: 'select',
+    },
     incortermAea: {
         key: 'incortermAea',
         ismodify: false,
@@ -156,14 +163,14 @@ export default {
         rules: [],
         type: 'select',
     },
-    customerAgreementNumber: {
+    customerAgreementNo: {
         key: 'customerAgreementNo',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'text',
     },
-    customerAgreementDate: {
+    customerAgreementDt: {
         key: 'customerAgreementDt',
         ismodify: false,
         isDefaultEdit: false,

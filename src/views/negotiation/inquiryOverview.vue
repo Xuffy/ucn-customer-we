@@ -118,7 +118,8 @@
             },
             status(val) {
                 this.params.statuses = val;
-            }
+            },
+            
         },
         methods: {
             inputEnter(val) {

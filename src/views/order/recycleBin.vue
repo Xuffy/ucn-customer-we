@@ -1,6 +1,6 @@
 <template>
     <div class="draftOverview">
-        <h3 class="hd">Draft Overview</h3>
+        <h3 class="hd">Recycle Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
