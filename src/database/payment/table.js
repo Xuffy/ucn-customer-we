@@ -43,5 +43,8 @@ export default {
     },
     actualDateOfReceipt: {
         key: 'actualReceiveDt'
+    },
+    currencyCode: {
+        key: 'currencyCode'
     }
   }

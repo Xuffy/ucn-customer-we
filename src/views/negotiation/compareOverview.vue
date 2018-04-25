@@ -4,14 +4,18 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button>{{ $i.baseText.downloadSelectedCompare }}</el-button>
-                <el-button type="danger">{{ $i.baseText.delete }}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <v-table 
             :data="tabData" 
-            :data-key="tabColumn"
-            :loading="tabLoad" 
+            :loading="tabLoad"
+            :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
+            @action="action"
+            @change-checked="changeChecked"
+            :height="350"
+            :page-total="pageTotal"
         />
     </div>
 </template>
@@ -21,7 +25,8 @@
         name:'',
         data() {
             return {
-                tabColumn: '',
+                pageTotal:0,
+                checkedArg: [],
                 tabData: [],
                 options:[{
                     id:'1',
@@ -42,14 +47,15 @@
                     // },
                     ps: 10,
                     pn: 1,
-                    sorts: [
-                        {
-                            nativeSql: true,
-                            orderBy: "string",
-                            orderType: "string",
-                            resultMapId: "string"
-                        }
-                    ]
+                    recycle: 0,
+                    // sorts: [
+                    //     {
+                    //         nativeSql: true,
+                    //         orderBy: "string",
+                    //         orderType: "string",
+                    //         resultMapId: "string"
+                    //     }
+                    // ]
                 },
                 tabLoad: false
             }
@@ -59,17 +65,69 @@
             'v-table': VTable
         },
         methods: {
-            getList() {
+            getList() { //获取Compare 列表
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
                 .then(res => {
+                    let data = res.datas;
                     this.tabLoad = false;
-                    console.log(res)
+                    data.forEach(item => {
+                        item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
+                    });
+                    this.pageTotal = res.tc;
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
                 });
             },
-            searchEnter(item) {
+            searchEnter(item) { // 搜索框
                 this.bodyData.key = item.key;
                 this.bodyData.keyType = item.keyType;
+            },
+            action(item, type) { //操作表单 action
+                let types = '';
+                if(type === 'detail') {
+                    types = 'only';
+                } else {
+                    types = 'modify';
+                }
+                this.$router.push({
+                    name: 'inquiryCompareDetail',
+                    params: {
+                        type: types
+                    },
+                    query: {
+                        id: _.findWhere(item, { 'key': 'id' }).value
+                    }
+                });
+            },
+            changeChecked(item) { //选中的compare
+                let arr = [];
+                item.forEach(item => {
+                    arr.push(item.id.value);
+                });
+                this.checkedArg = arr;
+            },
+            compareDelete() { //删除compare
+                this.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
+                    .then(res => {
+                        this.tabData.forEach((item, index) => {
+                            res.forEach(key => {
+                                if(item.id.value === key) {
+                                    this.tabData.splice(index, 1);
+                                }
+                            });
+                        });
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             }
         },
         watch: {

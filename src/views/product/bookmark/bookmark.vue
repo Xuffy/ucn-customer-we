@@ -68,10 +68,11 @@
                 <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
                 <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
-                <el-button>Add Product</el-button>
-                <el-button>Manually Add</el-button>
+                <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
+                <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
                 <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
-                <el-button :disabled="disabledRemove" type="danger">Remove</el-button>
+                <el-button @click="deleteBookmark" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>
+                <el-button>{{$i.product.upload}}</el-button>
                 <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
             </div>
 
@@ -81,6 +82,18 @@
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>
+
+
+        <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
+            <product
+                    :title="addProductTitle"
+                    :type="addProductType"
+                    :disabledOkBtn="disabledOkBtn"
+                    :hideBtn="true"
+                    @handleOK="handleOkClick"></product>
+        </el-dialog>
+
+
     </div>
 </template>
 
@@ -88,13 +101,15 @@
     import VTable from '@/components/common/table/index'
     import {dropDownSingle} from '@/components/index'
     import sectionNumber from '../../product/sectionNumber'
+    import product from '../addProduct'
 
     export default {
         name: "overview",
         components:{
             dropDown:dropDownSingle,
             sectionNumber,
-            VTable
+            VTable,
+            product
         },
 
         data(){
@@ -107,12 +122,16 @@
                 //btn禁用状态
                 disabledCompare:true,
                 disabledRemove:true,
+                addProductDialogVisible:false,      //新增产品弹出框显示隐藏
+                addProductTitle:'',
+                addProductType:'product',
+                disabledOkBtn:false,
 
                 //表格字段绑定
                 productForm: {
-                    categoryId: '',
+                    categoryId: null,
                     nameCnLike: "",
-                    readilyAvailable: '',
+                    readilyAvailable: null,
                     customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -121,11 +140,11 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: '',
+                    country: null,
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
-                    deliveryDates: '',
+                    deliveryDates: null,
                     descEnLike: "",
                     descCnLike: "",
 
@@ -149,7 +168,6 @@
                     //         orderType: "",
                     //     }
                     // ],
-
                 },
                 //表格验证参数
                 productFormRules:{
@@ -192,14 +210,36 @@
             search(){
                 console.log(this.productForm)
                 this.disabledSearch=true;
-                this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架(暂时中文)';
-                        }else if(v.status===1){
-                            v.status='上架';
-                        }
-                    });
+
+                if(!this.productForm.maxExwPrice){
+                    this.productForm.maxExwPrice=null;
+                }else{
+                    this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
+                }
+                if(!this.productForm.minExwPrice){
+                    this.productForm.minExwPrice=null;
+                }else{
+                    this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
+                }
+                if(!this.productForm.maxFobPrice){
+                    this.productForm.maxFobPrice=null;
+                }else{
+                    this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
+                }
+                if(!this.productForm.minFobPrice){
+                    this.productForm.minFobPrice=null;
+                }else{
+                    this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
+                }
+
+                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
+                    // res.datas.forEach(v=>{
+                    //     if(v.status===0){
+                    //         v.status='下架(暂时中文)';
+                    //     }else if(v.status===1){
+                    //         v.status='上架';
+                    //     }
+                    // });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
                 }).catch(err=>{
@@ -236,25 +276,50 @@
 
             //获取table数据
             getData() {
-
-                this.$ajax.post(this.$apis.get_buyerProductList,{
+                this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                     recycle:false
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    if(this.disabledLine.length>0){
-                        this.disabledLine.forEach(v=>{
-                            this.tableDataList.forEach(m=>{
-                                if(m.id.value===v){
-                                    m._disabled=true;
-                                }
-                            })
-                        })
-                    }
                 }).catch(err=>{
                     console.log(err)
                 });
             },
 
+            handleOkClick(e){
+                if(e.length===0){
+                    //表示一个都没选
+                    this.$message({
+                        message: '请选择一条商品',
+                        type: 'warning'
+                    });
+                }else{
+                    let id=[];
+                    e.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.disabledOkBtn=true;
+
+                    this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
+                        this.$ajax.post(this.$apis.get_buyerBookmarkList,{
+                            recycle:false
+                        }).then(res=>{
+                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                            this.$message({
+                                message: '添加成功',
+                                type: 'success'
+                            });
+                            this.disabledOkBtn=false;
+                            this.addProductDialogVisible=false;
+                        }).catch(err=>{
+                            console.log(err)
+                        });
+                    }).catch(err=>{
+                        console.log(err)
+                        this.disabledOkBtn=false;
+                        this.addProductDialogVisible=false;
+                    });
+                }
+            },
             /**
              * 按钮组操作
              * */
@@ -262,13 +327,53 @@
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/product/sourcingDetail',{id:item.id.value});
+                    this.windowOpen('/product/bookmarkDetail',{id:item.id.value});
                 }
             },
 
             createInquiry(){
 
             },
+            addProduct(){
+                this.addProductDialogVisible=true;
+            },
+            manuallyAddProduct(){
+                this.windowOpen('/product/bookmarkManuallyAdd');
+            },
+            deleteBookmark(){
+                this.$confirm('是否确认删除？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,id).then(res=>{
+                        this.selectList=[];
+                        this.$ajax.post(this.$apis.get_buyerBookmarkList,{
+                            recycle:false
+                        }).then(res=>{
+                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                        }).catch(err=>{
+                            console.log(err)
+                        });
+                    });
+
+                }).catch(() => {
+
+                });
+
+
+
+            },
+
         },
         created(){
             this.getData();

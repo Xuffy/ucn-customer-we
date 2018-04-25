@@ -13,7 +13,7 @@
   "compare":"Compare",
   "addToCompare":"Add To Compare",
   "addToBookmark":"Add To Bookmark",
-  "download":"download",
+  "download":"Download",
   "delete":"Delete",
   "addNewProduct":"添加新产品",
   "setUp":"设为上架",
@@ -30,8 +30,15 @@
   "tradeHistory":"Trade History",
   "remark":"Remark",
   "finish":"完成",
+  "finishEn":"Finish",
+  "remove":"Remove",
+  "upload":"Upload",
+  "recover":"Recover",
 
 
+
+  "compareOverview":"Compare Overview",
+  "compareDetail":"Compare Detail",
 
 
 
@@ -46,10 +53,22 @@
   "otherIncotermCurrency":"其他价格条款币种",
 
 
-
   "add":"Add",
   "operator":"Operator",
   "time":"Time",
   "action":"Action",
-  "modify":"Modify"
+  "modify":"Modify",
+  "editEn":"Edit",
+  "addNewProductEn":"Add New Product",
+  "manuallyAdd":"Manually Add",
+  "downloadTheProduct":"Download The Product",
+  "uploadProduct":"Upload Product",
+  "ok":"OK",
+  "cancel":"Cancel",
+  "accept":"Accept",
+  "addNew":"Add New",
+
+  "hideTheSame":"Hide The Same",
+  "highlightTheDifferent":"Highlight the Different",
+  "saveTheCompare":"Save The compare"
 }

@@ -1,4 +1,4 @@
-const version = ['/web/v1', '/web/v2', '/web/v3'];
+const version = ['/web/v1', '/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
@@ -24,6 +24,12 @@ const apis = {
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
   inquiry_detail: ['/inquiry', 'BASE_DHC'],
+  POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_DHC'], 
+  POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
+  POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'],
   POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_DHC'],
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_DHC'],
@@ -50,7 +56,6 @@ const apis = {
   delete_order:['/order/delete','BASE_HCJ'],
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
-  //
   get_userProfile:['/user/profile','BASE_LYF'],
   put_userProfile:['/user/profile','BASE_LYF'],
   put_userProfilePassword:['/user/profile/password','BASE_LYF'],
@@ -58,6 +63,9 @@ const apis = {
   get_department:['/department','BASE_LYF'],
   get_role:['/role','BASE_LYF'],
 
+  add_order:['/order/save','BASE_HCJ'], 
+  detail_order:['/order/detail/{id}','BASE_HCJ'],
+  get_order_history:['/order/skuHistory','BASE_HCJ'],
   //supplier
   get_listSupplier:['/purchase/listSupplier','BASE_CS_cgs'],
   get_supplier_id:['/purchase/supplier/{id}','BASE_CS_cgs'],
@@ -66,25 +74,60 @@ const apis = {
   get_supplier_remark_de:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
   post_supplier_delete_remark:['/purchase/supplier/deleteRemark/{id}','BASE_CS_cgs'],
   //settings
+  get_departmentOverview:['/department/overview','BASE_LYF'],
   get_department:['/department','BASE_LYF'],
   get_departmentUser:['/user/list','BASE_LYF'],
+  delete_department:['/department/{deptId}','BASE_LYF'],
+  add_departmentRole:['/role','BASE_LYF'],
+  delete_departmentRole:['/role/{deptId}/{roleId}','BASE_LYF'],
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
+  get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
+  add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
+  add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
+  update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
+  delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
+  delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
   post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
   get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
+  get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
+  recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
+  get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
+  add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
+  delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
+  get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
+
+
+
   post_supplier_addbookmark:['/purchase/supplier/bookmark','BASE_CS_cgs'],
   post_supplier_deletebookmark:['/purchase/supplier/deleteBookmark/{id}','BASE_CS_cgs'],
   post_supplier_listbookmark:['/purchase/supplier/listBookmarks','BASE_CS_cgs'], 
   post_supplier_recoverbookmark:['/purchase/supplier/recoverBookmark/{id}','BASE_CS_cgs'],
-  post_supplier_addCompare:['/purchase/supplier/supplier/compare','BASE_CS_cgs'],
-  post_supplier_listCompareDetails:['/purchase/supplier/supplier/compareDetail/{id}','BASE_CS_cgs'],
+  post_supplier_addCompare:['/purchase/supplier/compare','BASE_CS_cgs'],
+  post_supplier_listCompare:['/purchase/supplier/listCompare','BASE_CS_cgs'],
+   post_supplier_listCompareDetails:['/purchase/supplier/listCompareDetails','BASE_CS_cgs'],  
+  post_supplier_deleteCompareDetails:['/purchase/supplier/deleteCompareDetails','BASE_CS_cgs'],
   post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
-  post_supplier_deleteCompareDetail:['/purchase/supplier/deleteCompareDetail','BASE_CS_cgs'],
   post_supplier_recoverCompare:['/purchase/supplier/recoverCompare','BASE_CS_cgs'],
+
   //
   post_bizlog:['/bizlog/query','BASE_JML_log'],
-  post_codePart:['/code/part','BASE_JML']
+  post_codePart:['/code/part','BASE_JML'],
 
+
+  //seller warehouse
+  get_inboundData:['/inbound/page','BASE_SELLER'],
+
+  // logistic
+  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
+  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
+  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
+
+  // logistic dictionary
+  get_container_type: ['/containertype/all', 'BASE_dictionary']
 };
 
 let list = _.mapObject(apis, val => {

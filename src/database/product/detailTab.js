@@ -1,18 +1,30 @@
+
+
 export default {
     /**
      * Basic Info
      * */
-    status:{
+    saleStatus:{
         key:'status',
         type: 'Boolean',
         showType:'select',
-        belongTab:'basicInfo'
+        belongTab:'basicInfo',
+        options:[
+            {
+                label:'下架',
+                value:0
+            },
+            {
+                label:'上架',
+                value:1
+            }
+        ]
     },
     code:{
         key:'code',
         type: 'Boolean',
         showType:'input',
-        disabledInput:true,             //是否禁止输入
+        // disabledInput:true,             //是否禁止输入
         belongTab:'basicInfo'
     },
     nameCn:{
@@ -67,7 +79,7 @@ export default {
         showType:'input',
         belongTab:'basicInfo',
     },
-    supplierCode:{
+    supplierNo:{
         key:'supplierCode',
         type: 'String',
         showType:'input',
@@ -78,6 +90,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        options:[
+            {
+                label:'kg',
+                value:1
+            },
+            {
+                label:'g',
+                value:2
+            }
+        ]
     },
     formation:{
         key:'formation',
@@ -144,6 +166,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        options:[
+            {
+                label:'有货',
+                value:true
+            },
+            {
+                label:'无货',
+                value:false
+            }
+        ],
     },
     availableQty:{
         key:'availableQty',
@@ -156,6 +188,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        options:[
+            {
+                label:'中国',
+                value:0
+            },
+            {
+                label:'美国',
+                value:1
+            }
+        ]
     },
     applicableAge:{
         key:'applicableAge',
@@ -174,6 +216,21 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        options:[
+            {
+                label:'Year',
+                value:1
+            },
+            {
+                label:'Month',
+                value:2
+            },
+            {
+                label:'Day',
+                value:3
+            },
+
+        ]
     },
     comments:{
         key:'comments',
@@ -285,6 +342,111 @@ export default {
     },
 
     /**
+     * priceInfo
+     * */
+
+    fobCurrency:{
+        key:'fobCurrency',
+        showType:'select',
+        belongTab:'priceInfo',
+        options:[
+            {
+                label:'USD',
+                value:0,
+            },
+            {
+                label:'CNY',
+                value:1,
+            },
+            {
+                label:'EUR',
+                value:2,
+            },
+        ],
+    },
+    fobPrice:{
+        key:'fobPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
+    fobPort:{
+        key:'fobPort',
+        showType:'input',
+        belongTab:'priceInfo',
+    },
+    exwPrice:{
+        key:'exwPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
+    exwCurrency:{
+        key:'exwCurrency',
+        showType:'select',
+        belongTab:'priceInfo',
+        options:[
+            {
+                label:'USD',
+                value:0,
+            },
+            {
+                label:'CNY',
+                value:1,
+            },
+            {
+                label:'EUR',
+                value:2,
+            },
+        ],
+    },
+    otherIncoterm:{
+        key:'otherIncoterm',
+        showType:'select',
+        belongTab:'priceInfo',
+        options:[
+            {
+                label:'CIF',
+                value:0
+            },
+            {
+                label:'DDU',
+                value:1
+            },
+        ]
+    },
+    otherIncotermPrice:{
+        key:'otherIncotermPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
+    otherIncotermArea:{
+        key:'otherIncotermArea',
+        showType:'input',
+        belongTab:'priceInfo',
+    },
+    otherIncotermCurrency:{
+        key:'otherIncotermCurrency',
+        showType:'select',
+        belongTab:'priceInfo',
+        options:[
+            {
+                label:'USD',
+                value:0,
+            },
+            {
+                label:'CNY',
+                value:1,
+            },
+            {
+                label:'EUR',
+                value:2,
+            },
+        ]
+    },
+
+
+
+
+    /**
      * Packing Info
      * */
     unitWeight:{
@@ -292,18 +454,60 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
+        options:[
+            {
+                label:'t',
+                value:0
+            },
+            {
+                label:'kg',
+                value:1
+            },
+            {
+                label:'lb',
+                value:2
+            },
+        ]
     },
     unitLength:{
         key:'unitLength',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
+        options:[
+            {
+                label:'km',
+                value:0
+            },
+            {
+                label:'mile',
+                value:1
+            },
+            {
+                label:'m',
+                value:2
+            },
+        ]
     },
     unitVolume:{
         key:'unitVolume',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
+        options:[
+            {
+                label:'m3',
+                value:0
+            },
+            {
+                label:'liter',
+                value:1
+            },
+            {
+                label:'ft3',
+                value:2
+            },
+        ]
     },
     length:{
         key:'length',
@@ -492,6 +696,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
+        options:[
+            {
+                label:'yes',
+                value:true
+            },
+            {
+                label:'no',
+                value:false
+            }
+        ]
     },
 
     /**
@@ -572,6 +786,20 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
+        options:[
+            {
+                label:'中国',
+                value:0
+            },
+            {
+                label:'美国',
+                value:1
+            },
+            {
+                label:'日本',
+                value:2
+            },
+        ]
     },
     mainSaleArea:{
         key:'mainSaleArea',
@@ -602,6 +830,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
+        options:[
+            {
+                label:'yes',
+                value:true,
+            },
+            {
+                label:'no',
+                value:false,
+            },
+        ]
     },
     displayBoxQty:{
         key:'displayBoxQty',
@@ -632,6 +870,16 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
+        options:[
+            {
+                label:'yes',
+                value:true,
+            },
+            {
+                label:'no',
+                value:false,
+            },
+        ]
     },
 
 

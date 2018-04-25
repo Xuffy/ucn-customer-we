@@ -64,21 +64,25 @@
         </div>
         <div class="footer">
             <div class="btns" v-if="!hideBtn">
-                <el-button @click="addNewProduct">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                 <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                 <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
+            </div>
+            <div class="btns" v-if="type==='recycle'">
+                <el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover" type="primary">{{$i.product.recover}}</el-button>
+                <el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>
             </div>
 
             <v-table
                     :data="tableDataList"
-                    :buttons="[{label: 'detail', type: 1}]"
+                    :buttons="type==='recycle'?[]:[{label: 'detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
-            <div class="footer-btn" v-if="hideBtn">
-                <el-button type="primary" @click="postData">OK</el-button>
+            <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
+                <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
             </div>
         </div>
@@ -115,6 +119,14 @@
                 default:function () {
                     return []
                 }
+            },
+            disabledOkBtn:{
+                type:Boolean,
+                default:false
+            },
+            forceUpdateNumber:{
+                type:Number,
+                default:0
             }
         },
         data(){
@@ -123,16 +135,21 @@
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 selectList:[],
-                downloadBtnInfo:'All',
+                downloadBtnInfo:'0',
+                downloadRecycleListInfo:'all',
+
                 //btn禁用状态
                 disabledAddBookmark:true,
                 disabledCompare:true,
+                disabledDownload:true,
+                disabledRecover:true,
+                disabledClickRecover:false,     //是否让recover按钮不能点
 
                 //表格字段绑定
                 productForm: {
-                    categoryId: '',
+                    categoryId: null,
                     nameCnLike: "",
-                    readilyAvailable: '',
+                    readilyAvailable: null,
                     customerSkuCodeLike: "",
                     minExwPrice: '',
                     maxExwPrice: '',
@@ -141,11 +158,11 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: '',
+                    country: null,
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
-                    deliveryDates: '',
+                    deliveryDates: null,
                     descEnLike: "",
                     descCnLike: "",
 
@@ -200,32 +217,81 @@
             clear(){
                 this.$refs['productFormTop'].resetFields();
                 this.$refs['productForm'].resetFields();
-                this.$set(this.productForm,'categoryId','');
-                this.$set(this.productForm,'minExwPrice','');
-                this.$set(this.productForm,'maxExwPrice','');
-                this.$set(this.productForm,'minFobPrice','');
-                this.$set(this.productForm,'maxFobPrice','');
+                this.$set(this.productForm,'categoryId',null);
+                this.$set(this.productForm,'minExwPrice',null);
+                this.$set(this.productForm,'maxExwPrice',null);
+                this.$set(this.productForm,'minFobPrice',null);
+                this.$set(this.productForm,'maxFobPrice',null);
             },
 
 
             //搜查
             search(){
-                console.log(this.productForm)
                 this.disabledSearch=true;
-                this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架(暂时中文)';
-                        }else if(v.status===1){
-                            v.status='上架';
-                        }
-                    });
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    this.disabledSearch=false;
-                }).catch(err=>{
-                    this.disabledSearch=false;
-                });
+                if(!this.productForm.maxExwPrice){
+                    this.productForm.maxExwPrice=null;
+                }else{
+                    this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
+                }
+                if(!this.productForm.minExwPrice){
+                    this.productForm.minExwPrice=null;
+                }else{
+                    this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
+                }
+                if(!this.productForm.maxFobPrice){
+                    this.productForm.maxFobPrice=null;
+                }else{
+                    this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
+                }
+                if(!this.productForm.minFobPrice){
+                    this.productForm.minFobPrice=null;
+                }else{
+                    this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
+                }
 
+                if(this.type==='recycle'){
+                    this.productForm.recycle=true;
+                    this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            if(e.status.value===1){
+                                e.status.value='上架';
+                            }else if(e.status.value===0){
+                                e.status.value='下架';
+                            }
+                            return e;
+                        });
+                        this.disabledSearch=false;
+                        this.selectList=[];
+                        if(this.disabledLine.length>0){
+                            this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
+                                this.tableDataList.forEach(m=>{
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
+                                        m._disabled=true;
+                                    }
+                                })
+                            })
+                        }
+                    }).catch(err=>{
+                        this.disabledSearch=false;
+                    });
+                }else{
+                    this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            if(e.status.value===1){
+                                e.status.value='上架';
+                            }else if(e.status.value===0){
+                                e.status.value='下架';
+                            }
+                            return e;
+                        });
+                        this.disabledSearch=false;
+                        this.selectList=[];
+                    }).catch(err=>{
+                        this.disabledSearch=false;
+                    });
+                }
             },
 
             handleChange(value) {
@@ -240,7 +306,12 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
-                this.$emit('handleOK',this.selectList);
+
+                let arr=this.$copyArr(this.selectList);
+                arr.forEach(v=>{
+                    v._checked=false;
+                });
+                this.$emit('handleOK',arr);
             },
             cancel(){
                 this.$emit('handleCancel');
@@ -257,30 +328,82 @@
 
             //获取table数据
             getData() {
-
-                this.$ajax.post(this.$apis.get_buyerProductList,{
-                    recycle:false
-                }).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    if(this.disabledLine.length>0){
-                        this.disabledLine.forEach(v=>{
-                            this.tableDataList.forEach(m=>{
-                                if(m.id.value===v){
-                                    m._disabled=true;
-                                }
+                if(this.type==='recycle'){
+                    this.$ajax.post(this.$apis.get_buyerBookmarkList,{
+                        recycle:true
+                    }).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            if(e.status.value===1){
+                                e.status.value='上架';
+                            }else if(e.status.value===0){
+                                e.status.value='下架';
+                            }
+                            return e;
+                        });
+                        if(this.disabledLine.length>0){
+                            this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
+                                this.tableDataList.forEach(m=>{
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
+                                        m._disabled=true;
+                                    }
+                                })
                             })
-                        })
-                    }
-                }).catch(err=>{
-                    console.log(err)
-                });
+                        }
+                    }).catch(err=>{
+                        console.log(err)
+                    });
+                }
+                else{
+                    this.$ajax.post(this.$apis.get_buyerProductList,{
+                        recycle:false
+                    }).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            if(e.status.value===1){
+                                e.status.value='上架';
+                            }else if(e.status.value===0){
+                                e.status.value='下架';
+                            }
+                            return e;
+                        });
+                        if(this.disabledLine.length>0){
+                            this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
+                                this.tableDataList.forEach(m=>{
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
+                                        m._disabled=true;
+                                        m._checked=true;
+                                    }
+                                })
+                            })
+                        }
+                        this.selectList=this.$copyArr(this.disabledLine);
+                        this.selectList.forEach(v=>{
+                            v._disabled=true;
+                        });
+                    }).catch(err=>{
+                        console.log(err)
+                    });
+                }
             },
 
             /**
              * 按钮组操作
              * */
             addToBookmark(){
-                console.log(this.selectList)
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                // this.$ajax.post(this.$apis.add_bookmark,{
+                //     ids:id
+                // }).then(res=>{
+                //     console.log(res)
+                // }).catch(err=>{
+                //
+                // });
             },
 
             //表格按钮点击
@@ -290,8 +413,72 @@
                 }
             },
 
-            addNewProduct(){
+            createInquiry(){
+                console.log(1234)
+            },
 
+            //对比product
+            compareProducts(){
+                let id='';
+                this.selectList.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectList.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        id:id,
+                        type:'new'
+                    }
+                });
+            },
+
+            recover(){
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                this.disabledClickRecover=true;
+                this.$ajax.post(this.$apis.recover_bookmark,id).then(res=>{
+                    this.selectList=[];
+                    this.$ajax.post(this.$apis.get_buyerBookmarkList,{
+                        recycle:true
+                    }).then(res=>{
+                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            if(e.status.value===1){
+                                e.status.value='上架';
+                            }else if(e.status.value===0){
+                                e.status.value='下架';
+                            }
+                            return e;
+                        });
+                        if(this.disabledLine.length>0){
+                            this.disabledLine.forEach(v=>{
+                                let id=_.findWhere(v,{key:'id'}).value;
+                                this.tableDataList.forEach(m=>{
+                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    if(id===newId){
+                                        m._disabled=true;
+                                    }
+                                })
+                            })
+                        }
+                        this.$message({
+                            message: 'successfully recovery!',
+                            type: 'success'
+                        });
+                        this.disabledClickRecover=false;
+                    }).catch(err=>{
+                        this.disabledClickRecover=false;
+                    });
+                }).catch(err=>{
+                    this.disabledClickRecover=false;
+                });
             },
         },
         created(){
@@ -309,11 +496,17 @@
             },
             selectList(n){
                 if(n.length===0){
-                    this.downloadBtnInfo='All';
+                    this.downloadBtnInfo=0;
+                    this.downloadRecycleListInfo='all';
                     this.disabledAddBookmark=true;
+                    this.disabledDownload=true;
+                    this.disabledRecover=true;
                 }else{
                     this.downloadBtnInfo=n.length;
+                    this.downloadRecycleListInfo=n.length;
                     this.disabledAddBookmark=false;
+                    this.disabledDownload=false;
+                    this.disabledRecover=false;
                 }
 
                 if(n.length>=2){
@@ -321,7 +514,24 @@
                 }else{
                     this.disabledCompare=true;
                 }
-            }
+            },
+            disabledLine(n){
+                if(n.length>0){
+                    n.forEach(v=>{
+                        let id=_.findWhere(v,{key:'id'}).value;
+                        this.tableDataList.forEach(m=>{
+                            let newId=_.findWhere(m,{key:'id'}).value;
+                            if(id===newId){
+                                this.$set(m,'_disabled',true);
+                            }
+                        })
+                    })
+                    console.log(this.tableDataList,'this.tableDataList')
+                }
+            },
+            forceUpdateNumber(){
+                this.getData();
+            },
         }
     }
 </script>

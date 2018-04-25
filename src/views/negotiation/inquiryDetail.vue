@@ -1,7 +1,7 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
@@ -15,10 +15,9 @@
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
-                            :data="tabData" 
+                            :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
-                            :height="200"
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
@@ -40,7 +39,7 @@
                         <select-search :options="options" />
                     </div>
                     <v-table 
-                        :data.sync="productTabData"
+                        :data.sync="newProductTabData"
                         :buttons="productInfoBtn"
                         :loading="tableLoad"
                         @action="producInfoAction"
@@ -50,7 +49,7 @@
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')">{{ $i.baseText.accept }}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
-                        <el-button @click="compareConfig.showCompareList = true;">{{ $i.baseText.addToCompare }}</el-button>
+                        <el-button @click="addToCompare">{{ $i.baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
                         <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
                         <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i.baseText.cancel }}</el-button>
@@ -70,7 +69,7 @@
                 </div>
             </div>
         </div>
-        <v-compare-list :config="compareConfig" />
+        <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
         <el-dialog
                 :title="$i.baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
@@ -87,14 +86,11 @@
                 <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
             </span>
         </el-dialog>
-        <v-history 
-            :oSwitch.sync="oSwitch" 
-            :list.sync="historyData" 
-            :tableColumn="tableColumn"
-            :title="msgTitle"
-            :column="historyColumn"
-            :msgTableType="msgTableType"
-        />
+        <v-history-modify
+                @save="save"
+                ref="HM"
+            >
+        </v-history-modify>
     </div>
 </template>
 <script>
@@ -109,29 +105,29 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                compareLists: false,
+                tabData: [],
+                productTabData: [],
+                newTabData: [],
+                newProductTabData: [],
                 tableLoad: true,
                 checkedAll: '',
                 msgTableType: false,
                 historyColumn: {},
                 msgTitle: '',
                 historyData: [],
-                productTabData: [],
                 radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
-                tabColumn: '',
-                tabData: [],
-                compareConfig:{
-                    showCompareList:false,      //是否显示比较列表
-                },
+                compareConfig:[],
                 ChildrenCheckList:[],
                 ProductCheckList:[],
                 keyWord:'',
@@ -160,7 +156,8 @@
                 tableColumn: '',
                 submitData: {
                     deleteDetailIds: []
-                }
+                },
+                id_type: ''
             }
         },
         components: {
@@ -170,51 +167,130 @@
             'v-product': product,
             'v-compare-list': compareList,
             'v-history': VHistory,
-            'drop-down-single': dropDownSingle
+            'drop-down-single': dropDownSingle,
+            VHistoryModify
         },
         created() {
             this.getInquiryDetail();
             this.submitData.id = this.$route.query.id;
+            if(this.$localStore.get('$inquiryCompare')) {
+                this.compareConfig = this.$localStore.get('$inquiryCompare');
+            }
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
-                console.log(val);
+                val.forEach(item => {
+                    if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
+                    if(item + '' === '1') data = this.$table.setHighlight(this.tabData);
+                });
+                this.newTabData = data;
             },
             ProductCheckList(val, oldVal) {
-                console.log(val);
+                let arr = this.newProductTabData;
+                if(val[0] + '' === 0) this.newProductTabData = this.$table.setHighlight(this.newProductTabData);
+                this.newProductTabData = arr;
             }
         },
         methods: {
-            getInquiryDetail() {
+            startCompare() { //前往比较
+                let arr = [];
+                this.compareConfig.forEach(item => {
+                    arr.push(item.id);
+                });
+                //this.$sessionStore.set('$compareType', 'new')
+                this.$router.push({
+                    name: 'inquiryCompareDetail',
+                    params: {
+                        type: 'new'
+                    },
+                    query: {
+                        ids: arr.join(',')
+                    }
+                });
+            },
+            clerCompare() {   //clear
+                this.compareConfig = [];
+                this.$localStore.remove('$inquiryCompare');
+            },
+            handleClose(item) { //删除
+                this.compareConfig.forEach((items, index) => {
+                    if(items.id === item.id) this.compareConfig.splice(index, 1)
+                });
+                this.$localStore.set('$inquiryCompare', this.compareConfig);
+            },
+            addToCompare() { //添加对比
+                if(!this.tabData[0]) return this.$message({
+                    message: '请加载完毕再操作',
+                    type: 'warning'
+                });
+                this.compareLists = true;
+                let config = {
+                    name: this.tabData[0].inquiryNo.value,
+                    id: this.tabData[0].id.value
+                };
+
+                for(let i = 0; i < this.compareConfig.length; i++) {
+                    if(this.compareConfig[i].id === config.id) return this.$message({
+                        message: '这个订单已经添加到对比',
+                        type: 'warning'
+                    });
+                }
+                this.compareConfig.push(config);
+                this.$message('添加对比成功！');
+            },
+            getInquiryDetail() { //获取 Inquiry detail 数据
                 if(!this.$route.query.id) return this.$message('地址错误');
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
                     //Basic Info
-                    this.tableLoad = false;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(res, 'fieldRemark'));
+                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]),
+                        item => {
+                        // if (item.updateDt) {
+                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+                        // }
+                        return item;
+                    });
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]),
+                        item => {
+                        // if (item.updateDt) {
+                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+                        // }
+                        return item;
+                    });
                     //Product Info
-                    this.productTabData = this.$getDB(this.$db.product.indexTable, this.$filterRemark(res.details, 'fieldRemark'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
+                        item => {
+                        // if (item.updateDt) {
+                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+                        // }
+                        return item;
+                    });
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
+                        item => {
+                        // if (item.updateDt) {
+                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
+                        // }
+                        return item;
+                    });
+                    this.tableLoad = false;
                 })
                 .catch(err => {
                     this.tableLoad = false;
                 });
             },
-            selectChange(val) {
-                console.log(val)
-            },
-            submit(str) {
+            submit(str) { //留言板发布
                 let json = {};
                 json.time = getData(new Date(), 6);
                 json.name = '罗涛';
                 json.content = str;
                 this.list.push(json);
             },
-            boardSwitch() {
+            boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
             },
-            basicInfoBtn(item) {
+            basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
                     label: 'Modify',
                     type: 'modify'
@@ -228,83 +304,98 @@
                     type: 'histoty'
                 }];
             }, 
-            productInfoBtn (item) {
+            productInfoBtn (item) { //Product info 按钮创建
                 if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(!item._disabled) return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                if(this.statusModify && item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
             },
             fromChange(val) {
                console.log(val)
             },
-            modifyAction() {
+            modifyAction() { //打开页面编辑状态
                 this.statusModify = true;
             },
-            fnBasicInfoHistoty(item, type) {
-                if(type) {
-                    this.msgTableType = true;
-                } else {
-                    this.msgTableType = false;
+            save(data) { //modify 编辑完成反填数据
+                if(this.id_type === 'basicInfo') { //反填 basicInfo
+                    this.newTabData = _.map(this.newTabData, val => {
+                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
+                            val = data[0];
+                            val._modify = true;
+                        } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
+                            val = data[1];
+                            val._modify = true;
+                        }
+                        return val;
+                    });
+                } else if(this.id_type === 'producInfo') { // 反填 productTabData
+                    this.newProductTabData = _.map(this.newProductTabData, val => {
+                        if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[0], {'key': 'id'}).value + '' && !val._remark && !data[0]._remark) {
+                            console.log(val)
+                            val = data[0];
+                            val._modify = true;
+                        } else if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[1], {'key': 'id'}).value + '' && val._remark && data[1]._remark) {
+                            val = data[1];
+                            val._modify = true;
+                        }
+                        return val;
+                    });
                 }
-                if(item.histoty) {
-                    this.oSwitch = true;
-                    this.historyData = item.histoty;
-                    return false;
-                };
+            },
+            fnBasicInfoHistoty(item, type, config) { //查看历史记录
+                let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
                     id: item.id.value
                 })
                 .then(res => {
-                    item.histoty = res;
-                    this.historyData = res;
-                    this.oSwitch = true;
+                    let arr = [];
+                    if(type === 'basicInfo') {
+                        column = this.$db.inquiryOverview.basicInfo;
+                        _.map(this.newTabData, items => {
+                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
+                        });
+                    } else {
+                        column = this.$db.inquiryOverview.productInfo;
+                        _.map(this.newProductTabData, items => {
+                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
+                        });
+                    }
+                    if(config.type === 'histoty') {
+                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), false);
+                    } else {
+                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), true);
+                    }
                 });
            },
-           basicInfoAction(data, type) {
+           basicInfoAction(data, type) { // basic info 按钮操作 
+                this.id_type = 'basicInfo';
                 this.historyColumn = this.$db.inquiryOverview.basicInfo;
                 switch(type) {
                         case 'histoty':
-                            this.msgTitle = 'Histoty';
-                            this.fnBasicInfoHistoty(data);
+                            this.fnBasicInfoHistoty(data, 'basicInfo', { type: 'histoty', data: data.id.value});
                             break;
                         case 'modify':
-                            this.msgTitle = 'Modify';
-                            this.fnBasicInfoHistoty(data);
+                            this.fnBasicInfoHistoty(data, 'basicInfo', { type:'modify', data: data.id.value });
                             this.oSwitch = true;
                             break;
                 }
            },
-           producInfoAction(data, type) {
-                this.historyColumn = this.$db.product.indexTable;
+           producInfoAction(data, type) { //Produc info 按钮操作
+                this.id_type = 'producInfo';
+                this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch(type) {
                         case 'histoty':
-                            this.msgTitle = 'Histoty';
-                            this.producInfoHistoty(data);
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.id.value});
                             break;
                         case 'modify':
-                            this.msgTitle = 'Modify';
                             this.oSwitch = true;
-                            this.fnBasicInfoHistoty(data);
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.id.value });
                             break;
                 }
            },
-           producInfoHistoty(item) {
-               if(item.histoty) {
-                    this.oSwitch = true;
-                    this.historyData = item.histoty;
-                    return false;
-                };
-                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                    id: item.id.value
-                })
-                .then(res => {
-                    item.histoty = res;
-                    this.historyData = res;
-                    this.oSwitch = true;
-                });
-           },
-           changeChecked(item) {
+           changeChecked(item) { //获取选中的单 集合
                this.checkedAll = item;
            },
-            toCreateInquire() {
+            toCreateInquire() { //创建单
                 let arr = [];
                 this.checkedAll.forEach(item => {
                     arr.push(item.id.value);
@@ -316,7 +407,7 @@
                     }
                 });
             },
-            ajaxInqueryAction(type) {
+            ajaxInqueryAction(type) { //接受单
                 const argId = [];
                 argId.push(this.$route.query.id);
                 this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
@@ -327,40 +418,78 @@
                     console.log(res)
                 });
             },
-            removeProduct() {
-                this.productTabData.forEach((item, index) => {
+            removeProduct() { //删除product 某个单
+                this.newProductTabData.forEach((item, index) => {
                     if(item._checked) {
                         item._disabled = true;
-                        this.$set(this.productTabData, index, item);
+                        this.$set(this.newProductTabData, index, item);
                     };
                 });
             },
-            modifyCancel() {
-                this.productTabData.forEach((item, index) => {
+            modifyCancel() { //页面编辑取消
+                this.newTabData = this.tabData;
+                this.newProductTabData = this.productTabData;
+                this.productCancel();
+                this.statusModify = false;
+            },
+            modify() { //页面编辑提交
+                let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
+                if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
+                parentNode.details = this.dataFilter(this.newProductTabData);
+                console.log(this.$filterModify(parentNode))
+                return;
+                parentNode.draft = 0;
+                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, parentNode)
+                .then(res => {
+                    console.log(res);
+                });
+                return;
+                this.newTabData.details = producInfoData;
+                this.tabData = this.newTabData;
+                this.productTabData = this.newProductTabData;
+                this.productModify();
+                this.statusModify = false;
+            },
+            dataFilter (data) {
+                let arr = [], jsons = {}, json = {};
+                data.forEach(item => {
+                    jsons = {};
+                    if(item._remark) { //拼装remark 数据
+                        for(let k in item) {
+                            jsons[k] = item[k].value;
+                        }
+                        json.fieldRemark = jsons;
+                    } else {
+                        json = {};
+                        for(let k in item) {
+                            if(json[k] === 'fieldRemark') {
+                                json[k] = jsons;
+                            } else {
+                                json[k] = item[k].value;
+                            }
+                        };
+                        arr.push(json);
+                    }
+                });
+                return arr;
+            },
+            productCancel() { //  取消 product 编辑 
+                this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._disabled = false;
                         item._remove = false;
                     };
-                    this.$set(this.productTabData, index, item);
+                    this.$set(this.newProductTabData, index, item);
                 });
-                this.statusModify = false;
             },
-            modify() {
-                this.productTabData.forEach((item, index) => {
+            productModify() { //  提交 product 编辑 
+                this.newProductTabData.forEach((item, index) => {
                     if(!item._remove && item._disabled) {
                         item._remove = true;
                         this.submitData.deleteDetailIds.push(item);
                     };
-                    this.$set(this.productTabData, index, item);
+                    this.$set(this.newProductTabData, index, item);
                 });
-                this.statusModify = false;
-            },
-            filtersProduct(list) {
-                let arr = [];
-                list.forEach(item => {
-                    if(item._remove) arr.push(item);
-                });
-                return arr;
             }
         }
     }

@@ -77,11 +77,11 @@
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.baseText.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}</el-button>
-                  <el-button  :disabled='!selectedData.length>0' >{{$i.baseText.downloadSelected}}</el-button>
-                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i.baseText.remove}}</el-button>
+                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}({{selectedNumber.length}})</el-button>
+                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.baseText.creatOrder}}({{selectedNumber.length}})</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}({{selectedNumber.length}})</el-button>
+                  <el-button  :disabled='!selectedData.length>0' >{{$i.baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i.baseText.remove}}({{selectedNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -94,6 +94,7 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail" 
                     @change-checked='checked'
+                    :loading='loading'
                     style='marginTop:10px'/>
     </div>
 </template>
@@ -165,7 +166,9 @@
                     }]
                 }],
                 tabData: [],
-                selectedData:[]
+                selectedData: [],
+                selectedNumber: [],
+                loading: false
             }
         },
         methods: {
@@ -181,24 +184,23 @@
 
             //搜查
             search() {
-                console.log(this.parms)
                 this.get_data()
             },
             //....跳入createInquiry
             createInquiry() {
-            this.windowOpen('/negotiation/createInquiry', {
-                   selectedData:this.selectedData
+                this.windowOpen('/negotiation/createInquiry', {
+                    selectedData: this.selectedData
                 });
             },
             //....跳入createOrder
             createOrder() {
-               this.windowOpen('/order/creat', {
-                   selectedData:this.selectedData
+                this.windowOpen('/order/creat', {
+                    selectedData: this.selectedData
                 });
             },
             //........跳入compare
             compare() {
-                
+
             },
             //...........进入detail
             detail(item) {
@@ -208,26 +210,26 @@
             },
             //.........checked
             checked(item) {
-                
-                this.selectedData=item
+
+                this.selectedData = item
                 console.log(this.selectedData)
             },
             get_data() {
-                this.$ajax.post(this.$apis.post_supplier_listbookmark,this.parms)
+                this.loading = true;
+                this.$ajax.post(this.$apis.post_supplier_listbookmark, this.parms)
                     .then(res => {
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
-                        console.log(res.datas)
+                        this.loading = false
+
                     })
                     .catch((res) => {
-
+                        this.loading = true
                     });
             },
             //..........remove
-            remove(){
-                  this.$ajax.post(this.$apis.post_supplier_deletebookmark,{
-                      ids:[]
-                  })
-                    .then(res => {                   
+            remove() {
+                this.$ajax.post(this.$apis.post_supplier_deletebookmark, this.selectNumber)
+                    .then(res => {
                         console.log(res.datas)
                     })
                     .catch((res) => {

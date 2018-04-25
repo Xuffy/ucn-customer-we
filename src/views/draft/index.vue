@@ -1,159 +1,190 @@
 <template>
-    <div class="draftOverview">
-        <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
-
+    <div class="compare-overview">
+        <h3 class="hd">{{ $i.baseText.compareOverview }}</h3>
+        <div class="status">
+            <div class="state"></div>
+            <select-search :options="options" @inputChange="searchEnter" />
+        </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
-                <el-button >{{$t('order.buttonname.send')}}</el-button>
-                <el-button type="danger">{{$t('order.buttonname.delete')}}</el-button>
+                <el-button type="primary" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.submit}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="inquiryDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
             </div>
-           <selectSearch></selectSearch>
+            <div class="viewBy">
+                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+                <el-radio-group v-model="viewByStatus"  size="mini">
+                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                </el-radio-group>
+            </div>
         </div>
-        <!--form-->
-          <!--        表格-->
-            <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+        <v-table 
+            :data="tabData" 
+            :loading="tabLoad"
+            :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
+            @action="action"
+            @change-checked="changeChecked"
+            :page-total="pageTotal"
+        />
     </div>
 </template>
 <script>
-    /**
-     * @param selectChange 下拉框 值发生变更触发
-     * @param keyWord search框 值
-     * @param options 下拉框 原始数据 
-     * @param value 下拉框 选中值
-     */
-    import {
-        VTable,
-        selectSearch
-    } from '@/components/index';
+    import { VTable, selectSearch } from '@/components/index';
     export default {
-        name: 'draftOverview',
+        name:'',
         data() {
             return {
-                value: '',
-                keyWord: '',
-                options: [{
-                    id: '1',
-                    label: this.$t('order.buttonname.orderNo')
+                viewByStatus: 0,
+                pageTotal:0,
+                checkedArg: [],
+                tabData: [],
+                options:[{
+                    id:'1',
+                    label:'Compare Name'
                 }, {
                     id: '2',
-                    label: this.$t('order.buttonname.skuCode')
-                }, ],
-                tabColumn: [],
-                tabData: []
+                    label: 'Compare Item'
+                }],
+                bodyData: {
+                    key: '',
+                    keyType: '',
+                    // operatorFilters: { //筛选条件
+                    //     columnName: '',
+                    //     operator: '',
+                    //     property: '',
+                    //     resultMapId: '',
+                    //     value: {}
+                    // },
+                    ps: 10,
+                    pn: 1,
+                    recycle: 1,
+                    // sorts: [
+                    //     {
+                    //         nativeSql: true,
+                    //         orderBy: "string",
+                    //         orderType: "string",
+                    //         resultMapId: "string"
+                    //     }
+                    // ]
+                },
+                tabLoad: false
             }
         },
         components: {
-            VTable,
-            selectSearch
+            'select-search':selectSearch,
+            'v-table': VTable
         },
         methods: {
-            selectChange(val) {
-                console.log(val)
-            },
-            updata(){
-                 this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
+            getList() { //获取Compare 列表
+                this.tabLoad = true;
+                this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
                 .then(res => {
-                    this.tabData = res
-
-                })
-                .catch((res) => {
-                    console.log(res);
+                    let data = res.datas;
+                    this.tabLoad = false;
+                    data.forEach(item => {
+                        item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
+                    });
+                    this.pageTotal = res.tc;
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
                 });
+            },
+            searchEnter(item) { // 搜索框
+                this.bodyData.key = item.key;
+                this.bodyData.keyType = item.keyType;
+            },
+            action(item, type) { //操作表单 action
+                let types = '';
+                if(type === 'detail') {
+                    types = 'only';
+                } else {
+                    types = 'modify';
+                }
+                this.$router.push({
+                    name: 'inquiryCompareDetail',
+                    params: {
+                        type: types
+                    },
+                    query: {
+                        id: _.findWhere(item, { 'key': 'id' }).value
+                    }
+                });
+            },
+            changeChecked(item) { //选中的data
+                let arr = [];
+                item.forEach(item => {
+                    arr.push(item.id.value);
+                });
+                this.checkedArg = arr;
+            },
+            inquiryDelete() { //删除
+                
+            }
+        },
+        watch: {
+            bodyData: {
+                handler(val) {
+                    this.getList();
+                },
+                deep: true
+            },
+            viewByStatus(val) {
+                this.getList();
             }
         },
         created() {
-//             this.updata()
-        },
+            this.getList();
+        }
     }
-
 </script>
 <style lang="less" scoped>
-    .draftOverview {
+    .compare-overview{
         .hd {
+            padding-left:15px;
             height: 50px;
-            line-height: 50px;
-            color: #666;
-            border-bottom: 1px solid #ccc;
-            font-size: 18px;
-            color: #666666;
+            line-height:50px;
+            color:#666;
         }
-        .status {
-            display: flex;
+         .status {
+            display:flex;
             height: 60px;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 0 15px;
             box-sizing: border-box;
+            padding-left:25px;
+            padding-right:25px;
+            align-items: center;
+            justify-content:space-between;
             .btn-wrap {
-                display: flex;
+                display:flex;
                 align-items: center;
                 span {
-                    font-size: 14px;
-                }
-                button {
-                    padding: 2px 5px;
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
-            }
-            .select-wrap {
-                display: flex;
-                align-items: center;
-                .select {
-                    width: 110px;
-                    margin-right: 5px;
-                    input {}
+                    font-size:14px;
                 }
             }
         }
         .fn {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 15px;
+            display:flex;
+            justify-content:space-between;
+            padding:10px 15px;
             box-sizing: border-box;
             .viewBy {
-                display: flex;
+                display:flex;
                 align-items: center;
                 span {
-                    font-size: 14px;
-                    color: #666;
+                    font-size:14px;
+                    color:#666;
                 }
                 button {
                     cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    padding: 2px 5px;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
+                    padding:2px 5px;
                 }
                 .set {
                     cursor: pointer;
-                    padding-left: 18px;
-                    color: #999;
+                    padding-left:18px;
+                    color:#999;
                     i {
-                        font-size: 25px;
+                        font-size:25px;
                     }
                 }
             }
         }
     }
-
 </style>

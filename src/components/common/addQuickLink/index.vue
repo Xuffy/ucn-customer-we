@@ -1,7 +1,8 @@
 <template>
   <div class="add-quick-link">
 
-    <el-dialog title="Add Quick Link" :visible.sync="$store.state.quickLink.show">
+    <el-dialog title="Add Quick Link" :visible.sync="$store.state.quickLink.show"
+               @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
           <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key">
@@ -71,6 +72,7 @@
               return val.itemCode;
             });
             this.$store.state.quickLink.list = list;
+
           });
       },
       updateQuickLink() {
@@ -100,6 +102,12 @@
             });
             this.loading = false;
           });
+      },
+      dialogClose(done) {
+        this.checkedList = _.map(this.$store.state.quickLink.list, val => {
+          return val.itemCode;
+        });
+        // done();
       }
     }
   }

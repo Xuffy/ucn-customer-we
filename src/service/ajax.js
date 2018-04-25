@@ -17,7 +17,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    // 'U-Session-Token':'askjhasjkhgkajshg'
+    // 'U-Session-Token':'2b672b97-1576-4fae-8896-41e6fa81bd56'
   },
   transformRequest: [function (data) {
     // return JSON.stringify(data);
@@ -95,9 +95,9 @@ const $ajax = (config) => {
 
       switch (_options.method) {
         case 'DELETE':
-          return axios.delete(_options.url,{params:_options.data});
+          return axios.delete(_options.url);
         case 'PUT':
-          return axios.put(_options.url);
+          return axios.put(_options.url, options.data, config);
         default:
           return axios(_options);
       }

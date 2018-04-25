@@ -45,8 +45,13 @@
             <br>
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
-                <v-table :data="tableDataList" data-key="" 
-                :loading="tabLoad" @action="action" :buttons="setButton"
+                <v-table :data="tableDataList"
+                :total-row="totalRow"
+                :loading="tabLoad"  
+                :buttons="[{label:'urging payment',type:1,disabled:flag}, {label: 'detail', type: 2}]"
+                @action="action"
+                :rowspan="1"
+                @filter-value="onFilterValue"
                 ></v-table>
                 <!-- <el-pagination
                     @size-change="handleSizeChange"
@@ -80,7 +85,6 @@
                 viewByStatus:'',
                 date:'',
                 tabLoad:false,
-                disabled:false,
                 dateOptions:{
                     shortcuts: [{
                         text: '最近一周',
@@ -109,7 +113,9 @@
                     }]
                 },
                 //底部table数据
-                tableDataList:[]
+                tableDataList:[],
+                totalRow: [],
+                flag:false
             }
         },
         watch: {
@@ -131,6 +137,9 @@
                 this.params.key = val.key;
                 this.searchLoad = true;
             }, 
+            onFilterValue(val) {
+                console.log(val);
+            },
             getList(item){
                 this.tabLoad = true;
                 if(item){
@@ -143,15 +152,15 @@
                             overdue: this.status  //-1所有 0未逾期 1已逾期
                         },
                         pn: 1,  //每页大小
-                        ps: 50, //页码
-                        sorts: [
-                            {
-                            nativeSql: true,
-                            orderBy: "id",
-                            orderType: "desc",
-                            resultMapId: ""
-                            }
-                        ]
+                        ps: 10, //页码
+                        // sorts: [
+                        //     {
+                        //     nativeSql: true,
+                        //     orderBy: "id",
+                        //     orderType: "desc",
+                        //     resultMapId: ""
+                        //     }
+                        // ]
                     }
                     this.$ajax.post(this.$apis.post_ledgerPage, params)
                     .then(res => {
@@ -179,28 +188,40 @@
                             overdue: this.status  //-1所有 0未逾期 1已逾期
                         },
                         pn: 1,  //每页大小
-                        ps: 50, //页码
-                        sorts: [
-                            {
-                            nativeSql: true,
-                            orderBy: "id",
-                            orderType: "desc",
-                            resultMapId: ""
-                            }
-                        ]
+                        ps: 10, //页码
+                        // sorts: [
+                        //     {
+                        //     nativeSql: true,
+                        //     orderBy: "id",
+                        //     orderType: "desc",
+                        //     resultMapId: ""
+                        //     }
+                        // ]
                     }
                     this.$ajax.post(this.$apis.post_ledgerPage, params)
                     .then(res => {
-                        res.datas = _.map(res.datas,val=>{
-                            val.waitPayment = val.planPayAmount-val.actualPayAmount;
-                            val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
-                            return val;
+                        console.log(res)
+                        this.pageTotal = res.tc;
+                        this.tabLoad = false; 
+                        this.searchLoad = false; 
+                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
+                            item.waitPayment = Number(item.planPayAmount)-Number(item.actualPayAmount);
+                            item.waitReceipt = Number(item.planReceiveAmount)-Number(item.actualReceiveAmount);
+                            // item.waitPayment !=0 ? this.flag = false : this.flag = true
+                            return item;
                         });
-                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas);
+
+                        console.log(this.tableDataList)
+                        this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
+                            item._totalRow = {label: 'Caculate'};
+                            return item;
+                        })
+                        console.log(this.totalRow)
                     }); 
                 }
             },
             action(item, type) {
+                console.log(item)
                 switch(type) {
                     case 'detail':
                         this.detail(item);
@@ -212,6 +233,7 @@
             },
             detail(item) {
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
+                console.log(item)
                 if(item.orderType.value == 10){
                     this.$router.push({
                         path: '/',
@@ -236,6 +258,7 @@
                 }              
             },
             urgingPayment(item) {
+                console.log(item)
                 const count = 0
                 // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
                 // ② 当待付款金额不为0时，催款按钮可操作；
@@ -243,7 +266,6 @@
                 // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
                 if(item.waitPayment.value != 0){
                     if(count >= 3) {
-                        this.disabled = true
                         return false;
                     }else{
                         this.$message({
@@ -253,16 +275,9 @@
                        this.count ++ 
                     }
                 }else{
-                     this.disabled = true
+                    this.flag = true;
                 }
               
-            },
-            setButton(e){
-                // console.log(e) disabled e.waitPayment.value != 0
-                return [
-                    {label:'urging payment',type:1},
-                    {label:'detail',type:2}
-                ]
             },
             handleSizeChange(val) {
                 this.params.ps = val;
@@ -270,8 +285,8 @@
 
         },
         created(){
-            // this.viewByStatus = 0;
-             this.getList();
+           this.viewByStatus = '';
+           this.getList();
         },
     }
 </script>
@@ -284,9 +299,6 @@
         color:#666666;
         padding: 10px 0;
     }
-    .head{
-
-    }
     .head>div{
         margin-bottom: 10px;
     }
@@ -296,9 +308,6 @@
         font-size: 14px;
         /*font-weight: bold;*/
         color:#999999;
-    }
-    .spe-div{
-
     }
     .spe-div:after{
         content: '';

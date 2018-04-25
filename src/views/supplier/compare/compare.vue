@@ -1,26 +1,20 @@
 <template>
     <div class="compare">
-        <h3 class="hd">{{$t("supplier.title.compareDetail")}}</h3>
+        <h3 class="hd">compareDetail</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button >{{$t("supplier.buttonname.createOrder")}}</el-button>
-                 <el-button >{{$t("supplier.buttonname.accept")}}</el-button>
+                <el-button >{{$i.baseText.creatInquiry}}</el-button>
+                 <el-button >{{$i.baseText.creatOrder}}</el-button>
                 <el-checkbox-group v-model="checkList">
-                    <el-checkbox :label='$t("supplier.buttonname.hideTheSame")'></el-checkbox>
-                    <el-checkbox :label='$t("supplier.buttonname.hightlightTheDifferent")'></el-checkbox>
+                    <el-checkbox :label='$i.baseText.hideTheSame'></el-checkbox>
+                    <el-checkbox :label='$i.baseText.highLightTheDifferent'></el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-<!--
-<i class="el-icon-setting" @click='hiddenDropDown'></i>
-<drop-down :class="showdropDown?'speDropdownshow':'speDropdown'" ref="dropDown"></drop-down>
--->
-            </div>
-
-           
+            </div>    
         </div>
         <!--from-->
-        <v-table  :data="tabData" data-key="supplier.tableData"  style='marginTop:10px'/>
+        <v-table  :data="tabData"  style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -38,28 +32,52 @@
         },
         data() {
             return {
-                checkList: [],
-                options: [{
-                    label: 'wwww.baidu.com',
-                    id: '1'
-                }],
-                Filed: '',
-                tabColumn: [],
-                tabData: []
+                checkList: '',
+                tabData: [],
+                params: {
+                    "id": this.$route.query.id,
+                    "name": this.$route.query.name,
+                    //                      "operatorFilters": [
+                    //                        {
+                    //                          "columnName": "string",
+                    //                          "operator": "string",
+                    //                          "property": "string",
+                    //                          "resultMapId": "string",
+                    //                          "value": {}
+                    //                        }
+                    //                      ],
+                    "pn": 1,
+                    "ps": 10,
+                    //                      "recycle": true,
+                    //                      "sorts": [
+                    //                        {
+                    //                          "nativeSql": true,
+                    //                          "orderBy": "string",
+                    //                          "orderType": "string",
+                    //                          "resultMapId": "string"
+                    //                        }
+                    //                      ]
+                }
             }
         },
-        methods: {},
-        created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
+        methods: {
+            //get_orderlist数据
+            getdata() {
+                this.loading = true
+                this.$ajax.post(this.$apis.post_supplier_listCompareDetails, this.params)
+                    .then((res) => {
+                        console.log(res)
+                        this.tabData = this.$getDB(this.$db.supplier.compareDetail, res.datas);
 
-                })
-                .catch((res) => {
-                    
-                });
+                    })
+                    .catch((res) => {
+                        console.log(res);
+                    });
+            }
+        },
+        created() {
+            this.getdata()
+            console.log(this.$route.query.id)
         },
     }
 

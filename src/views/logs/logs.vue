@@ -154,7 +154,7 @@
             }
         },
         created(){
-           this.getbizlogs()
+        //    this.getbizlogs()
         }
     }
 </script>

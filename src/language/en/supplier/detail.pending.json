@@ -77,8 +77,11 @@
 
     "remark": "Remark",
     "date": "Date",
-    "operater": "Operater"
-    
-    
-    
+    "operater": "Operater",
+
+    "compareTime": "Compare Time",
+    "compareName": "Compare Name",
+    "compareItem": "Compare Item"
+
+
 }

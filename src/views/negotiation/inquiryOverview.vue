@@ -23,7 +23,7 @@
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="windowOpen('/negotiation/createInquiry')">{{ $i.baseText.createNewInquiry }}</el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.baseText.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
@@ -58,7 +58,7 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable, dropDownSingle } from '@/components/index';
+    import { selectSearch, VTable } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -91,20 +91,20 @@
                     keyType: '',
                     key: '',
                     ps: 10,
-                    pn: 1
+                    pn: 1,
+                    recycleCustomer: 0
                 },
                 tabLoad:false,
-                pageTotal: 0
+                pageTotal: 0,
+                _id: ''
             }
         },
         components: {
             'select-search': selectSearch,
-            'v-table': VTable,
-            'drop-down-single': dropDownSingle
+            'v-table': VTable
         },
         created() {
             this.viewByStatus = 0;
-                    console.log(this.$db.inquiryOverview.basicInfo)
         },
         watch: {
             viewByStatus() {
@@ -142,7 +142,7 @@
                 .then(res => {
                     this.pageTotal = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;   
+                    this.tabLoad = false;
                     this.searchLoad = false; 
                 })
                 .catch(() => {
@@ -154,7 +154,18 @@
                 this.ajaxInqueryAction('cancel')
             },
             deleteInquiry() { //删除询价单
-                this.ajaxInqueryAction('delete');
+                this.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.ajaxInqueryAction('delete');
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+                });
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
@@ -164,6 +175,7 @@
                 })
                 .then(res => {
                     this.gettabData();
+                    this.checkedData = [];
                 });
             },
             action(item, type) {
@@ -177,28 +189,28 @@
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: item.id.value
+                        id: _.findWhere(item, {'key': 'id'}).value
                     }
                 });
             },
             getChildrenId(type) {
                 let arr = [];
-                this.checkedData.forEach(item => {
-                    arr.push(item.id.value)
+                _.map(this.checkedData, item => {
+                    if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 if(typeof type === 'string') arr.join(',')
+                return;
                 return arr;
             },
             toCompare() {
                 let argId = this.getChildrenId('str');
-                return;
-                //if(argId.length < 2) return this.$message('请至少勾选两个以上');
-                this.$router.push({
-                    path: '/negotiation/compare',
-                    query: {
-                        id: argId
+                this.$windowOpen({
+                    url: '/negotiation/compareDetail/{type}',
+                    params: {   
+                        type: 'new',
+                        ids: argId.join(',')
                     }
-                })
+                });
             },
             pageChange(No) {
                 console.log(No)
@@ -253,7 +265,6 @@
                 .select {
                     width: 110px;
                     margin-right:5px;
-                    input {}
                 }
             }
         }

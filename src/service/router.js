@@ -98,7 +98,7 @@ export const routerMap = [
           component: () => import('../views/product/bookmark/manuallyAdd'),
         },
         {
-          path: 'bookmarkRecycleBin',
+          path: 'recycleBin',
           name: 'Bookmark RecycleBin',
           hidden: true,
           meta: {
@@ -120,7 +120,7 @@ export const routerMap = [
           component: () => import('../views/product/compare/overview'),
         },
         {
-          path: 'compareDetail',
+          path: 'compareDetail/:type',
           name: 'Compare Detail',
           hidden: true,
           meta: {
@@ -252,13 +252,14 @@ export const routerMap = [
           component: () => import('../views/negotiation/compareOverview')
         },
         {
-          path: 'compareDetail',
-          name: 'Compare Detail',
+          path: 'compareDetail/:type',
+          name: 'inquiryCompareDetail',
           hidden: true,
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
+            name: 'Compare Detail'
           },
           component: () => import('../views/negotiation/compare')
         }
@@ -408,7 +409,7 @@ export const routerMap = [
         {
           path: 'planDetail',
           name: 'Plan Detail',
-          hidden: true,
+          hidden: false,
           meta: {
             draft: true,
             recycleBin: true,
@@ -582,7 +583,7 @@ export const routerMap = [
       name: 'draft',
       redirect: '/draft/index',
       noDropdown: true,
-         hidden: true,
+      hidden: true,
       children: [
         {
           path: 'index',
@@ -614,6 +615,46 @@ export const routerMap = [
           component: () => import('../views/recycleBin/index.vue')
         }
       ]
+    },
+
+    {
+        path: '/sellerWarehouse',
+        component: Layout,
+        redirect: '/sellerWarehouse/overview',
+        name: 'SellerWarehouse',
+        noDropdown: false,
+        children: [
+            {
+                path: 'overview',
+                name: 'Warehouse Overview',
+                meta: {
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/warehouseOverview.vue'),
+            },
+            {
+                path:'inbound',
+                name:'Inbound Overview',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inbound/inboundOverview.vue'),
+            },
+            {
+                path:'createInbound',
+                name:'create Inbound',
+                meta:{
+                    draft: true,
+                    recycleBin: true,
+                    log: true,
+                },
+                component: () => import('../views/sellerWarehouse/inbound/createInbound'),
+            },
+        ]
     },
   ]
 ;

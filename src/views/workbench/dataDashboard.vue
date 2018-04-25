@@ -1,7 +1,7 @@
 <template>
   <div class="dataDashboard">
 
-    <h3 class="ucn-content-title inline">Data Dashboard</h3>
+    <h3 class="ucn-content-title inline" v-text="$i.workbench.dataDashboard"></h3>
     <div class="block" style="display: inline-block;margin-left: 80px">
       <span class="demonstration">Time：</span>
       <el-date-picker
@@ -28,56 +28,11 @@
       <el-col :span="6">
         <table>
           <tr>
-            <td class="title">Purchase order</td>
+            <td class="title" v-text="$i.workbench.purchaseOrder"></td>
             <td class="value">26 Orders</td>
           </tr>
           <tr>
-            <td class="title" rowspan="2">Order placed</td>
-            <td class="value">281 SKU</td>
-          </tr>
-          <tr>
-            <td class="value">JSD 132.24.00</td>
-          </tr>
-        </table>
-      </el-col>
-      <el-col :span="6">
-        <table>
-          <tr>
-            <td class="title">Purchase order</td>
-            <td class="value">26 Orders</td>
-          </tr>
-          <tr>
-            <td class="title" rowspan="2">Order placed</td>
-            <td class="value">281 SKU</td>
-          </tr>
-          <tr>
-            <td class="value">JSD 132.24.00</td>
-          </tr>
-        </table>
-      </el-col>
-      <el-col :span="6">
-        <table>
-          <tr>
-            <td class="title">Purchase order</td>
-            <td class="value">26 Orders</td>
-          </tr>
-          <tr>
-            <td class="title" rowspan="2">Order placed</td>
-            <td class="value">281 SKU</td>
-          </tr>
-          <tr>
-            <td class="value">JSD 132.24.00</td>
-          </tr>
-        </table>
-      </el-col>
-      <el-col :span="6">
-        <table>
-          <tr>
-            <td class="title">Purchase order</td>
-            <td class="value">26 Orders</td>
-          </tr>
-          <tr>
-            <td class="title" rowspan="2">Order placed</td>
+            <td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>
             <td class="value">281 SKU</td>
           </tr>
           <tr>
@@ -97,119 +52,11 @@
                 <td rowspan="3" style="width: 20px">
                   <el-checkbox lable="a1"></el-checkbox>
                 </td>
-                <td class="title">Purchase order</td>
+                <td class="title" v-text="$i.workbench.purchaseOrder"></td>
                 <td class="value">26 Orders</td>
               </tr>
               <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a2"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a3"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a4"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a5"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a6"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a7"></el-checkbox>
-                </td>
-                <td class="title">Purchase order</td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2">Order placed</td>
+                <td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>
                 <td class="value">281 SKU</td>
               </tr>
               <tr>

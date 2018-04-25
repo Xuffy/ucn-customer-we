@@ -12,7 +12,7 @@ input, button, select, textarea {
 ::-webkit-scrollbar {
   width: 14px;
   height: 14px;
-  padding: 0
+  padding: 0;
 }
 
 ::-webkit-scrollbar-button {
@@ -36,7 +36,7 @@ input, button, select, textarea {
 }
 
 body {
-  background-color: rgba(244, 244, 244, 1);
+  background-color: rgba(244, 244, 244, .7);
   min-width: 1366px;
   overflow: auto;
 }
@@ -79,4 +79,8 @@ body {
 
 .el-picker-panel__shortcut {
   font-size: 12px !important;
+}
+
+.el-loading-mask {
+  z-index: 9;
 }

@@ -14,7 +14,9 @@ export default {
     //    responsibility: {
     //        key: '',
     //    },
-
+    id:{
+        key:'id'
+    },
     archive: {
         key: 'archive',
     },
@@ -78,7 +80,7 @@ export default {
     //    },
 
     paymentRemark: {
-        _hide: true,
+//        _hide: true,
         key: 'paymentRemark',
     },
     totalSkuPrice: {
@@ -122,8 +124,5 @@ export default {
     skuQty: {
         key: 'skuQty',
     },
-
-
-
-   
+ 
 };

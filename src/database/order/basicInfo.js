@@ -1,7 +1,6 @@
 export default {
     orderNo: {
         key: 'orderNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: true,
         rules: [],
@@ -9,7 +8,6 @@ export default {
     },
     orderDate: {
         key: 'orderDate',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -17,7 +15,6 @@ export default {
     },
     customerOrderNo: {
         key: 'customerOrderNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -25,7 +22,6 @@ export default {
     },
     customerName: {
         key: 'customerName',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -33,7 +29,6 @@ export default {
     },
     customerNo: {
         key: 'customerNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -41,47 +36,44 @@ export default {
     },
     supplierOrderNo: {
         key: 'supplierOrderNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'text',
     },
+
+    //弹窗修改
     supplierName: {
         key: 'supplierName',
-        value: '',
         ismodify: false,
         isDefaultEdit: true,
         rules: [],
-        type: 'text',
+        type: 'textdialog',
     },
+    //弹窗修改
     supplierNo: {
         key: 'supplierNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: true,
         rules: [],
-        type: 'text',
+        type: 'textdialog',
     },
     quotationNo: {
         key: 'quotationNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'text',
     },
     orderStatus: {
-        key: 'orderStatus',
-        value: '',
+        key: 'status',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'select',
     },
     deliveryDate: {
-        key: 'deliveryDate',
-        value: '',
+        key: 'deliveryDt',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -89,7 +81,6 @@ export default {
     },
     incoterm: {
         key: 'incoterm',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -97,7 +88,6 @@ export default {
     },
     incortermAea: {
         key: 'incortermAea',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -105,7 +95,6 @@ export default {
     },
     payment: {
         key: 'payment',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -113,7 +102,6 @@ export default {
     },
     lcNo: {
         key: 'lcNo',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -121,7 +109,6 @@ export default {
     },
     paymentDays: {
         key: 'paymentDays',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -129,7 +116,6 @@ export default {
     },
     paymentStatus: {
         key: 'paymentStatus',
-        value: '',
         ismodify: false,
         isDefaultEdit: true,
         rules: [],
@@ -137,7 +123,6 @@ export default {
     },
     departureCountry: {
         key: 'departureCountry',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -145,7 +130,6 @@ export default {
     },
     departurePort: {
         key: 'departurePort',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -153,7 +137,6 @@ export default {
     },
     destinationCountry: {
         key: 'destinationCountry',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -161,31 +144,27 @@ export default {
     },
     destinationPort: {
         key: 'destinationPort',
-        value: '',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'text',
     },
     transportationWay: {
-        key: 'transportationWay',
-        value: '',
+        key: 'transport',
         ismodify: false,
         isDefaultEdit: true,
         rules: [],
         type: 'select',
     },
     customerAgreementNumber: {
-        key: 'customerAgreementNumber',
-        value: '',
+        key: 'customerAgreementNo',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'text',
     },
     customerAgreementDate: {
-        key: 'customerAgreementDate',
-        value: '',
+        key: 'customerAgreementDt',
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
@@ -193,7 +172,7 @@ export default {
     },
     remark: {
         key: 'remark',
-        value: '',
+
         ismodify: false,
         isDefaultEdit: false,
         rules: [],

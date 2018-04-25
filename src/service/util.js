@@ -2,6 +2,7 @@ import DateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
+import router from 'service/router'
 
 export default {
   install(Vue, options) {
@@ -39,33 +40,26 @@ export default {
      * @returns {Array}
      */
     Vue.prototype.$getDB = (db, data, cb) => {
+
       let list = [];
       db = _.values(db);
-      _.map(data, value => {
+      _.map(data, (value, index) => {
         let obj = {};
-        _.mapObject(value, (val, key) => {
-          let dbValue = _.clone(_.findWhere(db, {key: key}));
-          if (!_.isEmpty(dbValue)) {
-            dbValue.value = val;
-            obj[key] = dbValue;
+
+        _.map(db, val => {
+          let dv = value[val.key]
+            , cd = _.clone(val);
+          if (!_.isUndefined(dv)) {
+            cd.value = dv;
+            obj[val.key] = cd;
           }
-
         });
-
-        if (cb) obj = _.extend(obj, cb(obj));
-
+        if (cb) obj = _.extend(obj, cb(obj, index));
         list.push(obj);
       });
       return list;
     };
 
-    /*Vue.prototype.$dataBackfill = (data, oldData) => {
-      console.log(data, oldData)
-      _.map(data, value => {
-
-        console.log(value)
-      });
-    }*/
 
     /**
      * table 数据过滤
@@ -79,12 +73,10 @@ export default {
 
         _.map(data, value => {
           _.mapObject(value, (val, key) => {
-            if (type === 'same') {
+            if (type === 'same' && first[key]) {
               keyData[key] = first[key].value === val.value;
-            } else if (type === 'def') {
-              if (first[key].value !== val.value) {
-                keyData[key] = true;
-              }
+            } else if (type === 'def' && first[key] && first[key].value !== val.value) {
+              keyData[key] = true;
             }
           });
         });
@@ -120,35 +112,84 @@ export default {
       }
     };
     /**
-     * filterRemark 遍历 remark   list = json arr  remark = remark字段名
+     * 删除带有前缀下划线数据
     */
-    const getRemark = (list, remark) => {
-        let json = {};
-        for(let k in list) {
-          for(let key in list[remark]) {
-              if(k === key) {
-                  json[k] = list[remark][key];
-              } else {
-                  json[k] = null;
-              }
+    const deleteArr = (list, fieldRemark) => {
+      _.map(list, item => {
+        if(item) deleteObject(item);
+        if(item[fieldRemark]) deleteObject(item[fieldRemark]);
+      });
+    };
+
+    const deleteObject = (list, fieldRemark, details) => {
+      _.mapObject(list, (val, key) => {
+        if(key.substring(0, 1) === '_') delete list[key];
+        if(list[fieldRemark]) deleteObject(list[fieldRemark]);
+        if(key === details) deleteArr(list[details], fieldRemark)
+      });
+    };
+
+    Vue.prototype.$filterModify = (list, remark, children) => {
+      let fieldRemark = remark || 'fieldRemark', 
+          details = children || 'details';
+      if(_.isObject(list, details)) deleteObject(list, fieldRemark, details);
+      if(_.isArray(list)) _.map(list, fieldRemark, details);
+      return list;
+    };
+    /**
+     * $window.open
+    */
+    Vue.prototype.$windowOpen = (config) => {
+      let url = `//${window.location.host}/#${config.url}`, p = {};
+      if (!_.isEmpty(config.params) && !config.params.length) {
+        _.mapObject(config.params, (val, key) => {
+          if (url.indexOf(`{${key}}`) < 0) {
+            p[key] = val;
           }
-        };
-        return json;
+        });
+      }
+      url = _.template(url)(config.params || {});
+      for(let k in p) {
+        url += `?${k}=${p[k]}`
+      }
+      return window.open(url, '_blank');
+    };
+
+    /**
+     * filterRemark 遍历 remark   list = json arr  remark = remark字段名
+     */
+    const getRemark = (list, remark) => {
+      let json = {};
+      for (let k in list) {
+        for (let key in list[remark]) {
+          if (k === key) {
+            json[k] = list[remark][key];
+          } else {
+            if (k == 'id') {
+              json._id = list[k];
+            } else {
+              json[k] = null;
+            }
+          }
+        }
+      }
+      ;
+      return json;
     };
 
     Vue.prototype.$filterRemark = (list, remark) => {
       let data = [];
-      if(!list) return console.log('请传输list');
-      if(list.length && list) {
+      if (!list) return console.log('请传输list');
+      if (list.length && list) {
         list.forEach(item => {
-          if(item.updateDt) item.updateDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
-          if(item.entryDt) item.entryDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
+          if (item.updateDt) item.updateDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
+          if (item.entryDt) item.entryDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
           data.push(item);
           data.push(getRemark(item, remark))
         });
-      } else if(typeof list === "object" && !(list instanceof Array)) {
-        if(list.updateDt) list.updateDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
-        if(list.entryDt) list.entryDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
+      } else if (typeof list === "object" && !(list instanceof Array)) {
+        if (list.updateDt) list.updateDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
+        if (list.entryDt) list.entryDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
         data.push(list);
         data.push(getRemark(list, remark));
       }
@@ -156,14 +197,14 @@ export default {
     };
 
 
-    Vue.prototype.$copyArr=(arr)=>{
-        return arr.map((e) => {
-            if (typeof e === 'object') {
-                return Object.assign({}, e)
-            } else {
-                return e
-            }
-        })
+    Vue.prototype.$copyArr = (arr) => {
+      return arr.map((e) => {
+        if (typeof e === 'object') {
+          return Object.assign({}, e)
+        } else {
+          return e
+        }
+      })
     }
 
 
