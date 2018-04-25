@@ -1,0 +1,21 @@
+{
+  "inboundNo":"入库单号",
+  "inboundDate":"入库日期",
+  "warehouseNo":"仓库编号",
+  "warehouseName":"仓库名称",
+  "storageType":"入库类型",
+  "warehouseManager":"库管员",
+  "remark":"备注",
+  "purchaser":"采购员",
+  "carrier":"送货人员",
+  "carrierPhone":"送货人电话",
+  "timeZone":"时区",
+
+  "operator":"操作人",
+  "skuTotalQty":"入库产品总数量",
+  "updateDt":"修改时间",
+  "createDt":"创建时间",
+  "skuTotalVolume":"入库产品总体积",
+  "skuTotalNetWeight":"入库产品总净重",
+  "skuTotalGrossWeight":"入库产品总毛重"
+}

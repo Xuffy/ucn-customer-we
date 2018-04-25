@@ -307,18 +307,12 @@
             'v-up-load': Upload
         },
         created() {
-            this.getTransportationWay();
+            
         },
         computed: {
             
         },
         methods: {
-            getTransportationWay() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['transportationWay'])
-                .then(res => {
-                    console.log(res)
-                })
-            },
             getProduct() {
 
             },

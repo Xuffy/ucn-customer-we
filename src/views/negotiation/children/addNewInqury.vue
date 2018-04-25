@@ -108,7 +108,9 @@
             },
             argDisabled: {
                 type: Array,
-                default: []
+                default: () => {
+                    return [];
+                }
             }
         },
         computed: {
@@ -139,11 +141,15 @@
             addCompare() {
                 let arg = this.$copyArr(this.checkedData);
                 let arr = [];
-                arg.forEach((item, index) => {
-                    delete item._checked;
-                    if(!item._disabled) arr.push(item);
-                });
-                this.$emit('addInquiry', arr);
+                if(_.isObject(arg)) {
+                    this.$emit('addInquiry', arg);
+                } else {
+                    arg.forEach((item, index) => {
+                        delete item._checked;
+                        if(!item._disabled) arr.push(item);
+                    });
+                    this.$emit('addInquiry', arr);
+                }
             },
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
@@ -211,21 +217,6 @@
                 });
                 if(typeof type === 'string') arr.join(',')
                 return arr;
-            },
-            toCompare() {
-                let argId = this.getChildrenId('str');
-                this.$router.push({
-                    name: 'inquiryCompareDetail',
-                    params: {
-                        type: 'new'
-                    },
-                    query: {
-                        ids: argId.join(',')
-                    }
-                });
-            },
-            pageChange(No) {
-                console.log(No)
             },
             handleSizeChange(val) {
                 this.params.ps = val;

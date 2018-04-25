@@ -48,8 +48,8 @@
           </thead>
 
           <tbody ref="tableBody">
-          <tr v-for="(item,index) in dataList" :style="{opacity:item._disabled ? 0.5 : 1}"
-              :class="{rowspan:index % rowspan !== 0}">
+          <tr v-for="(item,index) in dataList"
+              :class="{rowspan:index % rowspan !== 0,disabled:item._disabled}">
             <td v-if="selection && (index % rowspan === 0) " :rowspan="rowspan">
               <div>
                 <input type="checkbox" ref="checkbox" :disabled="item._disabled"
@@ -70,8 +70,9 @@
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
-                      :class="{disabled:aItem.disabled}"
-                      @click="!aItem.disabled && $emit('action',item,aItem.type)">{{aItem.label || aItem}}</span>
+                      :class="{disabled:aItem.disabled || item._disabled}"
+                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type)">
+                  {{aItem.label || aItem}}</span>
               </div>
             </td>
           </tr>
@@ -79,11 +80,13 @@
 
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
-            <td v-if="totalItem._totalRow">
-              <div v-text="totalItem._totalRow.label"></div>
+            <td>
+              <div v-text="totalItem._totalRow ? totalItem._totalRow.label : '总计'"></div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide">
-              <div v-text="item.value"></div>
+            <td v-if="rowspan < 2">
+            </td>
+            <td v-for="item in dataColumn" v-if="!item._hide && typeof item === 'object'">
+              <div v-text="totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -212,6 +215,7 @@
         dataList: [],
         dataColumn: [],
         checkedAll: false,
+        interval: null,
         tableAttr: {st: 0, sl: 0},
       }
     },
@@ -219,32 +223,28 @@
       data(val) {
         this.dataList = val;
         this.filterColumn();
-        this.updateTable();
       },
       column() {
         this.filterColumn();
       },
       checkedAll(value) {
         this.dataList = _.map(this.dataList, val => {
-          if (!val._disabled){
+          if (!val._disabled) {
             this.$set(val, '_checked', value);
           }
           return val;
         });
         this.changeCheck();
       },
-      buttons() {
-        this.updateTable();
-      },
-      selection() {
-        this.updateTable();
-      },
     },
     mounted() {
       this.dataList = this.data;
       this.filterColumn();
-      this.updateTable();
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
+
+      this.interval = setInterval(() => {
+        this.updateTable();
+      }, 500);
     },
     methods: {
       onFilterColumn(checked) {
@@ -253,7 +253,7 @@
         // this.filterColumn();
         // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
-        this.updateTable();
+        // this.updateTable();
       },
       filterColumn() {
         this.dataColumn = _.values(this.dataList[0]);
@@ -292,7 +292,7 @@
               val.firstChild.style.transform = `translate3d(${sl}px,0,0)`;
             }
             if (this.buttons && val.lastChild.style) {
-              val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.clientWidth - sw + sl}px,0,0)`;
+              val.lastChild.style.transform = `translate3d(${this.$refs.tableBox.offsetWidth - sw + sl - 14}px,0,0)`;
             }
           });
 
@@ -323,6 +323,10 @@
         return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
           _.where(this.dataList, {_checked: true});
       }
+    },
+    beforeDestroy() {
+      clearInterval(this.interval);
+      this.interval = null;
     }
   }
 </script>
@@ -401,7 +405,7 @@
 
   }
 
-  .ucn-table thead {
+  .ucn-table thead tr td {
     /*position: absolute;*/
     /*z-index: 9999;*/
   }
@@ -486,6 +490,10 @@
     /*background-color: #fafafa;*/
   }
 
+  .ucn-table tbody tr.disabled td {
+    color: #dad8d8;
+  }
+
   .ucn-table tbody tr td:hover,
   .ucn-table tbody tr:hover td {
     /*background-color: #ebeff1 !important;*/
@@ -522,7 +530,7 @@
   }
 
   .ucn-table .button.disabled {
-    color: #c0c4cc;
+    color: #dad8d8;
   }
 
   .ucn-table .button:last-child {

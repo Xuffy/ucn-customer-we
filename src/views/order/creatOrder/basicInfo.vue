@@ -96,8 +96,7 @@
             return {
                 dialogEditDiv: false,
                 formItem: {
-                    timeZone: 0, //.........时区
-                    orderNo: '8222888888', //必填   系统生成 不可编辑
+                    orderNo: '8778888888', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成  
@@ -106,22 +105,23 @@
                     supplierName: '', //必填 不可编辑 系统生成 弹出框
                     supplierNo: '', //必填 不可编辑 系统生成 弹出框
                     quotationNo: '', // 不可编辑
-                    status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
-                    deliveryDt: '', //必填 
-                    incoterm: '', //必填 
-                    incortermAea: '', //必填 
-                    payment: '', //必填 
-                    lcNo: '',
-                    paymentDays: '',
-                    paymentStatus: '', //不可编辑
+                    status: 9, //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
+                    deliveryDt: 1523477789000, //必填 
+                    incoterm: -1, //必填 
+                    incortermAea: -1, //必填 
+                    payment: -1, //必填 
+                    lcNo: '1',
+                    paymentDays: 1,
+                    paymentStatus: -1, //不可编辑
                     departureCountry: '',
                     departurePort: '', //必填
-                    destinationCountry: '', // ??????
-                    destinationPort: '', //必填   //?????
+                    destCountry: '', // ??????
+                    destPort: '', //必填   //?????
                     transport: '海运', //不可编辑
-                    customerAgreementNo: '',
-                    customerAgreementDt: '',
+                    customerAgreementNo: '1',
+                    customerAgreementDt: 1523477845000,
                     remark: '',
+                    currency: ''
                 },
                 //......................表单正则
                 rules: {

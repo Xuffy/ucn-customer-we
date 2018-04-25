@@ -188,6 +188,13 @@ export default {
         type: 'select',
         state: 0
     },
+    relatedOrderNO: { //关联订单号
+        placeholder: 'Please select',
+        rules: [],
+        width: '150px',
+        type: 'text',
+        state: 0
+    },
     attachment: { //上传附件
         placeholder: 'Please select',
         rules: [],
@@ -210,12 +217,5 @@ export default {
         sm: 24,
         md: 24,
         lg: 24
-    },
-    relatedOrderNO: { //关联订单号
-        placeholder: 'Please select',
-        rules: [],
-        width: '150px',
-        type: 'text',
-        state: 0
     }
 }

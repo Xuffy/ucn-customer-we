@@ -1,5 +1,5 @@
 <template>
-    <div class="create-inbound">
+    <div class="inbound-detail">
         <div class="title">
             {{$i.warehouse.basicInfo}}
         </div>
@@ -11,12 +11,12 @@
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    :disabled="v.disabled"
+                                    :disabled="true"
                                     v-model="inboundData[v.key]"
                                     placeholder="please input"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
-                            <el-select class="speInput" size="mini" v-model="inboundData[v.key]" placeholder="please choose">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="inboundData[v.key]" placeholder="please choose">
                                 <el-option
                                         v-for="item in v.options"
                                         :key="item.value"
@@ -27,6 +27,7 @@
                         </div>
                         <div v-else-if="v.showType==='textarea'">
                             <el-input
+                                    :disabled="true"
                                     class="speInput"
                                     type="textarea"
                                     autosize
@@ -36,6 +37,7 @@
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
+                                    :disabled="true"
                                     class="speInput"
                                     size="mini"
                                     v-model="inboundData[v.key]"
@@ -53,6 +55,7 @@
                         </div>
                         <div v-else-if="v.showType==='date'">
                             <el-date-picker
+                                    :disabled="true"
                                     class="speInput"
                                     size="mini"
                                     v-model="inboundData[v.key]"
@@ -75,41 +78,6 @@
             <el-button type="danger">{{$i.warehouse.removeProduct}}</el-button>
         </div>
 
-        <div class="footer">
-            <div class="title">
-                {{$i.warehouse.total}}
-            </div>
-            <el-form :modal="inboundSummary" label-width="200px" :label-position="labelPosition">
-                <el-row>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalCartonQty">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalGrossWeight">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalVolume">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalNetWeight">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalSkuQty">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </div>
-
         <el-dialog
                 title="Add Product From Order"
                 :visible.sync="addOrderDialogVisible"
@@ -121,12 +89,13 @@
             </span>
         </el-dialog>
 
+
     </div>
 </template>
 
 <script>
     export default {
-        name: "createInbound",
+        name: "inboundDetail",
         data(){
             return{
                 /**
@@ -177,15 +146,6 @@
 
 
 
-
-                },
-                //inbound总计
-                inboundSummary:{
-                    totalCartonQty:0,
-                    totalGrossWeight:0,
-                    totalVolume:0,
-                    totalNetWeight:0,
-                    totalSkuQty:0,
                 },
             }
         },
@@ -216,14 +176,6 @@
 
     .speInput{
         width: 80%;
-    }
-
-    .footer{
-        background-color: #ffffff;
-        position: fixed;
-        bottom: 0;
-        /*width: 100%;*/
-        padding: 10px;
     }
 
 

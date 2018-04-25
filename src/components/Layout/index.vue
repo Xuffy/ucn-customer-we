@@ -5,11 +5,18 @@
     <div class="main-container" :class="{fullBox:$store.state.layout.hideMenu}">
       <nav-bar></nav-bar>
 
-      <section class="app-main">
-        <div style="background-color: #FFFFFF;height: 100%;padding: 10px;border-radius: 5px">
-          <transition name="el-fade-in">
+      <section class="app-main" :class="{'show-right-menu':$store.state.messageBoard.show}">
+        <div class="content">
+          <transition name="el-zoom-in-top">
             <router-view :key="key"></router-view>
           </transition>
+        </div>
+        <div class="right-menu" v-if="$store.state.messageBoard.code">
+          <div class="title-box">
+            <h3 class="ucn-content-title inline">Message Board</h3>
+            <i class="el-icon-d-arrow-right" @click="$store.state.messageBoard.show = !$store.state.messageBoard.show"></i>
+          </div>
+          <v-message-board></v-message-board>
         </div>
       </section>
     </div>
@@ -24,7 +31,7 @@
   import VHeader from './Header'
   import VMenu from './Menu'
   import NavBar from './navBar'
-  import {VAddQuickLink, VViewPicture} from '@/components/index'
+  import {VAddQuickLink, VMessageBoard} from '@/components/index'
 
   export default {
     name: 'layout',
@@ -33,15 +40,14 @@
       VMenu,
       NavBar,
       VAddQuickLink,
-      VViewPicture,
+      VMessageBoard,
     },
     data() {
-      return {}
+      return {
+      }
     },
+    watch: {},
     mounted() {
-      /*this.$on('full-box', (type) => {
-        this.fullBox = type;
-      });*/
     },
     computed: {
       key() {
@@ -72,10 +78,64 @@
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 10px;
+    position: relative;
+    transition: all .5s;
+  }
+
+  .app-main .content {
+    background-color: #FFFFFF;
+    height: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 80vh;
   }
 
   .main-container.fullBox {
     padding-left: 50px !important;
+  }
+
+  .app-main .right-menu {
+    width: 350px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding-top: 140px;
+    height: 100%;
+    z-index: 99;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    transition: all .5s;
+    transform: translate(100%, 0);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  }
+
+  .right-menu .title-box {
+    width: 50%;
+    padding: 5px 10px 0 10px;
+    top: 100px;
+    left: 0;
+    line-height: 30px;
+    position: absolute;
+    transition: all .5s;
+    transition-delay: .4s;
+    transform: translate(-100%, 0);
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  }
+
+  .right-menu .title-box * {
+    color: #999999;
+  }
+
+  .right-menu .title-box i {
+    font-size: 24px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: all .5s;
+    transform: rotate(180deg);
   }
 
   .layout {
@@ -125,7 +185,7 @@
   }
 
   .collapsed-menu span {
-    width: 0px;
+    width: 0;
     transition: width .2s ease;
   }
 
@@ -136,4 +196,26 @@
     font-size: 22px;
   }
 
+  .show-right-menu.app-main {
+    padding-right: 370px;
+  }
+
+  .show-right-menu .right-menu {
+    transform: translate(0, 0);
+  }
+
+  .show-right-menu .title-box {
+    transform: translate(0, 0);
+  }
+
+  .show-right-menu .right-menu .title-box {
+    box-shadow: none;
+    transition-delay: 0s;
+    width: 100%;
+  }
+
+  .show-right-menu .right-menu .title-box i {
+    transform: rotate(0);
+    transition-delay: .5s;
+  }
 </style>
