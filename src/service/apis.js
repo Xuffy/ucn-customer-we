@@ -104,7 +104,7 @@ const apis = {
   post_supplier_recoverCompare:['/purchase/supplier/recoverCompare','BASE_CS_cgs'],
 
   //seller warehouse
-  get_inboundData:['/inbound/page','BASE_SELLER',1],
+  get_inboundData:['/inbound/page','BASE_SELLER'],
 
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],

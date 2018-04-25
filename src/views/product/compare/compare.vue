@@ -39,19 +39,9 @@
                     :disabledOkBtn="false"
                     :hideBtn="true"
                     :disabledLine="disabledLine"
+                    :forceUpdateNumber="forceUpdateNumber"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
-
-
-
-        <!--<div class="btn-groups">-->
-            <!--<el-button>{{$t('product.page.createInquiry')}}</el-button>-->
-            <!--<el-button>{{$t('product.page.createOrder')}}</el-button>-->
-            <!--<el-checkbox-group v-model="checkList" class="checkbox-group">-->
-                <!--<el-checkbox :label="$t('product.page.hideTheSame')"></el-checkbox>-->
-                <!--<el-checkbox :label="$t('product.page.highlightTheDifference')"></el-checkbox>-->
-            <!--</el-checkbox-group>-->
-        <!--</div>-->
     </div>
 </template>
 
@@ -68,6 +58,7 @@
         },
         data(){
             return{
+                forceUpdateNumber:1,
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
                 tableDataList:[],       //表格数据展示
@@ -85,8 +76,6 @@
         },
         methods:{
             getList() {
-
-                console.log(this.$route)
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];
@@ -182,23 +171,23 @@
             //新增product
             addNewProduct(){
                 this.addProductDialogVisible=true;
+                this.forceUpdateNumber=Math.random();
             },
 
             //删除product
             deleteProduct(){
-                this.tableDataList.forEach(v=>{
+                this.tableDataList.forEach((v,k)=>{
                     let id=_.findWhere(v,{key:'id'}).value;
                     this.selectList.forEach(m=>{
                         let newId=_.findWhere(m,{key:'id'}).value;
                         if(id===newId){
-                            this.$set(v,'_disabled',true);
-                            this.$set(v,'_checked',false);
+                            this.tableDataList.splice(k,1)
                         }
                     })
                 });
-                this.$nextTick(()=>{
-                    this.disableDelete=true;
-                });
+                // this.$nextTick(()=>{
+                //     this.disableDelete=true;
+                // });
             },
 
             handleOkClick(e){
@@ -209,11 +198,19 @@
                     });
                 }else{
                     e.forEach(v=>{
-                        this.$set(v,'_checked',false);
-                        this.tableDataList.push(v);
+                        if(!v._disabled){
+                            this.tableDataList.push(v);
+                        }
                     });
+                    console.log(this.tableDataList)
                     this.disabledLine=this.tableDataList;
                     this.addProductDialogVisible=false;
+                    // e.forEach(v=>{
+                    //     this.$set(v,'_checked',false);
+                    //     this.tableDataList.push(v);
+                    // });
+                    // this.disabledLine=this.tableDataList;
+                    // this.addProductDialogVisible=false;
                 }
             },
 

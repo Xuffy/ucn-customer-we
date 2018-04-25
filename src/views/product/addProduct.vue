@@ -124,6 +124,10 @@
                 type:Boolean,
                 default:false
             },
+            forceUpdateNumber:{
+                type:Number,
+                default:0
+            }
         },
         data(){
             return{
@@ -302,21 +306,12 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
-                // this.selectList.forEach(v=>{
-                //     v._disabled=false;
-                // });
 
                 let arr=this.$copyArr(this.selectList);
                 arr.forEach(v=>{
-                    v._disabled=false;
-                });
-
-                this.tableDataList.forEach(v=>{
                     v._checked=false;
                 });
-
                 this.$emit('handleOK',arr);
-                this.selectList=[];
             },
             cancel(){
                 this.$emit('handleCancel');
@@ -384,6 +379,10 @@
                                 })
                             })
                         }
+                        this.selectList=this.$copyArr(this.disabledLine);
+                        this.selectList.forEach(v=>{
+                            v._disabled=true;
+                        });
                     }).catch(err=>{
                         console.log(err)
                     });
@@ -529,6 +528,9 @@
                     })
                     console.log(this.tableDataList,'this.tableDataList')
                 }
+            },
+            forceUpdateNumber(){
+                this.getData();
             },
         }
     }
