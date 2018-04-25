@@ -159,7 +159,8 @@ export default {
         width: '150px',
         type: 'text',
         state: 0,
-        _inquiryHide: true
+        _inquiryHide: true,
+        _disabled: true
     },
     destinationPort: { //目的港口 ok
         placeholder: 'Please select',
