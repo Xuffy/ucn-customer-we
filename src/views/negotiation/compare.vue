@@ -81,16 +81,6 @@
                 this.params.id = this.$route.query.id;
             };
             this.$route.params.type ? this.compareType = this.$route.params.type : '';
-            this.$nextTick(() => {
-                this.$windowOpen({
-                    url: '/negotiation/compareDetail/{type}',
-                    params: {
-                        type: 'only',
-                        id: '666',
-                        cd: '777'
-                    }
-                })
-            })
         },
         watch: {
             compareBy () {
@@ -123,17 +113,13 @@
                 this.tabData.forEach(item => {
                     if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value)
                 });
-
-                if(!this.compareName) return this.$message({
-                    message: '请填写Name',
-                    type: 'warning'
-                });
                 
                 this.$confirm('此操作将会保存编辑是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                    this.compareName?this.compareName = this.compareName:this.compareName = new Date().getTime();
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
                         inquiryIds: arr,
                         id:this.$route.query.id,
@@ -142,7 +128,7 @@
                     .then(res => {
                         if(type === 'save') return this.compareType = 'only';
                         this.$router.push({
-                            name: 'inquiryCompareDetail',
+                            name: 'negotiationCompare',
                             params: {
                                 type: 'only'
                             },
@@ -270,17 +256,24 @@
                     ids: arg
                 })
                 .then(res => {
-                    let data = [];
-                    _.map(this.tabData, items => {
-                        _.map(res.datas, item => {
-                            console.log(_.findWhere(item, {'key': 'id'}))
-                            // if(_.findWhere(items, {'key': 'id'}).value === _.findWhere(item, {'key': 'id'}).value) console.log(id)
-                        });
+                    let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    _.map(this.tabData, (item, index) => {
+                        if(item._disabled) {
+                            _.map(data, items => {
+                                if(item.id.value === items.id.value) {
+                                    item._disabled = false;
+                                    item._checked = false;
+                                    items._add = true;
+                                }
+                            });
+                        }
                     });
-                    return;
-                    //let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
-                    data = data.concat(this.tabData);
-                    this.tabData = data;
+                    let arr = [];
+                    _.map(data, item => {
+                        if(!item._add) arr.push(item);
+                    });
+                    arr = arr.concat(this.tabData);
+                    this.tabData = arr;
                     this.addNew = false;
                 })
             }
