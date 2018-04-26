@@ -10,17 +10,17 @@
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.description">                          
+                        <el-form-item :label="$i.logBasic.description">
                             <el-input type="text" v-model="search.description" @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.operater">                          
+                        <el-form-item :label="$i.logBasic.operater">
                             <el-input type="text" v-model="search.operater"  @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="$i.logBasic.operationDate">   
+                        <el-form-item :label="$i.logBasic.operationDate">
                             <el-date-picker
                             v-model="date"
                             type="daterange"
@@ -43,7 +43,7 @@
                     <!--v-model="searchValue">-->
                 <!--<i slot="prefix" class="el-input__icon el-icon-search"></i>-->
             <!--</el-input>-->
-            
+
             <!-- <el-button class="btn">ssss</el-button>
             <select-search :selectHide="false" class="search"></select-search> -->
             <!-- {{$t('product.page.download')+'('+logsNumber+')'}} -->
@@ -123,7 +123,7 @@
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
             },
-            getbizlogs(){             
+            getbizlogs(){
                 const params = {
                     moduleCode: 'ORDER',   //模块编码
                     bizCode: '',     //bizCode

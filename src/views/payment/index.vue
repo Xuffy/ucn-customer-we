@@ -37,7 +37,7 @@
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
                                 value-format="timestamp"
-                                :picker-options="dateOptions">                       
+                                :picker-options="dateOptions">
                         </el-date-picker>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
             <div class="main">
                 <v-table :data="tableDataList"
                 :total-row="totalRow"
-                :loading="tabLoad"  
+                :loading="tabLoad"
                 :buttons="setButtons"
                 @action="action"
                 :rowspan="1"
@@ -129,14 +129,14 @@
                 console.log(this.date)
             }
         },
-        methods:{   
+        methods:{
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
                 if(!val.key) return this.$message('搜索内容不能为空');
                 this.params.keyType = val.keyType;
                 this.params.key = val.key;
                 this.searchLoad = true;
-            }, 
+            },
             onFilterValue(val) {
                 console.log(val);
             },
@@ -170,8 +170,8 @@
                         //     return val;
                         // });
                         this.pageTotal = res.tc;
-                        this.tabLoad = false; 
-                        this.searchLoad = false; 
+                        this.tabLoad = false;
+                        this.searchLoad = false;
                         this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
                             item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                             item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
@@ -193,7 +193,7 @@
                             }
                             return item;
                         });
-                    }); 
+                    });
                 }else{
                     const params = {
                         conditions: {
@@ -217,8 +217,8 @@
                     this.$ajax.post(this.$apis.post_ledgerPage, params)
                     .then(res => {
                         this.pageTotal = res.tc;
-                        this.tabLoad = false; 
-                        this.searchLoad = false; 
+                        this.tabLoad = false;
+                        this.searchLoad = false;
                         this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
                             item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                             item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
@@ -238,7 +238,7 @@
                             // }
                             return item;
                         })
-                    }); 
+                    });
                 }
             },
             action(item, type) {
@@ -276,7 +276,7 @@
                             // orderNo: item.orderNo
                         }
                     });
-                }              
+                }
             },
             urgingPayment(item) {
                 console.log(item)
@@ -285,10 +285,10 @@
                 // ② 当待付款金额不为0时，催款按钮可操作；
                 // ③ 当待付金额为0时，催款按钮为禁用，不可操作；
                 // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
-                if(item.waitPayment.value != 0){
-                    
-                     
-                }              
+                // if(item.waitPayment.value != 0){
+                //
+                //
+                // }
             },
             setButtons(item){
                 if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]

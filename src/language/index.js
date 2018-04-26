@@ -37,10 +37,10 @@ export default _.extend(
   // require(`./${lang}/warehouse/warehouse.index`)
 
   // payment
-  {payment: require(`./${lang}/payment/payment`)},
+  {_payment: require(`./${lang}/payment/payment`)},
   require(`./${lang}/payment/payment.table`),
   //message
-  { message: require(`./${lang}/message/message.table`) },
+  {_message: require(`./${lang}/message/message.table`) },
   require(`./${lang}/message/tabs`),
   //logs
   {logs: require(`./${lang}/logs/logs.table`)},

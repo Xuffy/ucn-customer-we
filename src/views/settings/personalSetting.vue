@@ -3,24 +3,24 @@
     <el-form label-width="190px" ref="form" :model="form" :inline="true" >
         <el-row>
             <el-col :span="12">
-                <el-form-item :label="$i.personalInfo.email">                          
+                <el-form-item :label="$i.personalInfo.email">
                     <el-input type="email" style="max-width:200px;" v-model="form.email" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item :label="$i.personalInfo.userName">                          
+                <el-form-item :label="$i.personalInfo.userName">
                     <el-input style="max-width:200px" v-model="form.userName"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item  label="Password">                          
+                <el-form-item  label="Password">
                     <el-input style="max-width:140px;" type="password"></el-input>
                     <span  @click="dialogVisibleO = true">Replace</span>
                     <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
                 </el-form-item>
-            </el-col> 
+            </el-col>
              <el-col :span="12">
-                <el-form-item  :label="$i.personalInfo.tel">                          
+                <el-form-item  :label="$i.personalInfo.tel">
                     <el-input style="max-width:200px" v-model="form.tel"></el-input>
                 </el-form-item>
             </el-col>
@@ -163,7 +163,7 @@ export default {
                 }, {
                 value: '未知',
                 label: 'Unknown',
-                key: 2 
+                key: 2
            }],
            rules: {
                password:[
@@ -176,7 +176,7 @@ export default {
                 comfirmNewPassword: [
                     {min:6, message:'密码长度不少于6位', trigger: 'blur' },
                     { validator: validatePass2, trigger: 'blur' }
-                ],  
+                ],
             },
             dialogVisibleO:false,
             formLabelWidth: '140px',
@@ -186,7 +186,7 @@ export default {
         };
     },
     methods: {
-          //获取角色 部门 语言 
+          //获取角色 部门 语言
         getDepartment(){
             this.$ajax.get(this.$apis.get_department)
             .then(res => {
