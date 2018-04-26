@@ -13,7 +13,7 @@
                           :index="index + ''">
               <router-link class="link"
                            :to="item.path+'/'+item.children[0].path">
-                {{item.name}}
+                {{item.meta ? item.meta.name : ''}}
               </router-link>
             </el-menu-item>
 
@@ -21,7 +21,7 @@
             <el-submenu
               v-if="!item.noDropdown&&!item.hidden&&checkAuth(item.auth)" :index="index + ''">
               <template slot="title">
-                <span v-text="item.name"></span>
+                <span v-if="item.meta" v-text="item.meta.name"></span>
               </template>
 
               <template v-if="item.children.length&&!item.noDropdown&&!item.hidden"
@@ -29,7 +29,7 @@
                 <el-menu-item class="ucn-header-submenu"
                               v-if="!cItem.hidden&&checkAuth(cItem.auth)" :index="index +'-'+cIndex">
                   <router-link class="link" :to="item.path+'/'+cItem.path">
-                    {{cItem.name}}
+                    {{cItem.meta ? cItem.meta.name : ''}}
                   </router-link>
                 </el-menu-item>
               </template>

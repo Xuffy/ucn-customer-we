@@ -49,7 +49,7 @@ export default {
           let dv = value[val.key]
             , cd = _.clone(val);
           if (!_.isUndefined(dv) || val._important) {
-            cd.value = dv || '';
+            cd.value = _.isUndefined(dv) ? '' : dv;
             obj[val.key] = cd;
           }
         });
@@ -138,6 +138,18 @@ export default {
     /**
      * $window.open
      */
+
+    const serialization = (params) => {
+      const result = []
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const element = params[key];
+          result.push(`${key}=${element}`)
+        }
+      }
+      return result.join('&')
+    };
+
     Vue.prototype.$windowOpen = (config) => {
       let url = `//${window.location.host}/#${config.url}`, p = {};
       if (!_.isEmpty(config.params) && !config.params.length) {
@@ -148,10 +160,7 @@ export default {
         });
       }
       url = _.template(url)(config.params || {});
-      for (let k in p) {
-        url += `?${k}=${p[k]}`
-      }
-      return window.open(url, '_blank');
+      return window.open(`${url}?${serialization(p)}`, '_blank');
     };
 
     /**
@@ -204,6 +213,10 @@ export default {
           return e
         }
       })
+    }
+
+    Vue.prototype.$depthClone = (data) => {
+      return JSON.parse(_.clone(JSON.stringify(data)));
     }
 
 

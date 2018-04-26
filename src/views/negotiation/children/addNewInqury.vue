@@ -5,10 +5,10 @@
             :visible.sync="dialogVisible"
             width="80%"
             >
-                <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
+                <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
                 <div class="status">
                     <div class="state">
-                        <span>{{ $i.baseText.state }}</span>
+                        <span>{{ $i._baseText.state }}</span>
                         <el-checkbox-group v-model="status">
                             <el-checkbox-button 
                                     v-for="item in $db.inquiryOverview.overoiewState"
@@ -41,8 +41,8 @@
                     :total="pageTotal"
                 />
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">{{ $i.baseText.cancel }}</el-button>
-                <el-button type="primary" @click="addCompare">{{ $i.baseText.ok }}</el-button>
+                <el-button @click="dialogVisible = false">{{ $i._baseText.cancel }}</el-button>
+                <el-button type="primary" @click="addCompare">{{ $i._baseText.ok }}</el-button>
             </span>
         </el-dialog>
     </div>
@@ -87,7 +87,10 @@
                     key: '',
                     ps: 10,
                     pn: 1,
-                    recycleCustomer: 0
+                    recycleCustomer: 0,
+                    compareInquiryIds: [],
+                    compareInquiryDelIds: [],
+                    compareId: null
                 },
                 tabLoad:false,
                 pageTotal: 0
@@ -107,6 +110,15 @@
                 default: false
             },
             argDisabled: {
+                type: Array,
+                default: () => {
+                    return [];
+                }
+            },
+            compareId: {
+                default: null
+            },
+            disableds: {
                 type: Array,
                 default: () => {
                     return [];
@@ -134,19 +146,24 @@
                 this.params.statuses = val;
             },
             value() {
-                this.gettabData();
+                this.params.compareInquiryIds = this.argDisabled;
+                this.params.compareId = this.compareId;
+                this.params.compareInquiryDelIds = this.disableds;
             }
         },
         methods: {
             addCompare() {
                 let arg = this.$copyArr(this.checkedData);
                 let arr = [];
-                if(_.isObject(arg)) {
+                if(_.isObject(arg) && this.selectionRadio) {
                     this.$emit('addInquiry', arg);
                 } else {
-                    arg.forEach((item, index) => {
-                        delete item._checked;
-                        if(!item._disabled) arr.push(item);
+                    _.map(arg, item => {
+                        _.mapObject(item, (val, key) => {
+                            if(key === '_disabled' && val === false){
+                                arr.push(item.id.value);
+                            }
+                        });
                     });
                     this.$emit('addInquiry', arr);
                 }
@@ -168,10 +185,13 @@
                     this.searchLoad = false;
                     let arr = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
                     _.map(this.argDisabled, id => {
-                        _.map(arr, (items, index) => {
-                            if(_.findWhere(items, {'key': 'id'}).value + '' === id + '') {
+                        _.map(arr, items => {
+                            if(_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
                                 items._disabled = true;
                                 items._checked = true;
+                            } else {
+                                items._disabled = false;
+                                items._checked = false;
                             }
                         });
                     });

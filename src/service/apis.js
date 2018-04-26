@@ -7,6 +7,8 @@ const apis = {
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
   POST_CODE_PART: ['/code/part', 'BASE_JML'],
+  POST_LOGISTICSPORT_QUERY: ['/logisticsport/query', 'BASE_JML'],
+  GET_COUNTRY_ALL: ['/country/all', 'BASE_JML'],
   gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
@@ -22,6 +24,7 @@ const apis = {
   get_productDetail: ['/sku/{id}', 'BASE_CS'],
   delete_product: ['/sku/{id}/delete', 'BASE_CS'],
   change_productStatus: ['/sku/{id}/status', 'BASE_CS'],
+  PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS_cgs'],
   inquiry_list: ['/inquiry/list', 'BASE_DH C'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
@@ -59,6 +62,7 @@ const apis = {
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
+  get_order_history:['/order/skuHistory','BASE_HCJ'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],
@@ -89,10 +93,10 @@ const apis = {
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
   get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
-  add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
+  add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1'],
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-
+  delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -108,6 +112,9 @@ const apis = {
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
+  get_productInfo:['/order/skuListPage','BASE_BUYER'],
+
+
 
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
@@ -115,7 +122,10 @@ const apis = {
   get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
 
   // logistic dictionary
-  get_container_type: ['/containertype/all', 'BASE_dictionary']
+  get_container_type: ['/containertype/all', 'BASE_dictionary'],
+
+  //payment
+  post_ledgerPage:['/ledger/page','BASE_BJ'],
 };
 
 let list = _.mapObject(apis, val => {

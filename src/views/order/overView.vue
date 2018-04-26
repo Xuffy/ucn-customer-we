@@ -5,11 +5,11 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label="1"> {{ $i.baseText.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="2">{{($i.baseText.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="3">{{($i.baseText.process)}}</el-radio-button>
-                            <el-radio-button label="4">{{($i.baseText.finish)}}</el-radio-button>
-                            <el-radio-button label="5">{{($i.baseText.cancel)}}</el-radio-button>
+                            <el-radio-button label="1"> {{ $i._baseText.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="2">{{($i._baseText.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="3">{{($i._baseText.process)}}</el-radio-button>
+                            <el-radio-button label="4">{{($i._baseText.finish)}}</el-radio-button>
+                            <el-radio-button label="5">{{($i._baseText.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -22,16 +22,16 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
-                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i.baseText.createOrder)}}</el-button>
+                <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
+                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i._baseText.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled'>finish</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.baseText.delete)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i._baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
                    <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                            <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
+                            <el-radio-button label=1>{{($i._baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i._baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
             </div>
         </div>
@@ -134,7 +134,7 @@
                 this.getdata()
             },
             changeView() {
-                this.getdata()
+                this.getdata(this.$db.order.overviewBysku)
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message('请选中搜索类型');
@@ -165,12 +165,12 @@
                     });
             },
             //get_orderlist数据
-            getdata() {
+            getdata(overview) {
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+                        this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
                         //                            return _.mapObject(item, val => {
                         //                                val._checked = true
@@ -187,7 +187,7 @@
 
         },
         created() {
-            this.getdata()
+            this.getdata(this.$db.order.overview)
 
         },
         mounted() {

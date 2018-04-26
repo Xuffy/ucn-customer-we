@@ -16,7 +16,6 @@
                 clearable 
                 placeholder="search" 
                 style="max-width:150px;" 
-                @change="inputChange" 
                 @keyup.enter.native="inputEnter" 
             />
             <el-button 
@@ -34,7 +33,6 @@
         name:'selectSearch',
         data() {
             return {
-                keyType:'',
                 keyWord:''
             }
         },
@@ -52,17 +50,25 @@
             searchLoad: {
                 type: Boolean,
                 default: false
+            },
+            value: {
+                type: [String, Number],
+                default: ''
+            }
+        },
+        computed: {
+            keyType: {
+                get() {
+                    return this.value;
+                },
+                set(val) {
+                    this.$emit('input', val);
+                }
             }
         },
         methods: {
-            inputChange() {
-                this.$emit('inputChange', {
-                    key: this.keyWord,
-                    keyType: this.keyType
-                });
-            },
             inputEnter() {
-                this.$emit('inputChange', {
+                this.$emit('inputEnter', {
                     key: this.keyWord,
                     keyType: this.keyType
                 });
