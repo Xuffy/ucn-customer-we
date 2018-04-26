@@ -1,7 +1,7 @@
 <template>
     <div class="inbound-detail">
         <div class="title">
-            {{$i.warehouse.basicInfo}}
+            {{$i._warehouse.basicInfo}}
         </div>
         <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
@@ -71,11 +71,11 @@
         </el-form>
 
         <div class="title">
-            {{$i.warehouse.productInfo}}
+            {{$i._warehouse.productInfo}}
         </div>
         <div class="btns">
-            <el-button @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
-            <el-button type="danger">{{$i.warehouse.removeProduct}}</el-button>
+            <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
+            <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
 
         <el-dialog

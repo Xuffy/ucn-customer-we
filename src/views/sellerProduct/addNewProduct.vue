@@ -1,6 +1,6 @@
 <template>
     <div class="add-product">
-        <div class="title">{{$i.product.basicInformation}}</div>
+        <div class="title">{{$i._product.basicInformation}}</div>
         <div class="addPic">
             <div class="name">
                 Pic:
@@ -64,7 +64,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.product.customerInfo}}</div>
+        <div class="title">{{$i._product.customerInfo}}</div>
         <el-form :model="productForm" ref="productForm2" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -116,7 +116,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.product.priceInfo}}</div>
+        <div class="title">{{$i._product.priceInfo}}</div>
         <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-table
                     :data="productForm.price"
@@ -127,17 +127,17 @@
                         width="180">
                     <template slot-scope="scope">
                         <div v-if="scope.$index===0">
-                            {{$i.product.costPrice}}
+                            {{$i._product.costPrice}}
                         </div>
                         <div v-if="scope.$index===1">
-                            {{$i.product.quotedPrice}}
+                            {{$i._product.quotedPrice}}
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="fobCurrency"
                         align="center"
-                        :label="$i.product.fobCurrency"
+                        :label="$i._product.fobCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -155,7 +155,7 @@
                 <el-table-column
                         prop="fobPrice"
                         align="center"
-                        :label="$i.product.fobPrice"
+                        :label="$i._product.fobPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -170,7 +170,7 @@
                 <el-table-column
                         prop="fobPort"
                         align="center"
-                        :label="$i.product.fobPort"
+                        :label="$i._product.fobPort"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -184,7 +184,7 @@
                 <el-table-column
                         prop="exwPrice"
                         align="center"
-                        :label="$i.product.exwPrice"
+                        :label="$i._product.exwPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -199,7 +199,7 @@
                 <el-table-column
                         prop="exwCurrency"
                         align="center"
-                        :label="$i.product.exwCurrency"
+                        :label="$i._product.exwCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -217,7 +217,7 @@
                 <el-table-column
                         prop="otherIncoterm"
                         align="center"
-                        :label="$i.product.otherIncoterm"
+                        :label="$i._product.otherIncoterm"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -235,7 +235,7 @@
                 <el-table-column
                         prop="otherIncotermPrice"
                         align="center"
-                        :label="$i.product.otherIncotermPrice"
+                        :label="$i._product.otherIncotermPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -250,7 +250,7 @@
                 <el-table-column
                         prop="otherIncotermArea"
                         align="center"
-                        :label="$i.product.otherIncotermArea"
+                        :label="$i._product.otherIncotermArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -264,7 +264,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i.product.otherIncotermCurrency"
+                        :label="$i._product.otherIncotermCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -282,7 +282,7 @@
             </el-table>
         </el-form>
 
-        <div class="title">{{$i.product.packingInfo}}</div>
+        <div class="title">{{$i._product.packingInfo}}</div>
         <el-form :model="productForm" ref="productForm4" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -334,7 +334,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.product.logisticInfo}}</div>
+        <div class="title">{{$i._product.logisticInfo}}</div>
         <el-form :model="productForm" ref="productForm5" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -386,7 +386,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.product.otherInfo}}</div>
+        <div class="title">{{$i._product.otherInfo}}</div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
 
@@ -480,12 +480,12 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i.product.attachment}}</div>
+        <div class="title">{{$i._product.attachment}}</div>
 
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finish}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._product.finish}}</el-button>
         </div>
     </div>
 </template>

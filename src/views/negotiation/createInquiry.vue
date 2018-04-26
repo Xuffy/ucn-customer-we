@@ -44,20 +44,22 @@
                             <el-select
                                 style="width:100%;"
                                 v-if="item.type === 'manySelect'"
-                                v-model="fromArg[item.key]"
+                                v-model="fromArg.suppliers"
                                 multiple
                                 filterable
                                 remote
                                 reserve-keyword
+                                value-key="id"
                                 :size="item.size || 'mini'"
                                 placeholder="请输入关键词"
                                 :remote-method="remoteMethod"
                                 :loading="loading">
                                 <el-option
                                     v-for="item in selectAll[item.key]"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item"
+                                    :id="item.id"
                                 />
                             </el-select>
                             <el-input
@@ -78,7 +80,7 @@
                                 v-if="item.type === 'dateTime'"
                             />
                             <span v-if="item.type === 'Number'" style="display:flxe;">
-                                <el-input-number v-model="fromArg[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false" style="width:100%; padding-right:10px;" /> <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
+                                <el-input-number v-model="fromArg[item.key]" :min="0" :max="100" controls-position="right" size="mini" :controls="false" style="width:100%; padding-right:10px;" /> <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
                             </span>
                             <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
                         </el-form-item>
@@ -92,7 +94,7 @@
                 <el-button @click="dialogTableVisible = true">{{ $i._baseText.addProduct }}</el-button>
                 <el-button type="danger">{{ $i._baseText.remove }}</el-button>
             </div>
-            <select-search :options="[]" @inputEnter="inputEnter" @inputChange="inputChange" />
+            <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
         <v-table 
             :data.sync="tabData"
@@ -144,6 +146,7 @@
                     departureCountry: []
                 },
                 loading: false,
+                suppliers: [],
                 fromArg: {
                     //supplierId: [], //供应商ID
                     //supplierType: null, //供应商类型
@@ -165,12 +168,7 @@
                     exportLicense: null, //是否有出口许可证
                     remark: null,
                     draft: null, //是否草稿0:否，1:是
-                    // suppliers: [{
-                    //     supplierId: int, //供应商ID
-                    //     supplierType: int, //供应商类型
-                    //     supplierName: string //供应商名称
-                    //     supplierCode: 'string'
-                    // }],
+                    suppliers: [],
                     details: [{
                         "skuId": 11,
                         "skuRecycle": 0,
@@ -337,6 +335,7 @@
         },
         created() {
             this.getDictionaries();
+            this.remoteMethod('');
         },
         computed: {
             
@@ -370,7 +369,6 @@
                 console.log(val)
             },
             submitForm(type) {
-                console.log(this.fromArg)
                 if(type === 'draft') { //是否保存为草稿
                     this.fromArg.draft = 1;
                 } else {
@@ -462,12 +460,10 @@
                             break;
                 }
            },
-           remoteMethod(val) {
-               this.$ajax(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME, {
-                   name: val
-               })
+           remoteMethod(keyWord) {
+               this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
                .then(res => {
-                   console.log(res)
+                   this.selectAll.supplierName = res;
                })
            }
         }

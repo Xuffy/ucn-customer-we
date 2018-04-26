@@ -60,20 +60,20 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i._product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
-                <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
-                <el-button @click="deleteBookmark" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>
-                <el-button>{{$i.product.upload}}</el-button>
-                <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
+                <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
+                <el-button>{{$i._product.createOrder}}</el-button>
+                <el-button :disabled="disabledCompare">{{$i._product.compare}}</el-button>
+                <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
+                <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
+                <el-button>{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
+                <el-button @click="deleteBookmark" :disabled="disabledRemove" type="danger">{{$i._product.delete}}</el-button>
+                <el-button>{{$i._product.upload}}</el-button>
+                <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
             </div>
 
             <v-table
@@ -115,7 +115,7 @@
         data(){
             return{
                 hideBody:true,            //是否显示body
-                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i._product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 selectList:[],
                 downloadBtnInfo:'All',
@@ -383,9 +383,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$i.product.advanced;
+                    this.btnInfo=this.$i._product.advanced;
                 }else{
-                    this.btnInfo=this.$i.product.hideTheAdvanced;
+                    this.btnInfo=this.$i._product.hideTheAdvanced;
                 }
             },
             selectList(n){

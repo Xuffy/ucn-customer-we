@@ -4,8 +4,8 @@
              <div class="viewBy">
                 <span>View by&nbsp</span>
                    <el-radio-group v-model="params.view" size="mini" >
-                            <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
+                            <el-radio-button label=1>{{($i._baseText.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i._baseText.SKU)}}</el-radio-button>
                     </el-radio-group>
             </div>
            <selectSearch></selectSearch>

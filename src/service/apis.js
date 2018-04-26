@@ -24,7 +24,7 @@ const apis = {
   get_productDetail: ['/sku/{id}', 'BASE_CS'],
   delete_product: ['/sku/{id}/delete', 'BASE_CS'],
   change_productStatus: ['/sku/{id}/status', 'BASE_CS'],
-  PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS'],
+  PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS_cgs'],
   inquiry_list: ['/inquiry/list', 'BASE_DH C'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
@@ -122,7 +122,10 @@ const apis = {
   get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
 
   // logistic dictionary
-  get_container_type: ['/containertype/all', 'BASE_dictionary']
+  get_container_type: ['/containertype/all', 'BASE_dictionary'],
+
+  //payment
+  post_ledgerPage:['/ledger/page','BASE_BJ'],
 };
 
 let list = _.mapObject(apis, val => {

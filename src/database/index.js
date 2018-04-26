@@ -5,9 +5,12 @@ import logistic from './logistic';
 
 import inquiryOverview from './inquiry';
 import order from './order/index';
-import supplier from './supplier/index'
+import supplier from './supplier/index';
 import setting from './setting/index';
 import common from './common/index';
+import message from './message/index';
+import payment from './payment/index';
+import logs from './logs/index';
 
 import warehouse from './warehouse/index';
 
@@ -20,7 +23,11 @@ const db = {
   order,
   supplier,
   setting,
+  message,
+  payment,
+  logs,
   warehouse
+  // inbound,
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
