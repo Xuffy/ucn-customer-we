@@ -88,7 +88,8 @@
                     ps: 10,
                     pn: 1,
                     recycleCustomer: 0,
-                    comapreInquiryIds: [],
+                    compareInquiryIds: [],
+                    compareInquiryDelIds: [],
                     compareId: null
                 },
                 tabLoad:false,
@@ -116,6 +117,12 @@
             },
             compareId: {
                 default: null
+            },
+            disableds: {
+                type: Array,
+                default: () => {
+                    return [];
+                }
             }
         },
         computed: {
@@ -139,8 +146,9 @@
                 this.params.statuses = val;
             },
             value() {
-                this.params.comapreInquiryIds = this.argDisabled;
+                this.params.compareInquiryIds = this.argDisabled;
                 this.params.compareId = this.compareId;
+                this.params.compareInquiryDelIds = this.disableds;
             }
         },
         methods: {

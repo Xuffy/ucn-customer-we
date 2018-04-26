@@ -81,6 +81,16 @@
                 this.params.id = this.$route.query.id;
             };
             this.$route.params.type ? this.compareType = this.$route.params.type : '';
+            this.$nextTick(() => {
+                this.$windowOpen({
+                    url: '/negotiation/compareDetail/{type}',
+                    params: {
+                        type: 'only',
+                        id: '666',
+                        cd: '777'
+                    }
+                })
+            })
         },
         watch: {
             compareBy () {
