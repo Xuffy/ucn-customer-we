@@ -11,7 +11,6 @@
     "departureCountry": "Departure Country",
     "incoterm": "Incoterm",
     "currency": "Currency",
-    "exchangeRate": "exchange rate(xx--xx)",
     "discountRate": "discount rate",
     "departurePort": "departure port",
     "destinationPort": "destination port",
@@ -21,5 +20,5 @@
     "attachment": "Attachment",
     "inquiryRemark": "Inquiry remark",
     "relatedOrderNO": "related order NO.",
-    "remarkDate": ""
+    "remarkDate": " "
 }
