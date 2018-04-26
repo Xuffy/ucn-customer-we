@@ -564,7 +564,7 @@
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
                     this.disabledSubmit=false;
-                    this.$router.push('/product/sourcing');
+                    this.$router.push('/product/bookmark');
                 }).catch(err=>{
                     this.disabledSubmit=false;
                 });

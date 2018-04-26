@@ -72,7 +72,7 @@
 
             <v-table
                     :data="tableDataList"
-                    :buttons="type==='recycle'?[]:[{label: 'detail', type: 1}]"
+                    :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick">
 
@@ -139,6 +139,10 @@
                 default:0
             },
             isInModify:{        //是否处在modify状态，用来表示在compare页面add product时的不用操作
+                type:Boolean,
+                default:false
+            },
+            isInquiry:{
                 type:Boolean,
                 default:false
             }
@@ -336,6 +340,7 @@
                 this.$emit('handleOK',newArr);
             },
             cancel(){
+                this.$refs.productFormTop.resetFields();
                 this.$emit('handleCancel');
             },
 
@@ -402,9 +407,12 @@
                                 let id;
                                 if(this.isInModify){
                                     id=_.findWhere(v,{key:'skuId'}).value;
+                                }else if(this.isInquiry){
+                                    id=_.findWhere(v,{key:'skuId'}).value;
                                 }else{
                                     id=_.findWhere(v,{key:'id'}).value;
                                 }
+                                console.log(id)
                                 this.tableDataList.forEach(m=>{
                                     let newId=_.findWhere(m,{key:'id'}).value;
                                     if(id===newId){

@@ -23,7 +23,7 @@
            <v-table 
                 :height=360
                 :data="tabData" 
-                :buttons="[{label: 'detail', type: 1}]"
+                :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
                 @action="detail" 
                 @change-checked='checked'
                 style='marginTop:10px'/>
@@ -46,7 +46,7 @@
                     label: 'compareName'
                 }, {
                     id: '2',
-                    label: "scompareItem"
+                    label: "compareItem"
                 }],
                 params: {
                     id: 1,
@@ -88,28 +88,38 @@
 
             },
             checked(item) {
-                console.log(item)
                 this.selectedData = item
-            },
-            detail(item) {
-                console.log(item)
-                this.windowOpen('/supplier/compareDetail', {
-                    id: item.id.value,
-                    name: item.name.value
+                let number = []
+                this.selectedData.forEach(item => {
+                    console.log()
+                    number.push(item.id.value);
                 });
+                this.selectNumber = number
+            },
+            detail(item,type) {
+                if(type===1){
+                    
+                   }else{
+                     this.$windowOpen({
+                        url: '/supplier/compareDetail',
+                        params: {
+                            id: item.id.value,
+                            name: item.name.value
+                        }
+                        });
+                   }
+                
             },
             get_data() {
                 this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
                     .then(res => {
                         this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas);
-                        console.log(res)
                     })
                     .catch((res) => {
 
                     });
             },
-            downloadSelected() {
-                this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
+            downloadSelected() {               this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
                     .then(res => {
                         console.log(res.datas)
                     })
@@ -118,9 +128,9 @@
                     });
             },
             remove() {
-                this.$ajax.post(this.$apis.post_supplier_deleteCompare, [this.selectedNumber])
+                this.$ajax.post(this.$apis.post_supplier_deleteCompare, this.selectedNumber)
                     .then(res => {
-                        console.log(res.datas)
+                        console.log(res)
                     })
                     .catch((res) => {
 

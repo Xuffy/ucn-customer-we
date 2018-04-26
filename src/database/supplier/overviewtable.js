@@ -1,6 +1,6 @@
 export default {
     //.......................表格
-    SKUcode: {
+    supplierNO: {
         key: 'code'
     },
     suppliername: {

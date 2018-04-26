@@ -606,6 +606,5 @@ export default {
     adjustPackage: {
         key: 'skuAdjustPackage',
         _disabled: true,
-        _calu: true
     }
 }
