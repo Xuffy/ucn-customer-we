@@ -368,7 +368,14 @@
                     });
                 }
                 else{
-                    this.$ajax.post(this.$apis.get_buyerProductList,{
+                    let url='';
+                    if(this.type==='product'){
+                        url=this.$apis.get_buyerProductList;
+                    }else if(this.type==='bookmark'){
+                        url=this.$apis.get_buyerBookmarkList;
+                    }
+
+                    this.$ajax.post(url,{
                         recycle:false
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{

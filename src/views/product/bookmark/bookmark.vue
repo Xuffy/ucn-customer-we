@@ -67,7 +67,7 @@
             <div class="btns">
                 <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
                 <el-button>{{$i._product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i._product.compare}}</el-button>
+                <el-button @click="compare" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
                 <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
                 <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
                 <el-button>{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
@@ -334,11 +334,34 @@
             createInquiry(){
 
             },
+
+            compare(){
+                let id='';
+                this.selectList.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectList.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
+            },
+
             addProduct(){
                 this.addProductDialogVisible=true;
             },
             manuallyAddProduct(){
-                this.windowOpen('/product/bookmarkManuallyAdd');
+                this.$windowOpen({
+                    url:'/product/bookmarkManuallyAdd'
+                });
             },
             deleteBookmark(){
                 this.$confirm('是否确认删除？', '提示', {

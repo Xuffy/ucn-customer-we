@@ -1,5 +1,5 @@
 {
-
+  "saleStatus":"销售状态",
   "categoryId":"产品类型",
   "nameCnLike":"产品中文名",
   "readilyAvailable":"是否有现货",
@@ -11,6 +11,7 @@
   "materialEnLike":"产品英文材质",
   "country":"国家",
   "supplierNameLike":"供应商名称",
+  "supplierNo":"供应商编号",
   "outerCartonMethodEnLike":"外包装方式EN",
   "methodPkgEnLike":"产品包装方式EN",
   "deliveryDates":"交期",
@@ -146,6 +147,13 @@
 
   "incoterm":"价格条款",
   "incotermArea":"价格条款区域",
-  "incotermPrice":"价格"
+  "incotermPrice":"价格",
+
+  "cifPrice":"CIF单价",
+  "cifCurrency":"CIF 币种",
+  "cifArea":"CIF 区域",
+  "dduPrice":"DDU 单价",
+  "dduCurrency":"DDU 币种",
+  "dduArea":"DDU 区域"
 
 }
