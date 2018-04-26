@@ -34,7 +34,6 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            // messageBoard: 'code',
           },
           component: () => import('../views/workbench/index.vue')
         }

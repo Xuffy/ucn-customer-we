@@ -27,7 +27,7 @@ export default _.extend(
   require(`./${lang}/logistic/plan/overviewCheckbox.status`),
   require(`./${lang}/inquiry/compare.pending`),
 
-  {warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
+  {_warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
 
   // payment
   {_payment: require(`./${lang}/payment/payment`)},
@@ -36,9 +36,9 @@ export default _.extend(
   {_message: require(`./${lang}/message/message.table`) },
   require(`./${lang}/message/tabs`),
   //logs
-  {logs: require(`./${lang}/logs/logs.table`)},
-  {logBasic: require(`./${lang}/logs/logs.basic`)},
-  {track: require(`./${lang}/track/trackBysku`)},
+  {_logs: require(`./${lang}/logs/logs.table`)},
+  {_logBasic: require(`./${lang}/logs/logs.basic`)},
+  {_track: require(`./${lang}/track/trackBysku`)},
 
 
     //CN配置

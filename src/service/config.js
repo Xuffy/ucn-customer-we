@@ -13,6 +13,7 @@ export default {
       // BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_LYF: 'http://dev.uuser-facade.ucnholding.com',
       BASE_JML: 'http://dev.umeta-facade.ucnholding.com',
+      BASE_JML2: 'http://dev.umessage-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       BASE_HSM: 'http://dev.uwarehouse.ucnholding.com:18100',
       BASE_LJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
