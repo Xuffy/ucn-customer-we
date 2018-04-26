@@ -113,12 +113,25 @@
         <el-dialog
                 title="Add Product From Order"
                 :visible.sync="addOrderDialogVisible"
-                width="30%">
-            <span>这是一段信息</span>
-            <span slot="footer" class="dialog-footer">
+                width="70%">
+
+            <el-form :modal="orderProduct" label-width="200px" :label-position="labelPosition">
+                <el-row>
+                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalCartonQty">
+                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+
+
+
+            <div slot="footer" class="dialog-footer">
                 <el-button @click="addOrderDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addOrderDialogVisible = false">确 定</el-button>
-            </span>
+            </div>
         </el-dialog>
 
     </div>
@@ -174,10 +187,6 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-
-
-
-
                 },
                 //inbound总计
                 inboundSummary:{
@@ -187,12 +196,28 @@
                     totalNetWeight:0,
                     totalSkuQty:0,
                 },
+
+                //add order product搜索数据
+                orderProduct:{
+                    orderNo: "",
+                    pn: 1,
+                    ps: 50,
+                    skuCode:"",
+                    skuBarCode: "",
+                    skuNameCn: "",
+                },
             }
         },
         methods:{
             //新增产品
             addProduct(){
                 this.addOrderDialogVisible=true;
+                //请求弹出框数据
+                this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+
+                });
             },
         },
         created(){

@@ -10,6 +10,11 @@ export default {
     type: 'Number',
     length: 10,
     reg: '',
+    fn(ajax){
+      return ajax.post(1212).then(data=>{
+
+      });
+    },
     state: '',
   },
   descripition: {

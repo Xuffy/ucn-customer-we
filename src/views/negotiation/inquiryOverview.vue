@@ -1,9 +1,9 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
+        <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
             <div class="state">
-                <span>{{ $i.baseText.state }}</span>
+                <span>{{ $i._baseText.state }}</span>
                 <el-checkbox-group v-model="status">
                     <el-checkbox-button 
                             v-for="item in $db.inquiryOverview.overoiewState"
@@ -22,16 +22,16 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i.baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i._baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i._baseText.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i._baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i._baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+                <span>{{ $i._baseText.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i._baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i._baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -200,7 +200,6 @@
                     if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 if(typeof type === 'string') arr.join(',')
-                return;
                 return arr;
             },
             toCompare() {

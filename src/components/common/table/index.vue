@@ -83,8 +83,10 @@
             <td>
               <div v-text="totalItem._totalRow ? totalItem._totalRow.label : '总计'"></div>
             </td>
+            <td v-if="rowspan < 2">
+            </td>
             <td v-for="item in dataColumn" v-if="!item._hide && typeof item === 'object'">
-              <div v-text="item.value"></div>
+              <div v-text="totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -424,7 +426,7 @@
     /*border-right: 1px solid #ebeef5;*/
     box-sizing: border-box;
     position: relative;
-    background-color: #f6f8f9;
+    /*background-color: #f6f8f9;*/
     color: #999999;
   }
 

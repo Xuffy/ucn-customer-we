@@ -2,7 +2,7 @@
   <div class="workbench">
 
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"
+      <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"
           @click="$refs.historyModify.edit(mockData,historyData, true)"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
@@ -20,16 +20,16 @@
     <br/><br/>
     <el-row :gutter="10">
       <el-col :span="12">
-        <v-table-data></v-table-data>
+        <v-table-data type="1"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <!--<v-table-data></v-table-data>-->
+        <v-table-data type="2"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <!--<v-table-data></v-table-data>-->
+        <v-table-data type="4"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <!--<v-table-data></v-table-data>-->
+        <v-table-data type="3"></v-table-data>
       </el-col>
     </el-row>
 
@@ -51,6 +51,10 @@
     data() {
       return {
         visible: false,
+        pengdingTask: [],
+        futureTask: [],
+        fyiTask: [],
+        pushTask: [],
         testData: testData.content.details, // todo 测试
         mockData: [], // todo 测试
         historyData: [], // todo 测试
@@ -68,14 +72,16 @@
         console.log(this.$lang)
     },
     mounted() {
+      /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
+        this.pengdingTask = data.pending_task;
+        this.futureTask = data.future_task;
+        this.fyiTask = data.fyi_task;
+        this.pushTask = data.push_task;
+      });*/
 
-      this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
-
-      });
-
-      this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
-
-      });
+      // this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
+      //
+      // });
 
 
       this.mockData = this.$getDB(

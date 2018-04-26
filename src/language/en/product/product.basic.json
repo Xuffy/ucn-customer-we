@@ -70,5 +70,7 @@
 
   "hideTheSame":"Hide The Same",
   "highlightTheDifferent":"Highlight the Different",
-  "saveTheCompare":"Save The compare"
+  "saveTheCompare":"Save The compare",
+
+  "deleteTheCompare":"Delete The Compare"
 }

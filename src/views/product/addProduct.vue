@@ -531,7 +531,6 @@
                             }
                         })
                     })
-                    console.log(this.tableDataList,'this.tableDataList')
                 }
             },
             forceUpdateNumber(){

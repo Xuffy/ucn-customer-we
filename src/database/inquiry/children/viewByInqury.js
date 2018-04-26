@@ -2,6 +2,9 @@ export default {
     companyId: {
         _hide: true
     },
+    compareDisplay: {
+        _hide: true
+    },
     updateId: {
         _hide: true
     },

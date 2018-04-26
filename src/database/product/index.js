@@ -5,6 +5,7 @@ import detailTop from './detailTop';
 import buyerDetailTop from './buyerDetailTop';
 import detailTab from './detailTab';
 import detailPriceTable from './detailPriceTable';
+import compareTable from './compare.indexTable';
 
 export default {
     buyerBasic,
@@ -13,5 +14,6 @@ export default {
     detailTop,
     buyerDetailTop,
     detailTab,
-    detailPriceTable
+    detailPriceTable,
+    compareTable
 }

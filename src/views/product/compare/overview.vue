@@ -10,49 +10,27 @@
                     :options="[]"
                     class="search"></select-search>
         </div>
-        <!--<el-button type="primary" @click="$router.push('/product/compareDetail')">Detail</el-button>-->
-        <!--<div class="status">-->
-            <!--<div class="btn-wrap">-->
-                <!--<el-button>{{$t("product.page.downloadSelectedCompare")}}</el-button>-->
-                <!--<el-button type="danger">{{$t("product.page.delete")}}</el-button>-->
-            <!--</div>-->
 
-            <!--<div class="select-wrap">-->
-                <!--<select-search></select-search>-->
+        <v-table
+                class="speTable"
+                :data="tableDataList"
+                :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
+                @action="btnClick"
+                @change-checked="changeChecked"></v-table>
 
-
-                <!--&lt;!&ndash;<el-select v-model="value" placeholder="select" @change="selectChange">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<el-option&ndash;&gt;-->
-                            <!--&lt;!&ndash;v-for="item in options"&ndash;&gt;-->
-                            <!--&lt;!&ndash;:key="item.id"&ndash;&gt;-->
-                            <!--&lt;!&ndash;:label="item.label"&ndash;&gt;-->
-                            <!--&lt;!&ndash;:value="item.id" />&ndash;&gt;-->
-                <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
-                <!--&lt;!&ndash;<el-input v-model="keyWord" clearable       prefix-icon="el-icon-search" placeholder="search" style="width:150px;margin-left:10px;"></el-input>&ndash;&gt;-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="body">-->
-            <!--<v-simple-table-->
-                    <!--class="speTable"-->
-                    <!--:data.sync="tableDataList"-->
-                    <!--:column="dataColumn"-->
-                    <!--@sort-change="getSort"-->
-                    <!--@page-change="pageChange">-->
-            <!--</v-simple-table>-->
-        <!--</div>-->
-        <!--from-->
     </div>
 </template>
 <script>
     import {dropDown} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
-
+    import VTable from '@/components/common/table/index'
 
     export default {
         name: '',
         components: {
             dropDown,
-            selectSearch
+            selectSearch,
+            VTable
         },
         data() {
             return {
@@ -60,7 +38,8 @@
                  * 页面基本配置
                  * */
                 disableDelete:true,
-
+                tableDataList:[],
+                selectList:[],
             }
         },
         methods: {
@@ -74,7 +53,7 @@
             //获取data数据
             getList() {
                 this.$ajax.post(this.$apis.get_compareList,{
-                    name: "string",
+                    name: "",
                     // operatorFilters: [
                     //     {
                     //         columnName: "",
@@ -91,6 +70,13 @@
                     //         orderType: "",
                     //     }
                     // ]
+                }).then(res=>{
+
+                    this.tableDataList = this.$getDB(this.$db.product.compareTable, res.datas,(e)=>{
+                        e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        return e;
+                    });
+                    console.log(this.tableDataList)
                 });
             },
 
@@ -103,10 +89,30 @@
                 console.log(val, key)
             },
 
+            btnClick(e,type){
+                if(type===1){
+                    //modify
+                }else if(type===2){
+                    //Detail
+                    this.$router.push({
+                        name:'Compare Detail',
+                        params:{
+                            type:'modify'
+                        },
+                        query:{
+                            compareId:e.id.value
+                        }
+                    });
+                }
+            },
 
+            changeChecked(e){
+                this.selectList=e;
+            },
 
         },
         created(){
+            console.log(this.$db)
             this.getList();
         },
     }
@@ -127,6 +133,10 @@
                 float: right;
             }
         }
+        .speTable{
+            margin-top: 10px;
+        }
+
 
 
     }
