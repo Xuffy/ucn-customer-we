@@ -60,23 +60,24 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i._product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button :disabled="disabledCompare">{{$i.product.compare}}</el-button>
-                <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
-                <el-button @click="deleteBookmark" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>
-                <el-button>{{$i.product.upload}}</el-button>
-                <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
+                <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
+                <el-button>{{$i._product.createOrder}}</el-button>
+                <el-button @click="compare" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
+                <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
+                <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
+                <el-button>{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
+                <el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i._product.delete}}</el-button>
+                <el-button>{{$i._product.upload}}</el-button>
+                <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
             </div>
 
             <v-table
+                    v-loading="loadingTable"
                     :data="tableDataList"
                     :buttons="[{label: 'detail', type: 1}]"
                     @change-checked="changeChecked"
@@ -86,10 +87,12 @@
 
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :forceUpdateNumber="forceUpdateNumber"
                     :title="addProductTitle"
                     :type="addProductType"
                     :disabledOkBtn="disabledOkBtn"
                     :hideBtn="true"
+                    @handleCancel="handleCancel"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
 
@@ -115,8 +118,9 @@
         data(){
             return{
                 hideBody:true,            //是否显示body
-                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i._product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
+                loadingTable:false,                     //是否让table处于加载状态
                 selectList:[],
                 downloadBtnInfo:'All',
                 //btn禁用状态
@@ -126,7 +130,8 @@
                 addProductTitle:'',
                 addProductType:'product',
                 disabledOkBtn:false,
-
+                disableClickDelete:false,
+                forceUpdateNumber:11,               //改变数值以驱动内部更新
                 //表格字段绑定
                 productForm: {
                     categoryId: null,
@@ -320,6 +325,11 @@
                     });
                 }
             },
+
+            //处理取消
+            handleCancel(){
+                this.addProductDialogVisible=false;
+            },
             /**
              * 按钮组操作
              * */
@@ -334,11 +344,35 @@
             createInquiry(){
 
             },
+
+            compare(){
+                let id='';
+                this.selectList.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectList.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
+            },
+
             addProduct(){
+                this.forceUpdateNumber=Math.random();
                 this.addProductDialogVisible=true;
             },
             manuallyAddProduct(){
-                this.windowOpen('/product/bookmarkManuallyAdd');
+                this.$windowOpen({
+                    url:'/product/bookmarkManuallyAdd'
+                });
             },
             deleteBookmark(){
                 this.$confirm('是否确认删除？', '提示', {
@@ -346,8 +380,9 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-
                     let id=[];
+                    this.disableClickDelete=true;
+                    this.loadingTable=true;
                     this.selectList.forEach(v=>{
                         id.push(v.id.value);
                     });
@@ -361,8 +396,11 @@
                                 type: 'success',
                                 message: '删除成功!'
                             });
+                            this.disableClickDelete=false;
+                            this.loadingTable=false;
                         }).catch(err=>{
-                            console.log(err)
+                            this.disableClickDelete=false;
+                            this.loadingTable=false;
                         });
                     });
 
@@ -383,9 +421,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$i.product.advanced;
+                    this.btnInfo=this.$i._product.advanced;
                 }else{
-                    this.btnInfo=this.$i.product.hideTheAdvanced;
+                    this.btnInfo=this.$i._product.hideTheAdvanced;
                 }
             },
             selectList(n){

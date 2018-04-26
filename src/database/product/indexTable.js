@@ -2,6 +2,12 @@ export default {
     id:{
         _hide:true
     },
+    skuId:{
+        _hide:true
+    },
+    customerCreate:{
+        _hide:true
+    },
     pic: {
 
     },

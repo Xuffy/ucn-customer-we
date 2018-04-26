@@ -1,17 +1,17 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top">{{ $i.logistic.logisticPlan + 'HDAMC18005' }}</div>
-    <div class="hd active">{{ $i.inquiry.basicInfo }}</div>
+    <div class="hd-top">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
+    <div class="hd active">{{ $i.basicInfoTitle }}</div>
     <el-row :gutter="10">
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.logisticsNo }}</span>
+          <span>{{ $i.logisticsNo }}</span>
           <el-input placeholder="请输入内容" disabled v-model="detailObj.logisticsNo"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.logisticsStatus }}</span>
+          <span>{{ $i.logisticsStatus }}</span>
           <el-select v-model="detailObj.logisticsStatus" slot="prepend" placeholder="请选择">
             <el-option label="餐厅名" value="1"></el-option>
             <el-option label="订单号" value="2"></el-option>
@@ -21,121 +21,121 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.createDate }}</span>
+          <span>{{ $i.createDate }}</span>
           <el-input suffix-icon="el-icon-date" v-model="detailObj.createDate" :disabled="true"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.declareDate }}</span>
+          <span>{{ $i.declareDate }}</span>
           <el-date-picker v-model="detailObj.declareDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.bookingDate }}</span>
+          <span>{{ $i.bookingDate }}</span>
           <el-date-picker v-model="detailObj.bookingDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estContainerStuffingDate }}</span>
+          <span>{{ $i.estContainerStuffingDate }}</span>
           <el-date-picker v-model="detailObj.estContainerStuffingDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estCustomsCleanceDate }}</span>
+          <span>{{ $i.estCustomsCleanceDate }}</span>
           <el-date-picker v-model="detailObj.estCustomsCleanceDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estDepartureDate }}</span>
+          <span>{{ $i.estDepartureDate }}</span>
           <el-date-picker v-model="detailObj.estDepartureDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estArrivalDate }}</span>
+          <span>{{ $i.estArrivalDate }}</span>
           <el-date-picker v-model="detailObj.estArrivalDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estReleaseDate }}</span>
+          <span>{{ $i.estReleaseDate }}</span>
           <el-date-picker v-model="detailObj.estReleaseDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.estDelivaryDate }}</span>
+          <span>{{ $i.estDelivaryDate }}</span>
           <el-date-picker v-model="detailObj.estDelivaryDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actDeliveryDate }}</span>
+          <span>{{ $i.actDeliveryDate }}</span>
           <el-date-picker v-model="detailObj.actDeliveryDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actContainerStuffingDate }}</span>
+          <span>{{ $i.actContainerStuffingDate }}</span>
           <el-date-picker v-model="detailObj.actContainerStuffingDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actCustomsCleanceDate }}</span>
+          <span>{{ $i.actCustomsCleanceDate }}</span>
           <el-date-picker v-model="detailObj.actCustomsCleanceDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actDepartureDate }}</span>
+          <span>{{ $i.actDepartureDate }}</span>
           <el-date-picker v-model="detailObj.actDepartureDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actArrivalDate }}</span>
+          <span>{{ $i.actArrivalDate }}</span>
           <el-date-picker v-model="detailObj.actArrivalDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.actReleaseDate }}</span>
+          <span>{{ $i.actReleaseDate }}</span>
           <el-date-picker v-model="detailObj.actReleaseDate" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.shipServiceProvider }}</span>
+          <span>{{ $i.shipServiceProvider }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.shipServiceProvider"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.customerName }}</span>
+          <span>{{ $i.customerName }}</span>
           <el-input placeholder="请输入内容" disabled v-model="detailObj.customerName"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.receiptCompany }}</span>
+          <span>{{ $i.receiptCompany }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.receiptCompany"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.shippingAgent }}</span>
+          <span>{{ $i.shippingAgent }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.shippingAgent"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.exchangeCurrency }}</span>
+          <span>{{ $i.exchangeCurrency }}</span>
           <el-select v-model="detailObj.exchangeCurrency" slot="prepend" placeholder="请选择">
             <el-option label="餐厅名" value="1"></el-option>
             <el-option label="订单号" value="2"></el-option>
@@ -145,7 +145,7 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.payment }}</span>
+          <span>{{ $i.payment }}</span>
           <el-select v-model="detailObj.payment" slot="prepend" placeholder="请选择">
             <el-option label="餐厅名" value="1"></el-option>
             <el-option label="订单号" value="2"></el-option>
@@ -155,19 +155,19 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.paymentTerms }}</span>
+          <span>{{ $i.paymentTerms }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.paymentTerms"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.transportationWay }}</span>
+          <span>{{ $i.transportationWay }}</span>
           <el-input placeholder="请输入内容" disabled v-model="detailObj.transportationWay"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.loadingType }}</span>
+          <span>{{ $i.loadingType }}</span>
           <el-select v-model="detailObj.loadingType" slot="prepend" placeholder="请选择">
             <el-option label="餐厅名" value="1"></el-option>
             <el-option label="订单号" value="2"></el-option>
@@ -177,7 +177,7 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.permitedForTransportation }}</span>
+          <span>{{ $i.permitedForTransportation }}</span>
           <el-select v-model="detailObj.permitedForTransportation" slot="prepend" placeholder="请选择">
             <el-option label="是" value="1"></el-option>
             <el-option label="否" value="0"></el-option>
@@ -186,7 +186,7 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.blType }}</span>
+          <span>{{ $i.blType }}</span>
           <el-select v-model="detailObj.blType" slot="prepend" placeholder="请选择">
             <el-option label="电放" value="1"></el-option>
             <el-option label="正本" value="2"></el-option>
@@ -195,95 +195,114 @@
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.blQuantity }}</span>
+          <span>{{ $i.blQuantity }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.blQuantity"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.blNumber }}</span>
+          <span>{{ $i.blNumber }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.blNumber"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.shipper }}</span>
+          <span>{{ $i.shipper }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.shipper"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.consignee }}</span>
+          <span>{{ $i.consignee }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.consignee"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.notify }}</span>
+          <span>{{ $i.notify }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.notify"></el-input>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="input-item">
-          <span>{{ $i.logistic.basicInfo.remark }}</span>
+          <span>{{ $i.remark }}</span>
           <!-- <el-input placeholder="请输入内容" v-model="detailObj.remark"></el-input> -->
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="detailObj.remark"></el-input>
         </div>
       </el-col>
-      <attachment accept="all" ref="attachment" :title="$i.logistic.basicInfo.attachment"/>
-      <one-line :list="exchangeRateList" :title="$i.logistic.basicInfo.exchangeRate"/>
+      <attachment accept="all" ref="attachment" :title="$i.attachment"/>
+      <one-line :list="exchangeRateList" :title="$i.exchangeRate"/>
     </el-row>
     <div class="hd"></div>
-    <div class="hd active">{{ $i.logistic.transportInfoTitle }}</div>
+    <div class="hd active">{{ $i.transportInfoTitle }}</div>
     <el-row :gutter="10">
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.transportCompany }}</span>
+          <span>{{ $i.transportCompany }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.transportCompany"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.vesselName }}</span>
+          <span>{{ $i.vesselName }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.vesselName"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.vesselNo }}</span>
+          <span>{{ $i.vesselNo }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.vesselNo"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.departureCountry }}</span>
+          <span>{{ $i.departureCountry }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.departureCountry"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.departurePort }}</span>
+          <span>{{ $i.departurePort }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.departurePort"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.destinationCountry }}</span>
+          <span>{{ $i.destinationCountry }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.destinationCountry"></el-input>
         </div>
       </el-col>
       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
         <div class="input-item">
-          <span>{{ $i.logistic.transportInfo.destinationPort }}</span>
+          <span>{{ $i.destinationPort }}</span>
           <el-input placeholder="请输入内容" v-model="detailObj.destinationPort"></el-input>
         </div>
       </el-col>
     </el-row>
-    <div class="hd"></div>
-    <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-    <v-container-info :tableData.sync="tableData" @tabAppend="tabAppend" @tailBtnCancel="tailBtnCancel"
-    @tailBtnOk="tailBtnOk" @tabSplite="tabSplite"/>
 
+    <div>
+      <div class="hd"></div>
+      <div class="hd active">{{ $i.containerInfoTitle }}</div>
+      <v-container-info :tableData.sync="tableData" @tabAppend="tabAppend" @tailBtnCancel="tailBtnCancel"
+      @tailBtnOk="tailBtnOk" @tabSplite="tabSplite"/>
+    </div>
+
+    <div>
+      <div class="hd"></div>
+      <div class="hd active">{{ $i.feeInfoTitle }}</div>
+      <fee-info :tableData.sync="feeList"></fee-info>
+    </div>
+
+    <div>
+      <div class="hd"></div>
+      <div class="hd active">{{ $i.paymentTitle }}</div>
+      <payment :tableData.sync="paymentList"/>
+    </div>
+    <div>
+      <div class="hd"></div>
+      <div class="hd active">{{ $i.productInfoTitle }}</div>
+      <product-info :tableData="productList"/>
+    </div>
     <!-- <v-table :hideFilterValue="true" :hideFilterColumn="true" :data="tabData"/> -->
     <!-- <v-container-info
       :tableData="tableData"
@@ -329,9 +348,12 @@
 import { VSimpleTable, containerInfo, selectSearch, VTable } from '@/components/index';
 import attachment from '@/components/base/attachment'
 import oneLine from '@/views/logistic/children/oneLine'
+import feeInfo from '@/views/logistic/children/feeInfo'
+import payment from '@/views/logistic/children/payment'
+import productInfo from '@/views/logistic/children/productInfo'
 
 export default {
-  name: 'placeLogisticPlan',
+  name: 'logisticPlanDetail',
   data() {
     return {
       detailObj: {},
@@ -360,6 +382,70 @@ export default {
         {
           text: '€-$',
           value: 0
+        }
+      ],
+      feeList: [
+        {
+          "fclTransportCharge": "FCL Transport Charge",
+          "fclTransportChargeCurrency": "FCL Transport Charge Currency",
+          "handlingCharges": "Handling Charges",
+          "handlingChargesCurrency": "Handling Charges Currency",
+          "otherPortCharges": "Other Port Charges",
+          "otherPortChargesCurrency": "Other Port Charges Currency",
+          "oceanFreight": "Ocean Freight",
+          "oceanFreightCurrency": "Ocean Freight Currency",
+          "insuranceCharges": "Insurance Charges",
+          "insuranceChargesCurrency": "Insurance Charges Currency",
+          "otherCharges": "Other Charges",
+          "otherChargesCurrency": "Other Charges Currency",
+          "otherChargesExchangeRate": "Other Charges Exchange Rate",
+          "otherChargesRemark": "Other Charges Remark",
+          "commissionCharges": "Commission Charges",
+          "commissionChargesCurrency": "Commission Charges Currency"
+        }
+      ],
+      productList: [
+        {
+          "skuCode": "SKU Code",
+          "skuNameEn": "SKU Name (EN)",
+          "skuNameCn": "SKU Name (CN)",
+          "productDescription": "Product Description (Customer Language)",
+          "blSkuName": "B/L SKU Name",
+          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
+          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
+          "hsCode": "HS Code",
+          "reportElements": "Report Elements",
+          "supplierName": "Supplier Name",
+          "supplierNo": "Supplier No",
+          "customerSkuCode": "Customer SKU Code",
+          "factorySKUCode": "Factory SKU Code",
+          "unit": "Unit",
+          "exportUnitPrice": "Export Unit Price",
+          "totalPriceOfExport": "Total Price Of Export",
+          "currency": "Currency",
+          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
+          "outerCartonLength": "Outer Carton Length",
+          "outerCartonWidth": "Outer Carton Width",
+          "outerCartonHeight": "Outer Carton Height",
+          "outerCartonNetWeight": "Outer Carton Net Weight",
+          "outerCartonGrossWeight": "Outer Carton Gross Weight",
+          "outerCartonVolume": "Outer Carton Volume",
+          "shippingMarks": "Shipping Marks",
+          "outerCartonBarCode": "Outer Carton Bar-Code",
+          "outerCartonSkuCode": "Outer Carton SKU Code"
+        }
+      ],
+      paymentList: [
+        {
+          "paymentNumber": "casd122",
+          "paymentItem": "Payment Item",
+          "estPayDate": "Est. Pay Date",
+          "estAmount": "123",
+          "actPayDate": "Act. Pay Date",
+          "actAmount": "44",
+          "currency": "Currency",
+          "avilable": "Avilable",
+          "operation": "Operation"
         }
       ],
       createDate:'2018-09-08',
@@ -432,9 +518,20 @@ export default {
     "v-select-search": selectSearch,
     attachment,
     oneLine,
-    VTable
+    VTable,
+    feeInfo,
+    payment,
+    productInfo
   },
   mounted () {
+    this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList, item => {
+      return item
+      // return _.mapObject(item, a => {
+      //   console.log(this.$i.logistic.productInfo.skuCode)
+      //   !a.label && (a.label = this.$i.logistic.productInfo[a.key])
+      //   return a
+      // })
+    })
     // this.tableData = this.$getDB(this.$db.logistic.containerInfo, this.tableData, item => {
     //   return _.map(item, a => {
     //     !a.label && (a.label = this.$i.logistic.containerInfo[a.key])

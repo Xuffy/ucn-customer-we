@@ -14,11 +14,12 @@ const state = {
   },
   layout: {
     hideMenu: false,
+    paddingRight: 0
   },
-  messageBoard: {
+  /*messageBoard: {
     show: true,
     code: null
-  }
+  }*/
 };
 
 const actions = {};

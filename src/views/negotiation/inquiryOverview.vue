@@ -4,15 +4,16 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i._baseText.state }}</span>
-                <el-checkbox-group v-model="status">
-                    <el-checkbox-button 
-                            v-for="item in $db.inquiryOverview.overoiewState"
-                            :label="item.id"
-                            :key="item.id"
-                        >
-                        {{ item.text }}
-                    </el-checkbox-button>
-                </el-checkbox-group>
+                <el-radio-group v-model="params.statuses" size="mini">
+                    <el-radio-button :label="''">{{$i._baseText.all}}</el-radio-button>
+                    <el-radio-button 
+                        v-for="item in $db.inquiryOverview.overoiewState"
+                        :label="item.id"
+                        :key="item.id"
+                    >
+                    {{ item.text }}
+                    </el-radio-button>
+                </el-radio-group>
             </div>
             <select-search 
                 :options="options" 
@@ -85,9 +86,8 @@
 
                 tabData: [],
                 viewByStatus: '',
-                status: [],
                 params: {
-                    statuses: [],
+                    statuses: '',
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -115,10 +115,7 @@
                     this.gettabData();
                 },
                 deep: true
-            },
-            status(val) {
-                this.params.statuses = val;
-            },
+            }
             
         },
         methods: {

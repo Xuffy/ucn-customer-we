@@ -10,5 +10,7 @@
   "totalGrossWeight":"产品毛重总数",
   "totalVolume":"产品体积总数",
   "totalNetWeight":"产品净重总数",
-  "totalSkuQty":"产品总数"
+  "totalSkuQty":"产品总数",
+
+  "download":"下载"
 }

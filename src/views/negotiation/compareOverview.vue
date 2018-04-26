@@ -6,7 +6,7 @@
                 <el-button>{{ $i._baseText.downloadSelectedCompare }}</el-button>
                 <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})`}}</el-button>
             </div>
-            <select-search :options="options" @inputChange="searchEnter" />
+            <select-search :options="options" @inputEnter="inputEnter" />
         </div>
         <v-table 
             :data="tabData" 
@@ -114,13 +114,7 @@
                 }).then(() => {
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
                     .then(res => {
-                        this.tabData.forEach((item, index) => {
-                            res.forEach(key => {
-                                if(item.id.value === key) {
-                                    this.tabData.splice(index, 1);
-                                }
-                            });
-                        });
+                        this.getList();
                     });
                 }).catch(() => {
                     this.$message({
@@ -128,6 +122,9 @@
                         message: '已取消删除'
                     });          
                 });
+            },
+            inputEnter() {
+                
             }
         },
         watch: {

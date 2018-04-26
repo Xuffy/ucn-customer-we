@@ -63,7 +63,10 @@
             </td>
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="{'background-color':cItem._highlight}">
-              <div v-if="!cItem._image" v-text="cItem.value"></div>
+              <div v-if="!cItem._image"
+                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
+                   v-text="cItem.value"></div>
+
               <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
             </td>
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
