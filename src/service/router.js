@@ -244,7 +244,8 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Inquiry Detail'
+            name: 'Inquiry Detail',
+            messageBoard: 'code'
           },
           component: () => import('../views/negotiation/inquiryDetail')
         },
@@ -282,6 +283,14 @@ export const routerMap = [
             name: 'Compare Detail'
           },
           component: () => import('../views/negotiation/compare')
+        },
+        {
+          path:'draft/:type',
+          name: 'negotiationDraft',
+          hidden: true,
+          meta: {
+            name: 'draft'
+          }
         }
       ]
     },

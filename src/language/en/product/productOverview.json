@@ -144,6 +144,14 @@
   "adjustPackage":"adjust SKU and package or not",
 
 
+  "cifPrice":"CIF price",
+  "cifCurrency":"CIF currency",
+  "cifArea":"CIF area",
+  "dduPrice":"DDU price",
+  "dduCurrency":"DDU currency",
+  "dduArea":"DDU area",
+
+
   "incoterm":"incoterm",
   "incotermArea":"incoterm Area",
   "incotermPrice":"incoterm Price",

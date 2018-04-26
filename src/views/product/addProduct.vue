@@ -12,7 +12,8 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" 
+                            ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
@@ -32,7 +33,11 @@
                 <el-row class="speZone">
                     <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down
+                                    v-if="v.showType==='dropdown'"
+                                    :list="dropData"
+                                    :expand-on-click-node="false"
+                                    ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                 <el-option
@@ -106,7 +111,7 @@
                 type:String,
                 default:''
             },
-            type:{
+            type:{ //product || bookmark
                 type:String,
                 default:'product'
             },
@@ -368,7 +373,14 @@
                     });
                 }
                 else{
-                    this.$ajax.post(this.$apis.get_buyerProductList,{
+                    let url='';
+                    if(this.type==='product'){
+                        url=this.$apis.get_buyerProductList;
+                    }else if(this.type==='bookmark'){
+                        url=this.$apis.get_buyerBookmarkList;
+                    }
+
+                    this.$ajax.post(url,{
                         recycle:false
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{

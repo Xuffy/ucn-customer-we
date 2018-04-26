@@ -251,6 +251,15 @@
             },
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
+                let url, column;
+                if(this.compareBy + '' === '0') {
+                    url = this.$apis.POST_INQIIRY_LIST;
+                    column = this.$db.inquiryOverview.viewByInqury;
+                } else {
+                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    column = this.$db.inquiryOverview.viewBySKU;
+                };
+                
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, {
                     recycleCustomer:0,
                     ids: arg
