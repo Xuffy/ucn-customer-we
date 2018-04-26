@@ -426,7 +426,7 @@
     /*border-right: 1px solid #ebeef5;*/
     box-sizing: border-box;
     position: relative;
-    background-color: #f6f8f9;
+    /*background-color: #f6f8f9;*/
     color: #999999;
   }
 

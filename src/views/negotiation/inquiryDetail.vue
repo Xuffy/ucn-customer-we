@@ -1,16 +1,16 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
+            <h4 class="title">{{ $i._inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $i.baseText.basicInfo }}</h5>
+                        <h5>{{ $i._baseText.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
-                            <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="0">{{ $i._baseText.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
@@ -26,15 +26,15 @@
                 </div>
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $i.baseText.productInfo }}</h5>
+                        <h5>{{ $i._baseText.productInfo }}</h5>
                         <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button @click="newSearchDialogVisible = true">{{ $i._baseText.addProduct }}</el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" />
                     </div>
@@ -47,16 +47,16 @@
                         :rowspan="2"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')">{{ $i.baseText.accept }}</el-button>
-                        <el-button @click="windowOpen('/order/creatOrder')">{{ $i.baseText.createOrder }}</el-button>
-                        <el-button @click="addToCompare">{{ $i.baseText.addToCompare }}</el-button>
-                        <el-button @click="modifyAction">{{ $i.baseText.modify }}</el-button>
-                        <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i.baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i.baseText.cancel }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')">{{ $i._baseText.accept }}</el-button>
+                        <el-button @click="windowOpen('/order/creatOrder')">{{ $i._baseText.createOrder }}</el-button>
+                        <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
+                        <el-button @click="modifyAction">{{ $i._baseText.modify }}</el-button>
+                        <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i._baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i._baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i.baseText.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i.baseText.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i._baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -64,19 +64,19 @@
         </div>
         <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
         <el-dialog
-                :title="$i.baseText.addProduct"
+                :title="$i._baseText.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="0">{{ $i.baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="1">{{ $i.baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="0">{{ $i._baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="1">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
             <v-product :hideBtns="true"></v-product>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i.baseText.ok }}</el-button>
-                <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i._baseText.ok }}</el-button>
+                <el-button @click="newSearchDialogVisible = false">{{ $i._baseText.cancel }}</el-button>
             </span>
         </el-dialog>
         <v-history-modify
@@ -166,8 +166,8 @@
         created() {
             this.getInquiryDetail();
             this.submitData.id = this.$route.query.id;
-            if(this.$localStore.get('$inquiryCompare')) {
-                this.compareConfig = this.$localStore.get('$inquiryCompare');
+            if(this.$localStore.get('$in_quiryCompare')) {
+                this.compareConfig = this.$localStore.get('$in_quiryCompare');
             }
         },
         watch: {
@@ -203,13 +203,13 @@
             },
             clerCompare() {   //clear
                 this.compareConfig = [];
-                this.$localStore.remove('$inquiryCompare');
+                this.$localStore.remove('$in_quiryCompare');
             },
             handleClose(item) { //删除
                 this.compareConfig.forEach((items, index) => {
                     if(items.id === item.id) this.compareConfig.splice(index, 1)
                 });
-                this.$localStore.set('$inquiryCompare', this.compareConfig);
+                this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             addToCompare() { //添加对比
                 if(!this.tabData[0]) return this.$message({
