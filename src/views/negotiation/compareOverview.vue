@@ -1,10 +1,10 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $i.baseText.compareOverview }}</h3>
+        <h3 class="hd">{{ $i._baseText.compareOverview }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button>{{ $i.baseText.downloadSelectedCompare }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
+                <el-button>{{ $i._baseText.downloadSelectedCompare }}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>

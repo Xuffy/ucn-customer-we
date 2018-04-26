@@ -5,10 +5,10 @@
             :visible.sync="dialogVisible"
             width="80%"
             >
-                <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
+                <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
                 <div class="status">
                     <div class="state">
-                        <span>{{ $i.baseText.state }}</span>
+                        <span>{{ $i._baseText.state }}</span>
                         <el-checkbox-group v-model="status">
                             <el-checkbox-button 
                                     v-for="item in $db.inquiryOverview.overoiewState"
@@ -41,8 +41,8 @@
                     :total="pageTotal"
                 />
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">{{ $i.baseText.cancel }}</el-button>
-                <el-button type="primary" @click="addCompare">{{ $i.baseText.ok }}</el-button>
+                <el-button @click="dialogVisible = false">{{ $i._baseText.cancel }}</el-button>
+                <el-button type="primary" @click="addCompare">{{ $i._baseText.ok }}</el-button>
             </span>
         </el-dialog>
     </div>
