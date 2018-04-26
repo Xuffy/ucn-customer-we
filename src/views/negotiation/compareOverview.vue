@@ -90,7 +90,7 @@
                     types = 'modify';
                 }
                 this.$router.push({
-                    name: 'inquiryCompareDetail',
+                    name: 'negotiationCompareDetail',
                     params: {
                         type: types
                     },

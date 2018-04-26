@@ -81,6 +81,16 @@
                 this.params.id = this.$route.query.id;
             };
             this.$route.params.type ? this.compareType = this.$route.params.type : '';
+            this.$nextTick(() => {
+                this.$windowOpen({
+                    url: '/negotiation/compareDetail/{type}',
+                    params: {
+                        type: 'only',
+                        id: '666',
+                        cd: '777'
+                    }
+                })
+            })
         },
         watch: {
             compareBy () {
@@ -260,7 +270,15 @@
                     ids: arg
                 })
                 .then(res => {
-                    let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    let data = [];
+                    _.map(this.tabData, items => {
+                        _.map(res.datas, item => {
+                            console.log(_.findWhere(item, {'key': 'id'}))
+                            // if(_.findWhere(items, {'key': 'id'}).value === _.findWhere(item, {'key': 'id'}).value) console.log(id)
+                        });
+                    });
+                    return;
+                    //let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
                     data = data.concat(this.tabData);
                     this.tabData = data;
                     this.addNew = false;
