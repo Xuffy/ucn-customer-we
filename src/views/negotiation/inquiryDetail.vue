@@ -33,7 +33,7 @@
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="newSearchDialogVisible = true">{{ $i._baseText.addProduct }}</el-button>
+                            <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
                             <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
@@ -73,17 +73,48 @@
                 <el-radio-button label="0">{{ $i._baseText.fromNewSearch }}</el-radio-button>
                 <el-radio-button label="1">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
-            <v-product :hideBtns="true"></v-product>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i._baseText.ok }}</el-button>
-                <el-button @click="newSearchDialogVisible = false">{{ $i._baseText.cancel }}</el-button>
-            </span>
+            <v-product :hideBtn="true" :forceUpdateNumber="new Date().getTime()" @handleOK="handleOK" :disabledLine="disabledTabData"></v-product>
         </el-dialog>
         <v-history-modify
                 @save="save"
                 ref="HM"
             >
         </v-history-modify>
+        <div class="slot-wrap">
+            <div slot="transportationWay" slot-scope="{item}">
+                <el-select v-model="item" placeholder="请选择">
+                    <el-option
+                        v-for="item in selectAll.transportationWay"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                </el-select>
+            </div>
+            <div slot="supplierName" slot-scope="{item}">
+                <el-select
+                    style="width:100%;"
+                    v-model="item"
+                    multiple
+                    filterable
+                    remote
+                    reserve-keyword
+                    value-key="id"
+                    size="mini"
+                    placeholder="请输入关键词"
+                    :remote-method="remoteMethod"
+                    :loading="loading">
+                    <el-option
+                        v-for="item in selectAll.supplierName"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item"
+                        :id="item.id"
+                    />
+                </el-select>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -98,14 +129,15 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistory, dropDownSingle, VHistoryModify } from '@/components/index';
+    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     export default {
         name:'inquiryDetail',
         data() {
             return {
-                id:"1",
+                disabledTabData: [],
+                id:"",
                 compareLists: false,
                 tabData: [],
                 productTabData: [],
@@ -151,7 +183,17 @@
                 submitData: {
                     deleteDetailIds: []
                 },
-                id_type: ''
+                id_type: '',
+                selectAll: {
+                    paymentMethod: [],
+                    transport: [],
+                    incoterm: [],
+                    currency: [],
+                    supplierName: [],
+                    exportLicense: [],
+                    destinationCountry: [],
+                    departureCountry: []
+                }
             }
         },
         components: {
@@ -160,8 +202,6 @@
             'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList,
-            'v-history': VHistory,
-            'drop-down-single': dropDownSingle,
             VHistoryModify
         },
         created() {
@@ -169,7 +209,8 @@
             this.submitData.id = this.$route.query.id;
             if(this.$localStore.get('$in_quiryCompare')) {
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
-            }
+            };
+            this.getDictionaries();
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -180,18 +221,47 @@
                 this.newTabData = data;
             },
             ProductCheckList(val, oldVal) {
-                let arr = this.newProductTabData;
                 if(val[0] + '' === 0) this.newProductTabData = this.$table.setHighlight(this.newProductTabData);
                 this.newProductTabData = arr;
             }
         },
         methods: {
+            getDictionaries() {
+                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                .then(res => {
+                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
+                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
+                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
+                    this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+                });
+
+                this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
+                .then(res => {
+                    this.selectAll.destinationCountry = res;
+                    this.selectAll.departureCountry = res;
+                });
+
+            },
+            addProduct() {
+                let disabledTabData = [];
+                _.map(this.newProductTabData, items => {
+                    if(!items._remark && !items._disabled) disabledTabData.push(items);
+                });
+                this.newSearchDialogVisible = false;
+            },
+            handleOK(item) { //添加 product
+                if(item && !item.length) return this.$message('请选择商品');
+                let ids = [];
+                _.map(item, items => {
+                    ids.push(_.findWhere(items, {'key': 'id'}).value)
+                });
+            },
             startCompare() { //前往比较
                 let arr = [];
                 this.compareConfig.forEach(item => {
                     arr.push(item.id);
                 });
-                //this.$sessionStore.set('$compareType', 'new')
                 this.$router.push({
                     name: 'inquiryCompareDetail',
                     params: {
@@ -430,19 +500,14 @@
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 parentNode.details = this.dataFilter(this.newProductTabData);
-                console.log(this.$filterModify(parentNode))
-                return;
                 parentNode.draft = 0;
-                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, parentNode)
+                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
-                    console.log(res);
+                    this.tabData = this.newTabData;
+                    this.productTabData = this.newProductTabData;
+                    this.productModify();
+                    this.statusModify = false;
                 });
-                return;
-                this.newTabData.details = producInfoData;
-                this.tabData = this.newTabData;
-                this.productTabData = this.newProductTabData;
-                this.productModify();
-                this.statusModify = false;
             },
             dataFilter (data) {
                 let arr = [], jsons = {}, json = {};
