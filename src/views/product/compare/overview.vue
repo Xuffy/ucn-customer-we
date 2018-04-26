@@ -1,17 +1,19 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i.product.compareOverview}}</span>
+            <span>{{$i._product.compareOverview}}</span>
         </div>
         <div class="btns">
-            <el-button>{{$i.product.download}}</el-button>
-            <el-button :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+            <el-button>{{$i._product.download+' ('+downloadBtnInfo+')'}}</el-button>
+            <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i._product.delete}}</el-button>
             <select-search
-                    :options="[]"
+                    :options="searchOptions"
+                    @inputEnter="searchCompare"
                     class="search"></select-search>
         </div>
 
         <v-table
+                v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"
                 :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
@@ -37,23 +39,25 @@
                 /**
                  * 页面基本配置
                  * */
+                loadingTable:false,         //是否让表格处于loading状态
                 disableDelete:true,
                 tableDataList:[],
                 selectList:[],
-            }
-        },
-        methods: {
-            selectChange() {
-
-            },
-            hiddenDropDown() {
-                this.showdropDown = !this.showdropDown
-            },
-
-            //获取data数据
-            getList() {
-                this.$ajax.post(this.$apis.get_compareList,{
-                    name: "",
+                downloadBtnInfo:'All',
+                disableClickDeleteBtn:false,
+                searchOptions:[
+                    {
+                        label:'Compare Name',
+                        id:1
+                    },
+                    {
+                        label:'Compare Item',
+                        id:2
+                    },
+                ],
+                queryParam:{
+                    name: '',
+                    compareItem:'',
                     // operatorFilters: [
                     //     {
                     //         columnName: "",
@@ -70,13 +74,28 @@
                     //         orderType: "",
                     //     }
                     // ]
-                }).then(res=>{
+                }
+            }
+        },
+        methods: {
+            selectChange() {
 
+            },
+            hiddenDropDown() {
+                this.showdropDown = !this.showdropDown
+            },
+
+            //获取data数据
+            getList() {
+                this.$ajax.post(this.$apis.get_compareList,this.queryParam).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.compareTable, res.datas,(e)=>{
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         return e;
                     });
-                    console.log(this.tableDataList)
+                    this.selectList=[];
+                    this.loadingTable=false;
+                }).catch(err=>{
+                    this.loadingTable=false;
                 });
             },
 
@@ -92,16 +111,25 @@
             btnClick(e,type){
                 if(type===1){
                     //modify
+                    this.$windowOpen({
+                        url:'/product/compareDetail/{type}',
+                        params:{
+                            type:'modify',
+                            isModify:true,
+                            compareId:e.id.value,
+                            compareName:e.name.value
+                        },
+                    });
                 }else if(type===2){
                     //Detail
-                    this.$router.push({
-                        name:'Compare Detail',
+                    this.$windowOpen({
+                        url:'/product/compareDetail/{type}',
                         params:{
-                            type:'modify'
+                            type:'modify',
+                            compareId:e.id.value,
+                            compareName:e.name.value
                         },
-                        query:{
-                            compareId:e.id.value
-                        }
+
                     });
                 }
             },
@@ -110,11 +138,65 @@
                 this.selectList=e;
             },
 
+            //搜索compare
+            searchCompare(e){
+                this.loadingTable=true;
+                if(e.keyType===1){
+                    //compareName
+                    this.queryParam.compareItem='';
+                    this.queryParam.name=e.key;
+                    this.getList();
+                }else if(e.keyType===2){
+                    //compareItem
+                    this.queryParam.name='';
+                    this.queryParam.compareItem=e.key;
+                    this.getList();
+                }
+            },
+
+            //删除选中的compare，加入到recycle bin
+            deleteCompare(){
+                this.$confirm('是否确认删除？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let id=[];
+                    this.disableClickDeleteBtn=true;
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
+                        this.getList();
+                        this.$message({
+                            type: 'success',
+                            message: 'successfully delete!'
+                        });
+                        this.disableClickDeleteBtn=false;
+                    }).catch(err=>{
+                        this.disableClickDeleteBtn=false;
+                    });
+
+                }).catch(() => {
+
+                });
+            },
+
         },
         created(){
-            console.log(this.$db)
             this.getList();
         },
+        watch:{
+            selectList(n){
+                if(n.length>0){
+                    this.disableDelete=false;
+                    this.downloadBtnInfo=n.length;
+                }else{
+                    this.disableDelete=true;
+                    this.downloadBtnInfo='All';
+                }
+            }
+        }
     }
 
 </script>

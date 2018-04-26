@@ -1,23 +1,24 @@
 <template>
     <div class="track">
         <div class="title">
-            {{$t('track.page.trackBySKU')}}
+            trackBySKU
+            <!-- {{$t('track.page.trackBySKU')}} -->
         </div>
         <div class="body">
-            <v-simple-table
+            <v-table :data="dataList"></v-table>            
+            <!-- <v-simple-table
                     class="speTable"
                     :data.sync="dataList"
                     :column="dataColumn"
                     @sort-change="getSort"
                     @page-change="pageChange">
-            </v-simple-table>
+            </v-simple-table> -->
         </div>
     </div>
 </template>
 
 <script>
-
-    import VSimpleTable from '@/components/common/table/simple'
+    import VTable from '@/components/common/table/index'
 
     export default {
         name: "track-bySKU",

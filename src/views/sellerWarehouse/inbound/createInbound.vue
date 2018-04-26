@@ -1,7 +1,7 @@
 <template>
     <div class="create-inbound">
         <div class="title">
-            {{$i.warehouse.basicInfo}}
+            {{$i._warehouse.basicInfo}}
         </div>
         <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
@@ -68,41 +68,41 @@
         </el-form>
 
         <div class="title">
-            {{$i.warehouse.productInfo}}
+            {{$i._warehouse.productInfo}}
         </div>
         <div class="btns">
-            <el-button @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
-            <el-button type="danger">{{$i.warehouse.removeProduct}}</el-button>
+            <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
+            <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
 
         <div class="footer">
             <div class="title">
-                {{$i.warehouse.total}}
+                {{$i._warehouse.total}}
             </div>
             <el-form :modal="inboundSummary" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalCartonQty">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalCartonQty">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalGrossWeight">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalGrossWeight">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalVolume">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalVolume">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalNetWeight">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalNetWeight">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalSkuQty">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalSkuQty">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
@@ -118,7 +118,7 @@
             <el-form :modal="orderProduct" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i.warehouse.totalCartonQty">
+                        <el-form-item prop="asd" :label="$i._warehouse.totalCartonQty">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>

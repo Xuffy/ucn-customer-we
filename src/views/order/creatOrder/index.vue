@@ -12,11 +12,11 @@
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 {{$i.productInfo}}
+                 {{$i._productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true">{{$i.baseText.addproduct}}</el-button>
-                  <el-button type='danger'>{{$i.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true">{{$i._baseText.addproduct}}</el-button>
+                  <el-button type='danger'>{{$i._baseText.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  
@@ -26,6 +26,7 @@
                             :loading='tableLoad'
                             @change-checked="changeChecked"
                             :rowspan="2"
+                            :total-row="tableTatal"
                             style='marginTop:10px'/>
              </div>
          </div>
@@ -34,14 +35,14 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$i.baseText.send}}</el-button>
-                 <el-button >{{$i.baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$i.baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
+                 <el-button >{{$i._baseText.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
+                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
+          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
@@ -49,16 +50,16 @@
                 ></VInquiry>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i.baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i.baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i._baseText.addproduct" name="FromNewSearch">
                             <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
                                 @handleOK="getList"
                             ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -74,6 +75,9 @@
             </v-history-modify>
   </div>
 </template>
+
+
+
 
 <script>
     /* this.$ref.basicInfo*/
@@ -106,6 +110,7 @@
         },
         data() {
             return {
+                tableTatal: [],
                 textarea: "", //order remark输入内容
                 checked: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
@@ -278,6 +283,26 @@
                     "sukPrice": 0,
                     "fieldRemark": null
                 }],
+                exchangeRateList: [{
+                    "entryId": 1,
+                    "entryDt": 1524711629694,
+                    "entryName": "1",
+                    "updateId": 1,
+                    "updateDt": 1524711629694,
+                    "updateName": "1",
+                    "id": null,
+                    "ownerId": 1,
+                    "companyId": 1,
+                    "tenantId": 1,
+                    "orderId": 1,
+                    "orderNo": "",
+                    "sourceCurrency": "u",
+                    "targetCurrency": "c",
+                    "exchangeRate": 1,
+                    "timeZone": "0",
+                    "version": 0
+                }],
+
                 TotalQuantity: '',
                 SKUTypeQuantity: '',
                 TotalSKUPrice: '',
@@ -301,7 +326,7 @@
                     "companyId": 0,
                     "tenantId": 0,
                     "version": 0,
-                    "orderNo": "8866511",
+                    "orderNo": "8866555511",
                     "customerOrderNo": "",
                     "customerNo": "",
                     "customerName": "",
@@ -347,8 +372,9 @@
                     "draftSupplier": false,
                     "recycleCustomer": true,
                     "recycleSupplier": false,
-                    skuList: this.skuList
-                    //                    responsibilityList: this.$refs.responsibility.tableData,
+                    skuList: this.skuList,
+                    exchangeRateList: this.exchangeRateList,
+                    responsibilityList: this.$refs.responsibility.tableData,
                 }
                 // var basic = this.$refs.basicInfo.formItem
                 //   _.extendOwn(params, basic)
@@ -552,6 +578,7 @@
                         id: id
                     })
                     .then(res => {
+                        console.log(res)
                         //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
                         this.$refs.basicInfo.formItem.supplierName = res.supplierName
                         this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
@@ -568,6 +595,7 @@
                                 return item;
                             });
                         this.tableLoad = false;
+                        this.tableTatalCal()
                     })
                     .catch(err => {
                         this.tableLoad = false;
@@ -577,6 +605,20 @@
             getProductDetail() {
 
             },
+            //表格底部计算
+            tableTatalCal() {
+                let obj = _.clone(this.newProductTabData[0]);
+                _.map(this.newProductTabData, value => {
+                    _.map(value, val => {
+                        if (val._calu) {
+                            obj[val.key].value = obj[val.key].value + val.value;
+                        } else if (obj[val.key]) {
+                            obj[val.key].value = '';
+                        }
+                    });
+                });
+                this.tableTatal = [obj]
+            }
         },
         created() {
             //判断从哪个地方带来的数据
@@ -598,6 +640,7 @@
         mounted() {
             this.getInquiryDetail(16)
             this.summary()
+
         },
     }
 

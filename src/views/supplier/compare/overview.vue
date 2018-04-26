@@ -1,14 +1,14 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{$i.compareOverview}}</h3>
+        <h3 class="hd">{{$i._compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
                 <el-button  :disabled='!selectedData.length>0'
                  @click='downloadSelected'
-                >{{$i.baseText.downloadSelected}}</el-button>
+                >{{$i._baseText.downloadSelected}}</el-button>
                 <el-button type="danger" :disabled='!selectedData.length>0'
                 @click='remove'
-                >{{$i.baseText.delete}}</el-button>
+                >{{$i._baseText.delete}}</el-button>
             </div>
 
        <div class="select-wrap">       
