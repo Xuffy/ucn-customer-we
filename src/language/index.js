@@ -5,8 +5,6 @@ export default _.extend(
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
   require(`./${lang}/workbench/pending`),
-  {_product: require(`./${lang}/product/product.basic`)},
-  require(`./${lang}/product/productOverview`),
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
@@ -31,11 +29,6 @@ export default _.extend(
 
   {warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
 
-
-  //CN配置
-  // {_warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
-  // require(`./${lang}/warehouse/warehouse.index`)
-
   // payment
   {_payment: require(`./${lang}/payment/payment`)},
   require(`./${lang}/payment/payment.table`),
@@ -46,5 +39,12 @@ export default _.extend(
   {logs: require(`./${lang}/logs/logs.table`)},
   {logBasic: require(`./${lang}/logs/logs.basic`)},
   {track: require(`./${lang}/track/trackBysku`)},
+
+
+    //CN配置
+    // {_warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
+    // require(`./${lang}/warehouse/warehouse.index`),
+    {_product: require(`./${lang}/product/product.basic`)},
+    require(`./${lang}/product/productOverview`),
 
 )

@@ -61,6 +61,42 @@
                         </div>
                     </el-form-item>
                 </el-col>
+                <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item :label="$i._product.productVisible">
+                        <el-radio v-model="productForm.visibility" :label="true">{{$i._product.allSee}}</el-radio>
+                        <el-radio v-model="productForm.visibility" :label="false">{{$i._product.partSee}}</el-radio>
+
+                        <div v-if="!productForm.visibility">
+                            <el-button
+                                    @click="addCustomer"
+                                    size="mini"
+                                    type="primary">{{$i._product.add}}</el-button>
+                            <el-table
+                                    :data="tableData"
+                                    style="width: 511px"
+                                    border>
+                                <el-table-column
+                                        prop="date"
+                                        :label="$i._product.customerName"
+                                        align="center"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="name"
+                                        :label="$i._product.customerCode"
+                                        align="center"
+                                        width="180">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="address"
+                                        width="150"
+                                        align="center"
+                                        :label="$i._product.action">
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </el-form-item>
+                </el-col>
             </el-row>
         </el-form>
 
@@ -217,13 +253,28 @@
                 <el-table-column
                         prop="otherIncoterm"
                         align="center"
-                        :label="$i._product.otherIncoterm"
+                        :label="$i._product.cifPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-select v-model="scope.row.otherIncoterm" placeholder="请选择">
+                            <el-input-number
+                                    v-model="scope.row.cifPrice"
+                                    :controls="false"
+                                    :min="0"
+                                    label="描述文字"></el-input-number>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermPrice"
+                        align="center"
+                        :label="$i._product.cifCurrency"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-form-item class="tableList">
+                            <el-select v-model="scope.row.cifCurrency" placeholder="请选择">
                                 <el-option
-                                        v-for="item in otherIncotermUnit"
+                                        v-for="item in fobUnit"
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
@@ -233,29 +284,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="otherIncotermPrice"
-                        align="center"
-                        :label="$i._product.otherIncotermPrice"
-                        width="180">
-                    <template slot-scope="scope">
-                        <el-form-item class="tableList">
-                            <el-input-number
-                                    v-model="scope.row.otherIncotermPrice"
-                                    :controls="false"
-                                    :min="0"
-                                    label="描述文字"></el-input-number>
-                        </el-form-item>
-                    </template>
-                </el-table-column>
-                <el-table-column
                         prop="otherIncotermArea"
                         align="center"
-                        :label="$i._product.otherIncotermArea"
+                        :label="$i._product.cifArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
                             <el-input
-                                    v-model="scope.row.otherIncotermArea"
+                                    v-model="scope.row.cifArea"
                                     clearable
                                     placeholder="请输入内容"></el-input>
                         </el-form-item>
@@ -264,11 +300,26 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i._product.otherIncotermCurrency"
+                        :label="$i._product.dduPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
-                            <el-select v-model="scope.row.otherIncotermCurrency" placeholder="请选择">
+                            <el-input-number
+                                    v-model="scope.row.dduPrice"
+                                    :controls="false"
+                                    :min="0"
+                                    label="描述文字"></el-input-number>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermCurrency"
+                        align="center"
+                        :label="$i._product.dduCurrency"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-form-item class="tableList">
+                            <el-select v-model="scope.row.dduCurrency" placeholder="请选择">
                                 <el-option
                                         v-for="item in fobUnit"
                                         :key="item.value"
@@ -276,6 +327,20 @@
                                         :value="item.value">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="otherIncotermCurrency"
+                        align="center"
+                        :label="$i._product.dduArea"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-form-item class="tableList">
+                            <el-input
+                                    v-model="scope.row.dduArea"
+                                    clearable
+                                    placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </template>
                 </el-table-column>
@@ -487,6 +552,57 @@
         <div class="footBtn">
             <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._product.finish}}</el-button>
         </div>
+
+
+        <el-dialog width="70%" title="收货地址" :visible.sync="addCustomerDialogVisible">
+
+
+            <el-form ref="customerQuery" :model="customerQuery" label-width="120px">
+                <el-row class="speZone">
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+
+                        <el-form-item prop="name" :label="$i._product.customerName">
+                            <el-input
+                                    size="mini"
+                                    v-model="customerQuery.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+
+                        <el-form-item prop="name" :label="$i._product.customerType">
+                            <el-input
+                                    size="mini"
+                                    v-model="customerQuery.type"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+
+                        <el-form-item prop="name" :label="$i._product.customerCountry">
+                            <el-input
+                                    size="mini"
+                                    v-model="customerQuery.country"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+
+                        <el-form-item prop="name" :label="$i._product.customerCity">
+                            <el-input
+                                    size="mini"
+                                    v-model="customerQuery.city"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addCustomerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addCustomerDialogVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
+
+
     </div>
 </template>
 
@@ -507,9 +623,38 @@
                 labelPosition:'left',
                 disabledSubmit:false,               //防止用户多次提及表单
                 imgGroup:[],
+                addCustomerDialogVisible:false,     //弹出框可见
+                //配置可见性用户
+                tableData:[
+                    {
+                        date: '2016-05-02',
+                        name: '王小虎',
+                        address: '上海市普陀区金沙江路 1518 弄'
+                    },
+                ],
+
+                customerQuery:{
+                    city: "",
+                    country: "",
+                    name: "",
+                    pn: 1,
+                    ps: 50,
+                    // sorts: [
+                    //     {
+                    //         "nativeSql": true,
+                    //         "orderBy": "string",
+                    //         "orderType": "string",
+                    //         "resultMapId": "string"
+                    //     }
+                    // ],
+                    type: null
+                },
+
                 productForm:{
                     id: '',                         //新增传空
+                    ids:[],                         //选择的可见
                     pic: "thisIsAPicture",
+                    visibility:true,                //全网可见为true,否则false
                     status: 1,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
@@ -617,27 +762,31 @@
                     pkgId: 1,
                     price: [
                         {
+                            cifArea: "",
+                            cifCurrency: 0,
+                            cifPrice: 0,
+                            dduArea: "",
+                            dduCurrency: 0,
+                            dduPrice: 0,
                             fobCurrency: 1,
                             fobPrice: 1,                    //价格起始是多少
                             fobPort: "",
                             exwPrice: 1,                    //价格起始是多少
                             exwCurrency: 1,
-                            otherIncoterm: 1,
-                            otherIncotermPrice: 1,
-                            otherIncotermArea: '',
-                            otherIncotermCurrency: 1,
                             status: 1                       //1成本价，2基础报价
                         },
                         {
+                            cifArea: "",
+                            cifCurrency: 0,
+                            cifPrice: 0,
+                            dduArea: "",
+                            dduCurrency: 0,
+                            dduPrice: 0,
                             fobCurrency: 1,
                             fobPrice: 1,
                             fobPort: "",
                             exwPrice: 1,
                             exwCurrency: 1,
-                            otherIncoterm: 1,
-                            otherIncotermPrice: 1,
-                            otherIncotermArea: '',
-                            otherIncotermCurrency: 1,
                             status: 2
                         },
                     ]
@@ -1159,11 +1308,20 @@
                 });
             },
 
+            //添加客户
+            addCustomer(){
+                this.addCustomerDialogVisible=true;
+                this.$ajax.post(this.$apis.get_sellerCustomer,this.customerQuery).then(res=>{
+                    console.log(res)
+                });
+            },
+
             //完成新增
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
-                this.disabledSubmit=true;
+                // this.disabledSubmit=true;
+
 
                 if(this.$route.query.id && this.$route.query.isEdit){
                     //代表是编辑

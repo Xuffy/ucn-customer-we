@@ -5,6 +5,9 @@ export default {
     skuId:{
         _hide:true
     },
+    customerCreate:{
+        _hide:true
+    },
     pic: {
 
     },

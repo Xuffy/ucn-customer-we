@@ -77,6 +77,10 @@ const apis = {
   delete_department: ['/department/{deptId}', 'BASE_LYF'],
   add_departmentRole: ['/role', 'BASE_LYF'],
   delete_departmentRole: ['/role/{deptId}/{roleId}', 'BASE_LYF'],
+
+  //product supplier
+  get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_CS'],
+
   //product buyer
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
   get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],

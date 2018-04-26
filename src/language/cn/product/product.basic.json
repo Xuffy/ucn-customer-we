@@ -25,6 +25,24 @@
   "tradeHistory":"交易历史",
   "finish":"完成",
 
+  "cifPrice":"CIF单价",
+  "cifCurrency":"CIF 币种",
+  "cifArea":"CIF 区域",
+  "dduPrice":"DDU 单价",
+  "dduCurrency":"DDU 币种",
+  "dduArea":"DDU 区域",
+
+  "productVisible":"产品可见性",
+  "allSee":"全网可见",
+  "partSee":"部分客户可见",
+  "customerName":"客户名称",
+  "customerType":"客户类型",
+  "customerCode":"客户编号",
+  "customerCountry":"客户国别",
+  "customerCity":"所在城市",
+  "action":"操作",
+  "add":"添加",
+
 
 
 
