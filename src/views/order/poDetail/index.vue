@@ -153,7 +153,6 @@
             },
             onAction(item, type) {
                 //                console.log(item, type)
-
             },
             //........获取数据
             get_data() {
@@ -193,6 +192,7 @@
                 this.historyColumn = this.$db.order.productInfo;
                 switch (type) {
                     case 'histoty':
+
                         this.fnBasicInfoHistoty(data, 'productInfo', {
                             type: 'histoty',
                             data: data.id.value
@@ -259,13 +259,12 @@
                     })
                     .then(res => {
                         let arr = [];
-                        column = this.$db.inquiryOverview.productInfo;
+                        column = this.$db.order.productInfo;
                         _.map(this.newProductTabData, items => {
                             if (_.findWhere(items, {
                                     'key': 'id'
                                 }).value === config.data) arr.push(items)
                         });
-
                         if (config.type === 'histoty') {
                             this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)), false);
                         } else {
@@ -368,6 +367,10 @@
                     this.$set(this.newProductTabData, index, item);
                 });
             },
+            send(){
+                let parentNode = this.dataFilter(this.newProductTabData);
+                 console.log(this.$filterModify(parentNode))
+            }
         },
         mounted() {
 

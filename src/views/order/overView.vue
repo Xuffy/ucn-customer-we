@@ -134,7 +134,7 @@
                 this.getdata()
             },
             changeView() {
-                this.getdata()
+                this.getdata(this.$db.order.overviewBysku)
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message('请选中搜索类型');
@@ -165,12 +165,12 @@
                     });
             },
             //get_orderlist数据
-            getdata() {
+            getdata(overview) {
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+                        this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
                         //                            return _.mapObject(item, val => {
                         //                                val._checked = true
@@ -187,7 +187,7 @@
 
         },
         created() {
-            this.getdata()
+            this.getdata(this.$db.order.overview)
 
         },
         mounted() {
