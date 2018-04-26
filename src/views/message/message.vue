@@ -1,14 +1,14 @@
 <template>
     <div class="message">
         <div class="head">
-            <el-button @click="manageMessage">{{$t('product.page.management')}}</el-button>
-            <h1 style="color:red">这个页面表格要加一列title</h1>
+            <el-button @click="manageMessage">{{$lang.baseText.messageManagement}}</el-button>
+            <!-- <h1 style="color:red">这个页面表格要加一列title</h1> -->
         </div>
         <div class="body">
             <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$t('product.page.systemMessage')" name="System Message">
+                <el-tab-pane :label="$lang.platformMessage" name="System Message">
                     <div class="title">
-                        <el-button>{{$t('product.page.markAsRead')}}</el-button>
+                        <el-button>{{$lang.baseText.markAsRead}}</el-button>
                         <el-input
                                 class="message-input"
                                 placeholder="请输入内容"
@@ -17,10 +17,10 @@
                         </el-input>
                     </div>
                     <div class="content">
-                        <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
+                        <v-table :data="tableDataList"></v-table>                       
                     </div>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('product.page.messageSettings')" name="Message Settings">
+                <el-tab-pane :label="$lang.companyMessage" messagename="Message Settings">
                     <el-table
                             ref="multipleTable"
                             :data="messageType"
@@ -58,6 +58,7 @@
         },
         data(){
             return{
+                tableDataList:[],
                 tabPosition: 'left',
                 searchValue:'',
                 tableData3: [
@@ -118,6 +119,9 @@
                         name:'System Message'
                     },
                     {
+                        name:'Conpany Message'
+                    },
+                    {
                         name:'Pending Task'
                     },
                     {
@@ -154,6 +158,10 @@
             manageMessage(){
                 this.$router.push('/message/management');
             },
+        },
+        created(){
+            //  this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+            console.log(this.$lang)
         }
     }
 </script>

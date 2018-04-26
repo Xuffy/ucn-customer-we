@@ -1,6 +1,6 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $i.baseText.compare }}</h3>
+        <h3 class="hd">{{ $i._baseText.compare }}</h3>
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
@@ -10,19 +10,19 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i.baseText.modify }}</el-button>
-                <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i.baseText.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})` }}</el-button>
+                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i._baseText.modify }}</el-button>
+                <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i._baseText.addNew }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})` }}</el-button>
                 <el-checkbox-group v-model="ChildrenCheckList" size="mini">
-                    <el-checkbox :label="0">{{ $i.baseText.hideTheSame }}</el-checkbox>
-                    <el-checkbox :label="1">{{ $i.baseText.highlightTheDifferent }}</el-checkbox>
+                    <el-checkbox :label="0">{{ $i._baseText.hideTheSame }}</el-checkbox>
+                    <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-                <span>{{ $i.baseText.compareBy }}&nbsp;</span>
+                <span>{{ $i._baseText.compareBy }}&nbsp;</span>
                 <el-radio-group v-model="compareBy"  size="mini">
-                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i._baseText.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i._baseText.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -33,10 +33,10 @@
             :buttons="[{label: 'detail', type: 'detail'}]" 
             @action="action" 
         />
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i.baseText.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
         <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" :compareId="params.id || null" :disableds="disableds" />
     </div>
 </template>
@@ -81,6 +81,16 @@
                 this.params.id = this.$route.query.id;
             };
             this.$route.params.type ? this.compareType = this.$route.params.type : '';
+            this.$nextTick(() => {
+                this.$windowOpen({
+                    url: '/negotiation/compareDetail/{type}',
+                    params: {
+                        type: 'only',
+                        id: '666',
+                        cd: '777'
+                    }
+                })
+            })
         },
         watch: {
             compareBy () {
@@ -260,7 +270,15 @@
                     ids: arg
                 })
                 .then(res => {
-                    let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    let data = [];
+                    _.map(this.tabData, items => {
+                        _.map(res.datas, item => {
+                            console.log(_.findWhere(item, {'key': 'id'}))
+                            // if(_.findWhere(items, {'key': 'id'}).value === _.findWhere(item, {'key': 'id'}).value) console.log(id)
+                        });
+                    });
+                    return;
+                    //let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
                     data = data.concat(this.tabData);
                     this.tabData = data;
                     this.addNew = false;

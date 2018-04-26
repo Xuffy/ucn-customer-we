@@ -119,7 +119,7 @@
    * @param {String} [dataKey]    - i18n对应配置参数  例：'negotiation.tableProductInfo'
    * @param {Boolean} [loading]    - 加载loading状态  例：true
    * @param {String} [height]    - 设置表格高度  例：200
-   * @param {Array} [pageSizes]    - 允许分页显示条数  例：[10,20,30]
+   * @param {Array} [F]    - 允许分页显示条数  例：[10,20,30]
    * @param {Number} [pageSize]    - 每页条数  例：200
    * @param {Number} [pageTotal]    - 总条数  例：200
    * @param {Function, Array} [buttons]    - 设置action按钮，可传入函数判断按钮是否显示，返回Array

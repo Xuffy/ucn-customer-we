@@ -13,8 +13,6 @@ export default _.extend(
   {_baseText: require(`./${lang}/baseText`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
-  {_setting: require(`./${lang}/setting`)},
-  {_baseText: require(`./${lang}/baseText`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
   require(`./${lang}/inquiry/viewByInqury.pending`),
@@ -31,11 +29,22 @@ export default _.extend(
   require(`./${lang}/logistic/plan/overviewCheckbox.status`),
   require(`./${lang}/inquiry/compare.pending`),
 
-  {_warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
+  {warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
 
 
   //CN配置
   // {warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
   // require(`./${lang}/warehouse/warehouse.index`)
+
+  // payment
+  {_payment: require(`./${lang}/payment/payment`)},
+  require(`./${lang}/payment/payment.table`),
+  //message
+  {_message: require(`./${lang}/message/message.table`) },
+  require(`./${lang}/message/tabs`),
+  //logs
+  {logs: require(`./${lang}/logs/logs.table`)},
+  {logBasic: require(`./${lang}/logs/logs.basic`)},
+  {track: require(`./${lang}/track/trackBysku`)},
 
 )

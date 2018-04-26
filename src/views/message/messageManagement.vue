@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head">
-            <el-button @click="addNews">{{$t('product.page.addNews')}}</el-button>
+            <el-button @click="addNews">{{$lang.baseText.add}}</el-button>
         </div>
         <div class="body">
             <el-table
@@ -12,13 +12,18 @@
                     @selection-change="handleSelectionChange"
                     height="400">
                 <el-table-column
+                    prop="content"
+                    label="title"
+                    align="left">
+                </el-table-column>
+                <el-table-column
                         prop="content"
-                        :label="$t('product.page.content')"
+                        label="content"
                         align="left">
                 </el-table-column>
                 <el-table-column
                         prop="time"
-                        :label="$t('product.page.time')"
+                        label="time"
                         sortable
                         align="center">
                 </el-table-column>
@@ -42,6 +47,13 @@
                 :visible.sync="dialogVisible"
                 width="30%"
                 :before-close="handleClose">
+            <el-input
+                type="input"
+                :rows="2"
+                placeholder="请输入标题"
+                style="margin-bottom:10px"
+               >
+            </el-input>
             <el-input
                     type="textarea"
                     :rows="2"

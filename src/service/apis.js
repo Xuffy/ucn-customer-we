@@ -122,7 +122,10 @@ const apis = {
   get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
 
   // logistic dictionary
-  get_container_type: ['/containertype/all', 'BASE_dictionary']
+  get_container_type: ['/containertype/all', 'BASE_dictionary'],
+
+  //payment
+  post_ledgerPage:['/ledger/page','BASE_BJ'],
 };
 
 let list = _.mapObject(apis, val => {
