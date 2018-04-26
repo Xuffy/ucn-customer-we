@@ -118,6 +118,7 @@
                 @handleOK="getList"
                 :forceUpdateNumber="new Date().getTime()" 
                 :type="radio"
+                :isInquiry="true"
             ></v-product>
         </el-dialog>
         
@@ -142,7 +143,6 @@
                     departureCountry: []
                 },
                 loading: false,
-                suppliers: [],
                 fromArg: {
                     skuQty: 0, //产品数量
                     inquiryAmount: 0, //询价总金额
@@ -266,11 +266,9 @@
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
                 .then(res => {
-                    console.log(res)
+                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, res));
+                    this.dialogTableVisible = false;
                 });
-                return;
-                this.tabData = tabData;
-                this.dialogTableVisible = false;
             },
             producInfoAction(data, type) { //Produc info 按钮操作
                     this.id_type = 'producInfo';
@@ -294,7 +292,7 @@
             fnBasicInfoHistoty(item, type, id) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                    id: item.id.value
+                    id: item.skuId.value
                 })
                 .then(res => {
                     let arr = [];
