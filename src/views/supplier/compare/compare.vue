@@ -3,11 +3,11 @@
         <h3 class="hd">compareDetail</h3>
         <div class="fn">
             <div class="box-l">
-                <el-button >{{$i.baseText.creatInquiry}}</el-button>
-                 <el-button >{{$i.baseText.creatOrder}}</el-button>
+                <el-button >{{$i._baseText.creatInquiry}}</el-button>
+                 <el-button >{{$i._baseText.creatOrder}}</el-button>
                 <el-checkbox-group v-model="checkList">
-                    <el-checkbox :label='$i.baseText.hideTheSame'></el-checkbox>
-                    <el-checkbox :label='$i.baseText.highLightTheDifferent'></el-checkbox>
+                    <el-checkbox :label='$i._baseText.hideTheSame'></el-checkbox>
+                    <el-checkbox :label='$i._baseText.highLightTheDifferent'></el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
@@ -77,7 +77,6 @@
         },
         created() {
             this.getdata()
-            console.log(this.$route.query.id)
         },
     }
 
