@@ -14,5 +14,5 @@
   "waitReceipt":"Wait Receipt",
   "planDateOfReceipt":"Plan Date of Receipt",
   "actualDateOfReceipt":"Actual Date of Receipt",
-  "currencyCode":"currencyCode"
+  "currencyCode":"currency"
 }

@@ -1,17 +1,42 @@
 <template>
-    <div class="Overview">
-        <h3 class="hd">{{$t('order.buttonname.draftOview')}}</h3>
+    <div class="draftOverview">
+        <h3 class="hd">Draft Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button >{{$t('order.buttonname.downloadSelected')}}</el-button>
-                <el-button >{{$t('order.buttonname.send')}}</el-button>
-                <el-button type="danger">{{$t('order.buttonname.delete')}}</el-button>
+                <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
+                 <el-button @click='download'>{{($i.baseText.send)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.baseText.delete)}}</el-button>
             </div>
-           <selectSearch></selectSearch>
+             <div class="select-wrap">
+               <selectSearch 
+                    :options=options
+                    @selectChange="selectChange"
+                    @inputChange="inputEnter"
+                 ></selectSearch>
+            </div>         
         </div>
+        <div style='display:flex;justify-content: flex-end;margin-right:20px;'>
+             <div class="viewBy">
+                <span>View by&nbsp</span>
+                <el-radio-group v-model="params.view" size="mini" @change='changeView'>
+                    <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
+                    <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
+                </el-radio-group>
+            </div>
+        </div>
+       
         <!--form-->
-          <!--        表格-->
-            <v-table  :data="tabData" />
+          <v-table  
+           ref='vtable'
+          :data="tabData" 
+          :buttons="[{label: 'detail', type: 1}]" 
+           @action="onAction"
+          :loading='loading'
+          :pageTotal='pageTotal'
+          @change-checked='checked'
+          @page-size-change(size)='pagesizechange'
+          @page-change(page)='pagechange'
+           style='marginTop:10px'/>     
     </div>
 </template>
 <script>
@@ -21,53 +46,178 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
+
     import {
-        VTable,
+        dropDown,
         selectSearch
+    } from '@/components/index'
+    import {
+        VTable
     } from '@/components/index';
     export default {
-        name: '',
+        name: 'draftOverview',
+        components: {
+            dropDown,
+            VTable,
+            selectSearch
+        },
         data() {
             return {
                 value: '',
                 keyWord: '',
+                disabled: false, //delete的状态
+                prodisabled: true, // finish的状态
+                tabData: [],
+                loading: false,
+                pageTotal: 1,
+                rowspan: 1,
                 options: [{
                     id: '1',
-                    label: this.$t('order.buttonname.orderNo')
+                    label: 'Order No'
                 }, {
                     id: '2',
-                    label: this.$t('order.buttonname.skuCode')
-                }, ],
-                tabColumn: [],
-                tabData: []
+                    label: 'Sku Code'
+                }],
+                keyType: '',
+                params: {
+                    status: '', //status的按钮组
+                    orderNo: '',
+                    skuCode: '',
+                    view: 1, //view by的按钮组
+                    ps: 10,
+                    pn: 1
+                },
+                selectedDate: [],
+                selectedNumber: []
             }
-        },
-        components: {
-            VTable,
-            selectSearch
         },
         methods: {
+            onAction(item, type) {
+                //                this.$windowOpen('', {
+                //                    orderId: item.id.value
+                //                });
+
+                this.$windowOpen({
+                    url: '/order/detail',
+                    params: {
+                        orderId: item.id.value
+                    }
+                });
+            },
+            pagesizechange() {
+
+            },
+            pagechange() {
+
+            },
+            creat_order() {
+                this.$windowOpen('/order/detail', {
+                    selectedDate: this.selectedDate
+                });
+            },
             selectChange(val) {
-                console.log(val)
+                this.keyType = val;
+            },
+            checked(item) {
+                this.selectedDate = item
+
+                this.selectedDate.forEach(item => {
+                    this.selectedNumber.push(item.id.value);
+                });
+            },
+            changeStatus() {
+                this.getdata()
+            },
+            changeView() {
+                this.getdata()
+            },
+            inputEnter(val) {
+                if (!val.keyType) return this.$message('请选中搜索类型');
+                if (!val.key) return this.$message('搜索内容不能为空');
+                if (val.keyType == '1') {
+                    this.params.orderNo = val.key
+                } else {
+                    this.params.skuCode = val.key
+                }
+                this.getdata()
+            },
+            download() {
+                this.$ajax.post(this.$apis.download_order, this.selectedNumber)
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            deleteOrder() {
+                this.$ajax.post(this.$apis.delete_order, this.selectedNumber)
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            //get_orderlist数据
+            getdata() {
+                this.loading = true
+                this.$ajax.post(this.$apis.get_orderlist, this.params)
+                    .then((res) => {
+                        this.loading = false
+                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+                        //                        , item => {
+                        //                            return _.mapObject(item, val => {
+                        //                                val._checked = true
+                        //                            })
+                        //                        }
+                    })
+                    .catch((res) => {
+                        this.loading = false
+
+                    });
             }
         },
-        created() {
-            this.ajax.get(this.$apis.supplier_overview, {
-                    params: {}
-                })
-                .then(res => {
-                    this.tabData = res
+        computed: {
 
-                })
-                .catch((res) => {
-                    console.log(res);
-                });
         },
+        created() {
+            this.getdata()
+
+        },
+        mounted() {
+            this.loading = false
+        },
+        updated() {
+
+        },
+        watch: {　
+            params: {　　　　　　　　　　
+                handler(curVal, oldVal) {　　　　　　　　　　　　
+                    if (curVal.view == 1 && curVal.status == 5) {
+                        this.disabled = false
+                    } else if (curVal.status == 3) {
+                        this.prodisabled = false
+                        this.disabled = true
+                    } else {
+                        this.disabled = true
+                        this.prodisabled = true
+                    }　　　　　　　　　　
+                },
+                　deep: true　　　　　　　　
+            }
+        }
     }
 
 </script>
+<style scoped>
+    >>>.el-input-group__append {
+        padding: 0 !important;
+    }
+
+</style>
 <style lang="less" scoped>
-    .orderOverview {
+    .draftOverview {
         .hd {
             height: 50px;
             line-height: 50px;
@@ -75,12 +225,13 @@
             border-bottom: 1px solid #ccc;
             font-size: 18px;
             color: #666666;
+
         }
         .status {
             display: flex;
             height: 60px;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
             padding: 0 15px;
             box-sizing: border-box;
             .btn-wrap {
@@ -113,6 +264,7 @@
                     input {}
                 }
             }
+
         }
         .fn {
             display: flex;
@@ -126,30 +278,32 @@
                     font-size: 14px;
                     color: #666;
                 }
-                button {
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    padding: 2px 5px;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
+
                 .set {
                     cursor: pointer;
-                    padding-left: 18px;
-                    color: #999;
+                    padding-left: 40px;
+                    /*                    color: #999;*/
                     i {
                         font-size: 25px;
+                    }
+                    .speDropdown {
+                        position: absolute;
+                        right: 40px;
+                        background-color: #ffffff;
+                        z-index: 2000;
+                        display: none
+                    }
+                    .speDropdownshow {
+                        position: absolute;
+                        right: 40px;
+                        background-color: #ffffff;
+                        z-index: 2000;
+
                     }
                 }
             }
         }
+
     }
 
 </style>

@@ -21,6 +21,7 @@ export default {
         key: 'actualPayAmount'
     },
     waitPayment: {
+        _important:true,
         key: '' //待付
     },
     planDateOfPayment: {   //应付时间
@@ -36,6 +37,7 @@ export default {
         key: 'actualReceiveAmount'
     },
     waitReceipt: {
+        _important:true,
         key: ''  //待收
     },
     planDateOfReceipt: {  //应收时间
@@ -46,5 +48,9 @@ export default {
     },
     currencyCode: {
         key: 'currencyCode'
+    },
+    _totalRow:{
+        _important:true,
+        _hide:true
     }
   }

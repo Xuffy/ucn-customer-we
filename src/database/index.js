@@ -12,7 +12,7 @@ import message from './message/index';
 import payment from './payment/index';
 import logs from './logs/index';
 
-import inbound from './warehouse/index';
+import warehouse from './warehouse/index';
 
 const db = {
   common,
@@ -26,7 +26,8 @@ const db = {
   message,
   payment,
   logs,
-  inbound
+  warehouse
+  // inbound,
 };
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {

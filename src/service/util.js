@@ -45,12 +45,12 @@ export default {
       db = _.values(db);
       _.map(data, (value, index) => {
         let obj = {};
-
         _.map(db, val => {
+
           let dv = value[val.key]
             , cd = _.clone(val);
-          if (!_.isUndefined(dv)) {
-            cd.value = dv;
+          if (!_.isUndefined(dv) || val._important) {
+            cd.value = dv || '';
             obj[val.key] = cd;
           }
         });
@@ -113,32 +113,32 @@ export default {
     };
     /**
      * 删除带有前缀下划线数据
-    */
+     */
     const deleteArr = (list, fieldRemark) => {
       _.map(list, item => {
-        if(item) deleteObject(item);
-        if(item[fieldRemark]) deleteObject(item[fieldRemark]);
+        if (item) deleteObject(item);
+        if (item[fieldRemark]) deleteObject(item[fieldRemark]);
       });
     };
 
     const deleteObject = (list, fieldRemark, details) => {
       _.mapObject(list, (val, key) => {
-        if(key.substring(0, 1) === '_') delete list[key];
-        if(list[fieldRemark]) deleteObject(list[fieldRemark]);
-        if(key === details) deleteArr(list[details], fieldRemark)
+        if (key.substring(0, 1) === '_') delete list[key];
+        if (list[fieldRemark]) deleteObject(list[fieldRemark]);
+        if (key === details) deleteArr(list[details], fieldRemark)
       });
     };
 
     Vue.prototype.$filterModify = (list, remark, children) => {
-      let fieldRemark = remark || 'fieldRemark', 
-          details = children || 'details';
-      if(_.isObject(list, details)) deleteObject(list, fieldRemark, details);
-      if(_.isArray(list)) _.map(list, fieldRemark, details);
+      let fieldRemark = remark || 'fieldRemark',
+        details = children || 'details';
+      if (_.isObject(list, details)) deleteObject(list, fieldRemark, details);
+      if (_.isArray(list)) _.map(list, fieldRemark, details);
       return list;
     };
     /**
      * $window.open
-    */
+     */
     Vue.prototype.$windowOpen = (config) => {
       let url = `//${window.location.host}/#${config.url}`, p = {};
       if (!_.isEmpty(config.params) && !config.params.length) {
@@ -149,7 +149,7 @@ export default {
         });
       }
       url = _.template(url)(config.params || {});
-      for(let k in p) {
+      for (let k in p) {
         url += `?${k}=${p[k]}`
       }
       return window.open(url, '_blank');

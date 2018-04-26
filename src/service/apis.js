@@ -38,7 +38,6 @@ const apis = {
   POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_DHC'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_DHC'],
   get_productList:['/sku/listSkuByParams','BASE_CS'],
-  post_ledgerPage:['/ledger/page','BASE_BJ'],
   get_supplierWhole:['/supplierWhole','BASE_CS'],
   add_address:['/supplier/address','BASE_CS'],
   delete_address:['/supplier/delAddress/{id}','BASE_CS'],
@@ -51,18 +50,10 @@ const apis = {
   add_contact:['/supplier/contact','BASE_CS'],
   update_supplier:['/supplier/{id}','BASE_CS'],
   //order
-  get_orderlist:['/customer/order/page','BASE_HCJ'],
   get_orderlist:['/order/page','BASE_HCJ'],
   delete_order:['/order/delete','BASE_HCJ'],
   download_order:['/order/download','BASE_HCJ'],
   send_order:['/order/send','BASE_HCJ'], 
-  get_userProfile:['/user/profile','BASE_LYF'],
-  put_userProfile:['/user/profile','BASE_LYF'],
-  put_userProfilePassword:['/user/profile/password','BASE_LYF'],
-  put_userProfileEmail:['/user/profile/email','BASE_LYF'],
-  get_department:['/department','BASE_LYF'],
-  get_role:['/role','BASE_LYF'],
-
   add_order:['/order/save','BASE_HCJ'], 
   detail_order:['/order/detail/{id}','BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
@@ -99,7 +90,7 @@ const apis = {
   add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-
+  post_ledgerPage:['/ledger/page','BASE_BJ'],
 
 
   post_supplier_addbookmark:['/purchase/supplier/bookmark','BASE_CS_cgs'],
@@ -112,11 +103,6 @@ const apis = {
   post_supplier_deleteCompareDetails:['/purchase/supplier/deleteCompareDetails','BASE_CS_cgs'],
   post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
   post_supplier_recoverCompare:['/purchase/supplier/recoverCompare','BASE_CS_cgs'],
-
-  //
-  post_bizlog:['/bizlog/query','BASE_JML_log'],
-  post_codePart:['/code/part','BASE_JML'],
-
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],

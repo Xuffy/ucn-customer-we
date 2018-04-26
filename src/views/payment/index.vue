@@ -48,7 +48,7 @@
                 <v-table :data="tableDataList"
                 :total-row="totalRow"
                 :loading="tabLoad"  
-                :buttons="[{label:'urging payment',type:1,disabled:flag}, {label: 'detail', type: 2}]"
+                :buttons="setButtons"
                 @action="action"
                 :rowspan="1"
                 @filter-value="onFilterValue"
@@ -78,6 +78,7 @@
         data(){
             return{
                 status:-1,
+                flag:true,
                 time:1523959983,
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 pageTotal:0,
@@ -114,13 +115,12 @@
                 },
                 //底部table数据
                 tableDataList:[],
-                totalRow: [],
-                flag:false
+                totalRow: []
             }
         },
         watch: {
             status(){
-                this. getList();
+                this.getList();
             },
             viewByStatus() {
                 this.getList();
@@ -173,8 +173,24 @@
                         this.tabLoad = false; 
                         this.searchLoad = false; 
                         this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                            item.waitPayment = item.planPayAmount-item.actualPayAmount;
-                            item.waitReceipt = item.planReceiveAmount-item.actualReceiveAmount;
+                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                            // this.flag = item.waitPayment.value === 0;
+                            this.$set(this.flag,item.waitPayment.value === 0)
+                            console.log(this.flag)
+                            return item;
+                        });
+
+                        this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
+                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                            if(item.currencyCode.value ==='BTC'){
+                                item._totalRow.label = 'BTC';
+                            }else if(item.currencyCode.value ==='HKD'){
+                                item._totalRow.label = 'HKD';
+                            }else{
+                                item._totalRow.label = 'EUR';
+                            }
                             return item;
                         });
                     }); 
@@ -200,23 +216,28 @@
                     }
                     this.$ajax.post(this.$apis.post_ledgerPage, params)
                     .then(res => {
-                        console.log(res)
                         this.pageTotal = res.tc;
                         this.tabLoad = false; 
                         this.searchLoad = false; 
                         this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                            item.waitPayment = Number(item.planPayAmount)-Number(item.actualPayAmount);
-                            item.waitReceipt = Number(item.planReceiveAmount)-Number(item.actualReceiveAmount);
-                            // item.waitPayment !=0 ? this.flag = false : this.flag = true
+                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                             this.flag=item.waitPayment.value === 0;
                             return item;
                         });
 
-                        console.log(this.tableDataList)
                         this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                            item._totalRow = {label: 'Caculate'};
+                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                            // if(item.currencyCode.value ==='BTC'){
+                            //     item._totalRow.label = 'BTC';
+                            // }else if(item.currencyCode.value ==='HKD'){
+                            //     item._totalRow.label = 'HKD';
+                            // }else{
+                            //     item._totalRow.label = 'EUR';
+                            // }
                             return item;
                         })
-                        console.log(this.totalRow)
                     }); 
                 }
             },
@@ -238,7 +259,7 @@
                     this.$router.push({
                         path: '/',
                         query: {
-                            // orderNo: item.orderNo
+                            // orderNo: _.findWhere(item, {'key': 'orderNo'}).value
                         }
                     });
                 }else if(item.orderType.value == 20){
@@ -265,19 +286,13 @@
                 // ③ 当待付金额为0时，催款按钮为禁用，不可操作；
                 // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
                 if(item.waitPayment.value != 0){
-                    if(count >= 3) {
-                        return false;
-                    }else{
-                        this.$message({
-                            type: 'success',
-                            message: '发送成功!'
-                        });
-                       this.count ++ 
-                    }
-                }else{
-                    this.flag = true;
-                }
-              
+                    
+                     
+                }              
+            },
+            setButtons(item){
+                if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
+                return [{label: 'urging payment', type: '1',disabled:false},{label: 'detail', type: '2'}];
             },
             handleSizeChange(val) {
                 this.params.ps = val;
