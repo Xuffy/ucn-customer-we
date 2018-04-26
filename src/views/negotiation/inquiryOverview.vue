@@ -200,7 +200,6 @@
                     if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 if(typeof type === 'string') arr.join(',')
-                return;
                 return arr;
             },
             toCompare() {

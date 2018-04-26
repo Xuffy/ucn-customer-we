@@ -87,7 +87,9 @@
                     key: '',
                     ps: 10,
                     pn: 1,
-                    recycleCustomer: 0
+                    recycleCustomer: 0,
+                    comapreInquiryIds: [],
+                    compareId: null
                 },
                 tabLoad:false,
                 pageTotal: 0
@@ -111,6 +113,9 @@
                 default: () => {
                     return [];
                 }
+            },
+            compareId: {
+                default: null
             }
         },
         computed: {
@@ -134,19 +139,23 @@
                 this.params.statuses = val;
             },
             value() {
-                this.gettabData();
+                this.params.comapreInquiryIds = this.argDisabled;
+                this.params.compareId = this.compareId;
             }
         },
         methods: {
             addCompare() {
                 let arg = this.$copyArr(this.checkedData);
                 let arr = [];
-                if(_.isObject(arg)) {
+                if(_.isObject(arg) && this.selectionRadio) {
                     this.$emit('addInquiry', arg);
                 } else {
-                    arg.forEach((item, index) => {
-                        delete item._checked;
-                        if(!item._disabled) arr.push(item);
+                    _.map(arg, item => {
+                        _.mapObject(item, (val, key) => {
+                            if(key === '_disabled' && val === false){
+                                arr.push(item.id.value);
+                            }
+                        });
                     });
                     this.$emit('addInquiry', arr);
                 }
@@ -168,10 +177,13 @@
                     this.searchLoad = false;
                     let arr = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
                     _.map(this.argDisabled, id => {
-                        _.map(arr, (items, index) => {
-                            if(_.findWhere(items, {'key': 'id'}).value + '' === id + '') {
+                        _.map(arr, items => {
+                            if(_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
                                 items._disabled = true;
                                 items._checked = true;
+                            } else {
+                                items._disabled = false;
+                                items._checked = false;
                             }
                         });
                     });

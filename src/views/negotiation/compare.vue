@@ -37,7 +37,7 @@
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i.baseText.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i.baseText.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.baseText.cancel }}</el-button>
-        <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" />
+        <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" :compareId="params.id || null" :disableds="disableds" />
     </div>
 </template>
 <script>
@@ -64,7 +64,8 @@
                     pn: 1,
                     recycleCustomer: 0
                 },
-                argDisabled: []
+                argDisabled: [],
+                disableds: []
             }
         },
         components: {
@@ -205,13 +206,14 @@
             changeChecked(item) {
                 let arr = [];
                 item.forEach(item => {
-                    arr.push(_.findWhere(item, {'key': 'id'}));
+                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}));
                 });
                 this.checkedArg = arr;
             },
             addNewCopare() {
                 this.addNew = true;
-                this.argDisabled = this.mapTabData();
+                this.argDisabled = this.mapTabData(true);
+                this.disableds = this.mapTabData(false);
             },
             deleteCompare(type) { //删除
                 if(type === 'all') {
@@ -237,29 +239,32 @@
                             this.$set(this.tabData, index, items);
                         }
                     });
+                    this.checkedArg = [];
                 };
             },
-            mapTabData() {
+            mapTabData(type) {
                 let arr = [];
                 _.map(this.tabData, item => {
-                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    if(type) {
+                        if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    } else {
+                        if(item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    }
                 });
                 return arr;
             },
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
-                _.map(arg, items => {
-                    _.map(this.tabData, item => {
-                        if(_.findWhere(items, {'key': 'id'}).value === _.findWhere(item, {'key': 'id'}).value) {
-                            delete item._disabled;
-                            console.log(items)
-                        }
-                    });
-                });
-                return;
-                arg = arg.concat(this.tabData);
-                this.tabData = arg;
-                this.addNew = false;
+                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, {
+                    recycleCustomer:0,
+                    ids: arg
+                })
+                .then(res => {
+                    let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    data = data.concat(this.tabData);
+                    this.tabData = data;
+                    this.addNew = false;
+                })
             }
         }
     }

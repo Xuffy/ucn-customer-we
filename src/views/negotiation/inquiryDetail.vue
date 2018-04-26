@@ -61,13 +61,6 @@
                     <div class="bom-btn-wrap-box"></div>
                 </div>
             </div>
-            <div class="message-board-wrap">
-                <div class="con"><message-board :list="list" @sub="submit" /></div>
-                <div class="switch-btn" @click="boardSwitch">
-                    {{ $i.baseText.messageBoard }}
-                    <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
-                </div>
-            </div>
         </div>
         <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
         <el-dialog
@@ -517,16 +510,8 @@
         }
         .container {
             display:flex;
-            &.active {
-                .table-wrap {
-                    width: 100%;
-                }
-                .message-board-wrap {
-                    width: 0;
-                }
-            }
             .table-wrap {
-                width:80%;
+                width:100%;
                 .basic-info {
                     width:100%;
                     padding:0 10px;
