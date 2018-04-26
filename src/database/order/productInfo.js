@@ -97,7 +97,12 @@ export default {
         key: 'skuQualityStander',
         _disabled: true,
     },
-    skuprice: {}, //自动计算?????
+    //自动计算?????
+    sukPrice: {
+        key: 'sukPrice',
+        _disabled: true,
+        _calu: true
+    },
     rateValueAddedTax: {
         key: 'skuRateValueAddedTax',
         _disabled: true,
@@ -209,9 +214,13 @@ export default {
         key: 'skuInnerCartonUnit',
         _disabled: true,
     },
+    // 合计SKU Quantity Of Inner Carton     
+    //Quantity of Inner Box in Outer Carton
+
     innerCartonQty: {
         key: 'skuInnerCartonQty',
         _disabled: true,
+        _calu: true
     },
     innerCartonLength: {
         key: 'skuInnerCartonLength',
@@ -261,9 +270,11 @@ export default {
         key: 'skuInnerCartonOuterNum',
         _disabled: true,
     },
+    //SKU Quantity of Outer Carton
     outerCartonQty: {
         key: 'skuOuterCartonQty',
         _disabled: true,
+        _calu: true
     },
     outerCartonLength: {
         key: 'skuOuterCartonLength',
@@ -381,17 +392,23 @@ export default {
         key: 'sukSample',
         type: 'select'
     },
+    //合计
     sukSampleQty: {
         key: 'sukSampleQty',
-        type: 'text'
+        type: 'text',
+        _calu: true
     },
+    //合计
     sukSamplePrice: {
         key: 'sukSamplePrice',
-        type: 'text'
+        type: 'text',
+        _calu: true
     },
+    //Undelivered Quantity ？？？
     sukDeliveredQty: {
         key: 'sukDeliveredQty',
         _disabled: true,
+        _calu: true
     },
     sukDepartureDt: {
         key: 'sukDepartureDt',
@@ -400,6 +417,7 @@ export default {
     sukQuotationNo: {
         key: 'sukQuotationNo',
         _disabled: true,
+        _calu: true
     },
     sukModifyStatus: {
         key: 'sukModifyStatus'
@@ -429,8 +447,8 @@ export default {
         key: 'sukAdditionalFour',
         type: 'pic'
     },
-    //Undelivered Quantity  Delivered Quantity
-    //Qualified products total QTYS
+    //Undelivered Quantity  
+    //Qualified products total QTYS    Total Quantity of Quantified SKU
     //Uninspected QC SKU Quantity
 
 
@@ -588,5 +606,6 @@ export default {
     adjustPackage: {
         key: 'skuAdjustPackage',
         _disabled: true,
+        _calu: true
     }
 }
