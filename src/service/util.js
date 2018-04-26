@@ -49,7 +49,7 @@ export default {
           let dv = value[val.key]
             , cd = _.clone(val);
           if (!_.isUndefined(dv) || val._important) {
-            cd.value = dv || '';
+            cd.value = _.isUndefined(dv) ? '' : dv;
             obj[val.key] = cd;
           }
         });
@@ -204,6 +204,10 @@ export default {
           return e
         }
       })
+    }
+
+    Vue.prototype.$depthClone = (data) => {
+      return JSON.parse(_.clone(JSON.stringify(data)));
     }
 
 
