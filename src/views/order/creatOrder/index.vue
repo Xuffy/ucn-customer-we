@@ -12,11 +12,11 @@
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 {{$i.productInfo}}
+                 {{$i._productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true">{{$i.baseText.addproduct}}</el-button>
-                  <el-button type='danger'>{{$i.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true">{{$i._baseText.addproduct}}</el-button>
+                  <el-button type='danger'>{{$i._baseText.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  
@@ -34,14 +34,14 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$i.baseText.send}}</el-button>
-                 <el-button >{{$i.baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$i.baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
+                 <el-button >{{$i._baseText.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
+                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
+          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
@@ -49,16 +49,16 @@
                 ></VInquiry>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i.baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i.baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i._baseText.addproduct" name="FromNewSearch">
                             <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
                                 @handleOK="getList"
                             ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -332,15 +332,15 @@
                     "archive": false,
                     "currency": 1,
                     "paymentRemark": "1",
-                    "totalSkuPrice": 1,
-                    "paidAmount": 0,
-                    "unpaidAmount": 0,
-                    "totalQty": 1,
-                    "totalOuterCartonQty": 1,
-                    "totalGrossWeight": 1,
-                    "totalNetWeight": 1,
-                    "totalVolume": 1,
-                    "skuQty": 1,
+//                    "totalSkuPrice": 1,
+//                    "paidAmount": 0,
+//                    "unpaidAmount": 0,
+//                    "totalQty": 1,
+//                    "totalOuterCartonQty": 1,
+//                    "totalGrossWeight": 1,
+//                    "totalNetWeight": 1,
+//                    "totalVolume": 1,
+//                    "skuQty": 1,
                     "inboundQty": 0,
                     "deliveredQty": 0,
                     "draftCustomer": false,
@@ -348,7 +348,7 @@
                     "recycleCustomer": true,
                     "recycleSupplier": false,
                     skuList: this.skuList
-                    //                    responsibilityList: this.$refs.responsibility.tableData,
+                    //responsibilityList: this.$refs.responsibility.tableData,
                 }
                 // var basic = this.$refs.basicInfo.formItem
                 //   _.extendOwn(params, basic)
