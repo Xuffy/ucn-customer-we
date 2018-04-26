@@ -3,11 +3,13 @@ import overviewBtn from './plan/overviewBtn';
 import planList from './plan/planList'
 import transportationList from './plan/transportationList'
 import containerInfo from './plan/containerInfo'
+import productInfo from './plan/productInfo'
 
 export default {
   basicInfo,
   overviewBtn,
   planList,
   transportationList,
-  containerInfo
+  containerInfo,
+  productInfo
 }
