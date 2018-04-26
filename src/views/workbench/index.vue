@@ -35,6 +35,8 @@
 
     <v-history-modify ref="historyModify" @save="save">
     </v-history-modify>
+
+    <v-message-board module="workbench" code="workbench" id="123"></v-message-board>
   </div>
 </template>
 
@@ -48,8 +50,16 @@
 
   export default {
     name: 'workbench',
+    components: {
+      VDataDashboard,
+      VTableData,
+      VBasicInfo,
+      VHistoryModify,
+      VMessageBoard,
+    },
     data() {
       return {
+        testId: '', // todo 测试
         visible: false,
         pengdingTask: [],
         futureTask: [],
@@ -60,16 +70,10 @@
         historyData: [], // todo 测试
       }
     },
-    components: {
-      VDataDashboard,
-      VTableData,
-      VBasicInfo,
-      VHistoryModify,
-      VMessageBoard,
-    },
     created() {
     },
     mounted() {
+      this.testId = '123';
       /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
         this.pengdingTask = data.pending_task;
         this.futureTask = data.future_task;

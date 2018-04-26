@@ -15,8 +15,13 @@
         this.$store.state.quickLink.log = val.meta.log;
         this.$store.state.quickLink.recycleBin = val.meta.recycleBin;
 
-        this.$store.state.messageBoard.show = !!val.meta.messageBoard;
-        this.$store.state.messageBoard.code = val.meta.messageBoard;
+        this.$store.state.layout.paddingRight = 0;
+        /*if (_.isEmpty(val.meta.messageBoard)) {
+          this.$store.state.messageBoard = {};
+        } else {
+          this.$store.state.messageBoard.module = val.meta.messageBoard.module;
+          this.$store.state.messageBoard.code = val.meta.messageBoard.code;
+        }*/
       }
     },
   }
