@@ -1,26 +1,27 @@
 <template>
   <div>
     <div class="btn-wraps">
-      <el-button type="primary" size="mini" @click="tabAppend">{{ $i.logistic.containerInfo.add }}</el-button>
-      <el-button type="danger" size="mini">{{ $i.logistic.containerInfo.delete }}</el-button>
+      <el-button type="primary" size="mini" @click="tabAppend">{{ $i.add }}</el-button>
+      <el-button type="danger" size="mini">{{ $i.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :data="tableData" border style="width: 100%; margin-top: 20px" :row-class-name="tableRowClassName" :show-summary="true" tooltip-effect="dark" sum-text="合计">
-        <el-table-column type="selection" width="40"/>
-        <el-table-column label="#" align="center" width="50">
+      <el-table :data="tableData" border style="width: 100%; margin-top: 20px" :row-class-name="tableRowClassName" show-summary tooltip-effect="dark" :sum-text="$i.sum">
+        <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin"/>
+        <el-table-column type="index" width="50" align="center"/>
+        <!-- <el-table-column label="#" align="center" width="50">
           <template slot-scope="scope">
             {{scope.row.index + 1}}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
-        :label="$i.logistic.containerInfo.containerNo"
+        :label="$i.containerNo"
         align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.sealNumber"
+        :label="$i.sealNumber"
         prop="sealNumber"
         align="center">
           <template slot-scope="scope">
@@ -28,7 +29,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.containerWeight"
+        :label="$i.containerWeight"
         prop="containerWeight"
         align="center">
           <template slot-scope="scope">
@@ -36,7 +37,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.containerType"
+        :label="$i.containerType"
         align="center">
           <template slot-scope="scope">
             <el-select v-model="scope.row.containerType" placeholder="请选择" >
@@ -45,7 +46,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.vgm"
+        :label="$i.vgm"
         prop="vgm"
         align="center">
           <template slot-scope="scope">
@@ -53,7 +54,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.totalQuantityInContainer"
+        :label="$i.totalQuantityInContainer"
         prop="totalQuantityInContainer"
         align="center">
           <template slot-scope="scope">
@@ -61,7 +62,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.totalVolumeInContainer"
+        :label="$i.totalVolumeInContainer"
         prop="totalVolumeInContainer"
         align="center">
           <template slot-scope="scope">
@@ -69,7 +70,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.totalNetWeightInContainer"
+        :label="$i.totalNetWeightInContainer"
         prop="totalNetWeightInContainer"
         align="center">
           <template slot-scope="scope">
@@ -77,7 +78,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.totalQuantityOfOuterCartonsInContainer"
+        :label="$i.totalQuantityOfOuterCartonsInContainer"
         prop="totalQuantityOfOuterCartonsInContainer"
         align="center">
           <template slot-scope="scope">
@@ -85,7 +86,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.totalSkuPriceInContainer"
+        :label="$i.totalSkuPriceInContainer"
         prop="totalSkuPriceInContainer"
         align="center">
           <template slot-scope="scope">
@@ -93,7 +94,7 @@
           </template>
         </el-table-column>
         <el-table-column
-        :label="$i.logistic.containerInfo.exchangeCurrency"
+        :label="$i.exchangeCurrency"
         align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.exchangeCurrency }}</span>
@@ -105,7 +106,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       containerNo: '',
       containerSelect: '',
@@ -115,16 +116,18 @@ export default {
   props: {
     tableData: {
       type: Array,
-      default: []
+      default () {
+        return []
+      }
     },
     containerType: {
       type: Array,
       default: () => {
         return [
-        {
-          label: "dada",
-          value: "4"
-        }
+          {
+            label: "dada",
+            value: "4"
+          }
         ]
       }
     }
@@ -146,30 +149,30 @@ export default {
           message: '请选择货柜类型',
           type: 'warning'
         });
-          if(!this.containerNo) return this.$message({
-            message: '请填写货柜数量',
-            type: 'warning'
-          });
-            this.$emit('tailBtnOk', {
-              Product: this.containerSelect,
-              containerAmount: this.containerNo
-            });
-            this.containerSelect = '';
-            this.containerNo = '';
-          } else {
-            this.$emit('tailBtnCancel');
-          }
-          return this.isActive = false
-        },
-        tabSplite(index) {
-          if(this.tableData.length <= 1) this.tabAppend();
-          this.$emit('tabSplite', index)
-        }
+        if(!this.containerNo) return this.$message({
+          message: '请填写货柜数量',
+          type: 'warning'
+        });
+        this.$emit('tailBtnOk', {
+          Product: this.containerSelect,
+          containerAmount: this.containerNo
+        });
+        this.containerSelect = '';
+        this.containerNo = '';
+      } else {
+        this.$emit('tailBtnCancel');
       }
+      return this.isActive = false
+    },
+    tabSplite(index) {
+      if(this.tableData.length <= 1) this.tabAppend();
+      this.$emit('tabSplite', index)
     }
-    </script>
-    <style lang="less" scoped>
-    .btn-wraps {
-      padding:10px 0;
-    }
-    </style>
+  }
+}
+</script>
+<style lang="less" scoped>
+.btn-wraps {
+  padding:10px 0;
+}
+</style>
