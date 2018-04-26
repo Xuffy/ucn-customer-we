@@ -88,10 +88,10 @@ const apis = {
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
   get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
-  add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
+  add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1'],
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-
+  delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -107,6 +107,9 @@ const apis = {
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
+  get_productInfo:['/order/skuListPage','BASE_BUYER'],
+
+
 
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
