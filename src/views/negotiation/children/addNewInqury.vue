@@ -142,13 +142,13 @@
                 let arg = this.$copyArr(this.checkedData);
                 let arr = [];
                 if(_.isObject(arg)) {
+                    this.$emit('addInquiry', arg);
+                } else {
                     arg.forEach((item, index) => {
                         delete item._checked;
                         if(!item._disabled) arr.push(item);
                     });
                     this.$emit('addInquiry', arr);
-                } else {
-                    this.$emit('addInquiry', arg);
                 }
             },
             inputEnter(val) {

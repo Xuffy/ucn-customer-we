@@ -2,11 +2,19 @@ export default {
   id: {
     _hide: true,
   },
+  test: {
+    _important: true
+  },
   time: {
     key: '',
     type: 'Number',
     length: 10,
     reg: '',
+    fn(ajax){
+      return ajax.post(1212).then(data=>{
+
+      });
+    },
     state: '',
   },
   descripition: {

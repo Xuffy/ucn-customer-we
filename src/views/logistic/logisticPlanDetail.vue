@@ -281,11 +281,10 @@
     </el-row>
     <div class="hd"></div>
     <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-    <div class="btn-wraps">
-      <el-button type="primary" size="mini">{{ $i.logistic.containerInfo.add }}</el-button>
-      <el-button type="danger" size="mini">{{ $i.logistic.containerInfo.delete }}</el-button>
-    </div>
-    <v-table :hideFilterValue="true" :hideFilterColumn="true" :data="tabData"/>
+    <v-container-info :tableData.sync="tableData" @tabAppend="tabAppend" @tailBtnCancel="tailBtnCancel"
+    @tailBtnOk="tailBtnOk" @tabSplite="tabSplite"/>
+
+    <!-- <v-table :hideFilterValue="true" :hideFilterColumn="true" :data="tabData"/> -->
     <!-- <v-container-info
       :tableData="tableData"
       @tabAppend="tabAppend"
@@ -327,7 +326,7 @@
 </div>
 </template>
 <script>
-import { VSimpleTable, selectSearch, VTable } from '@/components/index';
+import { VSimpleTable, containerInfo, selectSearch, VTable } from '@/components/index';
 import attachment from '@/components/base/attachment'
 import oneLine from '@/views/logistic/children/oneLine'
 
@@ -365,11 +364,7 @@ export default {
       ],
       createDate:'2018-09-08',
       tabColumn: [],
-      tabData: [
-        {
-          logisticsNo: '1212424'
-        }
-      ],
+      tabData: [],
       fileList: [],
       date: '',
       newSearchDialogVisible: false,
@@ -401,22 +396,51 @@ export default {
       date: '',
       departureOptions: [],
       departure: '',
-      tableData: []
+      tableData: [
+        {
+          "containerNo": 1,
+          "sealNumber": 2,
+          "containerWeight": "3",
+          "containerType": "4",
+          "vgm": "22",
+          "totalQuantityInContainer": "13",
+          "totalVolumeInContainer": "3",
+          "totalNetWeightInContainer": "12",
+          "totalQuantityOfOuterCartonsInContainer": "43",
+          "totalSkuPriceInContainer": "45",
+          "exchangeCurrency": "Exchange Currency"
+        },
+        {
+          "containerNo": 1,
+          "sealNumber": 2,
+          "containerWeight": "3",
+          "containerType": "4",
+          "vgm": "11",
+          "totalQuantityInContainer": "22",
+          "totalVolumeInContainer": "12",
+          "totalNetWeightInContainer": "1",
+          "totalQuantityOfOuterCartonsInContainer": "12",
+          "totalSkuPriceInContainer": "33",
+          "exchangeCurrency": "Exchange Currency"
+        }
+      ]
     }
   },
   components: {
     "v-simple-table": VSimpleTable,
-    // "v-container-info": containerInfo,
+    "v-container-info": containerInfo,
     "v-select-search": selectSearch,
     attachment,
     oneLine,
     VTable
   },
   mounted () {
-    console.log(this.$db.logistic)
-    this.tabData = this.$getDB(this.$db.logistic.containerInfo, this.tabData)
-    console.log(this.tabData)
-    // console.log(this.$i)
+    // this.tableData = this.$getDB(this.$db.logistic.containerInfo, this.tableData, item => {
+    //   return _.map(item, a => {
+    //     !a.label && (a.label = this.$i.logistic.containerInfo[a.key])
+    //     return a
+    //   })
+    // })
   },
   created () {
     // this.ajax({
