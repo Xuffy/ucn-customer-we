@@ -33,7 +33,6 @@
         name:'selectSearch',
         data() {
             return {
-                keyType:'',
                 keyWord:''
             }
         },
@@ -51,6 +50,20 @@
             searchLoad: {
                 type: Boolean,
                 default: false
+            },
+            value: {
+                type: [String, Number],
+                default: ''
+            }
+        },
+        computed: {
+            keyType: {
+                get() {
+                    return this.value;
+                },
+                set(val) {
+                    this.$emit('input', val);
+                }
             }
         },
         methods: {

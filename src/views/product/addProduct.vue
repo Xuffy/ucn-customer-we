@@ -106,7 +106,7 @@
                 type:String,
                 default:''
             },
-            type:{
+            type:{ //product || bookmark
                 type:String,
                 default:'product'
             },

@@ -116,7 +116,6 @@
         const isType = this.accept.indexOf(file.type) != -1;
         const isSize = file.size / 1024 / 1024 < this.maxsize;
         if (!isType) {
-          console.log('in')
           this.$message.error('上传格式不对!');
         }
         if (!isSize) {

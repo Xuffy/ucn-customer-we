@@ -19,7 +19,7 @@
 						:data="list"
 						node-key="id"  
 						:props="defaultProps"
-						:expand-on-click-node="false"
+						:expand-on-click-node="expandOnClickNode"
 						@node-click="getChecked"
 						:filter-node-method="filterNode"
 					>
@@ -106,6 +106,10 @@
 			size: {
 				type: String,
 				default: 'mini'
+			},
+			expandOnClickNode: {
+				type: Boolean,
+				default: true
 			}
 		},
 		watch: {
@@ -125,7 +129,7 @@
 		},
 		methods: {
 			getChecked(item) {
-				if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
+				if(this.expandOnClickNode) if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
 				this.selectedList = item;
 				this.visible = false;
 			},
