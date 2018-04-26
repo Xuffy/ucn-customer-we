@@ -6,7 +6,7 @@
                      v-if="!hideFilterColumn">
     </v-filter-column>
 
-    <el-dialog title="Table filter" :visible.sync="visible" width="1000px">
+    <el-dialog title="Table filter" :modal-append-to-body="true" :visible.sync="visible" width="1000px">
       <ul>
         <li class="filter-item" v-for="(cItem,index) in conditionList">
           <el-select v-model="cItem.property" class="compute-key" filterable placeholder="请选择"

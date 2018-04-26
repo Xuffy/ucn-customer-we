@@ -122,14 +122,14 @@
         this.isModify = isModify;
 
       },
-      getFilterData(data) {
+      getFilterData(data,k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);
           value.fieldRemark = value.fieldRemark || {};
           value.fieldRemark._remark = true;
           list.push(_.extend(_.mapObject(value, (val, key) => {
-            if (key !== 'id') {
+            if (key !== k) {
               val = '';
             }
             return val;

@@ -62,7 +62,7 @@
               <div v-text="index + 1"></div>
             </td>
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
-                :style="{'background-color':cItem._highlight}">
+                :style="cItem._style">
               <div v-if="!cItem._image"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
@@ -562,6 +562,7 @@
   .header-content .fixed {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 50%;
+    transform: translate(0, -50%);
   }
 </style>
