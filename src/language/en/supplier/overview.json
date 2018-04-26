@@ -12,7 +12,7 @@
     "description": "description",
 
 
-    "SKUcode": "Supplier NO",
+    "supplierNO": "Supplier NO",
     "suppliername": "supplier name",
     "suppliertype": "Supplier type",
 

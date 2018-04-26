@@ -12,7 +12,8 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps"
+                            ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
@@ -32,7 +33,11 @@
                 <el-row class="speZone">
                     <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down
+                                    v-if="v.showType==='dropdown'"
+                                    :list="dropData"
+                                    :expand-on-click-node="false"
+                                    ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
                                 <el-option
@@ -63,24 +68,29 @@
             <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
         </div>
         <div class="footer">
-            <div class="btns" v-if="!hideBtn">
-                <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
-                <el-button>{{$i._product.createOrder}}</el-button>
-                <el-button @click="compareProducts" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
-                <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i._product.addToBookmark}}</el-button>
-                <el-button :disabled="disabledDownload">{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
-                <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
-            </div>
-            <div class="btns" v-if="type==='recycle'">
-                <el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover" type="primary">{{$i._product.recover}}</el-button>
-                <el-button>{{$i._product.download+'('+downloadRecycleListInfo+')'}}</el-button>
-            </div>
+
 
             <v-table
                     :data="tableDataList"
-                    :buttons="type==='recycle'?[]:[{label: 'detail', type: 1}]"
+                    :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
-                    @action="btnClick"></v-table>
+                    @action="btnClick">
+
+              <template slot="header">
+                <div class="btns" v-if="!hideBtn">
+                  <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
+                  <el-button>{{$i._product.createOrder}}</el-button>
+                  <el-button @click="compareProducts" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
+                  <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i._product.addToBookmark}}</el-button>
+                  <el-button :disabled="disabledDownload">{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
+                  <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
+                </div>
+                <div class="btns" v-if="type==='recycle'">
+                  <el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover" type="primary">{{$i._product.recover}}</el-button>
+                  <el-button>{{$i._product.download+'('+downloadRecycleListInfo+')'}}</el-button>
+                </div>
+              </template>
+            </v-table>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
@@ -106,7 +116,7 @@
                 type:String,
                 default:''
             },
-            type:{
+            type:{ //product || bookmark
                 type:String,
                 default:'product'
             },
@@ -129,6 +139,10 @@
                 default:0
             },
             isInModify:{        //是否处在modify状态，用来表示在compare页面add product时的不用操作
+                type:Boolean,
+                default:false
+            },
+            isInquiry:{
                 type:Boolean,
                 default:false
             }
@@ -326,6 +340,7 @@
                 this.$emit('handleOK',newArr);
             },
             cancel(){
+                this.$refs.productFormTop.resetFields();
                 this.$emit('handleCancel');
             },
 
@@ -368,7 +383,14 @@
                     });
                 }
                 else{
-                    this.$ajax.post(this.$apis.get_buyerProductList,{
+                    let url='';
+                    if(this.type==='product'){
+                        url=this.$apis.get_buyerProductList;
+                    }else if(this.type==='bookmark'){
+                        url=this.$apis.get_buyerBookmarkList;
+                    }
+
+                    this.$ajax.post(url,{
                         recycle:false
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -385,9 +407,12 @@
                                 let id;
                                 if(this.isInModify){
                                     id=_.findWhere(v,{key:'skuId'}).value;
+                                }else if(this.isInquiry){
+                                    id=_.findWhere(v,{key:'skuId'}).value;
                                 }else{
                                     id=_.findWhere(v,{key:'id'}).value;
                                 }
+                                console.log(id)
                                 this.tableDataList.forEach(m=>{
                                     let newId=_.findWhere(m,{key:'id'}).value;
                                     if(id===newId){

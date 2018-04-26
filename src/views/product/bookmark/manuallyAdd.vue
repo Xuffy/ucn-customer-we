@@ -1,7 +1,7 @@
 <template>
     <div class="manually-add">
         <div class="title">
-            {{$i.product.basicInformation}}
+            {{$i._product.basicInformation}}
         </div>
         <div class="addPic">
             <div class="name">
@@ -65,7 +65,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.customerInfo}}
+            {{$i._product.customerInfo}}
         </div>
         <el-form :modal="productForm" ref="customerInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
@@ -114,7 +114,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.priceInfo}}
+            {{$i._product.priceInfo}}
         </div>
         <el-form :modal="productForm" ref="priceInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
@@ -163,7 +163,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.packingInfo}}
+            {{$i._product.packingInfo}}
         </div>
         <el-form :modal="productForm" ref="packingInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -212,7 +212,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.logisticInfo}}
+            {{$i._product.logisticInfo}}
         </div>
         <el-form :modal="productForm" ref="logisticInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -261,7 +261,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.otherInfo}}
+            {{$i._product.otherInfo}}
         </div>
         <el-form :modal="productForm" ref="otherInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -321,7 +321,7 @@
         </el-form>
 
         <div class="title">
-            {{$i.product.attachment}}
+            {{$i._product.attachment}}
         </div>
 
 
@@ -329,7 +329,7 @@
         <!--<input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">-->
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._product.finishEn}}</el-button>
         </div>
     </div>
 </template>
@@ -394,6 +394,7 @@
                     adjustPackage: true,
                     applicableAge: 0,
                     availableQty: 0,
+
                     barcode: "",
                     brand: "",
                     brandRelated: "",
@@ -476,6 +477,17 @@
                     pkgId: null,
                     price: [
                         {
+                            //新增的
+                            cifArea: "",
+                            cifCurrency: 0,
+                            cifPrice: 0,
+                            dduArea: "",
+                            dduCurrency: 0,
+                            dduPrice: 0,
+                            refCifPrice: 0,
+                            refDduPrice: 0,
+                            refFobPrice: 0,
+                            //旧的
                             exwCurrency: 0,
                             exwPrice: 0,
                             fobCurrency: 0,
@@ -493,7 +505,7 @@
                     qualityStander: "",
                     rateValueAddedTax: 0,
                     readilyAvailable: true,
-                    recycle: true,
+                    recycle: false,
                     safeInventory: 0,
                     skuQtyPerTray: 0,
                     specialTransportRequire: "",
@@ -552,7 +564,7 @@
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
                     this.disabledSubmit=false;
-                    this.$router.push('/product/sourcing');
+                    this.$router.push('/product/bookmark');
                 }).catch(err=>{
                     this.disabledSubmit=false;
                 });

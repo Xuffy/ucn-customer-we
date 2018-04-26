@@ -5,8 +5,7 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-<!--         <VExchange :list='exchangeRateList'></VExchange>-->
-   
+         <VExchange></VExchange>  
 <!--             responsibility     -->
          <VResponsibility ref='responsibility'></VResponsibility>
 <!--         productinfo-->
@@ -31,7 +30,7 @@
              </div>
          </div>
 <!--           caculate-->
-         <v-caculate></v-caculate>
+         <v-caculate ref='caculate'></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
@@ -87,7 +86,7 @@
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
-    //    import VExchange from '@/components/base/oneLine'
+    import VExchange from './exchange.vue'
     import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
@@ -105,7 +104,7 @@
             VCaculate,
             VHistoryModify,
             VProduct,
-            //            VExchange,
+            VExchange,
             VInquiry
         },
         data() {
@@ -121,7 +120,7 @@
                 keyWord: '',
                 newProductTabData: [],
                 tableLoad: false, //表格加载状态  
-                statusModify: false,
+                statusModify: true,
                 id_type: '',
                 historyColumn: {},
                 oSwitch: false, //VHistory 组件开关状态
@@ -302,16 +301,6 @@
                     "timeZone": "0",
                     "version": 0
                 }],
-
-                TotalQuantity: '',
-                SKUTypeQuantity: '',
-                TotalSKUPrice: '',
-                TotalOuterCartonQuantity: '',
-                TotalOuterCartonGrossWet: '',
-                TotalOuterCartonNetWet: '',
-                TotalOuterCartonVolume: '',
-                PaidAmount: '',
-                UnpaidAmount: ''
             }
         },
         methods: {
@@ -322,63 +311,15 @@
             send() {
                 //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    "ownerId": 0,
-                    "companyId": 0,
-                    "tenantId": 0,
-                    "version": 0,
-                    "orderNo": "8866555511",
-                    "customerOrderNo": "",
-                    "customerNo": "",
-                    "customerName": "",
-                    "supplierOrderNo": "",
-                    "supplierName": "",
-                    "supplierNo": "",
-                    "quotationNo": "",
-                    "status": 9,
-                    "deliveryDt": 1523477789000,
-                    "actDeliveryDt": 1523477806000,
-                    "incoterm": -1,
-                    "incotermArea": -1,
-                    "payment": -1,
-                    "lcNo": "1",
-                    "departureCountry": "",
-                    "departurePort": "",
-                    "destCountry": "",
-                    "destPort": "",
-                    "transport": -1,
-                    "customerAgreementNo": "1",
-                    "customerAgreementDt": 1523477845000,
-                    "paymentDays": 1,
-                    "paymentStatus": -1,
-                    "remark": "",
-                    "important": false,
-                    "attachment": false,
-                    "remind": false,
-                    "archive": false,
-                    "currency": 1,
-                    "paymentRemark": "1",
-                    "totalSkuPrice": 1,
-                    "paidAmount": 0,
-                    "unpaidAmount": 0,
-                    "totalQty": 1,
-                    "totalOuterCartonQty": 1,
-                    "totalGrossWeight": 1,
-                    "totalNetWeight": 1,
-                    "totalVolume": 1,
-                    "skuQty": 1,
-                    "inboundQty": 0,
-                    "deliveredQty": 0,
-                    "draftCustomer": false,
-                    "draftSupplier": false,
-                    "recycleCustomer": true,
-                    "recycleSupplier": false,
+                    exchangeRateList: [],
                     skuList: this.skuList,
-                    exchangeRateList: this.exchangeRateList,
                     responsibilityList: this.$refs.responsibility.tableData,
                 }
-                // var basic = this.$refs.basicInfo.formItem
-                //   _.extendOwn(params, basic)
-                //  console.log(params)
+                var basic = this.$refs.basicInfo.formItem
+                _.extendOwn(params, basic)
+                var caculate = this.$refs.caculate.caculateForm
+                _.extendOwn(params, caculate)
+                return
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -400,16 +341,14 @@
                 UnpaidAmount:''
             */
             summary() {
-                console.log(this.skuList)
                 this.TotalQuantity = this.skuList.length
                 this.TotalSKUPrice = _.reduce(_.pluck(this.skuList, 'sukPrice'))
                 this.TotalOuterCartonQuantity = _.reduce(_.pluck(this.skuList, 'skuOuterCartonQty'))
                 this.TotalOuterCartonNetWet = _.reduce(_.pluck(this.skuList, 'skuOuterCartonNetWeight'))
                 this.TotalOuterCartonVolume = _.reduce(_.pluck(this.skuList, 'skuOuterCartonVolume'))
-
             },
             productInfoBtn(item) { //Product info 按钮创建
-                if (!this.statusModify && !item._disabled) return [{
+                if (this.statusModify && !item._disabled) return [{
                     label: 'Modify',
                     type: 'modify'
                 }, {
@@ -478,7 +417,7 @@
                         skuId: item.id.value
                     })
                     .then(res => {
-                        console.log(res)
+
                         let arr = [];
                         column = this.$db.order.productInfo;
                         _.map(this.newProductTabData, items => {
@@ -590,6 +529,7 @@
                         this.$refs.basicInfo.formItem.destinationPort = res.destinationPort
                         this.$refs.basicInfo.formItem.transport = res.transport
                         //Product Info
+
                         this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.details),
                             item => {
                                 return item;
@@ -608,12 +548,11 @@
             //表格底部计算
             tableTatalCal() {
                 let obj = _.clone(this.newProductTabData[0]);
+                return console.log(obj)
                 _.map(this.newProductTabData, value => {
                     _.map(value, val => {
                         if (val._calu) {
                             obj[val.key].value = obj[val.key].value + val.value;
-                        } else if (obj[val.key]) {
-                            obj[val.key].value = '';
                         }
                     });
                 });
@@ -638,9 +577,7 @@
             }
         },
         mounted() {
-            this.getInquiryDetail(16)
-            this.summary()
-
+            this.getInquiryDetail(17)
         },
     }
 

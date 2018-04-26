@@ -10,17 +10,17 @@ export default {
     businessScope: {
         key: 'mainBusiness',
         type: 'String',
-        showType: 'select',
-        isbasic: true,
-        rule: []
-    },
-    categoryId: {
-        key: 'categoryId',
-        type: 'String',
         showType: 'dropdown',
         isbasic: true,
         rule: []
     },
+    //    categoryId: {
+    //        key: 'categoryId',
+    //        type: 'String',
+    //        showType: 'dropdown',
+    //        isbasic: true,
+    //        rule: []
+    //    },
     supplierType: {
         key: 'type',
         type: 'String',

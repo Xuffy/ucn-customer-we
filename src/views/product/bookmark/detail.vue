@@ -111,7 +111,6 @@
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
@@ -145,7 +144,6 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-
                 <el-tab-pane :label="$i.product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
@@ -221,7 +219,6 @@
 
 
                 </el-tab-pane>
-
             </el-tabs>
         </div>
         <compare-list

@@ -159,7 +159,6 @@
       getConfig() {
         this.$ajax.get(this.$apis.gridfieldsetting).then(data => {
           this.dataList = data;
-          console.log(data)
         });
       },
       selectCondition(item) {

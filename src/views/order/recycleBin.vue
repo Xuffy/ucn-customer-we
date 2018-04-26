@@ -3,9 +3,9 @@
         <h3 class="hd">Recycle Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download'>{{($i.baseText.download)}}({{selectedDate.length}})</el-button>
-                 <el-button @click='download'>{{($i.baseText.send)}}</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.baseText.delete)}}</el-button>
+                <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
+                 <el-button @click='download'>{{($i._baseText.send)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i._baseText.delete)}}</el-button>
             </div>
              <div class="select-wrap">
                <selectSearch 
@@ -19,8 +19,8 @@
              <div class="viewBy">
                 <span>View by&nbsp</span>
                 <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                    <el-radio-button label=1>{{($i.baseText.order)}}</el-radio-button>
-                    <el-radio-button label=2>{{($i.baseText.SKU)}}</el-radio-button>
+                    <el-radio-button label=1>{{($i._baseText.order)}}</el-radio-button>
+                    <el-radio-button label=2>{{($i._baseText.SKU)}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>

@@ -1,8 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplierSourcing}}
-            <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>
+             {{$i._supplierSourcing}}
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -11,7 +10,7 @@
                           <el-col :xs="24" :sm="12" :md="8" :lg="8" 
                            v-for='(item,index) in $db.supplier.overview'
                            :key="index+'j'"
-                           v-if='item.isbasic==true'
+                         
                            >
                             <el-form-item class="form-list" 
                              v-if="item.showType==='text'"
@@ -38,54 +37,22 @@
                                 </div>
                             </el-form-item>
                          </el-col>
-
                         </el-row>
-    </el-form>
+                </el-form>
             </div>
-            <div class="body" :class="{hide:hideBody}">             
-                     <el-form ref="parms" :model="parms" label-width="200px" size="mini">
-                     <el-row>                 
-                                <el-col :xs="24" :sm="12" :md="8" :lg="8" 
-                           v-for='(item,index) in $db.supplier.overview'
-                           :key="index+'i'"
-                            v-if='!item.isbasic'
-                           >
-                            <el-form-item class="form-list" 
-                             v-if="item.showType==='text'"
-                            :label="item.label" 
-                            :prop="item.key"                    
-                            >
-                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                            <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label" 
-                            :prop="item.key" >
-                                <el-select v-model="parms[item.key]"></el-select>
-                               </el-form-item>
-                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label" 
-                                :prop="item.key">
-                                 <div class="speDropdown">
-                                     <drop-down ref="dropDown" v-model="parms[item.key]" :list="dropData"></drop-down>
-                                </div>
-                            </el-form-item>
-                         </el-col>                
-
-                </el-row>
-            </el-form>
-        </div>
+         
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$i.baseText.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i.baseText.clear}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$i._baseText.search}}</el-button>
+            <el-button @click="clear('parms')">{{$i._baseText.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i.baseText.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.baseText.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.baseText.compare}}({{selectNumber.length}})</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.baseText.addToBookmark}}({{selectNumber.length}})</el-button>
-                  <el-button :disabled='!selectedData.length>0'>{{$i.baseText.downloadSelected}}({{selectNumber.length}})</el-button>
+                  <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectNumber.length}})</el-button>
+                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectNumber.length}})</el-button>
+                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i._baseText.addToBookmark}}({{selectNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -113,7 +80,7 @@
     export default {
         name: "SupplierSourcing",
         components: {
-            dropDown:dropDownSingle,
+            dropDown: dropDownSingle,
             VTable
         },
         props: {
@@ -125,12 +92,12 @@
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
                 loading: false,
-                pageTotal:"",
-                endpn:"",
+                pageTotal: "",
+                endpn: "",
                 parms: {
                     conditions: {},
                     description: "",
-                    //                    mainBusiness: [],
+                    mainBusiness: [],
                     name: '',
                     pn: 1,
                     ps: 10,
@@ -138,39 +105,14 @@
                     skuNameEn: "",
                     type: ''
                 },
-                dropData: [{
-                    id: 1,
-                    label: '一级 1',
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1'
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2'
-                        }]
-                    }]
-                }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                }],
                 tabData: [],
-                selectedData:[],
-                selectNumber:[],
-                 //Category下拉组件数据
-                dropData:[],
-                defaultProps:{
-                    label:'name',
-                    children:'children'
+                selectedData: [],
+                selectNumber: [],
+                //Category下拉组件数据
+                dropData: [],
+                defaultProps: {
+                    label: 'name',
+                    children: 'children'
                 },
             }
         },
@@ -183,6 +125,7 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
+                this.parms.mainBusiness = ''
             },
 
             //搜查
@@ -192,29 +135,29 @@
             },
             //....跳入createInquiry
             createInquiry() {
-                 this.windowOpen('/negotiation/createInquiry', {
-                   selectedData:this.selectedData
+                this.$windowOpen('/negotiation/createInquiry', {
+                    selectedData: this.selectedData
                 });
             },
             //....跳入createOrder
             createOrder() {
-               this.windowOpen('/order/creat', {
-                   selectedData:this.selectedData
+                this.$windowOpen('/order/creat', {
+                    selectedData: this.selectedData
                 });
             },
             //........compare
-            compare() {          this.$ajax.post(this.$apis.post_supplier_addCompare, {
-                      "compares": [
-                        {
-                          "id": 0,
-                          "name": ""
-                        },
-                        {
-                          "id": 1,
-                          "name": ""
-                        }
-                      ],
-                      "name": ""
+            compare() {
+                this.$ajax.post(this.$apis.post_supplier_addCompare, {
+                        "compares": [{
+                                "id": 0,
+                                "name": ""
+                            },
+                            {
+                                "id": 1,
+                                "name": ""
+                            }
+                        ],
+                        "name": ""
                     })
                     .then(res => {
                         console.log(res)
@@ -225,46 +168,54 @@
             },
             //...........进入detail
             detail(item) {
-                this.windowOpen('/supplier/sourcingDetail', {
-                    id: item.id.value
+                this.$windowOpen({
+                    url: '/supplier/sourcingDetail',
+                    params: {
+                        companyId: item.companyId.value,
+                        id: item.id.value
+                    }
+
                 });
             },
             //.........checked
             checked(item) {
-                this.selectedData=item
-                console.log(item)
-                console.log(_.where(item, {id:4}))
+                this.selectedData = item
+                let number = []
+                this.selectedData.forEach(item => {
+                    console.log()
+                    number.push(item.id.value);
+                });
+                this.selectNumber = number
             },
             //.....拿数据
             get_data() {
-                 this.loading = true
+                this.loading = true
                 this.$ajax.post(this.$apis.get_listSupplier, this.parms)
                     .then(res => {
-                     this.pageTotal=res.datas.tc
-                     this.endpn=res.datas.end
-                     this.loading = false
+                        this.pageTotal = res.datas.tc
+                        this.endpn = res.datas.end
+                        this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
-                       
+
                     })
                     .catch((res) => {
-                     this.loading = false
+                        this.loading = false
                     });
             },
             //...........addToBookmark
-            addToBookmark(){                  this.$ajax.post(this.$apis.post_supplier_addbookmark, this.selectNumber
-                  )
+            addToBookmark() {
+                this.$ajax.post(this.$apis.post_supplier_addbookmark, this.selectNumber)
                     .then(res => {
                         console.log(res)
                     })
                     .catch((res) => {
                         console.slog(res)
-                  });
+                    });
             },
-             getCategoryId(){
-                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                    this.dropData=res;
-                    console.log(res)
-                }).catch(err=>{
+            getCategoryId() {
+                this.$ajax.get(this.$apis.getCategory, {}).then(res => {
+                    this.dropData = res;
+                }).catch(err => {
                     console.log(err)
                 });
             },
@@ -273,15 +224,7 @@
             this.get_data()
             this.getCategoryId()
         },
-        watch: {
-            hideBody(n) {
-                if (n) {
-                    this.btnInfo = 'Show the Advance';
-                } else {
-                    this.btnInfo = 'Hide the Advance';
-                }
-            }
-        }
+        watch: {}
     }
 
 </script>

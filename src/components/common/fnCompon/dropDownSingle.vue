@@ -19,7 +19,7 @@
 						:data="list"
 						node-key="id"  
 						:props="defaultProps"
-						:expand-on-click-node="false"
+						:expand-on-click-node="expandOnClickNode"
 						@node-click="getChecked"
 						:filter-node-method="filterNode"
 					>
@@ -47,10 +47,10 @@
 	 * @param { checkInputBoxPl } - 操作框提示文字
 	 * @param { list } - 树型组件数组
 	 * @param { selectedList } - 选中nodes => 返回数组 可用过 vw.$refs.status 取值
-	 * @param { getChecked } -methods 选择触发 返回值getChecked 
+	 * @param { getChecked } -methods 选择触发 返回值getChecked
 	 * @param { treeHeight } - 树高度 默认 200
 	 * @param { chindeNode } - 是否只能选择子节点 boolean 默认false
-	*/ 
+	*/
 	export default {
 		data() {
 			return {
@@ -106,6 +106,10 @@
 			size: {
 				type: String,
 				default: 'mini'
+			},
+			expandOnClickNode: {
+				type: Boolean,
+				default: true
 			}
 		},
 		watch: {
@@ -125,7 +129,7 @@
 		},
 		methods: {
 			getChecked(item) {
-				if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
+				if(this.expandOnClickNode) if(item[this.defaultProps.children] && item[this.defaultProps.children].length) return;
 				this.selectedList = item;
 				this.visible = false;
 			},

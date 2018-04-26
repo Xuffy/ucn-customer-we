@@ -36,7 +36,7 @@
                  hide-filter-value
                  :page-size="taskData.ps">
         </v-table>
-      </el-tab-pane> 
+      </el-tab-pane>
       <el-tab-pane label="Order">
         <!--<v-simple-table></v-simple-table>-->
       </el-tab-pane>
@@ -119,6 +119,9 @@
               item.submittedTime.value = this.$dateFormat(item.submittedTime.value, 'yyyy-mm-dd');
               return item;
             });
+          })
+          .catch(() => {
+            this.$store.state.messageBoard.id = '123';
           });
       },
       getList() {

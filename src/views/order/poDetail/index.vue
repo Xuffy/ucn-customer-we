@@ -12,7 +12,7 @@
 <!--                         <messageBoard ></messageBoard>-->
                      </div>
                      <div class="switch-btn" @click="boardSwitch">
-                     {{$i.baseText.messageBoard}}
+                     {{$i._baseText.messageBoard}}
                      <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                     </div>
                    
@@ -25,11 +25,11 @@
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
-                 {{$i.baseText.productInfo}}
+                 {{$i._baseText.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i.baseText.addproduct}}</el-button>
-                  <el-button type='danger' @click='removeProduct' :disabled='statusModify'>{{$i.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i._baseText.addproduct}}</el-button>
+                  <el-button type='danger' @click='removeProduct' :disabled='statusModify'>{{$i._baseText.remove}}</el-button>
 
              </div>
              <div class="pro_table">
@@ -43,34 +43,34 @@
              </div>
          </div>
 <!--         caculate-->
-         <v-caculate :disabled='statusModify'></v-caculate>
+         <v-caculate :disabled=true ref='caculate' ></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
-                 <el-button  @click='modify'>{{$i.baseText.modify}}</el-button>
-                 <el-button >{{$i.baseText.confirm}}</el-button>
-                 <el-button  :disabled='true'>{{$i.baseText.download}}</el-button>
-                  <el-button >{{$i.baseText.createOrder}}</el-button>
-                   <el-button >{{$i.baseText.cancel}}</el-button>
-                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
-                 <el-checkbox v-model="checked">{{$i.baseText.highlightTheDifferent}}</el-checkbox>
+                 <el-button  @click='modify'>{{$i._baseText.modify}}</el-button>
+                 <el-button >{{$i._baseText.confirm}}</el-button>
+                 <el-button  :disabled='true'>{{$i._baseText.download}}</el-button>
+                  <el-button >{{$i._baseText.createOrder}}</el-button>
+                   <el-button >{{$i._baseText.cancel}}</el-button>
+                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
+                 <el-checkbox v-model="checked">{{$i._baseText.highlightTheDifferent}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
-                 <el-button >{{$i.baseText.send}}</el-button>
-                 <el-button type='danger' @click='modifyCancel'>{{$i.baseText.cancel}}</el-button>
+                 <el-button >{{$i._baseText.send}}</el-button>
+                 <el-button type='danger' @click='modifyCancel'>{{$i._baseText.cancel}}</el-button>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i.baseText.addproduct" :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$i._baseText.addproduct" :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i.baseText.fromNewSearch" name="FromNewSearch">
+                        <el-tab-pane :label="$i._baseText.fromNewSearch" name="FromNewSearch">
                            <v-product                     
                            :hideBtns="true"
                                 :hideBtn="true"
                                 @handleOK="getList"
                            ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
                            <v-product :hideBtns="true"></v-product>
                         </el-tab-pane>
                       </el-tabs>
@@ -157,17 +157,19 @@
             //........获取数据
             get_data() {
                 this.$ajax.get(this.$apis.detail_order, {
-                        id: this.$route.query.orderId
+                        id: this.orderId
                     })
                     .then((res) => {
-                        var copy = Object.assign({}, res);
-                        delete copy.orderResponsibilityList
-                        delete copy.skuList
+                        //                        var copy = Object.assign({}, res);
+                        //                        delete copy.orderResponsibilityList
+                        //                        delete copy.skuList
                         //..........basicinfo
-                        this.$refs.basicinfo.formItem = copy;
+                        this.$refs.basicinfo.formItem = res;
+                        this.$refs.caculate.caculateForm = res
                         //..........responsibility
                         this.$refs.responsibility.tableData = res.orderResponsibilityList
                         //..........attachment
+
                         //..........productinfo
                         this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
                             item => {
@@ -367,9 +369,9 @@
                     this.$set(this.newProductTabData, index, item);
                 });
             },
-            send(){
+            send() {
                 let parentNode = this.dataFilter(this.newProductTabData);
-                 console.log(this.$filterModify(parentNode))
+                console.log(this.$filterModify(parentNode))
             }
         },
         mounted() {
@@ -378,7 +380,7 @@
         created() {
             this.get_data()
             this.submitData.id = this.$route.query.id;
-            // this.getInquiryDetail()
+            //            this.getInquiryDetail()
         },
         watch: {
             newProductTabData(val, old) {

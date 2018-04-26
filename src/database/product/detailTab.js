@@ -369,6 +369,12 @@ export default {
         showType:'number',
         belongTab:'priceInfo',
     },
+
+
+
+
+
+
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -398,33 +404,15 @@ export default {
             },
         ],
     },
-    otherIncoterm:{
-        key:'otherIncoterm',
-        showType:'select',
-        belongTab:'priceInfo',
-        options:[
-            {
-                label:'CIF',
-                value:0
-            },
-            {
-                label:'DDU',
-                value:1
-            },
-        ]
-    },
-    otherIncotermPrice:{
-        key:'otherIncotermPrice',
+
+
+    cifPrice:{
+        key:'cifPrice',
         showType:'number',
         belongTab:'priceInfo',
     },
-    otherIncotermArea:{
-        key:'otherIncotermArea',
-        showType:'input',
-        belongTab:'priceInfo',
-    },
-    otherIncotermCurrency:{
-        key:'otherIncotermCurrency',
+    cifCurrency:{
+        key:'cifCurrency',
         showType:'select',
         belongTab:'priceInfo',
         options:[
@@ -440,7 +428,41 @@ export default {
                 label:'EUR',
                 value:2,
             },
-        ]
+        ],
+    },
+    cifArea:{
+        key:'cifArea',
+        showType:'input',
+        belongTab:'priceInfo',
+    },
+    dduPrice:{
+        key:'dduPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
+    dduCurrency:{
+        key:'dduCurrency',
+        showType:'select',
+        belongTab:'priceInfo',
+        options:[
+            {
+                label:'USD',
+                value:0,
+            },
+            {
+                label:'CNY',
+                value:1,
+            },
+            {
+                label:'EUR',
+                value:2,
+            },
+        ],
+    },
+    dduArea:{
+        key:'dduArea',
+        showType:'input',
+        belongTab:'priceInfo',
     },
 
 

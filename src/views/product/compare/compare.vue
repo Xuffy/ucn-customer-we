@@ -64,6 +64,15 @@
                     @handleOK="handleOkClick"
                     @handleCancel="handleCancel"></product>
         </el-dialog>
+
+        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+            asf
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -92,6 +101,7 @@
 
                 //弹出框显示状态
                 addProductDialogVisible:false,
+                dialogFormVisible:false,
 
                 //btns状态
                 disabledSaveCompare:false,
@@ -189,7 +199,18 @@
 
             //勾选的商品创建order
             createOrder(){
-
+                let arr=[];
+                this.selectList.forEach(v=>{
+                    if(v.customerCreate.value){
+                        arr.push(v);
+                    }
+                });
+                if(arr.length>0){
+                    console.log(arr)
+                    this.dialogFormVisible=true;
+                }else{
+                    this.dialogFormVisible=true;
+                }
             },
 
             //新增product

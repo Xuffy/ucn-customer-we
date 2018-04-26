@@ -6,6 +6,9 @@ export default {
     _disabled: true,
     _title: 'remark'
   },
+  skuId: {
+    _disabled: true
+  },
   _remark: {
     _hide: true,
   },

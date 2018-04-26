@@ -1,7 +1,7 @@
 <template>
     <div class="bookmark">
         <div class="title">
-            <span>{{$i.product.title}}</span>
+            <span>{{$i._product.title}}</span>
             <el-button class="title-btn"
                        @click="switchDisplay"
                        type="text">{{btnInfo}}
@@ -59,16 +59,16 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i._product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
         </div>
         <div class="footer">
             <div class="btns">
-                <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                <el-button @click="setUp">{{$i.product.setUp}}</el-button>
-                <el-button @click="setDown">{{$i.product.setDown}}</el-button>
-                <el-button>{{$i.product.downloadSelected}}</el-button>
-                <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
+                <el-button @click="addNewProduct">{{$i._product.addNewProduct}}</el-button>
+                <el-button @click="setUp">{{$i._product.setUp}}</el-button>
+                <el-button @click="setDown">{{$i._product.setDown}}</el-button>
+                <el-button>{{$i._product.downloadSelected}}</el-button>
+                <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i._product.delete}}</el-button>
             </div>
 
             <v-table
@@ -126,7 +126,7 @@
                 partDialogVisible:false,       //弹出框显示隐藏
                 allDialogVisible:false,        //弹出框显示隐藏
                 hideBody:true,            //是否显示body
-                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i._product.advanced,     //按钮默认文字显示
                 disabledSearch:false,                 //是否禁止搜索，默认false
                 disabledDeleteGoods:true,             //默认没有选中商品的时候是不能点击删除的
                 //表格字段绑定
@@ -366,9 +366,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$i.product.advanced;
+                    this.btnInfo=this.$i._product.advanced;
                 }else{
-                    this.btnInfo=this.$i.product.hideTheAdvanced;
+                    this.btnInfo=this.$i._product.hideTheAdvanced;
                 }
             },
             selectGroups(n){
