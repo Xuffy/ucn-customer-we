@@ -36,7 +36,7 @@
                  hide-filter-value
                  :page-size="taskData.ps">
         </v-table>
-      </el-tab-pane>
+      </el-tab-pane> 
       <el-tab-pane label="Order">
         <!--<v-simple-table></v-simple-table>-->
       </el-tab-pane>
