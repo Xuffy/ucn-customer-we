@@ -1,8 +1,8 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $i._inquiry.inquiryNo }}</h3>
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
+            <h4 class="content-hd">{{ $i._inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
                     <el-col 
@@ -27,7 +27,6 @@
                                 v-if="item.type === 'text' && !item._hide" 
                                 :disabled="item.disabled"
                             />
-
                             <el-select
                                     v-model="fromArg[item.key]" 
                                     :size="item.size || 'mini'"
@@ -36,10 +35,29 @@
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="nodes in item.select"
-                                    :key="nodes.value"
-                                    :label="nodes.label"
-                                    :value="nodes.value"
+                                    v-for="nodes in selectAll[item.key]"
+                                    :key="nodes.id"
+                                    :label="nodes.name"
+                                    :value="nodes.id"
+                                />
+                            </el-select>
+                            <el-select
+                                style="width:100%;"
+                                v-if="item.type === 'manySelect'"
+                                v-model="fromArg[item.key]"
+                                multiple
+                                filterable
+                                remote
+                                reserve-keyword
+                                :size="item.size || 'mini'"
+                                placeholder="请输入关键词"
+                                :remote-method="remoteMethod"
+                                :loading="loading">
+                                <el-option
+                                    v-for="item in selectAll[item.key]"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
                                 />
                             </el-select>
                             <el-input
@@ -68,13 +86,13 @@
                 </el-row>
             </el-form>
         </div>
-        <h4 class="content-hd">{{ $i.baseText.productInfo }}</h4>
+        <h4 class="content-hd">{{ $i._baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $i._baseText.addProduct }}</el-button>
+                <el-button type="danger">{{ $i._baseText.remove }}</el-button>
             </div>
-            <select-search :options="[]" />
+            <select-search :options="[]" @inputEnter="inputEnter" @inputChange="inputChange" />
         </div>
         <v-table 
             :data.sync="tabData"
@@ -85,8 +103,8 @@
             :rowspan="2"
         />
         <div class="bom-btn-wrap">
-            <el-button @click="submitForm()">{{ $i.baseText.submit }}</el-button>
-            <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
+            <el-button @click="submitForm()">{{ $i._baseText.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i._baseText.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -115,6 +133,17 @@
         data() {
             return {
                 tableLoad: false,
+                selectAll: {
+                    paymentMethod: [],
+                    transport: [],
+                    incoterm: [],
+                    currency: [],
+                    supplierName: [],
+                    exportLicense: [],
+                    destinationCountry: [],
+                    departureCountry: []
+                },
+                loading: false,
                 fromArg: {
                     //supplierId: [], //供应商ID
                     //supplierType: null, //供应商类型
@@ -307,17 +336,32 @@
             'v-up-load': Upload
         },
         created() {
-            this.getTransportationWay();
+            this.getDictionaries();
         },
         computed: {
             
         },
         methods: {
-            getTransportationWay() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['transportationWay'])
+            inputEnter(val) {
+
+            },
+            getDictionaries() {
+                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
-                    console.log(res)
-                })
+                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
+                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
+                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
+                    //this.selectAll.supplierName = _.findWhere(res, {'code': '供应商'}).codes;
+                    this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+                });
+
+                this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
+                .then(res => {
+                    this.selectAll.destinationCountry = res;
+                    this.selectAll.departureCountry = res;
+                });
+
             },
             getProduct() {
 
@@ -417,6 +461,14 @@
                             this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
                             break;
                 }
+           },
+           remoteMethod(val) {
+               this.$ajax(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME, {
+                   name: val
+               })
+               .then(res => {
+                   console.log(res)
+               })
            }
         }
     }

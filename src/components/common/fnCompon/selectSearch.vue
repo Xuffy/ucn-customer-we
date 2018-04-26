@@ -62,7 +62,7 @@
                 });
             },
             inputEnter() {
-                this.$emit('inputChange', {
+                this.$emit('inputEnter', {
                     key: this.keyWord,
                     keyType: this.keyType
                 });
