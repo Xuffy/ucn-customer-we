@@ -8,11 +8,12 @@
             <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i._product.delete}}</el-button>
             <select-search
                     :options="searchOptions"
-                    @inputChange="searchCompare"
+                    @inputEnter="searchCompare"
                     class="search"></select-search>
         </div>
 
         <v-table
+                v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"
                 :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
@@ -38,6 +39,7 @@
                 /**
                  * 页面基本配置
                  * */
+                loadingTable:false,         //是否让表格处于loading状态
                 disableDelete:true,
                 tableDataList:[],
                 selectList:[],
@@ -86,12 +88,14 @@
             //获取data数据
             getList() {
                 this.$ajax.post(this.$apis.get_compareList,this.queryParam).then(res=>{
-
                     this.tableDataList = this.$getDB(this.$db.product.compareTable, res.datas,(e)=>{
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         return e;
                     });
                     this.selectList=[];
+                    this.loadingTable=false;
+                }).catch(err=>{
+                    this.loadingTable=false;
                 });
             },
 
@@ -107,6 +111,15 @@
             btnClick(e,type){
                 if(type===1){
                     //modify
+                    this.$windowOpen({
+                        url:'/product/compareDetail/{type}',
+                        params:{
+                            type:'modify',
+                            isModify:true,
+                            compareId:e.id.value,
+                            compareName:e.name.value
+                        },
+                    });
                 }else if(type===2){
                     //Detail
                     this.$windowOpen({
@@ -127,6 +140,7 @@
 
             //搜索compare
             searchCompare(e){
+                this.loadingTable=true;
                 if(e.keyType===1){
                     //compareName
                     this.queryParam.compareItem='';

@@ -17,13 +17,13 @@
         <div class="btns">
             <span v-if="$route.params.type==='new'">
                 <el-button>{{$i._product.createInquiry}}</el-button>
-                <el-button>{{$i._product.createOrder}}</el-button>
+                <el-button @click="createOrder">{{$i._product.createOrder}}</el-button>
                 <el-button @click="addNewProduct">{{$i._product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i._product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
                 <el-button v-if="!isModify">{{$i._product.createInquiry}}</el-button>
-                <el-button v-if="!isModify">{{$i._product.createOrder}}</el-button>
+                <el-button @click="createOrder" v-if="!isModify">{{$i._product.createOrder}}</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
@@ -47,14 +47,15 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i._product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
-                <el-button type="primary" v-if="isModify">Save</el-button>
-                <el-button @click="cancelModify" v-if="isModify">Cancel</el-button>
+                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
+                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
+                <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
         </div>
 
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :isInModify="$route.params.type==='modify'?true:false"
                     :title="addProductTitle"
                     :disabledOkBtn="false"
                     :hideBtn="true"
@@ -95,6 +96,8 @@
                 //btns状态
                 disabledSaveCompare:false,
                 disableDelete:true,            //是否禁止删除
+                allowDeleteCompare:true,      //是否可以点击delete，在数据还没加载完的时候不能点击
+                allowBottomClick:true,          //是否禁止点击底部操作按钮
             }
         },
         methods:{
@@ -122,15 +125,12 @@
                     });
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
-
-                    let id='',name='';
-                    let index1=this.$route.query.compareId.indexOf('?');
-                    let index2=this.$route.query.compareId.indexOf('compareName=');
-                    id=this.$route.query.compareId.slice(0,index1);
-                    name=this.$route.query.compareId.slice(index2+12);
-                    this.compareName=name;
+                    this.compareName=this.$route.query.compareName;
+                    if(this.$route.query.isModify){
+                        this.isModify=true;
+                    }
                     let params={
-                        id: Number(id),
+                        id: Number(this.$route.query.compareId),
                         // operatorFilters: [
                         //     {
                         //         "columnName": "string",
@@ -160,6 +160,8 @@
                             return e;
                         });
                         this.disabledLine=this.tableDataList;
+                        this.allowDeleteCompare=false;
+                        this.allowBottomClick=false;
                     }).catch(err=>{
 
                     });
@@ -185,6 +187,11 @@
                 this.isModify=false;
             },
 
+            //勾选的商品创建order
+            createOrder(){
+
+            },
+
             //新增product
             addNewProduct(){
                 this.addProductDialogVisible=true;
@@ -193,24 +200,36 @@
 
             //删除product
             deleteProduct(){
-                this.selectList.forEach(v=>{
-                    let id=_.findWhere(v,{key:'id'}).value;
-                    this.tableDataList.forEach(m=>{
-                        let newId=_.findWhere(m,{key:'id'}).value;
-                        if(id===newId){
-                            this.$set(m,'_disabled',true);
-                            this.$set(m,'_checked',false);
-                        }
-                    })
-                });
-                this.$nextTick(()=>{
-                    this.disableDelete=true;
-                    this.disabledLine=[];
-                    this.tableDataList.forEach(v=>{
-                        if(!v._disabled){
-                            this.disabledLine.push(v);
-                        }
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.selectList.forEach(v=>{
+                        let id=_.findWhere(v,{key:'id'}).value;
+                        this.tableDataList.forEach(m=>{
+                            let newId=_.findWhere(m,{key:'id'}).value;
+                            if(id===newId){
+                                this.$set(m,'_disabled',true);
+                                this.$set(m,'_checked',false);
+                            }
+                        })
                     });
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.$nextTick(()=>{
+                        this.disableDelete=true;
+                        this.disabledLine=[];
+                        this.tableDataList.forEach(v=>{
+                            if(!v._disabled){
+                                this.disabledLine.push(v);
+                            }
+                        });
+                    });
+                }).catch(() => {
+
                 });
             },
 
@@ -261,12 +280,11 @@
             saveCompare(){
                 if(!this.compareName){
                     this.$message({
-                        message: '警告哦，这是一条警告消息',
+                        message: 'Please Input Compare Name',
                         type: 'warning'
                     });
+                    return;
                 }
-
-
 
                 this.disabledSaveCompare=true;
                 let params={
@@ -285,12 +303,13 @@
                 this.$ajax.post(this.$apis.add_buyerProductCompare,params).then(res=>{
                     let compareId=res;
                     this.$router.push({
-                        name:'Compare Detail',
+                        name:'productCompareDetail',
                         params:{
                             type:'modify'
                         },
                         query:{
-                            compareId:compareId
+                            compareId:compareId,
+                            compareName:this.compareName
                         }
                     });
                     this.disabledSaveCompare=false;
@@ -315,6 +334,7 @@
                             message: '删除成功!'
                         });
                         this.disabledSaveCompare=false;
+                        this.$router.push('/product/compare');
                     }).catch(err=>{
                         this.disabledSaveCompare=false;
                     });

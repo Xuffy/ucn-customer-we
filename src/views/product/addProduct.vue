@@ -67,7 +67,7 @@
                 <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
                 <el-button>{{$i._product.createOrder}}</el-button>
                 <el-button @click="compareProducts" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
-                <el-button @click="addToBookmark" :disabled="disabledAddBookmark">{{$i._product.addToBookmark}}</el-button>
+                <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i._product.addToBookmark}}</el-button>
                 <el-button :disabled="disabledDownload">{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
                 <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
             </div>
@@ -127,6 +127,10 @@
             forceUpdateNumber:{
                 type:Number,
                 default:0
+            },
+            isInModify:{        //是否处在modify状态，用来表示在compare页面add product时的不用操作
+                type:Boolean,
+                default:false
             }
         },
         data(){
@@ -144,6 +148,9 @@
                 disabledDownload:true,
                 disabledRecover:true,
                 disabledClickRecover:false,     //是否让recover按钮不能点
+
+                //btn加载状态
+                disableClickAddBookmark:false,
 
                 //表格字段绑定
                 productForm: {
@@ -372,9 +379,15 @@
                             }
                             return e;
                         });
+
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
-                                let id=_.findWhere(v,{key:'id'}).value;
+                                let id;
+                                if(this.isInModify){
+                                    id=_.findWhere(v,{key:'skuId'}).value;
+                                }else{
+                                    id=_.findWhere(v,{key:'id'}).value;
+                                }
                                 this.tableDataList.forEach(m=>{
                                     let newId=_.findWhere(m,{key:'id'}).value;
                                     if(id===newId){
@@ -402,19 +415,28 @@
                 this.selectList.forEach(v=>{
                     id.push(v.id.value);
                 });
-                // this.$ajax.post(this.$apis.add_bookmark,{
-                //     ids:id
-                // }).then(res=>{
-                //     console.log(res)
-                // }).catch(err=>{
-                //
-                // });
+                this.disableClickAddBookmark=true;
+                this.$ajax.post(this.$apis.add_bookmark,id).then(res=>{
+                    this.$message({
+                        message: 'successfully add!',
+                        type: 'success'
+                    });
+                    this.disableClickAddBookmark=false;
+                }).catch(err=>{
+                    this.disableClickAddBookmark=false;
+                });
             },
 
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/product/sourcingDetail',{id:item.id.value});
+                    // this.$windowOpen('/product/sourcingDetail',{});
+                    this.$windowOpen({
+                        url:'/product/sourcingDetail',
+                        params:{
+                            id:item.id.value
+                        }
+                    })
                 }
             },
 
@@ -437,8 +459,8 @@
                 this.$windowOpen({
                     url:'product/compareDetail/{type}',
                     params:{
+                        type:'new',
                         id:id,
-                        type:'new'
                     }
                 });
             },

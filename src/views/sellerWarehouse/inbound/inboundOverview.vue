@@ -93,7 +93,6 @@
             //获取表格数据
             getInboundData(){
                 this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
-                    console.log(res)
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
                         e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
