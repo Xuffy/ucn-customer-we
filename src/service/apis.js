@@ -104,6 +104,8 @@ const apis = {
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
   delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
+  get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
+  edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
