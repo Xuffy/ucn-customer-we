@@ -403,7 +403,7 @@
                                 if(this.isInModify){
                                     id=_.findWhere(v,{key:'skuId'}).value;
                                 }else if(this.isInquiry){
-                                    id=_.findWhere(v,{key:'productId'}).value;
+                                    id=_.findWhere(v,{key:'skuId'}).value;
                                 }else{
                                     id=_.findWhere(v,{key:'id'}).value;
                                 }

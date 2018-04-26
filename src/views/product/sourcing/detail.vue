@@ -4,7 +4,7 @@
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail" v-loading="notLoadingDone">
+            <div class="detail head-detail" v-loading="!notLoadingDone">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
@@ -41,11 +41,11 @@
                         </el-form>
                     </el-col>
                 </el-row>
-                <div class="btns" v-show="!notLoadingDone">
+                <div class="btns" v-show="notLoadingDone">
                     <el-button>{{$i._product.createInquiry}}</el-button>
                     <el-button>{{$i._product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i._product.addToCompare}}</el-button>
-                    <el-button @click="addToBookmark">{{$i._product.addToBookmark}}</el-button>
+                    <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i._product.addToBookmark}}</el-button>
                     <el-button>{{$i._product.download}}</el-button>
                 </div>
             </div>
@@ -246,6 +246,7 @@
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
                 notLoadingDone:false,
+                disableClickAddBookmark:false,
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
@@ -431,10 +432,10 @@
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
-                    this.notLoadingDone=false;
+                    this.notLoadingDone=true;
                 }).catch(err=>{
                     console.log(err)
-                    this.notLoadingDone=false;
+                    this.notLoadingDone=true;
                 })
             },
             /**
@@ -559,13 +560,17 @@
             },
 
             addToBookmark(){
-
+                this.disableClickAddBookmark=true;
                 this.$ajax.post(this.$apis.add_buyerOneBookmark,{
                     id:this.productForm.id
                 }).then(res=>{
-                    console.log(res)
+                    this.$message({
+                        message: 'Successfully Add!',
+                        type: 'success'
+                    });
+                    this.disableClickAddBookmark=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.disableClickAddBookmark=false;
                 });
 
 
