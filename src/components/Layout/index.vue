@@ -5,16 +5,16 @@
     <div class="main-container" :class="{fullBox:$store.state.layout.hideMenu}">
       <nav-bar></nav-bar>
 
-      <section class="app-main" :class="{'show-right-menu':showRightMenu}">
+      <section class="app-main" :class="{'show-right-menu':$store.state.messageBoard.show}">
         <div class="content">
           <transition name="el-zoom-in-top">
             <router-view :key="key"></router-view>
           </transition>
         </div>
-        <div class="right-menu">
+        <div class="right-menu" v-if="$store.state.messageBoard.code">
           <div class="title-box">
             <h3 class="ucn-content-title inline">Message Board</h3>
-            <i class="el-icon-d-arrow-right" @click="showRightMenu = !showRightMenu"></i>
+            <i class="el-icon-d-arrow-right" @click="$store.state.messageBoard.show = !$store.state.messageBoard.show"></i>
           </div>
           <v-message-board></v-message-board>
         </div>
@@ -44,7 +44,6 @@
     },
     data() {
       return {
-        showRightMenu: true,
       }
     },
     watch: {},

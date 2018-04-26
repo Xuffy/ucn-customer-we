@@ -3,6 +3,7 @@ import config from './config';
 
 const apis = {
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
+  UTASK_TYPELIST: ['/utask/typeList', 'BASE_JY'],
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
   POST_CODE_PART: ['/code/part', 'BASE_JML'],
@@ -61,6 +62,7 @@ const apis = {
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
+  get_order_history:['/order/skuHistory','BASE_HCJ'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],
@@ -91,10 +93,10 @@ const apis = {
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
   get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
-  add_buyerProductCompare:['/purchase/supplier/compare','BASE_CS1'],
+  add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1'],
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-
+  delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -110,6 +112,9 @@ const apis = {
 
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
+  get_productInfo:['/order/skuListPage','BASE_BUYER'],
+
+
 
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],

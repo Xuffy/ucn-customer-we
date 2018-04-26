@@ -146,6 +146,12 @@
 
   "incoterm":"incoterm",
   "incotermArea":"incoterm Area",
-  "incotermPrice":"incoterm Price"
+  "incotermPrice":"incoterm Price",
+
+
+  "compareTime":"Compare Time",
+  "compareName":"Compare Name",
+  "productName":"Compare Item",
+  "operator":"Operator"
 
 }
