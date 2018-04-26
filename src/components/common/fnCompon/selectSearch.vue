@@ -16,7 +16,6 @@
                 clearable 
                 placeholder="search" 
                 style="max-width:150px;" 
-                @change="inputChange" 
                 @keyup.enter.native="inputEnter" 
             />
             <el-button 
@@ -55,12 +54,6 @@
             }
         },
         methods: {
-            inputChange() {
-                this.$emit('inputChange', {
-                    key: this.keyWord,
-                    keyType: this.keyType
-                });
-            },
             inputEnter() {
                 this.$emit('inputEnter', {
                     key: this.keyWord,
