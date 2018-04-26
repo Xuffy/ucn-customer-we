@@ -160,7 +160,7 @@ export default {
         });
       }
       url = _.template(url)(config.params || {});
-      return window.open(url + serialization(p), '_blank');
+      return window.open(`${url}?${serialization(p)}`, '_blank');
     };
 
     /**
