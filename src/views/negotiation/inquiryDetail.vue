@@ -36,7 +36,7 @@
                             <el-button @click="newSearchDialogVisible = true">{{ $i._baseText.addProduct }}</el-button>
                             <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
-                        <select-search :options="options" />
+                        <select-search :options="options" v-model="id" />
                     </div>
                     <v-table 
                         :data.sync="newProductTabData"
@@ -105,6 +105,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                id:"1",
                 compareLists: false,
                 tabData: [],
                 productTabData: [],

@@ -44,7 +44,7 @@
                             <el-select
                                 style="width:100%;"
                                 v-if="item.type === 'manySelect'"
-                                v-model="suppliers"
+                                v-model="fromArg.suppliers"
                                 multiple
                                 filterable
                                 remote
@@ -168,12 +168,7 @@
                     exportLicense: null, //是否有出口许可证
                     remark: null,
                     draft: null, //是否草稿0:否，1:是
-                    // suppliers: [{
-                    //     supplierId: int, //供应商ID
-                    //     supplierType: int, //供应商类型
-                    //     supplierName: string //供应商名称
-                    //     supplierCode: 'string'
-                    // }],
+                    suppliers: [],
                     details: [{
                         "skuId": 11,
                         "skuRecycle": 0,
