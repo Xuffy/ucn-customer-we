@@ -85,6 +85,7 @@ const apis = {
   get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
   get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
   add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
+  add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1'],
   add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
   get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
   add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],

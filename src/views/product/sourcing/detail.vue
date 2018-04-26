@@ -560,7 +560,9 @@
 
             addToBookmark(){
 
-                this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
+                this.$ajax.post(this.$apis.add_buyerOneBookmark,{
+                    id:this.productForm.id
+                }).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.log(err)
