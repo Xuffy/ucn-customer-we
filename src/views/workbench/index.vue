@@ -68,8 +68,6 @@
       VMessageBoard,
     },
     created() {
-        console.log(this.$db)
-        console.log(this.$lang)
     },
     mounted() {
       /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {

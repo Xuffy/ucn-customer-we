@@ -17,15 +17,6 @@ import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
 
-
-// /*引入资源请求插件*/
-// import VueResource from 'vue-resource'
-//
-// /*使用VueResource插件*/
-// Vue.use(VueResource)
-
-// 引入样式
-// import 'vue-easytable/libs/themes-base/index.css'
 const lang = localStore.get('language') || 'en';
 
 locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
