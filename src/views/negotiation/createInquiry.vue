@@ -1,8 +1,8 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $i._inquiry.inquiryNo }}</h3>
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
+            <h4 class="content-hd">{{ $i._inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
                     <el-col 
@@ -86,13 +86,13 @@
                 </el-row>
             </el-form>
         </div>
-        <h4 class="content-hd">{{ $i.baseText.productInfo }}</h4>
+        <h4 class="content-hd">{{ $i._baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
+                <el-button @click="dialogTableVisible = true">{{ $i._baseText.addProduct }}</el-button>
+                <el-button type="danger">{{ $i._baseText.remove }}</el-button>
             </div>
-            <select-search :options="[]" @inputEnter="inputEnter" />
+            <select-search :options="[]" @inputEnter="inputEnter" @inputChange="inputChange" />
         </div>
         <v-table 
             :data.sync="tabData"
@@ -103,8 +103,8 @@
             :rowspan="2"
         />
         <div class="bom-btn-wrap">
-            <el-button @click="submitForm()">{{ $i.baseText.submit }}</el-button>
-            <el-button @click="submitForm('draft')">{{ $i.baseText.saveAsDraft }}</el-button>
+            <el-button @click="submitForm()">{{ $i._baseText.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i._baseText.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -343,7 +343,7 @@
         },
         methods: {
             inputEnter(val) {
-                console.log(val)
+
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
