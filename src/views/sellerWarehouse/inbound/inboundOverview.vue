@@ -1,11 +1,11 @@
 <template>
     <div class="inbound-overview">
         <div class="title">
-            <span>{{$i.warehouse.inboundOverview}}</span>
+            <span>{{$i._warehouse.inboundOverview}}</span>
         </div>
         <div class="body">
             <div class="head">
-                <span>{{$i.warehouse.inboundType}}</span>
+                <span>{{$i._warehouse.inboundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="0">全部</el-radio-button>
                     <el-radio-button label="1">采购入库</el-radio-button>
@@ -13,16 +13,21 @@
                     <el-radio-button label="3">客户退货入库</el-radio-button>
                     <el-radio-button label="4">预发货退货入库</el-radio-button>
                 </el-radio-group>
-                <select-search class="search"></select-search>
+                <select-search
+                        class="search"
+                        @inputChange="searchInbound"
+                        @inputEnter="searchInbound"
+                        :options="searchOptions"></select-search>
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>下载</el-button>
+                    <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
                     <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
+                        @change-checked="changeChecked"
                         @action="btnClick">
                 </v-table>
             </div>
@@ -47,6 +52,8 @@
                  * */
                 inboundStatus:'0',
                 tableDataList:[],
+                downloadBtnInfo:'All',
+                selectList:[],
                 inboundConfig:{
                     inboundNo: "",
                     pn: 1,
@@ -58,7 +65,18 @@
                     //     }
                     // ],
                     storageType: null
-                }
+                },
+
+                searchOptions:[
+                    {
+                        label:'入库单号',
+                        id:1
+                    },
+                    {
+                        label:'订单号',
+                        id:2
+                    },
+                ]
             }
         },
         methods:{
@@ -94,13 +112,30 @@
                 });
             },
 
+            searchInbound(e){
+                console.log(e)
+            },
+
             btnClick(e){
                 console.log(e)
+            },
+
+            changeChecked(e){
+                this.selectList=e;
             },
         },
         created(){
             this.getInboundData();
         },
+        watch:{
+            selectList(n){
+                if(n.length>0){
+                    this.downloadBtnInfo=n.length;
+                }else{
+                    this.downloadBtnInfo='All';
+                }
+            }
+        }
     }
 </script>
 

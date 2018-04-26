@@ -1,7 +1,7 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i.product.compareDetail}}</span>
+            <span>{{$i._product.compareDetail}}</span>
         </div>
         <div class="name">
             <span>Compare Name</span>
@@ -16,23 +16,23 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button>{{$i.product.createInquiry}}</el-button>
-                <el-button>{{$i.product.createOrder}}</el-button>
-                <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button>{{$i._product.createInquiry}}</el-button>
+                <el-button>{{$i._product.createOrder}}</el-button>
+                <el-button @click="addNewProduct">{{$i._product.addNew}}</el-button>
+                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i._product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify">{{$i.product.createInquiry}}</el-button>
-                <el-button v-if="!isModify">{{$i.product.createOrder}}</el-button>
+                <el-button v-if="!isModify">{{$i._product.createInquiry}}</el-button>
+                <el-button v-if="!isModify">{{$i._product.createOrder}}</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
-                <el-button v-if="isModify" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button v-if="isModify" @click="addNewProduct">{{$i._product.addNew}}</el-button>
+                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i._product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
-                <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
-                <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
+                <el-checkbox label="1">{{$i._product.hideTheSame}}</el-checkbox>
+                <el-checkbox label="2">{{$i._product.highlightTheDifferent}}</el-checkbox>
             </el-checkbox-group>
         </div>
 
@@ -41,18 +41,16 @@
                 :buttons="[{label: 'detail', type: 1}]"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
-        <div class="footBtn">
 
+        <div class="footBtn">
             <div v-if="$route.params.type==='new'">
-                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
+                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i._product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>
+                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
                 <el-button type="primary" v-if="isModify">Save</el-button>
                 <el-button @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
-
-
         </div>
 
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
@@ -107,6 +105,8 @@
                     this.$route.query.id.split(',').forEach(v=>{
                         id.push(Number(v));
                     });
+                    let time=new Date();
+                    this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             if(e.status.value===1){
@@ -122,8 +122,15 @@
                     });
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
+
+                    let id='',name='';
+                    let index1=this.$route.query.compareId.indexOf('?');
+                    let index2=this.$route.query.compareId.indexOf('compareName=');
+                    id=this.$route.query.compareId.slice(0,index1);
+                    name=this.$route.query.compareId.slice(index2+12);
+                    this.compareName=name;
                     let params={
-                        id: Number(this.$route.query.compareId),
+                        id: Number(id),
                         // operatorFilters: [
                         //     {
                         //         "columnName": "string",
@@ -252,6 +259,15 @@
 
             //保存该compare list
             saveCompare(){
+                if(!this.compareName){
+                    this.$message({
+                        message: '警告哦，这是一条警告消息',
+                        type: 'warning'
+                    });
+                }
+
+
+
                 this.disabledSaveCompare=true;
                 let params={
                     compares: [],
@@ -318,7 +334,7 @@
 
         },
         created(){
-            console.log(this.$route,'????')
+            console.log(this.$route)
             this.getList();
         },
         watch:{
@@ -366,6 +382,7 @@
         display: inline-block;
     }
     .footBtn{
+        margin-top: 10px;
         border-top: 1px solid #e0e0e0;
         height: 40px;
         line-height: 40px;
