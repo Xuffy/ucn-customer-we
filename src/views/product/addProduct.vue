@@ -412,7 +412,6 @@
                                 }else{
                                     id=_.findWhere(v,{key:'id'}).value;
                                 }
-                                console.log(id)
                                 this.tableDataList.forEach(m=>{
                                     let newId=_.findWhere(m,{key:'id'}).value;
                                     if(id===newId){

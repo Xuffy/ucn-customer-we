@@ -1,7 +1,7 @@
 <template>
     <div class="logs">
         <div class="title">
-           {{$i.logBasic.logs}}
+           {{$i._logBasic.logs}}
         </div>
         <div>
             <el-form label-width="130px" class="searchCondition">
@@ -10,17 +10,17 @@
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.description">
+                        <el-form-item :label="$i._logBasic.description">
                             <el-input type="text" v-model="search.description" @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item :label="$i.logBasic.operater">
+                        <el-form-item :label="$i._logBasic.operater">
                             <el-input type="text" v-model="search.operater"  @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="$i.logBasic.operationDate">
+                        <el-form-item :label="$i._logBasic.operationDate">
                             <el-date-picker
                             v-model="date"
                             type="daterange"
@@ -109,6 +109,7 @@
         watch: {
             date(){
                   console.log(this.date[0])
+              console.log(this.search.operater)
                   this.getbizlogs()
             }
         },
@@ -145,7 +146,7 @@
                 }
                 console.log(this.params)
                 this.tabLoad = true;
-                this.$ajax.post(this.$apis.post_bizlog,params)
+                this.$ajax.post(this.$apis.post_bizloQuery,params)
                 .then(res => {
                     console.log(res)
                      this.tabLoad = false;
@@ -154,7 +155,7 @@
             }
         },
         created(){
-        //    this.getbizlogs()
+            this.getbizlogs()
         }
     }
 </script>

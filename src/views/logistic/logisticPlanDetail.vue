@@ -42,6 +42,13 @@
         </div>
       </v-table>
     </div>
+    <el-dialog title="收货地址" :visible.sync="showDialog">
+      <v-table :data="productList" @action="action" @tabSplite="tabSplite" @tabAppend="tabAppend" :buttons="productbButtons" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showDialog = false">取 消</el-button>
+        <el-button type="primary" @click="showDialog = false">确 定</el-button>
+      </div>
+    </el-dialog>
     <btns/>
   </div>
 </template>
@@ -53,6 +60,7 @@ import oneLine from '@/views/logistic/children/oneLine'
 import feeInfo from '@/views/logistic/children/feeInfo'
 import payment from '@/views/logistic/children/payment'
 import btns from '@/views/logistic/children/btns'
+import productModify from '@/views/logistic/children/productModify'
 
 // 测试
 import { basicInfoInput, basicInfoSelector, basicInfoDate } from './children/test'
@@ -61,6 +69,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      showDialog: true,
       edit: true,
       basicInfoObj: {
         "logisticsNo": "Logistics No",
@@ -250,7 +259,8 @@ export default {
     VTable,
     feeInfo,
     payment,
-    btns
+    btns,
+    productModify
   },
   mounted () {
     this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
