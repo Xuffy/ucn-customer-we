@@ -2,7 +2,7 @@
     <div class="responsibility">
          <div>
               <div class="r_title">
-                 {{$i.responsibility}}
+                 {{$i._responsibility}}
               </div>
               <div class="r_table">
    <el-table :data="tableData" style="width: 100%">
