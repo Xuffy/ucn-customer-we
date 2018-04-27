@@ -4,7 +4,7 @@ const lang = localStore.get('language') || 'en';
 export default _.extend(
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
-  require(`./${lang}/workbench/pending`),
+  require(`./${lang}/workbench/task`),
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),

@@ -1,13 +1,12 @@
 <template>
-  <div class="ucn-pagination">
+  <div class="ucn-pagination" :class="{show:pageLayout}">
     <el-pagination
-      :style="{visibility: !data.length ? 'hidden' : ''}"
       @size-change="size => {$emit('page-size-change', size)}"
       @current-change="page => {$emit('page-change', page)}"
       :page-sizes="pageSizes"
-      :current-page="pageNum"
-      :page-size="pageSize"
-      :total="pageTotal"
+      :current-page="pageInfo.pn"
+      :page-size="pageInfo.ps"
+      :total="pageInfo.tc"
       :layout="pageLayout">
     </el-pagination>
   </div>
@@ -42,28 +41,48 @@
         type: Number,
         default: 1,
       },
+      pageData: {
+        type: Object,
+        default() {
+          return {};
+        },
+      },
     },
     data() {
       return {
-        pageLayout: 'prev, pager, next,sizes, jumper,total'
+        pageInfo: {},
+        pageLayout: ''
       }
     },
     watch: {
       pageTotal() {
-        this.pageListener();
+        this.pageListener(true);
       },
       pageSize() {
-        this.pageListener();
+        this.pageListener(true);
       },
+      pageNum() {
+        this.pageListener(true);
+      },
+      pageData() {
+        this.pageListener();
+      }
     },
     mounted() {
     },
     methods: {
-      pageListener() {
-        if (this.pageTotal <= this.pageSize) {
-          this.pageLayout = '';
+      pageListener(type) {
+
+        this.pageInfo = _.extend(this.pageData, type ? {
+          pn: this.pageNum,
+          ps: this.pageSize,
+          tc: this.pageTotal,
+        } : {});
+
+        if (this.pageInfo.tc <= this.pageInfo.ps) {
+          return this.pageLayout = '';
         } else {
-          this.pageLayout = this.$options.data().pageLayout;
+          this.pageLayout = 'prev, pager, next,sizes, jumper,total';
         }
       }
     }
@@ -72,21 +91,12 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-  .filter-column {
-    margin-left: 10px;
-    display: inline-block;
+  .ucn-pagination {
+    visibility: hidden;
   }
 
-  .filter-column .el-icon-setting {
-    font-size: 20px;
-    color: #666666;
-    cursor: pointer;
+  .ucn-pagination.show {
+    visibility: inherit !important;
   }
 
-</style>
-<style>
-  .ucn-table .ivu-poptip-body {
-    padding: 0;
-  }
 </style>

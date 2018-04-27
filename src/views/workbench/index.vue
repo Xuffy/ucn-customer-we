@@ -18,23 +18,23 @@
     <br/><br/>
     <el-row :gutter="10">
       <el-col :span="12">
-        <v-table-data type="1"></v-table-data>
+        <v-table-data :type="1"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data type="2"></v-table-data>
+        <v-table-data :type="2"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data type="4"></v-table-data>
+        <v-table-data :type="4"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data type="3"></v-table-data>
+        <v-table-data :type="3"></v-table-data>
       </el-col>
     </el-row>
 
     <v-history-modify ref="historyModify" @save="save">
     </v-history-modify>
 
-    <v-message-board module="workbench" code="workbench" id="123"></v-message-board>
+    <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
 
