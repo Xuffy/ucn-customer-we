@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-row class="btns" :style="{ width: hideMune ? '1856px' : '1726px' }">
-      <div v-if="edit">
-        <el-button size="mini" type="primary">{{ $i.modify }}</el-button>
+      <div v-if="!edit">
+        <el-button size="mini" type="primary" @click.stop="toModify">{{ $i.modify }}</el-button>
         <el-button size="mini" type="primary">{{ $i.confirm }}</el-button>
         <el-button size="mini" type="primary">{{ $i.cancel }}</el-button>
         <el-button size="mini" type="primary">{{ $i.copy }}</el-button>
@@ -12,7 +12,7 @@
       </div>
       <div v-else>
         <el-button size="mini" type="primary">{{ $i.send }}</el-button>
-        <el-button size="mini" type="danger">{{ $i.exit }}</el-button>
+        <el-button size="mini" type="danger" @click.stop="toExit">{{ $i.exit }}</el-button>
       </div>
     </el-row>
   </div>
@@ -22,12 +22,22 @@ export default {
   props: {
     edit: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   computed: {
     hideMune () {
       return this.$store.state.layout.hideMenu
+    }
+  },
+  methods: {
+    toModify () {
+      console.log('toModify')
+      this.$emit('switchEdit')
+    },
+    toExit () {
+      console.log('toExit')
+      this.$emit('switchEdit')
     }
   }
 }

@@ -6,11 +6,12 @@
        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="input-item">
           <span>{{ $i.remark }}</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="basicInfoObj.remark"></el-input>
+          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="basicInfoObj.remark" v-if="edit"></el-input>
+          <p v-else>{{ basicInfoObj.remark }}</p>
         </div>
       </el-col>
       <attachment accept="all" ref="attachment" :title="$i.attachment"/>
-      <one-line :list="exchangeRateList" :title="$i.exchangeRate"/>
+      <one-line :edit="edit" :list="exchangeRateList" :title="$i.exchangeRate"/>
     </el-row>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.transportInfoTitle"/>
     <div>
@@ -23,7 +24,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.feeInfoTitle }}</div>
-      <fee-info :tableData.sync="feeList"></fee-info>
+      <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
     </div>
 
     <div>
@@ -56,7 +57,7 @@
         <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns/>
+    <btns :edit="edit" @switchEdit="switchEdit"/>
   </div>
 </template>
 <script>
@@ -80,7 +81,7 @@ export default {
       showProductDialog: false,
       showAddProductDialog: false,
       productInfoModifyStatus: 0,
-      edit: true,
+      edit: false,
       basicInfoObj: {
         "logisticsNo": "Logistics No",
         "estContainerStuffingDate": "Est Container Stuffing Date",
@@ -114,7 +115,8 @@ export default {
         "blNumber": "B/L Number",
         "shipper": "Shipper",
         "consignee": "Consignee",
-        "notify": "Notify"
+        "notify": "Notify",
+        "remark": "Remark"
       },
       transportInfoObj: {
         "transportCompany": "Transport Company",
@@ -363,6 +365,9 @@ export default {
     },
     closeDialog () {
       console.log(this.$refs.productModifyComponents)
+    },
+    switchEdit () {
+      this.edit = !this.edit
     }
   }
 }
