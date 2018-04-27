@@ -126,6 +126,23 @@ const apis = {
 
   //payment
   post_ledgerPage:['/ledger/page','BASE_BJ'],
+  //message
+  post_companymessage_query:['/companymessage/query','BASE_JML_msg'],
+  post_systemmessage_query:['/systemmessage/query','BASE_JML_msg'],
+  get_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
+  post_sys_addsystemmessage:['/systemmessage/addsystemmessage','BASE_JML_msg'],
+  post_sys_updateread:['/systemmessagesubscribe/updateread','BASE_JML_msg'],
+  get_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
+  post_company_addcompanymessage:['/companymessage/addcompanymessage','BASE_JML_msg'],
+  post_company_updateread:['/companymessagesubscribe/updateread','BASE_JML_msg'],
+  //logs
+  post_bizloQuery:['/bizlog/query','BASE_JML_logs'],
+  //Personal Setting
+  get_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile_password:['/user/profile/password','BASE_UUSER']
+
+
 };
 
 let list = _.mapObject(apis, val => {

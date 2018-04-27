@@ -1,23 +1,14 @@
 export default {
     title: {
-      key: '',
-      type: 'String',
-      length: 10,
-      reg: '',
-      state: ''
+      key: 'title'
     },
     content: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
-      },
-      time: {
-        key: '',
-        type: 'String',
-        length: 10,
-        reg: '',
-        state: ''
-      }
+      key: 'content'
+    },
+  sendTime: {
+      key: 'sendTime'
+    },
+  subscribeId: {
+    key: 'subscribeId'
+  }
 }

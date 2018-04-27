@@ -19,6 +19,9 @@ export default {
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_SELLER:'http://dev.usupply-facade.ucnholding.com:18100',
       BASE_BUYER:'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_JML_msg:'http://dev.umessage-facade.ucnholding.com',
+      BASE_JML_logs:'http://dev.ubizlog-facade.ucnholding.com',
+      BASE_UUSER:'http://dev.uuser-facade.ucnholding.com:18100/',
     },
     develop: {
       BASE_API: 'http://192.168.11.215:30704'
