@@ -134,13 +134,30 @@
             },
             //....跳入createOrder
             createOrder() {
-                this.windowOpen('/order/creat', {
+                this.$windowOpen({
+                    url:'/order/creat', 
+                    params:{
                     selectedData: this.selectedData
-                });
+                }});
             },
             //........跳入compare
             compare() {
-
+                let id='';
+                this.selectedData.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectedData.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'/supplier/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
             },
             //...........进入detail
             detail(item) {

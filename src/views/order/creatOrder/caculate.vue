@@ -38,12 +38,12 @@
                             <el-input size="mini" v-model="caculateForm.totalVolume" :disabled=true></el-input>
                         </el-form-item>
                     </el-col>
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                          <el-form-item prop="email" label="Paid Amount">                          
                             <el-input size="mini" v-model="caculateForm.paidAmount" :disabled=true></el-input>
                         </el-form-item>
                     </el-col>
-                      <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
+                    <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="8">
                          <el-form-item prop="email" label="Unpaid Amount">                          
                             <el-input size="mini" v-model="caculateForm.unpaidAmount" :disabled=true></el-input>
                         </el-form-item>
@@ -69,7 +69,6 @@
                     paidAmount:'',
                     unpaidAmount:'',
                 }
-
             }
         },
         props: {

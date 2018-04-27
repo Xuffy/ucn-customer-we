@@ -72,6 +72,9 @@ const apis = {
   post_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
   get_supplier_remark_de: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
+  post_supplier_addCompare:['/purchase/supplier/compare','BASE_CS_cgs'],
+  post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
+  post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
   get_departmentOverview: ['/department/overview', 'BASE_LYF'],
   get_department: ['/department', 'BASE_LYF'],
@@ -104,6 +107,8 @@ const apis = {
   delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
   get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
   delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
+  get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
+  edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],

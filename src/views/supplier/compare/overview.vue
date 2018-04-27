@@ -98,10 +98,20 @@
             },
             detail(item,type) {
                 if(type===1){
-                    
-                   }else{
+                      //modify
+                    this.$windowOpen({
+                        url:'/supplier/compareDetail/{type}',
+                        params:{
+                            type:'modify',
+                            isModify:true,
+                            compareId:item.id.value,
+                            compareName:item.name.value
+                        },
+                    });
+                   }else if(type===2){
+                         //Detail
                      this.$windowOpen({
-                        url: '/supplier/compareDetail',
+                        url: '/supplier/compareDetail{type}',
                         params: {
                             id: item.id.value,
                             name: item.name.value

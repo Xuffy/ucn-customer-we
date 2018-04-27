@@ -7,7 +7,7 @@ export default {
       //BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
-      BASE_HCJ: '//192.168.51.173:18001',
+      BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:80',
       BASE_JY: 'http://192.168.51.198:18002',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       // BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com:18100',

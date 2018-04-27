@@ -194,7 +194,7 @@ export const routerMap = [
           component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
         {
-          path: 'compareDetail',
+          path: 'compareDetail/:type',
           name: 'supplierCompareDetail',
           hidden: true,
           meta: {

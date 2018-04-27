@@ -428,7 +428,7 @@
             },
 
             getTableData(){
-                this.$ajax.get(this.$apis.get_productDetail,{
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
@@ -477,8 +477,8 @@
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
                 });
-
             },
+
 
             editRemark(index,row){
                 this.editRemarkData.id=row.id;
@@ -508,6 +508,8 @@
                     this.editRemarkFormVisible=false;
                 });
             },
+
+
             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {
                     confirmButtonText: '确定',
@@ -572,15 +574,6 @@
                 }).catch(err=>{
                     this.disableClickAddBookmark=false;
                 });
-
-
-
-                // this.$router.push({
-                //     path:'/product/bookmark/detail',
-                //     query:{
-                //
-                //     }
-                // });
             },
 
             /**
@@ -611,7 +604,22 @@
                 this.compareData=[];
             },
             goCompare(){
-                console.log(123)
+                let data=this.$localStore.get('compareProductList');
+                let id='';
+                data.forEach((v,k)=>{
+                    if(k===data.length-1){
+                        id+=v.id;
+                    }else{
+                        id+=(v.id+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
             },
         },
         created(){
