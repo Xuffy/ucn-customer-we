@@ -29,16 +29,35 @@
                             />
                             <el-select
                                     v-model="fromArg[item.key]" 
+                                    value-key="id"
                                     :size="item.size || 'mini'"
                                     :placeholder="item.placeholder" 
-                                    v-if="item.type === 'select'"
+                                    v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="nodes in selectAll[item.key]"
-                                    :key="nodes.id"
-                                    :label="nodes.name"
-                                    :value="nodes.id"
+                                    v-for="item in selectAll[item.key]"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.name"
+                                    :id="item.id"
+                                />
+                            </el-select>
+
+                            <el-select
+                                    v-model="fromArg[item.key]" 
+                                    value-key="id"
+                                    :size="item.size || 'mini'"
+                                    :placeholder="item.placeholder" 
+                                    v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                                    style="width:100%;"
+                                >
+                                <el-option
+                                    v-for="item in selectAll[item.key]"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.value"
+                                    :id="item.id"
                                 />
                             </el-select>
                             <el-select
@@ -116,16 +135,20 @@
                 :hideBtn="true"
                 :disabledLine="tabData"
                 @handleOK="getList"
-                :forceUpdateNumber="new Date().getTime()" 
+                :forceUpdateNumber="dialogTableVisible" 
                 :type="radio"
                 :isInquiry="true"
             ></v-product>
         </el-dialog>
-        
+        <v-history-modify
+                @save="save"
+                ref="HM"
+            >
+        </v-history-modify>
     </div>
 </template>
 <script>
-    import { selectSearch, VTable, Upload } from '@/components/index';
+    import { selectSearch, VTable, Upload, VHistoryModify } from '@/components/index';
     import product from '@/views/product/addProduct';
     export default {
         name:'createInquiry',
@@ -201,7 +224,8 @@
             'select-search': selectSearch,
             'v-table': VTable,
             'v-product': product,
-            'v-up-load': Upload
+            'v-up-load': Upload,
+            VHistoryModify
         },
         created() {
             this.getDictionaries();
@@ -213,6 +237,18 @@
         methods: {
             inputEnter(val) {
 
+            },
+            save(data) { //modify 编辑完成反填数据
+                this.tabData = _.map(this.tabData, val => {
+                    if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[0], {'key': 'skuId'}).value && !val._remark && !data[0]._remark) {
+                        val = data[0];
+                        val._modify = true;
+                    } else if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[1], {'key': 'skuId'}).value && val._remark && data[1]._remark) {
+                        val = data[1];
+                        val._modify = true;
+                    }
+                    return val;
+                });
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
@@ -236,9 +272,9 @@
 
             },
             fromChange(val) {
-                console.log(val)
+                
             },
-            submitForm(type) {
+            submitForm(type) { //提交
                 if(type === 'draft') { //是否保存为草稿
                     this.fromArg.draft = 1;
                 } else {
@@ -250,82 +286,85 @@
                         type: 'warning'
                     });
                 });
-                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.fromArg)
+                this.fromArg.exportLicense = parseInt(this.fromArg.exportLicense);
+                this.fromArg.currency = parseInt(this.fromArg.currency);
+                this.fromArg.incoterm = parseInt(this.fromArg.incoterm);
+                this.fromArg.paymentMethod = parseInt(this.fromArg.paymentMethod);
+                this.fromArg.transport = parseInt(this.fromArg.transport);
+                this.fromArg.details = this.dataFilter(this.tabData);
+                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(this.fromArg))
                 .then(res => {
-                    console.log(res)
+                    
                 });
                 //this.$router.push('/negotiation/inquiryDetail');
+            },
+            dataFilter (data) {
+                let arr = [], jsons = {}, json = {};
+                data.forEach(item => {
+                    jsons = {};
+                    if(item._remark) { //拼装remark 数据
+                        for(let k in item) {
+                            jsons[k] = item[k].value;
+                        }
+                        json.fieldRemark = jsons;
+                    } else {
+                        json = {};
+                        for(let k in item) {
+                            if(json[k] === 'fieldRemark') {
+                                json[k] = jsons;
+                            } else {
+                                json[k] = item[k].value;
+                            }
+                        };
+                        arr.push(json);
+                    }
+                });
+                return arr;
             },
             changeChecked(item) {
                 this.checkedAll = item;
             },
             getList(item) {
-                let tabData = [];
+                let tabData = [], arr = [];
                 item.forEach(items => {
                     tabData.push(items.id.value);
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
                 .then(res => {
-                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, res));
+                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.dialogTableVisible = false;
                 });
             },
-            producInfoAction(data, type) { //Produc info 按钮操作
-                    this.id_type = 'producInfo';
-                    this.historyColumn = this.$db.inquiryOverview.productInfo;
-                    switch(type) {
-                            case 'histoty':
-                                //this.msgTitle = 'Histoty';
-                                this.fnBasicInfoHistoty(data, 'productInfo');
-                                break;
-                            case 'modify':
-                                //this.msgTitle = 'Modify';
-                                this.oSwitch = true;
-                                this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
-                                break;
-                    }
-            },
             productInfoBtn (item) { //Product info 按钮创建
-                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(!item._disabled) return [{label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
             },
-            fnBasicInfoHistoty(item, type, id) { //查看历史记录
+            fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
                     id: item.skuId.value
                 })
                 .then(res => {
                     let arr = [];
-                    if(type === 'basicInfo') {
-                        column = this.$db.inquiryOverview.basicInfo;
-                        this.newTabData.forEach((items, index) => {
-                            if(items.id.value === id) {
-                                arr.push(items);
-                            }
-                        });
+                    _.map(this.tabData, items => {
+                        if(_.findWhere(items, {'key': 'skuId'}).value === config.data) arr.push(items)
+                    });
+                    if(config.type === 'histoty') {
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                     } else {
-                        column = this.$db.inquiryOverview.productInfo;
-                        this.newProductTabData.forEach((items, index) => {
-                            if(items.id.value === id) {
-                                arr.push(items);
-                            }
-                        });
+                        console.log(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')))
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                     }
-                    this.$refs.HM.edit(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)));
                 });
            },
            producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch(type) {
                         case 'histoty':
-                            //this.msgTitle = 'Histoty';
-                            this.fnBasicInfoHistoty(data, 'productInfo');
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.skuId.value});
                             break;
                         case 'modify':
-                            //this.msgTitle = 'Modify';
                             this.oSwitch = true;
-                            this.fnBasicInfoHistoty(data, 'productInfo', data.id.value);
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
                             break;
                 }
            },
