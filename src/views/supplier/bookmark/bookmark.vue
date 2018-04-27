@@ -98,7 +98,8 @@
                     ps: 10,
                     skuCode: "",
                     skuNameEn: "",
-                    type: ''
+                    type: '',
+                    recycle: false,
                 },
                 tabData: [],
                 selectedData: [],
@@ -134,13 +135,30 @@
             },
             //....跳入createOrder
             createOrder() {
-                this.windowOpen('/order/creat', {
+                this.$windowOpen({
+                    url:'/order/creat', 
+                    params:{
                     selectedData: this.selectedData
-                });
+                }});
             },
             //........跳入compare
             compare() {
-
+                let id='';
+                this.selectedData.forEach((v,k)=>{
+                    let item=_.findWhere(v,{key:'id'});
+                    if(k===this.selectedData.length-1){
+                        id+=item.value;
+                    }else{
+                        id+=(item.value+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'/supplier/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
             },
             //...........进入detail
             detail(item) {
@@ -174,9 +192,10 @@
             },
             //..........remove
             remove() {
-                this.$ajax.post(this.$apis.post_supplier_deletebookmark, this.selectNumber)
+                console.log(this.selectNumber);
+                this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
                     .then(res => {
-                        console.log(res)
+                        this.get_data()
                     })
                     .catch((res) => {
 

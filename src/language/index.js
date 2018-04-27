@@ -33,14 +33,13 @@ export default _.extend(
   {_payment: require(`./${lang}/payment/payment`)},
   require(`./${lang}/payment/payment.table`),
   //message
-  {_message: require(`./${lang}/message/message.table`) },
-  require(`./${lang}/message/tabs`),
+  require(`./${lang}/message/message.table`),
+  {_messages: require(`./${lang}/message/tabs`)},
   //logs
-  {_logs: require(`./${lang}/logs/logs.table`)},
+  require(`./${lang}/logs/logs.table`),
   {_logBasic: require(`./${lang}/logs/logs.basic`)},
   {_track: require(`./${lang}/track/trackBysku`)},
-
-
+  {_personalInfo: require(`./${lang}/setting/personalInfo`)},
     //CN配置
     // {_warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
     // require(`./${lang}/warehouse/warehouse.index`),

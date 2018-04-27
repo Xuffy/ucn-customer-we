@@ -96,18 +96,30 @@
                 });
                 this.selectNumber = number
             },
-            detail(item,type) {
+            detail(e,type) {
                 if(type===1){
-                    
-                   }else{
-                     this.$windowOpen({
-                        url: '/supplier/compareDetail',
-                        params: {
-                            id: item.id.value,
-                            name: item.name.value
-                        }
-                        });
-                   }
+                    //modify
+                    this.$windowOpen({
+                        url:'/supplier/compareDetail/{type}',
+                        params:{
+                            type:'modify',
+                            isModify:true,
+                            compareId:e.id.value,
+                            compareName:e.name.value
+                        },
+                    });
+                }else if(type===2){
+                    //Detail
+                    this.$windowOpen({
+                        url:'/supplier/compareDetail/{type}',
+                        params:{
+                            type:'modify',
+                            compareId:e.id.value,
+                            compareName:e.name.value
+                        },
+
+                    });
+                }
                 
             },
             get_data() {

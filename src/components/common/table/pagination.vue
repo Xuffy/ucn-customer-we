@@ -5,9 +5,10 @@
       @size-change="size => {$emit('page-size-change', size)}"
       @current-change="page => {$emit('page-change', page)}"
       :page-sizes="pageSizes"
+      :current-page="pageNum"
       :page-size="pageSize"
       :total="pageTotal"
-      layout="prev, pager, next,sizes, jumper,total">
+      :layout="pageLayout">
     </el-pagination>
   </div>
 </template>
@@ -37,14 +38,35 @@
         type: Number,
         default: 1,
       },
+      pageNum: {
+        type: Number,
+        default: 1,
+      },
     },
     data() {
-      return {}
+      return {
+        pageLayout: 'prev, pager, next,sizes, jumper,total'
+      }
     },
-    watch: {},
+    watch: {
+      pageTotal() {
+        this.pageListener();
+      },
+      pageSize() {
+        this.pageListener();
+      },
+    },
     mounted() {
     },
-    methods: {}
+    methods: {
+      pageListener() {
+        if (this.pageTotal <= this.pageSize) {
+          this.pageLayout = '';
+        } else {
+          this.pageLayout = this.$options.data().pageLayout;
+        }
+      }
+    }
   }
 </script>
 
