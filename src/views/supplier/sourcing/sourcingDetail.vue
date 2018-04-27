@@ -22,15 +22,15 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                    <el-button @click='createInquiry'>{{$i.baseText.createInquiry}}</el-button>
-                    <el-button @click='createOrder'>{{$i.baseText.createOrder}}</el-button>
-                    <el-button @click='addToCompare'>{{$i.baseText.addToCompare}}</el-button>
-                    <el-button @click='supplierProducts'>{{$i.baseText.supplierProducts}}</el-button>
-                    <el-button @click='addToBookmark'>{{$i.baseText.addToBookmark}}</el-button>
+                    <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
+                    <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>
+                    <el-button @click='addToCompare'>{{$i._baseText.addToCompare}}</el-button>
+                    <el-button @click='supplierProducts'>{{$i._baseText.supplierProducts}}</el-button>
+                    <el-button @click='addToBookmark'>{{$i._baseText.addToBookmark}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">{{$i.baseText.finish}}</el-button>
-                    <el-button @click="cancelEdit" type="info">{{$i.baseText.cancel}}</el-button>
+                    <el-button @click="finishEdit" type="primary">{{$i._baseText.finish}}</el-button>
+                    <el-button @click="cancelEdit" type="info">{{$i._baseText.cancel}}</el-button>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
         data() {
             return {
                 noEdit: true,
-                id: Number(this.$route.query.id),
+                companyId: Number(this.$route.query.companyId),
                 tabName: 'address', //默认打开的tab
                 basicDate: '',
                 accounts: [],
@@ -106,28 +106,35 @@
         },
         methods: {
             createInquiry() {
-                this.windowOpen('/negotiation/createInquiry', {
-                    supplierCode: this.code //供应商信息将被带入
+                this.windowOpen({
+                    url: '/negotiation/createInquiry',
+                    params: {
+                        supplierCode: this.code //供应商信息将被带入
+                    }
                 });
             },
             createOrder() {
-                this.windowOpen('/order/creat', {
-                    supplierCode: this.code //供应商信息将被带入
+                this.windowOpen({
+                    url: '/order/creat',
+                    params: {
+                        supplierCode: this.code //供应商信息将被带入
+                    }
                 });
             },
             addToCompare() {
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-                this.windowOpen('/product/sourcing', {
-                    supplierCode: this.code //供应商信息将被带入
+                this.windowOpen({
+                    url: '/product/sourcing',
+                    params: {
+                        supplierCode: this.code //供应商信息将被带入
+                    }
                 });
             },
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
                     .then(res => {
-                        console.log(res)
-
                         this.$message({
                             message: 'success',
                             type: 'success',
@@ -149,7 +156,7 @@
             get_data() {
                 this.loading = true
                 this.$ajax.get(this.$apis.get_supplier_id, {
-                        id: this.id
+                        id: this.companyId
                     })
                     .then(res => {
                         this.code = res.code
@@ -166,7 +173,6 @@
         },
         created() {
             this.get_data()
-
         },
     }
 

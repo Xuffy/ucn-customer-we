@@ -24,7 +24,7 @@
                                 v-model="fromArg[item.key]" 
                                 :size="item.size || 'mini'"
                                 :placeholder="item.placeholder" 
-                                v-if="item.type === 'text' && !item._hide" 
+                                v-if="item.type === 'String' && !item._hide && item.types !== 'textarea'" 
                                 :disabled="item.disabled"
                             />
                             <el-select
@@ -44,20 +44,22 @@
                             <el-select
                                 style="width:100%;"
                                 v-if="item.type === 'manySelect'"
-                                v-model="fromArg[item.key]"
+                                v-model="fromArg.suppliers"
                                 multiple
                                 filterable
                                 remote
                                 reserve-keyword
+                                value-key="id"
                                 :size="item.size || 'mini'"
                                 placeholder="请输入关键词"
                                 :remote-method="remoteMethod"
                                 :loading="loading">
                                 <el-option
                                     v-for="item in selectAll[item.key]"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item"
+                                    :id="item.id"
                                 />
                             </el-select>
                             <el-input
@@ -66,19 +68,12 @@
                                 :rows="item.rows || 4"
                                 :size="item.size || 'mini'"
                                 :placeholder="item.placeholder"
-                                v-if="item.type === 'textarea'"
+                                v-if="item.types === 'textarea'"
                                 resize="none"
                                 :disabled="item.disabled"
                             />
-                            <el-date-picker
-                                style="width:100%;"
-                                v-model="fromArg[item.key]"
-                                type="datetime"
-                                :placeholder="item.placeholder"
-                                v-if="item.type === 'dateTime'"
-                            />
                             <span v-if="item.type === 'Number'" style="display:flxe;">
-                                <el-input-number v-model="fromArg[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false" style="width:100%; padding-right:10px;" /> <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
+                                <el-input-number v-model="fromArg[item.key]" :min="0" :max="100" controls-position="right" size="mini" :controls="false" style="width:100%; padding-right:10px;" /> <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
                             </span>
                             <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
                         </el-form-item>
@@ -92,7 +87,7 @@
                 <el-button @click="dialogTableVisible = true">{{ $i._baseText.addProduct }}</el-button>
                 <el-button type="danger">{{ $i._baseText.remove }}</el-button>
             </div>
-            <select-search :options="[]" @inputEnter="inputEnter" @inputChange="inputChange" />
+            <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
         <v-table 
             :data.sync="tabData"
@@ -113,13 +108,17 @@
                 width="80%"
                 lock-scroll>
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="0">From New Search</el-radio-button>
-                <el-radio-button label="1">From my bookmark</el-radio-button>
+                <el-radio-button label="product">{{$i._baseText.fromNewSearch}}</el-radio-button>
+                <el-radio-button label="bookmark">{{$i._baseText.FromMyBookmark}}</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
+                :disabledLine="tabData"
                 @handleOK="getList"
+                :forceUpdateNumber="new Date().getTime()" 
+                :type="radio"
+                :isInquiry="true"
             ></v-product>
         </el-dialog>
         
@@ -145,9 +144,6 @@
                 },
                 loading: false,
                 fromArg: {
-                    //supplierId: [], //供应商ID
-                    //supplierType: null, //供应商类型
-                    //supplierName: null, //供应商名称
                     skuQty: 0, //产品数量
                     inquiryAmount: 0, //询价总金额
                     timeZone: 0, //时区
@@ -165,138 +161,10 @@
                     exportLicense: null, //是否有出口许可证
                     remark: null,
                     draft: null, //是否草稿0:否，1:是
-                    // suppliers: [{
-                    //     supplierId: int, //供应商ID
-                    //     supplierType: int, //供应商类型
-                    //     supplierName: string //供应商名称
-                    //     supplierCode: 'string'
-                    // }],
-                    details: [{
-                        "skuId": 11,
-                        "skuRecycle": 0,
-                        "skuSysCode": 'sad',
-                        "skuCode": "dxtxnfhs",
-                        "deleteDisplayStatus": "0",
-                        "skuPic": "0",
-                        "skuStatus": "0",
-                        "skuBarcode": "0",
-                        "skuNameCn": "苹果",
-                        "skuNameEn": "Apple",
-                        "skuDescCn": "一种水果",
-                        "skuDescEn": "A kind of friut",
-                        "skuDescCustomer": "0",
-                        "skuNameCustomer": "0",
-                        "skuCustomerSkuCode": "0",
-                        "skuSupplierCode": "0",
-                        "skuSupplierName": "0",
-                        "skuUnit": "0",
-                        "skuProductFormation": "0",
-                        "skuMaterialEn": "0",
-                        "skuMaterialCn": "0",
-                        "skuColourEn": "0",
-                        "skuColourCn": "0",
-                        "skuMinOrderQty": "0",
-                        "skuDeliveryDates": "0",
-                        "skuProductDesign": "0",
-                        "skuCodeneSellCountry": "0",
-                        "skuApplicableAge": "0",
-                        "skuExpireDates": "0",
-                        "skuExpireUnit": "0",
-                        "skuComments": "0",
-                        "skuReadilyAvailable": "0",
-                        "skuAvailableQty": "0",
-                        "skuMainSaleCountry": "0",
-                        "skuMainSaleArea": "0",
-                        "skuProductionDates": "0",
-                        "skuQualityStander": "0",
-                        "skuYearListed": "0",
-                        "skuUseDisplayBox": 0,
-                        "skuQuantityDisplayBox": "0",
-                        "skuOtherPackInfoCn": "0",
-                        "skuOtherPackInfoEn": "0",
-                        "skuAdjustPackage": 0,
-                        "skuLengthWidthHeight": "0",
-                        "skuCategoryId": "0",
-                        "skuPurchaseCreate": 1,
-                        "skuFobCurrency": 1,
-                        "skuFobPrice": "0",
-                        "skuFobPort": "0",
-                        "skuExwPrice": "0",
-                        "skuExwCurrency": "0",
-                        "skuOtherIncoterm": "0",
-                        "skuOtherIncotermPrice": "0",
-                        "skuOtherIncotermArea": "0",
-                        "skuOtherIncotermCurrency": "0",
-                        "skuPriceType": "0",
-                        "skuUnitWeight": "0",
-                        "skuUnitLength": "0",
-                        "skuUnitVolume": "0",
-                        "skuSkuLength": "0",
-                        "skuSkuWidth": "0",
-                        "skuSkuHeight": "0",
-                        "skuSkuNetWeight": "0",
-                        "skuSkuVolume": "0",
-                        "skuMethodPkgCn": "0",
-                        "skuMethodPkgEn": "0",
-                        "skuInnerCartonUnit": "0",
-                        "skuInnerCartonQuantity": "0",
-                        "skuInnerCartonLength": "0",
-                        "skuInnerCartonWidth": "0",
-                        "skuInnerCartonHeight": "0",
-                        "skuInnerCartonWeightNet": "0",
-                        "skuInnerCartonRoughWeight": "0",
-                        "skuInnerCartonVolume": "0",
-                        "skuInnerCartonDesc": "0",
-                        "skuInnerCartonMethodCn": "0",
-                        "skuInnerCartonMethodEn": "0",
-                        "skuUnitOuterCarton": "0",
-                        "skuDescOuterCarton": "0",
-                        "skuInnerCartonOuterNum": "0",
-                        "skuOuterCartonQuantity": "0",
-                        "skuOuterCartonLength": "0",
-                        "skuOuterCartonWidth": "0",
-                        "skuOuterCartonHeight": "0",
-                        "skuOuterCartonNetWeight": "0",
-                        "skuOuterCartonRoughWeight": "0",
-                        "skuOuterCartonVolume": "0",
-                        "skuOuterCartonMethodCn": "0",
-                        "skuOuterCartonMethodEn": "0",
-                        "skuOem": 0,
-                        "skuRateValueAddedTax": "0",
-                        "skuTaxRefundRate": "0",
-                        "skuCustomsCode": "0",
-                        "skuCustomsNameCn": "0",
-                        "skuCustomsNameEn": "0",
-                        "skuTradeMarkCn": "0",
-                        "skuTradeMarkEn": "0",
-                        "skuCommodityInspectionCn": "0",
-                        "skuCommodityInspectionEn": "0",
-                        "skuDeclareElement": "0",
-                        "skuOrigin": "0",
-                        "skuInspectQuarantineCategory": "0",
-                        "skuBrand": "0",
-                        "skuBrandRemark": "0",
-                        "skuBrandRelated": "0",
-                        "skuCertificat": "0",
-                        "skuGp20SkuQuantity": "0",
-                        "skuGp40SkuQuantity": "0",
-                        "skuHq40SkuQuantity": "0",
-                        "skuTryDimension": "0",
-                        "skuSkuQuantityPerTray": "0",
-                        "skuSpecialTransportRequire": "0",
-                        "skuInventoryCostMethod": "0",
-                        "skuWarehourceDefault": "0",
-                        "skuInventory": "0",
-                        "skuSafeStock": "0",
-                        "skuMinStock": "0",
-                        "fieldRemark": {
-                            "skuNameEn": "备注内容A",
-                            "skuNameCn": "备注内容B",
-                            "skuCode": "备注内容C"
-                        }
-                    }]
+                    suppliers: [],
+                    details: []
                 },
-                radio: '0',   //Add Product status
+                radio: 'product',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
                 tabColumn: '', //tab top
@@ -337,6 +205,7 @@
         },
         created() {
             this.getDictionaries();
+            this.remoteMethod('');
         },
         computed: {
             
@@ -370,7 +239,6 @@
                 console.log(val)
             },
             submitForm(type) {
-                console.log(this.fromArg)
                 if(type === 'draft') { //是否保存为草稿
                     this.fromArg.draft = 1;
                 } else {
@@ -398,10 +266,9 @@
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
                 .then(res => {
-                    console.log(res)
+                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, res));
+                    this.dialogTableVisible = false;
                 });
-                this.tabData = tabData;
-                this.dialogTableVisible = false;
             },
             producInfoAction(data, type) { //Produc info 按钮操作
                     this.id_type = 'producInfo';
@@ -425,7 +292,7 @@
             fnBasicInfoHistoty(item, type, id) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                    id: item.id.value
+                    id: item.skuId.value
                 })
                 .then(res => {
                     let arr = [];
@@ -462,12 +329,10 @@
                             break;
                 }
            },
-           remoteMethod(val) {
-               this.$ajax(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME, {
-                   name: val
-               })
+           remoteMethod(keyWord) {
+               this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
                .then(res => {
-                   console.log(res)
+                   this.selectAll.supplierName = res;
                })
            }
         }

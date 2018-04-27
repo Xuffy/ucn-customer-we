@@ -34,7 +34,6 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: false,
-            // messageBoard: 'code',
           },
           component: () => import('../views/workbench/index.vue')
         }
@@ -195,7 +194,7 @@ export const routerMap = [
           component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
         {
-          path: 'compareDetail',
+          path: 'compareDetail/:type',
           name: 'supplierCompareDetail',
           hidden: true,
           meta: {
@@ -245,7 +244,8 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Inquiry Detail'
+            name: 'Inquiry Detail',
+            messageBoard: 'code'
           },
           component: () => import('../views/negotiation/inquiryDetail')
         },
@@ -283,6 +283,14 @@ export const routerMap = [
             name: 'Compare Detail'
           },
           component: () => import('../views/negotiation/compare')
+        },
+        {
+          path:'draft/:type',
+          name: 'negotiationDraft',
+          hidden: true,
+          meta: {
+            name: 'draft'
+          }
         }
       ]
     },

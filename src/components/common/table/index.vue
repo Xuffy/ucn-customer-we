@@ -62,8 +62,11 @@
               <div v-text="index + 1"></div>
             </td>
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
-                :style="{'background-color':cItem._highlight}">
-              <div v-if="!cItem._image" v-text="cItem.value"></div>
+                :style="cItem._style">
+              <div v-if="!cItem._image"
+                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
+                   v-text="cItem.value"></div>
+
               <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
             </td>
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
@@ -104,7 +107,10 @@
     <v-pagination :data="dataList"
                   :page-sizes="pageSizes"
                   :page-size="pageSize"
-                  :page-total="pageTotal"></v-pagination>
+                  :page-num="pageNum"
+                  :page-total="pageTotal"
+                  @size-change="size => {$emit('page-size-change', size)}"
+                  @current-change="page => {$emit('page-change', page)}"></v-pagination>
 
 
     <v-view-picture ref="viewPicture"></v-view-picture>
@@ -189,6 +195,10 @@
         default: 10,
       },
       pageTotal: {
+        type: Number,
+        default: 1,
+      },
+      pageNum: {
         type: Number,
         default: 1,
       },
@@ -559,6 +569,7 @@
   .header-content .fixed {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 50%;
+    margin-top: -10px;
   }
 </style>

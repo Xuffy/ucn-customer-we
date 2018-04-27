@@ -3,12 +3,12 @@
     <el-dialog
       :title="isModify ? 'Modify' : 'History'"
       width="80%"
-      @close="() => {$emit('update:visible', false)}"
+      @close="closeDialog"
       :visible.sync="showDialog">
 
       <el-table
         :data="dataList"
-        height="400px"
+        max-height="400px"
         :span-method="objectSpanMethod"
         border>
         <el-table-column v-for="item in dataColumn" :key="item.id"
@@ -26,12 +26,17 @@
 
             <div v-else>
               <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
+
+              <div v-else-if="scope.row[item.key]._slot">
+                <slot :name="scope.row[item.key]._slot" :data="scope.row[item.key]"></slot>
+              </div>
+
               <div v-else>
-                <el-input v-if="scope.row[item.key].type !== 'Number'" clearable
-                          placeholder="Please select"
+                <el-input v-if="scope.row[item.key].type === 'String'" clearable
+                          placeholder=""
                           v-model="scope.row[item.key].value" size="mini"></el-input>
 
-                <el-input-number v-if="scope.row[item.key].type === 'Number'"
+                <el-input-number v-else-if="scope.row[item.key].type === 'Number'"
                                  v-model="scope.row[item.key].value"
                                  :min="scope.row[item.key].min || 0"
                                  :max="scope.row[item.key].max || 99999999" controls-position="right" size="mini"
@@ -59,30 +64,20 @@
     name: 'VHistoryModify',
     components: {},
     props: {
-      data: {
-        type: Array,
-        default() {
-          return [];
-        }
-      },
       visible: {
         type: Boolean,
         default: false
-      },
-      config: {
-        type: Object,
-        default() {
-          return {};
-        }
       },
 
     },
     data() {
       return {
         showDialog: false,
+        defaultData: [],
         dataList: [],
         dataColumn: [],
         isModify: false,
+        modified: false,
       }
     },
     watch: {
@@ -99,6 +94,7 @@
     },
     methods: {
       submit() {
+        this.modified = true;
         this.$emit('save', [this.dataList[0], this.dataList[1]]);
         this.showDialog = false;
       },
@@ -118,26 +114,35 @@
           });
         });
 
-        this.dataList = ed.concat(history);
+        // this.dataList = ed.concat(history);
+        this.dataList = this.$depthClone(ed.concat(history));
+        this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
       },
-      getFilterData(data) {
+      getFilterData(data,k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);
           value.fieldRemark = value.fieldRemark || {};
           value.fieldRemark._remark = true;
           list.push(_.extend(_.mapObject(value, (val, key) => {
-            if (key !== 'id') {
+            if (key !== k) {
               val = '';
             }
             return val;
           }), value.fieldRemark));
         });
         return list;
+      },
+      closeDialog() {
+        if (this.modified) {
+          this.dataList = this.$depthClone(this.defaultData);
+        }
+        this.modified = false;
+        this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
         if (columnIndex === 0) {
@@ -161,5 +166,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

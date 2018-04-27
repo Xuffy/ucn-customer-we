@@ -5,18 +5,17 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-<!--         <VExchange :list='exchangeRateList'></VExchange>-->
-   
+         <VExchange></VExchange>  
 <!--             responsibility     -->
          <VResponsibility ref='responsibility'></VResponsibility>
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 {{$i.productInfo}}
+                 {{$i._productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true">{{$i.baseText.addproduct}}</el-button>
-                  <el-button type='danger'>{{$i.baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true">{{$i._baseText.addproduct}}</el-button>
+                  <el-button type='danger'>{{$i._baseText.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  
@@ -26,22 +25,23 @@
                             :loading='tableLoad'
                             @change-checked="changeChecked"
                             :rowspan="2"
+                            :total-row="tableTatal"
                             style='marginTop:10px'/>
              </div>
          </div>
 <!--           caculate-->
-         <v-caculate></v-caculate>
+         <v-caculate ref='caculate'></v-caculate>
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$i.baseText.send}}</el-button>
-                 <el-button >{{$i.baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$i.baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="checked">{{$i.baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
+                 <el-button >{{$i._baseText.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
+                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$i.baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
+          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
@@ -49,16 +49,16 @@
                 ></VInquiry>
         </el-dialog>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i.baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i.baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i._baseText.addproduct" name="FromNewSearch">
                             <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
                                 @handleOK="getList"
                             ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i.baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -75,6 +75,9 @@
   </div>
 </template>
 
+
+
+
 <script>
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
@@ -83,7 +86,7 @@
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
-    //    import VExchange from '@/components/base/oneLine'
+    import VExchange from './exchange.vue'
     import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
@@ -101,11 +104,12 @@
             VCaculate,
             VHistoryModify,
             VProduct,
-            //            VExchange,
+            VExchange,
             VInquiry
         },
         data() {
             return {
+                tableTatal: [],
                 textarea: "", //order remark输入内容
                 checked: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
@@ -116,7 +120,7 @@
                 keyWord: '',
                 newProductTabData: [],
                 tableLoad: false, //表格加载状态  
-                statusModify: false,
+                statusModify: true,
                 id_type: '',
                 historyColumn: {},
                 oSwitch: false, //VHistory 组件开关状态
@@ -278,15 +282,25 @@
                     "sukPrice": 0,
                     "fieldRemark": null
                 }],
-                TotalQuantity: '',
-                SKUTypeQuantity: '',
-                TotalSKUPrice: '',
-                TotalOuterCartonQuantity: '',
-                TotalOuterCartonGrossWet: '',
-                TotalOuterCartonNetWet: '',
-                TotalOuterCartonVolume: '',
-                PaidAmount: '',
-                UnpaidAmount: ''
+                exchangeRateList: [{
+                    "entryId": 1,
+                    "entryDt": 1524711629694,
+                    "entryName": "1",
+                    "updateId": 1,
+                    "updateDt": 1524711629694,
+                    "updateName": "1",
+                    "id": null,
+                    "ownerId": 1,
+                    "companyId": 1,
+                    "tenantId": 1,
+                    "orderId": 1,
+                    "orderNo": "",
+                    "sourceCurrency": "u",
+                    "targetCurrency": "c",
+                    "exchangeRate": 1,
+                    "timeZone": "0",
+                    "version": 0
+                }],
             }
         },
         methods: {
@@ -297,62 +311,15 @@
             send() {
                 //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    "ownerId": 0,
-                    "companyId": 0,
-                    "tenantId": 0,
-                    "version": 0,
-                    "orderNo": "8866511",
-                    "customerOrderNo": "",
-                    "customerNo": "",
-                    "customerName": "",
-                    "supplierOrderNo": "",
-                    "supplierName": "",
-                    "supplierNo": "",
-                    "quotationNo": "",
-                    "status": 9,
-                    "deliveryDt": 1523477789000,
-                    "actDeliveryDt": 1523477806000,
-                    "incoterm": -1,
-                    "incotermArea": -1,
-                    "payment": -1,
-                    "lcNo": "1",
-                    "departureCountry": "",
-                    "departurePort": "",
-                    "destCountry": "",
-                    "destPort": "",
-                    "transport": -1,
-                    "customerAgreementNo": "1",
-                    "customerAgreementDt": 1523477845000,
-                    "paymentDays": 1,
-                    "paymentStatus": -1,
-                    "remark": "",
-                    "important": false,
-                    "attachment": false,
-                    "remind": false,
-                    "archive": false,
-                    "currency": 1,
-                    "paymentRemark": "1",
-                    "totalSkuPrice": 1,
-                    "paidAmount": 0,
-                    "unpaidAmount": 0,
-                    "totalQty": 1,
-                    "totalOuterCartonQty": 1,
-                    "totalGrossWeight": 1,
-                    "totalNetWeight": 1,
-                    "totalVolume": 1,
-                    "skuQty": 1,
-                    "inboundQty": 0,
-                    "deliveredQty": 0,
-                    "draftCustomer": false,
-                    "draftSupplier": false,
-                    "recycleCustomer": true,
-                    "recycleSupplier": false,
-                    skuList: this.skuList
-                    //                    responsibilityList: this.$refs.responsibility.tableData,
+                    exchangeRateList: [],
+                    skuList: this.skuList,
+                    responsibilityList: this.$refs.responsibility.tableData,
                 }
-                // var basic = this.$refs.basicInfo.formItem
-                //   _.extendOwn(params, basic)
-                //  console.log(params)
+                var basic = this.$refs.basicInfo.formItem
+                _.extendOwn(params, basic)
+                var caculate = this.$refs.caculate.caculateForm
+                _.extendOwn(params, caculate)
+                return
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -374,16 +341,14 @@
                 UnpaidAmount:''
             */
             summary() {
-                console.log(this.skuList)
                 this.TotalQuantity = this.skuList.length
                 this.TotalSKUPrice = _.reduce(_.pluck(this.skuList, 'sukPrice'))
                 this.TotalOuterCartonQuantity = _.reduce(_.pluck(this.skuList, 'skuOuterCartonQty'))
                 this.TotalOuterCartonNetWet = _.reduce(_.pluck(this.skuList, 'skuOuterCartonNetWeight'))
                 this.TotalOuterCartonVolume = _.reduce(_.pluck(this.skuList, 'skuOuterCartonVolume'))
-
             },
             productInfoBtn(item) { //Product info 按钮创建
-                if (!this.statusModify && !item._disabled) return [{
+                if (this.statusModify && !item._disabled) return [{
                     label: 'Modify',
                     type: 'modify'
                 }, {
@@ -452,7 +417,7 @@
                         skuId: item.id.value
                     })
                     .then(res => {
-                        console.log(res)
+
                         let arr = [];
                         column = this.$db.order.productInfo;
                         _.map(this.newProductTabData, items => {
@@ -552,6 +517,7 @@
                         id: id
                     })
                     .then(res => {
+                        console.log(res)
                         //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
                         this.$refs.basicInfo.formItem.supplierName = res.supplierName
                         this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
@@ -563,11 +529,13 @@
                         this.$refs.basicInfo.formItem.destinationPort = res.destinationPort
                         this.$refs.basicInfo.formItem.transport = res.transport
                         //Product Info
+
                         this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.details),
                             item => {
                                 return item;
                             });
                         this.tableLoad = false;
+                        this.tableTatalCal()
                     })
                     .catch(err => {
                         this.tableLoad = false;
@@ -577,6 +545,19 @@
             getProductDetail() {
 
             },
+            //表格底部计算
+            tableTatalCal() {
+                let obj = _.clone(this.newProductTabData[0]);
+                return console.log(obj)
+                _.map(this.newProductTabData, value => {
+                    _.map(value, val => {
+                        if (val._calu) {
+                            obj[val.key].value = obj[val.key].value + val.value;
+                        }
+                    });
+                });
+                this.tableTatal = [obj]
+            }
         },
         created() {
             //判断从哪个地方带来的数据
@@ -596,8 +577,7 @@
             }
         },
         mounted() {
-            this.getInquiryDetail(16)
-            this.summary()
+            this.getInquiryDetail(17)
         },
     }
 

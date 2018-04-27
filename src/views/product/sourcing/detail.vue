@@ -4,7 +4,7 @@
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail" v-loading="notLoadingDone">
+            <div class="detail head-detail" v-loading="!notLoadingDone">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
@@ -41,18 +41,18 @@
                         </el-form>
                     </el-col>
                 </el-row>
-                <div class="btns" v-show="!notLoadingDone">
-                    <el-button>{{$i.product.createInquiry}}</el-button>
-                    <el-button>{{$i.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
-                    <el-button @click="addToBookmark">{{$i.product.addToBookmark}}</el-button>
-                    <el-button>{{$i.product.download}}</el-button>
+                <div class="btns" v-show="notLoadingDone">
+                    <el-button>{{$i._product.createInquiry}}</el-button>
+                    <el-button>{{$i._product.createOrder}}</el-button>
+                    <el-button @click="addCompare">{{$i._product.addToCompare}}</el-button>
+                    <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i._product.addToBookmark}}</el-button>
+                    <el-button>{{$i._product.download}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i._product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
@@ -70,7 +70,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i._product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -81,14 +81,14 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i._product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i._product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -99,7 +99,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i._product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="280px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -110,7 +110,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i._product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -122,18 +122,18 @@
                     </el-form>
                 </el-tab-pane>
 
-                <el-tab-pane :label="$i.product.tradeHistory" name="History">
+                <el-tab-pane :label="$i._product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.attachment" name="Attachment">
+                <el-tab-pane :label="$i._product.attachment" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.remark" name="Remark">
+                <el-tab-pane :label="$i._product.remark" name="Remark">
                     <!--<add-table-->
                             <!--:get_url="getRemarkUrl"-->
                             <!--:id="parseInt($route.query.id)"></add-table>-->
                     <div>
-                        <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
+                        <el-button @click="createRemark" type="primary" size="mini">{{$i._product.add}}</el-button>
                     </div>
                     <br>
                     <el-table
@@ -142,17 +142,17 @@
                             style="width: 100%">
                         <el-table-column
                                 prop="remark"
-                                :label="$i.product.remark"
+                                :label="$i._product.remark"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorName"
-                                :label="$i.product.operator"
+                                :label="$i._product.operator"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorDate"
-                                :label="$i.product.time"
+                                :label="$i._product.time"
                                 align="center">
                             <template slot-scope="scope">
                                 {{$dateFormat(scope.row.operatorDate,'yyyy-mm-dd hh:mm:ss')}}
@@ -160,11 +160,11 @@
                         </el-table-column>
                         <el-table-column
                                 fixed="right"
-                                :label="$i.product.action"
+                                :label="$i._product.action"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
-                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
+                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.modify}}</el-button>
+                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -246,6 +246,7 @@
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
                 notLoadingDone:false,
+                disableClickAddBookmark:false,
                 productForm:{
                     id: '',                         //新增传空
                     pic: "thisIsAPicture",
@@ -427,14 +428,14 @@
             },
 
             getTableData(){
-                this.$ajax.get(this.$apis.get_productDetail,{
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
-                    this.notLoadingDone=false;
+                    this.notLoadingDone=true;
                 }).catch(err=>{
                     console.log(err)
-                    this.notLoadingDone=false;
+                    this.notLoadingDone=true;
                 })
             },
             /**
@@ -476,8 +477,8 @@
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
                 });
-
             },
+
 
             editRemark(index,row){
                 this.editRemarkData.id=row.id;
@@ -507,6 +508,8 @@
                     this.editRemarkFormVisible=false;
                 });
             },
+
+
             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {
                     confirmButtonText: '确定',
@@ -559,21 +562,18 @@
             },
 
             addToBookmark(){
-
-                this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
-                    console.log(res)
+                this.disableClickAddBookmark=true;
+                this.$ajax.post(this.$apis.add_buyerOneBookmark,{
+                    id:this.productForm.id
+                }).then(res=>{
+                    this.$message({
+                        message: 'Successfully Add!',
+                        type: 'success'
+                    });
+                    this.disableClickAddBookmark=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.disableClickAddBookmark=false;
                 });
-
-
-
-                // this.$router.push({
-                //     path:'/product/bookmark/detail',
-                //     query:{
-                //
-                //     }
-                // });
             },
 
             /**
@@ -604,7 +604,22 @@
                 this.compareData=[];
             },
             goCompare(){
-                console.log(123)
+                let data=this.$localStore.get('compareProductList');
+                let id='';
+                data.forEach((v,k)=>{
+                    if(k===data.length-1){
+                        id+=v.id;
+                    }else{
+                        id+=(v.id+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
             },
         },
         created(){

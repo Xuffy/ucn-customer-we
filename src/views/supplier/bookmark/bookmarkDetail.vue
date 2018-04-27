@@ -22,15 +22,15 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                    <el-button @click='createInquiry'>{{$i.baseText.createInquiry}}</el-button>
-                    <el-button @click='createOrder'>{{$i.baseText.createOrder}}</el-button>
-                    <el-button @click='addToCompare'>{{$i.baseText.addToCompare}}</el-button>
-                    <el-button @click='supplierProducts'>{{$i.baseText.supplierProducts}}</el-button>
-                    <el-button @click='remove' type='danger'>{{$i.baseText.remove}}</el-button>
+                    <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
+                    <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>
+                    <el-button @click='addToCompare'>{{$i._baseText.addToCompare}}</el-button>
+                    <el-button @click='supplierProducts'>{{$i._baseText.supplierProducts}}</el-button>
+                    <el-button @click='remove' type='danger'>{{$i._baseText.remove}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="finishEdit" type="primary">{{$i.baseText.finish}}</el-button>
-                    <el-button @click="cancelEdit" type="info">{{$i.baseText.cancel}}</el-button>
+                    <el-button @click="finishEdit" type="primary">{{$i._baseText.finish}}</el-button>
+                    <el-button @click="cancelEdit" type="info">{{$i._baseText.cancel}}</el-button>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
 <!--                  <v-table  :data="tabData"   style='marginTop:10px'/>-->
                 </el-tab-pane>
 <!--
-                <el-tab-pane :label="$i.inquireHistory"  name="inquireHistory">
+                <el-tab-pane :label="$i._inquireHistory"  name="inquireHistory">
                   <v-table  :data="tabData"   style='marginTop:10px'/> 
                 </el-tab-pane>
 -->
@@ -60,7 +60,7 @@
                      />
                 </el-tab-pane>
 <!--
-                <el-tab-pane :label="$i.attchment" name="attchment">
+                <el-tab-pane :label="$i._attchment" name="attchment">
 
 
                    <v-attachment></v-attachment>
@@ -108,35 +108,36 @@
         },
         methods: {
             createInquiry() {
-               this.windowOpen('/negotiation/createInquiry', {
-                    supplierId:this.id   //供应商信息将被带入
+                this.windowOpen('/negotiation/createInquiry', {
+                    supplierId: this.id //供应商信息将被带入
                 });
             },
             createOrder() {
                 this.windowOpen('/order/creat', {
-                    supplierId:this.id   //供应商信息将被带入
+                    supplierId: this.id //供应商信息将被带入
                 });
             },
             addToCompare() {
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-                 this.windowOpen('/product/sourcing', {
-                    supplierId:this.id   //供应商信息将被带入
+                this.windowOpen('/product/sourcing', {
+                    supplierId: this.id //供应商信息将被带入
                 });
             },
-            remove(){          
-               this.$ajax.post(this.$apis.post_supplier_deletebookmark,{
-                    id:this.id
-                }).then((res)=>{
-                   this.$message({
-                          message: 'success',
-                          type: 'success',
-                           onClose:(()=>{
-                                this.$router.push('/supplier/bookmark')
-                            })
-                        });                  
-                }).catch((res)=>{
+            remove() {
+                this.$ajax.post(this.$apis.post_supplier_deletebookmark, {
+                    id: this.id
+                }).then((res) => {
+                    console.log(res)
+                    this.$message({
+                        message: 'success',
+                        type: 'success',
+                        onClose: (() => {
+                            this.$router.push('/supplier/bookmark')
+                        })
+                    });
+                }).catch((res) => {
                     console.log(res)
                 })
             },
@@ -150,7 +151,7 @@
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
-                       console.log(res)
+                        console.log(res)
                     })
                     .catch((res) => {
 
@@ -159,7 +160,6 @@
         },
         created() {
             this.get_data()
-            this.get_remark()
         },
     }
 
