@@ -34,19 +34,26 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.productInfoTitle }}</div>
-      <v-table :data="productList" @action="action"
+      <v-table :data.sync="productList" @action="action"
       @tabSplite="tabSplite" @tabAppend="tabAppend" :buttons="productbButtons">
         <div slot="header" class="product-header">
-          <el-button type="primary" size="mini">{{ $i.addProduct }}</el-button>
+          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.addProduct }}</el-button>
           <el-button type="danger" size="mini">{{ $i.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <el-dialog title="收货地址" :visible.sync="showDialog">
-      <v-table :data="productList" @action="action" @tabSplite="tabSplite" @tabAppend="tabAppend" :buttons="productbButtons" />
+    <el-dialog :title="$i.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showDialog = false">取 消</el-button>
-        <el-button type="primary" @click="showDialog = false">确 定</el-button>
+        <el-button @click="showProductDialog = false">{{ $i.cancel }}</el-button>
+        <el-button type="primary" @click="showProductDialog = false">{{ $i.confirm }}</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :title="$i.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+      <add-product/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showAddProductDialog = false">{{ $i.cancel }}</el-button>
+        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
       </div>
     </el-dialog>
     <btns/>
@@ -61,6 +68,7 @@ import feeInfo from '@/views/logistic/children/feeInfo'
 import payment from '@/views/logistic/children/payment'
 import btns from '@/views/logistic/children/btns'
 import productModify from '@/views/logistic/children/productModify'
+import addProduct from '@/views/logistic/children/addProduct'
 
 // 测试
 import { basicInfoInput, basicInfoSelector, basicInfoDate } from './children/test'
@@ -69,7 +77,9 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
-      showDialog: true,
+      showProductDialog: false,
+      showAddProductDialog: false,
+      productInfoModifyStatus: 0,
       edit: true,
       basicInfoObj: {
         "logisticsNo": "Logistics No",
@@ -179,10 +189,47 @@ export default {
       ],
       productList: [
         {
+          "orderNo": "orderNo",
+          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
+          "goodsToBeShipped": "goodsToBeShipped",
           "skuCode": "SKU Code",
           "skuNameEn": "SKU Name (EN)",
           "skuNameCn": "SKU Name (CN)",
-          "productDescription": "Product Description (Customer Language)",
+          "productDescription": "Product Description",
+          "blSkuName": "B/L SKU Name",
+          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
+          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
+          "hsCode": "HS Code",
+          "reportElements": "Report Elements",
+          "supplierName": "Supplier Name",
+          "supplierNo": "Supplier No",
+          "customerSkuCode": "Customer SKU Code",
+          "factorySKUCode": "Factory SKU Code",
+          "unit": "Unit",
+          "exportUnitPrice": "Export Unit Price",
+          "totalPriceOfExport": "Total Price Of Export",
+          "currency": "Currency",
+          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
+          "outerCartonLength": "Outer Carton Length",
+          "outerCartonWidth": "Outer Carton Width",
+          "outerCartonHeight": "Outer Carton Height",
+          "outerCartonNetWeight": "Outer Carton Net Weight",
+          "outerCartonGrossWeight": "Outer Carton Gross Weight",
+          "outerCartonVolume": "Outer Carton Volume",
+          "shippingMarks": "Shipping Marks",
+          "outerCartonBarCode": "Outer Carton Bar-Code",
+          "outerCartonSkuCode": "Outer Carton SKU Code"
+        }
+      ],
+      productModifyList: [
+        {
+          "orderNo": "orderNo",
+          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
+          "goodsToBeShipped": "goodsToBeShipped",
+          "skuCode": "SKU Code",
+          "skuNameEn": "SKU Name (EN)",
+          "skuNameCn": "SKU Name (CN)",
+          "productDescription": "Product Description",
           "blSkuName": "B/L SKU Name",
           "customsDeclarationNameCn": "Customs Declaration Name(CN)",
           "customsDeclarationNameEn": "Customs Declaration Name(EN)",
@@ -260,10 +307,18 @@ export default {
     feeInfo,
     payment,
     btns,
-    productModify
+    productModify,
+    addProduct
   },
+  // watch: {
+  //   showDialog (newValue) {
+  //     if (!newValue) this.clearProductInfo()
+  //   }
+  // },
   mounted () {
     this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
+    this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
+
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
@@ -302,7 +357,12 @@ export default {
     },
     tailBtnCancel () {},
     action (e, i) {
-      console.log(e, i)
+      if (i === 3) return
+      this.productInfoModifyStatus = i
+      this.showProductDialog = true
+    },
+    closeDialog () {
+      console.log(this.$refs.productModifyComponents)
     }
   }
 }

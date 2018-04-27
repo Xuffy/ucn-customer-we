@@ -1,4 +1,13 @@
 export default {
+  "orderNo": {
+    type: 'text'
+  },
+  "quantityOfOuterCartonsToBeShipped": {
+    type: 'text'
+  },
+  "goodsToBeShipped": {
+    type: 'text'
+  },
   "skuCode": {
     type: 'text'
   },
