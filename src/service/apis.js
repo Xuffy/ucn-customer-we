@@ -26,8 +26,8 @@ const apis = {
   get_productDetail: ['/sku/{id}', 'BASE_CS'],
   delete_product: ['/sku/{id}/delete', 'BASE_CS'],
   change_productStatus: ['/sku/{id}/status', 'BASE_CS'],
-  PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS_cgs'],
-  inquiry_list: ['/inquiry/list', 'BASE_DH C'],
+  PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS1'],
+  inquiry_list: ['/inquiry/list', 'BASE_DHC'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
   inquiry_delete: ['/inquiry/delete', 'BASE_DHC'],
   inquiry_cancel: ['/inquiry/cancel', 'BASE_DHC'],
@@ -138,6 +138,23 @@ const apis = {
 
   //payment
   post_ledgerPage:['/ledger/page','BASE_BJ'],
+  //message
+  post_companymessage_query:['/companymessage/query','BASE_JML_msg'],
+  post_systemmessage_query:['/systemmessage/query','BASE_JML_msg'],
+  get_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
+  post_sys_addsystemmessage:['/systemmessage/addsystemmessage','BASE_JML_msg'],
+  post_sys_updateread:['/systemmessagesubscribe/updateread','BASE_JML_msg'],
+  get_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
+  post_company_addcompanymessage:['/companymessage/addcompanymessage','BASE_JML_msg'],
+  post_company_updateread:['/companymessagesubscribe/updateread','BASE_JML_msg'],
+  //logs
+  post_bizloQuery:['/bizlog/query','BASE_JML_logs'],
+  //Personal Setting
+  get_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile_password:['/user/profile/password','BASE_UUSER']
+
+
 };
 
 let list = _.mapObject(apis, val => {
