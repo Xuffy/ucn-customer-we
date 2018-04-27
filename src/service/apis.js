@@ -121,7 +121,7 @@ const apis = {
   post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetails', 'BASE_CS_cgs'],
   post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare', 'BASE_CS_cgs'],
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
-
+  post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
   get_productInfo:['/order/skuListPage','BASE_BUYER'],

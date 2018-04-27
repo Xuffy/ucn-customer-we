@@ -98,7 +98,8 @@
                     ps: 10,
                     skuCode: "",
                     skuNameEn: "",
-                    type: ''
+                    type: '',
+                    recycle: false,
                 },
                 tabData: [],
                 selectedData: [],
@@ -191,9 +192,10 @@
             },
             //..........remove
             remove() {
-                this.$ajax.post(this.$apis.post_supplier_deletebookmark, this.selectNumber)
+                console.log(this.selectNumber);
+                this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
                     .then(res => {
-                        console.log(res)
+                        this.get_data()
                     })
                     .catch((res) => {
 

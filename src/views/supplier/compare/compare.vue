@@ -112,21 +112,30 @@
         },
         methods:{
             getList() {
-               
+                
                 if(this.$route.params.type==='new'){
-                  
+                   
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
                         id.push(Number(v));
                     });
-                    let time=new Date();                   this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(res=>{
+                    let time=new Date(); 
+                    this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
+                    this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
+                        res=>{                       
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
+                        console.log(this.tableDataList)
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-
+                            console.log(err,'+++++++++')
+                    }).finally(res=>{
+                        console.log('in')
+//                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
+//                        console.log(this.tableDataList)
+//                        this.disabledLine=this.tableDataList;
                     });
+                   
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
