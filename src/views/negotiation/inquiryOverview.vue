@@ -4,8 +4,8 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i._baseText.state }}</span>
-                <el-radio-group v-model="params.statuses" size="mini">
-                    <el-radio-button :label="''">{{$i._baseText.all}}</el-radio-button>
+                <el-radio-group v-model="params.status" size="mini">
+                    <el-radio-button :label="null">{{$i._baseText.all}}</el-radio-button>
                     <el-radio-button 
                         v-for="item in $db.inquiryOverview.overoiewState"
                         :label="item.id"
@@ -87,7 +87,7 @@
                 tabData: [],
                 viewByStatus: '',
                 params: {
-                    statuses: '',
+                    status: null,
                     keyType: '',
                     key: '',
                     ps: 10,
