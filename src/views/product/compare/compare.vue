@@ -10,8 +10,7 @@
                     size="mini"
                     class="compare-name"
                     placeholder="please input"
-                    v-model="compareName"
-                    clearable>
+                    v-model="compareName">
             </el-input>
         </div>
         <div class="btns">
@@ -270,10 +269,12 @@
                     });
                 }else{
                     e.forEach(v=>{
+                        console.log(v)
+                        console.log(this.tableDataList)
                         let id=_.findWhere(v,{key:'id'}).value;
                         let isIn=false;
                         this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
+                            let newId=_.findWhere(m,{key:'skuId'}).value;
                             if(id===newId){
                                 this.$set(m,'_disabled',false);
                                 isIn=true;

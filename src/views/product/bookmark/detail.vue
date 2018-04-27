@@ -42,25 +42,25 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="!notLoadingDone" v-if="notEdit">
-                    <el-button>{{$i.product.createInquiry}}</el-button>
-                    <el-button>{{$i.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
-                    <el-button @click="editProduct">{{$i.product.editEn}}(还没做)</el-button>
-                    <el-button type="danger" @click="deleteBookmark">{{$i.product.delete}}</el-button>
-                    <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                    <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                    <el-button>{{$i.product.downloadTheProduct}}</el-button>
-                    <el-button>{{$i.product.uploadProduct}}</el-button>
+                    <el-button>{{$i._product.createInquiry}}</el-button>
+                    <el-button>{{$i._product.createOrder}}</el-button>
+                    <el-button @click="addCompare">{{$i._product.addToCompare}}</el-button>
+                    <el-button @click="editProduct">{{$i._product.editEn}}</el-button>
+                    <el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i._product.delete}}</el-button>
+                    <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
+                    <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
+                    <el-button>{{$i._product.downloadTheProduct}}</el-button>
+                    <el-button>{{$i._product.uploadProduct}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="saveEdit" type="primary">{{$i.product.ok}}</el-button>
-                    <el-button @click="cancelEdit">{{$i.product.cancel}}</el-button>
+                    <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i._product.ok}}</el-button>
+                    <el-button @click="cancelEdit">{{$i._product.cancel}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i._product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
@@ -94,7 +94,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i._product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -105,13 +105,13 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i._product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i._product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -122,7 +122,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i._product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="280px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -133,7 +133,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i._product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -144,18 +144,18 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.tradeHistory" name="History">
+                <el-tab-pane :label="$i._product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.attachment" name="Attachment">
+                <el-tab-pane :label="$i._product.attachment" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane :label="$i.product.remark" name="Remark">
+                <el-tab-pane :label="$i._product.remark" name="Remark">
                     <!--<add-table-->
                     <!--:get_url="getRemarkUrl"-->
                     <!--:id="parseInt($route.query.id)"></add-table>-->
                     <div>
-                        <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
+                        <el-button @click="createRemark" type="primary" size="mini">{{$i._product.add}}</el-button>
                     </div>
                     <br>
                     <el-table
@@ -164,17 +164,17 @@
                             style="width: 100%">
                         <el-table-column
                                 prop="remark"
-                                :label="$i.product.remark"
+                                :label="$i._product.remark"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorName"
-                                :label="$i.product.operator"
+                                :label="$i._product.operator"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorDate"
-                                :label="$i.product.time"
+                                :label="$i._product.time"
                                 align="center">
                             <template slot-scope="scope">
                                 {{$dateFormat(scope.row.operatorDate,'yyyy-mm-dd hh:mm:ss')}}
@@ -182,11 +182,11 @@
                         </el-table-column>
                         <el-table-column
                                 fixed="right"
-                                :label="$i.product.action"
+                                :label="$i._product.action"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
-                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
+                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.modify}}</el-button>
+                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -216,8 +216,6 @@
                             <el-button @click="addRemarkFormVisible = false">取 消</el-button>
                         </div>
                     </el-dialog>
-
-
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -225,14 +223,38 @@
                 v-if="showCompareList"
                 :data="compareData"
                 @clearData="clearData"
+                @goCompare="goCompare"
                 @closeTag="handleClose"></compare-list>
+
+
+        <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
+            <el-form :model="editRemarkData">
+                <el-form-item label="备注:" :label-width="formLabelWidth">
+                    <el-input
+                            type="textarea"
+                            :rows="4"
+                            placeholder="请输入内容"
+                            v-model="editRemarkData.remark">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">提交</el-button>
+                <el-button @click="editRemarkFormVisible = false">取 消</el-button>
+            </div>
+        </el-dialog>
+
+
+
 
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :forceUpdateNumber="forceNumber"
                     :title="addProductTitle"
                     :type="addProductType"
                     :disabledOkBtn="disabledOkBtn"
                     :hideBtn="true"
+                    @handleCancel="handleCancel"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
     </div>
@@ -266,9 +288,18 @@
                 addProductTitle:'',
                 addProductType:'product',
                 disabledOkBtn:false,
+                disabledClickSaveEdit:false,
+                disableClickDelete:false,
+                forceNumber:0,
+                editRemarkFormVisible:false,
+                disableModifyRemark:false,
 
 
-
+                editRemarkData:{
+                    id: null,
+                    remark: "",
+                    skuId: 0,
+                },
 
                 productForm:{
                     id: null,                         //新增传空
@@ -452,8 +483,27 @@
             },
 
             saveEdit(){
-                this.notEdit=true;
-
+                let params={
+                    customerCode: "",
+                    descCustomer: "",
+                    id: null,
+                    nameCustomer: "",
+                };
+                params.nameCustomer=this.productForm.nameCustomer;
+                params.id=this.productForm.id;
+                params.descCustomer=this.productForm.descCustomer;
+                params.customerCode=this.productForm.customerSkuCode;
+                this.disabledClickSaveEdit=true;
+                this.$ajax.post(this.$apis.edit_buyerProductBookmark,params).then(res=>{
+                    this.notEdit=true;
+                    this.disabledClickSaveEdit=false;
+                    this.$message({
+                        message: 'Edit Successfully!',
+                        type: 'success'
+                    });
+                }).catch(err=>{
+                    this.disabledClickSaveEdit=false;
+                });
             },
 
             cancelEdit(){
@@ -462,6 +512,7 @@
                 this.productForm.descCustomer=this.copyDescCustomer;
                 this.productForm.nameCustomer=this.copyNameCustomer;
             },
+
             //删除bookmark
             deleteBookmark(){
                 this.$confirm('是否确认删除？', '提示', {
@@ -469,13 +520,16 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                    this.disableClickDelete=true;
                     this.$ajax.post(this.$apis.delete_buyerProductBookmark,[this.productForm.id]).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
                         });
+                        this.disableClickDelete=false;
                         this.$router.push('/product/bookmark');
                     }).catch(err=>{
+                        this.disableClickDelete=false;
                         this.$message.error('delete failed!');
                     });
 
@@ -486,10 +540,17 @@
             },
             //新增product
             addProduct(){
+                this.forceNumber=Math.random();
                 this.addProductDialogVisible=true;
             },
             manuallyAddProduct(){
-                this.windowOpen('/product/bookmarkManuallyAdd');
+                this.$windowOpen({
+                    url:'/product/bookmarkManuallyAdd'
+                });
+            },
+
+            handleCancel(){
+                this.addProductDialogVisible=false;
             },
 
             handleOkClick(e){
@@ -520,17 +581,12 @@
                 }
             },
 
-
-
-
-
-
             handleClick(){
                 //切换tab页
             },
 
             getTableData(){
-                this.$ajax.get(this.$apis.get_productDetail,{
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
@@ -552,6 +608,39 @@
                     this.remarkTableData=res.datas;
                 });
             },
+
+            editRemark(index,row){
+                this.editRemarkData.id=row.id;
+                this.editRemarkData.skuId=this.productForm.id;
+                this.editRemarkData.remark=row.remark;
+                this.editRemarkFormVisible=true;
+            },
+
+            //确定编辑remark
+            editRemarkSubmit(){
+                this.disableModifyRemark=true;
+                this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
+                    .then(res=>{
+                        this.$ajax.post(this.$apis.get_buyerRemarkList,{
+                            id:Number(this.$route.query.id),
+                            pn: 1,
+                            ps: 50,
+                        }).then(res=>{
+                            this.remarkTableData=res.datas;
+                            this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            });
+                            this.disableModifyRemark=false;
+                            this.editRemarkFormVisible=false;
+                        });
+                    }).catch(err=>{
+                    this.disableModifyRemark=false;
+                    this.editRemarkFormVisible=false;
+                });
+            },
+
+
             handleSizeChange(e){
 
             },
@@ -670,6 +759,26 @@
                 });
                 this.compareData.splice(key,1);
                 this.$localStore.set('compareProductList',this.compareData);
+            },
+
+            //去比较
+            goCompare(){
+                let data=this.$localStore.get('compareProductList');
+                let id='';
+                data.forEach((v,k)=>{
+                    if(k===data.length-1){
+                        id+=v.id;
+                    }else{
+                        id+=(v.id+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'product/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
             },
 
             //清空数据

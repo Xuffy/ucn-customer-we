@@ -79,7 +79,7 @@
             <v-table
                     v-loading="loadingTable"
                     :data="tableDataList"
-                    :buttons="[{label: 'detail', type: 1}]"
+                    :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>
@@ -337,7 +337,12 @@
             //表格按钮点击
             btnClick(item){
                 if(!item._disabled){
-                    this.windowOpen('/product/bookmarkDetail',{id:item.id.value});
+                    this.$windowOpen({
+                        url:'/product/bookmarkDetail',
+                        params:{
+                            id:item.id.value
+                        }
+                    })
                 }
             },
 

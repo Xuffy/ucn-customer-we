@@ -13,8 +13,6 @@
       </el-button>
 
     </div>
-    <!--<v-table-data></v-table-data>-->
-    <!--<v-quick-link></v-quick-link>-->
     <br/><br/>
     <v-data-dashboard></v-data-dashboard>
     <br/><br/>

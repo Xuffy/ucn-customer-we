@@ -249,6 +249,7 @@
   }
   .ucn-message-board .title-box .ucn-content-title{
     padding-left: 10px;
+    font-size: 14px;
   }
 
   .ucn-message-board .title-box * {

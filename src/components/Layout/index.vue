@@ -5,9 +5,9 @@
     <div class="main-container" :class="{fullBox:$store.state.layout.hideMenu}">
       <nav-bar></nav-bar>
 
-      <section class="app-main" :style="{paddingRight:$store.state.layout.paddingRight}">
+      <section class="app-main" :style="{paddingRight:$store.state.layout.paddingRight || '15px'}">
         <div class="content">
-          <transition name="el-zoom-in-top">
+          <transition name="el-fade-in-linear">
             <router-view :key="key"></router-view>
           </transition>
         </div>
@@ -15,7 +15,6 @@
     </div>
 
     <v-add-quick-link></v-add-quick-link>
-
 
   </div>
 </template>
