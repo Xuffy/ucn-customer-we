@@ -7,13 +7,13 @@ export default {
         isbasic: true,
         rule: []
     },
-    businessScope: {
-        key: 'mainBusiness',
-        type: 'String',
-        showType: 'dropdown',
-        isbasic: true,
-        rule: []
-    },
+//    businessScope: {
+//        key: 'mainBusiness',
+//        type: 'String',
+//        showType: 'dropdown',
+//        isbasic: true,
+//        rule: []
+//    },
     //    categoryId: {
     //        key: 'categoryId',
     //        type: 'String',

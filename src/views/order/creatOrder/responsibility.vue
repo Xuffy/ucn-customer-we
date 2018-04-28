@@ -20,7 +20,7 @@
                   <span v-else-if="scope.row.type==5">OtherDate</span>
             </span>
         </template>
-      </el-table-column>
+</el-table-column>
 <el-table-column prop="customer" label="Me" width="240">
     <template slot-scope="scope">
              
@@ -69,7 +69,7 @@
 </template>
 <script>
     /*
-     0=>NeedLabelDesignInfoDate 1=>LableDesignDate 2=>DesignNeedConfirmDate 3=>ReceiveSampleDate 4=>SampleNeedConfirmDate 5=>OtherDate */
+         0=>NeedLabelDesignInfoDate 1=>LableDesignDate 2=>DesignNeedConfirmDate 3=>ReceiveSampleDate 4=>SampleNeedConfirmDate 5=>OtherDate */
     export default {
         name: 'responsibility',
         components: {

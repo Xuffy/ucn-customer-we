@@ -8,7 +8,7 @@
                 <div>
                     <span class="text">Status : </span>
                     <el-radio-group size="mini" v-model="status">
-                        <el-radio-button label="-1" border>{{$i.baseText.all}}</el-radio-button>
+                        <el-radio-button label="-1" border>{{$i._baseText.all}}</el-radio-button>
                         <el-radio-button label="1" >已逾期</el-radio-button>
                         <el-radio-button label="0" >未逾期</el-radio-button>
                     </el-radio-group>
@@ -17,10 +17,10 @@
                     <div class="View">
                         <span class="text">View : </span>
                         <el-radio-group size="mini"  v-model="viewByStatus" >
-                            <el-radio-button label="" border>{{$i.baseText.all}}</el-radio-button>
-                            <el-radio-button label="30">{{$i.baseText.logisticOrder}}</el-radio-button>
-                            <el-radio-button label="10">{{$i.baseText.purchaseOrder}}</el-radio-button>
-                            <el-radio-button label="20">{{$i.baseText.qcOrder}}</el-radio-button>
+                            <el-radio-button label="" border>{{$i._baseText.all}}</el-radio-button>
+                            <el-radio-button label="30">{{$i._baseText.logisticOrder}}</el-radio-button>
+                            <el-radio-button label="10">{{$i._baseText.purchaseOrder}}</el-radio-button>
+                            <el-radio-button label="20">{{$i._baseText.qcOrder}}</el-radio-button>
                         </el-radio-group>
                     </div>
                     <div class="search">
@@ -130,17 +130,11 @@
             }
         },
         methods:{
-            inputEnter(val) {
-                if(!val.keyType) return this.$message('请选中搜索类型');
-                if(!val.key) return this.$message('搜索内容不能为空');
-                this.params.keyType = val.keyType;
-                this.params.key = val.key;
-                this.searchLoad = true;
-            },
             onFilterValue(val) {
                 console.log(val);
             },
             getList(item){
+              console.log(item)
                 this.tabLoad = true;
                 if(item){
                     const params ={

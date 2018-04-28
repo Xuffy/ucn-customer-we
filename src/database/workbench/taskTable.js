@@ -1,6 +1,6 @@
 export default {
   id: {
-    key: '',
+    key: 'id',
     label: 'ID',
   },
   time: {

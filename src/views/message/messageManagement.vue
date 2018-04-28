@@ -1,43 +1,12 @@
 <template>
     <div>
         <div class="head">
-            <el-button @click="addNews">{{$lang.baseText.add}}</el-button>
+            <el-button @click="addNews">{{$i._baseText.add}}</el-button>
         </div>
         <div class="body">
-            <el-table
-                    ref="multipleTable"
-                    :data="tableData3"
-                    tooltip-effect="dark"
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange"
-                    height="400">
-                <el-table-column
-                    prop="content"
-                    label="title"
-                    align="left">
-                </el-table-column>
-                <el-table-column
-                        prop="content"
-                        label="content"
-                        align="left">
-                </el-table-column>
-                <el-table-column
-                        prop="time"
-                        label="time"
-                        sortable
-                        align="center">
-                </el-table-column>
-            </el-table>
-            <br>
-            <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
-            </el-pagination>
+          <v-table
+            :data="tabData"
+          />
         </div>
 
 
@@ -52,16 +21,17 @@
                 :rows="2"
                 placeholder="请输入标题"
                 style="margin-bottom:10px"
+                v-model="params.title"
                >
             </el-input>
             <el-input
                     type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="newsContent">
+                    v-model="params.content">
             </el-input>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">发 布</el-button>
+                <el-button type="primary" @click="postAddMessage()">发 布</el-button>
                 <el-button @click="dialogVisible = false">取消</el-button>
             </span>
         </el-dialog>
@@ -69,63 +39,22 @@
 </template>
 
 <script>
+    import { VTable } from '@/components/index';
     export default {
         name: "message-management",
+        components:{
+          VTable
+        },
         data(){
             return{
-                tableData3: [
-                    {
-                        content:'这是第一条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第二条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第三条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第四条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第一条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第二条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第三条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第四条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第一条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第二条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第三条日志',
-                        time:'2018-02-02'
-                    },
-                    {
-                        content:'这是第四条日志',
-                        time:'2018-02-02'
-                    },
-                ],
-                currentPage:1,
+                tabData:[],
+                tabLoad:true,
+                params:{
+                  title:'',
+                  content:''
+                },
                 dialogVisible:false,            //弹出框显示隐藏
-                newsContent:'',                 //新增消息的内容
+                newsContent:'',              //新增消息的内容
             }
         },
         methods:{
@@ -161,9 +90,46 @@
                 //     })
                 //     .catch(_ => {});
                 done();
-            }
+            },
+          getMessageList(){
+            let url, column;
+            this.tabLoad = true;
+            column = this.$db.message.table;
+            if(this.$route.query.type == 1) {;
+              url = this.$apis.get_sys_queryownlist;
+            } else {
+              url = this.$apis.get_company_queryownlist;
+            };
+            this.$ajax.get(url)
+              .then(res => {
+                this.tabData = this.$getDB(column, res);
+                this.tabLoad = false;
+              })
+              .catch(() => {
+                this.tabLoad = false;
+              })
+          },
+          postAddMessage(){
+            let url
+            if(this.$route.query.type == 1) {;
+              url = this.$apis.post_sys_addsystemmessage;
+            } else {
+              url = this.$apis.post_company_addcompanymessage;
+            };
+            this.$ajax.post(url, this.params)
+            .then(res => {
+              this.$message('发送成功');
+            })
+            .catch(() => {
+              console.log('发送失败')
+            })
+            this.dialogVisible = false
+          }
 
-        }
+        },
+      created(){
+        this. getMessageList()
+      }
     }
 </script>
 

@@ -70,7 +70,13 @@
             </el-tabs>
         </div>
 
-<!--     <VCompareList :config="compareConfig"></VCompareList>-->
+     <VCompareList 
+             v-if="showCompareList"
+            :data="compareData"
+            @clearData="clearData"
+            @goCompare="goCompare"
+            @closeTag="handleClose"      
+     ></VCompareList>
 
     </div>
 </template>
@@ -104,6 +110,8 @@
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
+                compareData:[],
+                showCompareList:false
             }
         },
         methods: {
@@ -124,6 +132,74 @@
                 this.windowOpen('/product/sourcing', {
                     supplierId: this.id //供应商信息将被带入
                 });
+            },
+                         //添加比较
+            addCompare(){
+                this.showCompareList=true;
+                let compareList=this.$localStore.get('compareSupplierList');
+                let hasAdd=false;
+                if(!compareList){
+                    compareList=[];
+                }
+                compareList.forEach(v=>{
+                    if(v.id===this.basicDate.id){
+                        //代表该商品已经添加了
+                        hasAdd=true;
+                    }
+                });
+                if(hasAdd){
+                    this.$message({
+                        message: '该商品已经添加到列表了',
+                        type: 'warning'
+                    });
+                }else{
+                    compareList.push({
+                        name:this.basicDate.name,
+                        id:this.basicDate.id
+                    });
+                    this.compareData=compareList;
+                    this.$localStore.set('compareSupplierList',compareList)
+                }
+            },
+            getCompareList(){
+                let data=this.$localStore.get('compareSupplierList');
+                if(!data){
+                    this.compareData=[];
+                }else{
+                    this.compareData=data;
+                }
+            },
+            goCompare(){
+                let data=this.$localStore.get('compareSupplierList');
+                let id='';
+                data.forEach((v,k)=>{
+                    if(k===data.length-1){
+                        id+=v.id;
+                    }else{
+                        id+=(v.id+',');
+                    }
+                });
+                this.$windowOpen({
+                    url:'supplier/compareDetail/{type}',
+                    params:{
+                        type:'new',
+                        id:id,
+                    }
+                });
+            },
+            handleClose(e){
+                let key;
+                this.compareData.forEach((v,k)=>{
+                    if(v.id===e.id){
+                        key=k;
+                    }
+                });
+                this.compareData.splice(key,1);
+                this.$localStore.set('compareSupplierList',this.compareData);
+            },
+            clearData(){
+                this.$localStore.remove('compareSupplierList');
+                this.compareData=[];
             },
             remove() {
                 this.$ajax.post(this.$apis.post_supplier_deletebookmark, {
