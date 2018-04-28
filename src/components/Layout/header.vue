@@ -195,7 +195,6 @@
           this.$localStore.clearAll();
           this.$localStore.clearAll();
           this.$router.push('/login');
-        }).catch(() => {
         });
       },
       goMessage() {

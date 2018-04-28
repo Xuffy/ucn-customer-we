@@ -19,9 +19,22 @@ export default {
   _id: {
     _hide: true
   },
+  displayStyle: {
+    _hide: true
+  },
+  skuCustomerCreate: {
+    _hide: true
+  },
+  skuRecycle: {
+    _hide: true
+  },
   pic: {
     key: 'skuPic',
     type: 'attachment'
+  },
+  skuSysCode: {
+    type: 'text',
+    _disabled: true
   },
   status: {
     key: 'skuStatus',

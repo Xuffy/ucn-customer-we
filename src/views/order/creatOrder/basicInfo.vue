@@ -13,14 +13,14 @@
                                  :label="item.label" 
                                  :prop="item.key">
                                 <el-input                       
-                                v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit  placeholder=""></el-input>
+                                v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit ></el-input>
                             </el-form-item>  
                              <el-form-item 
                                   v-if='item.type=="textdialog"'
                                  :label="item.label" 
                                  :prop="item.key">
                                 <el-input                       
-                                v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit  placeholder=""></el-input>
+                                v-model='formItem[item.key]'                                   :disabled=item.ismodify||disabled||item.isDefaultEdit ></el-input>
                                 <i class="el-icon-more-outline" style='fontSize:20px'  @click='dialogEdit'></i>
                             </el-form-item>                         
                              <el-form-item class="form-list"
@@ -44,8 +44,14 @@
                                  <el-select
                                           v-model='formItem[item.key]'                 
                                         :disabled=item.ismodify||disabled||item.isDefaultEdit >
-                                         <el-option>
-                                        </el-option>
+<!--
+                                          <el-option
+                                              v-for="item in options"
+                                              :key="item.value"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+-->
                                   </el-select>
                             </el-form-item>                  
                          </el-col>
@@ -65,8 +71,10 @@
                      </el-row>
                  </el-form>
              </div>
+<!--
                <el-dialog :visible.sync="dialogEditDiv" width='70%'>
                 </el-dialog>
+-->
          </div>  
 </template>
 <script>
@@ -76,13 +84,6 @@
             disabled: {
                 type: Boolean,
                 default: false
-            },
-
-            list: {
-                type: Object,
-                default: function() {
-                    return {}
-                }
             },
             podisabled: {
                 type: Boolean,
@@ -96,7 +97,7 @@
             return {
                 dialogEditDiv: false,
                 formItem: {
-                    orderNo: '', //必填   系统生成 不可编辑
+                    orderNo: '9999', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成  
@@ -107,7 +108,7 @@
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
                     deliveryDt: '', //必填 
-                    incoterm: '', //必填 
+                    incoterm: 'FOB', //必填 
                     incortermAea: '', //必填 
                     payment: '', //必填 
                     lcNo: '',
@@ -117,11 +118,11 @@
                     departurePort: '', //必填
                     destCountry: '', // ??????
                     destPort: '', //必填   //?????
-                    transport: '海运', //不可编辑
+                    transport: '1', //不可编辑
                     customerAgreementNo: '',
                     customerAgreementDt: '',
                     remark: '',
-                    currency: ''
+                    currency: 'USD' //必填
                 },
                 //......................表单正则
                 rules: {

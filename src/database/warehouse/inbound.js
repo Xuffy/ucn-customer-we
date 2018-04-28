@@ -20,18 +20,18 @@ export default {
         belong:'basicInfo',
         showType:'input',
     },
-    storageType:{
-        key:'storageType',
+    inboundTypeDictCode:{
+        key:'inboundTypeDictCode',
         belong:'basicInfo',
         showType:'select',
         options:[
             {
                 label:'采购入库',
-                value:1
+                value:'1'
             },
             {
                 label:'验货入库',
-                value:2
+                value:'2'
             },
         ]
     },
@@ -66,4 +66,10 @@ export default {
         showType:'textarea',
         fullLine:true
     },
+    attachment:{
+        key:'attachment',
+        belong:'basicInfo',
+        showType:'textarea',
+        fullLine:true
+    }
 }

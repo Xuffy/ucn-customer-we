@@ -2,7 +2,7 @@
   <div class="ucn-table" v-loading="loading"
        :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
 
-    <div class="header-content">
+    <div class="header-content" v-if="!hideFilterColumn && !hideFilterValue">
       <div>
         <slot name="header"></slot>
       </div>
@@ -104,14 +104,29 @@
     </div>
 
     <!--分页-->
-    <v-pagination :data="dataList"
+    <!--<v-pagination :data="dataList"
                   :page-sizes="pageSizes"
                   :page-size="pageSize"
                   :page-num="pageNum"
                   :page-total="pageTotal"
                   @size-change="size => {$emit('page-size-change', size)}"
-                  @current-change="page => {$emit('page-change', page)}"></v-pagination>
+                  @current-change="page => {$emit('page-change', page)}"></v-pagination>-->
 
+
+    <!--<v-table ref="pendingTable"
+             :data.sync="dataList"
+             :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
+             :selection="filterSelection"
+             :rowspan="2"
+             :total-row="totalRow"
+             selection-radio
+             @action="onAction"
+             @filter-value="onFilterValue"
+             @change-checked="changeChecked">
+    </v-table>-->
+    <div>
+      <slot name="footer"></slot>
+    </div>
 
     <v-view-picture ref="viewPicture"></v-view-picture>
   </div>
@@ -142,12 +157,11 @@
 
 
   import VTableFilter from './filter'
-  import VPagination from './pagination'
   import VViewPicture from '../viewPicture/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VPagination, VViewPicture},
+    components: {VTableFilter, VViewPicture},
     props: {
       data: {
         type: Array,
@@ -155,12 +169,6 @@
           return [];
         },
       },
-      /*columns: {
-        type: Object,
-        default() {
-          return {};
-        },
-      },*/
       dataKey: {
         type: String,
         default: '',
@@ -184,24 +192,6 @@
         type: Boolean,
         default: false,
       },
-      pageSizes: {
-        type: Array,
-        default() {
-          return [10, 20, 30, 40, 50];
-        },
-      },
-      pageSize: {
-        type: Number,
-        default: 10,
-      },
-      pageTotal: {
-        type: Number,
-        default: 1,
-      },
-      pageNum: {
-        type: Number,
-        default: 1,
-      },
       rowspan: {
         type: Number,
         default: 1,
@@ -218,7 +208,10 @@
         type: [Boolean, Array],
         default: false,
       },
-
+      parId: {
+        type: String,
+        default: 'id'
+      }
     },
     data() {
       return {
@@ -244,7 +237,7 @@
           }
           return val;
         });
-        this.changeCheck();
+        this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
@@ -319,7 +312,7 @@
 
         return value[0];
       },
-      changeCheck(item) {
+      changeCheck(item, value) {
         if (this.selectionRadio) {
           this.dataList = _.map(this.dataList, val => {
             val._checked = false;

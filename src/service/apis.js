@@ -1,7 +1,8 @@
-const version = ['/web/v1', '/v2', '/web/v3'];
-import config from './config';
+
+
 
 const apis = {
+  USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
   CHATMESSAGE_ADD: ['/chatmessage/add', 'BASE_JML2'],
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
@@ -15,11 +16,13 @@ const apis = {
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
   update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
-  sys_category: ['/sys/category', 'BASE_CS'],
+  GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS'], //供应商 =》 获取系统分类
+  BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1'], //采购端 => 获取系统分类
   GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
-  category: ['/category', 'BASE_CS'],
+  GET_CATEGORY: ['/category', 'BASE_CS'], //供应商 =》 获取我的分类
+  BUYER_GET_CATEGORY: ['/purchase/category', 'BASE_CS1'], //供应商 =》 获取我的分类
   mapping_category: ['/category/mapping', 'BASE_CS'],
-  getCategory: ['/sys/category', 'BASE_CS'],              //暂时使用
+  getCategory: ['/purchase/sys/category', 'BASE_CS1'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
   add_newSKU: ['/sku', 'BASE_CS'],
   supplier_overview: ['/supplierOverview', 'BASE_API'],
@@ -35,6 +38,7 @@ const apis = {
   POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_DHC'],
   POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_RESTORE: ['/inquiry/compare/restore', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_DHC'],
   POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
   POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
@@ -59,12 +63,17 @@ const apis = {
   update_supplier: ['/supplier/{id}', 'BASE_CS'],
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
+  get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
+  get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ'],
+  post_recover_order:['/order/recover','BASE_HCJ'],
+  post_finishPost:['/order/finish','BASE_HCJ'],
   delete_order: ['/order/delete', 'BASE_HCJ'],
   download_order: ['/order/download', 'BASE_HCJ'],
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
+  post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_BUYER'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],
@@ -72,8 +81,6 @@ const apis = {
   post_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
   get_supplier_remark_de: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
-  post_supplier_addCompare:['/purchase/supplier/compare','BASE_CS_cgs'],
-  post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
   post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
   get_departmentOverview: ['/department/overview', 'BASE_LYF'],
@@ -109,6 +116,9 @@ const apis = {
   delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
   get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
   edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
+  update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_CS1'],
+
+
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -121,10 +131,12 @@ const apis = {
   post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetails', 'BASE_CS_cgs'],
   post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare', 'BASE_CS_cgs'],
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
-
+  post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
-  get_productInfo:['/order/skuListPage','BASE_BUYER'],
+  get_productInfo:['/order/skuListPage','BASE_TEST'],
+  get_inboundDetail:['/inbound/getById','BASE_SELLER'],
+  // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
 
 
@@ -157,7 +169,6 @@ const apis = {
   put_user_profile_password:['/user/profile/password','BASE_UUSER'],
   //qc order
   post_qc_page:['/qc/page','BASE_BJ'],
-
 
 
 };

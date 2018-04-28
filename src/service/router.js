@@ -16,6 +16,67 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
+      path: '/sellerSellerSettings',
+      name: 'sellerSellerSettings',
+      component: Layout,
+      redirect: '/sellerSellerSettings/CategorySetting',
+      meta: {
+        name: 'Settings',
+      },
+      children:[
+        {
+          path: 'CategorySetting',
+          name: 'CategorySetting',
+          meta: {
+            name: 'Category setting',
+          },
+          component: () => import('../views/sellerSettings/CategorySetting'),
+        }
+      ]
+    },
+    {
+      path: '/sellerNegotiation',
+      name: 'sellerNegotiation',
+      component: Layout,
+      redirect: '/sellerNegotiation/CategorySetting',
+      meta: {
+        name: 'sellerNegotiation',
+      },
+      children:[
+        {
+          path: 'sellerNegotiationInquiry',
+          name: 'sellerNegotiationInquiry',
+          meta: {
+            name: 'Category setting',
+          },
+          component: () => import('../views/sellerNegotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'sellerNegotiationInquiryDetail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Inquiry Detail',
+            messageBoard: 'code'
+          },
+          component: () => import('../views/sellerNegotiation/inquiryDetail')
+        },
+        {
+          path: 'draft',
+          name: 'sellerDraft',
+          component: () => import('../views/sellerNegotiation/draft')
+        },
+        {
+          path: 'recycleBin',
+          name: 'sellerRecycleBin',
+          component: () => import('../views/sellerNegotiation/recycleBin')
+        }
+      ]
+    },
+    {
       path: '/login',
       hidden: true,
       component: () => import('../views/login/index.vue')
@@ -277,7 +338,7 @@ export const routerMap = [
           name: 'negotiationCompareDetail',
           hidden: true,
           meta: {
-            draft: true,
+            draft: false,
             recycleBin: true,
             log: true,
             name: 'Compare Detail'
@@ -290,7 +351,17 @@ export const routerMap = [
           hidden: true,
           meta: {
             name: 'draft'
-          }
+          },
+          component: () => import('../views/negotiation/draft')
+        },
+        {
+          path: 'recycleBin/:type',
+          name: 'negotiationRecycleBin',
+          hidden: true,
+          meta: {
+            name: 'recycleBin'
+          },
+          component: () => import('../views/negotiation/recycleBin')
         }
       ]
     },
@@ -361,6 +432,16 @@ export const routerMap = [
             name: 'Draft Overview'
           },
           component: () => import('../views/order/draftOverview.vue')
+        }, {
+          path: 'recycleBin',
+          name: 'recycleBin',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'recycleBin Overview'
+          },
+          component: () => import('../views/order/recycleBin.vue')
         }
       ]
     },
@@ -435,18 +516,18 @@ export const routerMap = [
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
-        {
-          path: 'placeLogisticPlan',
-          name: 'logisticPlaceLogisticPlan',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Place Logistic Plan'
-          },
-          component: () => import('../views/logistic/placeLogisticPlan')
-        },
+        // {
+        //   path: 'placeLogisticPlan',
+        //   name: 'logisticPlaceLogisticPlan',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Place Logistic Plan'
+        //   },
+        //   component: () => import('../views/logistic/placeLogisticPlan')
+        // },
         {
           path: 'planDetail',
           name: 'logisticPlanDetail',
@@ -459,41 +540,41 @@ export const routerMap = [
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
-        {
-          path: 'orderOverview',
-          name: 'logisticOrder',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Order Overview'
-          },
-          component: () => import('../views/logistic/logisticOrderOverview')
-        },
-        {
-          path: 'placeLogisticOrder',
-          name: 'logisticPlaceLogisticOrder',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Place Logistic Order'
-          },
-          component: () => import('../views/logistic/placeLogisticOrder')
-        },
-        {
-          path: 'orderDetail',
-          name: 'logisticOrderDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Order Detail'
-          },
-          component: () => import('../views/logistic/logisticOrderDetail')
-        }
+        // {
+        //   path: 'orderOverview',
+        //   name: 'logisticOrder',
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Order Overview'
+        //   },
+        //   component: () => import('../views/logistic/logisticOrderOverview')
+        // },
+        // {
+        //   path: 'placeLogisticOrder',
+        //   name: 'logisticPlaceLogisticOrder',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Place Logistic Order'
+        //   },
+        //   component: () => import('../views/logistic/placeLogisticOrder')
+        // },
+        // {
+        //   path: 'orderDetail',
+        //   name: 'logisticOrderDetail',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Order Detail'
+        //   },
+        //   component: () => import('../views/logistic/logisticOrderDetail')
+        // }
       ]
 
     },
@@ -685,7 +766,6 @@ export const routerMap = [
         }
       ]
     },
-
     {
       path: '/sellerWarehouse',
       component: Layout,
@@ -741,7 +821,7 @@ export const routerMap = [
           component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
         },
       ]
-    },
+    }
   ]
 ;
 

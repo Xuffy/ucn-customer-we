@@ -1,36 +1,51 @@
 <template>
-  <div v-if="list.length">
-    <el-col >
+  <div >
+    <el-col :xs="raster" :sm="raster" :md="raster" :lg="raster" :xl="raster" v-for="(a, i) of exchangeRateList" :key="'list-' + i">
       <div class="right">
-        <span>￥-$</span>
-        <el-input :placeholder="a.placeholder" v-model="a.value"></el-input>
+            <span>
+                 <span v-if="a.currency=='CNY|USD'">exchange rate(￥-$)</span>
+                 <span v-else-if="a.currency=='USD|CNY'">exchange rate($-￥)</span> 
+                 <span v-else-if="a.currency=='CNY|EUR'">exchange rate(￥-€)</span> 
+                 <span v-else-if="a.currency=='EUR|CNY'">exchange rate(€-￥)</span> 
+                 <span v-else-if="a.currency=='USD|EUR'">exchange rate($-€)</span> 
+                 <span v-else-if="a.currency=='EUR|USD'">exchange rate(€-$)</span>           
+            </span>
+            <el-input  v-model="a.exchangeRate"></el-input>
       </div>
     </el-col>
   </div>
 </template>
 <script>
     export default {
+        name: 'exchange',
         data() {
             return {
                 exchangeRateList: [{
-                    "entryId": 1,
-                    "entryDt": 1524711629694,
-                    "entryName": "1",
-                    "updateId": 1,
-                    "updateDt": 1524711629694,
-                    "updateName": "1",
-                    "id": null,
-                    "ownerId": 1,
-                    "companyId": 1,
-                    "tenantId": 1,
-                    "orderId": 1,
-                    "orderNo": "",
-                    "sourceCurrency": "u",
-                    "targetCurrency": "c",
-                    "exchangeRate": 1,
-                    "timeZone": "0",
-                    "version": 0
-                }],
+                        currency: "CNY|USD",
+                        exchangeRate: ''
+                    },
+                    {
+                        currency: "USD|CNY",
+                        exchangeRate: ''
+                    },
+                    {
+                        currency: "CNY|EUR",
+                        exchangeRate: ''
+                    },
+                    {
+                        currency: "EUR|CNY",
+                        exchangeRate: ''
+                    },
+                    {
+                        currency: "USD|EUR",
+                        exchangeRate: ''
+                    },
+                    {
+                        currency: "EUR|USD",
+                        exchangeRate: ''
+                    }
+                ],
+                raster: 4
             }
         }
     }
@@ -42,9 +57,9 @@
         align-items: center;
         padding: 10px 0;
         span {
-            width: 140px;
+            width: 150px;
             white-space: nowrap;
-            overflow: hidden;
+            /*            overflow: hidden;*/
             text-overflow: ellipsis;
             display: inline-block;
             font-size: 12px;

@@ -4,7 +4,7 @@ const lang = localStore.get('language') || 'en';
 export default _.extend(
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
-  require(`./${lang}/workbench/pending`),
+  require(`./${lang}/workbench/task`),
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
@@ -18,7 +18,6 @@ export default _.extend(
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/basicInfo.pending`),
   require(`./${lang}/supplier/overview`),
-
   require(`./${lang}/supplier/detail.pending`),
   require(`./${lang}/order/overview`),
   require(`/${lang}/order/basicinfo.pending`),
@@ -26,9 +25,6 @@ export default _.extend(
   require(`./${lang}/logistic/plan/plan.base`),
   require(`./${lang}/logistic/plan/overviewCheckbox.status`),
   require(`./${lang}/inquiry/compare.pending`),
-
-  {_warehouse: require(`./${lang}/warehouse/warehouse.basic`)},
-
   // payment
   {_payment: require(`./${lang}/payment/payment`)},
   require(`./${lang}/payment/payment.table`),
@@ -40,10 +36,17 @@ export default _.extend(
   {_logBasic: require(`./${lang}/logs/logs.basic`)},
   {_track: require(`./${lang}/track/trackBysku`)},
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
-    //CN配置
-    // {_warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
-    // require(`./${lang}/warehouse/warehouse.index`),
-    {_product: require(`./${lang}/product/product.basic`)},
-    require(`./${lang}/product/productOverview`),
+
+  {_product: require(`./${lang}/product/product.basic`)},
+  require(`./${lang}/product/productOverview`),
+  require(`./${lang}/logistic/plan/plan.base`),
+
+
+
+
+
+  // //CN配置
+  // {_warehouse:require(`./${lang}/warehouse/warehouse.basic`)},
+  // require(`./${lang}/warehouse/warehouse.index`),
 
 )

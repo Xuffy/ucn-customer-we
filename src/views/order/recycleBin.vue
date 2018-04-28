@@ -1,11 +1,10 @@
 <template>
     <div class="draftOverview">
-        <h3 class="hd">Recycle Overview</h3>
+        <h3 class="hd">RecycleBin Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
                 <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
-                 <el-button @click='download'>{{($i._baseText.send)}}</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i._baseText.delete)}}</el-button>
+                 <el-button @click='recover'>recover</el-button>
             </div>
              <div class="select-wrap">
                <selectSearch 
@@ -80,7 +79,6 @@
                 }],
                 keyType: '',
                 params: {
-                    status: '', //status的按钮组
                     orderNo: '',
                     skuCode: '',
                     view: 1, //view by的按钮组
@@ -125,33 +123,63 @@
                     this.selectedNumber.push(item.id.value);
                 });
             },
-            changeStatus() {
-                this.getdata()
-            },
             changeView() {
-                this.getdata()
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message('请选中搜索类型');
                 if (!val.key) return this.$message('搜索内容不能为空');
                 if (val.keyType == '1') {
                     this.params.orderNo = val.key
+                    if (this.params.view == 1) {
+                        this.getdata(this.$db.order.overview)
+                    } else {
+                        this.getdata(this.$db.order.overviewBysku)
+                    }
                 } else {
                     this.params.skuCode = val.key
+                    if (this.params.view == 1) {
+                        this.getdata(this.$db.order.overview)
+                    } else {
+                        this.getdata(this.$db.order.overviewBysku)
+                    }
                 }
                 this.getdata()
             },
             download() {
-                this.$ajax.post(this.$apis.download_order, this.selectedNumber)
+                this.$ajax.post(this.$apis.download_order, {
+                        ids: this.selectedNumber
+                    })
                     .then((res) => {
                         console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            recover() {
+                this.$ajax.post(this.$apis.post_recover_order, {
+                        ids: this.selectedNumber
+                    })
+                    .then((res) => {
+                        if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
                     })
                     .catch((res) => {
                         console.log(res)
                     });
             },
             deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, this.selectedNumber)
+                this.$ajax.post(this.$apis.delete_order, {
+                        ids: this.selectedNumber
+                    })
                     .then((res) => {
                         console.log(res)
                     })
@@ -159,13 +187,13 @@
                         console.log(res)
                     });
             },
-            //get_orderlist数据
-            getdata() {
+            //get_recycle_orderlist数据
+            getdata(overview) {
                 this.loading = true
-                this.$ajax.post(this.$apis.get_orderlist, this.params)
+                this.$ajax.post(this.$apis.get_recycle_orderlist, this.params)
                     .then((res) => {
                         this.loading = false
-                        this.tabData = this.$getDB(this.$db.order.overview, res.datas);
+                        this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
                         //                            return _.mapObject(item, val => {
                         //                                val._checked = true
@@ -182,8 +210,7 @@
 
         },
         created() {
-            this.getdata()
-
+            this.getdata(this.$db.order.overview)
         },
         mounted() {
             this.loading = false

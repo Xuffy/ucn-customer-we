@@ -27,7 +27,6 @@
                     <div v-if="v.type==='Text'">
                         <!--有效性-->
                         <div v-if="k===11">
-<!--                            {{scope.row[v.prop]===1?'待确认':(scope.row[v.prop]===2?'已确认':'无效')}}-->
                             <span v-if='scope.row[v.prop]===1'>
                                 待供应商确认
                             </span>
@@ -38,7 +37,7 @@
                                 待采购商确认
                             </span>
                             <span v-if='scope.row[v.prop]===4'>
-                                待采购商确认
+                                采购商已确认
                             </span>
                             <span v-if='scope.row[v.prop]===5'>
                                 无效
@@ -107,7 +106,7 @@
                             <el-button type="text" :disabled="disabledBtn" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[11].prop]===1 ">
+                            <div v-if="scope.row[columns[11].prop]===3">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
@@ -149,6 +148,7 @@
 <script>
     /*
     1:待采购商确认,2:采购商已确认,3:待供应商确认,4:供应商已确认,5:作废
+     orderType :10 采购订单
     */
     export default {
         name: 'payment-table',
@@ -190,129 +190,131 @@
                     ]
                 },
                 columns: [{
-                        label: '付款编号',
-                        prop: 'paymentNumber',
+                        label: 'Payment No.',
+                        prop: 'no',
                         type: 'Text',
                         width: 180
                     },
                     {
-                        label: '款项名称',
-                        prop: 'paymentItem',
+                        label: 'Payment Item',
+                        prop: 'name',
                         type: 'Input',
-                        width: 150
+                        width: 150,
+                        belong: "customer",
                     },
                     {
-                        label: '预计付款日期',
-                        prop: 'estPayDate',
+                        label: 'Est. Pay Date',
+                        prop: 'planPayDt',
                         type: 'Date',
                         belong: "customer",
                         width: 150
                     },
                     {
-                        label: '预计付款金额',
-                        prop: 'estAmount',
+                        label: 'Est. Amount',
+                        prop: 'planPayAmount',
                         type: 'Number',
                         belong: "customer",
                         width: 130
                     },
                     {
-                        label: '实际付款日期',
-                        prop: 'actPayDate',
+                        label: 'Act. Pay Date',
+                        prop: 'actualPayDt',
                         type: 'Date',
                         belong: "customer",
                         width: 150
                     },
                     {
-                        label: '实际付款金额',
-                        prop: 'actAmount',
+                        label: 'Act. Amount',
+                        prop: 'actualPayAmount',
                         type: 'Number',
                         belong: "customer",
                         width: 130
 
                     },
                     {
-                        label: '预计退款日期',
-                        prop: 'estRefundDate',
+                        label: 'Est. Refund Date',
+                        prop: 'planRefundDt',
                         type: 'Date',
                         belong: "supplier",
                         width: 150
                     },
                     {
-                        label: '预计退款金额',
-                        prop: 'estRefundAmount',
+                        label: 'Est. Refund Amount',
+                        prop: 'planRefundAmount',
                         type: 'Number',
                         belong: "supplier",
                         width: 150
 
                     },
                     {
-                        label: '实际退款日期',
-                        prop: 'actRefundDate',
+                        label: 'Act. Refund Date',
+                        prop: 'actualRefundDt',
                         type: 'Date',
                         belong: "supplier",
                         width: 150
 
                     },
                     {
-                        label: '实际退款金额',
-                        prop: 'actRefundAmount',
+                        label: 'Act. Refund Amount',
+                        prop: 'actualRefundAmount',
                         type: 'Number',
                         belong: "supplier",
                         width: 150
 
                     },
                    {
-                        label: '币种',
-                        prop: 'money',
-                        type: 'Text',
-                        width: 150
-
+                        label: 'Currency',
+                        prop: 'currency',
+                        type: 'Input',
+                        width: 150,
+                       belong: "customer",
                     },
                     {
-                        label: '有效性',
+                        label: 'Avilable',
                         prop: 'available',
                         type: 'Text'
                     },
                 ],
-                paymentData: [{
-                        paymentNumber: 1512547574887,
-                        paymentItem: 'QC预付款',
-                        estPayDate: '2018-02-23', //预计付款时间
-                        estAmount: 19025, //预计付款金额
-                        actPayDate: '2018-04-01', //实际付款时间
-                        actAmount: 12345, //实际付款金额
-                        estRefundDate: '',
-                        estRefundAmount: '',
-                        actRefundDate: '',
-                        actRefundAmount: '',
-                        available: 1, //有效性,1:待确认,2:已确认,3:作废
-                    },
-                    {
-                        paymentNumber: 1512547574887,
-                        paymentItem: 'QC预付款',
-                        estPayDate: '2018-02-23', //预计付款时间
-                        estAmount: 19025, //预计付款金额
-                        actPayDate: '2018-04-01', //实际付款时间
-                        actAmount: 12345, //实际付款金额
-                        estRefundDate: '',
-                        estRefundAmount: '123',
-                        actRefundDate: '',
-                        actRefundAmount: '123',
-                        available: 2, //有效性,1:待确认,2:已确认,3:作废
-                    },
-                    {
-                        paymentNumber: 236987239862,
-                        paymentItem: 'QC尾款',
-                        estPayDate: '2018-03-11', //预计付款时间
-                        estAmount: 6723, //预计付款金额
-                        actPayDate: '2018-06-01', //实际付款时间
-                        actAmount: 1351, //实际付款金额
-                        estRefundDate: '2018-03-11',
-                        estRefundAmount: 1325456,
-                        actRefundDate: '2018-03-11',
-                        actRefundAmount: 213554,
-                        available: 5, //有效性,1:待确认,2:已确认,3:作废
-                    },
+                paymentData: [
+//                    {
+//                        paymentNumber: 1512547574887,
+//                        paymentItem: 'QC预付款',
+//                        estPayDate: '2018-02-23', //预计付款时间
+//                        estAmount: 19025, //预计付款金额
+//                        actPayDate: '2018-04-01', //实际付款时间
+//                        actualPayAmount: 12345, //实际付款金额
+//                        estRefundDate: '',
+//                        estRefundAmount: '',
+//                        actRefundDate: '',
+//                        actRefundAmount: '',
+//                        available: 1, //有效性,1:待确认,2:已确认,3:作废
+//                    },
+//                    {
+//                        paymentNumber: 1512547574887,
+//                        paymentItem: 'QC预付款',
+//                        estPayDate: '2018-02-23', //预计付款时间
+//                        estAmount: 19025, //预计付款金额
+//                        actPayDate: '2018-04-01', //实际付款时间
+//                        actualPayAmount: 12345, //实际付款金额
+//                        estRefundDate: '',
+//                        estRefundAmount: '123',
+//                        actRefundDate: '',
+//                        actRefundAmount: '123',
+//                        available: 2, //有效性,1:待确认,2:已确认,3:作废
+//                    },
+//                    {
+//                        paymentNumber: 236987239862,
+//                        paymentItem: 'QC尾款',
+//                        estPayDate: '2018-03-11', //预计付款时间
+//                        estAmount: 6723, //预计付款金额
+//                        actPayDate: '2018-06-01', //实际付款时间
+//                        actualPayAmount: 1351, //实际付款金额
+//                        estRefundDate: '2018-03-11',
+//                        estRefundAmount: 1325456,
+//                        actRefundDate: '2018-03-11',
+//                        actRefundAmount: 213554,
+//                        available: 5, //有效性,1:待确认,2:已确认,3:作废
+//                    },
                 ],
                 //用于备份data
                 copyData: [],
@@ -369,16 +371,27 @@
 
             //处理顶部按钮点击
             handleClick() {
-//                this.disabledBtn = true;
+                this.disabledBtn = true;
+//                this.$ajax.post(this.$api.paymentGetNo,{}).then(
+//                res=>{
+//                    console.log(res)
+//                }
+//                ).catch(res=>{
+//                    console.log(res)
+//                })
                 this.paymentData.push({
-                    paymentNumber: 890807,
-                    paymentItem: '',
-                    estPayDate: '', //预计付款时间
-                    estAmount: 0, //预计付款金额
-                    actPayDate: '', //实际付款时间
-                    actAmount: 0, //实际付款金额
+                    no: 890807,
+                    name: '',
+                    planPayDt: '', //预计付款时间
+                    planPayAmount: 0, //预计付款金额
+                    actualPayDt: '', //实际付款时间
+                    actualPayAmount: 0, //实际付款金额
+                    planRefundDt:'',
+                    planRefundAmount:'',
+                    actualRefundDt:'',
+                    actualRefundAmount:'',
+                    Currency:'',
                     available: 1, //有效性,1:待确认,2:已确认,3:无效
-                    money:'',
                     isNew: true, //新增的数据全部处于新增状态
                 });
 
@@ -470,10 +483,23 @@
                     }
                 })
             },
+            get_list(){
+                this.$ajax.post(this.$apis.post_order_paymentlist,{
+                        orderNo:'0004',
+                        orderType:10
+                    }).then((res)=>{
+                    this.paymentData=res.datas
+                        console.log( this.paymentData)
+                    }).catch((res)=>{
+                    console.log(res)
+                    })
+                }
         },
         created() {
+            this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
+            
         },
     }
 

@@ -103,8 +103,8 @@
         <h4 class="content-hd">{{ $i._baseText.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="dialogTableVisible = true">{{ $i._baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $i._baseText.remove }}</el-button>
+                <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
+                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ $i._baseText.remove }}</el-button>
             </div>
             <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
@@ -114,6 +114,7 @@
             :loading="tableLoad"
             @action="producInfoAction"
             @change-checked="changeChecked"
+            :parId="'skuId'"
             :rowspan="2"
         />
         <div class="bom-btn-wrap">
@@ -133,9 +134,9 @@
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
-                :disabledLine="tabData"
+                :disabledLine="disabledLine"
                 @handleOK="getList"
-                :forceUpdateNumber="dialogTableVisible" 
+                :forceUpdateNumber="trig" 
                 :type="radio"
                 :isInquiry="true"
             ></v-product>
@@ -154,6 +155,9 @@
         name:'createInquiry',
         data() {
             return {
+                disabledLine: [],
+                checkedAll: [],
+                trig: 0,
                 tableLoad: false,
                 selectAll: {
                     paymentMethod: [],
@@ -235,6 +239,20 @@
             
         },
         methods: {
+            addProduct() {
+                let arr = [];
+                _.map(this.tabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                this.disabledLine = arr;
+                this.trig = new Date().getTime();
+                this.dialogTableVisible = true;
+            },
+            removeList() {
+                _.map(this.tabData, (item, index) => {
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), item.skuId.value) !== -1) this.$set(item, '_disabled', true);
+                });
+            },
             inputEnter(val) {
 
             },
@@ -243,9 +261,11 @@
                     if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[0], {'key': 'skuId'}).value && !val._remark && !data[0]._remark) {
                         val = data[0];
                         val._modify = true;
+                        val.displayStyle = 1;
                     } else if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[1], {'key': 'skuId'}).value && val._remark && data[1]._remark) {
                         val = data[1];
                         val._modify = true;
+                        val.displayStyle = 1;
                     }
                     return val;
                 });
@@ -272,7 +292,7 @@
 
             },
             fromChange(val) {
-                
+                this.trig = new Date().getTime();
             },
             submitForm(type) { //提交
                 if(type === 'draft') { //是否保存为草稿
@@ -286,6 +306,15 @@
                         type: 'warning'
                     });
                 });
+                let arr = [];
+                _.map(this.fromArg.suppliers, item => {
+                    let json = {};
+                    _.mapObject(item, (val, k) => {
+                        if(!/^supplier/.test(k)) json[`supplier${k.substring(0, 1).toUpperCase()}${k.substring(1, k.length)}`] = val;
+                    });
+                    arr.push(json);
+                });
+                if(arr.length) this.fromArg.suppliers = arr;
                 this.fromArg.exportLicense = parseInt(this.fromArg.exportLicense);
                 this.fromArg.currency = parseInt(this.fromArg.currency);
                 this.fromArg.incoterm = parseInt(this.fromArg.incoterm);
@@ -294,9 +323,14 @@
                 this.fromArg.details = this.dataFilter(this.tabData);
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(this.fromArg))
                 .then(res => {
-                    
+                    if(!this.fromArg.draft) return this.$router.push('/negotiation/negotiationInquiry');
+                    this.$router.push({
+                        name: 'negotiationDraft',
+                        params: {
+                            type: 'inquiry'
+                        }
+                    });
                 });
-                //this.$router.push('/negotiation/inquiryDetail');
             },
             dataFilter (data) {
                 let arr = [], jsons = {}, json = {};
@@ -327,10 +361,14 @@
             getList(item) {
                 let tabData = [], arr = [];
                 item.forEach(items => {
+                    console.log(items.skuId.vlaue)
                     tabData.push(items.id.value);
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
                 .then(res => {
+                    _.map(res, item => {
+                        item.displayStyle = 0;
+                    });
                     this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.dialogTableVisible = false;
                 });
@@ -351,7 +389,6 @@
                     if(config.type === 'histoty') {
                         this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                     } else {
-                        console.log(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')))
                         this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                     }
                 });

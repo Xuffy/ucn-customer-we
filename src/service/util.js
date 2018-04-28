@@ -3,6 +3,8 @@ import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
 import router from 'service/router'
+import _config from "./config";
+import {Message, MessageBox} from 'element-ui';
 
 export default {
   install(Vue, options) {
@@ -136,6 +138,18 @@ export default {
       return list;
     };
     /**
+     * 时区转换 传入时区 如 0 8 -1
+    */
+    Vue.prototype.$getLocalTime = (i) => {
+        if (typeof i !== 'number') return;
+        const d = new Date(), 
+              len = d.getTime(),
+              offset = d.getTimezoneOffset() * 60000,
+              utcTime = len + offset;
+        return new Date(utcTime + 3600000 * i);
+    }
+
+    /**
      * $window.open
      */
 
@@ -161,47 +175,6 @@ export default {
       }
       url = _.template(url)(config.params || {});
       return window.open(`${url}?${serialization(p)}`, '_blank');
-    };
-
-    /**
-     * filterRemark 遍历 remark   list = json arr  remark = remark字段名
-     */
-    const getRemark = (list, remark) => {
-      let json = {};
-      for (let k in list) {
-        for (let key in list[remark]) {
-          if (k === key) {
-            json[k] = list[remark][key];
-          } else {
-            if (k == 'id') {
-              json._id = list[k];
-            } else {
-              json[k] = null;
-            }
-          }
-        }
-      }
-      ;
-      return json;
-    };
-
-    Vue.prototype.$filterRemark = (list, remark) => {
-      let data = [];
-      if (!list) return console.log('请传输list');
-      if (list.length && list) {
-        list.forEach(item => {
-          if (item.updateDt) item.updateDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
-          if (item.entryDt) item.entryDt = DateFormat(item.updateDt, 'yyyy-mm-dd');
-          data.push(item);
-          data.push(getRemark(item, remark))
-        });
-      } else if (typeof list === "object" && !(list instanceof Array)) {
-        if (list.updateDt) list.updateDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
-        if (list.entryDt) list.entryDt = DateFormat(list.updateDt, 'yyyy-mm-dd');
-        data.push(list);
-        data.push(getRemark(list, remark));
-      }
-      return data;
     };
 
 
@@ -260,6 +233,21 @@ export default {
       }
     }
 
+    Vue.prototype.$goLogin = () => {
+      // sessionStore.clearAll();
+      // localStore.clearAll();
+      /*MessageBox.alert('', '', {
+        message: '正在跳转登录...',
+        dangerouslyUseHTMLString: true,
+        customClass: 'ucn-login-alter',
+        showClose: false,
+        showConfirmButton: false,
+        center: true,
+      });
 
+      setTimeout(() => {
+        window.location.href = `${_config.ENV.LOGIN_URL}${Base64.encode(window.location.href)}`;
+      }, 2000);*/
+    }
   }
 }

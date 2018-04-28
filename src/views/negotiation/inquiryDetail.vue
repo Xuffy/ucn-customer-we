@@ -70,10 +70,18 @@
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="0">{{ $i._baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="1">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="product">{{ $i._baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="bookmark">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
-            <v-product :hideBtn="true" :forceUpdateNumber="new Date().getTime()" @handleOK="handleOK" :disabledLine="disabledTabData"></v-product>
+            <v-product 
+                :hideBtns="true"
+                :hideBtn="true"
+                :disabledLine="disabledLine"
+                @handleOK="getList"
+                :forceUpdateNumber="trig" 
+                :type="radio"
+                :isInquiry="true"
+            ></v-product>
         </el-dialog>
         <v-history-modify
                 @save="save"
@@ -136,6 +144,8 @@
         name:'inquiryDetail',
         data() {
             return {
+                disabledLine: [],
+                trig: 0,
                 disabledTabData: [],
                 id:"",
                 compareLists: false,
@@ -149,7 +159,7 @@
                 historyColumn: {},
                 msgTitle: '',
                 historyData: [],
-                radio: 'From New Search',
+                radio: 'product',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
@@ -244,11 +254,13 @@
 
             },
             addProduct() {
-                let disabledTabData = [];
-                _.map(this.newProductTabData, items => {
-                    if(!items._remark && !items._disabled) disabledTabData.push(items);
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
                 });
-                this.newSearchDialogVisible = false;
+                this.disabledLine = arr;
+                this.trig = new Date().getTime();
+                this.newSearchDialogVisible = true;
             },
             handleOK(item) { //添加 product
                 if(item && !item.length) return this.$message('请选择商品');
@@ -309,35 +321,11 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]),
-                        item => {
-                        // if (item.updateDt) {
-                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                        // }
-                        return item;
-                    });
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]),
-                        item => {
-                        // if (item.updateDt) {
-                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                        // }
-                        return item;
-                    });
+                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
-                        item => {
-                        // if (item.updateDt) {
-                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                        // }
-                        return item;
-                    });
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
-                        item => {
-                        // if (item.updateDt) {
-                        //     item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-                        // }
-                        return item;
-                    });
+                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -353,6 +341,20 @@
             },
             boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
+            },
+            getList(item) {
+                let tabData = [], arr = [];
+                item.forEach(items => {
+                    tabData.push(items.id.value);
+                });
+                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
+                .then(res => {
+                    _.map(res, item => {
+                        item.displayStyle = 0;
+                    });
+                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.dialogTableVisible = false;
+                });
             },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
@@ -374,7 +376,7 @@
                 if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
             },
             fromChange(val) {
-               console.log(val)
+               this.trig = new Date().getTime();
             },
             modifyAction() { //打开页面编辑状态
                 this.statusModify = true;
@@ -385,21 +387,25 @@
                         if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
+                            val.displayStyle = 1;
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
+                            val.displayStyle = 1;
                         }
                         return val;
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
-                        if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[0], {'key': 'id'}).value + '' && !val._remark && !data[0]._remark) {
+                        if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[0], {'key': 'skuId'}).value + '' && !val._remark && !data[0]._remark) {
                             console.log(val)
                             val = data[0];
                             val._modify = true;
-                        } else if(_.findWhere(val, {'key': 'id'}).value + '' === _.findWhere(data[1], {'key': 'id'}).value + '' && val._remark && data[1]._remark) {
+                            val.displayStyle = 1;
+                        } else if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
+                            val.displayStyle = 1;
                         }
                         return val;
                     });
@@ -413,20 +419,23 @@
                 .then(res => {
                     let arr = [];
                     if(type === 'basicInfo') {
-                        column = this.$db.inquiryOverview.basicInfo;
                         _.map(this.newTabData, items => {
                             if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
                         });
+                        if(config.type === 'histoty') {
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), false);
+                        } else {
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), true);
+                        }
                     } else {
-                        column = this.$db.inquiryOverview.productInfo;
                         _.map(this.newProductTabData, items => {
-                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
+                            if(_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
                         });
-                    }
-                    if(config.type === 'histoty') {
-                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), false);
-                    } else {
-                        this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res)), true);
+                        if(config.type === 'histoty') {
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                        } else {
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                        }
                     }
                 });
            },
@@ -448,11 +457,11 @@
                 this.historyColumn = this.$db.inquiryOverview.productInfo;
                 switch(type) {
                         case 'histoty':
-                            this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.id.value});
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.skuId.value});
                             break;
                         case 'modify':
                             this.oSwitch = true;
-                            this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.id.value });
+                            this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
                             break;
                 }
            },
@@ -483,11 +492,9 @@
                 });
             },
             removeProduct() { //删除product 某个单
-                this.newProductTabData.forEach((item, index) => {
-                    if(item._checked) {
-                        item._disabled = true;
-                        this.$set(this.newProductTabData, index, item);
-                    };
+            // console.log(_.pluck(this.checkedAll,'skuId'))
+                _.map(this.newProductTabData, (item, index) => {
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
                 });
             },
             modifyCancel() { //页面编辑取消
@@ -499,7 +506,11 @@
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
-                parentNode.details = this.dataFilter(this.newProductTabData);
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                parentNode.details = this.dataFilter(arr);
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {

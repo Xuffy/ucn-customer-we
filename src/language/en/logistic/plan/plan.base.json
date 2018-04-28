@@ -102,7 +102,7 @@
   "skuCode": "SKU Code",
   "skuNameEn": "SKU Name (EN)",
   "skuNameCn": "SKU Name (CN)",
-  "productDescription": "Product Description (Customer Language)",
+  "productDescription": "Product Description",
   "blSkuName": "B/L SKU Name",
   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
@@ -125,5 +125,13 @@
   "outerCartonVolume": "Outer Carton Volume",
   "shippingMarks": "Shipping Marks",
   "outerCartonBarCode": "Outer Carton Bar-Code",
-  "outerCartonSkuCode": "Outer Carton SKU Code"
+  "outerCartonSkuCode": "Outer Carton SKU Code",
+  "negotiate": "Negotiate",
+  "quantityOfOuterCartonsToBeShipped": "Quantity of Outer Cartons to be shipped",
+  "goodsToBeShipped": "Goods to be shipped",
+  "send": "Send",
+  "exit": "Exit",
+  "addProductFromOrder": "Add Product From Order",
+  "detail": "Detail",
+  "factorySkuCode": "Factory SKU Code"
 }

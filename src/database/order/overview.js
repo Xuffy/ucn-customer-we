@@ -15,6 +15,7 @@ export default {
     //        key: '',
     //    },
     id:{
+        _hide:true,
         key:'id'
     },
     archive: {
