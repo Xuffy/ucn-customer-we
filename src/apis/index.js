@@ -12,7 +12,7 @@ const version = ['/web/v1', '/v2', '/web/v3'];
 let list = _.mapObject(apis, val => {
   let b = ''
     , v = version[0];
-  console.log(val)
+  // console.log(val)
   if (config.IS_MOCK && config.ENV_FLAG === 'local') {
     b = config.ENV.MOCK;
   } else if (_.indexOf(_.keys(config.ENV), val[1]) > -1) {

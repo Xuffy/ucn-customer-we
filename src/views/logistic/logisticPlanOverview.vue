@@ -69,6 +69,11 @@ export default {
       ]
     }
   },
+  computed: {
+    pageName () {
+      return this.$route.meta.name
+    }
+  },
   components: {
     selectSearch,
     VTable
