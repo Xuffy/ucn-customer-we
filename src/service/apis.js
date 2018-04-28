@@ -2,6 +2,7 @@ const version = ['/web/v1', '/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
   CHATMESSAGE_ADD: ['/chatmessage/add', 'BASE_JML2'],
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],

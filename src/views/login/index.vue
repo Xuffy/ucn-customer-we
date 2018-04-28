@@ -1,216 +1,44 @@
 <template>
   <div class="login">
-    <div class="login-top"></div>
-    <section id="login-app" class="login-box">
-      <div style="text-align: center;">
-        <i class="logo"></i>
-        <span class="title">{{ $t('login.text.signIn') }}</span>
-      </div>
-      <div class="login-form">
-        <div class="from">
-          <div class="from-item">
-            <span>{{ $t('login.userInformation.email') }}</span><el-input v-model="formInline.username" placeholder="Email" ></el-input>
-          </div>
-          <div class="from-item">
-            <span>{{ $t('login.userInformation.password') }}</span><el-input v-model="formInline.password" placeholder="Password" ></el-input>
-          </div>
-          <div class="login-link" style="margin-top:50px;">
-            <el-checkbox v-model="checked">{{ $t('login.text.remenberMe') }}</el-checkbox>
-            <router-link to="/forgetPassword">{{ $t('login.text.forgetPassword') }}?</router-link>
-          </div>
-          <el-button type="primary" @click="handleSubmit('formInline')" style="width:100%;margin:10px 0;">{{$t('login.text.loginIn')}}</el-button>
-          <div class="login-link active">
-            <router-link to="/signUp">{{$t('login.text.noAccount')}}? {{$t('login.text.signUpNow')}}>></router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+    <iframe :src="loginUrl" style="width: 100%;height: 100%;position: fixed;top: 0;left: 0">
+
+    </iframe>
   </div>
 </template>
 
 <script>
-  import config from  'service/config';
+  import config from 'service/config';
+  import {Base64} from 'js-base64';
+
   export default {
     name: 'login',
     data() {
       return {
-        loginLoading: false,
-        checked:false,
-        formInline: {
-          username: '',
-          password: ''
-        },
-        ruleInline: {
-          username: [
-            {required: true, message: '请输入用户名', trigger: 'change'}
-          ],
-          password: [
-            {required: true, message: '请输入密码', trigger: 'change'},
-            {type: 'string', min: 3, message: '密码长度不能小于3位', trigger: 'change'}
-          ]
-        }
+        loginUrl: ''
       }
     },
     created() {
+      let redirectUrl = Base64.encode(`${window.location.origin}/static/authorize/index.html`);
+      this.$message.closeAll();
+      this.loginUrl = `${config.ENV.LOGIN_URL}${redirectUrl}`;
       this.$localStore.clearAll();
       this.$sessionStore.clearAll();
+
+      window.__authorize = this.getUserInfo;
     },
     methods: {
-      handleSubmit(name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.submitLogin();
-          } else {
-            this.$Message.warning('请输入正确的用户名密码！');
-          }
-        })
-      },
-      submitLogin(){
-        this.loginLoading = true;
-
-        setTimeout( ()=> {
-          this.$Message.success('登录成功');
+      getUserInfo(token) {
+        if (!token) return false;
+        token = Base64.decode(token);
+        this.$localStore.set('token', token);
+        this.$ajax.get(this.$apis.USER_PRIVILEGE).then(data => {
+          this.$localStore.set('user', data);
           this.$router.push('/');
-        },1000);
-        return false;
-        /*this.ajax.post('/v2/store/user/loginUser',
-          {username: this.formInline.username, password: this.formInline.password},
-          {noAuth: true})
-          .then(data => {
-            data.user.storeName = data.storeName;
-            this.$localStore.set('ticket', data.ticket);
-            this.$localStore.set('user', data.user);
-            this.$localStore.set('version', config.VERSION);
-            this.$Message.success('登录成功');
-            let timeout = setTimeout(() => {
-              clearTimeout(timeout);
-              this.$Message.destroy();
-              this.$router.push('/');
-            }, 1000);
-          })
-          .catch(() => {
-            this.loginLoading = false;
-          });*/
+        });
       }
     }
   }
 </script>
 <style scoped lang="less">
-  .login {
-    .login-link {
-      display:flex;
-      justify-content: space-between;
-      &.active {
-        justify-content: center;
-      }
-      a {
-        color:#409EFF;
-        font-size:14px;
-        &:hover {
-          opacity: .6;
-        }
-      }
-    }
-  }
-  .login .ivu-input-group-prepend {
-    background-color: #ffffff;
-    border: none;
-    width: 40px;
-    text-align: left;
-  }
-
-  .login .ivu-form-item-content {
-    line-height: 40px;
-    height: 40px;
-  }
-
-  .login .ivu-input {
-    height: 40px;
-    border: none;
-    padding: 0;
-    border-radius: 0;
-    font-size: 14px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .login .ivu-input:focus {
-    border: none;
-    box-shadow: none;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .login .ivu-input:hover {
-    border-color: none;
-    border-bottom: 1px solid #e6e6e6;
-  }
-
-  .login .ivu-form-item-error-tip {
-    left: 40px;
-  }
-</style>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
-  .login-top {
-    position: absolute;
-    width: 100%;
-    height: 398px;
-    background-image: url("../../assets/images/login-back.jpg");
-    background-position: center;
-    background-size: cover;
-    z-index: -1;
-  }
-
-  .login-box {
-    max-width: 500px;
-    width: 500px;
-    height: 380px;
-    background-color: #fff;
-    position: fixed;
-    top: 45%;
-    left: 50%;
-    margin-top: -160px;
-    margin-left: -250px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
-  }
-
-  .login-box .logo {
-    display: inline-block;
-    background-image: url("../../assets/images/logo.jpg");
-    width: 150px;
-    height: 68px;
-    vertical-align: middle;
-    margin: 30px 20px 20px 0;
-    background-size: 100% 100%;
-  }
-
-  .login-box .title {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 50px;
-  }
-
-  .login-form {
-    padding-left: 45px;
-    padding-right: 45px;
-    margin-top: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    .from {
-      .from-item {
-        display:flex;
-        align-items:center;
-        margin-bottom:10px;
-        span {
-          width: 100px;
-          font-size:12px;
-          color:#666;
-          text-align:right;
-          padding-right:10px;
-        }
-      }
-    }
-  }
-
 
 </style>
