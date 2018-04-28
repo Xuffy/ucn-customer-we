@@ -531,7 +531,7 @@ export const routerMap = [
         {
           path: 'planDetail',
           name: 'logisticPlanDetail',
-          hidden: false,
+          hidden: true,
           meta: {
             draft: true,
             recycleBin: true,

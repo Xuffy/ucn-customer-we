@@ -1,8 +1,9 @@
 <template>
   <div class="logistic-plan-overview">
+    <div class="hd-top">{{ $i.logisticsPlanOverview }}</div>
     <div class="status">
       <div class="btn-wrap">
-        <span>{{ $i.logisticsPlanOverview}}:</span>
+        <span>{{ $i.status}}:</span>
         <el-checkbox-group v-model="fillterArr" size="mini" @change="handleCheckedLabelChange">
           <el-checkbox-button :label="a.mark" v-for="a of $i.checkboxStatus" :key="'status-' + a.text">{{a.text}}</el-checkbox-button>
         </el-checkbox-group>
@@ -13,7 +14,7 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.downloadSelected }}</el-button>
+        <el-button>{{ $i.download }}({{ 'all' }})</el-button>
         <el-button>{{ $i.placeLogisticPlan }}</el-button>
         <el-button type="danger" :disabled="true">{{ $i.delete }}</el-button>
       </div>
@@ -137,6 +138,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .logistic-plan-overview {
+  .hd-top {
+    font-size: 18px;
+    color: #666;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #ccc;
+    padding: 0 15px;
+  }
   .btn-wrap {
     padding:10px;
     display:flex;

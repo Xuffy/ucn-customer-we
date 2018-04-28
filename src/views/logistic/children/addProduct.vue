@@ -183,7 +183,7 @@ export default {
   },
   methods: {
     tableRowClassName({row, rowIndex}) {
-      row.index = rowIndex;
+      row.index = rowIndex
     },
     handleSelectionChange (val) {
       console.log(val.map(a => a.index))

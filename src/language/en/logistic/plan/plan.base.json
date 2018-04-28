@@ -1,4 +1,6 @@
 {
+  "status": "Status",
+  "logisticsPlanOverview": "Logistics Plan Overview",
   "placeholder": "Please enter content",
   "modify": "Modify",
   "confirm": "Confirm",

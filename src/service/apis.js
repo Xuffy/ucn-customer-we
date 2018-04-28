@@ -1,6 +1,4 @@
 
-
-
 const apis = {
   USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
@@ -104,8 +102,7 @@ const apis = {
   update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
   delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
   delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
-  post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
-  get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+ 
   add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
