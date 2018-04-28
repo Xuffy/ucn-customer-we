@@ -134,6 +134,7 @@ const apis = {
   get_inboundData:['/inbound/page','BASE_SELLER'],
   get_productInfo:['/order/skuListPage','BASE_TEST'],
   get_inboundDetail:['/inbound/getById','BASE_SELLER'],
+  add_inbound:['/inbound/add','BASE_SELLER'],
   // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
 

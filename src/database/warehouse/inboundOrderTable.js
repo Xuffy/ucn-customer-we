@@ -1,5 +1,41 @@
 export default {
     orderNo:{
-        key:''
-    }
+        key:'orderNo'
+    },
+    skuBarCode:{
+        key:'skuBarCode',
+    },
+    skuCode:{
+        key:'skuCode'
+    },
+    skuNameCn:{
+        key:'skuNameCn'
+    },
+    skuCustomsNameCn:{
+        key:'skuCustomsNameCn'
+    },
+    skuNameEn:{
+        key:'skuNameEn'
+    },
+    skuMaterialCn:{
+        key:'skuMaterialCn'
+    },
+    skuMaterialEn:{
+        key:'skuMaterialEn'
+    },
+    skuCustomerSkuCode:{
+        key:'skuCustomerSkuCode'
+    },
+    skuDescCn:{
+        key:'skuDescCn'
+    },
+    skuDescEn:{
+        key:'skuDescEn'
+    },
+    skuBrand:{
+        key:'skuBrand'
+    },
+    skuInnerCartonVolume:{
+        key:'skuInnerCartonVolume'
+    },
 }
