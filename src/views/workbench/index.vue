@@ -39,7 +39,6 @@
 </template>
 
 <script>
-  // import VQuickLink from './quickLink'
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
