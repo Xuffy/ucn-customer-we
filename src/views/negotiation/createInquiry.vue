@@ -361,7 +361,6 @@
             getList(item) {
                 let tabData = [], arr = [];
                 item.forEach(items => {
-                    console.log(items.skuId.vlaue)
                     tabData.push(items.id.value);
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)

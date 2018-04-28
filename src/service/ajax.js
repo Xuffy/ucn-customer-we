@@ -16,8 +16,7 @@ const axios = Axios.create({
   // baseURL: mock ? _config.ENV.mock : '',
   timeout: _config.TIMEOUT,
   headers: {
-    'Content-Type': 'application/json;charset=utf-8',
-    'U-Session-Token':'e682431b-15fb-43fa-956f-23b665379175',
+    'Content-Type': 'application/json;charset=utf-8'
   },
   transformRequest: [function (data) {
     return data;
