@@ -80,7 +80,7 @@ const $ajax = (config) => {
       options.data = JSON.stringify(options.data);
     }
 
-    if (!config._noAuth) {
+    if (!config._noAuth && _config.AUTH) {
       options.headers['U-Session-Token'] = t;
     }
     return [options, config]
@@ -206,7 +206,7 @@ NProgress.configure({
 axios.interceptors.request.use(config => {
   NProgress.start();
 
-  if (!config.headers['U-Session-Token'] && !config._noAuth) {
+  if (!config.headers['U-Session-Token'] && !config._noAuth && _config.AUTH) {
     Message({
       message: '登录失效，请重新登录',
       type: 'warning',

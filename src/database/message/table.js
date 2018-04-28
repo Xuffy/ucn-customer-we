@@ -10,5 +10,6 @@ export default {
     },
   subscribeId: {
     key: 'subscribeId',
+    _hide:true,
   }
 }
