@@ -2,7 +2,7 @@ export default {
   // 环境配置
   ENV: {
     local: {
-      LOGIN_URL: '//localhost:8070/#/?type=1&redirect=',
+      LOGIN_URL: '//120.79.230.214:9090/#/?type=1&redirect=',
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
       //BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
