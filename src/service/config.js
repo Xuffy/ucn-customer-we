@@ -28,6 +28,7 @@ export default {
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
 
 
+      BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
       USSO_URL: 'http://dev.usso-facade.ucnholding.com:18100', // sso 服务
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100', // 用户中心
       UMETA_URL: 'http://dev.umeta-facade.ucnholding.com:18100', // 元数据
@@ -63,6 +64,9 @@ export default {
       BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
+
+  // 是否开启token验证
+  AUTH: false,
 
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,
