@@ -15,12 +15,18 @@
             @action="action"
             @change-checked="changeChecked"
             :height="350"
-            :page-total="pageTotal"
+        />
+        <v-pagination
+            :pageNum.sync="bodyData.pn"
+            :pageSize.sync="bodyData.ps"
+            :page-total.sync="pageTotal"
+            @page-change="handleSizeChange"
+            @page-size-change="pageSizeChange"
         />
     </div>
 </template>
 <script>
-    import { VTable, selectSearch } from '@/components/index';
+    import { VTable, selectSearch, VPagination } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -62,7 +68,8 @@
         },
         components: {
             'select-search':selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'v-pagination': VPagination
         },
         methods: {
             getList() { //获取Compare 列表
@@ -126,6 +133,12 @@
             },
             inputEnter() {
                 
+            },
+            handleSizeChange(val) {
+                this.params.pn = val;
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
             }
         },
         watch: {

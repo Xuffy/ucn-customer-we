@@ -33,6 +33,13 @@
             :buttons="[{label: 'detail', type: 'detail'}]" 
             @action="action" 
         />
+        <v-pagination
+            :pageNum.sync="params.pn"
+            :pageSize.sync="params.ps"
+            :page-total.sync="pageTotal"
+            @page-change="handleSizeChange"
+            @page-size-change="pageSizeChange"
+        />
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
@@ -41,11 +48,12 @@
     </div>
 </template>
 <script>
-    import { VTable, dropDownSingle, addNewInqury } from '@/components/index';
+    import { VTable, dropDownSingle, addNewInqury, VPagination } from '@/components/index';
     export default {
         name:'compareOverview',
         data() {
             return {
+                pageTotal:0,
                 addNew: false,
                 compareName: '',
                 tabLoad: false,
@@ -71,6 +79,7 @@
         components: {
             "v-table": VTable,
             "add-new-inqury": addNewInqury,
+            'v-pagination': VPagination,
             dropDownSingle
         },
         created() {
@@ -86,8 +95,11 @@
             compareBy () {
                 this.upData();
             },
-            params(val) {
-                this.upData();
+            params: {
+                handler(val) {
+                    this.upData();
+                },
+                deep: true
             }
         },
         methods: {
@@ -172,7 +184,8 @@
 
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.compareName = res.appendant.compareName;
+                    this.pageTotal = res.tc;
+                    this.compareName = res.appendant?res.appendant.compareName:this.compareName;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                 })
@@ -285,6 +298,12 @@
                     this.tabData = arr;
                     this.addNew = false;
                 })
+            },
+            handleSizeChange(val) {
+                this.params.pn = val;
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
             }
         }
     }

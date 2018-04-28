@@ -37,7 +37,7 @@ console.warn = () => {
 
 
 // 去掉console
-if (config.ENV_FLAG !== 'local') {
+if (config.ENV_FLAG === 'production') {
   console.log = () => {
   }
 }

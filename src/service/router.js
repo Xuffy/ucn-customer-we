@@ -434,7 +434,7 @@ export const routerMap = [
           component: () => import('../views/order/draftOverview.vue')
         }, {
           path: 'recycleBin',
-          name: 'recycleBin',
+          name: 'orderRecycleBin',
           meta: {
             draft: true,
             recycleBin: true,
