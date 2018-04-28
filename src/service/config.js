@@ -2,7 +2,7 @@ export default {
   // 环境配置
   ENV: {
     local: {
-      LOGIN_URL: '//120.79.230.214:9090/#/?type=1&redirect=',
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn/#/?type=1&redirect=',
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
       //BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
@@ -33,7 +33,7 @@ export default {
       UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100',
       USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100',
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      LOGIN_URL: 'http://120.79.230.214:9090'
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn'
     },
     test: {
       BASE_API: 'http://store.test.tailorx.cn/api'
