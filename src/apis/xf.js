@@ -4,7 +4,7 @@ export default {
   UTASK_TYPELIST: ['/utask/typeList', 'BASE_JY'],
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
-  CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
-  CHATMESSAGE_ADD: ['/chatmessage/add', 'BASE_JML2'],
+  CHATMESSAGE_QUERY: ['/chatmessage/query', 'UMESSAGE_URL'],
+  CHATMESSAGE_ADD: ['/chatmessage/add', 'UMESSAGE_URL'],
   GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
 }
