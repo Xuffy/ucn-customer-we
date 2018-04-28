@@ -20,7 +20,7 @@
         </div>
 <!--         attachment-->
 <!--VExchange-->
-        <VExchange :disabled=false ></VExchange> 
+        <VExchange :disabled=false ref='exchange'></VExchange> 
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
@@ -163,14 +163,15 @@
                         id: this.orderId
                     })
                     .then((res) => {
-                        //                        var copy = Object.assign({}, res);
-                        //                        delete copy.orderResponsibilityList
-                        //                        delete copy.skuList
+                        console.log(res)
                         //..........basicinfo
                         this.$refs.basicinfo.formItem = res;
+                        //..........caculate
                         this.$refs.caculate.caculateForm = res
                         //..........responsibility
                         this.$refs.responsibility.tableData = res.orderResponsibilityList
+                        //..........exchangerate
+                        this.$refs.exchange.exchangeRateList = res.exchangeRateList
                         //..........attachment
 
                         //..........productinfo
@@ -182,7 +183,6 @@
                             item => {
                                 return item;
                             });
-                        //..........calculate
 
                         this.tableLoad = false;
                     })

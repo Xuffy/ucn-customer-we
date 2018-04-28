@@ -92,9 +92,6 @@
         },
         methods: {
             onAction(item, type) {
-                //                this.$windowOpen('', {
-                //                    orderId: item.id.value
-                //                });
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {
