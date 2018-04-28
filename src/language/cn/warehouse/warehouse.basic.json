@@ -12,5 +12,15 @@
   "totalNetWeight":"产品净重总数",
   "totalSkuQty":"产品总数",
 
-  "download":"下载"
+  "orderNo":"订单号",
+  "productNo":"产品货号",
+  "nameCn":"中文品名",
+  "barCode":"产品条码",
+
+
+
+
+  "download":"下载",
+  "submit":"提交",
+  "cancel":"取消"
 }

@@ -361,6 +361,16 @@ export const routerMap = [
             name: 'Draft Overview'
           },
           component: () => import('../views/order/draftOverview.vue')
+        }, {
+          path: 'recycleBin',
+          name: 'recycleBin',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'recycleBin Overview'
+          },
+          component: () => import('../views/order/recycleBin.vue')
         }
       ]
     },
@@ -740,6 +750,36 @@ export const routerMap = [
           },
           component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
         },
+      ]
+    },
+        {
+      path: '/customer',
+      component: Layout,
+      meta: {name: 'Customer'},
+      redirect: '/customer/overview',
+      children: [
+        {
+          path: 'overview',
+          name: 'Customer Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Customer Overview'
+          },
+          component: () => import ('../views/customer/overview.vue'),
+        },    
+         {
+          path: 'customerDetail',
+          name: 'Customer Detail',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Customer Detail',
+          },
+          component: () => import('../views/customer/customerDetail.vue'),
+        }, 
       ]
     },
   ]

@@ -48,12 +48,13 @@
             </div>
             <div v-if="$route.params.type==='modify'">
                 <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
-                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
+                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare'>Save</el-button>
                 <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
         </div>
 
-        <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
+        <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
+<!--
             <product
                     :isInModify="$route.params.type==='modify'?true:false"
                     :title="addProductTitle"
@@ -63,10 +64,17 @@
                     :forceUpdateNumber="forceUpdateNumber"
                     @handleOK="handleOkClick"
                     @handleCancel="handleCancel"></product>
+-->
+            <VSupplier
+                @handleOkClick='handleOkClick'
+                :isButton=false
+                 :disabledLine="disabledLine"
+                >
+               
+            </VSupplier>
         </el-dialog>
 
         <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            asf
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -79,13 +87,14 @@
 <script>
     import VTable from '@/components/common/table/index'
     import product from '../../product/addProduct'
-
+    import VSupplier from '../sourcing/sourcing'
 
     export default {
         name: "compare",
         components:{
             VTable,
-            product
+            product,
+            VSupplier
         },
         data(){
             return{
@@ -128,13 +137,8 @@
                         console.log(this.tableDataList)
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-                            console.log(err,'+++++++++')
-                    }).finally(res=>{
-                        console.log('in')
-//                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
-//                        console.log(this.tableDataList)
-//                        this.disabledLine=this.tableDataList;
-                    });
+                            
+                    })
                    
                 }else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
@@ -163,7 +167,8 @@
                         //         orderType: "string",
                         //     }
                         // ]
-                    };                    this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
+                    };  
+                    this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas);
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -175,8 +180,13 @@
             },
 
             btnClick(e){
-                console.log(e)
-                // this.$windowOpen('/product/sourcingDetail',{id:e.id.value});
+                this.$windowOpen({
+                    url:'/supplier/sourcingDetail',
+                    params:{
+                        companyId:e.companyId.value,
+                        id:e.id.value
+                    }
+                })
             },
 
             changeChecked(e){
@@ -251,6 +261,7 @@
             },
 
             handleOkClick(e){
+                
                 //如果总条数>100，则进行提示
                 let totalLen=0;
                 this.tableDataList.forEach(v=>{
@@ -258,7 +269,6 @@
                         totalLen++;
                     }
                 });
-
                 if(totalLen+e.length>100){
                     this.$message({
                         message: '警告哦，这是一条警告消息',
@@ -285,6 +295,7 @@
                             this.disabledLine.push(v);
                         }
                     });
+                    console.log(this.tableDataList)
                 }
                 this.addProductDialogVisible=false;
             },
@@ -295,6 +306,7 @@
 
             //保存该compare list
             saveCompare(){
+               
                 if(!this.compareName){
                     this.$message({
                         message: 'Please Input Compare Name',
@@ -302,7 +314,6 @@
                     });
                     return;
                 }
-
                 this.disabledSaveCompare=true;
                 let params={
                     compares: [],
@@ -311,13 +322,14 @@
                 this.tableDataList.forEach(v=>{
                     let id,name;
                     id=_.findWhere(v,{key:'id'}).value;
-                    name=_.findWhere(v,{key:'nameEn'}).value;
+                    name=_.findWhere(v,{key:'name'}).value;
                     params.compares.push({
                         id:id,
                         name:name
                     });
                 });
                 this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
+                    console.log(res)
                     let compareId=res;
                     this.$router.push({
                         name:'supplierCompareDetail',
@@ -334,7 +346,6 @@
                     this.disabledSaveCompare=false;
                 });
             },
-
             //删除该compare
             deleteCompare(){
                 this.$confirm('确认删除该compare?', '提示', {
@@ -351,7 +362,9 @@
                             message: '删除成功!'
                         });
                         this.disabledSaveCompare=false;
-                        this.$router.push('/supplier/compare');
+                        this.$router.push({
+                            path:'/supplier/compare'
+                        });
                     }).catch(err=>{
                         this.disabledSaveCompare=false;
                     });
