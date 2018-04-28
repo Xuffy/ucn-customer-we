@@ -1,5 +1,5 @@
-const version = ['/web/v1', '/v2', '/web/v3'];
-import config from './config';
+
+
 
 const apis = {
   USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
