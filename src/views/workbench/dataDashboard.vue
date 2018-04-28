@@ -2,7 +2,7 @@
   <div class="dataDashboard">
 
     <h3 class="ucn-content-title inline" v-text="$i._workbench.dataDashboard"></h3>
-    <div class="block" style="display: inline-block;margin-left: 80px">
+    <!--<div class="block" style="display: inline-block;margin-left: 80px">
       <span class="demonstration">Time：</span>
       <el-date-picker
         v-model="value7"
@@ -20,7 +20,7 @@
     <el-button size="medium" type="text"
                style="display: inline-block;margin-left: 30px!important;"
                @click="dialog.show = true">more
-    </el-button>
+    </el-button>-->
 
     <br/><br/>
 
