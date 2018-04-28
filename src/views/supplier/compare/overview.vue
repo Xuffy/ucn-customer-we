@@ -1,18 +1,20 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{$i._compareOverview}}</h3>
+        <h3 class="hd">{{$i.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
                 <el-button  :disabled='!selectedData.length>0'
                  @click='downloadSelected'
-                >{{$i._baseText.downloadSelected}}</el-button>
+                >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
                 <el-button type="danger" :disabled='!selectedData.length>0'
                 @click='remove'
-                >{{$i._baseText.delete}}</el-button>
+                >{{$i._baseText.delete}}({{selectedNumber.length}})</el-button>
             </div>
 
        <div class="select-wrap">       
-                   <selectSearch :options='options' @inputChange='inputEnter'></selectSearch>
+                   <selectSearch :options='options' @inputEnter='inputEnter' 
+                   v-model='selectSearch'
+                     ></selectSearch>
                 <div>
 
                 </div>
@@ -41,6 +43,7 @@
         name: '',
         data() {
             return {
+                selectSearch:'1',
                 options: [{
                     id: '1',
                     label: 'compareName'
@@ -49,8 +52,9 @@
                     label: "compareItem"
                 }],
                 params: {
-                    id: 1,
+                    id: '',
                     name: "",
+                    compareName:'',
                     //                      "operatorFilters": [
                     //                        {
                     //                          "columnName": "string",
@@ -84,17 +88,24 @@
         },
         methods: {
             inputEnter(keyWord) {
-                console.log(keyWord)
-
+                console.log(keyWord.key)
+                if(keyWord.keyType==1){
+                     params.compareName=keyWord.key
+                    
+                      this.get_data()
+                   }else{
+                        params.compareName=keyWord.key
+                       this.get_data()
+                      
+                   }
             },
             checked(item) {
                 this.selectedData = item
                 let number = []
                 this.selectedData.forEach(item => {
-                    console.log()
                     number.push(item.id.value);
                 });
-                this.selectNumber = number
+                this.selectedNumber = number
             },
             detail(e,type) {
                 if(type===1){

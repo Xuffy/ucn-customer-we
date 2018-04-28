@@ -59,12 +59,17 @@ const apis = {
   update_supplier: ['/supplier/{id}', 'BASE_CS'],
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
+  get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
+  get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ'],
+  post_recover_order:['/order/recover','BASE_HCJ'],
+  post_finishPost:['/order/finish','BASE_HCJ'],
   delete_order: ['/order/delete', 'BASE_HCJ'],
   download_order: ['/order/download', 'BASE_HCJ'],
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
+  post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_BUYER'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],

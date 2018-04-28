@@ -5,6 +5,7 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
+                            <el-radio-button label=" ">{{($i._baseText.all)}}</el-radio-button>
                             <el-radio-button label="1"> {{ $i._baseText.TBCByCustomer }}</el-radio-button>
                             <el-radio-button label="2">{{($i._baseText.TBCBySupplier)}}</el-radio-button>
                             <el-radio-button label="3">{{($i._baseText.process)}}</el-radio-button>
@@ -24,7 +25,7 @@
             <div class="btn-wrap">
                 <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
                 <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i._baseText.createOrder)}}</el-button>
-                 <el-button :disabled='prodisabled'>finish</el-button>
+                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
                 <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i._baseText.delete)}}</el-button>
             </div>
             <div class="viewBy">
@@ -92,6 +93,7 @@
                 params: {
                     orderNo: '',
                     skuCode: '',
+                    status:'',
                     view: 1, //view by的按钮组
                     ps: 10,
                     pn: 1
@@ -102,6 +104,7 @@
         },
         methods: {
             onAction(item, type) {
+                console.log(item)
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {
@@ -125,29 +128,57 @@
             },
             checked(item) {
                 this.selectedDate = item
-
+                var obj=[]
                 this.selectedDate.forEach(item => {
-                    this.selectedNumber.push(item.id.value);
+                    obj.push(item.id.value);
                 });
+                 this.selectedNumber=obj
             },
             changeStatus() {
-                this.getdata()
+                if(this.params.view==1){
+                      this.getdata(this.$db.order.overview)
+                   }else{
+                       this.getdata(this.$db.order.overviewBysku)
+                   } 
             },
             changeView() {
-                this.getdata(this.$db.order.overviewBysku)
+                if(this.params.view==1){
+                      this.getdata(this.$db.order.overview)
+                   }else{
+                       this.getdata(this.$db.order.overviewBysku)
+                   }            
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message('请选中搜索类型');
                 if (!val.key) return this.$message('搜索内容不能为空');
                 if (val.keyType == '1') {
                     this.params.orderNo = val.key
+                    if(this.params.view==1){
+                      this.getdata(this.$db.order.overview)
+                   }else{
+                       this.getdata(this.$db.order.overviewBysku)
+                   } 
                 } else {
                     this.params.skuCode = val.key
+                    if(this.params.view==1){
+                      this.getdata(this.$db.order.overview)
+                   }else{
+                       this.getdata(this.$db.order.overviewBysku)
+                   } 
                 }
                 this.getdata()
             },
+            finish(){
+                 this.$ajax.post(this.$apis.post_finishPost, {ids:this.selectedNumber})
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
             download() {
-                this.$ajax.post(this.$apis.download_order, this.selectedNumber)
+                this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
                     .then((res) => {
                         console.log(res)
                     })
@@ -156,9 +187,13 @@
                     });
             },
             deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, this.selectedNumber)
+                this.$ajax.post(this.$apis.delete_order, {ids:this.selectedNumber})
                     .then((res) => {
-                        console.log(res)
+                        if(this.params.view==1){
+                          this.getdata(this.$db.order.overview)
+                       }else{
+                           this.getdata(this.$db.order.overviewBysku)
+                       } 
                     })
                     .catch((res) => {
                         console.log(res)
@@ -188,7 +223,6 @@
         },
         created() {
             this.getdata(this.$db.order.overview)
-
         },
         mounted() {
             this.loading = false

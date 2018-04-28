@@ -18,6 +18,9 @@
                    
                 </div>
         </div>
+<!--         attachment-->
+<!--VExchange-->
+        <VExchange :disabled=false ></VExchange> 
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
@@ -91,7 +94,7 @@
     import attchment from '../creatOrder/attachment'
     import VCaculate from '../creatOrder/caculate'
     import VPayment from './payment.vue'
-
+    import VExchange from '../creatOrder/exchange.vue'
     import {
         VTable,
         messageBoard,
@@ -109,7 +112,7 @@
             messageBoard,
             VCaculate,
             VHistoryModify,
-
+            VExchange
         },
         data() {
             return {
