@@ -138,13 +138,6 @@ const apis = {
   get_inboundDetail:['/inbound/getById','BASE_SELLER'],
   // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
-
-
-  // logistic
-  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
-  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
-  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
-
   // logistic dictionary
   get_container_type: ['/containertype/all', 'BASE_dictionary'],
 

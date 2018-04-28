@@ -18,7 +18,7 @@ export default {
       BASE_JML2: 'http://dev.umessage-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       BASE_HSM: 'http://dev.uwarehouse.ucnholding.com:18100',
-      BASE_LJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_LJ: 'http://192.168.51.219:18100',
       BASE_dictionary: 'http://dev.umeta-facade.ucnholding.com',
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_SELLER: 'http://dev.usupply-facade.ucnholding.com:18100',
