@@ -97,7 +97,7 @@
             return {
                 dialogEditDiv: false,
                 formItem: {
-                    orderNo:'', //必填   系统生成 不可编辑
+                    orderNo: '9999', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成  
@@ -108,7 +108,7 @@
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
                     deliveryDt: '', //必填 
-                    incoterm: '', //必填 
+                    incoterm: 'FOB', //必填 
                     incortermAea: '', //必填 
                     payment: '', //必填 
                     lcNo: '',
@@ -122,7 +122,7 @@
                     customerAgreementNo: '',
                     customerAgreementDt: '',
                     remark: '',
-                    currency: ''
+                    currency: 'USD' //必填
                 },
                 //......................表单正则
                 rules: {

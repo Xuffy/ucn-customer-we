@@ -33,7 +33,7 @@
             :buttons="[{label: 'detail', type: 'detail'}]" 
             @action="action" 
         />
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
@@ -127,15 +127,15 @@
                     })
                     .then(res => {
                         if(type === 'save') return this.compareType = 'only';
-                        this.$router.push({
-                            name: 'negotiationCompare',
-                            params: {
-                                type: 'only'
-                            },
-                            query: {
-                                id: res.id
-                            }
-                        });
+                        // this.$router.push({
+                        //     name: 'negotiationCompare',
+                        //     params: {
+                        //         type: 'only'
+                        //     },
+                        //     query: {
+                        //         id: res.id
+                        //     }
+                        // });
                     });
                 }).catch(() => {
                     this.$message({

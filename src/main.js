@@ -5,7 +5,7 @@ import ajax from 'service/ajax'
 import config from 'service/config';
 import * as filters from 'service/filters.js'
 import fetch from 'service/fetch';
-import apis from 'service/apis';
+import apis from '@/apis/index';
 import util from 'service/util';
 import '../theme/index.css';
 import 'assets/style/main.less';

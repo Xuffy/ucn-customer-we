@@ -17,7 +17,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    'U-Session-Token':'ebc4e8ec-276d-44f8-b267-1685f9ae0456'
+    'U-Session-Token':'e682431b-15fb-43fa-956f-23b665379175'
   },
   transformRequest: [function (data) {
     return data;

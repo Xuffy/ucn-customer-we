@@ -138,6 +138,18 @@ export default {
       return list;
     };
     /**
+     * 时区转换 传入时区 如 0 8 -1
+    */
+    Vue.prototype.$getLocalTime = (i) => {
+        if (typeof i !== 'number') return;
+        const d = new Date(), 
+              len = d.getTime(),
+              offset = d.getTimezoneOffset() * 60000,
+              utcTime = len + offset;
+        return new Date(utcTime + 3600000 * i);
+    }
+
+    /**
      * $window.open
      */
 
