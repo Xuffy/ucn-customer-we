@@ -42,6 +42,7 @@ export default {
       LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     develop: {
+      BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
       USSO_URL: 'http://dev.usso-facade.ucnholding.com:18100', // sso 服务
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100', // 用户中心
       UMETA_URL: 'http://dev.umeta-facade.ucnholding.com:18100', // 元数据
@@ -53,8 +54,6 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      // LOGIN_URL: 'http://120.79.230.214:9090',
-      // LOGIN_URL: 'http://dev.auth.ucnscm.cn'
       LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     test: {
