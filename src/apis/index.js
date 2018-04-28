@@ -1,12 +1,11 @@
 import config from '@/service/config';
 import twj from './twj'
 import lsx from './lsx'
-import lt from './lt'
+import tl from './tl'
 import lyx from './lyx'
 import rcy from './rcy'
 import xf from './xf'
-
-const apis = _.extend(twj, lsx, lt, lyx, rcy, xf);
+const apis = _.extend(twj, lsx, tl, lyx, rcy, xf);
 const version = ['/web/v1', '/v2', '/web/v3'];
 
 
