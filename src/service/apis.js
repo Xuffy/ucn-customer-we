@@ -15,9 +15,11 @@ const apis = {
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
   update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
-  sys_category: ['/sys/category', 'BASE_CS'],
+  GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS'], //供应商 =》 获取系统分类
+  BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1'], //采购端 => 获取系统分类
   GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
-  category: ['/category', 'BASE_CS'],
+  GET_CATEGORY: ['/category', 'BASE_CS'], //供应商 =》 获取我的分类
+  BUYER_GET_CATEGORY: ['/purchase/category', 'BASE_CS1'], //供应商 =》 获取我的分类
   mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory: ['/sys/category', 'BASE_CS'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
@@ -60,12 +62,17 @@ const apis = {
   update_supplier: ['/supplier/{id}', 'BASE_CS'],
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
+  get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
+  get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ'],
+  post_recover_order:['/order/recover','BASE_HCJ'],
+  post_finishPost:['/order/finish','BASE_HCJ'],
   delete_order: ['/order/delete', 'BASE_HCJ'],
   download_order: ['/order/download', 'BASE_HCJ'],
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
+  post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_BUYER'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],
@@ -122,7 +129,7 @@ const apis = {
   post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetails', 'BASE_CS_cgs'],
   post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare', 'BASE_CS_cgs'],
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
-
+  post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
   get_productInfo:['/order/skuListPage','BASE_BUYER'],
@@ -139,6 +146,22 @@ const apis = {
 
   //payment
   post_ledgerPage:['/ledger/page','BASE_BJ'],
+  //message
+  post_companymessage_query:['/companymessage/query','BASE_JML_msg'],
+  post_systemmessage_query:['/systemmessage/query','BASE_JML_msg'],
+  get_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
+  post_sys_addsystemmessage:['/systemmessage/addsystemmessage','BASE_JML_msg'],
+  post_sys_updateread:['/systemmessagesubscribe/updateread','BASE_JML_msg'],
+  get_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
+  post_company_addcompanymessage:['/companymessage/addcompanymessage','BASE_JML_msg'],
+  post_company_updateread:['/companymessagesubscribe/updateread','BASE_JML_msg'],
+  //logs
+  post_bizloQuery:['/bizlog/query','BASE_JML_logs'],
+  //Personal Setting
+  get_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile:['/user/profile','BASE_UUSER'],
+  put_user_profile_password:['/user/profile/password','BASE_UUSER']
+
 };
 
 let list = _.mapObject(apis, val => {

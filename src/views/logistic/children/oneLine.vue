@@ -1,12 +1,13 @@
 <template>
-  <div v-if="list.length">
+  <el-row v-if="list.length">
     <el-col :xs="raster" :sm="raster" :md="raster" :lg="raster" :xl="raster" v-for="(a, i) of list" :key="'list-' + i">
       <div class="right">
         <span>{{ `${ title }(${ a.text })`}}</span>
-        <el-input :placeholder="a.placeholder" v-model="a.value"></el-input>
+        <el-input :placeholder="a.placeholder" v-model="a.value" v-if="edit"></el-input>
+        <p v-else>{{ a.value }}</p>
       </div>
     </el-col>
-  </div>
+  </el-row>
 </template>
 <script>
 export default {
@@ -19,6 +20,10 @@ export default {
     list: {
       type: Array,
       default: []
+    },
+    edit: {
+      type: Boolean,
+      default: false
     }
   }
 }

@@ -60,14 +60,14 @@
             return {
                 caculateForm: {
                     totalQty: '',
-                    skuQty:'',
-                    totalSkuPrice:'',
-                    totalOuterCartonQty:'',
-                    totalGrossWeight:'',
-                    totalNetWeight:'',
-                    totalVolume:'',
-                    paidAmount:'',
-                    unpaidAmount:'',
+                    skuQty: '',
+                    totalSkuPrice: '',
+                    totalOuterCartonQty: '',
+                    totalGrossWeight: '',
+                    totalNetWeight: '',
+                    totalVolume: '',
+                    paidAmount: '',
+                    unpaidAmount: '',
                 }
             }
         },

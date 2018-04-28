@@ -8,11 +8,6 @@
       <el-table :data="tableData" border style="width: 100%; margin-top: 20px" :row-class-name="tableRowClassName" show-summary tooltip-effect="dark" :sum-text="$i.sum">
         <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin"/>
         <el-table-column type="index" width="50" align="center"/>
-        <!-- <el-table-column label="#" align="center" width="50">
-          <template slot-scope="scope">
-            {{scope.row.index + 1}}
-          </template>
-        </el-table-column> -->
         <el-table-column
         :label="$i.containerNo"
         align="center">

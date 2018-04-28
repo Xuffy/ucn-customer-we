@@ -38,7 +38,7 @@
                         highlight-current
                         :filter-node-method="filterNode"
                         :render-content="renderContent"
-                        :expand-on-click-node="false"
+                        :expand-on-click-node="true"
                         ref="tree"
                         @node-click="myCategoryChange"
                     />
@@ -101,17 +101,17 @@
         created() {
             this.getMgeneralCategoryData();
             this.getMyCategoryData();
-            this.getMappingCategory();
+            // this.getMappingCategory();
         },
         methods: {
             getMgeneralCategoryData() {
-                this.$ajax.get(this.$apis.sys_category)
+                this.$ajax.get(this.$apis.GET_SYS_CATEGORY)
                 .then(res => {
                     this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
-                this.$ajax.get(this.$apis.category)
+                this.$ajax.get(this.$apis.GET_CATEGORY)
                 .then(res => {
                     this.myCategoryData = res;
                 })
@@ -284,10 +284,10 @@
                 });
             },
             myCategoryChange(val) {
-                if(val.children && val.children.length) return this.$message({
-                        type: 'info',
-                        message: '父节点不能添加映射关系'
-                    });
+                if(val.children && val.children.length) return; // this.$message({
+                    //     type: 'info',
+                    //     message: '父节点不能添加映射关系'
+                    // });
                 this.myCategory = val.id;
                 this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
                     id: val.id

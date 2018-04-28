@@ -76,7 +76,7 @@
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
-                :disabledLine="newProductTabData"
+                :disabledLine="disabledLine"
                 @handleOK="getList"
                 :forceUpdateNumber="trig" 
                 :type="radio"
@@ -144,6 +144,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                disabledLine: [],
                 trig: 0,
                 disabledTabData: [],
                 id:"",
@@ -253,6 +254,11 @@
 
             },
             addProduct() {
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                this.disabledLine = arr;
                 this.trig = new Date().getTime();
                 this.newSearchDialogVisible = true;
             },
@@ -339,7 +345,7 @@
             getList(item) {
                 let tabData = [], arr = [];
                 item.forEach(items => {
-                    tabData.push(items.skuId.value);
+                    tabData.push(items.id.value);
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
                 .then(res => {
@@ -486,11 +492,9 @@
                 });
             },
             removeProduct() { //删除product 某个单
-                this.newProductTabData.forEach((item, index) => {
-                    if(item._checked) {
-                        item._disabled = true;
-                        this.$set(this.newProductTabData, index, item);
-                    };
+            // console.log(_.pluck(this.checkedAll,'skuId'))
+                _.map(this.newProductTabData, (item, index) => {
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
                 });
             },
             modifyCancel() { //页面编辑取消
@@ -502,7 +506,11 @@
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
-                parentNode.details = this.dataFilter(this.newProductTabData);
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                parentNode.details = this.dataFilter(arr);
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {

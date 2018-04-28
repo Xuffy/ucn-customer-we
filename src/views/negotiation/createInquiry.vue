@@ -134,7 +134,7 @@
             <v-product 
                 :hideBtns="true"
                 :hideBtn="true"
-                :disabledLine="tabData"
+                :disabledLine="disabledLine"
                 @handleOK="getList"
                 :forceUpdateNumber="trig" 
                 :type="radio"
@@ -155,6 +155,7 @@
         name:'createInquiry',
         data() {
             return {
+                disabledLine: [],
                 checkedAll: [],
                 trig: 0,
                 tableLoad: false,
@@ -239,12 +240,17 @@
         },
         methods: {
             addProduct() {
+                let arr = [];
+                _.map(this.tabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                this.disabledLine = arr;
                 this.trig = new Date().getTime();
                 this.dialogTableVisible = true;
             },
             removeList() {
                 _.map(this.tabData, (item, index) => {
-                    if(item._checked) this.tabData.splice(index, 1);
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), item.skuId.value) !== -1) this.$set(item, '_disabled', true);
                 });
             },
             inputEnter(val) {
@@ -355,6 +361,7 @@
             getList(item) {
                 let tabData = [], arr = [];
                 item.forEach(items => {
+                    console.log(items.skuId.vlaue)
                     tabData.push(items.id.value);
                 });
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)

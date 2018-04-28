@@ -22,5 +22,13 @@ export default {
     },
     category: {
         key: ""
+    },
+    id:{
+        _hide:true,
+        key:'id'
+    },
+    companyId:{
+         _hide:true,
+        key:'companyId'
     }
 }
