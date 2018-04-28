@@ -1,85 +1,71 @@
 <template>
-    <div class="qc-overview">
-        <div class="head">
-            <el-form ref="qcOrder" :model="qcOrder" label-width="190px">
-                <el-row class="speZone">
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.qcStatus')+' :'">
-                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
-                            <el-input size="mini" v-model="qcOrder.qcStatus"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.qcOrderNo')+' :'">
-                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
-                            <el-input size="mini" v-model="qcOrder.qcOrderNo"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.orderNo')+' :'">
-                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
-                            <el-input size="mini" v-model="qcOrder.orderNo"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="qcStatus" :label="$t('warehouse.page.inboundNo')+' :'">
-                            <!--<drop-down class="speDropdown" style="width:100%" :list="dropData" ref="dropDown"></drop-down>-->
-                            <el-input size="mini" v-model="qcOrder.inboundNo"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-
-            <div class="btns">
-                <el-button type="primary">{{$t('warehouse.page.search')}}</el-button>
-                <el-button type="info">{{$t('warehouse.page.clear')}}</el-button>
-            </div>
-        </div>
-
-        <div class="body">
-            <div class="btn-group">
-                <el-button>{{$t('warehouse.page.exports')}}</el-button>
-                <el-button>{{$t('warehouse.page.add')}}</el-button>
-                <el-button @click="$router.push('/warehouse/qcDetail')">qc detail</el-button>
-            </div>
-
-            <v-table :data="tableDataList" data-key="payment.tableData"></v-table>
-        </div>
-
+  <div class="inquiryOverview">
+    <h3 class="hd"></h3>
+    <div class="status">
+      <div class="state">
+        <span>{{ $i._baseText.qcStatus }}</span>
+        <el-radio-group>
+          <el-radio-button>{{$i._baseText.waitingQC}}</el-radio-button>
+          <el-radio-button>{{$i._baseText.completedQC}}</el-radio-button>
+        </el-radio-group>
+      </div>
+      <div style="float: right">
+        <select-search
+          :options="options"
+          @inputChange="inputEnter"
+          :searchLoad="searchLoad"
+        />
+      </div>
     </div>
+    <div class="fn">
+      <div class="btn-wrap">
+        <el-button>{{ $i._baseText.downloadall }}</el-button>
+        <el-button>{{ $i._baseText.create }}</el-button>
+      </div>
+    </div>
+    <v-table
+      :data="tabData"
+    />
+  </div>
 </template>
-
 <script>
-
-    import VTable from '@/components/common/table/index'
+import { selectSearch, VTable } from '@/components/index';
 
     export default {
         name: "qc-overview",
         components:{
-            VTable
+            VTable,
+            selectSearch
         },
         data(){
             return{
                 name:'',
                 value:'',
-                options:[
+                options: [{
+                id: 1,
+                label: 'QC Order No'
+                }, {
+                id: 2,
+                label: 'Order No'
+                }],
+                searchLoad:false,
+                params: {
+                  pn: 1,
+                  ps: 10,
+                  purchaseId: '',
+                  qcOrderNo: '',
+                  qcStatusDictCode: '',
+                  serviceProviderId: '',
+                  sorts: [
                     {
-                        label:'哇哈哈',
-                        value:'哇哈哈',
-                    },
-                    {
-                        label:'喜之郎',
-                        value:'喜之郎',
-                    },
-                ],
-                qcOrder:{
-                    qcStatus:'',
-                    qcOrderNo:'',
-                    orderNo:'',
-                    inboundNo:''
+                      nativeSql: true,
+                      orderBy: 'id',
+                      orderType: 'DESC',
+                      resultMapId: ''
+                    }
+                  ]
                 },
-                tableDataList:[],
-                dataColumn:[],
+                tabData:[]
             }
         },
         methods:{
@@ -91,17 +77,38 @@
             getSort(val, key) {
                 console.log(val, key)
             },
+            inputEnter(){
 
+            },
 
             //获取表格data
-            getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.tableDataList = data;
-                })
-            },
+            getQcOrderList(){
+              const test ={
+                pn: 1,
+                ps: 10,
+                purchaseId: '',
+                qcOrderNo: "",
+                qcStatusDictCode: "",
+                serviceProviderId: '',
+                sorts: [
+                  {
+                    "nativeSql": true,
+                    "orderBy": "id",
+                    "orderType": "DESC",
+                    "resultMapId": ""
+                  }
+                ]
+              }
+              this.$ajax.post(this.$apis.post_qc_page,this.params)
+                .then(res => {
+                    this.tabData = this.$getDB(this.$db.qcOrderTable, res.datas);
+                    console.log(res)
+                });
+            }
+
         },
         created(){
-            this.getList();
+             this.getQcOrderList();
         },
     }
 </script>
@@ -129,7 +136,38 @@
     .head-list .content >>> input{
         height: 32px;
     }
-
+    .state{
+      float: left;
+    }
+    .status{
+      overflow: hidden;
+    }
+    .fn {
+      display:flex;
+      justify-content:space-between;
+      padding:30px 15px;
+      box-sizing: border-box;
+      .viewBy {
+        display:flex;
+        align-items: center;
+        span {
+          font-size:14px;
+          color:#666;
+        }
+        button {
+          cursor: pointer;
+          padding:2px 5px;
+        }
+          .set {
+            cursor: pointer;
+            padding-left:18px;
+            color:#999;
+          i {
+            font-size:25px;
+          }
+        }
+      }
+    }
     .btns{
         text-align: center;
     }

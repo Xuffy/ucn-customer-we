@@ -1,6 +1,4 @@
 
-
-
 const apis = {
   USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
@@ -104,8 +102,7 @@ const apis = {
   update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
   delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
   delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
-  post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
-  get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
+ 
   add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
   get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
   recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
@@ -138,13 +135,6 @@ const apis = {
   get_inboundDetail:['/inbound/getById','BASE_SELLER'],
   // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
-
-
-  // logistic
-  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
-  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
-  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
-
   // logistic dictionary
   get_container_type: ['/containertype/all', 'BASE_dictionary'],
 
@@ -153,18 +143,23 @@ const apis = {
   //message
   post_companymessage_query:['/companymessage/query','BASE_JML_msg'],
   post_systemmessage_query:['/systemmessage/query','BASE_JML_msg'],
-  get_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
+  post_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
   post_sys_addsystemmessage:['/systemmessage/addsystemmessage','BASE_JML_msg'],
   post_sys_updateread:['/systemmessagesubscribe/updateread','BASE_JML_msg'],
-  get_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
+  post_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
   post_company_addcompanymessage:['/companymessage/addcompanymessage','BASE_JML_msg'],
   post_company_updateread:['/companymessagesubscribe/updateread','BASE_JML_msg'],
+  get_messagesetting_query:['/messagesetting/query','BASE_JML_msg'],
+  post_messagesetting_updatesetting:['/messagesetting/updatesetting','BASE_JML_msg'],
   //logs
   post_bizloQuery:['/bizlog/query','BASE_JML_logs'],
   //Personal Setting
   get_user_profile:['/user/profile','BASE_UUSER'],
   put_user_profile:['/user/profile','BASE_UUSER'],
-  put_user_profile_password:['/user/profile/password','BASE_UUSER']
+  put_user_profile_password:['/user/profile/password','BASE_UUSER'],
+  //qc order
+  post_qc_page:['/qc/page','BASE_BJ'],
+
 
 };
 

@@ -9,6 +9,6 @@ export default {
       key: 'sendTime'
     },
   subscribeId: {
-    key: 'subscribeId'
+    key: 'subscribeId',
   }
 }

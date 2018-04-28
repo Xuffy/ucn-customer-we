@@ -32,49 +32,37 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="department" :label="$i._personalInfo.department">
-                     <el-select v-model="form.deptName" placeholder="请选择" >
-                        <el-option
-                                v-for="item in departmentsOptions"
-                                :key="item.deptId"
-                                :label="item.deptName"
-                                :value="item.deptId">
-                        </el-option>
-                    </el-select>
+                <el-form-item prop="department" :label="$i._personalInfo.department" >
+                  <el-input style="max-width:200px"v-model="form.deptName"  disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item prop="language" :label="$i._personalInfo.language">
-                    <el-select v-model="form.lang" placeholder="请选择">
+                    <el-select v-model="form.lang" placeholder="请选择" style="width: 200px">
                         <el-option
                                 v-for="item in language"
                                 :key="item.code"
                                 :label="item.name"
-                                :value="item.code">
+                                :value="item.code"
+                                style="width: 200px">
                         </el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item prop="role" :label="$i._personalInfo.role">
-                    <el-select v-model="form.roleName" placeholder="请选择" >
-                        <el-option
-                                v-for="item in roleOptions"
-                                :key="item.roleId"
-                                :label="item.roleName"
-                                :value="item.roleId">
-                        </el-option>
-                    </el-select>
+                  <el-input style="max-width:200px" v-model="form.roleName" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item prop="gender" :label="$i._personalInfo.gender">
-                    <el-select v-model="form.gender" placeholder="please input" >
+                    <el-select v-model="form.gender" placeholder="please input" style="width: 200px">
                         <el-option
                                 v-for="item in genderOptions"
                                 :key="item.key"
                                 :label="item.label"
-                                :value="item.value">
+                                :value="item.key"
+                                style="width: 200px">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -142,7 +130,9 @@ export default {
               birthday:'',
               lang:'',
               deptName:'',
-              roleName:'',
+              roleName:'hh',
+              deptId:'',
+              roleId:''
             },
             modifyPass:{
               password:'',
@@ -154,12 +144,12 @@ export default {
             },
             genderOptions:[{
                 value: '男',
-                label: 'Man',
-                key: 0
+                label: 'Male',
+                key: 1
                 }, {
                 value: '女',
-                label: 'Woman',
-                key: 1
+                label: 'Female',
+                key: 0
                 }, {
                 value: '未知',
                 label: 'Unknown',
@@ -180,27 +170,12 @@ export default {
             },
             dialogVisibleO:false,
             formLabelWidth: '140px',
-            departmentsOptions:[],
-            roleOptions:[],
             language:[]
         };
     },
     methods: {
-          //获取角色 部门 语言
-        getDepartment(){
-            this.$ajax.get(this.$apis.get_department)
-            .then(res => {
-                this.departmentsOptions = res
-            });
-        },
-        getRole(){
-            this.$ajax.get(this.$apis.get_role)
-            .then(res => {
-                this.roleOptions = res
-            });
-        },
         postLanguage(){
-            this.$ajax.post(this.$apis.post_codePart,['LANGUAGE'])
+            this.$ajax.post(this.$apis.POST_CODE_PART,['LANGUAGE'])
             .then(res => {
                 this.language = res[0].codes
             });
@@ -209,8 +184,8 @@ export default {
             this.$ajax.get(this.$apis.get_user_profile)
             .then(res => {
                 console.log(res)
-                this.form = this.$getDB(this.$db.payment.table, res);
-            });
+                this.form = res
+            })
         },
         putUserProfile(){
             const params = {
@@ -218,9 +193,7 @@ export default {
                 tel: this.form.tel,
                 gender: this.form.gender,
                 birthday: this.form.birthday,
-                lang: this.form.lang,
-                deptId: this.form.deptName,
-                roleId: this.form.role
+                lang: this.form.lang
             }
             console.log(params)
             this.$ajax.put(this.$apis.put_user_profile,params)
@@ -229,10 +202,10 @@ export default {
                     type: 'success',
                     message: '修改成功!'
                 });
+              this.getUserProfile()
             });
         },
         putUserPassword(){
-            const params = this.modifyPass
             //校验新旧密码
             if(this.modifyPass.password == this.modifyPass.comfirmNewPassword){
                 this.$message({
@@ -241,7 +214,8 @@ export default {
                 });
                 return false;
             }
-            this.$ajax.put(this.$apis.put_user_profile_password,params)
+            console.log(this.modifyPass)
+            this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
             .then(res => {
                 this.$message({
                     type: 'success',
@@ -254,10 +228,8 @@ export default {
         }
     },
     created(){
-          this.getUserProfile()
-          this.getDepartment();
-          this.getRole()
-          this.postLanguage()
+           this.getUserProfile()
+           this.postLanguage()
     }
 }
 </script>
