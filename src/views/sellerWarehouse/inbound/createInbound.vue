@@ -74,8 +74,13 @@
             <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
             <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
+        <v-table
+                v-loading="loadingProductTable"
+                :data="productTableData"
+                @change-checked="changeProductChecked"></v-table>
 
-        <div>
+
+        <div class="total">
             <div class="title">
                 {{$i._warehouse.total}}
             </div>
@@ -115,12 +120,21 @@
             <el-button :loading="disabledSubmit">{{$i._warehouse.cancel}}</el-button>
         </div>
 
+
+
+
+
+
+
+
+
+
         <el-dialog
                 title="Add Product From Order"
                 :visible.sync="addOrderDialogVisible"
                 width="70%">
 
-            <el-form :modal="orderProduct" label-width="200px" :label-position="labelPosition">
+            <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" :label="$i._warehouse.orderNo">
@@ -128,7 +142,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuCode" :label="$i._warehouse.productNo">
+                        <el-form-item prop="skuCode" :label="$i._warehouse.skuCode">
                             <el-input size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
@@ -145,20 +159,19 @@
                 </el-row>
             </el-form>
             <div class="search-btn">
-                <el-button type="primary">搜索</el-button>
+                <el-button :disabled="disabledSearch" :loading="disabledClickSubmit" @click="searchOrderData" type="primary">{{$i._warehouse.search}}</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i._warehouse.clear}}</el-button>
             </div>
 
 
             <v-table
                     v-loading="loadingTable"
                     :data="tableDataList"
-                    :buttons="[{label: 'Detail', type: 1}]"
-                    @change-checked="changeChecked"
-                    @action="btnClick"></v-table>
+                    @change-checked="changeChecked"></v-table>
 
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addOrderDialogVisible = false">确 定</el-button>
-                <el-button @click="addOrderDialogVisible = false">取 消</el-button>
+                <el-button :disabled="disabledSearch" type="primary" @click="postData">确 定</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="addOrderDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
 
@@ -207,9 +220,10 @@
                     }]
                 },
                 addOrderDialogVisible:false,
-
+                productTableData:[],
+                loadingProductTable:false,
                 inboundData:{
-                    inboundNo:'',
+                    inboundNo:'',       //新建的时候不传
                     inboundDate:'',
                     warehouseNo:'',
                     warehouseName:'',
@@ -220,7 +234,14 @@
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
-                    attachment:''
+                    attachment:'',
+                    inboundSkuBeanCreateParams:[],      //新增的产品数组
+                    //新增的产品总计
+                    skuTotalCartonQty: 0,
+                    skuTotalGrossWeight: 0,
+                    skuTotalNetWeight: 0,
+                    skuTotalQty: 0,
+                    skuTotalVolume: 0,
                 },
                 //inbound总计
                 inboundSummary:{
@@ -238,6 +259,12 @@
                 selectList:[],
                 loadingTable:false,
                 tableDataList:[],           //弹出框表格数据
+
+                //btns禁用状态
+                disabledSearch:true,
+                disabledCancelSearch:true,
+                disabledClickSubmit:false,
+
                 //add order product搜索数据
                 orderProduct:{
                     orderNo: "",
@@ -252,19 +279,39 @@
         methods:{
             //新增产品
             addProduct(){
+                this.selectList=[];
                 this.addOrderDialogVisible=true;
+                this.loadingTable=true;
+                this.disabledSearch=true;
+                this.disabledCancelSearch=true;
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
-                    console.log(res.datas)
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
+                    this.disabledSearch=false;
+                    this.disabledCancelSearch=false;
+                    this.loadingTable=false;
                 }).catch(err=>{
-
+                    this.disabledSearch=false;
+                    this.disabledCancelSearch=false;
+                    this.loadingTable=false;
                 });
             },
+
+            //改变product table选中状态时触发的事件
+            changeProductChecked(){
+
+            },
+
+
 
             //提交表单
             submit(){
                 console.log(this.inboundData)
+                // this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
+                //     console.log(res)
+                // }).catch(err=>{
+                //
+                // });
             },
 
 
@@ -272,11 +319,29 @@
             /**
              * 弹出框事件
              * */
+            searchOrderData(){
+                this.loadingTable=true;
+                this.disabledClickSubmit=true;
+                this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
+                    this.loadingTable=false;
+                    this.disabledClickSubmit=false;
+                }).catch(err=>{
+                    this.loadingTable=false;
+                    this.disabledClickSubmit=false;
+                });
+            },
+            clearSearchData(){
+                this.orderProduct.orderNo='';
+                this.orderProduct.skuCode='';
+                this.orderProduct.skuBarCode='';
+                this.orderProduct.skuNameCn='';
+            },
             changeChecked(e){
                 this.selectList=e;
             },
-            btnClick(e){
-                console.log(e)
+            postData(){
+                console.log(this.selectList)
             },
         },
         created(){
@@ -304,6 +369,10 @@
 
     .search-btn{
         text-align: center;
+    }
+
+    .total{
+        margin-top: 80px;
     }
 
     .footer{
