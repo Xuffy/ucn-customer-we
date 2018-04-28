@@ -184,6 +184,8 @@
       });
 
       this.updateMenuActive()
+
+      this.getMessage();
     },
     methods: {
       logout() {
@@ -230,11 +232,17 @@
         }
 
         return _.indexOf(param, user.userType) !== -1;
+      },
+      getMessage() {
+        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
+          .then(data => {
+
+          });
       }
     },
     watch: {
       $route() {
-        this.updateMenuActive()
+        this.updateMenuActive();
       }
     }
   }
