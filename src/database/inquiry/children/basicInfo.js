@@ -163,7 +163,9 @@ export default {
         rules: [],
         width: '150px',
         type: 'String',
-        state: 0
+        state: 0,
+        _disabled: true,
+        _inquiryHide: true
     },
     inquiryRemark: { //询价备注
         key: 'remark',

@@ -218,7 +218,10 @@
         type: [Boolean, Array],
         default: false,
       },
-
+      parId: {
+        type: String,
+        default: 'id'
+      }
     },
     data() {
       return {
@@ -244,7 +247,7 @@
           }
           return val;
         });
-        this.changeCheck();
+        this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
@@ -319,14 +322,36 @@
 
         return value[0];
       },
-      changeCheck(item) {
+      changeCheck(item, value) {
         if (this.selectionRadio) {
           this.dataList = _.map(this.dataList, val => {
             val._checked = false;
             return val;
           });
           item._checked = true;
+        } else {
+          if(item.length) {
+            _.map(this.dataList, val => {
+              if(value) {
+                val._checked = true;
+              } else {
+                val._checked = false;
+              }
+            });
+          } else {
+            if(item._checked) {
+              _.map(this.dataList, val => {
+                if(item[this.parId].value + '' === val[this.parId].value + '') val._checked = true;
+              });
+            } else {
+              _.map(this.dataList, val => {
+                if(item[this.parId].value + '' === val[this.parId].value + '') val._checked = false;
+              });
+            }
+          }
+          
         }
+
         this.$emit('change-checked', this.getSelected());
       },
       getSelected() {

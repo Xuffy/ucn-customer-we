@@ -70,18 +70,10 @@
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i._baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="0">{{ $i._baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="1">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
-            <v-product 
-                :hideBtns="true"
-                :hideBtn="true"
-                :disabledLine="newProductTabData"
-                @handleOK="getList"
-                :forceUpdateNumber="trig" 
-                :type="radio"
-                :isInquiry="true"
-            ></v-product>
+            <v-product :hideBtn="true" :forceUpdateNumber="new Date().getTime()" @handleOK="handleOK" :disabledLine="disabledTabData"></v-product>
         </el-dialog>
         <v-history-modify
                 @save="save"
@@ -144,7 +136,6 @@
         name:'inquiryDetail',
         data() {
             return {
-                trig: 0,
                 disabledTabData: [],
                 id:"",
                 compareLists: false,
@@ -158,7 +149,7 @@
                 historyColumn: {},
                 msgTitle: '',
                 historyData: [],
-                radio: 'product',
+                radio: 'From New Search',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
@@ -253,8 +244,11 @@
 
             },
             addProduct() {
-                this.trig = new Date().getTime();
-                this.newSearchDialogVisible = true;
+                let disabledTabData = [];
+                _.map(this.newProductTabData, items => {
+                    if(!items._remark && !items._disabled) disabledTabData.push(items);
+                });
+                this.newSearchDialogVisible = false;
             },
             handleOK(item) { //添加 product
                 if(item && !item.length) return this.$message('请选择商品');
@@ -336,20 +330,6 @@
             boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
             },
-            getList(item) {
-                let tabData = [], arr = [];
-                item.forEach(items => {
-                    tabData.push(items.skuId.value);
-                });
-                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
-                .then(res => {
-                    _.map(res, item => {
-                        item.displayStyle = 0;
-                    });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
-                    this.dialogTableVisible = false;
-                });
-            },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
                     label: 'Modify',
@@ -370,7 +350,7 @@
                 if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
             },
             fromChange(val) {
-               this.trig = new Date().getTime();
+               console.log(val)
             },
             modifyAction() { //打开页面编辑状态
                 this.statusModify = true;

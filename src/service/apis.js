@@ -35,6 +35,7 @@ const apis = {
   POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_DHC'],
   POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_RESTORE: ['/inquiry/compare/restore', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_DHC'],
   POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
   POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
