@@ -33,7 +33,10 @@ export default {
       UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100',
       USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100',
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      LOGIN_URL: 'http://120.79.230.214:9090'
+      LOGIN_URL: 'http://120.79.230.214:9090',
+      UMESSAGE_URL: 'http://dev.umessage-facade.uncholding.com:18100',
+      UMETA_URL: 'http://dev.umeta-facade.uncholding.com:18100',
+      UBIZLOG_URL: 'http://dev.ubizlog-facade.uncholding.com:18100',
     },
     test: {
       BASE_API: 'http://store.test.tailorx.cn/api'
