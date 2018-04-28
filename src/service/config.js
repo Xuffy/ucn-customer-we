@@ -66,7 +66,7 @@ export default {
   }[process.env.NODE_ENV],
 
   // 环境标识
-  ENV_FLAG: 'develop' || process.env.NODE_ENV,
+  ENV_FLAG: process.env.NODE_ENV,
 
   // 是否mock
   IS_MOCK: false,
