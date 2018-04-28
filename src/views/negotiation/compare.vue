@@ -37,12 +37,13 @@
             :pageNum.sync="params.pn"
             :pageSize.sync="params.ps"
             :page-total.sync="pageTotal"
+            :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
         />
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
         <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" :compareId="params.id || null" :disableds="disableds" />
     </div>
@@ -138,16 +139,19 @@
                         compareName: this.compareName
                     })
                     .then(res => {
-                        if(type === 'save') return this.compareType = 'only';
-                        // this.$router.push({
-                        //     name: 'negotiationCompare',
-                        //     params: {
-                        //         type: 'only'
-                        //     },
-                        //     query: {
-                        //         id: res.id
-                        //     }
-                        // });
+                        if(this.$route.params.type === 'only') {
+                            this.upData();
+                            return this.compareType = 'only';
+                        }
+                        this.$router.push({
+                            name: 'negotiationCompareDetail',
+                            params: {
+                                type: 'only'
+                            },
+                            query: {
+                                id: res.id
+                            }
+                        });
                     });
                 }).catch(() => {
                     this.$message({

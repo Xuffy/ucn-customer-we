@@ -37,6 +37,7 @@ export const routerMap = [
     {
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
+      hidden: true,
       component: Layout,
       redirect: '/sellerNegotiation/CategorySetting',
       meta: {

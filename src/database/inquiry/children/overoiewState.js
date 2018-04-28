@@ -1,14 +1,5 @@
 export default {
-    draft: {
-        key: '',
-        text: 'draft',
-        id: 11
-    },
-    submit: {
-        key: '',
-        text: 'submit',
-        id: 12
-    },
+    
     TBCByCustomer: {
         key: '',
         text: 'TBC By Customer',
@@ -21,12 +12,12 @@ export default {
     },
     finish: {
         key: '',
-        text: '已完成',
+        text: 'finish',
         id: 99
     },
     cancel: {
         key: '',
-        text: '已取消',
+        text: 'cancel',
         id: 1
     },
 
