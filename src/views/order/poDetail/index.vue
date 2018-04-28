@@ -42,6 +42,7 @@
                         :loading="tableLoad"
                         @action="producInfoAction"
                         @change-checked="changeChecked"
+                         :total-row="tableTatal"
                         :rowspan="2"/>
              </div>
          </div>
@@ -139,6 +140,7 @@
                     deleteDetailIds: []
                 },
                  disabledLine: [],
+                tableTatal:[]
             }
         },
         methods: {
@@ -175,7 +177,6 @@
                         //..........exchangerate
                         this.$refs.exchange.exchangeRateList = res.exchangeRateList
                         //..........attachment
-
                         //..........productinfo
                         this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
                             item => {
@@ -185,7 +186,7 @@
                             item => {
                                 return item;
                             });
-
+                        
                         this.tableLoad = false;
                     })
                     .catch((res) => {
@@ -387,6 +388,19 @@
                 this.trig = new Date().getTime();
                 this.dialogTableVisible = true;
             },
+            //表格底部计算
+            tableTatalCal() {
+                let obj = _.clone(this.tabData[0]);
+                return console.log(obj)
+                _.map(this.tabData, value => {
+                    _.map(value, val => {
+                        if (val._calu) {
+                            obj[val.key].value = obj[val.key].value + val.value;
+                        }
+                    });
+                });
+                this.tableTatal = [obj]
+            }
         },
         mounted() {
 
