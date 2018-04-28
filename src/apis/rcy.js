@@ -13,6 +13,9 @@ export default {
     detail_order: ['/order/detail/{id}', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_order_history: ['/order/skuHistory', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_BUYER', 'UPURCHASE_URL'],
+    post_order_skus: ['/order/skus', 'BASE_HCJ', 'UPURCHASE_URL'],
+
+
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],

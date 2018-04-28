@@ -396,13 +396,20 @@
             },
             //..........addproduct 弹窗
             getList(item) {
-                let tabData = [];
+                let tabData = [],
+                    arr = [];
                 item.forEach(items => {
-                    items._checked = false;
-                    tabData.push(Object.assign({}, items))
+                    console.log(items.skuId.vlaue)
+                    tabData.push(items.id.value);
                 });
-                this.newProductTabData = tabData;
-                this.dialogAddproduct = false;
+                this.$ajax.post(this.$apis.post_order_skus, tabData)
+                    .then(res => {
+                        _.map(res, item => {
+                            item.displayStyle = 0;
+                        });
+                        this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                        this.dialogTableVisible = false;
+                    });
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
