@@ -98,8 +98,8 @@ export default {
         _disabled: true,
     },
     //自动计算?????
-    sukPrice: {
-        key: 'sukPrice',
+    skuPrice: {
+        key: 'skuPrice',
         _disabled: true,
         _calu: true
     },
@@ -332,119 +332,119 @@ export default {
         key: 'skuStatus',
         _disabled: true,
     },
-    sukCategoryOne: {
-        key: 'sukCategoryOne',
+    skuCategoryOne: {
+        key: 'skuCategoryOne',
         _disabled: true,
     },
-    sukCategoryTwo: {
-        key: 'sukCategoryTwo',
+    skuCategoryTwo: {
+        key: 'skuCategoryTwo',
         _disabled: true,
     },
-    sukCategoryThree: {
-        key: 'sukCategoryThree',
+    skuCategoryThree: {
+        key: 'skuCategoryThree',
         _disabled: true,
     },
-    sukSaleStatus: {
-        key: 'sukSaleStatus'
+    skuSaleStatus: {
+        key: 'skuSaleStatus'
     },
-    sukLabel: {
-        key: 'sukLabel'
+    skuLabel: {
+        key: 'skuLabel'
     },
-    sukBarCode: {
-        key: 'sukBarCode'
+    skuBarCode: {
+        key: 'skuBarCode'
     },
-    sukInnerPackBarCode: {
-        key: 'sukInnerPackBarCode',
+    skuInnerPackBarCode: {
+        key: 'skuInnerPackBarCode',
 
     },
-    sukInnerPackLabe: {
-        key: 'sukInnerPackLabe'
+    skuInnerPackLabe: {
+        key: 'skuInnerPackLabe'
     },
-    sukInnerPackCode: {
-        key: 'sukInnerPackCode'
+    skuInnerPackCode: {
+        key: 'skuInnerPackCode'
     },
-    sukShippingMarks: {
-        key: 'sukShippingMarks'
+    skuShippingMarks: {
+        key: 'skuShippingMarks'
     },
-    sukOuterCartonBarCode: {
-        key: 'sukOuterCartonBarCode'
+    skuOuterCartonBarCode: {
+        key: 'skuOuterCartonBarCode'
     },
-    sukOuterCartonCode: {
-        key: 'sukOuterCartonCode'
+    skuOuterCartonCode: {
+        key: 'skuOuterCartonCode'
     },
-    sukLabelPic: {
-        key: "sukLabelPic"
+    skuLabelPic: {
+        key: "skuLabelPic"
     },
-    sukLabelDesc: {
-        key: 'sukLabelDesc'
+    skuLabelDesc: {
+        key: 'skuLabelDesc'
     },
-    sukPkgMethodPic: {
-        key: 'sukPkgMethodPic'
+    skuPkgMethodPic: {
+        key: 'skuPkgMethodPic'
     },
-    sukInnerCartonPic: {
-        key: 'sukInnerCartonPic'
+    skuInnerCartonPic: {
+        key: 'skuInnerCartonPic'
     },
-    sukOuterCartonPic: {
-        key: 'sukOuterCartonPic'
+    skuOuterCartonPic: {
+        key: 'skuOuterCartonPic'
     },
     //.........need sample 
-    sukSample: {
-        key: 'sukSample',
+    skuSample: {
+        key: 'skuSample',
         type: 'select'
     },
     //合计
-    sukSampleQty: {
-        key: 'sukSampleQty',
+    skuSampleQty: {
+        key: 'skuSampleQty',
         type: 'text',
         _calu: true
     },
     //合计
-    sukSamplePrice: {
-        key: 'sukSamplePrice',
+    skuSamplePrice: {
+        key: 'skuSamplePrice',
         type: 'text',
         _calu: true
     },
     //Undelivered Quantity ？？？
-    sukDeliveredQty: {
-        key: 'sukDeliveredQty',
+    skuDeliveredQty: {
+        key: 'skuDeliveredQty',
         _disabled: true,
         _calu: true
     },
-    sukDepartureDt: {
-        key: 'sukDepartureDt',
+    skuDepartureDt: {
+        key: 'skuDepartureDt',
 
     },
-    sukQuotationNo: {
-        key: 'sukQuotationNo',
+    skuQuotationNo: {
+        key: 'skuQuotationNo',
         _disabled: true,
         _calu: true
     },
-    sukModifyStatus: {
-        key: 'sukModifyStatus'
+    skuModifyStatus: {
+        key: 'skuModifyStatus'
     },
-    sukRemarkOne: {
-        key: 'sukRemarkOne'
+    skuRemarkOne: {
+        key: 'skuRemarkOne'
     },
-    sukRemarkTwo: {
-        key: 'sukRemarkTwo'
+    skuRemarkTwo: {
+        key: 'skuRemarkTwo'
     },
-    sukRemarkThree: {
-        key: 'sukRemarkThree'
+    skuRemarkThree: {
+        key: 'skuRemarkThree'
     },
-    sukAdditionalOne: {
-        key: 'sukAdditionalOne',
+    skuAdditionalOne: {
+        key: 'skuAdditionalOne',
         type: 'pic'
     },
-    sukAdditionalTwo: {
-        key: 'sukAdditionalTwo',
+    skuAdditionalTwo: {
+        key: 'skuAdditionalTwo',
         type: 'pic'
     },
-    sukAdditionalThree: {
-        key: 'sukAdditionalThree',
+    skuAdditionalThree: {
+        key: 'skuAdditionalThree',
         type: 'pic'
     },
-    sukAdditionalFour: {
-        key: 'sukAdditionalFour',
+    skuAdditionalFour: {
+        key: 'skuAdditionalFour',
         type: 'pic'
     },
     //Undelivered Quantity  

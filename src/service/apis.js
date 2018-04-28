@@ -20,7 +20,7 @@ const apis = {
   GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
   category: ['/category', 'BASE_CS'],
   mapping_category: ['/category/mapping', 'BASE_CS'],
-  getCategory: ['/sys/category', 'BASE_CS'],              //暂时使用
+  getCategory: ['/purchase/sys/category', 'BASE_CS1'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
   add_newSKU: ['/sku', 'BASE_CS'],
   supplier_overview: ['/supplierOverview', 'BASE_API'],
@@ -60,12 +60,17 @@ const apis = {
   update_supplier: ['/supplier/{id}', 'BASE_CS'],
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
+  get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
+  get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ'],
+  post_recover_order:['/order/recover','BASE_HCJ'],
+  post_finishPost:['/order/finish','BASE_HCJ'],
   delete_order: ['/order/delete', 'BASE_HCJ'],
   download_order: ['/order/download', 'BASE_HCJ'],
   send_order: ['/order/send', 'BASE_HCJ'],
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
+  post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_BUYER'],
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],
@@ -110,6 +115,9 @@ const apis = {
   delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
   get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
   edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
+  update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_CS1'],
+
+
 
 
   post_supplier_addbookmark: ['/purchase/supplier/bookmark', 'BASE_CS_cgs'],
@@ -125,7 +133,9 @@ const apis = {
   post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
   //seller warehouse
   get_inboundData:['/inbound/page','BASE_SELLER'],
-  get_productInfo:['/order/skuListPage','BASE_BUYER'],
+  get_productInfo:['/order/skuListPage','BASE_TEST'],
+  get_inboundDetail:['/inbound/getById','BASE_SELLER'],
+  // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
 
 

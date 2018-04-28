@@ -24,7 +24,7 @@
                 <div class="btns" v-if="noEdit">
                     <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
                     <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>
-                    <el-button @click='addCompare'>{{$i._baseText.addToCompare}}</el-button>
+                    <el-button @click='addToCompare'>{{$i._baseText.addToCompare}}</el-button>
                     <el-button @click='supplierProducts'>{{$i._baseText.supplierProducts}}</el-button>
                     <el-button @click='addToBookmark'>{{$i._baseText.addToBookmark}}</el-button>
                 </div>
@@ -65,27 +65,19 @@
 
             </el-tabs>
         </div>
-
-     <VCompareList  
-                v-if="showCompareList"
-                :data="compareData"
-                @clearData="clearData"
-                @goCompare="goCompare"
-                @closeTag="handleClose"></VCompareList>
-        
     </div>
 </template>
 
 <script>
-    import VCompareList from '../../product/compareList'
-    import VRemark from '../../product/addlineTable'
-    import VAttachment from '../attachment'
+    import VCompareList from '../product/compareList'
+    import VRemark from './remark'
+    import VAttachment from './attachment'
     import {
         VTable
     } from '@/components/index';
 
     export default {
-        name: "souringDetail",
+        name: "customerDetail",
         components: {
             VTable,
             VCompareList,
@@ -95,23 +87,23 @@
         data() {
             return {
                 noEdit: true,
-                companyId: '',
-                id:Number(this.$route.query.id),
+                companyId: Number(this.$route.query.companyId),
                 tabName: 'address', //默认打开的tab
                 basicDate: '',
                 accounts: [],
                 concats: [],
                 address: [],
-                remarkData: [],              
-                showCompareList: false, //是否显示比较列表               
+                remarkData: [],
+                compareConfig: {
+                    showCompareList: false, //是否显示比较列表
+                },
                 code: '',
-                loading: false,
-                compareData:[]
+                loading: false
             }
         },
         methods: {
             createInquiry() {
-                this.$windowOpen({
+                this.windowOpen({
                     url: '/negotiation/createInquiry',
                     params: {
                         supplierCode: this.code //供应商信息将被带入
@@ -119,88 +111,23 @@
                 });
             },
             createOrder() {
-                this.$windowOpen({
+                this.windowOpen({
                     url: '/order/creat',
                     params: {
                         supplierCode: this.code //供应商信息将被带入
                     }
                 });
             },
-             //添加比较
-            addCompare(){
-                this.showCompareList=true;
-                let compareList=this.$localStore.get('compareSupplierList');
-                let hasAdd=false;
-                if(!compareList){
-                    compareList=[];
-                }
-                compareList.forEach(v=>{
-                    if(v.id===this.basicDate.id){
-                        //代表该商品已经添加了
-                        hasAdd=true;
-                    }
-                });
-                if(hasAdd){
-                    this.$message({
-                        message: '该商品已经添加到列表了',
-                        type: 'warning'
-                    });
-                }else{
-                    compareList.push({
-                        name:this.basicDate.name,
-                        id:this.basicDate.id
-                    });
-                    this.compareData=compareList;
-                    this.$localStore.set('compareSupplierList',compareList)
-                }
-            },
-            getCompareList(){
-                let data=this.$localStore.get('compareSupplierList');
-                if(!data){
-                    this.compareData=[];
-                }else{
-                    this.compareData=data;
-                }
-            },
-            goCompare(){
-                let data=this.$localStore.get('compareSupplierList');
-                let id='';
-                data.forEach((v,k)=>{
-                    if(k===data.length-1){
-                        id+=v.id;
-                    }else{
-                        id+=(v.id+',');
-                    }
-                });
-                this.$windowOpen({
-                    url:'supplier/compareDetail/{type}',
-                    params:{
-                        type:'new',
-                        id:id,
-                    }
-                });
-            },
-            handleClose(e){
-                let key;
-                this.compareData.forEach((v,k)=>{
-                    if(v.id===e.id){
-                        key=k;
-                    }
-                });
-                this.compareData.splice(key,1);
-                this.$localStore.set('compareSupplierList',this.compareData);
-            },
-            clearData(){
-                this.$localStore.remove('compareSupplierList');
-                this.compareData=[];
+            addToCompare() {
+                this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-//                this.$windowOpen({
-//                    url: '/product/sourcing',
-//                    params: {
-//                        supplierCode: this.code 
-//                    }
-//                });
+                this.windowOpen({
+                    url: '/product/sourcing',
+                    params: {
+                        supplierCode: this.code //供应商信息将被带入
+                    }
+                });
             },
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
@@ -242,9 +169,7 @@
             },
         },
         created() {
-            this.companyId=Number(this.$route.query.companyId)
             this.get_data()
-            this.getCompareList()
         },
     }
 

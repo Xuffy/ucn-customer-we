@@ -5,13 +5,13 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         <VExchange></VExchange>  
+         <VExchange :disabled=false ref='exchangeList'></VExchange>  
 <!--             responsibility     -->
          <VResponsibility ref='responsibility'></VResponsibility>
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
-                 {{$i._productInfo}}
+                 {{$i.productInfo}}
              </div>
              <div class="pro_button">
                   <el-button  @click="dialogAddproduct = true">{{$i._baseText.addproduct}}</el-button>
@@ -282,25 +282,7 @@
                     "sukPrice": 0,
                     "fieldRemark": null
                 }],
-                exchangeRateList: [{
-                    "entryId": 1,
-                    "entryDt": 1524711629694,
-                    "entryName": "1",
-                    "updateId": 1,
-                    "updateDt": 1524711629694,
-                    "updateName": "1",
-                    "id": null,
-                    "ownerId": 1,
-                    "companyId": 1,
-                    "tenantId": 1,
-                    "orderId": 1,
-                    "orderNo": "",
-                    "sourceCurrency": "u",
-                    "targetCurrency": "c",
-                    "exchangeRate": 1,
-                    "timeZone": "0",
-                    "version": 0
-                }],
+
             }
         },
         methods: {
@@ -311,15 +293,16 @@
             send() {
                 //  if (!this.$refs.basicInfo.submitForm()) { // return // }
                 var params = {
-                    exchangeRateList: [],
-                    skuList: this.skuList,
+                    //                    exchangeRateList
+                    exchangeRateList: this.$refs.exchangeList.exchangeRateList,
+                    //                    skuList: this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                 }
                 var basic = this.$refs.basicInfo.formItem
                 _.extendOwn(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extendOwn(params, caculate)
-                return
+
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
@@ -607,15 +590,10 @@
 
     .basicinfo_other {
         margin-left: 80px;
-        /*
-        display: flex;
-        justify-content:space-between;
-*/
     }
 
     .attchment {
-        /*        width: 400px;*/
-        /*        margin-left: 20px;*/
+        margin-bottom: 60px;
     }
 
     .pro_button {

@@ -149,6 +149,7 @@
 <script>
     /*
     1:待采购商确认,2:采购商已确认,3:待供应商确认,4:供应商已确认,5:作废
+     orderType :10 采购订单
     */
     export default {
         name: 'payment-table',
@@ -470,10 +471,22 @@
                     }
                 })
             },
+            get_list(){
+                this.$ajax.post(this.$apis.post_order_paymentlist,{
+                        orderNo:1,
+                        orderType:10
+                    }).then((res)=>{
+                        console.log(res)
+                    }).catch((res)=>{
+                         console.log(res)
+                    })
+                }
         },
         created() {
+            this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
+            
         },
     }
 

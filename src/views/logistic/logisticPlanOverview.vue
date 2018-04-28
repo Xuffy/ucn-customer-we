@@ -2,7 +2,7 @@
   <div class="logistic-plan-overview">
     <div class="status">
       <div class="btn-wrap">
-        <span>{{ $i.baseText.Status }}:</span>
+        <span>{{ $i.logisticsPlanOverview}}:</span>
         <el-checkbox-group v-model="fillterArr" size="mini" @change="handleCheckedLabelChange">
           <el-checkbox-button :label="a.mark" v-for="a of $i.checkboxStatus" :key="'status-' + a.text">{{a.text}}</el-checkbox-button>
         </el-checkbox-group>
@@ -13,12 +13,12 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.baseText.downloadSelected }}</el-button>
+        <el-button>{{ $i.downloadSelected }}</el-button>
         <el-button>{{ $i.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="true">{{ $i.baseText.delete }}</el-button>
+        <el-button type="danger" :disabled="true">{{ $i.delete }}</el-button>
       </div>
       <div class="view-by-btn">
-        <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+        <span>{{ $i.viewBy }}&nbsp;</span>
         <el-radio-group v-model="viewBy" size="mini">
           <el-radio-button 
             v-for="item in $db.logistic.overviewBtn"
@@ -36,7 +36,7 @@
     @action="action"
     @change-checked="changeChecked"
     @page-change="pageChange"
-    :loading="!tabData.length"
+    :loading="false"
     ref="tab"
     />
 </div>
@@ -73,7 +73,7 @@ export default {
     VTable
   },
   mounted () {
-    this.getDictionary()
+    // this.getDictionary()
     this.viewByChange(this.viewBy)
   },
   watch: {
