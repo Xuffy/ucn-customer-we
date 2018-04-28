@@ -1,5 +1,5 @@
 export default {
-    POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC', 'USUPPLY_URL'], // 采购端=> inquiry list
+    POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_DHC'], // 采购端=> inquiry list
     
     GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS', 'USUPPLY_URL'], //采购商 =》 获取系统分类
     BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1', 'USUPPLY_URL'], //采购端 => 获取系统分类
