@@ -17,8 +17,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.containerInfoTitle }}</div>
-      <container-info :tableData.sync="tableData" @tabAppend="tabAppend" @tailBtnCancel="tailBtnCancel"
-      @tailBtnOk="tailBtnOk" @tabSplite="tabSplite"/>
+      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"/>
     </div>
 
     <div>
@@ -35,8 +34,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.productInfoTitle }}</div>
-      <v-table :data.sync="productList" @action="action"
-      @tabSplite="tabSplite" @tabAppend="tabAppend" :buttons="productbButtons">
+      <v-table :data.sync="productList" @action="action" :buttons="productbButtons">
         <div slot="header" class="product-header">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.addProduct }}</el-button>
           <el-button type="danger" size="mini">{{ $i.remove }}</el-button>
@@ -80,6 +78,7 @@ export default {
     return {
       showProductDialog: false,
       showAddProductDialog: false,
+      selectionContainer: [],
       productInfoModifyStatus: 0,
       edit: false,
       basicInfoObj: {
@@ -312,11 +311,14 @@ export default {
     productModify,
     addProduct
   },
-  // watch: {
-  //   showDialog (newValue) {
-  //     if (!newValue) this.clearProductInfo()
-  //   }
-  // },
+  watch: {
+    edit (newValue) {
+      if (newValue) return
+      this.tableData.forEach((a, i) => {
+        !Object.keys(a).length && this.arraySplite(this.tableData, i)
+      })
+    }
+  },
   mounted () {
     this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
     this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
@@ -338,11 +340,28 @@ export default {
     })
   },
   methods: {
+    handleSelectionContainer (selectArray) {
+      this.selectionContainer = selectArray
+    },
+    deleteContainer () {
+      if (!this.selectionContainer.length) return
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.selectionContainer.forEach(i => this.arraySplite(this.tableData, i))
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
+    },
     computeType (key) {
       return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
     },
-    tabAppend() {
-      this.tableData.push({})
+    arrayAppend(arrKey) {
+      this[arrKey].push({})
     },
     tailBtnCance () {
       this.tableData.pop();
@@ -351,8 +370,8 @@ export default {
       this.tableData.pop();
       this.tableData.push(item);
     },
-    tabSplite (index) {
-      this.tableData.splice(index, 1);
+    arraySplite (array, index) {
+      array.splice(index, 1);
     },
     modify () {
       this.isModify = false;
