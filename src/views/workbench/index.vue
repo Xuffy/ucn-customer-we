@@ -69,6 +69,7 @@
       }
     },
     created() {
+      console.log(this.$apis);
     },
     mounted() {
       this.testId = '123';
