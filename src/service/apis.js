@@ -78,8 +78,6 @@ const apis = {
   post_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
   get_supplier_remark_de: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
-  post_supplier_addCompare:['/purchase/supplier/compare','BASE_CS_cgs'],
-  post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
   post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
   get_departmentOverview: ['/department/overview', 'BASE_LYF'],

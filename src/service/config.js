@@ -21,15 +21,19 @@ export default {
       BASE_LJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_dictionary: 'http://dev.umeta-facade.ucnholding.com',
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      BASE_SELLER:'http://dev.usupply-facade.ucnholding.com:18100',
-      BASE_BUYER:'http://dev.upurchase-facade.ucnholding.com:18100',
-      BASE_TEST:'http://dev.upurchase-facade.ucnholding.com:80',
-      BASE_JML_msg:'http://dev.umessage-facade.ucnholding.com',
-      BASE_JML_logs:'http://dev.ubizlog-facade.ucnholding.com',
-      BASE_UUSER:'http://dev.uuser-facade.ucnholding.com:18100/',
+      BASE_SELLER: 'http://dev.usupply-facade.ucnholding.com:18100',
+      BASE_BUYER: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_TEST: 'http://dev.upurchase-facade.ucnholding.com:80',
+      BASE_JML_msg: 'http://dev.umessage-facade.ucnholding.com',
+      BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
+      BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
     },
     develop: {
-      BASE_API: 'http://192.168.11.215:30704'
+      UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100',
+      UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100',
+      UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
+      LOGIN_URL: 'http://120.79.230.214:9090'
     },
     test: {
       BASE_API: 'http://store.test.tailorx.cn/api'
