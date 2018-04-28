@@ -68,8 +68,9 @@
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$i._baseText.fromNewSearch" name="FromNewSearch">
                            <v-product                     
-                           :hideBtns="true"
+                                :hideBtns="true"
                                 :hideBtn="true"
+                                :disabledLine="disabledLine"
                                 @handleOK="getList"
                            ></v-product>
                         </el-tab-pane>
@@ -137,6 +138,7 @@
                 submitData: {
                     deleteDetailIds: []
                 },
+                 disabledLine: [],
             }
         },
         methods: {
@@ -375,7 +377,16 @@
             send() {
                 let parentNode = this.dataFilter(this.newProductTabData);
                 console.log(this.$filterModify(parentNode))
-            }
+            },
+            addProduct() {
+                let arr = [];
+                _.map(this.tabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                this.disabledLine = arr;
+                this.trig = new Date().getTime();
+                this.dialogTableVisible = true;
+            },
         },
         mounted() {
 
