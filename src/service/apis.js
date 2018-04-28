@@ -1,12 +1,5 @@
 
 const apis = {
-  USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
-  CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
-  CHATMESSAGE_ADD: ['/chatmessage/add', 'BASE_JML2'],
-  UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
-  UTASK_TYPELIST: ['/utask/typeList', 'BASE_JY'],
-  ITEMFAVORITE_PART: ['/itemfavorite/part', 'BASE_JML'],
-  ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'BASE_JML'],
   POST_CODE_PART: ['/code/part', 'BASE_JML'],
   POST_LOGISTICSPORT_QUERY: ['/logisticsport/query', 'BASE_JML'],
   GET_COUNTRY_ALL: ['/country/all', 'BASE_JML'],
@@ -16,7 +9,6 @@ const apis = {
   update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
   GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS'], //供应商 =》 获取系统分类
   BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1'], //采购端 => 获取系统分类
-  GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
   GET_CATEGORY: ['/category', 'BASE_CS'], //供应商 =》 获取我的分类
   BUYER_GET_CATEGORY: ['/purchase/category', 'BASE_CS1'], //供应商 =》 获取我的分类
   mapping_category: ['/category/mapping', 'BASE_CS'],
