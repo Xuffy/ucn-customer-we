@@ -512,7 +512,29 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Plan Overview'
+            name: 'planOverview'
+          },
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'loadingList',
+          name: 'loadingList',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'loadingList'
+          },
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'draft',
+          name: 'logisticDraft',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'logisticDraft'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },

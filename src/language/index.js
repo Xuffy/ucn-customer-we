@@ -36,6 +36,7 @@ export default _.extend(
   {_logBasic: require(`./${lang}/logs/logs.basic`)},
   {_track: require(`./${lang}/track/trackBysku`)},
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
+
   {_product: require(`./${lang}/product/product.basic`)},
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
