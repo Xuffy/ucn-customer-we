@@ -14,7 +14,7 @@
         </el-radio-group>
       </div>
       <div class="search">
-        <select-search  class="search" :options="options" @inputChange="inputEnter" :searchLoad="searchLoad"/>
+        <select-search  class="search" :options="options" @inputEnter="inputEnter" v-model="message" :searchLoad="searchLoad"/>
       </div>
     </div>
     <div class="main">
@@ -43,9 +43,9 @@
               label="Notification Method"
               align="center">
               <template slot-scope="scope">
-                <div @click="handleEdit(scope.$index, scope.row)" style="display: inline-block;">
-                  <el-checkbox @change="handleCheckedCitiesChange" v-model="checked">Email</el-checkbox>
-                </div>
+                <!--<div @click="handleEdit(scope.$index, scope.row)" style="display: inline-block;">-->
+                  <el-checkbox @change="handleCheckedCitiesChange(scope.$index, scope.row)" v-model="scope.row.subscribeEmail">Email</el-checkbox>
+                <!--</div>-->
                 <el-checkbox v-model="checked1" disabled>Platform</el-checkbox>
               </template>
             </el-table-column>
@@ -104,8 +104,9 @@
           ps:10,
           pn:1
         },
-        checked:{},
+        checked:'',
         checked1:true,
+        message:'',
         tabData:[],
         checkedData:[],
         activeName: 'System Message',
@@ -133,27 +134,25 @@
       changeChecked(item) { //tab 勾选
         this.checkedData = item;
       },
-      handleEdit(index, row) {
-        // this.centerDialogVisible = true  0：不订阅，1：订阅
+      handleCheckedCitiesChange(index, row){
         let url = this.$apis.post_messagesetting_updatesetting
         this.updatesetting.id = row.id
-        console.log(row)
-
-        if (row.subscribeEmail === 1){
-          this.updatesetting.subscribeEmail = 0
-          this.$ajax.post(url, this.updatesetting)
-          .then(res => {
-            this.$message('系统关闭邮件来发送消息');
-          })
-        }else{
+        // 0：不订阅，1：订阅
+        if (row.subscribeEmail){
           this.updatesetting.subscribeEmail = 1
           this.$ajax.post(url, this.updatesetting)
           .then(res => {
             this.$message('系统通过邮件来发送消息');
-            this.checked = true;
+            this.getMessageQuery()
+          })
+        }else{
+          this.updatesetting.subscribeEmail = 0
+          this.$ajax.post(url, this.updatesetting)
+          .then(res => {
+            this.$message('系统关闭邮件来发送消息');
+            this.getMessageQuery()
           })
         }
-
       },
       //管理信息
       manageMessage(){
@@ -173,10 +172,8 @@
           })
         }
       },
-      handleCheckedCitiesChange(value){
-        // console.log(this.tableData)
-      },
       inputEnter(val) {
+        console.log(val)
         if(!val.keyType) return this.$message('请选中搜索类型');
         if(!val.key) return this.$message('搜索内容不能为空');
         this.params.mark = val.keyType;
@@ -252,9 +249,16 @@
                   val.messageType = 'FYI'
                   break;
               }
+              if (val.subscribeEmail == 1){
+                val.subscribeEmail = true
+              }else{
+                val.subscribeEmail = false;
+              }
 
                 return val;
             });
+
+
             this.tableData = res
           })
           .catch(() => {
@@ -271,6 +275,7 @@
           this.isShow = false;
           this.isHide = true;
         }
+        this.getDataInfo()
       }
     },
     created(){

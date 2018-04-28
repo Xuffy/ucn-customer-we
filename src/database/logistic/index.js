@@ -4,6 +4,7 @@ import planList from './plan/planList'
 import transportationList from './plan/transportationList'
 import containerInfo from './plan/containerInfo'
 import productInfo from './plan/productInfo'
+import sku from './plan/sku'
 
 export default {
   basicInfo,
@@ -11,5 +12,6 @@ export default {
   planList,
   transportationList,
   containerInfo,
-  productInfo
+  productInfo,
+  sku
 }

@@ -44,13 +44,12 @@
             :loading="tabLoad" 
             ref="tab"
         />
-        <el-pagination
-            @size-change="handleSizeChange"
-            :currentPage.sync="params.pn"
-            :page-sizes="pazeSize"
-            :page-size="params.ps"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageTotal"
+        <v-pagination
+            :pageNum.sync="params.pn"
+            :pageSize.sync="params.ps"
+            :page-total.sync="pageTotal"
+            @page-change="handleSizeChange"
+            @page-size-change="pageSizeChange"
         />
     </div>
 </template>
@@ -59,7 +58,7 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable } from '@/components/index';
+    import { selectSearch, VTable, VPagination } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -102,7 +101,8 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'v-pagination': VPagination
         },
         created() {
             this.viewByStatus = 0;
@@ -214,6 +214,9 @@
                 console.log(No)
             },
             handleSizeChange(val) {
+                this.params.pn = val;
+            },
+            pageSizeChange(val) {
                 this.params.ps = val;
             },
             changeChecked(item) { //tab 勾选

@@ -1,8 +1,6 @@
 <template>
   <div class="login">
-    <iframe :src="loginUrl" style="width: 100%;height: 100%;position: fixed;top: 0;left: 0">
-
-    </iframe>
+    <iframe :src="loginUrl" style="width: 100%;height: 100%;position: fixed;top: 0;left: 0"></iframe>
   </div>
 </template>
 
@@ -18,7 +16,7 @@
       }
     },
     created() {
-      let redirectUrl = Base64.encode(`${window.location.origin}/static/authorize/index.html`);
+      let redirectUrl = '/#/?type=1&redirect=' + Base64.encode(`${window.location.origin}/static/authorize/index.html`);
       this.$message.closeAll();
       this.loginUrl = `${config.ENV.LOGIN_URL}${redirectUrl}`;
       this.$localStore.clearAll();
@@ -31,6 +29,7 @@
         if (!token) return false;
         token = Base64.decode(token);
         this.$localStore.set('token', token);
+        this.$router.push('/');
         this.$ajax.get(this.$apis.USER_PRIVILEGE).then(data => {
           this.$localStore.set('user', data);
           this.$router.push('/');

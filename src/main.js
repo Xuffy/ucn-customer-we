@@ -37,7 +37,7 @@ console.warn = () => {
 
 
 // 去掉console
-if (config.ENV_FLAG !== 'local') {
+if (config.ENV_FLAG === 'production') {
   console.log = () => {
   }
 }
@@ -45,6 +45,8 @@ if (config.ENV_FLAG !== 'local') {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 });
+
+config.AUTH = config.ENV_FLAG === 'local' ? config.AUTH : true;
 
 // underscorejs配置template
 _.templateSettings = {
