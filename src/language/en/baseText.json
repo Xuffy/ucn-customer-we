@@ -55,9 +55,7 @@
     "supplierProducts":"Supplier's Products",
     "sentAsOrder": "sent as order",
     "logisticsPlanOverview": "Logistics Plan Overview",
-
     "highLightTheDifferent":"High Light The Different",
-
     "compareOverview": "Compare Overview",
     "downloadSelectedCompare": "Download Selected Compare",
     "compareBy": "Compare by",
@@ -65,8 +63,13 @@
     "deleteTheCompare": "Delete the Compare",
     "addNew": "add New",
     "Status": "Status",
+    "waitingQC":"Waiting QC",
+    "completedQC":"Completed QC",
+    "create":"Create",
+    "qcStatus":"QC status",
     "inquiryDraft": "Inquiry draft",
     "inquiryRecycleBin": "Inquiry recycle bin",
     "recover": "Recover",
     "compareRecycleBin": "Compare recycle bin"
 }
+
