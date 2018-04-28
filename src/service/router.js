@@ -445,18 +445,18 @@ export const routerMap = [
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
-        {
-          path: 'placeLogisticPlan',
-          name: 'logisticPlaceLogisticPlan',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Place Logistic Plan'
-          },
-          component: () => import('../views/logistic/placeLogisticPlan')
-        },
+        // {
+        //   path: 'placeLogisticPlan',
+        //   name: 'logisticPlaceLogisticPlan',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Place Logistic Plan'
+        //   },
+        //   component: () => import('../views/logistic/placeLogisticPlan')
+        // },
         {
           path: 'planDetail',
           name: 'logisticPlanDetail',
@@ -469,41 +469,41 @@ export const routerMap = [
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
-        {
-          path: 'orderOverview',
-          name: 'logisticOrder',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Order Overview'
-          },
-          component: () => import('../views/logistic/logisticOrderOverview')
-        },
-        {
-          path: 'placeLogisticOrder',
-          name: 'logisticPlaceLogisticOrder',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Place Logistic Order'
-          },
-          component: () => import('../views/logistic/placeLogisticOrder')
-        },
-        {
-          path: 'orderDetail',
-          name: 'logisticOrderDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Order Detail'
-          },
-          component: () => import('../views/logistic/logisticOrderDetail')
-        }
+        // {
+        //   path: 'orderOverview',
+        //   name: 'logisticOrder',
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Order Overview'
+        //   },
+        //   component: () => import('../views/logistic/logisticOrderOverview')
+        // },
+        // {
+        //   path: 'placeLogisticOrder',
+        //   name: 'logisticPlaceLogisticOrder',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Place Logistic Order'
+        //   },
+        //   component: () => import('../views/logistic/placeLogisticOrder')
+        // },
+        // {
+        //   path: 'orderDetail',
+        //   name: 'logisticOrderDetail',
+        //   hidden: true,
+        //   meta: {
+        //     draft: true,
+        //     recycleBin: true,
+        //     log: true,
+        //     name: 'Order Detail'
+        //   },
+        //   component: () => import('../views/logistic/logisticOrderDetail')
+        // }
       ]
 
     },

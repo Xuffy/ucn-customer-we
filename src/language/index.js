@@ -4,7 +4,7 @@ const lang = localStore.get('language') || 'en';
 export default _.extend(
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
-  require(`./${lang}/workbench/pending`),
+  require(`./${lang}/workbench/task`),
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
@@ -23,7 +23,6 @@ export default _.extend(
   require(`./${lang}/order/overview`),
   require(`/${lang}/order/basicinfo.pending`),
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
-  require(`./${lang}/logistic/plan/plan.base`),
   require(`./${lang}/logistic/plan/overviewCheckbox.status`),
   require(`./${lang}/inquiry/compare.pending`),
 
@@ -45,5 +44,6 @@ export default _.extend(
     // require(`./${lang}/warehouse/warehouse.index`),
     {_product: require(`./${lang}/product/product.basic`)},
     require(`./${lang}/product/productOverview`),
+    require(`./${lang}/logistic/plan/plan.base`),
 
 )

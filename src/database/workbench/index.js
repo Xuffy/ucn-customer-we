@@ -1,10 +1,10 @@
 // import pending from './pending';
 // import future from './future';
-import table from './table';
+import taskTable from './taskTable';
 
 
 export default {
   // pending,
   // future,
-  table
+  taskTable
 }

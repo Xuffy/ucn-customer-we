@@ -2,6 +2,7 @@
 
 import VTable from './common/table/index';
 import VTableFilter from './common/table/filter';
+import VPagination from './common/table/pagination';
 import VSimpleTable from './common/table/simple';
 import VComplexTable from './common/table/complex';
 import VHistoryModify from './common/historyModify';
@@ -28,7 +29,9 @@ import paymentTable from '@/views/warehouse/paymentTable';
 import VHistory from '@/views/negotiation/children/history';
 // import timeSelection from './common/fnCompon/timeSelection';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
+
 export {
+  VPagination,
   VHistoryModify,
   VAddQuickLink,
   VTable,
