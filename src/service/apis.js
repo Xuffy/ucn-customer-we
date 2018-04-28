@@ -22,11 +22,9 @@ const apis = {
   mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory: ['/purchase/sys/category', 'BASE_CS1'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
-  add_newSKU: ['/sku', 'BASE_CS'],
+
   supplier_overview: ['/supplierOverview', 'BASE_API'],
-  get_productDetail: ['/sku/{id}', 'BASE_CS'],
-  delete_product: ['/sku/{id}/delete', 'BASE_CS'],
-  change_productStatus: ['/sku/{id}/status', 'BASE_CS'],
+
   PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS1'],
   inquiry_list: ['/inquiry/list', 'BASE_DHC'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
@@ -47,18 +45,10 @@ const apis = {
   GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_DHC'],
   POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_DHC'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_DHC'],
-  get_productList: ['/sku/listSkuByParams', 'BASE_CS'],
-  get_supplierWhole: ['/supplierWhole', 'BASE_CS'],
-  add_address: ['/supplier/address', 'BASE_CS'],
-  delete_address: ['/supplier/delAddress/{id}', 'BASE_CS'],
-  update_address: ['/supplier/address/{id}', 'BASE_CS'],
-  add_account: ['/supplier/account', 'BASE_CS'],
-  update_account: ['/supplier/account/{id}', 'BASE_CS'],
-  delete_account: ['/supplier/delAccount/{id}', 'BASE_CS'],
-  delete_contact: ['/supplier/delContact/{id}', 'BASE_CS'],
-  update_contact: ['/supplier/contact/{id}', 'BASE_CS'],
-  add_contact: ['/supplier/contact', 'BASE_CS'],
-  update_supplier: ['/supplier/{id}', 'BASE_CS'],
+
+
+
+
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
   get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
@@ -81,6 +71,11 @@ const apis = {
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
   post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
+
+
+
+
+
   get_departmentOverview: ['/department/overview', 'BASE_LYF'],
   get_department: ['/department', 'BASE_LYF'],
   get_departmentUser: ['/user/list', 'BASE_LYF'],
@@ -129,18 +124,7 @@ const apis = {
   post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare', 'BASE_CS_cgs'],
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
   post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
-  //seller warehouse
-  get_inboundData:['/inbound/page','BASE_SELLER'],
-  get_productInfo:['/order/skuListPage','BASE_TEST'],
-  get_inboundDetail:['/inbound/getById','BASE_SELLER'],
-  // get_productInfo:['/order/skuListPage','BASE_BUYER'],
 
-
-
-  // logistic
-  gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_LJ'],
-  get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_LJ'],
-  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_LJ'],
 
   // logistic dictionary
   get_container_type: ['/containertype/all', 'BASE_dictionary'],
@@ -150,18 +134,23 @@ const apis = {
   //message
   post_companymessage_query:['/companymessage/query','BASE_JML_msg'],
   post_systemmessage_query:['/systemmessage/query','BASE_JML_msg'],
-  get_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
+  post_sys_queryownlist:['/systemmessage/queryownlist','BASE_JML_msg'],
   post_sys_addsystemmessage:['/systemmessage/addsystemmessage','BASE_JML_msg'],
   post_sys_updateread:['/systemmessagesubscribe/updateread','BASE_JML_msg'],
-  get_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
+  post_company_queryownlist:['/companymessage/queryownlist','BASE_JML_msg'],
   post_company_addcompanymessage:['/companymessage/addcompanymessage','BASE_JML_msg'],
   post_company_updateread:['/companymessagesubscribe/updateread','BASE_JML_msg'],
+  get_messagesetting_query:['/messagesetting/query','BASE_JML_msg'],
+  post_messagesetting_updatesetting:['/messagesetting/updatesetting','BASE_JML_msg'],
   //logs
   post_bizloQuery:['/bizlog/query','BASE_JML_logs'],
   //Personal Setting
   get_user_profile:['/user/profile','BASE_UUSER'],
   put_user_profile:['/user/profile','BASE_UUSER'],
-  put_user_profile_password:['/user/profile/password','BASE_UUSER']
+  put_user_profile_password:['/user/profile/password','BASE_UUSER'],
+  //qc order
+  post_qc_page:['/qc/page','BASE_BJ'],
+
 
 };
 

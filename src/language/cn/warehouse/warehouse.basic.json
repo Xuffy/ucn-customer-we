@@ -13,7 +13,7 @@
   "totalSkuQty":"产品总数",
 
   "orderNo":"订单号",
-  "productNo":"产品货号",
+  "skuCode":"供应商货号",
   "nameCn":"中文品名",
   "barCode":"产品条码",
 
@@ -22,5 +22,8 @@
 
   "download":"下载",
   "submit":"提交",
-  "cancel":"取消"
+  "cancel":"取消",
+
+  "search":"搜索",
+  "clear":"清除"
 }

@@ -74,7 +74,7 @@ export default {
     VTable
   },
   mounted () {
-    // this.getDictionary()
+    this.getDictionary()
     this.viewByChange(this.viewBy)
   },
   watch: {
