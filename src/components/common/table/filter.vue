@@ -144,7 +144,7 @@
     },
     watch: {},
     created() {
-      this.getConfig();
+      // this.getConfig();
     },
     methods: {
       change(e) {

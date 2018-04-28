@@ -3,13 +3,15 @@
   "inboundDate":"入库日期",
   "warehouseNo":"仓库编号",
   "warehouseName":"仓库名称",
-  "storageType":"入库类型",
+  "inboundTypeDictCode":"入库类型",
   "warehouseManager":"库管员",
   "remark":"备注",
   "purchaser":"采购员",
   "carrier":"送货人员",
   "carrierPhone":"送货人电话",
   "timeZone":"时区",
+  "attachment":"附件",
+
 
   "operator":"操作人",
   "skuTotalQty":"入库产品总数量",

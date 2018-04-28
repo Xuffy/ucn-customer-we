@@ -52,6 +52,32 @@ body {
   display: inline-block;
 }
 
+.ucn-login-alter {
+  .el-message-box__header {
+    display: none;
+  }
+  .el-message-box__btns {
+    display: none;
+  }
+
+  .el-message-box__message {
+    color: #eeeeee;
+    font-size: 14px;
+  }
+
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background-color: initial;
+
+}
+
+.el-message {
+  &.set-top {
+    z-index: 9999999!important;
+  }
+}
+
 /*重置*/
 .ivu-input:focus {
   box-shadow: none;
@@ -91,4 +117,10 @@ body {
 
 .el-table th > .cell {
   white-space: nowrap;
+}
+
+.el-message {
+  padding: 10px 15px 10px 10px;
+  //opacity: .9;
+  min-width: 230px;
 }

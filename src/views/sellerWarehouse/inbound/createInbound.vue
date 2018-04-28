@@ -75,7 +75,7 @@
             <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
 
-        <div class="footer">
+        <div>
             <div class="title">
                 {{$i._warehouse.total}}
             </div>
@@ -110,6 +110,11 @@
             </el-form>
         </div>
 
+        <div class="footBtn">
+            <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i._warehouse.submit}}</el-button>
+            <el-button :loading="disabledSubmit">{{$i._warehouse.cancel}}</el-button>
+        </div>
+
         <el-dialog
                 title="Add Product From Order"
                 :visible.sync="addOrderDialogVisible"
@@ -118,19 +123,42 @@
             <el-form :modal="orderProduct" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalCartonQty">
-                            <el-input size="mini" class="speInput" :disabled="true" v-model="inboundSummary.totalCartonQty"></el-input>
+                        <el-form-item prop="orderNo" :label="$i._warehouse.orderNo">
+                            <el-input size="mini" class="speInput" v-model="orderProduct.orderNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="skuCode" :label="$i._warehouse.productNo">
+                            <el-input size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="skuNameCn" :label="$i._warehouse.nameCn">
+                            <el-input size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
+                        <el-form-item prop="skuBarCode" :label="$i._warehouse.barCode">
+                            <el-input size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
+            <div class="search-btn">
+                <el-button type="primary">搜索</el-button>
+            </div>
 
 
-
+            <v-table
+                    v-loading="loadingTable"
+                    :data="tableDataList"
+                    :buttons="[{label: 'Detail', type: 1}]"
+                    @change-checked="changeChecked"
+                    @action="btnClick"></v-table>
 
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addOrderDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="addOrderDialogVisible = false">确 定</el-button>
+                <el-button @click="addOrderDialogVisible = false">取 消</el-button>
             </div>
         </el-dialog>
 
@@ -138,14 +166,21 @@
 </template>
 
 <script>
+
+    import VTable from '@/components/common/table/index'
+
     export default {
         name: "createInbound",
+        components:{
+            VTable
+        },
         data(){
             return{
                 /**
                  * 页面基础配置
                  * */
                 labelPosition:'right',
+                disabledSubmit:false,
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -173,20 +208,19 @@
                 },
                 addOrderDialogVisible:false,
 
-
-
                 inboundData:{
                     inboundNo:'',
                     inboundDate:'',
                     warehouseNo:'',
                     warehouseName:'',
-                    storageType:null,
+                    inboundTypeDictCode:'',
                     warehouseManager:'',
                     remark:'',
                     purchaser:'',
                     carrier:'',
                     carrierPhone:'',
                     timeZone:'',
+                    attachment:''
                 },
                 //inbound总计
                 inboundSummary:{
@@ -197,6 +231,13 @@
                     totalSkuQty:0,
                 },
 
+
+                /**
+                 * 弹出框数据
+                 * */
+                selectList:[],
+                loadingTable:false,
+                tableDataList:[],           //弹出框表格数据
                 //add order product搜索数据
                 orderProduct:{
                     orderNo: "",
@@ -214,10 +255,28 @@
                 this.addOrderDialogVisible=true;
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
-                    console.log(res)
+                    console.log(res.datas)
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
                 }).catch(err=>{
 
                 });
+            },
+
+            //提交表单
+            submit(){
+                console.log(this.inboundData)
+            },
+
+
+
+            /**
+             * 弹出框事件
+             * */
+            changeChecked(e){
+                this.selectList=e;
+            },
+            btnClick(e){
+                console.log(e)
             },
         },
         created(){
@@ -243,12 +302,31 @@
         width: 80%;
     }
 
+    .search-btn{
+        text-align: center;
+    }
+
     .footer{
         background-color: #ffffff;
         position: fixed;
         bottom: 0;
         /*width: 100%;*/
         padding: 10px;
+    }
+
+
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    .dialog-footer{
+        text-align: center;
     }
 
 
