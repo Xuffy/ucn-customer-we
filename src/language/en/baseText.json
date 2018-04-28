@@ -55,14 +55,16 @@
     "supplierProducts":"Supplier's Products",
     "sentAsOrder": "sent as order",
     "logisticsPlanOverview": "Logistics Plan Overview",
-
     "highLightTheDifferent":"High Light The Different",
-
     "compareOverview": "Compare Overview",
     "downloadSelectedCompare": "Download Selected Compare",
     "compareBy": "Compare by",
     "saveTheCompare": "Save the Compare",
     "deleteTheCompare": "Delete the Compare",
     "addNew": "add New",
-    "Status": "Status"
+    "Status": "Status",
+    "waitingQC":"Waiting QC",
+    "completedQC":"Completed QC",
+    "create":"Create",
+    "qcStatus":"QC status"
 }
