@@ -129,7 +129,6 @@
                             compareId:e.id.value,
                             compareName:e.name.value
                         },
-
                     });
                 }
             },

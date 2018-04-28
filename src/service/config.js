@@ -3,8 +3,8 @@ export default {
   ENV: {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
-      // BASE_CS1: 'http://192.168.51.33:11007',
-      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_CS1: 'http://192.168.51.33:11007',
+      // BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: '//192.168.51.173:18001',
@@ -21,6 +21,7 @@ export default {
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_SELLER:'http://dev.usupply-facade.ucnholding.com:18100',
       BASE_BUYER:'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_TEST:'http://dev.upurchase-facade.ucnholding.com:80'
     },
     develop: {
       BASE_API: 'http://192.168.11.215:30704'

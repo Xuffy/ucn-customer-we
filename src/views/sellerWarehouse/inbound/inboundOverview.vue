@@ -15,8 +15,8 @@
                 </el-radio-group>
                 <select-search
                         class="search"
-                        @inputChange="searchInbound"
                         @inputEnter="searchInbound"
+                        v-model="searchId"
                         :options="searchOptions"></select-search>
             </div>
             <div class="section">
@@ -64,8 +64,10 @@
                     //         orderType: "",
                     //     }
                     // ],
-                    storageType: null
+                    inboundTypeDictCode: null
                 },
+
+                searchId:1,
 
                 searchOptions:[
                     {
@@ -83,9 +85,9 @@
             changeStatus(e){
                 let num=Number(e);
                 if(num===0){
-                    this.inboundConfig.storageType=null;
+                    this.inboundConfig.inboundTypeDictCode=null;
                 }else{
-                    this.inboundConfig.storageType=num;
+                    this.inboundConfig.inboundTypeDictCode=num;
                 }
                 this.getInboundData();
             },
@@ -112,7 +114,8 @@
             },
 
             searchInbound(e){
-                console.log(e)
+                this.inboundConfig.inboundNo=e.key;
+                this.getInboundData();
             },
 
             btnClick(e){

@@ -327,16 +327,23 @@
             //emit数据
             postData(){
                 this.$refs.productFormTop.resetFields();
-
                 let arr=this.$copyArr(this.selectList);
                 //这里只把选中并且没有置灰的数据抛出去，这肯定是新增的
                 let newArr=[];
-                arr.forEach(v=>{
-                    if(v._checked && !v._disabled){
-                        v._checked=false;
-                        newArr.push(v);
-                    }
-                });
+                if(this.type==='product'){
+                    arr.forEach(v=>{
+                        if(v._checked && !v._disabled){
+                            newArr.push(v.id.value);        //只把id带出去
+                        }
+                    });
+                }else if(this.type==='bookmark'){
+                    arr.forEach(v=>{
+                        if(v._checked && !v._disabled){
+                            newArr.push(v.skuId.value);        //只把id带出去
+                        }
+                    });
+                }
+
                 this.$emit('handleOK',newArr);
             },
             cancel(){
@@ -401,7 +408,6 @@
                             }
                             return e;
                         });
-
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 let id;
@@ -413,7 +419,12 @@
                                     id=_.findWhere(v,{key:'id'}).value;
                                 }
                                 this.tableDataList.forEach(m=>{
-                                    let newId=_.findWhere(m,{key:'id'}).value;
+                                    let newId;
+                                    if(this.type==='product'){
+                                        newId=_.findWhere(m,{key:'id'}).value;
+                                    }else if(this.type==='bookmark'){
+                                        newId=_.findWhere(m,{key:'skuId'}).value;
+                                    }
                                     if(id===newId){
                                         m._disabled=true;
                                         m._checked=true;

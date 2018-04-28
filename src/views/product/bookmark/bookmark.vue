@@ -12,7 +12,7 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
@@ -66,7 +66,7 @@
         <div class="footer">
             <div class="btns">
                 <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
-                <el-button>{{$i._product.createOrder}}</el-button>
+                <el-button @click="createOrder">{{$i._product.createOrder}}</el-button>
                 <el-button @click="compare" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
                 <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
                 <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
@@ -94,6 +94,39 @@
                     :hideBtn="true"
                     @handleCancel="handleCancel"
                     @handleOK="handleOkClick"></product>
+        </el-dialog>
+
+
+        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+            <el-table
+                    :data="disabledOrderList"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        label="#"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i._product.skuNameEn"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.nameEn.value}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i._product.skuCode">
+                    <template slot-scope="scope">
+                        {{scope.row.code.value}}
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
         </el-dialog>
 
 
@@ -132,6 +165,8 @@
                 disabledOkBtn:false,
                 disableClickDelete:false,
                 forceUpdateNumber:11,               //改变数值以驱动内部更新
+                disabledOrderList:[],               //不能添加到order的list
+                dialogFormVisible:false,
                 //表格字段绑定
                 productForm: {
                     categoryId: null,
@@ -213,7 +248,6 @@
 
             //搜查
             search(){
-                console.log(this.productForm)
                 this.disabledSearch=true;
 
                 if(!this.productForm.maxExwPrice){
@@ -247,6 +281,7 @@
                     // });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
+                    this.selectList=[];
                 }).catch(err=>{
                     this.disabledSearch=false;
                 });
@@ -350,10 +385,29 @@
 
             },
 
+
+            //勾选的商品创建order
+            createOrder(){
+                this.disabledOrderList=[];
+                this.selectList.forEach(v=>{
+                    //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                    if(v.customerCreate.value){
+                        this.disabledOrderList.push(v);
+                    }
+                });
+                if(this.disabledOrderList.length>0){
+                    console.log(this.disabledOrderList)
+                    this.dialogFormVisible=true;
+                }else{
+
+                }
+            },
+
+
             compare(){
                 let id='';
                 this.selectList.forEach((v,k)=>{
-                    let item=_.findWhere(v,{key:'id'});
+                    let item=_.findWhere(v,{key:'skuId'});
                     if(k===this.selectList.length-1){
                         id+=item.value;
                     }else{
