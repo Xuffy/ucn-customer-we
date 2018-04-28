@@ -4,9 +4,9 @@ export default {
     local: {
       LOGIN_URL: '//localhost:8070/#/?type=1&redirect=',
       BASE_CS: 'http://192.168.51.33:11003',
-      BASE_CS1: 'http://192.168.51.33:11007',
-      // BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      //BASE_CS1: 'http://192.168.51.33:11007',
       //BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_CS1: 'http://192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:80',

@@ -5,14 +5,14 @@ export default {
     companyId: {
         _hide: true
     },
-    compareItems: {
-
+    compareTime: {
+        key: 'updateDt'
     },
     compareName: {
 
     },
-    compareTime: {
-        key: 'updateDt'
+    compareItems: {
+
     },
     operater: {
         key: 'updateName'

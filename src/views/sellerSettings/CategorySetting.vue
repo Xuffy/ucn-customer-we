@@ -105,13 +105,13 @@
         },
         methods: {
             getMgeneralCategoryData() {
-                this.$ajax.get(this.$apis.BUYER_GET_PURCHASE_SYS_CAREGORY)
+                this.$ajax.get(this.$apis.GET_SYS_CATEGORY)
                 .then(res => {
                     this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
-                this.$ajax.get(this.$apis.BUYER_GET_CATEGORY)
+                this.$ajax.get(this.$apis.GET_CATEGORY)
                 .then(res => {
                     this.myCategoryData = res;
                 })
@@ -284,7 +284,10 @@
                 });
             },
             myCategoryChange(val) {
-                if(val.children && val.children.length) return;
+                if(val.children && val.children.length) return; // this.$message({
+                    //     type: 'info',
+                    //     message: '父节点不能添加映射关系'
+                    // });
                 this.myCategory = val.id;
                 this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
                     id: val.id

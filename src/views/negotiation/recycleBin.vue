@@ -1,17 +1,17 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $i._baseText.compareOverview }}</h3>
+        <h3 class="hd">{{ title }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button>{{ $i._baseText.downloadSelectedCompare }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.recover}(${checkedArg.length})` }}</el-button>
+                <el-button type="primary">{{ `${$i._baseText.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button>
             </div>
-            <select-search :options="options" @inputEnter="inputEnter" />
+            <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
-            :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
+            :buttons="[{label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
             :height="350"
@@ -25,6 +25,7 @@
         name:'',
         data() {
             return {
+                title: '',
                 pageTotal:0,
                 checkedArg: [],
                 tabData: [],
@@ -47,7 +48,6 @@
                     // },
                     ps: 10,
                     pn: 1,
-                    recycle: 0,
                     // sorts: [
                     //     {
                     //         nativeSql: true,
@@ -65,8 +65,20 @@
             'v-table': VTable
         },
         methods: {
-            getList() { //获取Compare 列表
-                this.tabLoad = true;
+            getInquiryList() { // 获取inquirylist
+                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
+                .then(res => {
+                    this.pageTotal = res.tc;
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    this.tabLoad = false;
+                    this.searchLoad = false; 
+                })
+                .catch(() => {
+                    this.searchLoad = false; 
+                    this.tabLoad = false;
+                });
+            },
+            getCompare() { // 获取compare
                 this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
                 .then(res => {
                     let data = res.datas;
@@ -83,49 +95,68 @@
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
-                let types = '';
-                if(type === 'detail') {
-                    types = 'only';
-                } else {
-                    types = 'modify';
-                }
-                this.$router.push({
-                    name: 'negotiationCompareDetail',
-                    params: {
-                        type: types
-                    },
-                    query: {
-                        id: _.findWhere(item, { 'key': 'id' }).value
-                    }
-                });
+                
             },
-            changeChecked(item) { //选中的compare
+            changeChecked(item) { //选中的list
                 let arr = [];
                 item.forEach(item => {
                     arr.push(item.id.value);
                 });
                 this.checkedArg = arr;
             },
-            compareDelete() { //删除compare
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
-                    .then(res => {
-                        this.getList();
-                        this.checkedData = [];
+            getList() {
+                switch(this.$route.params.type) {
+                    case 'inquiry':
+                        this.getInquiryList();
+                        break;
+                    case 'compare':
+                        this.getCompare();
+                        break;
+                }
+            },
+            actionInquiry(type) {
+                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                    ids:this.checkedArg,
+                    action: type
+                })
+                .then(res => {
+                    this.tabData.forEach((item, index) => {
+                        res.forEach(key => {
+                            if(item.id.value === key) {
+                                this.tabData.splice(index, 1);
+                            }
+                        });
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                    this.checkedArg = [];
                 });
             },
-            inputEnter() {
-                
+            actionCompare() {
+                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RESTORE, this.checkedArg)
+                .then(res => {
+                    this.checkedArg = [];
+                    this.getCompare();
+                });
+            },
+            submit() { //删除恢复
+                switch(this.$route.params.type) {
+                    case 'inquiry':
+                        this.actionInquiry('restore');
+                        break;
+                    case 'compare':
+                        this.actionCompare('restore');
+                        break;
+                }
+            },
+            ajaxInqueryAction(type) {
+                const argId = this.getChildrenId();
+                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                    action: type,
+                    ids:argId
+                })
+                .then(res => {
+                    this.getInquiryList();
+                    this.checkedData = [];
+                });
             }
         },
         watch: {
@@ -137,7 +168,18 @@
             }
         },
         created() {
-            this.getList();
+            switch(this.$route.params.type) {
+                case 'inquiry':
+                    this.title = this.$i._baseText.inquiryRecycleBin;
+                    this.bodyData.recycleCustomer = 1;
+                    break;
+                case 'compare':
+                    this.title = this.$i._baseText.compareRecycleBin;
+                    this.bodyData.recycle = 1;
+                    //recycleSupplier
+                    break;
+            };
+            this.getList();            
         }
     }
 </script>
