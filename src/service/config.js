@@ -30,8 +30,8 @@ export default {
     },
     develop: {
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100',
-      UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100',
+      UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 供应商
+      USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100', // 采购商
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
       LOGIN_URL: 'http://120.79.230.214:9090'
     },
