@@ -24,11 +24,9 @@ const apis = {
   mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory: ['/purchase/sys/category', 'BASE_CS1'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
-  add_newSKU: ['/sku', 'BASE_CS'],
+
   supplier_overview: ['/supplierOverview', 'BASE_API'],
-  get_productDetail: ['/sku/{id}', 'BASE_CS'],
-  delete_product: ['/sku/{id}/delete', 'BASE_CS'],
-  change_productStatus: ['/sku/{id}/status', 'BASE_CS'],
+
   PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'BASE_CS1'],
   inquiry_list: ['/inquiry/list', 'BASE_DHC'],
   inquiry_list_sku: ['/inquiry/list/sku', 'BASE_DHC'],
@@ -49,18 +47,10 @@ const apis = {
   GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_DHC'],
   POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_DHC'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_DHC'],
-  get_productList: ['/sku/listSkuByParams', 'BASE_CS'],
-  get_supplierWhole: ['/supplierWhole', 'BASE_CS'],
-  add_address: ['/supplier/address', 'BASE_CS'],
-  delete_address: ['/supplier/delAddress/{id}', 'BASE_CS'],
-  update_address: ['/supplier/address/{id}', 'BASE_CS'],
-  add_account: ['/supplier/account', 'BASE_CS'],
-  update_account: ['/supplier/account/{id}', 'BASE_CS'],
-  delete_account: ['/supplier/delAccount/{id}', 'BASE_CS'],
-  delete_contact: ['/supplier/delContact/{id}', 'BASE_CS'],
-  update_contact: ['/supplier/contact/{id}', 'BASE_CS'],
-  add_contact: ['/supplier/contact', 'BASE_CS'],
-  update_supplier: ['/supplier/{id}', 'BASE_CS'],
+
+
+
+
   //order
   get_orderlist: ['/order/page', 'BASE_HCJ'],
   get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ'],
@@ -83,40 +73,11 @@ const apis = {
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
   post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
-  get_departmentOverview: ['/department/overview', 'BASE_LYF'],
-  get_department: ['/department', 'BASE_LYF'],
-  get_departmentUser: ['/user/list', 'BASE_LYF'],
-  delete_department: ['/department/{deptId}', 'BASE_LYF'],
-  add_departmentRole: ['/role', 'BASE_LYF'],
-  delete_departmentRole: ['/role/{deptId}/{roleId}', 'BASE_LYF'],
 
-  //product supplier
-  get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_CS'],
 
-  //product buyer
-  get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
-  get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
-  add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
-  add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1'],
-  add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
-  get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
-  add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
-  update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
-  delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
-  delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
-  post_add_supplier_remark:['/purchase/supplier/remark','BASE_CS_cgs'],
-  get_update_supplier_remark:['/purchase/supplier/remark/{id}','BASE_CS_cgs'],
-  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
-  get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
-  recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
-  get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
-  add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1'],
-  delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
-  get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-  delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
-  get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
-  edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
-  update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_CS1'],
+
+
+
 
 
 
@@ -132,12 +93,7 @@ const apis = {
   post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare', 'BASE_CS_cgs'],
   post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs'],
   post_deleteBookmarks:['/purchase/supplier/batchDeleteBookmark','BASE_CS_cgs'],
-  //seller warehouse
-  get_inboundData:['/inbound/page','BASE_SELLER'],
-  get_productInfo:['/order/skuListPage','BASE_TEST'],
-  get_inboundDetail:['/inbound/getById','BASE_SELLER'],
-  add_inbound:['/inbound/add','BASE_SELLER'],
-  // get_productInfo:['/order/skuListPage','BASE_BUYER'],
+
 
 
 
