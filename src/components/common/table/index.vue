@@ -97,6 +97,7 @@
           </tr>
           </tfoot>
         </table>
+
         <div v-else class="empty">
           暂无数据
         </div>
@@ -541,12 +542,10 @@
   }
 
   .ucn-table .empty {
-    position: absolute;
-    top: 50%;
-    left: 50%;
     text-align: center;
-    transform: translate(-50%, -50%);
     color: #999999;
+    height: 40px;
+    line-height: 40px;
   }
 
   .ucn-table .el-pagination {
