@@ -9,7 +9,6 @@
           />
         </div>
 
-
         <el-dialog
                 class="speDialog"
                 title="Add News"
@@ -51,7 +50,11 @@
                 tabLoad:true,
                 params:{
                   title:'',
-                  content:''
+                  content:'',
+                },
+                pData:{
+                  ps:10,
+                  pn:1
                 },
                 dialogVisible:false,            //弹出框显示隐藏
                 newsContent:'',              //新增消息的内容
@@ -96,13 +99,13 @@
             this.tabLoad = true;
             column = this.$db.message.table;
             if(this.$route.query.type == 1) {;
-              url = this.$apis.get_sys_queryownlist;
+              url = this.$apis.post_sys_queryownlist;
             } else {
-              url = this.$apis.get_company_queryownlist;
+              url = this.$apis.post_company_queryownlist;
             };
-            this.$ajax.get(url)
+            this.$ajax.post(url,this.pData)
               .then(res => {
-                this.tabData = this.$getDB(column, res);
+                this.tabData = this.$getDB(column, res.datas);
                 this.tabLoad = false;
               })
               .catch(() => {
@@ -124,9 +127,10 @@
               console.log('发送失败')
             })
             this.dialogVisible = false
-          }
+          },
 
         },
+      //get_messagesetting_query
       created(){
         this. getMessageList()
       }
