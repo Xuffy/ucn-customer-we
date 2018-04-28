@@ -73,21 +73,7 @@
         <div class="title">
             {{$i._warehouse.productInfo}}
         </div>
-        <div class="btns">
-            <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
-            <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
-        </div>
 
-        <el-dialog
-                title="Add Product From Order"
-                :visible.sync="addOrderDialogVisible"
-                width="30%">
-            <span>这是一段信息</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addOrderDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addOrderDialogVisible = false">确 定</el-button>
-            </span>
-        </el-dialog>
 
 
     </div>
@@ -144,19 +130,22 @@
                     carrierPhone:'',
                     timeZone:'',
 
-
-
                 },
             }
         },
         methods:{
-            //新增产品
-            addProduct(){
-                this.addOrderDialogVisible=true;
+            getData(){
+                this.$ajax.get(this.$apis.get_inboundDetail,{
+                    id:'1'
+                }).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+
+                });
             },
         },
         created(){
-            console.log(this.$db)
+            this.getData();
         },
     }
 </script>

@@ -72,5 +72,8 @@
   "highlightTheDifferent":"Highlight the Different",
   "saveTheCompare":"Save The compare",
 
-  "deleteTheCompare":"Delete The Compare"
+  "deleteTheCompare":"Delete The Compare",
+
+  "skuNameEn":"SKU Name En",
+  "skuCode":"SKU Code"
 }

@@ -13,7 +13,7 @@
                     v-model="compareName">
             </el-input>
         </div>
-        <div class="btns">
+        <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
                 <el-button>{{$i._product.createInquiry}}</el-button>
                 <el-button @click="createOrder">{{$i._product.createOrder}}</el-button>
@@ -36,8 +36,9 @@
         </div>
 
         <v-table
+                v-loading="loadingTable"
                 :data="tableDataList"
-                :buttons="[{label: 'detail', type: 1}]"
+                :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
 
@@ -47,25 +48,66 @@
             </div>
             <div v-if="$route.params.type==='modify'">
                 <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
-                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
-                <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
+                <el-button @click="saveModify" :loading="disableClickSaveModify" :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
+                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
         </div>
 
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
-            <product
-                    :isInModify="$route.params.type==='modify'?true:false"
-                    :title="addProductTitle"
-                    :disabledOkBtn="false"
-                    :hideBtn="true"
-                    :disabledLine="disabledLine"
-                    :forceUpdateNumber="forceUpdateNumber"
-                    @handleOK="handleOkClick"
-                    @handleCancel="handleCancel"></product>
+
+            <el-tabs v-model="addProductTabName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="Add From Product" name="1">
+                    <product
+                            :isInModify="$route.params.type==='modify'?true:false"
+                            :disabledOkBtn="false"
+                            :hideBtn="true"
+                            :disabledLine="disabledLine"
+                            :forceUpdateNumber="forceUpdateNumber"
+                            @handleOK="handleOkClick"
+                            @handleCancel="handleCancel"></product>
+                </el-tab-pane>
+                <el-tab-pane label="Add From Bookmark" name="2">
+                    <product
+                            :isInModify="$route.params.type==='modify'?true:false"
+                            :disabledOkBtn="false"
+                            :hideBtn="true"
+                            :type="'bookmark'"
+                            :disabledLine="disabledLine"
+                            :forceUpdateNumber="forceUpdateNumber"
+                            @handleOK="handleOkClick"
+                            @handleCancel="handleCancel"></product>
+                </el-tab-pane>
+            </el-tabs>
+
+
         </el-dialog>
 
-        <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-            asf
+        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+            <el-table
+                    :data="disabledOrderList"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        label="#"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i._product.skuNameEn"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.nameEn.value}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i._product.skuCode">
+                    <template slot-scope="scope">
+                        {{scope.row.code.value}}
+                    </template>
+                </el-table-column>
+            </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -96,17 +138,23 @@
                 totalDataList:[],       //因为要分页，所以先取一个全部数据
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
                 selectList:[],          //保存选择的数剧
+                disabledOrderList:[],   //不能添加到order的数据
                 isModify:false,         //是否处于编辑状态，默认为false
-
+                hasLoading:false,       //加载完成才让按钮显示出来
                 //弹出框显示状态
                 addProductDialogVisible:false,
                 dialogFormVisible:false,
-
+                addProductTabName:'1',
+                loadingTable:false,
                 //btns状态
                 disabledSaveCompare:false,
                 disableDelete:true,            //是否禁止删除
                 allowDeleteCompare:true,      //是否可以点击delete，在数据还没加载完的时候不能点击
                 allowBottomClick:true,          //是否禁止点击底部操作按钮
+                disableClickCancel:false,
+                disableClickSaveModify:false,
+
+                isChangeData:false,             //是否在最原始的基础上modify过数据
             }
         },
         methods:{
@@ -128,11 +176,13 @@
                             }
                             return e;
                         });
+                        this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
 
                     });
-                }else if(this.$route.params.type==='modify'){
+                }
+                else if(this.$route.params.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
                     if(this.$route.query.isModify){
@@ -168,6 +218,7 @@
                             }
                             return e;
                         });
+                        this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -178,8 +229,29 @@
             },
 
             btnClick(e){
-                console.log(e)
-                // this.$windowOpen('/product/sourcingDetail',{id:e.id.value});
+                let id;
+                if(this.$route.params.type==='new'){
+                    id=e.id.value;
+                }else if(this.$route.params.type==='modify'){
+                    id=e.skuId.value;
+                }
+                if(e.bookmarkId.value){
+                    //跳bookmark detail
+                    this.$windowOpen({
+                        url:'/product/bookmarkDetail',
+                        params:{
+                            id:id
+                        }
+                    })
+                }else{
+                    //跳product detail
+                    this.$windowOpen({
+                        url:'/product/sourcingDetail',
+                        params:{
+                            id:id
+                        }
+                    })
+                }
             },
 
             changeChecked(e){
@@ -193,22 +265,71 @@
 
             //取消编辑
             cancelModify(){
-                this.isModify=false;
+                this.disableClickCancel=true;
+                this.loadingTable=true;
+                this.compareName=this.$route.query.compareName;
+                let params={
+                    id: Number(this.$route.query.compareId),
+                    // operatorFilters: [
+                    //     {
+                    //         "columnName": "string",
+                    //         "operator": "string",
+                    //         "property": "string",
+                    //         "resultMapId": "string",
+                    //         "value": {}
+                    //     }
+                    // ],
+                    pn: 1,
+                    ps: 100,
+                    recycle: false,
+                    // sorts: [
+                    //     {
+                    //         orderBy: "string",
+                    //         orderType: "string",
+                    //     }
+                    // ]
+                };
+                this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                        if(e.status.value===1){
+                            e.status.value='上架';
+                        }else if(e.status.value===0){
+                            e.status.value='下架';
+                        }
+                        return e;
+                    });
+                    this.hasLoading=true;
+                    this.disabledLine=this.tableDataList;
+                    this.allowDeleteCompare=false;
+                    this.allowBottomClick=false;
+
+                    //额外操作
+                    this.isModify=false;
+                    this.disableClickCancel=false;
+                    this.loadingTable=false;
+                }).catch(err=>{
+                    this.disableClickCancel=false;
+                    this.loadingTable=false;
+                });
+
+
+
             },
 
             //勾选的商品创建order
             createOrder(){
-                let arr=[];
+                this.disabledOrderList=[];
                 this.selectList.forEach(v=>{
+                    //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
                     if(v.customerCreate.value){
-                        arr.push(v);
+                        this.disabledOrderList.push(v);
                     }
                 });
-                if(arr.length>0){
-                    console.log(arr)
+                if(this.disabledOrderList.length>0){
+                    console.log(this.disabledOrderList)
                     this.dialogFormVisible=true;
                 }else{
-                    this.dialogFormVisible=true;
+
                 }
             },
 
@@ -242,6 +363,7 @@
                     this.$nextTick(()=>{
                         this.disableDelete=true;
                         this.disabledLine=[];
+                        this.selectList=[];
                         this.tableDataList.forEach(v=>{
                             if(!v._disabled){
                                 this.disabledLine.push(v);
@@ -261,35 +383,78 @@
                         totalLen++;
                     }
                 });
-
                 if(totalLen+e.length>100){
                     this.$message({
                         message: '警告哦，这是一条警告消息',
                         type: 'warning'
                     });
                 }else{
-                    e.forEach(v=>{
-                        console.log(v)
-                        console.log(this.tableDataList)
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        let isIn=false;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'skuId'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',false);
-                                isIn=true;
+                    //现在跑出来的东西只是一个productId数组
+                    console.log(e,'抛出的数据')
+                    if(this.$route.params.type==='new'){
+                        //在新建状态的情况下，直接拿id重新请求获取表格数据
+                        let id=[];
+                        this.tableDataList.forEach(v=>{
+                            id.push(v.id.value);
+                        });
+                        e.forEach(v=>{
+                            id.push(v);
+                        });
+                        this.loadingTable=true;
+                        this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
+                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
+                                if(e.status.value===1){
+                                    e.status.value='上架';
+                                }else if(e.status.value===0){
+                                    e.status.value='下架';
+                                }
+                                return e;
+                            });
+                            this.hasLoading=true;
+                            this.disabledLine=this.tableDataList;
+                            this.loadingTable=false;
+                        }).catch(err=>{
+                            this.loadingTable=false;
+                        });
+                    }
+                    else if(this.$route.params.type==='modify'){
+                        //modify状态下，要把拿出来的数据先进行对比，对比之后没有的再请求接口塞进去
+                        //如果丢出来的数据的id有table里面产品的id，则把这个id对于的商品从置灰还原
+                        console.log(this.tableDataList,'table')
+                        let ids=[];
+                        this.tableDataList.forEach(v=>{
+                            if(!v._disabled){
+                                if(!this.isChangeData){
+                                    ids.push(v.skuId.value);
+                                }else{
+                                    ids.push(v.id.value);
+                                }
                             }
                         });
-                        if(!isIn){
-                            this.tableDataList.push(v);
-                        }
-                    });
-                    this.disabledLine=[];
-                    this.tableDataList.forEach(v=>{
-                        if(!v._disabled){
-                            this.disabledLine.push(v);
-                        }
-                    });
+                        e.forEach(v=>{
+                            ids.push(v);
+                        });
+                        this.loadingTable=true;
+                        this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
+                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
+                                if(e.status.value===1){
+                                    e.status.value='上架';
+                                }else if(e.status.value===0){
+                                    e.status.value='下架';
+                                }
+                                e.skuId.value=e.id.value;       //把id的值给skuId
+                                return e;
+                            });
+                            this.hasLoading=true;
+                            this.isChangeData=true;
+                            this.disabledLine=this.tableDataList;
+                            this.loadingTable=false;
+                        }).catch(err=>{
+                            this.loadingTable=false;
+                        });
+
+                        console.log(ids,'ids')
+                    }
                 }
                 this.addProductDialogVisible=false;
             },
@@ -307,15 +472,23 @@
                     });
                     return;
                 }
-
                 this.disabledSaveCompare=true;
                 let params={
                     compares: [],
                     name: this.compareName
                 };
+                console.log(this.tableDataList,'this.tableDataList')
                 this.tableDataList.forEach(v=>{
                     let id,name;
-                    id=_.findWhere(v,{key:'id'}).value;
+                    if(v.speProduct){
+                        if(_.findWhere(v,{key:'skuId'}).value){
+                            id=_.findWhere(v,{key:'skuId'}).value;
+                        }else{
+                            id=_.findWhere(v,{key:'id'}).value;
+                        }
+                    }else{
+                        id=_.findWhere(v,{key:'id'}).value;
+                    }
                     name=_.findWhere(v,{key:'nameEn'}).value;
                     params.compares.push({
                         id:id,
@@ -365,6 +538,47 @@
                 });
             },
 
+            //保存修改
+            saveModify(){
+                this.disableClickSaveModify=true;
+                let params={
+                    compares: [],
+                    id: Number(this.$route.query.compareId),
+                    name: this.compareName
+                };
+                this.tableDataList.forEach(v=>{
+                    if(!v._disabled){
+                        let id='';
+                        if(!this.isChangeData){
+                            id=v.skuId.value;
+                        }else{
+                            id=v.id.value;
+                        }
+                        params.compares.push({
+                            id:id,
+                            name:v.nameEn.value
+                        });
+                    }
+                });
+                this.$ajax.post(this.$apis.update_buyerProductCompare,params).then(res=>{
+                    this.$router.push({
+                        name:'productCompareDetail',
+                        params:{
+                            type:'modify',
+                        },
+                        query:{
+                            compareId:this.$route.query.compareId,
+                            compareName:this.compareName,
+                            forceChange:Math.random().toFixed(3)
+                        }
+                    });
+                    this.disableClickSaveModify=false;
+                }).catch(err=>{
+                    this.disableClickSaveModify=false;
+                });
+            },
+
+
             handleClick(e){
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
@@ -374,9 +588,12 @@
                 });
             },
 
+            //切换tab页
+            handleClick(){
+
+            },
         },
         created(){
-            console.log(this.$route)
             this.getList();
         },
         watch:{

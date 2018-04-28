@@ -3,6 +3,8 @@ import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
 import router from 'service/router'
+import _config from "./config";
+import {Message, MessageBox} from 'element-ui';
 
 export default {
   install(Vue, options) {
@@ -219,6 +221,21 @@ export default {
       }
     }
 
+    Vue.prototype.$goLogin = () => {
+      // sessionStore.clearAll();
+      // localStore.clearAll();
+      /*MessageBox.alert('', '', {
+        message: '正在跳转登录...',
+        dangerouslyUseHTMLString: true,
+        customClass: 'ucn-login-alter',
+        showClose: false,
+        showConfirmButton: false,
+        center: true,
+      });
 
+      setTimeout(() => {
+        window.location.href = `${_config.ENV.LOGIN_URL}${Base64.encode(window.location.href)}`;
+      }, 2000);*/
+    }
   }
 }

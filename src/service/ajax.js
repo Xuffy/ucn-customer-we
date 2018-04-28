@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import Vue from 'vue'
 import Qs from 'qs'
 import router from './router'
 import NProgress from 'nprogress'
@@ -7,9 +8,8 @@ import {Message} from 'element-ui';
 import _config from './config';
 import {localStore, sessionStore} from 'service/store';
 
-
 /**
- *
+ * axios配置
  * @type {any}
  */
 const axios = Axios.create({
@@ -17,13 +17,30 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-     'U-Session-Token':'ebc4e8ec-276d-44f8-b267-1685f9ae0456'
+    'U-Session-Token':'ebc4e8ec-276d-44f8-b267-1685f9ae0456'
   },
   transformRequest: [function (data) {
-    // return JSON.stringify(data);
     return data;
   }],
 });
+
+/**
+ * 异常验证
+ * @param code
+ * @param msg
+ */
+const validate_error = (code, msg) => {
+  switch (code) {
+    case 'AUTH-011': // 登录失效
+      return router.push('/login');
+    // return Vue.prototype.$goLogin();
+
+  }
+
+  Message.warning(msg || '数据返回异常，请重试！');
+  throw new Error(`${msg || '数据返回异常，请重试！'}`);
+}
+
 
 const $ajax = (config) => {
 
@@ -54,11 +71,18 @@ const $ajax = (config) => {
    * @returns {*[]}
    */
   this.sethHeader = (options, config) => {
+    let t = localStore.get('token') || '';
+
+    options.headers = options.headers || {};
     if (config._contentType === 'F') {
       options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
       options.data = Qs.stringify(options.data);
     } else {
       options.data = JSON.stringify(options.data);
+    }
+
+    if (!config._noAuth) {
+      options.headers['U-Session-Token'] = t;
     }
     return [options, config]
   }
@@ -104,6 +128,7 @@ const $ajax = (config) => {
     }
   }
 }
+
 /**
  * 合并请求
  * @param list
@@ -180,16 +205,29 @@ NProgress.configure({
  * request拦截器
  */
 axios.interceptors.request.use(config => {
-
   NProgress.start();
+
+  if (!config.headers['U-Session-Token'] && !config._noAuth) {
+    Message({
+      message: '登录失效，请重新登录',
+      type: 'warning',
+      customClass: 'set-top',
+      duration: 2000,
+      onClose: () => {
+        router.push('/login');
+      }
+    });
+    Promise.reject();
+    return config;
+  } else {
+  }
 
   return config
 }, error => {
   NProgress.done();
-  Message.warning(response.data.msg || '请求异常，请重试！');
-  Promise.reject(error)
+  Message.warning('请求异常，请重试！');
+  Promise.reject(error);
 });
-
 
 /**
  * respone拦截器
@@ -210,8 +248,7 @@ axios.interceptors.response.use(
     }
 
     if (response.data.status !== 'SUCCESS') {
-      Message.warning(response.data.errorMsg || '数据返回异常，请重试！');
-      throw new Error(`[code - ${response.data.status || '000'}] ${response.data.errorMsg || 'api request data unsuccessful'}`);
+      return validate_error(response.data.errorCode, response.data.errorMsg);
     }
 
     // 缓存设置
@@ -244,11 +281,19 @@ axios.interceptors.response.use(
   }
 );
 
+
+/**
+ * 扩展finally
+ * @param callback
+ * @returns {Promise<any>}
+ */
 Promise.prototype.finally = function (callback) {
   let P = this.constructor;
   return this.then(
-    value  => P.resolve(callback()).then(() => value),
-    reason => P.resolve(callback()).then(() => { throw reason })
+    value => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => {
+      throw reason
+    })
   );
 };
 
