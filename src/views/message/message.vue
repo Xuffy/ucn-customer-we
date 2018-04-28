@@ -104,7 +104,7 @@
           ps:10,
           pn:1
         },
-        checked:{},
+        checked:'',
         checked1:true,
         tabData:[],
         checkedData:[],
