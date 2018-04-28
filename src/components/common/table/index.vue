@@ -208,7 +208,10 @@
         type: [Boolean, Array],
         default: false,
       },
-
+      parId: {
+        type: String,
+        default: 'id'
+      }
     },
     data() {
       return {
@@ -234,7 +237,7 @@
           }
           return val;
         });
-        this.changeCheck();
+        this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
@@ -309,7 +312,7 @@
 
         return value[0];
       },
-      changeCheck(item) {
+      changeCheck(item, value) {
         if (this.selectionRadio) {
           this.dataList = _.map(this.dataList, val => {
             val._checked = false;

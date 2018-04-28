@@ -2,6 +2,7 @@ const version = ['/web/v1', '/v2', '/web/v3'];
 import config from './config';
 
 const apis = {
+  USER_PRIVILEGE: ['/user/privilege', 'BASE_UUSER'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'BASE_JML2'],
   CHATMESSAGE_ADD: ['/chatmessage/add', 'BASE_JML2'],
   UTASK_PAGELIST: ['/utask/pageList', 'BASE_JY'],
@@ -15,9 +16,11 @@ const apis = {
   get_listTest: ['/getList', 'BASE_API'],
   get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
   update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
-  sys_category: ['/sys/category', 'BASE_CS'],
+  GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS'], //供应商 =》 获取系统分类
+  BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1'], //采购端 => 获取系统分类
   GET_QUICKLINK: ['/getQuickLink', 'BASE_API'],
-  category: ['/category', 'BASE_CS'],
+  GET_CATEGORY: ['/category', 'BASE_CS'], //供应商 =》 获取我的分类
+  BUYER_GET_CATEGORY: ['/purchase/category', 'BASE_CS1'], //供应商 =》 获取我的分类
   mapping_category: ['/category/mapping', 'BASE_CS'],
   getCategory: ['/purchase/sys/category', 'BASE_CS1'],              //暂时使用
   delete_category: ['/category/delete', 'BASE_CS'],
@@ -35,6 +38,7 @@ const apis = {
   POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_DHC'],
   POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_DHC'],
+  POST_INQUIRY_COMPARE_RESTORE: ['/inquiry/compare/restore', 'BASE_DHC'],
   POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_DHC'],
   POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_DHC'],
   POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_DHC'],
@@ -77,8 +81,6 @@ const apis = {
   post_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
   get_supplier_remark_de: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
   post_supplier_delete_remark: ['/purchase/supplier/deleteRemark/{id}', 'BASE_CS_cgs'],
-  post_supplier_addCompare:['/purchase/supplier/compare','BASE_CS_cgs'],
-  post_supplier_deleteCompare:['/purchase/supplier/deleteCompare','BASE_CS_cgs'],
   post_listSupplierByIds:['/purchase/supplier/listSupplierByIds','BASE_CS_cgs'],
   //settings
   get_departmentOverview: ['/department/overview', 'BASE_LYF'],
@@ -164,7 +166,6 @@ const apis = {
   get_user_profile:['/user/profile','BASE_UUSER'],
   put_user_profile:['/user/profile','BASE_UUSER'],
   put_user_profile_password:['/user/profile/password','BASE_UUSER']
-
 
 };
 

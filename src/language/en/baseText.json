@@ -39,7 +39,7 @@
     "downloadall":"Download All",
     "addproduct":"Add Product",
     "send":"send",
-    "saveAsDraft":"saveAsDraft",
+    "saveAsDraft":"Save as draft",
     "quickCreate":"quickCreate",
      "markAsImportant":"markAsImportant",
     "fromNewSearch":"From New Search",
@@ -64,5 +64,9 @@
     "saveTheCompare": "Save the Compare",
     "deleteTheCompare": "Delete the Compare",
     "addNew": "add New",
-    "Status": "Status"
+    "Status": "Status",
+    "inquiryDraft": "Inquiry draft",
+    "inquiryRecycleBin": "Inquiry recycle bin",
+    "recover": "Recover",
+    "compareRecycleBin": "Compare recycle bin"
 }

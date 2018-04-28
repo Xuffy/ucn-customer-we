@@ -115,6 +115,7 @@
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
                     .then(res => {
                         this.getList();
+                        this.checkedData = [];
                     });
                 }).catch(() => {
                     this.$message({
