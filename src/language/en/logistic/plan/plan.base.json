@@ -1,4 +1,6 @@
 {
+  "blNo": "B/L No",
+  "all": "All",
   "status": "Status",
   "logisticsPlanOverview": "Logistics Plan Overview",
   "placeholder": "Please enter content",
@@ -102,8 +104,8 @@
   "addProduct": "Add Product",
   "remove": "Remove",
   "skuCode": "SKU Code",
-  "skuNameEn": "SKU Name (EN)",
-  "skuNameCn": "SKU Name (CN)",
+  "skuNameEN": "SKU Name (EN)",
+  "skuNameCN": "SKU Name (CN)",
   "productDescription": "Product Description",
   "blSkuName": "B/L SKU Name",
   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
@@ -135,5 +137,14 @@
   "exit": "Exit",
   "addProductFromOrder": "Add Product From Order",
   "detail": "Detail",
-  "factorySkuCode": "Factory SKU Code"
+  "factorySkuCode": "Factory SKU Code",
+  "departurePort": "Departure Port",
+  "ate": "Ate",
+  "vendorSkuCode": "Vendor Sku Code",
+  "unitPrice": "Unit Price",
+  "totalPrice": "Total Price",
+  "warehouseName": "Warehouse Name",
+  "warehouseNo": "Warehouse No",
+  "inboundDate": "Inbound Date",
+  "inboundNo": "Inbound No"
 }

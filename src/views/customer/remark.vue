@@ -87,45 +87,37 @@
         props: {
             add_url: {
                 type: String,
-                default: 'post_add_supplier_remark'
+                default: 'post_addCustomerListRemark'
             },
             delete_url: {
                 type: String,
-                default: 'post_supplier_delete_remark'
+                default: 'post_delete_CustomerRemark'
             },
             updata_url: {
                 type: String,
-                default: 'get_update_supplier_remark'
+                default: 'post_customerUpdataRmark'
             },
             get_url: {
                 type: String,
-                default: 'post_supplier_list_remark'
+                default: 'post_getCustomerListRemark'
             },
 
         },
         data() {
             return {
-                data: [{
-                        remark: '只有充钱你才能变得更强',
-                        submiter: '麻花藤',
-                        time: '2012-02-02',
-                    },
-                    {
-                        remark: '我从不卖假货',
-                        submiter: '强东',
-                        time: '2013-03-03',
-                    },
-                ],
                 value: '', //输入框内容
                 currentPage1: 1, //当前页
                 tableData: [], //表格数据
                 parms: {
-                    "entryDt": "",
-                    "entryId": '',
-                    "entryName": "",
-                    "id": '',
+                    "id":'',
                     "remark": "",
-                    "supplierId": this.$route.query.id,
+                    "supplierCustomerId": this.$route.query.id,
+                    "version": 0
+                },
+                getListParams:{
+                    id: this.$route.query.id,
+                    pn: 1,
+                    ps: 50,
                 },
                 addRemarkFormVisible: false, //新增备注弹出框显示隐藏
                 checkRemarkFormVisible: false, //查看备注弹出框显示隐藏
@@ -161,11 +153,14 @@
 
             //修改备注
             editRemark(index, row) {
+               
                 this.parms.id = row.id
+                this.parms.version=row.version              
                 this.parms.remark = ''
                 this.editRemarkFormVisible = true;
             },
-            edit_submit() {
+            edit_submit() {       
+               
                 this.$ajax.post(this.$apis[this.updata_url], this.parms).then((res) => {
                     this.get_remark()
                 }).catch((res) => {
@@ -183,7 +178,6 @@
                     this.$ajax.post(this.$apis[this.delete_url], {
                         id: row.id
                     }).then((res) => {
-
                         this.get_remark()
                         this.$message({
                             type: 'success',
@@ -192,24 +186,15 @@
                     }).catch((res) => {
                         console.log(res)
                     })
-
-
-
                 }).catch(() => {
 
                 });
             },
             //获取remark数据列表
             get_remark() {
-                this.$ajax.post(this.$apis[this.get_url], {
-                    id: this.id,
-                    pn: 1,
-                    ps: 50,
-                    sorts: [{
-                        orderBy: "", //默认传空
-                        orderType: "",
-                    }]
-                }).then((res) => {
+                this.$ajax.post(this.$apis[this.get_url], this.getListParams
+                ).then((res) => {
+                    
                     this.tableData = res.datas
                 }).catch((res) => {
                     console.log(res)
