@@ -78,6 +78,9 @@ export default {
   // 请求超时
   TIMEOUT: 60000,
 
+  // 默认语言设置
+  LANGUAGE: 'en',
+
   // 项目版本号
   VERSION: `2.0.${process.env.VERSION}`,
 

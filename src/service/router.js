@@ -903,7 +903,6 @@ router.beforeResolve((to, from, next) => {
     , version;
 
 
-  console.log(to.path, from.path, ts, '*/*/-/*')
   if (to.path !== '/login' || from.path === '/login') {
     /*version = localStore.get('version');
 

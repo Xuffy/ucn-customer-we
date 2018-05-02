@@ -80,7 +80,7 @@
         } : {});
 
         if (this.pageInfo.tc <= this.pageInfo.ps) {
-          return this.pageLayout = '';
+          return this.pageLayout = 'sizes,total';
         } else {
           this.pageLayout = 'prev, pager, next,sizes, jumper,total';
         }
