@@ -7,7 +7,7 @@
             <div class="head">
                 <div>
                     <span class="text">Status : </span>
-                    <el-radio-group size="mini" v-model="status">
+                    <el-radio-group size="mini" v-model="params.conditions.overdue" @change="getList">
                         <el-radio-button label="-1" border>{{$i._baseText.all}}</el-radio-button>
                         <el-radio-button label="1" >已逾期</el-radio-button>
                         <el-radio-button label="0" >未逾期</el-radio-button>
@@ -16,7 +16,7 @@
                 <div class="spe-div">
                     <div class="View">
                         <span class="text">View : </span>
-                        <el-radio-group size="mini"  v-model="viewByStatus" >
+                        <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
                             <el-radio-button label="" border>{{$i._baseText.all}}</el-radio-button>
                             <el-radio-button label="30">{{$i._baseText.logisticOrder}}</el-radio-button>
                             <el-radio-button label="10">{{$i._baseText.purchaseOrder}}</el-radio-button>
@@ -24,7 +24,10 @@
                         </el-radio-group>
                     </div>
                     <div class="search">
-                        <select-search :selectHide="false" class="search"  @inputChange="getList" :searchLoad="searchLoad"></select-search>
+                        <select-search  class="search"
+                                        :options=options
+                                        @inputChange="inputEnter"
+                                        :searchLoad="searchLoad"></select-search>
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -77,7 +80,6 @@
         },
         data(){
             return{
-                status:-1,
                 flag:true,
                 time:1523959983,
                 pazeSize: [10, 20, 30, 40, 50, 100],
@@ -86,6 +88,32 @@
                 viewByStatus:'',
                 date:'',
                 tabLoad:false,
+                options: [{
+                  id: '1',
+                  label: 'Order No'
+                }, {
+                  id: '2',
+                  label: 'Order create date',
+                }],
+                params:{
+                  conditions: {
+                    orderEntryEndDt: "",
+                    orderEntryStartDt: "",
+                    orderNoLike: "",
+                    orderType: "",
+                    overdue: -1
+                  },
+                  pn: 1,
+                  ps: 10,
+                  // sorts: [
+                  //   {
+                  //     nativeSql: true,
+                  //     orderBy: "",
+                  //     orderType: "",
+                  //     resultMapId: ""
+                  //   }
+                  // ]
+                },
                 dateOptions:{
                     shortcuts: [{
                         text: '最近一周',
@@ -119,12 +147,6 @@
             }
         },
         watch: {
-            status(){
-                this.getList();
-            },
-            viewByStatus() {
-                this.getList();
-            },
             date(){
                 console.log(this.date)
             }
@@ -133,107 +155,49 @@
             onFilterValue(val) {
                 console.log(val);
             },
-            getList(item){
+            inputEnter(){
+
+            },
+            getList(){
               console.log()
-                this.tabLoad = true;
-                if(item){
-                    const params ={
-                        conditions: {
-                            orderEntryEndDt:"",
-                            orderEntryStartDt: "",
-                            orderNoLike: item.key,
-                            orderType: this.viewByStatus,
-                            overdue: this.status  //-1所有 0未逾期 1已逾期
-                        },
-                        pn: 1,  //每页大小
-                        ps: 10, //页码
-                        // sorts: [
-                        //     {
-                        //     nativeSql: true,
-                        //     orderBy: "id",
-                        //     orderType: "desc",
-                        //     resultMapId: ""
-                        //     }
-                        // ]
-                    }
-                    this.$ajax.post(this.$apis.post_ledgerPage, params)
-                    .then(res => {
-                        // res.datas = _.map(res.datas,val=>{
-                        //     val.waitPayment = val.planPayAmount-val.actualPayAmount;
-                        //     val.waitReceipt = val.planReceiveAmount-val.actualReceiveAmount;
-                        //     return val;
-                        // });
-                        this.pageTotal = res.tc;
-                        this.tabLoad = false;
-                        this.searchLoad = false;
-                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                            // this.flag = item.waitPayment.value === 0;
-                            this.$set(this.flag,item.waitPayment.value === 0)
-                            console.log(this.flag)
-                            return item;
-                        });
+              this.tabLoad = true;
+              console.log(this.params)
+              this.$ajax.post(this.$apis.post_ledgerPage, this.params)
+                .then(res => {
+                  this.pageTotal = res.tc;
+                  this.tabLoad = false;
+                  this.searchLoad = false;
+                  this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
+                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    // this.flag = item.waitPayment.value === 0;
+                    this.$set(this.flag,item.waitPayment.value === 0)
+                    _.mapObject(item, val => {
+                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                      return val
+                    })
 
-                        this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                            if(item.currencyCode.value ==='BTC'){
-                                item._totalRow.label = 'BTC';
-                            }else if(item.currencyCode.value ==='HKD'){
-                                item._totalRow.label = 'HKD';
-                            }else{
-                                item._totalRow.label = 'EUR';
-                            }
-                            return item;
-                        });
-                    });
-                }else{
-                    const params = {
-                        conditions: {
-                            orderEntryEndDt:"",
-                            orderEntryStartDt: "",
-                            orderNoLike: '',
-                            orderType: this.viewByStatus,
-                            overdue: this.status  //-1所有 0未逾期 1已逾期
-                        },
-                        pn: 1,  //每页大小
-                        ps: 10, //页码
-                        // sorts: [
-                        //     {
-                        //     nativeSql: true,
-                        //     orderBy: "id",
-                        //     orderType: "desc",
-                        //     resultMapId: ""
-                        //     }
-                        // ]
-                    }
-                    this.$ajax.post(this.$apis.post_ledgerPage, params)
-                    .then(res => {
-                        this.pageTotal = res.tc;
-                        this.tabLoad = false;
-                        this.searchLoad = false;
-                        this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                             this.flag=item.waitPayment.value === 0;
-                            return item;
-                        });
+                    return item;
+                  });
 
-                        this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                            item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                            item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                            // if(item.currencyCode.value ==='BTC'){
-                            //     item._totalRow.label = 'BTC';
-                            // }else if(item.currencyCode.value ==='HKD'){
-                            //     item._totalRow.label = 'HKD';
-                            // }else{
-                            //     item._totalRow.label = 'EUR';
-                            // }
-                            return item;
-                        })
-                    });
-                }
+                  this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
+                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
+                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    if(item.currencyCode.value ==='BTC'){
+                      item._totalRow.label = 'BTC';
+                    }else if(item.currencyCode.value ==='HKD'){
+                      item._totalRow.label = 'HKD';
+                    }else{
+                      item._totalRow.label = 'EUR';
+                    }
+                    return item;
+                  });
+                })
+                .catch((res) => {
+                  this.tabLoad = false;
+                  this.searchLoad = false;
+              });
+
             },
             action(item, type) {
                 console.log(item)

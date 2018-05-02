@@ -9,10 +9,12 @@ export default {
         key: 'status'
     },
     ordercreatedate: {
-        key: 'orderEntryDt'
+        key: 'orderEntryDt',
+       type: 'textDate',
     },
     paymentUpdateDate: {
-        key: 'updateDt'
+        key: 'updateDt',
+       type: 'textDate',
     },
     payable: {
         key: 'planPayAmount' //应付
@@ -25,7 +27,8 @@ export default {
         key: '' //待付
     },
     planDateOfPayment: {   //应付时间
-        key: 'planPayDt'
+        key: 'planPayDt',
+       type: 'textDate',
     },
     actualDateOfPayment: {
         key: 'actualPayDt'
@@ -41,10 +44,12 @@ export default {
         key: ''  //待收
     },
     planDateOfReceipt: {  //应收时间
-       key:'planReceiveDt'
+       key:'planReceiveDt',
+       type: 'textDate',
     },
     actualDateOfReceipt: {
-        key: 'actualReceiveDt'
+        key: 'actualReceiveDt',
+        type: 'textDate',
     },
     currencyCode: {
         key: 'currencyCode'

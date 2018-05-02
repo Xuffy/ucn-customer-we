@@ -4,14 +4,14 @@
     <div class="status">
       <div class="btn-wrap">
         <span>Status&nbsp</span>
-        <el-radio-group v-model="params.skuInventoryStatusDictCode" size="mini">
+        <el-radio-group v-model="params.skuInventoryStatusDictCode" size="mini" @change="getdata()">
           <!--<el-radio-button label=" ">{{($i._baseText.all)}}</el-radio-button>-->
-          <el-radio-button label="1"> {{ $i._baseText.waitingQC }}</el-radio-button>
-          <el-radio-button label="2">{{($i._baseText.applyRework)}}</el-radio-button>
-          <el-radio-button label="3">{{($i._baseText.confirmedRework)}}</el-radio-button>
-          <el-radio-button label="4">{{($i._baseText.applyReturn)}}</el-radio-button>
-          <el-radio-button label="5">{{($i._baseText.confirmedReturn)}}</el-radio-button>
-          <el-radio-button label="6">{{($i._baseText.confirmed)}}</el-radio-button>
+          <el-radio-button label="WAIT_FOR_QC"> {{ $i._baseText.waitingQC }}</el-radio-button>
+          <el-radio-button label="APPLY_FOR_REWORK">{{($i._baseText.applyRework)}}</el-radio-button>
+          <el-radio-button label="CONFIRMATION_OF_REWORK">{{($i._baseText.confirmedRework)}}</el-radio-button>
+          <el-radio-button label="APPLY_FOR_RETURN">{{($i._baseText.applyReturn)}}</el-radio-button>
+          <el-radio-button label="CONFIRMATION_OF_RETURN">{{($i._baseText.confirmedReturn)}}</el-radio-button>
+          <el-radio-button label="CONFIRMED">{{($i._baseText.confirmed)}}</el-radio-button>
         </el-radio-group>
       </div>
       <div class="select-wrap">
@@ -34,11 +34,16 @@
       :buttons="[{label: 'detail', type: 1}]"
       @action="onAction"
       :loading='loading'
-      :pageTotal='pageTotal'
       @change-checked='checked'
-      @page-size-change(size)='pagesizechange'
-      @page-change(page)='pagechange'
       style='marginTop:10px'/>
+      <v-pagination
+        :pageNum.sync="params.pn"
+        :pageSize.sync="params.ps"
+        :page-total.sync="pageTotal"
+        @page-change="handleSizeChange"
+        @page-size-change="pageSizeChange"
+      />
+
   </div>
 </template>
 <script>
@@ -49,19 +54,14 @@
    * @param value 下拉框 选中值
    */
 
-  import {
-    dropDown,
-    selectSearch
-  } from '@/components/index'
-  import {
-    VTable
-  } from '@/components/index';
+  import { VTable,VPagination,dropDown,selectSearch } from '@/components/index';
   export default {
     name: 'orderOverview',
     components: {
       dropDown,
       VTable,
-      selectSearch
+      selectSearch,
+      VPagination
     },
     data() {
       return {
@@ -71,6 +71,7 @@
         loading: false,
         pageTotal: 1,
         rowspan: 1,
+        pazeSize: [10, 20, 30, 40, 50, 100],
         options: [{
           id: '1',
           label: 'Order No'
@@ -82,24 +83,25 @@
           label: 'Inbound No'
         }],
         keyType: '',
+        pageTotal: 0,
         params: {
           "companyId": 0,
           "inboundNo": "",
           "orderNo": "",
           "outboundNo": "",
-          "ownerIds": [
-            0
-          ],
+          // "ownerIds": [
+          //   0
+          // ],
           "pn": 1,
           "ps": 10,
           "qcOrderNo": "",
           "skuCode": "",
-          "skuInventoryStatusDictCode": 0,
+          "skuInventoryStatusDictCode": "", //WAIT_FOR_QC
           "sorts": [
             {
               "nativeSql": true,
-              "orderBy": "id",
-              "orderType": "DESC",
+              "orderBy": "inboundDate", //入库时间
+              "orderType": "ASC", //升序
               "resultMapId": ""
             }
           ],
@@ -118,16 +120,17 @@
           }
         });
       },
-      pagesizechange() {
-
+      handleSizeChange(val) {
+        this.params.pn = val;
       },
-      pagechange() {
-
+      pageSizeChange(val) {
+        this.params.ps = val;
       },
       selectChange(val) {
         this.keyType = val;
       },
       checked(item) {
+        console.log(item)
         this.selectedDate = item
         var obj=[]
         this.selectedDate.forEach(item => {
@@ -159,9 +162,16 @@
       //get_orderlist数据
       getdata() {
         this.loading = true
+        console.log(this.params)
         this.$ajax.post(this.$apis.post_warehouse_page, this.params)
           .then((res) => {
-            this.tabData = this.$getDB(this.$db.warehouseTable, res.datas);
+            res.tc ? this.pageTotal = res.tc : this.pageTotal = this.pageTotal;
+            this.tabData = this.$getDB(this.$db.warehouse.warehouseTable, res.datas, item => {
+              _.mapObject(item, val => {
+                val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                return val
+              })
+            })
             this.loading = false
           })
           .catch((res) => {
@@ -184,7 +194,14 @@
     watch: {
       status(){
          console.log(1)
+      },
+      params: {
+        handler(val, oldVal) {
+          this.getdata();
+        },
+        deep: true
       }
+
     }
   }
 

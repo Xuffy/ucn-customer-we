@@ -388,17 +388,20 @@ export const routerMap = [
       path: '/warehouse',
       component: Layout,
       redirect: '/warehouse/overview',
-      meta: {name: 'Warehouse'},
-      noDropdown: true,
+      name:'Warehouse',
+      meta: {
+        name: 'Warehouse'
+      },
+      noDropdown: false,
       children: [
         {
           path: 'overview',
-          name: 'warehouse',
+          name: 'Warehouse Overview',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Overview'
+            name: 'Warehouse Overview'
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
@@ -613,14 +616,19 @@ export const routerMap = [
     {
       path: '/logs',
       component: Layout,
-      meta: {name: 'Logs'},
       redirect: '/logs/index',
+      meta: {name: 'Logs'},
       noDropdown: true,
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'index',
           name: 'logs',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/logs/logs.vue')
         }
       ]
