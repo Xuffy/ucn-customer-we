@@ -134,10 +134,10 @@
                 
             },
             handleSizeChange(val) {
-                
+                this.bodyData.pn = val;
             },
             pageSizeChange(val) {
-                this.params.ps = val;
+                this.bodyData.ps = val;
             }
         },
         watch: {
