@@ -35,7 +35,7 @@
          <div class="footer">
              <div class="footer_button">
                  <el-button @click='send'>{{$i._baseText.send}}</el-button>
-                 <el-button >{{$i._baseText.saveAsDraft}}</el-button>
+                 <el-button @click='saveAsDraft'>{{$i._baseText.saveAsDraft}}</el-button>
                  <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
                  <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
              </div>
@@ -319,7 +319,28 @@
             //......................提交
             send() {
                 //正则  if (!this.$refs.basicInfo.submitForm()) { // return // }
-                var params = {
+                let params = {
+                    // exchangeRateList
+                    exchangeRateList: this.$refs.exchangeList.exchangeRateList,
+                    skuList: this.skuList,
+                    responsibilityList: this.$refs.responsibility.tableData,
+                    draftCustomer: false
+                }
+                var basic = this.$refs.basicInfo.formItem
+                _.extendOwn(params, basic)
+                var caculate = this.$refs.caculate.caculateForm
+                _.extendOwn(params, caculate)
+
+                this.$ajax.post(this.$apis.add_order, params)
+                    .then(res => {
+                        console.log(res)
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
+            },
+            saveAsDraft(){
+                  let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
                     skuList: this.skuList,
@@ -394,18 +415,14 @@
             //..........addproduct 弹窗
             getList(item) {
                 let tabData = item,
-                    arr = [];
-               
-//                item.forEach(items => {
-//                    console.log(items.skuId.value)
-//                    tabData.push(items.id.value);
-//                });
+                arr = [];
+               //{ids: [12, 13, 17, 20, 21, 22, 23, 24, 25, 26]}
                 this.$ajax.post(this.$apis.post_order_skus, 
                     tabData)
-                    .then(res => {
-                        _.map(res, item => {
-                            item.displayStyle = 0;
-                        });
+                    .then(res => {                   
+//                        _.map(res, item => {
+//                            item.displayStyle = 0;
+//                        });
                         this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                         this.dialogTableVisible = false;
                     });

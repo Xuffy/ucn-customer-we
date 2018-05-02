@@ -224,11 +224,12 @@
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
-                let data;
+                let data = this.tabData;
                 val.forEach(item => {
                     if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
                     if(item + '' === '1') data = this.$table.setHighlight(this.tabData);
                 });
+                console.log(data)
                 this.newTabData = data;
             },
             ProductCheckList(val, oldVal) {
