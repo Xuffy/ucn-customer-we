@@ -33,7 +33,7 @@
                     </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
+                            <el-button @click="addProduct" :disabled="!statusModify">{{ $i._baseText.addProduct }}</el-button>
                             <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
@@ -224,6 +224,7 @@
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
+                let data;
                 val.forEach(item => {
                     if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
                     if(item + '' === '1') data = this.$table.setHighlight(this.tabData);

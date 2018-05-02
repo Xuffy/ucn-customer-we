@@ -44,13 +44,10 @@
             :loading="tabLoad" 
             ref="tab"
         />
-        <el-pagination
-            @size-change="handleSizeChange"
-            :currentPage.sync="params.pn"
-            :page-sizes="pazeSize"
-            :page-size="params.ps"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageTotal"
+        <v-pagination
+            :page-data.sync="params"
+            @page-change="handleSizeChange"
+            @page-size-change="pageSizeChange"
         />
     </div>
 </template>
@@ -92,10 +89,11 @@
                     key: '',
                     ps: 10,
                     pn: 1,
-                    recycleSupplier: false
+                    tc: 0,
+                    recycleSupplier: false,
+                    draft: false
                 },
                 tabLoad:false,
-                pageTotal: 0,
                 _id: ''
             }
         },
@@ -138,7 +136,7 @@
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.pageTotal = res.tc;
+                    this.params.tc = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 

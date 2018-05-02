@@ -39,7 +39,7 @@
                                     v-for="item in selectAll[item.key]"
                                     :key="item.id"
                                     :label="item.name"
-                                    :value="item.name"
+                                    :value="item.code"
                                     :id="item.id"
                                 />
                             </el-select>
@@ -56,7 +56,7 @@
                                     v-for="item in selectAll[item.key]"
                                     :key="item.id"
                                     :label="item.name"
-                                    :value="item.value"
+                                    :value="item.code"
                                     :id="item.id"
                                 />
                             </el-select>
@@ -170,7 +170,12 @@
                     departureCountry: []
                 },
                 loading: false,
-                fromArg: {},
+                fromArg: {
+                    paymentTerm: 0,
+                    timeZone: 1,
+                    inquiryAmount: 1,
+                    skuQty: 1
+                },
                 radio: 'product',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
@@ -266,7 +271,6 @@
                     }
                     return val;
                 });
-                console.log(this.tabData)
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')

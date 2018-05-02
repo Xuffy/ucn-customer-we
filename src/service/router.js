@@ -891,7 +891,7 @@ export const routerMap = [
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
       component: Layout,
-      redirect: '/sellerNegotiation/CategorySetting',
+      redirect: '/sellerNegotiation/sellerNegotiationInquiry',
       meta: {
         name: 'sellerNegotiation',
       },
