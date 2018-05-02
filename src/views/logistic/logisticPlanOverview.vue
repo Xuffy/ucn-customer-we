@@ -5,7 +5,7 @@
       <div class="btn-wrap">
         <span>{{ $i.status}}:</span>
         <el-checkbox-group v-model="fillterArr" size="mini" @change="handleCheckedLabelChange">
-          <el-checkbox-button :label="a.mark" v-for="a of $i.checkboxStatus" :key="'status-' + a.text">{{a.text}}</el-checkbox-button>
+          <el-checkbox-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-checkbox-button>
         </el-checkbox-group>
       </div>
       <div class="select-search-wrap">
@@ -15,7 +15,7 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
-        <el-button>{{ $i.placeLogisticPlan }}</el-button>
+        <el-button @click.stop="addNew">{{ $i.placeLogisticPlan }}</el-button>
         <el-button type="danger" :disabled="true">{{ $i.delete }}</el-button>
       </div>
       <div class="view-by-btn">
@@ -36,18 +36,21 @@
     :buttons="[{label: 'detail', type: 'detail'}]"
     @action="action"
     @change-checked="changeChecked"
-    @page-change="pageChange"
-    :loading="!tabData.length"
+    :loading="tableLoading"
     ref="tab"
     />
+    <v-pagination :page-data="pageObj" @size-change="pageChange"/>
 </div>
 </template>
 <script>
-import { selectSearch, VTable } from '@/components/index';
+import { selectSearch, VTable, VPagination } from '@/components/index';
 export default {
   name:'logisticPlanOverview',
   data () {
     return {
+      pageObj: {},
+      tableLoading: true,
+      ls_plan: [],
       totalCount: 0,
       selectCount: [],
       fillterArr: [],
@@ -77,10 +80,11 @@ export default {
   },
   components: {
     selectSearch,
-    VTable
+    VTable,
+    VPagination
   },
   mounted () {
-    // this.getDictionary()
+    this.getDictionary()
     this.viewByChange(this.viewBy)
   },
   watch: {
@@ -90,7 +94,7 @@ export default {
   },
   methods: {
     handleCheckedLabelChange () {
-      console.log(this.fillterArr)
+      this.viewByChange(this.viewBy)
     },
     changeChecked (arr) {
       this.selectCount = arr
@@ -101,16 +105,22 @@ export default {
     pageChange (e) {
       console.log(e)
     },
+    addNew () {
+      this.$router.push({path: '/logistic/planDetail', query: {x: 1}})
+    },
     viewByChange (viewId) {
       viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
     },
     getDictionary () {
-      this.$ajax.get(this.$apis.get_container_type).then(res => {
-        console.log(res)
+      this.$ajax.post(this.$apis.get_dictionary, ['LS_PLAN'], '_cache').then(res => {
+        this.ls_plan = res[0].codes
       })
     },
     getPlanList () {
-      this.$ajax.post(this.$apis.gei_plan_list, {pn: 1, ps: 10}).then(res => {
+      this.tableLoading = true
+      this.$ajax.post(this.$apis.gei_plan_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
+        this.pageObj = res
+        console.log(this.pageObj)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
@@ -118,10 +128,12 @@ export default {
             return val
           })
         })
+        this.tableLoading = false
       })
     },
     getTransportationList () {
-      this.$ajax.post(this.$apis.get_transportation_list, {pn: 1, ps: 10}).then(res => {
+      this.tableLoading = true
+      this.$ajax.post(this.$apis.get_transportation_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
@@ -129,10 +141,12 @@ export default {
             return val
           })
         })
+        this.tableLoading = false
       })
     },
     getSKUList () {
-      this.$ajax.post(this.$apis.get_SKU_list, {pn: 1, ps: 10}).then(res => {
+      this.tableLoading = true
+      this.$ajax.post(this.$apis.get_SKU_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {
@@ -140,6 +154,7 @@ export default {
             return val
           })
         })
+        this.tableLoading = false
       })
     }
   }

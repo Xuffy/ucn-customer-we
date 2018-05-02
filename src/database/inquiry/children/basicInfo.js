@@ -1,11 +1,4 @@
 export default {
-    remarkDate: {
-        key: 'updateDt',
-        label: ' ',
-        type: 'String',
-        _disabled: true,
-        _inquiryHide: true
-    },
     id: {
         _hide: true
     },
@@ -13,19 +6,31 @@ export default {
         _hide: true
     },
     status: {
-        _inquiryHide: true
+        _inquiryHide: true,
+        _hide: true
     },
     paymentTerm: {
-        _inquiryHide: true
+        _inquiryHide: true,
+        _hide: true
     },
     inquiryAmount: {
-        _inquiryHide: true
+        _inquiryHide: true,
+        _hide: true
     },
     timeZone: {
+        _inquiryHide: true,
+        _hide: true
+    },
+    remarkDate: {
+        key: 'updateDt',
+        label: '22',
+        type: 'String',
+        _disabled: true,
         _inquiryHide: true
     },
     skuQty: {
-        _inquiryHide: true
+        _inquiryHide: true,
+        _hide: true
     },
     operater: { //修改人 系统带入
         placeholder: 'Please select',
@@ -133,7 +138,9 @@ export default {
         rules: [],
         width: '150px',
         type: 'Number',
-        state: 0
+        state: 0,
+        min:0,
+        max:100
     },
     departurePort: { //发运港口  ok
         placeholder: 'Please select',

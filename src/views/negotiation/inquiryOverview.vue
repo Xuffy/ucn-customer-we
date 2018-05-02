@@ -39,6 +39,7 @@
         <v-table 
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
+            :height="450"
             @action="action" 
             @change-checked="changeChecked"
             :loading="tabLoad" 
