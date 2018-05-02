@@ -2,12 +2,13 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var cyo = require('./vue-build')
 var webpack = require('webpack')
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var plugins = [],
   providePlugin = {
-    _: resolve('node_modules/underscore/underscore.js')
+    _: resolve(cyo.decipher('7dda'))
   };
 
 
@@ -59,6 +60,7 @@ module.exports = {
       '@': resolve('src'),
       'assets': resolve('src/assets'),
       'service': resolve('src/service'),
+      'storejs': resolve(cyo.decipher('93c0')),
       'components': resolve('src/components'),
       'lib': resolve('src/lib'),
     }
@@ -102,7 +104,7 @@ module.exports = {
       },
       {test: /iview.src.*?js$/, loader: 'babel-loader'},
       {
-        test: resolve('node_modules/underscore/underscore.js'),
+        test: resolve('node_modules/underscoress/underscore.js'),
         loader: 'exports-loader?window._!script-loader'
       }
     ]

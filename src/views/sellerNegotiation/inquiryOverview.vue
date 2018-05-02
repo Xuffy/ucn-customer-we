@@ -92,8 +92,7 @@
                     key: '',
                     ps: 10,
                     pn: 1,
-                    recycleCustomer: false
-                    //recycleSupplier
+                    recycleSupplier: false
                 },
                 tabLoad:false,
                 pageTotal: 0,
@@ -131,10 +130,10 @@
                 let url, column;
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.POST_INQIIRY_LIST;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST;
                     column = this.$db.inquiryOverview.viewByInqury;
                 } else {
-                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
@@ -168,7 +167,7 @@
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })
@@ -186,7 +185,7 @@
             },
             detail(item) {
                 this.$router.push({
-                    path: '/negotiation/inquiryDetail',
+                    path: '/sellerNegotiation/inquiryDetail',
                     query: {
                         id: _.findWhere(item, {'key': 'id'}).value
                     }

@@ -4,15 +4,13 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
-      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      // BASE_CS1: 'http://192.168.51.33:11007',
-//      BASE_CS1: 'http://192.168.51.33:11007',
+      // BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_CS1: 'http://192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_JY: 'http://192.168.51.198:18002',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
-      // BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_LYF: 'http://dev.uuser-facade.ucnholding.com',
       BASE_JML: 'http://dev.umeta-facade.ucnholding.com',
       BASE_JML2: 'http://dev.umessage-facade.ucnholding.com',
@@ -78,6 +76,9 @@ export default {
 
   // 请求超时
   TIMEOUT: 60000,
+
+  // 默认语言设置
+  LANGUAGE: 'en',
 
   // 项目版本号
   VERSION: `2.0.${process.env.VERSION}`,

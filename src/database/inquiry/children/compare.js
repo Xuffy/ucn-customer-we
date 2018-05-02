@@ -1,6 +1,6 @@
 export default {
     id: {
-        _hide: true,
+        _hide: true
     },
     companyId: {
         _hide: true

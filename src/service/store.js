@@ -1,18 +1,18 @@
-import engine from 'store/src/store-engine';
+import engine from 'storejs/src/store-engine.js';
 import config from  'service/config';
 
 // store 配置
 let storePrefix
   , store_plugins = [
-  require('store/plugins/defaults'),
-  require('store/plugins/expire')
+  require('storejs/plugins/defaults'),
+  require('storejs/plugins/expire')
 ]
   , localStore = engine.createStore([
-  require('store/storages/localStorage'),
-  require('store/storages/cookieStorage'),
+  require('storejs/storages/localStorage'),
+  require('storejs/storages/cookieStorage'),
 ], store_plugins)
   , sessionStore = engine.createStore([
-  require('store/storages/sessionStorage')
+  require('storejs/storages/sessionStorage')
 ], store_plugins);
 
 storePrefix = () => {
@@ -33,7 +33,7 @@ localStore.addPlugin(storePrefix);
 sessionStore.addPlugin(storePrefix);
 
 export {
-  localStore, 
+  localStore,
   sessionStore
 };
 

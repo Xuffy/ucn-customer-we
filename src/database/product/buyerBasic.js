@@ -36,11 +36,15 @@ export default {
         belongPage:'sellerProductOverview',
         options:[
             {
-                label:'是',
+                label:'All',
+                value:null
+            },
+            {
+                label:'Yes',
                 value:true
             },
             {
-                label:'否',
+                label:'No',
                 value:false
             }
         ],
