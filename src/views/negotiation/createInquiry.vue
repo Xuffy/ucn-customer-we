@@ -170,27 +170,7 @@
                     departureCountry: []
                 },
                 loading: false,
-                fromArg: {
-                    skuQty: 0, //产品数量
-                    inquiryAmount: 0, //询价总金额
-                    timeZone: 0, //时区
-                    entryDt: 0, //时间
-                    discountRate: null, //折扣率
-                    currency: null, //币种
-                    paymentMethod: null, //付款方式
-                    paymentTerm: 0, //付款期限
-                    incoterm: null, //价格条款
-                    transport: null, //运输方式
-                    destinationCountry: null, //目标国家
-                    destinationPort: null, //目标港口
-                    departureCountry: null, //发货国家
-                    departurePort: null, //发货港口
-                    exportLicense: null, //是否有出口许可证
-                    remark: null,
-                    draft: null, //是否草稿0:否，1:是
-                    suppliers: [],
-                    details: []
-                },
+                fromArg: {},
                 radio: 'product',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
@@ -234,11 +214,22 @@
         created() {
             this.getDictionaries();
             this.remoteMethod('');
+            if(this.$route.query.id) this.getFefault();
         },
         computed: {
             
         },
         methods: {
+            getFefault() {
+                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
+                    id: this.$route.query.id
+                })
+                .then(res => {
+                    console.log(res, '=====')
+                    this.fromArg = res;
+                    this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
+                });
+            },
             addProduct() {
                 let arr = [];
                 _.map(this.tabData, item => {
@@ -273,12 +264,26 @@
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
-                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
-                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
-                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
-                    //this.selectAll.supplierName = _.findWhere(res, {'code': '供应商'}).codes;
-                    this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+                    this.selectAll.paymentMethod = _.map(_.findWhere(res, {'code': 'PMT'}).codes, item => {
+                        item.code = Number(item.code);
+                        return item;
+                    });
+                    this.selectAll.transport = _.map(_.findWhere(res, {'code': 'MD_TN'}).codes, item => {
+                        item.code = Number(item.code);
+                        return item;
+                    });
+                    this.selectAll.incoterm = _.map(_.findWhere(res, {'code': 'ITM'}).codes, item => {
+                        item.code = Number(item.code);
+                        return item;
+                    });
+                    this.selectAll.currency = _.map(_.findWhere(res, {'code': 'CY_UNIT'}).codes, item => {
+                        item.code = Number(item.code);
+                        return item;
+                    });
+                    this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
+                        item.code = Number(item.code);
+                        return item;
+                    });
                 });
 
                 this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
@@ -314,16 +319,12 @@
                     });
                     arr.push(json);
                 });
-                if(arr.length) this.fromArg.suppliers = arr;
-                this.fromArg.exportLicense = parseInt(this.fromArg.exportLicense);
-                this.fromArg.currency = parseInt(this.fromArg.currency);
-                this.fromArg.incoterm = parseInt(this.fromArg.incoterm);
-                this.fromArg.paymentMethod = parseInt(this.fromArg.paymentMethod);
-                this.fromArg.transport = parseInt(this.fromArg.transport);
-                this.fromArg.details = this.dataFilter(this.tabData);
-                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(this.fromArg))
+                let upData = _.clone(this.fromArg);
+                if(arr.length) upData.suppliers = arr;
+                upData.details = this.dataFilter(this.tabData);
+                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData))
                 .then(res => {
-                    if(!this.fromArg.draft) return this.$router.push('/negotiation/negotiationInquiry');
+                    if(!this.fromArg.draft) return this.$router.push('/negotiation/inquiry');
                     this.$router.push({
                         name: 'negotiationDraft',
                         params: {
@@ -359,11 +360,7 @@
                 this.checkedAll = item;
             },
             getList(item) {
-                let tabData = [], arr = [];
-                item.forEach(items => {
-                    tabData.push(items.id.value);
-                });
-                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
+                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, item)
                 .then(res => {
                     _.map(res, item => {
                         item.displayStyle = 0;

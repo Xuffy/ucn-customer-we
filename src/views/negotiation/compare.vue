@@ -26,7 +26,8 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table 
+        <v-table
+            :height="455"
             :data="tabData" 
             :loading="tabLoad"
             @change-checked="changeChecked"
@@ -37,12 +38,13 @@
             :pageNum.sync="params.pn"
             :pageSize.sync="params.ps"
             :page-total.sync="pageTotal"
+            :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
         />
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit('save')" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
         <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" :compareId="params.id || null" :disableds="disableds" />
     </div>
@@ -68,7 +70,7 @@
                 checkedArg: [],
                 compareType: '',
                 params: {
-                    ps: 10,
+                    ps: 200,
                     pn: 1,
                     recycleCustomer: 0
                 },
@@ -121,9 +123,10 @@
                 this.compareType = 'only';
             },
             onSubmit(type) { //保存Compare 
-                let arr = [];
+                let arr = [], delIds = [];
                 this.tabData.forEach(item => {
-                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value)
+                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    if(item._disabled) delIds.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 
                 this.$confirm('此操作将会保存编辑是否继续?', '提示', {
@@ -133,21 +136,25 @@
                 }).then(() => {
                     this.compareName?this.compareName = this.compareName:this.compareName = new Date().getTime();
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
-                        inquiryIds: arr,
+                        addInquiryIds: arr,
+                        delInquiryIds: delIds,
                         id:this.$route.query.id,
                         compareName: this.compareName
                     })
                     .then(res => {
-                        if(type === 'save') return this.compareType = 'only';
-                        // this.$router.push({
-                        //     name: 'negotiationCompare',
-                        //     params: {
-                        //         type: 'only'
-                        //     },
-                        //     query: {
-                        //         id: res.id
-                        //     }
-                        // });
+                        if(this.$route.params.type === 'only') {
+                            this.upData();
+                            return this.compareType = 'only';
+                        }
+                        this.$router.push({
+                            name: 'negotiationCompareDetail',
+                            params: {
+                                type: 'only'
+                            },
+                            query: {
+                                id: res.id
+                            }
+                        });
                     });
                 }).catch(() => {
                     this.$message({
