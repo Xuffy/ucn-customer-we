@@ -1,4 +1,8 @@
 export default {
+  id: {
+    type: 'text',
+    _hide: true
+  },
   transportationWay: {
     type: 'text'
   },

@@ -4,19 +4,19 @@
     <div class="status">
       <div class="btn-wrap">
         <span>{{ $i.status}}:</span>
-        <el-checkbox-group v-model="fillterArr" size="mini" @change="handleCheckedLabelChange">
+        <el-checkbox-group v-model="fillterArr" size="mini" @change="viewByChange(viewBy)">
           <el-checkbox-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-checkbox-button>
         </el-checkbox-group>
       </div>
       <div class="select-search-wrap">
-        <select-search :options="options" />
+        <select-search :options="options" @inputEnter="searchFn"/>
       </div>
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
         <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
         <el-button @click.stop="addNew">{{ $i.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="true">{{ $i.delete }}</el-button>
+        <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.viewBy }}&nbsp;</span>
@@ -33,7 +33,7 @@
     </div>
     <v-table
     :data="tabData"
-    :buttons="[{label: 'detail', type: 'detail'}]"
+    :buttons="!viewBy ? [{label: 'detail', type: 'detail'}] : null"
     @action="action"
     @change-checked="changeChecked"
     :loading="tableLoading"
@@ -45,7 +45,7 @@
 <script>
 import { selectSearch, VTable, VPagination } from '@/components/index';
 export default {
-  name:'logisticPlanOverview',
+  name: 'logisticPlanOverview',
   data () {
     return {
       pageObj: {},
@@ -63,16 +63,16 @@ export default {
       viewBy: 0,
       options: [
         {
-          id: '1',
+          id: 'logisticsNo',
           label: 'logistic Plan No'
         },
         {
-          id: '2',
+          id: 'skuCode',
           label: 'SKU Code'
         },
         {
-          id: '3',
-          label: 'Order No.'
+          id: 'orderNo',
+          label: 'Order No'
         }
       ]
     }
@@ -97,23 +97,42 @@ export default {
     }
   },
   methods: {
-    handleCheckedLabelChange () {
-      this.viewByChange(this.viewBy)
+    deleteData () {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
+          this.viewByChange(this.viewBy)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      })
     },
     changeChecked (arr) {
       this.selectCount = arr
     },
-    action () {
-      console.log(123)
+    action (e) {
+      this.$router.push({path: '/logistic/planDetail', query: {id: e.id.value}})
+    },
+    searchFn (obj) {
+      const { pn, ps } = this.pageParams
+      this.pageParams = {pn, ps, [obj.keyType]: obj.key}
+      this.viewByChange(this.viewBy)
     },
     sizeChange (e) {
-      console.log(e)
+      this.pageParams.ps = e
+      this.viewByChange(this.viewBy)
     },
     pageChange (e) {
-      console.log(e)
+      this.pageParams.pn = e
+      this.viewByChange(this.viewBy)
     },
     addNew () {
-      this.$router.push({path: '/logistic/planDetail', query: {x: 1}})
+      this.$router.push('/logistic/placeLogisticPlan')
     },
     viewByChange (viewId) {
       viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
