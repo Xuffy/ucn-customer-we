@@ -74,10 +74,50 @@
             <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
             <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
-        <v-table
+
+
+
+        <el-table
                 v-loading="loadingProductTable"
+                class="product-table"
                 :data="productData"
-                @change-checked="changeProductChecked"></v-table>
+                border
+                show-summary
+                style="width: 100%">
+            <el-table-column
+                    type="selection"
+                    align="center"
+                    class="table-checkbox"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    prop="id"
+                    label="ID"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="姓名">
+            </el-table-column>
+            <el-table-column
+                    prop="amount1"
+                    label="数值 1">
+            </el-table-column>
+            <el-table-column
+                    prop="amount2"
+                    label="数值 2">
+            </el-table-column>
+            <el-table-column
+                    prop="amount3"
+                    label="数值 3">
+            </el-table-column>
+        </el-table>
+
+
+        <!--<v-table-->
+                <!--v-loading="loadingProductTable"-->
+                <!--:data="productData"-->
+                <!--@change-checked="changeProductChecked"></v-table>-->
 
 
         <div class="total">
@@ -383,14 +423,15 @@
                     if(v._checked && !v._disabled){
                         v._checked=false;
                         v._disabled=false;
-                        this.productIds.push(v);
+                        this.productIds.push(v.skuId.value);
                     }
                 });
-
-                this.$ajax.post(this.$apis.get_skuListByIds,[12]).then(res=>{
-                    console.log(res)
+                this.loadingProductTable=true;
+                this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
+                    this.productData=res;
+                    this.loadingProductTable=false;
                 }).catch(err=>{
-
+                    this.loadingProductTable=false;
                 });
 
                 console.log(this.productIds)
@@ -435,6 +476,12 @@
 
     .total{
         margin-top: 80px;
+    }
+    .product-table{
+        margin-top: 10px;
+    }
+    .product-table >>> .el-checkbox{
+        margin: 0;
     }
 
     .footer{
