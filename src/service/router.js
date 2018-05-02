@@ -510,9 +510,7 @@ export const routerMap = [
           path: 'plan',
           name: 'logisticPlan',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            draft: '/logistic/draft',
             name: 'planOverview'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -521,9 +519,7 @@ export const routerMap = [
           path: 'loadingList',
           name: 'loadingList',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            draft: '/logistic/draft',
             name: 'loadingList'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -531,10 +527,8 @@ export const routerMap = [
         {
           path: 'draft',
           name: 'logisticDraft',
+          hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'logisticDraft'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -556,9 +550,6 @@ export const routerMap = [
           name: 'logisticPlanDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Plan Detail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
@@ -965,7 +956,6 @@ router.beforeResolve((to, from, next) => {
     , version;
 
 
-  console.log(to.path, from.path, ts, '*/*/-/*')
   if (to.path !== '/login' || from.path === '/login') {
     /*version = localStore.get('version');
 

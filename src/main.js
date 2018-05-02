@@ -17,7 +17,8 @@ import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
 
-const lang = localStore.get('language') || 'en';
+
+const lang = localStore.get('language') || config.LANGUAGE;
 
 locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
@@ -29,6 +30,8 @@ Vue.use(ElementUI, {size: 'small'});
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = new ajax();
 Vue.prototype.$apis = apis;
+
+config.LANGUAGE = lang;
 
 
 // 屏蔽开发环境warn
