@@ -71,6 +71,8 @@
     },
     mounted() {
       this.testId = '123';
+
+      // this.$store.commit('setDraft', {path: '/login'});
       /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
         this.pengdingTask = data.pending_task;
         this.futureTask = data.future_task;

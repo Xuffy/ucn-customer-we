@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
-import {Notification,Message} from 'element-ui';
+import {Notification, Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -24,7 +24,7 @@ export const routerMap = [
       meta: {
         name: 'sellerNegotiation',
       },
-      children:[
+      children: [
         {
           path: 'inquiry',
           name: 'sellerNegotiationInquiry',
@@ -74,8 +74,8 @@ export const routerMap = [
           path: 'index',
           name: 'workbench',
           meta: {
-            draft: false,
-            recycleBin: false,
+            draft: true,
+            recycleBin: true,
             log: false,
           },
           component: () => import('../views/workbench/index.vue')
