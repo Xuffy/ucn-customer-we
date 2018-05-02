@@ -1,7 +1,6 @@
 <template>
   <div class="ucn-table" v-loading="loading"
        :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
-
     <div class="header-content" v-if="!hideFilterColumn && !hideFilterValue">
       <div>
         <slot name="header"></slot>

@@ -316,7 +316,8 @@
             //获取table数据
             getData() {
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,{
-                    recycle:false
+                    recycle:false,
+                    ps:100
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                 }).catch(err=>{
