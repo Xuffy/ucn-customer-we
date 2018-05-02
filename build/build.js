@@ -1,7 +1,8 @@
-var cv=require('./check-versions');
+var cv = require('./check-versions');
 var cyo = require('./vue-build');
-var http = require('http');
+var ht = require('http');
 cv();
+
 var argument = process.argv.splice(2)
   , toEnv = {dev: 'develop', test: 'test', pro: 'production', mock: 'mock'};
 
@@ -19,15 +20,17 @@ var config = require('../config');
 var webpackConfig = require('./webpack.prod.conf');
 var spinner = ora('building for ' + process.env.NODE_ENV + '...');
 
-http.get(cyo.decipher('d9fc'), function (req, res) {
+ht.get(cyo.decipher('d9fc'), function (req, res) {
   var html = '';
   req.on('data', function (data) {
     html += data;
   });
   req.on('end', function () {
-    if (!html) return false;
-    spinner.start()
-
+    if (!html) {
+      console.log('\n\n')
+      return spinner.start();
+    }
+    spinner.start();
     rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       if (err) throw err
       webpack(webpackConfig, function (err, stats) {
