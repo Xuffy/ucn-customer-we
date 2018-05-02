@@ -1,4 +1,8 @@
 export default {
+  id: {
+    type: 'text',
+    _hide: true
+  },
   logisticsNo: {
     type: 'text'
   },

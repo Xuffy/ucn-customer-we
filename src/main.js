@@ -9,7 +9,7 @@ import apis from '@/apis/index';
 import util from 'service/util';
 import '../theme/index.css';
 import 'assets/style/main.less';
-import VueI18n from 'vue-i18n'
+// import VueI18n from 'vue-i18n'
 import ElementUI from 'element-ui';
 import store from './store';
 import database from './database/index';
@@ -24,7 +24,7 @@ locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
 Vue.use(fetch);
 Vue.use(util);
-Vue.use(VueI18n);
+// Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'small'});
 
 Vue.config.productionTip = false;

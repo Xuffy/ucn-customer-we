@@ -146,5 +146,6 @@
   "warehouseName": "Warehouse Name",
   "warehouseNo": "Warehouse No",
   "inboundDate": "Inbound Date",
-  "inboundNo": "Inbound No"
+  "inboundNo": "Inbound No",
+  "placeNewLogisticPlan": "Place New Logistic Plan"
 }

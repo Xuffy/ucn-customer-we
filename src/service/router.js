@@ -16,25 +16,6 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
-      path: '/sellerSellerSettings',
-      name: 'sellerSellerSettings',
-      component: Layout,
-      redirect: '/sellerSellerSettings/CategorySetting',
-      meta: {
-        name: 'Settings',
-      },
-      children:[
-        {
-          path: 'CategorySetting',
-          name: 'CategorySetting',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerSettings/CategorySetting'),
-        }
-      ]
-    },
-    {
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
       hidden: true,
@@ -545,6 +526,15 @@ export const routerMap = [
         //   },
         //   component: () => import('../views/logistic/placeLogisticPlan')
         // },
+        {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          hidden: true,
+          meta: {
+            name: 'Place Logistic Plan'
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
         {
           path: 'planDetail',
           name: 'logisticPlanDetail',
