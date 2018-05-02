@@ -17,7 +17,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    'U-Session-Token':'b3551677-5c47-46ed-bbab-a360a86d2a95'
+    'Accept-Language': _config.LANGUAGE,
   },
   transformRequest: [function (data) {
     return data;
@@ -33,7 +33,6 @@ const validate_error = (code, msg) => {
   switch (code) {
     case 'AUTH-011': // 登录失效
       return router.push('/login');
-    // return Vue.prototype.$goLogin();
 
   }
 

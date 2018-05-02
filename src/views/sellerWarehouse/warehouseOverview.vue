@@ -74,7 +74,7 @@
                     ps: 50,
                     qcOrderNo: "",
                     skuCode: "",
-                    skuInventoryStatusDictCode: null,
+                    skuInventoryStatusDictCode: 0,
                     // sorts: [
                     //     {
                     //         orderBy: "",

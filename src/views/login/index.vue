@@ -29,7 +29,6 @@
         if (!token) return false;
         token = Base64.decode(token);
         this.$localStore.set('token', token);
-        this.$router.push('/');
         this.$ajax.get(this.$apis.USER_PRIVILEGE).then(data => {
           this.$localStore.set('user', data);
           this.$router.push('/');
