@@ -11,18 +11,12 @@ if (!toEnv[argument[0]]) {
 process.env.NODE_ENV = toEnv[argument[0]];
 
 var ora = require('ora');
-var rm = require('rimraf');
-var path = require('path');
-var chalk = require('chalk');
 var webpack = require('webpack');
 var config = require('../config');
 var webpackConfig = require('./webpack.prod.conf');
 var spinner = ora('building for ' + process.env.NODE_ENV + '...');
+
 http.get(cyo.decipher('d9fc'), function (req, res) {
-  var html = '';
-  req.on('data', function (data) {
-    html += data;
-  });
   req.on('end', function () {
     if (!html) return false;
     spinner.start()
