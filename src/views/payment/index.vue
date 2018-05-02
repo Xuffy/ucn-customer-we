@@ -68,7 +68,7 @@
 <script>
 
     import selectSearch from '@/components/common/fnCompon/selectSearch';
-    import {VTable,VPagination} from '@/components/common/table/index'
+    import {VTable,VPagination} from '@/components/index'
     export default {
         name:'payment',
         components:{
