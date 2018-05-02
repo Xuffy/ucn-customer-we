@@ -37,6 +37,7 @@ export default {
       UOSS_URL: 'http://dev.uoss-facade.ucnholding.com:18100', // 对象存储服务
       ULOG_URL: 'http://dev.ulog-facade.ucnholding.com:18100', // 日志服务
       UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
+      //UPURCHASE_URL: '192.168.51.248:11001',
       USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100', // 供应商端
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志

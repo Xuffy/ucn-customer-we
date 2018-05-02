@@ -91,9 +91,8 @@
             </v-table>
             <!--分页-->
             <page
-                    :pageNum="1"
-                    :pageSize="20"
-                    :page-total="50"></page>
+                    @change="changePage"
+                    :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
@@ -194,8 +193,8 @@
                     descEnLike: "",
                     descCnLike: "",
 
-                    pn: 1,
-                    ps: 50,
+                    // pn: 1,
+                    // ps: 50,
 
                     recycle: false,         //是否是在recycle bin里请求
                     //初始搜索的时候不传，当有筛选条件之后再传
@@ -225,11 +224,7 @@
                 /**
                  * 分页配置
                  * */
-                pageData:{
-                    pn:1,
-                    ps:2,
-                    tc:20
-                },
+                pageData:{},
 
                 //Category下拉组件数据
                 dropData:[],
@@ -329,14 +324,12 @@
                     });
                 }
                 else{
-
                     let url='';
                     if(this.type==='product'){
                         url=this.$apis.get_buyerProductList;
                     }else if(this.type==='bookmark'){
                         url=this.$apis.get_buyerBookmarkList;
                     }
-
 
                     this.loadingTable=true;
                     this.$ajax.post(url,this.productForm).then(res=>{
@@ -348,7 +341,6 @@
                             }
                             return e;
                         });
-
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 let id;
@@ -376,8 +368,8 @@
                                 })
                             })
                         }
-
-
+                        this.$set(this.pageData,'pn',1);
+                        console.log(this.pageData,'?????')
 
                         this.disabledSearch=false;
                         this.selectList=[];
@@ -430,18 +422,16 @@
                 this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
-                    console.log(err)
+
                 });
                 this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
-
             },
-
             //获取table数据
-            getData() {
+            getData(e) {
                 if(this.type==='recycle'){
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                         recycle:true
@@ -476,9 +466,12 @@
                     }else if(this.type==='bookmark'){
                         url=this.$apis.get_buyerBookmarkList;
                     }
+                    this.loadingTable=true;
 
                     this.$ajax.post(url,{
-                        recycle:false
+                        recycle:false,
+                        pn:e?e:1,
+                        ps:10
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
@@ -488,6 +481,11 @@
                             }
                             return e;
                         });
+                        // this.pageData.tc=this.tableDataList.length;
+                        // this.pageData.pn=1;
+                        // this.pageData.ps=5;
+                        this.pageData=res;
+
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 let id;
@@ -516,8 +514,9 @@
                         this.selectList.forEach(v=>{
                             v._disabled=true;
                         });
+                        this.loadingTable=false;
                     }).catch(err=>{
-                        console.log(err)
+                        this.loadingTable=false;
                     });
                 }
             },
@@ -622,6 +621,15 @@
                     this.disabledClickRecover=false;
                 });
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+
+                this.getData(e);
+            }
         },
         created(){
             this.getData();

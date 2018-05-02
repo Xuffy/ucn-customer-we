@@ -18,8 +18,8 @@
         />
         <v-pagination
             :page-data.sync="bodyData"
-            @page-change="handleSizeChange"
-            @page-size-change="pageSizeChange"
+            @change="handleSizeChange"
+            @size-change="pageSizeChange"
         />
     </div>
 </template>
