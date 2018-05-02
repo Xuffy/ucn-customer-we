@@ -7,7 +7,7 @@ export default {
       //BASE_CS1: 'http://192.168.51.33:11007',
       BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
       // BASE_CS1: 'http://192.168.51.33:11007',
-//      BASE_CS1: 'http://192.168.51.33:11007',
+      // BASE_CS1: 'http://192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
@@ -42,7 +42,7 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
+      // LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     develop: {
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
