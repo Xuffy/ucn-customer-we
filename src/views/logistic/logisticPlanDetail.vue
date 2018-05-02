@@ -1,6 +1,7 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
+    <div class="hd-top" v-if="hasId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
+    <div class="hd-top" v-else>{{ $i.placeNewLogisticPlan }}</div>
     <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :title="$i.basicInfoTitle"/>
     <el-row :gutter="10">
        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -55,7 +56,7 @@
         <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit"/>
   </div>
 </template>
 <script>
@@ -82,49 +83,49 @@ export default {
       productInfoModifyStatus: 0,
       edit: false,
       basicInfoObj: {
-        "logisticsNo": "Logistics No",
-        "estContainerStuffingDate": "Est Container Stuffing Date",
-        "estCustomsCleanceDate": "Est Customs Cleance Date",
-        "estDepartureDate": "Est Departure Date",
-        "estArrivalDate": "Est Arrival Date",
-        "estReleaseDate": "Est Release Date",
-        "estDelivaryDate": "Est Delivary Date",
-        "logisticsStatus": "Logistics Status",
-        "createDate": "Create Date",
-        "declareDate": "Declare Date",
-        "bookingDate": "Booking Date",
-        "actDeliveryDate": "Act.Delivery Date",
-        "actContainerStuffingDate": "Act.Container Stuffing Date",
-        "actCustomsCleanceDate": "Act.Customs Cleance Date",
-        "actDepartureDate": "Act.Departure Date",
-        "actArrivalDate": "Act.Arrival Date",
-        "actReleaseDate": "Act.Release Date",
-        "shipServiceProvider": "Ship Service Provider",
-        "customerName": "Customer Name",
-        "receiptCompany": "Receipt Company",
-        "shippingAgent": "Shipping Agent",
-        "exchangeCurrency": "Exchange Currency",
-        "payment": "Payment",
-        "paymentTerms": "Payment Terms",
-        "transportationWay": "Transportation Way",
-        "loadingType": "Loading Type",
-        "permitedForTransportation": "Permited for Transportation",
-        "blType": "B/L Type",
-        "blQuantity": "B/L Quantity",
-        "blNumber": "B/L Number",
-        "shipper": "Shipper",
-        "consignee": "Consignee",
-        "notify": "Notify",
-        "remark": "Remark"
+        "logisticsNo": "",
+        "estContainerStuffingDate": "",
+        "estCustomsCleanceDate": "",
+        "estDepartureDate": "",
+        "estArrivalDate": "",
+        "estReleaseDate": "",
+        "estDelivaryDate": "",
+        "logisticsStatus": "",
+        "createDate": "",
+        "declareDate": "",
+        "bookingDate": "",
+        "actDeliveryDate": "",
+        "actContainerStuffingDate": "",
+        "actCustomsCleanceDate": "",
+        "actDepartureDate": "",
+        "actArrivalDate": "",
+        "actReleaseDate": "",
+        "shipServiceProvider": "",
+        "customerName": "",
+        "receiptCompany": "",
+        "shippingAgent": "",
+        "exchangeCurrency": "",
+        "payment": "",
+        "paymentTerms": "",
+        "transportationWay": "",
+        "loadingType": "",
+        "permitedForTransportation": "",
+        "blType": "",
+        "blQuantity": "",
+        "blNumber": "",
+        "shipper": "",
+        "consignee": "",
+        "notify": "",
+        "remark": ""
       },
       transportInfoObj: {
-        "transportCompany": "Transport Company",
-        "vesselName": "Vessel Name",
-        "vesselNo": "Vessel No",
-        "departureCountry": "Departure Country",
-        "departurePort": "Departure Port",
-        "destinationCountry": "Destination Country",
-        "destinationPort": "Destination Port"
+        "transportCompany": "",
+        "vesselName": "",
+        "vesselNo": "",
+        "departureCountry": "",
+        "departurePort": "",
+        "destinationCountry": "",
+        "destinationPort": ""
       },
       transportInfoArr: [],
       basicInfoArr: [],
@@ -319,7 +320,16 @@ export default {
       })
     }
   },
+  computed: {
+    hasId () {
+      return !!this.$route.query.id
+    }
+  },
   mounted () {
+    if (!this.hasId) {
+      this.edit = true
+      this.getNewLogisticsNo()
+    }
     this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
     this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
 
@@ -340,6 +350,11 @@ export default {
     })
   },
   methods: {
+    getNewLogisticsNo () {
+      this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
+        console.log(res)
+      })
+    },
     handleSelectionContainer (selectArray) {
       this.selectionContainer = selectArray
     },
@@ -387,6 +402,9 @@ export default {
     },
     switchEdit () {
       this.edit = !this.edit
+    },
+    toExit () {
+      this.hasId ? (this.edit = !this.edit) : this.$router.go(-1)
     }
   }
 }

@@ -39,6 +39,7 @@
         <v-table 
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
+            :height="450"
             @action="action" 
             @change-checked="changeChecked"
             :loading="tabLoad" 
@@ -82,7 +83,6 @@
                     id: 'PAYMENT_METHOD',
                     label: '支付方式'
                 }],
-
                 tabData: [],
                 viewByStatus: '',
                 params: {
@@ -91,6 +91,7 @@
                     key: '',
                     ps: 10,
                     pn: 1,
+                    draft: 0,
                     recycleCustomer: false
                     //recycleSupplier
                 },
@@ -139,7 +140,8 @@
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.pageTotal = res.tc;
+                    res.tc ? this.pageTotal = res.tc : this.pageTotal = this.pageTotal;
+                    this.checkedData = [];
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 

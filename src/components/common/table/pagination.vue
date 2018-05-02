@@ -1,8 +1,8 @@
 <template>
   <div class="ucn-pagination" :class="{show:pageLayout}">
     <el-pagination
-      @size-change="size => {$emit('page-size-change', size)}"
-      @current-change="page => {$emit('page-change', page)}"
+      @size-change="size => {$emit('size-change', size)}"
+      @current-change="page => {$emit('change', page)}"
       :page-sizes="pageSizes"
       :current-page="pageInfo.pn"
       :page-size="pageInfo.ps"
@@ -64,11 +64,15 @@
       pageNum() {
         this.pageListener(true);
       },
-      pageData() {
-        this.pageListener();
+      pageData: {
+        handler() {
+          this.pageListener();
+        },
+        deep: true
       }
     },
     mounted() {
+
     },
     methods: {
       pageListener(type) {
@@ -78,9 +82,8 @@
           ps: this.pageSize,
           tc: this.pageTotal,
         } : {});
-
         if (this.pageInfo.tc <= this.pageInfo.ps) {
-          return this.pageLayout = '';
+          return this.pageLayout = 'pager,sizes,total';
         } else {
           this.pageLayout = 'prev, pager, next,sizes, jumper,total';
         }

@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
-import {Notification} from 'element-ui';
+import {Notification,Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -14,6 +14,49 @@ export const routerMap = [
       component: Layout,
       redirect: '/workbench/index',
       hidden: true, // 在侧边栏中不显示该菜单
+    },
+    {
+      path: '/sellerNegotiation',
+      name: 'sellerNegotiation',
+      hidden: true,
+      component: Layout,
+      redirect: '/sellerNegotiation/inquiry',
+      meta: {
+        name: 'sellerNegotiation',
+      },
+      children:[
+        {
+          path: 'inquiry',
+          name: 'sellerNegotiationInquiry',
+          meta: {
+            name: 'sellerNegotiationInquiry',
+          },
+          component: () => import('../views/sellerNegotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'sellerNegotiationInquiryDetail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Inquiry Detail',
+            messageBoard: 'code'
+          },
+          component: () => import('../views/sellerNegotiation/inquiryDetail')
+        },
+        {
+          path: 'draft',
+          name: 'sellerDraft',
+          component: () => import('../views/sellerNegotiation/draft')
+        },
+        {
+          path: 'recycleBin',
+          name: 'sellerRecycleBin',
+          component: () => import('../views/sellerNegotiation/recycleBin')
+        }
+      ]
     },
     {
       path: '/login',
@@ -448,9 +491,7 @@ export const routerMap = [
           path: 'plan',
           name: 'logisticPlan',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            draft: '/logistic/draft',
             name: 'planOverview'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -459,9 +500,7 @@ export const routerMap = [
           path: 'loadingList',
           name: 'loadingList',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
+            draft: '/logistic/draft',
             name: 'loadingList'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -469,10 +508,8 @@ export const routerMap = [
         {
           path: 'draft',
           name: 'logisticDraft',
+          hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'logisticDraft'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -490,13 +527,19 @@ export const routerMap = [
         //   component: () => import('../views/logistic/placeLogisticPlan')
         // },
         {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          hidden: true,
+          meta: {
+            name: 'Place Logistic Plan'
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
           path: 'planDetail',
           name: 'logisticPlanDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Plan Detail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
@@ -805,7 +848,7 @@ export const routerMap = [
       children: [
         {
           path: 'overview',
-          name: 'recycleBin',
+          name: 'customerRecycleBin',
           meta: {
             draft: false,
             recycleBin: false,
@@ -813,17 +856,20 @@ export const routerMap = [
           },
           component: () => import('../views/customer/overview.vue')
         },
-          {
+        {
           path: 'detail',
-          name: 'recycleBin',
+          name: 'customerRecycleBinDetail',
           meta: {
             draft: false,
             recycleBin: false,
             log: false,
           },
-          component: () => import('../views/customer/customerDetail.vue')}
-          ]},
-     { path: '/sellerSellerSettings',
+          component: () => import('../views/customer/customerDetail.vue')
+        }
+      ]
+    },
+    {
+      path: '/sellerSellerSettings',
       name: 'sellerSellerSettings',
       component: Layout,
       redirect: '/sellerSellerSettings/CategorySetting',
@@ -894,19 +940,20 @@ let router = new Router({
 
 
 router.beforeResolve((to, from, next) => {
-  let ts = localStore.get('ticket')
+  let ts = localStore.get('token')
     , cacheParam = sessionStore.get('cache_router_param') || []
     , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
     , version;
 
 
   if (to.path !== '/login' || from.path === '/login') {
-    version = localStore.get('version');
+    /*version = localStore.get('version');
 
     if (version !== config.VERSION) { // 版本控制
-      // return next({path: '/login'});
-    } else if (_.isEmpty(ts)) { // 登录验证
-      // return next({path: '/login'});
+      return next({path: '/login'});
+    }*/
+    if (_.isEmpty(ts)) { // 登录验证
+      return next({path: '/login'});
     }
   }
 
@@ -937,7 +984,7 @@ router.beforeResolve((to, from, next) => {
 
   }
 
-  Notification.closeAll();
+  // Notification.closeAll();
 
   next();
 });

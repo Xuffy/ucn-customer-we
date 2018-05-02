@@ -101,23 +101,23 @@
         created() {
             this.getMgeneralCategoryData();
             this.getMyCategoryData();
-            // this.getMappingCategory();
+            this.getMappingCategory();
         },
         methods: {
             getMgeneralCategoryData() {
-                this.$ajax.get(this.$apis.BUYER_GET_PURCHASE_SYS_CAREGORY)
+                this.$ajax.get(this.$apis.GET_PURCHASE_SYS_CATEGORY)
                 .then(res => {
                     this.mgeneralCategoryData = res;
                 });
             },
             getMyCategoryData() {
-                this.$ajax.get(this.$apis.BUYER_GET_CATEGORY)
+                this.$ajax.get(this.$apis.GET_PURCHASE_CATEGORY)
                 .then(res => {
                     this.myCategoryData = res;
                 })
             },
             getMappingCategory() {
-                this.$ajax.get(this.$apis.mapping_category)
+                this.$ajax.get(this.$apis.GET_PURCHASE_MAPPING_CATEGORY)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);
@@ -143,7 +143,7 @@
                     parentId: data.id || 0,
                     name: name
                 };
-                this.$ajax.post(this.$apis.category, params)
+                this.$ajax.post(this.$apis.GET_CATEGORY, params)
                 .then(res => {
                     this.addData(res, data, name, type);
                     this.myCategory = '';
@@ -196,7 +196,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.get(`${this.$apis.delete_category}/{id}`, {
+                    this.$ajax.get(`${this.$apis.POST_PURCHASE_CATEGORY_DELETE}/{id}`, {
                         id: id
                     })
                     .then(res => {
@@ -228,7 +228,7 @@
                     if(data.children && data.children.length) {
                         this.addNewCategory(data, value, type);
                     } else {
-                        this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
+                        this.$ajax.get(this.$apis.GET_PURCHASE_ADD_APPING_CATEGORY, {
                             id: data.id
                         })
                         .then(res => {
@@ -260,7 +260,7 @@
                         type: 'info',
                         message: '不修改和以前同'
                     });  
-                    this.$ajax.post(`${this.$apis.category}/{id}?name={name}`, {
+                    this.$ajax.post(this.$apis.POST_PURCHASE_UPDATE_CATEGORY, {
                         id: data.id,
                         name: value
                     })
@@ -284,9 +284,12 @@
                 });
             },
             myCategoryChange(val) {
-                if(val.children && val.children.length) return;
+                if(val.children && val.children.length) return; // this.$message({
+                    //     type: 'info',
+                    //     message: '父节点不能添加映射关系'
+                    // });
                 this.myCategory = val.id;
-                this.$ajax.get(`${this.$apis.mapping_category}/{id}`, {
+                this.$ajax.get(this.$apis.GET_PURCHASE_CHANGE_MAPPING_CATEGORY, {
                     id: val.id
                 })
                 .then(res => {
@@ -317,7 +320,7 @@
                     type: 'info',
                     message: '请勾选系统分类'
                 });
-                this.$ajax.post(this.$apis.mapping_category, params)
+                this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
                 .then(res => {
                     this.mappingRelationData = res;
                     this.mappingRelationDataSplit(this.mappingRelationData);

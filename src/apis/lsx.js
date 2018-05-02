@@ -45,8 +45,8 @@ export default {
 
 
     //product buyer
-    get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1','UPURCHASE_URL'],
-    get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1','UPURCHASE_URL'],
+    get_buyerProductList:['/purchase/sku/listSkuByParams','UPURCHASE_URL','UPURCHASE_URL'],
+    get_buyerBookmarkList:['/purchase/sku/listBookmark','UPURCHASE_URL','UPURCHASE_URL'],
     add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
     add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1','UPURCHASE_URL'],
     add_bookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],

@@ -2,6 +2,9 @@ export default {
     id: {
         _hide: true
     },
+    inquiryId: {
+        _hide: true
+    },
     inquiryNo: { // 系统自动生成 询价母单号
 
     },
