@@ -56,14 +56,11 @@
                 :rowspan="1"
                 @filter-value="onFilterValue"
                 ></v-table>
-                <!-- <el-pagination
-                    @size-change="handleSizeChange"
-                    :currentPage.sync="params.pn"
-                    :page-sizes="pazeSize"
-                    :page-size="params.ps"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="pageTotal"
-                /> -->
+              <v-pagination
+                :page-data.sync="params"
+                @change="handleSizeChange"
+                @size-change="pageSizeChange"
+              />
             </div>
         </div>
     </div>
@@ -71,12 +68,13 @@
 <script>
 
     import selectSearch from '@/components/common/fnCompon/selectSearch';
-    import VTable from '@/components/common/table/index'
+    import {VTable,VPagination} from '@/components/common/table/index'
     export default {
         name:'payment',
         components:{
             selectSearch,
-            VTable
+            VTable,
+            VPagination
         },
         data(){
             return{
@@ -105,6 +103,7 @@
                   },
                   pn: 1,
                   ps: 10,
+                  tc:0,
                   // sorts: [
                   //   {
                   //     nativeSql: true,
@@ -149,6 +148,12 @@
         watch: {
             date(){
                 console.log(this.date)
+            },
+            params: {
+              handler(val, oldVal) {
+                this.getdata();
+              },
+              deep: true
             }
         },
         methods:{
@@ -158,13 +163,19 @@
             inputEnter(){
 
             },
+            handleSizeChange(val) {
+              this.params.pn = val;
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
+            },
             getList(){
               console.log()
               this.tabLoad = true;
               console.log(this.params)
               this.$ajax.post(this.$apis.post_ledgerPage, this.params)
                 .then(res => {
-                  this.pageTotal = res.tc;
+                  res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                   this.tabLoad = false;
                   this.searchLoad = false;
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{

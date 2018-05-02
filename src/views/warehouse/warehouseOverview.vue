@@ -35,13 +35,12 @@
       @action="onAction"
       :loading='loading'
       @change-checked='checked'
+      :height="450"
       style='marginTop:10px'/>
       <v-pagination
-        :pageNum.sync="params.pn"
-        :pageSize.sync="params.ps"
-        :page-total.sync="pageTotal"
-        @page-change="handleSizeChange"
-        @page-size-change="pageSizeChange"
+        :page-data.sync="params"
+        @change="handleSizeChange"
+        @size-change="pageSizeChange"
       />
 
   </div>
@@ -69,7 +68,6 @@
         keyWord: '',
         tabData: [],
         loading: false,
-        pageTotal: 1,
         rowspan: 1,
         pazeSize: [10, 20, 30, 40, 50, 100],
         options: [{
@@ -85,27 +83,28 @@
         keyType: '',
         pageTotal: 0,
         params: {
-          "companyId": 0,
-          "inboundNo": "",
-          "orderNo": "",
-          "outboundNo": "",
+          companyId: 0,
+          inboundNo: "",
+          orderNo: "",
+          outboundNo: "",
           // "ownerIds": [
           //   0
           // ],
-          "pn": 1,
-          "ps": 10,
-          "qcOrderNo": "",
-          "skuCode": "",
-          "skuInventoryStatusDictCode": "", //WAIT_FOR_QC
-          "sorts": [
+          pn: 1,
+          ps: 10,
+          tc:0,
+          qcOrderNo: "",
+          skuCode: "",
+          skuInventoryStatusDictCode: "", //WAIT_FOR_QC
+          sorts: [
             {
-              "nativeSql": true,
-              "orderBy": "inboundDate", //入库时间
-              "orderType": "ASC", //升序
-              "resultMapId": ""
+              nativeSql: true,
+              orderBy: "inboundDate", //入库时间
+              orderType: "ASC", //升序
+              resultMapId: ""
             }
           ],
-          "tenantId": ''
+          tenantId: ''
         },
         selectedDate: [],
         selectedNumber: []
@@ -165,7 +164,7 @@
         console.log(this.params)
         this.$ajax.post(this.$apis.post_warehouse_page, this.params)
           .then((res) => {
-            res.tc ? this.pageTotal = res.tc : this.pageTotal = this.pageTotal;
+            res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
             this.tabData = this.$getDB(this.$db.warehouse.warehouseTable, res.datas, item => {
               _.mapObject(item, val => {
                 val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
