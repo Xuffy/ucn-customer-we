@@ -4,9 +4,10 @@
     <div class="status">
       <div class="btn-wrap">
         <span>{{ $i.status}}:</span>
-        <el-checkbox-group v-model="fillterArr" size="mini" @change="viewByChange(viewBy)">
-          <el-checkbox-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-checkbox-button>
-        </el-checkbox-group>
+        <el-radio-group v-model="fillterVal" size="mini" @change="viewByChange(viewBy)">
+          <el-radio-button label="all">{{ $i.all }}</el-radio-button>
+          <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-radio-button>
+        </el-radio-group>
       </div>
       <div class="select-search-wrap">
         <select-search :options="options" @inputEnter="searchFn"/>
@@ -16,7 +17,7 @@
       <div class="fn btn">
         <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
         <el-button @click.stop="addNew">{{ $i.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
+        <el-button type="danger" :disabled="viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.viewBy }}&nbsp;</span>
@@ -57,7 +58,7 @@ export default {
       },
       totalCount: 0,
       selectCount: [],
-      fillterArr: [],
+      fillterVal: 'all',
       tabColumn: [],
       tabData: [],
       viewBy: 0,
@@ -88,11 +89,12 @@ export default {
     VPagination
   },
   mounted () {
-    this.getDictionary()
+    this.getDictionary(['LS_PLAN'], this.ls_plan)
     this.viewByChange(this.viewBy)
   },
   watch: {
     viewBy (newVal) {
+      this.selectCount = []
       this.viewByChange(newVal)
     }
   },
@@ -137,14 +139,16 @@ export default {
     viewByChange (viewId) {
       viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
     },
-    getDictionary () {
-      this.$ajax.post(this.$apis.get_dictionary, ['LS_PLAN'], '_cache').then(res => {
-        this.ls_plan = res[0].codes
+    getDictionary (keyCode, dataModel) {
+      this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
+        dataModel = res[0].code
       })
     },
     getPlanList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.gei_plan_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
+      const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+
+      this.$ajax.post(this.$apis.gei_plan_list, {lgStatus, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
@@ -158,7 +162,10 @@ export default {
     },
     getTransportationList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.get_transportation_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
+      const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+
+      if (this.fillterVal === 'all') this.fillterVal = []
+      this.$ajax.post(this.$apis.get_transportation_list, {lgStatus, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
@@ -172,7 +179,9 @@ export default {
     },
     getSKUList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.get_SKU_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
+      const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+
+      this.$ajax.post(this.$apis.get_SKU_list, {lgStatus, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {

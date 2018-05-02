@@ -6,11 +6,11 @@
       <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
         <div class="input-item">
           <span>{{ a.label }}</span>
-          <span v-if="!edit">{{a.value}}</span>
+          <span v-if="!edit || disabledFields.includes(a.key)">{{a.value}}</span>
           <div v-else>
             <el-input placeholder="请输入内容" v-model="a.value" v-if="a.type === 'input'"/>
-            <el-select v-model="a.value" slot="prepend" placeholder="请输入内容" v-if="a.type === 'selector'">
-              <el-option :label="item.label" :value="item.value" v-for="item of a.select" :key="'el-option-' + item.label"/>
+            <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true">
+              <el-option :label="item.name" :value="item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
             </el-select>
             <el-date-picker v-if="a.type === 'date'" v-model="a.value" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
           </div>
@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+import { disabledFields } from './test'
 
 export default {
   props: {
@@ -41,11 +42,16 @@ export default {
       default () {
         return []
       }
+    },
+    selectArr: {
+      type: Object,
+      default: () => {}
     }
   },
   data () {
     return {
-      detailObj: {},
+      disabledFields,
+      paymentList: [],
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
