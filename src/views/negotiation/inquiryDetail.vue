@@ -47,12 +47,12 @@
                         :rowspan="2"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')">{{ $i._baseText.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.accept }}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i._baseText.createOrder }}</el-button>
                         <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
-                        <el-button @click="modifyAction">{{ $i._baseText.modify }}</el-button>
-                        <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i._baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i._baseText.cancel }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.modify }}</el-button>
+                        <el-button @click="toCreateInquire">{{ $i._baseText.createInquiry }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
@@ -342,18 +342,14 @@
             boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
             },
-            getList(item) {
-                let tabData = [], arr = [];
-                item.forEach(items => {
-                    tabData.push(items.id.value);
-                });
-                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, tabData)
+            getList(ids) {
+                this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
                 .then(res => {
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
                     this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
-                    this.dialogTableVisible = false;
+                    this.newSearchDialogVisible = false;
                 });
             },
             basicInfoBtn(item) { //Basic info 按钮创建
@@ -469,16 +465,7 @@
                this.checkedAll = item;
            },
             toCreateInquire() { //创建单
-                let arr = [];
-                this.checkedAll.forEach(item => {
-                    arr.push(item.id.value);
-                });
-                this.$router.push({
-                    path: '/negotiation/createInquiry',
-                    query: {
-                        id :arr.join(',')
-                    }
-                });
+                this.$router.push('/negotiation/createInquiry');
             },
             ajaxInqueryAction(type) { //接受单
                 const argId = [];

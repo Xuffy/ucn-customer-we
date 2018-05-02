@@ -64,11 +64,15 @@
       pageNum() {
         this.pageListener(true);
       },
-      pageData() {
-        this.pageListener();
+      pageData: {
+        handler() {
+          this.pageListener();
+        },
+        deep: true
       }
     },
     mounted() {
+      
     },
     methods: {
       pageListener(type) {
@@ -78,7 +82,6 @@
           ps: this.pageSize,
           tc: this.pageTotal,
         } : {});
-
         if (this.pageInfo.tc <= this.pageInfo.ps) {
           return this.pageLayout = '';
         } else {

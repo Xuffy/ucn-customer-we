@@ -12,6 +12,21 @@ export default {
     _remark: {
         _hide: true
     },
+    status: {
+        _inquiryHide: true
+    },
+    paymentTerm: {
+        _inquiryHide: true
+    },
+    inquiryAmount: {
+        _inquiryHide: true
+    },
+    timeZone: {
+        _inquiryHide: true
+    },
+    skuQty: {
+        _inquiryHide: true
+    },
     operater: { //修改人 系统带入
         placeholder: 'Please select',
         width: '150px',

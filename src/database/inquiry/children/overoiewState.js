@@ -1,5 +1,4 @@
 export default {
-    
     TBCByCustomer: {
         key: '',
         text: 'TBC By Customer',

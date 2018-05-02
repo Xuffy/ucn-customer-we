@@ -39,16 +39,16 @@ export const routerMap = [
       name: 'sellerNegotiation',
       hidden: true,
       component: Layout,
-      redirect: '/sellerNegotiation/CategorySetting',
+      redirect: '/sellerNegotiation/inquiry',
       meta: {
         name: 'sellerNegotiation',
       },
       children:[
         {
-          path: 'sellerNegotiationInquiry',
+          path: 'inquiry',
           name: 'sellerNegotiationInquiry',
           meta: {
-            name: 'Category setting',
+            name: 'sellerNegotiationInquiry',
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },

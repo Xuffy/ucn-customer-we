@@ -26,7 +26,8 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table 
+        <v-table
+            :height="455"
             :data="tabData" 
             :loading="tabLoad"
             @change-checked="changeChecked"
@@ -69,7 +70,7 @@
                 checkedArg: [],
                 compareType: '',
                 params: {
-                    ps: 10,
+                    ps: 200,
                     pn: 1,
                     recycleCustomer: 0
                 },
@@ -122,9 +123,10 @@
                 this.compareType = 'only';
             },
             onSubmit(type) { //保存Compare 
-                let arr = [];
+                let arr = [], delIds = [];
                 this.tabData.forEach(item => {
-                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value)
+                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    if(item._disabled) delIds.push(_.findWhere(item, {'key': 'id'}).value);
                 });
                 
                 this.$confirm('此操作将会保存编辑是否继续?', '提示', {
@@ -134,7 +136,8 @@
                 }).then(() => {
                     this.compareName?this.compareName = this.compareName:this.compareName = new Date().getTime();
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
-                        inquiryIds: arr,
+                        addInquiryIds: arr,
+                        delInquiryIds: delIds,
                         id:this.$route.query.id,
                         compareName: this.compareName
                     })

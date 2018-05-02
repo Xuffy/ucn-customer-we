@@ -10,8 +10,7 @@ export default {
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:80',
       BASE_JY: 'http://192.168.51.198:18002',
-      //BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
-      BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_LYF: 'http://dev.uuser-facade.ucnholding.com',
       BASE_JML: 'http://dev.umeta-facade.ucnholding.com',
       BASE_JML2: 'http://dev.umessage-facade.ucnholding.com',
@@ -66,7 +65,7 @@ export default {
   }[process.env.NODE_ENV],
 
   // 是否开启token验证
-  AUTH: false,
+  AUTH: true,
 
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,

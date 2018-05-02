@@ -86,7 +86,12 @@
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
-                
+                this.$router.push({
+                    name: 'negotiationCreateInquiry',
+                    query: {
+                        id: item.id.value
+                    }
+                });
             },
             changeChecked(item) { //选中的list
                 let arr = [];
