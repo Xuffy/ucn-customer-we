@@ -3,7 +3,7 @@
         <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
             <div class="state">
-                <span>{{ $i._baseText.state }}</span>
+                <span>{{ $i._baseText.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
                     <el-radio-button :label="null">{{$i._baseText.all}}</el-radio-button>
                     <el-radio-button 
@@ -25,8 +25,9 @@
             <div class="btn-wrap">
                 <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i._baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i._baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData ? false : true">{{ $i._baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData ? false : true">{{ $i._baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i._baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i._baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button>{{ `${$i._baseText.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i._baseText.viewBy }}&nbsp;</span>
@@ -39,17 +40,16 @@
         <v-table 
             :data="tabData" 
             :buttons="[{label: 'detail', type: 'detail'}]" 
+            :height="450"
             @action="action" 
             @change-checked="changeChecked"
             :loading="tabLoad" 
             ref="tab"
         />
         <v-pagination
-            :pageNum.sync="params.pn"
-            :pageSize.sync="params.ps"
-            :page-total.sync="pageTotal"
-            @page-change="handleSizeChange"
-            @page-size-change="pageSizeChange"
+            :page-data.sync="params"
+            @change="handleSizeChange"
+            @size-change="pageSizeChange"
         />
     </div>
 </template>
@@ -82,7 +82,6 @@
                     id: 'PAYMENT_METHOD',
                     label: '支付方式'
                 }],
-
                 tabData: [],
                 viewByStatus: '',
                 params: {
@@ -91,6 +90,8 @@
                     key: '',
                     ps: 10,
                     pn: 1,
+                    tc: 0,
+                    draft: 0,
                     recycleCustomer: false
                     //recycleSupplier
                 },
@@ -139,7 +140,8 @@
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.pageTotal = res.tc;
+                    res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+                    this.checkedData = [];
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 
@@ -214,6 +216,7 @@
                 console.log(No)
             },
             handleSizeChange(val) {
+                console.log(val)
                 this.params.pn = val;
             },
             pageSizeChange(val) {

@@ -47,12 +47,12 @@
                         :rowspan="2"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')">{{ $i._baseText.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.accept }}</el-button>
                         <el-button @click="windowOpen('/order/creatOrder')">{{ $i._baseText.createOrder }}</el-button>
                         <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i._baseText.modify }}</el-button>
                         <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i._baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')">{{ $i._baseText.cancel }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '21' && tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
@@ -70,10 +70,18 @@
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="0">{{ $i._baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="1">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="product">{{ $i._baseText.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="bookmark">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
-            <v-product :hideBtn="true" :forceUpdateNumber="new Date().getTime()" @handleOK="handleOK" :disabledLine="disabledTabData"></v-product>
+            <v-product 
+                :hideBtns="true"
+                :hideBtn="true"
+                :disabledLine="disabledLine"
+                @handleOK="getList"
+                :forceUpdateNumber="trig" 
+                :type="radio"
+                :isInquiry="true"
+            ></v-product>
         </el-dialog>
         <v-history-modify
                 @save="save"
@@ -136,6 +144,8 @@
         name:'inquiryDetail',
         data() {
             return {
+                disabledLine: [],
+                trig: 0,
                 disabledTabData: [],
                 id:"",
                 compareLists: false,
@@ -149,7 +159,7 @@
                 historyColumn: {},
                 msgTitle: '',
                 historyData: [],
-                radio: 'From New Search',
+                radio: 'product',
                 oSwitch: false, //VHistory 组件开关状态
                 statusModify: false,
                 newSearchDialogVisible:false,
@@ -244,11 +254,13 @@
 
             },
             addProduct() {
-                let disabledTabData = [];
-                _.map(this.newProductTabData, items => {
-                    if(!items._remark && !items._disabled) disabledTabData.push(items);
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
                 });
-                this.newSearchDialogVisible = false;
+                this.disabledLine = arr;
+                this.trig = new Date().getTime();
+                this.newSearchDialogVisible = true;
             },
             handleOK(item) { //添加 product
                 if(item && !item.length) return this.$message('请选择商品');
@@ -304,7 +316,7 @@
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
                 if(!this.$route.query.id) return this.$message('地址错误');
-                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
+                this.$ajax.get(`${this.$apis.BUYER_GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
@@ -330,6 +342,16 @@
             boardSwitch() { //留言板开关
                 this.switchStatus = !this.switchStatus;
             },
+            getList(ids) {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids)
+                .then(res => {
+                    _.map(res, item => {
+                        item.displayStyle = 0;
+                    });
+                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.newSearchDialogVisible = false;
+                });
+            },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
                     label: 'Modify',
@@ -350,7 +372,7 @@
                 if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
             },
             fromChange(val) {
-               console.log(val)
+               this.trig = new Date().getTime();
             },
             modifyAction() { //打开页面编辑状态
                 this.statusModify = true;
@@ -387,7 +409,7 @@
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
-                this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+                this.$ajax.get(this.$apis.BUYER_GET_INQUIRY_HISTORY, {
                     id: item.id.value
                 })
                 .then(res => {
@@ -457,20 +479,18 @@
             ajaxInqueryAction(type) { //接受单
                 const argId = [];
                 argId.push(this.$route.query.id);
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })
                 .then(res => {
-                    console.log(res)
+                    this.$router.push('/sellerNegotiation/inquiry')
                 });
             },
             removeProduct() { //删除product 某个单
-                this.newProductTabData.forEach((item, index) => {
-                    if(item._checked) {
-                        item._disabled = true;
-                        this.$set(this.newProductTabData, index, item);
-                    };
+            // console.log(_.pluck(this.checkedAll,'skuId'))
+                _.map(this.newProductTabData, (item, index) => {
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
                 });
             },
             modifyCancel() { //页面编辑取消
@@ -482,14 +502,19 @@
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
                 if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
-                parentNode.details = this.dataFilter(this.newProductTabData);
+                let arr = [];
+                _.map(this.newProductTabData, item => {
+                    if(!item._disabled) arr.push(item);
+                });
+                parentNode.details = this.dataFilter(arr);
                 parentNode.draft = 0;
-                this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
                     this.statusModify = false;
+                    this.$router.push('/sellerNegotiation/inquiry');
                 });
             },
             dataFilter (data) {

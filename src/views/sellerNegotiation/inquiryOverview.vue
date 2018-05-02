@@ -44,13 +44,10 @@
             :loading="tabLoad" 
             ref="tab"
         />
-        <el-pagination
-            @size-change="handleSizeChange"
-            :currentPage.sync="params.pn"
-            :page-sizes="pazeSize"
-            :page-size="params.ps"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pageTotal"
+        <v-pagination
+            :page-data.sync="params"
+            @page-change="handleSizeChange"
+            @page-size-change="pageSizeChange"
         />
     </div>
 </template>
@@ -92,11 +89,11 @@
                     key: '',
                     ps: 10,
                     pn: 1,
-                    recycleCustomer: false
-                    //recycleSupplier
+                    tc: 0,
+                    recycleSupplier: false,
+                    draft: false
                 },
                 tabLoad:false,
-                pageTotal: 0,
                 _id: ''
             }
         },
@@ -131,15 +128,15 @@
                 let url, column;
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
-                    url = this.$apis.POST_INQIIRY_LIST;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST;
                     column = this.$db.inquiryOverview.viewByInqury;
                 } else {
-                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
-                    this.pageTotal = res.tc;
+                    this.params.tc = res.tc;
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 
@@ -168,7 +165,7 @@
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
                     action: type,
                     ids:argId
                 })
@@ -186,7 +183,7 @@
             },
             detail(item) {
                 this.$router.push({
-                    path: '/negotiation/inquiryDetail',
+                    path: '/sellerNegotiation/inquiryDetail',
                     query: {
                         id: _.findWhere(item, {'key': 'id'}).value
                     }

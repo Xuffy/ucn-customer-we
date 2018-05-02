@@ -14,14 +14,12 @@
             :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
-            :height="350"
+            :height="455"
         />
         <v-pagination
-            :pageNum.sync="bodyData.pn"
-            :pageSize.sync="bodyData.ps"
-            :page-total.sync="pageTotal"
-            @page-change="handleSizeChange"
-            @page-size-change="pageSizeChange"
+            :page-data.sync="bodyData"
+            @change="handleSizeChange"
+            @size-change="pageSizeChange"
         />
     </div>
 </template>
@@ -53,6 +51,7 @@
                     // },
                     ps: 10,
                     pn: 1,
+                    tc: 0,
                     recycle: 0,
                     // sorts: [
                     //     {
@@ -81,7 +80,7 @@
                     data.forEach(item => {
                         item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
                     });
-                    this.pageTotal = res.tc;
+                    this.bodyData.tc = res.tc;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
                 });
             },
@@ -135,10 +134,10 @@
                 
             },
             handleSizeChange(val) {
-                this.params.pn = val;
+                this.bodyData.pn = val;
             },
             pageSizeChange(val) {
-                this.params.ps = val;
+                this.bodyData.ps = val;
             }
         },
         watch: {
