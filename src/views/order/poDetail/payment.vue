@@ -27,21 +27,22 @@
                     <div v-if="v.type==='Text'">
                         <!--有效性-->
                         <div v-if="k===11">
-                            <span v-if='scope.row[v.prop]===1'>
-                                待供应商确认
+                            <span v-if='scope.row[v.prop]===-1'>
+                                作废
                             </span>
-                            <span v-if='scope.row[v.prop]===2'>
-                                供应商已确认
-                            </span>
-                            <span v-if='scope.row[v.prop]===3'>
+                            <span v-if='scope.row[v.prop]===10'>
                                 待采购商确认
                             </span>
-                            <span v-if='scope.row[v.prop]===4'>
-                                采购商已确认
+                            <span v-if='scope.row[v.prop]===20'>
+                                待供应商确认
                             </span>
-                            <span v-if='scope.row[v.prop]===5'>
-                                无效
+                            <span v-if='scope.row[v.prop]===30'>
+                                待服务商确认
                             </span>
+                            <span v-if='scope.row[v.prop]===40'>
+                                已确认
+                            </span>
+                            
                         </div>
                         <div v-else>
                             {{scope.row[v.prop]}}   
@@ -106,7 +107,7 @@
                             <el-button type="text" :disabled="disabledBtn" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[11].prop]===3">
+                            <div v-if="scope.row[columns[11].prop]===10||scope.row[columns[11].prop]===20||scope.row[columns[11].prop]===30">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
@@ -147,7 +148,7 @@
 </template>
 <script>
     /*
-    1:待采购商确认,2:采购商已确认,3:待供应商确认,4:供应商已确认,5:作废
+    10:待采购商确认,20:待供应商确认,30:待服务商确认，4:已确认,5:作废
      orderType :10 采购订单
     */
     export default {
