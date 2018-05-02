@@ -72,7 +72,6 @@
       }
     },
     mounted() {
-      this.pageListener();
     },
     methods: {
       pageListener(type) {
