@@ -3,8 +3,8 @@
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
          <div class="basic">
-               <div class='basicinfo_input'>                
-                   <basicinfo :disabled='statusModify' :podisabled=true ref='basicinfo'></basicinfo>
+               <div class='basicInfo_input'>                
+                   <basicinfo :disabled='statusModify' :podisabled=true ref='basicInfo'></basicinfo>
                    <attchment :disabled='statusModify'></attchment>                       
               </div>
                <div class='basicinfo_message'>
@@ -19,12 +19,17 @@
                 </div>
         </div>
 <!--         attachment-->
+            
 <!--VExchange-->
-        <VExchange :disabled=false ref='exchange'></VExchange> 
+        <VExchange :disabled=false ref='exchangeList'></VExchange> 
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
-         <v-payment></v-payment>
+         <v-payment :orderNo='orderNo' 
+                    :currencyCode='currencyCode'
+                    :payToId='payToId'
+                    
+         ></v-payment>
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
@@ -38,12 +43,12 @@
              <div class="pro_table">
                    <v-table  
                          :data.sync="newProductTabData"
-                        :buttons="productInfoBtn"
-                        :loading="tableLoad"
-                        @action="producInfoAction"
-                        @change-checked="changeChecked"
+                         :buttons="productInfoBtn"
+                         :loading="tableLoad"
+                         @action="producInfoAction"
+                         @change-checked="changeChecked"
                          :total-row="tableTatal"
-                        :rowspan="2"/>
+                         :rowspan="2"/>
              </div>
          </div>
 <!--         caculate-->
@@ -55,12 +60,12 @@
                  <el-button >{{$i._baseText.confirm}}</el-button>
                  <el-button  :disabled='true'>{{$i._baseText.download}}</el-button>
                   <el-button >{{$i._baseText.createOrder}}</el-button>
-                   <el-button >{{$i._baseText.cancel}}</el-button>
-                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
-                 <el-checkbox v-model="checked">{{$i._baseText.highlightTheDifferent}}</el-checkbox>
+                  <el-button :disabled="orderStatus==='5'" @click='cancelOrder'>{{$i._baseText.cancel}}</el-button>
+                 <el-checkbox v-model="markAsImportant">{{$i._baseText.markAsImportant}}</el-checkbox>
+                 <el-checkbox v-model="hightlightTheDifferent">{{$i._baseText.highlightTheDifferent}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
-                 <el-button >{{$i._baseText.send}}</el-button>
+                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
                  <el-button type='danger' @click='modifyCancel'>{{$i._baseText.cancel}}</el-button>
              </div>
          </div>
@@ -118,17 +123,21 @@
         },
         data() {
             return {
+                tableTatal: [],
                 markAsImportant: true, //底部单选 mark as important
                 hideTheSame: true, //底部单选 Hide The Same
                 hightlightTheDifferent: true, //底选hightlightTheDifferent
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
                 statusModify: true, //页面输入框是否可写
-                checked: false,
                 switchStatus: false,
                 Data: [],
                 tabData: [],
                 orderId: this.$route.query.orderId,
+                orderNo: "", // payment
+                currencyCode: '', // payment
+                payToId: '', // payment
+                orderStatus:'',
                 loading: false, //表格加载
                 id_type: '',
                 historyColumn: {},
@@ -139,8 +148,8 @@
                 submitData: {
                     deleteDetailIds: []
                 },
-                 disabledLine: [],
-                tableTatal:[]
+                disabledLine: [],
+                tableTatal: []
             }
         },
         methods: {
@@ -154,6 +163,7 @@
             },
             //..............底部cancel
             modifyCancel() { //页面编辑取消
+                console.log(this.productTabData)
                 this.newProductTabData = this.productTabData;
                 this.productCancel();
                 this.statusModify = true;
@@ -161,13 +171,30 @@
             onAction(item, type) {
                 //                console.log(item, type)
             },
+            //........取消订单
+            cancelOrder(){
+                this.$ajax.post(this.$apis.post_cancleOrder,{
+                    ids:[this.orderId]
+                }).then(res=>{
+                   this.$router.push({
+                    path:'/order/overview',
+                });
+                }).catch(res=>{
+                    console.log(res)
+                })
+            },
             //........获取数据
             get_data() {
                 this.$ajax.get(this.$apis.detail_order, {
                         id: this.orderId
                     })
                     .then((res) => {
-                        console.log(res)
+                        this.orderStatus=res.status
+                        //.传递给[payment]组件的数据
+                        this.orderNo = res.orderNo
+                        this.currencyCode = res.currency
+                        this.payToId = res.companyId
+                        
                         //..........basicinfo
                         this.$refs.basicinfo.formItem = res;
                         //..........caculate
@@ -182,11 +209,12 @@
                             item => {
                                 return item;
                             });
+                        
                         this.productTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
                             item => {
                                 return item;
                             });
-                        
+                        this.tableTatalCal();
                         this.tableLoad = false;
                     })
                     .catch((res) => {
@@ -280,28 +308,6 @@
                         }
                     });
             },
-            getInquiryDetail() { //获取 Inquiry detail 数据
-                this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
-                        id: 16
-                    })
-                    .then(res => {
-                        //Product Info
-                        console.log(res)
-                        this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
-                            item => {
-                                return item;
-                            });
-
-                        this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details),
-                            item => {
-                                return item;
-                            });
-                        this.tableLoad = false;
-                    })
-                    .catch(err => {
-                        this.tableLoad = false;
-                    });
-            },
             productModify() { //  提交 product 编辑 
                 this.newProductTabData.forEach((item, index) => {
                     if (!item._remove && item._disabled) {
@@ -376,13 +382,32 @@
                 });
             },
             send() {
-                let parentNode = this.dataFilter(this.newProductTabData);
-                console.log(this.$filterModify(parentNode))
+              
+                let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
+                //参数一堆堆 我靠
+                let params = {
+                    // exchangeRateList
+                    exchangeRateList: this.$refs.exchangeList.exchangeRateList,
+                    skuList: parentNode,
+                    responsibilityList: this.$refs.responsibility.tableData,
+                    draftCustomer: false
+                }
+                 var basic = this.$refs.basicInfo.formItem
+                _.extendOwn(params, basic)
+                var caculate = this.$refs.caculate.caculateForm
+                _.extendOwn(params, caculate)
+                 this.$ajax.post(this.$apis.post_updataOrder, params)
+                    .then(res => {
+                        this.$router.push('/order/overview')
+                    })
+                    .catch((res) => {
+                        console.log(res)
+                    });
             },
             addProduct() {
                 let arr = [];
                 _.map(this.tabData, item => {
-                    if(!item._disabled) arr.push(item);
+                    if (!item._disabled) arr.push(item);
                 });
                 this.disabledLine = arr;
                 this.trig = new Date().getTime();
@@ -390,16 +415,20 @@
             },
             //表格底部计算
             tableTatalCal() {
-                let obj = _.clone(this.tabData[0]);
-                return console.log(obj)
-                _.map(this.tabData, value => {
-                    _.map(value, val => {
-                        if (val._calu) {
-                            obj[val.key].value = obj[val.key].value + val.value;
+                let obj = this.$depthClone(this.newProductTabData[0]);
+                console.log(_.values(this.newProductTabData))
+                _.map(this.newProductTabData, value => {
+                    _.map(value, (val,k) => {
+                        if (obj[val.key] && obj[val.key]._calu) {   
+                           obj[val.key].value = (obj[val.key].value + val.value);
+                            
+                            console.log(obj[val.key].value);
+                        }else{                         
+                            obj[val.key].value=''
                         }
+                         this.tableTatal = [obj]
                     });
-                });
-                this.tableTatal = [obj]
+                });             
             }
         },
         mounted() {
@@ -408,12 +437,17 @@
         created() {
             this.get_data()
             this.submitData.id = this.$route.query.id;
-            //            this.getInquiryDetail()
         },
         watch: {
-            newProductTabData(val, old) {
-                console.log(val)
-            }
+//            newProductTabData:{
+//               　handler(curVal,oldVal){
+//　　　　　　　　　　　　if(curVal){
+//                        console.log('in')
+//                        this.tableTatalCal()
+//                        }
+//　　　　　　　　　　},
+//　　　　　　　　　　deep:true
+//            }
         }
     }
 

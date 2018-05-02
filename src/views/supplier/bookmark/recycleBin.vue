@@ -46,11 +46,8 @@
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectedNumber.length}})</el-button>
+                   <el-button  :disabled='!selectedData.length>0' @click='recycle'>{{$i._baseText.recover}}({{selectedNumber.length}})</el-button>
                   <el-button  :disabled='!selectedData.length>0' >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
-                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i._baseText.remove}}({{selectedNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -99,7 +96,7 @@
                     skuCode: "",
                     skuNameEn: "",
                     type: '',
-                    recycle: false,
+                    recycle: true,
                 },
                 tabData: [],
                 selectedData: [],
@@ -127,39 +124,7 @@
             search() {
                 this.get_data()
             },
-            //....跳入createInquiry
-            createInquiry() {
-                this.windowOpen('/negotiation/createInquiry', {
-                    selectedData: this.selectedData
-                });
-            },
-            //....跳入createOrder
-            createOrder() {
-                this.$windowOpen({
-                    url:'/order/creat', 
-                    params:{
-                    selectedData: this.selectedData
-                }});
-            },
-            //........跳入compare
-            compare() {
-                let id='';
-                this.selectedData.forEach((v,k)=>{
-                    let item=_.findWhere(v,{key:'id'});
-                    if(k===this.selectedData.length-1){
-                        id+=item.value;
-                    }else{
-                        id+=(item.value+',');
-                    }
-                });
-                this.$windowOpen({
-                    url:'/supplier/compareDetail/{type}',
-                    params:{
-                        type:'new',
-                        id:id,
-                    }
-                });
-            },
+
             //...........进入detail
             detail(item) {
                 this.$windowOpen({
@@ -190,16 +155,12 @@
                         this.loading = true
                     });
             },
-            //..........remove
-            remove() {
-                console.log(this.selectNumber);
-                this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
-                    .then(res => {
-                        this.get_data()
-                    })
-                    .catch((res) => {
-
-                    });
+            recycle(){
+                this.$ajax.post(this.$apis.post_recoverBookmarks, this.selectedNumber).then(res => {
+                     this.get_data()
+                }).catch(err => {
+                    console.log(err)
+                });
             },
             getCategoryId() {
                 this.$ajax.get(this.$apis.getCategory, {}).then(res => {

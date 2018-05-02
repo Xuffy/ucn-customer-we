@@ -6,9 +6,17 @@ Vue.use(Vuex);
 
 const state = {
   quickLink: {
-    draft: false,
+    draft: {
+      show: false,
+      url: '',
+      params: {}
+    },
+    recycleBin: {
+      show: false,
+      url: '',
+      params: {}
+    },
     log: false,
-    recycleBin: false,
     show: false,
     list: [],
   },
@@ -24,7 +32,14 @@ const state = {
 
 const actions = {};
 
-const mutations = {};
+const mutations = {
+  setDraft(state, params = {}) {
+    state.quickLink.draft = _.extend(state.quickLink.draft, params);
+  },
+  setRecycleBin(state, params = {}) {
+    state.quickLink.recycleBin = _.extend(state.quickLink.recycleBin, params);
+  }
+};
 
 export default new Vuex.Store({
   state,

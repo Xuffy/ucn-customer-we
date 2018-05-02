@@ -6,7 +6,8 @@ export default {
     key: 'inboundNo'
   },
   inboundDate: {
-    key: 'inboundDate'
+    key: 'inboundDate',
+    type: 'textDate',
   },
   custormerNo: {
     key: 'customerNo'
@@ -44,7 +45,7 @@ export default {
   skuDescriptionInEnglish: {
     key: 'skuDescEn'
   },
-  unit: {
+  unit: {   //计量单位
     key: ''
   },
   outCartonQuatityOfInbound: {
@@ -53,7 +54,7 @@ export default {
   outCartonQuatityOfOutbound: {
     key: 'outboundOutCartonTotalQty'
   },
-  inventoryOfCarton: {
+  inventoryOfCarton: {  //库存箱数
     key: ''
   },
   inboundSkuQuantity: {

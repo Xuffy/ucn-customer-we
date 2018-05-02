@@ -1,4 +1,9 @@
 export default {
+    //获取category
+    get_sys_category: ['/purchase/sys/category', 'BASE_CS1','UPURCHASE_URL'],
+    get_my_category:['/purchase/category/tree','BASE_CS1','UPURCHASE_URL'],
+
+
     get_productCategory:['/purchase/sys/category','BASE_CS1','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_CS','USUPPLY_URL'],
     delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
@@ -74,4 +79,5 @@ export default {
     get_warehouseOrderData:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELLER','USUPPLY_URL'],
+    get_orderSku:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
 }

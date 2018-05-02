@@ -97,7 +97,7 @@
             return {
                 dialogEditDiv: false,
                 formItem: {
-                    orderNo: '9999', //必填   系统生成 不可编辑
+                    orderNo: '8888', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成  

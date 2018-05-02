@@ -153,14 +153,19 @@
             },
             //....跳入createInquiry
             createInquiry() {
-                this.$windowOpen('/negotiation/createInquiry', {
+                this.$windowOpen({
+                    url:'/negotiation/createInquiry', 
+                    params:{
                     selectedData: this.selectedData
-                });
+                }});
             },
             //....跳入createOrder
             createOrder() {
-                this.$windowOpen('/order/creat', {
-                    selectedData: this.selectedData
+                this.$windowOpen({
+                    url:'/order/creat',
+                    params:{
+                         selectedData: this.selectedData
+                    }
                 });
             },
             //........compare

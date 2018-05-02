@@ -25,13 +25,15 @@
       </el-menu-item-group>
 
       <el-menu-item-group>
-        <el-menu-item index="2-0" v-show="$store.state.quickLink.draft">
+        <el-menu-item index="2-0" v-show="$store.state.quickLink.draft.show"
+                      @click="$router.push($store.state.quickLink.draft)">
           <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Draft" placement="right">
             <i class="el-icon-edit-outline"></i>
           </el-tooltip>
           <span>Draft</span>
         </el-menu-item>
-        <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin">
+        <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin.show"
+                      @click="$router.push($store.state.quickLink.recycleBin)">
           <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Recycle Bin" placement="right">
             <i class="el-icon-delete"></i>
           </el-tooltip>

@@ -4,9 +4,8 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
-      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      // BASE_CS1: 'http://192.168.51.33:11007',
-      // BASE_CS1: 'http://192.168.51.33:11007',
+      // BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_CS1: 'http://192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
@@ -26,6 +25,7 @@ export default {
       BASE_JML_msg: 'http://dev.umessage-facade.ucnholding.com',
       BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
+      BASE_HSM_W: 'http://192.168.51.248:11001',
 
 
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
@@ -37,6 +37,7 @@ export default {
       UOSS_URL: 'http://dev.uoss-facade.ucnholding.com:18100', // 对象存储服务
       ULOG_URL: 'http://dev.ulog-facade.ucnholding.com:18100', // 日志服务
       UPURCHASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
+      //UPURCHASE_URL: '192.168.51.248:11001',
       USUPPLY_URL: 'http://dev.usupply-facade.ucnholding.com:18100', // 供应商端
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志

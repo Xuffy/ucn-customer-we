@@ -39,7 +39,7 @@
                                     v-for="item in selectAll[item.key]"
                                     :key="item.id"
                                     :label="item.name"
-                                    :value="item.name"
+                                    :value="item.code"
                                     :id="item.id"
                                 />
                             </el-select>
@@ -56,7 +56,7 @@
                                     v-for="item in selectAll[item.key]"
                                     :key="item.id"
                                     :label="item.name"
-                                    :value="item.value"
+                                    :value="item.code"
                                     :id="item.id"
                                 />
                             </el-select>
@@ -170,7 +170,12 @@
                     departureCountry: []
                 },
                 loading: false,
-                fromArg: {},
+                fromArg: {
+                    paymentTerm: 0,
+                    timeZone: 1,
+                    inquiryAmount: 1,
+                    skuQty: 1
+                },
                 radio: 'product',   //Add Product status
                 dialogTableVisible: false, //Add Product switch
                 
@@ -253,10 +258,16 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        })
                     } else if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[1], {'key': 'skuId'}).value && val._remark && data[1]._remark) {
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        })
                     }
                     return val;
                 });
@@ -380,7 +391,7 @@
                 .then(res => {
                     let arr = [];
                     _.map(this.tabData, items => {
-                        if(_.findWhere(items, {'key': 'skuId'}).value === config.data) arr.push(items)
+                        if(_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'' && !items._disabled) arr.push(items)
                     });
                     if(config.type === 'histoty') {
                         this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);

@@ -101,7 +101,6 @@
       init(editData, history = [], isModify = true) {
         let ed = [];
         if (_.isEmpty(editData) || !_.isArray(editData)) return false;
-
         // 初始化可编辑行
         ed = _.map(editData, value => {
           return _.mapObject(value, (val, index) => {
