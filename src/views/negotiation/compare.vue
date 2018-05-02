@@ -46,7 +46,13 @@
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
-        <add-new-inqury v-model="addNew" @addInquiry="addCopare" :arg-disabled="argDisabled" :compareId="params.id || null" :disableds="disableds" />
+        <add-new-inqury 
+            v-model="addNew" 
+            @addInquiry="addCopare" 
+            :arg-disabled="argDisabled" 
+            :compareId="params.id || null" 
+            :disableds="disableds" 
+        />
     </div>
 </template>
 <script>
@@ -124,10 +130,17 @@
             },
             onSubmit(type) { //保存Compare 
                 let arr = [], delIds = [];
-                this.tabData.forEach(item => {
-                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
-                    if(item._disabled) delIds.push(_.findWhere(item, {'key': 'id'}).value);
-                });
+                if(this.compareBy+''==='0') {
+                    this.tabData.forEach(item => {
+                        if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                        if(item._disabled) delIds.push(_.findWhere(item, {'key': 'id'}).value);
+                    });
+                } else {
+                    this.tabData.forEach(item => {
+                        if(!item._disabled) arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
+                        if(item._disabled) delinquiryIds.push(_.findWhere(item, {'key': 'inquiryId'}).value);
+                    });
+                }
                 
                 this.$confirm('此操作将会保存编辑是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -222,7 +235,7 @@
             changeChecked(item) {
                 let arr = [];
                 item.forEach(item => {
-                    if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}));
+                    if(!item._disabled) this.compareBy+''==='0'?arr.push(_.findWhere(item, {'key': 'id'})):arr.push(_.findWhere(item, {'key': 'inquiryId'}));
                 });
                 this.checkedArg = arr;
             },
@@ -261,10 +274,18 @@
             mapTabData(type) {
                 let arr = [];
                 _.map(this.tabData, item => {
-                    if(type) {
-                        if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                    if(this.compareBy+''==='0') {
+                        if(type) {
+                            if(!item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                        } else {
+                            if(item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                        }
                     } else {
-                        if(item._disabled) arr.push(_.findWhere(item, {'key': 'id'}).value);
+                        if(type) {
+                            if(!item._disabled) arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
+                        } else {
+                            if(item._disabled) arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
+                        }
                     }
                 });
                 return arr;
@@ -272,20 +293,19 @@
             addCopare(arg) { //add new compare
                 if(!arg.length) return this.$message('请先选择inquiry');
                 let url, column;
-                if(this.compareBy + '' === '0') {
+                if(this.compareBy+''==='0') {
                     url = this.$apis.POST_INQIIRY_LIST;
                     column = this.$db.inquiryOverview.viewByInqury;
                 } else {
                     url = this.$apis.POST_INQIIRY_LIST_SKU;
                     column = this.$db.inquiryOverview.viewBySKU;
                 };
-                
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, {
+                this.$ajax.post(url, {
                     recycleCustomer:0,
                     ids: arg
                 })
                 .then(res => {
-                    let data = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    let data = this.$getDB(column, res.datas);
                     _.map(this.tabData, (item, index) => {
                         if(item._disabled) {
                             _.map(data, items => {
