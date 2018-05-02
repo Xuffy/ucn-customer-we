@@ -12,10 +12,10 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps"
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
                             ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
+                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="All">
                                 <el-option
                                         v-for="item in v.options"
                                         :key="item.value"
@@ -74,7 +74,6 @@
                     :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick">
-
               <template slot="header">
                 <div class="btns" v-if="!hideBtn">
                   <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
@@ -90,6 +89,11 @@
                 </div>
               </template>
             </v-table>
+            <!--分页-->
+            <page
+                    :pageNum="1"
+                    :pageSize="20"
+                    :page-total="50"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
@@ -100,7 +104,7 @@
 
 <script>
     import VTable from '@/components/common/table/index'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
 
     export default {
@@ -108,7 +112,8 @@
         components:{
             dropDown:dropDownSingle,
             sectionNumber,
-            VTable
+            VTable,
+            page:VPagination
         },
         props:{
             title:{
@@ -217,9 +222,29 @@
                         { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
                     ],
                 },
+                /**
+                 * 分页配置
+                 * */
+                pageData:{
+                    pn:1,
+                    ps:2,
+                    tc:20
+                },
 
                 //Category下拉组件数据
                 dropData:[],
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[]
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[]
+                    },
+                ],
                 defaultProps:{
                     label:'name',
                     children:'children'
@@ -302,9 +327,19 @@
                         this.disabledSearch=false;
                         this.loadingTable=false;
                     });
-                }else{
+                }
+                else{
+
+                    let url='';
+                    if(this.type==='product'){
+                        url=this.$apis.get_buyerProductList;
+                    }else if(this.type==='bookmark'){
+                        url=this.$apis.get_buyerBookmarkList;
+                    }
+
+
                     this.loadingTable=true;
-                    this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
+                    this.$ajax.post(url,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
                                 e.status.value='上架';
@@ -313,6 +348,37 @@
                             }
                             return e;
                         });
+
+                        if(this.disabledLine.length>0){
+                            this.disabledLine.forEach(v=>{
+                                let id;
+                                if(this.isInModify){
+                                    id=_.findWhere(v,{key:'skuId'}).value;
+                                }else if(this.isInquiry){
+                                    id=_.findWhere(v,{key:'skuId'}).value;
+                                }else{
+                                    id=_.findWhere(v,{key:'id'}).value;
+                                }
+                                this.tableDataList.forEach(m=>{
+                                    let newId;
+                                    if(this.type==='product'){
+                                        newId=_.findWhere(m,{key:'id'}).value;
+                                    }else if(this.type==='bookmark'){
+                                        newId=_.findWhere(m,{key:'skuId'}).value;
+                                    }
+                                    if(id===newId){
+                                        // m._disabled=true;
+                                        // m._checked=true;
+                                        // console.log(m)
+                                        this.$set(m,'_disabled',true);
+                                        this.$set(m,'_checked',true);
+                                    }
+                                })
+                            })
+                        }
+
+
+
                         this.disabledSearch=false;
                         this.selectList=[];
                         this.loadingTable=false;
@@ -361,11 +427,17 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                    this.dropData=res;
+                this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
                     console.log(err)
                 });
+                this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
+                });
+
             },
 
             //获取table数据

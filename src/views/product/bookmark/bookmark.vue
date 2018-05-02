@@ -245,7 +245,6 @@
                 this.$set(this.productForm,'maxFobPrice','');
             },
 
-
             //搜查
             search(){
                 this.disabledSearch=true;
@@ -333,13 +332,9 @@
                         type: 'warning'
                     });
                 }else{
-                    let id=[];
-                    e.forEach(v=>{
-                        id.push(v.id.value);
-                    });
                     this.disabledOkBtn=true;
 
-                    this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
+                    this.$ajax.post(this.$apis.add_buyerBookmark,e).then(res=>{
                         this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                             recycle:false
                         }).then(res=>{
