@@ -74,8 +74,6 @@
                     :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick">
-                <!--分页-->
-                <page :page-data="pageData"></page>
               <template slot="header">
                 <div class="btns" v-if="!hideBtn">
                   <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
@@ -91,6 +89,11 @@
                 </div>
               </template>
             </v-table>
+            <!--分页-->
+            <page
+                    :pageNum="1"
+                    :pageSize="20"
+                    :page-total="50"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
                 <el-button @click="cancel">Cancel</el-button>
@@ -101,9 +104,8 @@
 
 <script>
     import VTable from '@/components/common/table/index'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
-    import page from '@/components/common/table/pagination'
 
     export default {
         name: "overview",
@@ -111,7 +113,7 @@
             dropDown:dropDownSingle,
             sectionNumber,
             VTable,
-            page
+            page:VPagination
         },
         props:{
             title:{
@@ -225,9 +227,10 @@
                  * */
                 pageData:{
                     pn:1,
-                    ps:50,
+                    ps:2,
                     tc:20
                 },
+
                 //Category下拉组件数据
                 dropData:[],
                 categoryList:[
