@@ -253,13 +253,20 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        })
                     } else if(_.findWhere(val, {'key': 'skuId'}).value === _.findWhere(data[1], {'key': 'skuId'}).value && val._remark && data[1]._remark) {
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        })
                     }
                     return val;
                 });
+                console.log(this.tabData)
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
@@ -380,7 +387,7 @@
                 .then(res => {
                     let arr = [];
                     _.map(this.tabData, items => {
-                        if(_.findWhere(items, {'key': 'skuId'}).value === config.data) arr.push(items)
+                        if(_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'' && !items._disabled) arr.push(items)
                     });
                     if(config.type === 'histoty') {
                         this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
