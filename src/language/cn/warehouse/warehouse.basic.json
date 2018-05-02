@@ -1,4 +1,5 @@
 {
+  "warehouseOverview":"仓库总览",
   "inboundOverview":"入库总览",
   "inboundType":"入库类型",
   "basicInfo":"基本信息",
@@ -16,6 +17,7 @@
   "skuCode":"供应商货号",
   "nameCn":"中文品名",
   "barCode":"产品条码",
+  "status":"状态",
 
 
 
@@ -25,5 +27,6 @@
   "cancel":"取消",
 
   "search":"搜索",
-  "clear":"清除"
+  "clear":"清除",
+  "close":"关闭"
 }

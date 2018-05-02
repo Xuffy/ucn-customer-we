@@ -76,6 +76,12 @@
 
 
 
+
+        <div class="footBtn">
+            <el-button @click="closeWindow" type="primary">{{$i._warehouse.close}}</el-button>
+        </div>
+
+
     </div>
 </template>
 
@@ -115,8 +121,6 @@
                 },
                 addOrderDialogVisible:false,
 
-
-
                 inboundData:{
                     inboundNo:'',
                     inboundDate:'',
@@ -135,14 +139,19 @@
         },
         methods:{
             getData(){
-                this.$ajax.get(this.$apis.get_inboundDetail,{
-                    id:'1'
-                }).then(res=>{
+                this.$ajax.get(`${this.$apis.get_inboundDetail}?id=${this.$route.query.id}`).then(res=>{
                     console.log(res)
+                    this.inboundData=res;
                 }).catch(err=>{
 
                 });
             },
+
+
+            //关闭窗口
+            closeWindow(){
+                window.close();
+            }
         },
         created(){
             this.getData();
@@ -159,8 +168,15 @@
         color:#666666;
     }
 
-    .btns{
-        margin-top: 5px;
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
     }
 
     .speInput{

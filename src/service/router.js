@@ -781,6 +781,17 @@ export const routerMap = [
           },
           component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
         },
+        {
+          path: 'qcOverview',
+          name: 'qc Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'qc Overview',
+          },
+          component: () => import('../views/sellerWarehouse/qc/qcOverview'),
+        },
       ]
     },
     {

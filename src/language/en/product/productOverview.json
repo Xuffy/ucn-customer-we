@@ -143,7 +143,6 @@
   "otherPackInfoEn":"other packing information EN",
   "adjustPackage":"adjust SKU and package or not",
 
-
   "cifPrice":"CIF price",
   "cifCurrency":"CIF currency",
   "cifArea":"CIF area",
@@ -151,15 +150,15 @@
   "dduCurrency":"DDU currency",
   "dduArea":"DDU area",
 
-
   "incoterm":"incoterm",
   "incotermArea":"incoterm Area",
   "incotermPrice":"incoterm Price",
 
-
   "compareTime":"Compare Time",
   "compareName":"Compare Name",
   "productName":"Compare Item",
-  "operator":"Operator"
+  "operator":"Operator",
+
+  "categoryName":"Category Name"
 
 }
