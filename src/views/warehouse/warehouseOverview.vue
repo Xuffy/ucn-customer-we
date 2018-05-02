@@ -4,7 +4,7 @@
     <div class="status">
       <div class="btn-wrap">
         <span>Status&nbsp</span>
-        <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
+        <el-radio-group v-model="params.skuInventoryStatusDictCode" size="mini">
           <!--<el-radio-button label=" ">{{($i._baseText.all)}}</el-radio-button>-->
           <el-radio-button label="1"> {{ $i._baseText.waitingQC }}</el-radio-button>
           <el-radio-button label="2">{{($i._baseText.applyRework)}}</el-radio-button>
@@ -90,16 +90,16 @@
           "ownerIds": [
             0
           ],
-          "pn": 10,
-          "ps": 1,
+          "pn": 1,
+          "ps": 10,
           "qcOrderNo": "",
           "skuCode": "",
           "skuInventoryStatusDictCode": 0,
           "sorts": [
             {
               "nativeSql": true,
-              "orderBy": "",
-              "orderType": "",
+              "orderBy": "id",
+              "orderType": "DESC",
               "resultMapId": ""
             }
           ],
@@ -115,7 +115,6 @@
         this.$windowOpen({
           url: '',
           params: {
-            // orderId: item.id.value
           }
         });
       },
@@ -136,37 +135,15 @@
         });
         this.selectedNumber=obj
       },
-      changeStatus() {
-        if(this.params.view==1){
-          this.getdata(this.$db.order.overview)
-        }else{
-          this.getdata(this.$db.order.overviewBysku)
-        }
-      },
-      changeView() {
-        if(this.params.view==1){
-          this.getdata(this.$db.order.overview)
-        }else{
-          this.getdata(this.$db.order.overviewBysku)
-        }
-      },
       inputEnter(val) {
         if (!val.keyType) return this.$message('请选中搜索类型');
         if (!val.key) return this.$message('搜索内容不能为空');
         if (val.keyType == '1') {
           this.params.orderNo = val.key
-          if(this.params.view==1){
-            this.getdata(this.$db.order.overview)
-          }else{
-            this.getdata(this.$db.order.overviewBysku)
-          }
-        } else {
+        } else if (val.keyType == '2'){
           this.params.skuCode = val.key
-          if(this.params.view==1){
-            this.getdata(this.$db.order.overview)
-          }else{
-            this.getdata(this.$db.order.overviewBysku)
-          }
+        }else{
+          this.params.inboundNo = val.key
         }
         this.getdata()
       },
@@ -205,7 +182,9 @@
 
     },
     watch: {
-
+      status(){
+         console.log(1)
+      }
     }
   }
 

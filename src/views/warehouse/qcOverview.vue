@@ -20,7 +20,7 @@
     <div class="fn">
       <div class="btn-wrap">
         <el-button>{{ $i._baseText.downloadall }}</el-button>
-        <el-button>{{ $i._baseText.create }}</el-button>
+        <el-button @click="createQcOrder">{{ $i._baseText.create }}</el-button>
       </div>
     </div>
     <v-table
@@ -42,12 +42,9 @@ import { selectSearch, VTable } from '@/components/index';
                 name:'',
                 value:'',
                 options: [{
-                id: 1,
-                label: 'QC Order No'
-                }, {
-                id: 2,
-                label: 'Order No'
-                }],
+                  id: 1,
+                  label: 'QC Order No'
+                  }],
                 searchLoad:false,
                 params: {
                   pn: 1,
@@ -77,33 +74,29 @@ import { selectSearch, VTable } from '@/components/index';
             getSort(val, key) {
                 console.log(val, key)
             },
-            inputEnter(){
-
+            inputEnter(val) {
+              if (!val.keyType) return this.$message('请选中搜索类型');
+              if (!val.key) return this.$message('搜索内容不能为空');
+              if (val.keyType == '1') {
+                this.params.qcOrderNo = val.key
+              }
+              this.getdata()
             },
-
             //获取表格data
             getQcOrderList(){
-              const test ={
-                pn: 1,
-                ps: 10,
-                purchaseId: '',
-                qcOrderNo: "",
-                qcStatusDictCode: "",
-                serviceProviderId: '',
-                sorts: [
-                  {
-                    "nativeSql": true,
-                    "orderBy": "id",
-                    "orderType": "DESC",
-                    "resultMapId": ""
-                  }
-                ]
-              }
               this.$ajax.post(this.$apis.post_qc_page,this.params)
                 .then(res => {
                     this.tabData = this.$getDB(this.$db.qcOrderTable, res.datas);
                     console.log(res)
                 });
+            },
+            createQcOrder(){
+              this.$router.push({
+                path: '/createQc',
+                query: {
+                  id: id
+                }
+              })
             }
 
         },
