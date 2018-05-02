@@ -27,7 +27,6 @@
       <el-menu-item-group>
         <el-menu-item index="2-0" v-show="$store.state.quickLink.draft.show"
                       @click="$router.push($store.state.quickLink.draft)">
-          {{$store.state.quickLink.draft}}
           <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Draft" placement="right">
             <i class="el-icon-edit-outline"></i>
           </el-tooltip>
