@@ -527,6 +527,15 @@ export const routerMap = [
         //   component: () => import('../views/logistic/placeLogisticPlan')
         // },
         {
+          path: 'placeLogisticPlan',
+          name: 'placeLogisticPlan',
+          hidden: true,
+          meta: {
+            name: 'Place Logistic Plan'
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
           path: 'planDetail',
           name: 'logisticPlanDetail',
           hidden: true,
