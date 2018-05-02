@@ -2,7 +2,6 @@ export default {
   // 环境配置
   ENV: {
     local: {
-      LOGIN_URL: 'http://dev.auth.ucnscm.cn/#/?type=1&redirect=',
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
       BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
@@ -30,6 +29,7 @@ export default {
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
 
 
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
       USSO_URL: 'http://dev.usso-facade.ucnholding.com:18100', // sso 服务
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100', // 用户中心
@@ -42,7 +42,6 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     develop: {
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
