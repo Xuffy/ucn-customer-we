@@ -22,16 +22,21 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
+                   <el-button @click='deleted' type='danger'>{{$i._baseText.delete}}</el-button>
+<!--
                     <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
                     <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>
                     <el-button @click='addToCompare'>{{$i._baseText.addToCompare}}</el-button>
                     <el-button @click='supplierProducts'>{{$i._baseText.supplierProducts}}</el-button>
                     <el-button @click='addToBookmark'>{{$i._baseText.addToBookmark}}</el-button>
+-->
                 </div>
+<!--
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">{{$i._baseText.finish}}</el-button>
                     <el-button @click="cancelEdit" type="info">{{$i._baseText.cancel}}</el-button>
                 </div>
+-->
             </div>
         </div>
         <div class="body">
@@ -87,9 +92,9 @@
         data() {
             return {
                 noEdit: true,
-                companyId: Number(this.$route.query.companyId),
+                id: Number(this.$route.query.id),
                 tabName: 'address', //默认打开的tab
-                basicDate: '',
+                basicDate: [],
                 accounts: [],
                 concats: [],
                 address: [],
@@ -102,32 +107,9 @@
             }
         },
         methods: {
-            createInquiry() {
-                this.windowOpen({
-                    url: '/negotiation/createInquiry',
-                    params: {
-                        supplierCode: this.code //供应商信息将被带入
-                    }
-                });
-            },
-            createOrder() {
-                this.windowOpen({
-                    url: '/order/creat',
-                    params: {
-                        supplierCode: this.code //供应商信息将被带入
-                    }
-                });
-            },
-            addToCompare() {
-                this.compareConfig.showCompareList = true;
-            },
-            supplierProducts() {
-                this.windowOpen({
-                    url: '/product/sourcing',
-                    params: {
-                        supplierCode: this.code //供应商信息将被带入
-                    }
-                });
+           
+            deleted(){
+                
             },
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
@@ -152,16 +134,17 @@
             //..................获取数据
             get_data() {
                 this.loading = true
-                this.$ajax.get(this.$apis.get_supplier_id, {
-                        id: this.companyId
+                this.$ajax.post(this.$apis.post_customerDetail, {
+                        id: this.id
                     })
                     .then(res => {
-                        this.code = res.code
-                        this.basicDate = res;
-                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
-                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
-                        this.loading = false
+                    console.log(res)
+//                        this.code = res.code
+//                        this.basicDate = res;
+//                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
+//                        this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
+//                        this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+//                        this.loading = false
                     })
                     .catch((res) => {
                         this.loading = false

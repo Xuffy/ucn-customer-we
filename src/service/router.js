@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
-import {Notification} from 'element-ui';
+import {Notification,Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -843,6 +843,48 @@ export const routerMap = [
           },
           component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
         },
+        {
+          path: 'qcOverview',
+          name: 'qc Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'qc Overview',
+          },
+          component: () => import('../views/sellerWarehouse/qc/qcOverview'),
+        },
+      ]
+    },
+    {
+
+      path: '/customer',
+      component: Layout,
+      meta: {name: 'customer'},
+      redirect: '/customer/overview',
+      noDropdown: true,
+      hidden: false,
+      children: [
+        {
+          path: 'overview',
+          name: 'customerRecycleBin',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/customer/overview.vue')
+        },
+        {
+          path: 'detail',
+          name: 'customerRecycleBinDetail',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/customer/customerDetail.vue')
+        }
       ]
     },
     {
@@ -903,6 +945,7 @@ export const routerMap = [
           path: 'recycleBin',
           name: 'sellerRecycleBin',
           component: () => import('../views/sellerNegotiation/recycleBin')
+
         }
       ]
     },
@@ -916,19 +959,21 @@ let router = new Router({
 
 
 router.beforeResolve((to, from, next) => {
-  let ts = localStore.get('ticket')
+  let ts = localStore.get('token')
     , cacheParam = sessionStore.get('cache_router_param') || []
     , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
     , version;
 
 
+  console.log(to.path, from.path, ts, '*/*/-/*')
   if (to.path !== '/login' || from.path === '/login') {
-    version = localStore.get('version');
+    /*version = localStore.get('version');
 
     if (version !== config.VERSION) { // 版本控制
-      // return next({path: '/login'});
-    } else if (_.isEmpty(ts)) { // 登录验证
-      // return next({path: '/login'});
+      return next({path: '/login'});
+    }*/
+    if (_.isEmpty(ts)) { // 登录验证
+      return next({path: '/login'});
     }
   }
 

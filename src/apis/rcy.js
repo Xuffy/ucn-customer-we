@@ -13,6 +13,9 @@ export default {
     detail_order: ['/order/detail/{id}', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_order_history: ['/order/skuHistory', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_BUYER', 'UPURCHASE_URL'],
+    post_order_skus: ['/order/skus', 'BASE_HCJ', 'UPURCHASE_URL'],
+
+
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS_cgs'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'BASE_CS_cgs'],
@@ -35,4 +38,14 @@ export default {
     post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare', 'BASE_CS_cgs', 'UPURCHASE_URL'],
     post_deleteBookmarks: ['/purchase/supplier/batchDeleteBookmark', 'BASE_CS_cgs', 'UPURCHASE_URL'],
 
+    
+    //customer
+    post_getCustomerList:['/supply/overview','BASE_CS','UPURCHASE_URL'],
+    post_deleteCustomerRemark:['/supply/deleteRemark/{id}','BASE_CS','UPURCHASE_URL'],
+    post_customerDetail:['/supply/{id}','BASE_CS','UPURCHASE_URL'],
+    post_getCustomerListRemark:['/supply/listRemarks/{id}','BASE_CS','UPURCHASE_URL'],
+     post_addCustomerListRemark:['/supply/remark','BASE_CS','UPURCHASE_URL'],
+    post_delete_CustomerRemark:['/supply/deleteRemark/{id}','BASE_CS','UPURCHASE_URL'],
+    post_customerUpdataRmark:['/supply/remark/{id}','BASE_CS','UPURCHASE_URL'],
+    
 }

@@ -3,27 +3,24 @@ export default {
     type: 'text'
   },
   estContainerStuffingDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estCustomsCleanceDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estDepartureDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estArrivalDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estReleaseDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
   },
   estDelivaryDate: {
-    type: 'textDate',
-    disabled: true
+    type: 'textDate'
+  },
+  blNo: {
+    type: 'text'
   }
 }

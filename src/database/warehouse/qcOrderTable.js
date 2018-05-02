@@ -1,14 +1,59 @@
 export default {
-  description: {
-    key: 'operatorName'
+  qcOrderNo: {
+    key: 'qcOrderNo'
   },
-  operationDate: {
-    key: 'operationDt'
+  qcStatus: {
+    key: 'qcStatusDictCode'
   },
-  operater: {
-    key: 'operationContent'
+  qcMethod:{
+    key: 'qcMethodDictCode'
   },
-  operationType: {
-    key: 'operationType'
-  }
+  surveyor: {
+    key: 'surveyor'
+  },
+  factoryAddress: {
+    key: 'factoryAddress'
+  },
+  factoryContactPhone: {
+    key: 'factoryContactPhone'
+  },
+  remark: {
+    key: 'remark'
+  },
+  qualifiedProductsTotalCTNS: {
+    key: ''
+  },
+  qualifiedProductsTotalQTYS: {
+    key: ''
+  },
+  qualifiedProductsTotalCBM: {
+    key: ''
+  },
+  qualifiedProductTotalNW: {
+    key: ''
+  },
+  qualifiedProductTotalGW: {
+    key: ''
+  },
+  unqualifiedProductsQTY: {
+    key: ''
+  },
+  unqualifiedProductTotalCTNS: {
+    key: ''
+  },
+  unqualifiedProductTotalNW: {
+    key: ''
+  },
+  unqualifiedProductsTotalCBM: {
+    key: ''
+  },
+  unqualifiedProductTotalGW: {
+    key: ''
+  },
+  quantityOfSKU: {
+    key: ''
+  },
+  checkOuterCartons: {
+    key: ''
+  },
 }

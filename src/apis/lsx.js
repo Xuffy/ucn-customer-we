@@ -1,4 +1,5 @@
 export default {
+    get_productCategory:['/purchase/sys/category','BASE_CS1','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_CS','USUPPLY_URL'],
     delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
     change_productStatus: ['/sku/{id}/status', 'BASE_CS','USUPPLY_URL'],
@@ -66,8 +67,11 @@ export default {
      * seller warehouse
      * */
     get_inboundData:['/inbound/page','BASE_SELLER','USUPPLY_URL'],
-    get_productInfo:['/order/skuListPage','BASE_TEST','USUPPLY_URL'],
+    get_productInfo:['/order/skuListPage','BASE_BUYER','USUPPLY_URL'],
     get_inboundDetail:['/inbound/getById','BASE_SELLER','USUPPLY_URL'],
     add_inbound:['/inbound/add','BASE_SELLER','USUPPLY_URL'],
     // get_productInfo:['/order/skuListPage','BASE_BUYER'],
+    get_warehouseOrderData:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
+    get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
+    get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELLER','USUPPLY_URL'],
 }

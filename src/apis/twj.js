@@ -25,5 +25,8 @@ export default {
   POST_CODE_PART: ['/code/part', 'BASE_JML','UMETA_URL'],
   GET_COUNTRY_ALL: ['/country/all', 'BASE_JML','UMETA_URL'],
 
+  //warehouse
+  post_warehouse_page: ['/warehouse/overview/page','UWAREHOUSE_URL']
+
 
 }

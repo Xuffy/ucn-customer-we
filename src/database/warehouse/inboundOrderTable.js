@@ -1,6 +1,13 @@
 export default {
+    /**
+     * 需要隐藏的字段
+     * */
+    id:{
+        _hide:true
+    },
+
     orderNo:{
-        key:'orderNo'
+        key:'orderNo',
     },
     skuBarCode:{
         key:'skuBarCode',
@@ -38,4 +45,18 @@ export default {
     skuInnerCartonVolume:{
         key:'skuInnerCartonVolume'
     },
+
+
+
+    /**
+     * 需要传递的字段
+     * */
+    customerNo:{
+        key:'skuCustomsCode',
+        _hide:true
+    },
+    customerOrderNo:{
+        key:''
+    },
+
 }

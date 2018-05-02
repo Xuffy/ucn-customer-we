@@ -68,9 +68,8 @@
             <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
         </div>
         <div class="footer">
-
-
             <v-table
+                    :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
@@ -162,6 +161,9 @@
                 disabledDownload:true,
                 disabledRecover:true,
                 disabledClickRecover:false,     //是否让recover按钮不能点
+
+                //表格加载状态
+                loadingTable:false,
 
                 //btn加载状态
                 disableClickAddBookmark:false,
@@ -272,6 +274,7 @@
 
                 if(this.type==='recycle'){
                     this.productForm.recycle=true;
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
@@ -294,10 +297,13 @@
                                 })
                             })
                         }
+                        this.loadingTable=false;
                     }).catch(err=>{
                         this.disabledSearch=false;
+                        this.loadingTable=false;
                     });
                 }else{
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductList,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
@@ -309,8 +315,10 @@
                         });
                         this.disabledSearch=false;
                         this.selectList=[];
+                        this.loadingTable=false;
                     }).catch(err=>{
                         this.disabledSearch=false;
+                        this.loadingTable=false;
                     });
                 }
             },

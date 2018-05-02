@@ -183,7 +183,6 @@ export default {
         getUserProfile(){
             this.$ajax.get(this.$apis.get_user_profile)
             .then(res => {
-                console.log(res)
                 this.form = res
             })
         },
@@ -195,7 +194,6 @@ export default {
                 birthday: this.form.birthday,
                 lang: this.form.lang
             }
-            console.log(params)
             this.$ajax.put(this.$apis.put_user_profile,params)
             .then(res => {
                 this.$message({

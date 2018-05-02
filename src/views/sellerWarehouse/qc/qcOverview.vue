@@ -1,19 +1,14 @@
 <template>
     <div class="inbound-overview">
-        <div class="title">
-            <span>{{$i._warehouse.warehouseOverview}}</span>
-        </div>
+        <!--<div class="title">-->
+            <!--<span>{{$i._warehouse.inboundOverview}}</span>-->
+        <!--</div>-->
         <div class="body">
             <div class="head">
                 <span>{{$i._warehouse.status}}</span>
-                <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
-                    <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="1">待验货</el-radio-button>
-                    <el-radio-button label="2">申请返工</el-radio-button>
-                    <el-radio-button label="3">确认返工</el-radio-button>
-                    <el-radio-button label="4">申请退货</el-radio-button>
-                    <el-radio-button label="5">确认退货</el-radio-button>
-                    <el-radio-button label="6">已确认</el-radio-button>
+                <el-radio-group class="radioGroup" @change="changeStatus" v-model="qcOrderStatus" size="mini">
+                    <el-radio-button label="0">待验货</el-radio-button>
+                    <el-radio-button label="1">已验货</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -24,7 +19,6 @@
             <div class="section">
                 <div class="btns">
                     <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
                         :data="tableDataList"
@@ -42,7 +36,7 @@
     import selectSearch from '@/components/common/fnCompon/selectSearch'
 
     export default {
-        name: "warehouseOverview",
+        name: "qcOverview",
         components:{
             selectSearch,
             VTable
@@ -52,50 +46,35 @@
                 /**
                  * 页面基本配置
                  * */
-                inboundStatus:'0',
+                qcOrderStatus:'0',
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
-                warehouseConfig:{
-                    inboundNo: "",
-                    // operatorFilters: [
-                    //     {
-                    //         columnName: "",
-                    //         operator: "",
-                    //         property: "",
-                    //         resultMapId: "",
-                    //         value: {}
-                    //     }
-                    // ],
-                    orderNo: "",
-                    outboundNo: "",
-                    ownerIds: [1],
+                qcOrderConfig:{
                     pn: 1,
                     ps: 50,
-                    qcOrderNo: "",
-                    skuCode: "",
-                    skuInventoryStatusDictCode: 0,
+                    purchaseId: null,
+                    qcOrderNo: '',
+                    qcStatusDictCode: '',
                     // sorts: [
                     //     {
-                    //         orderBy: "",
-                    //         orderType: "",
+                    //         orderBy: "string",
+                    //         orderType: "string",
                     //     }
                     // ],
                 },
-
                 searchId:1,
-
                 searchOptions:[
                     {
-                        label:'订单号',
+                        label:'验货单号',
                         id:1
                     },
                     {
-                        label:'供应商货号',
+                        label:'入库单号',
                         id:2
                     },
                     {
-                        label:'入库单号',
+                        label:'订单号',
                         id:3
                     },
                 ]
@@ -114,7 +93,7 @@
 
             //获取表格数据
             getInboundData(){
-                this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
+                this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
                     console.log(res)
                     // this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
                     //     e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -127,12 +106,6 @@
                 });
             },
 
-            //新建入库单
-            createInbound(){
-                this.$windowOpen({
-                    url:'/sellerWarehouse/createInbound'
-                });
-            },
 
             searchInbound(e){
                 this.inboundConfig.inboundNo=e.key;
@@ -179,12 +152,9 @@
     .radioGroup{
         margin-left: 10px;
     }
-    .head{
-        padding: 10px 0;
-    }
+
     .head .search{
         float: right;
-
     }
     .section{
         margin-top: 10px;

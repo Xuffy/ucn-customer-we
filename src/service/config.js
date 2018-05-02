@@ -4,11 +4,12 @@ export default {
     local: {
       BASE_CS: 'http://192.168.51.33:11003',
       //BASE_CS1: 'http://192.168.51.33:11007',
-      //BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com',
+      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
+      // BASE_CS1: 'http://192.168.51.33:11007',
+      // BASE_CS1: 'http://192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
-      BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:80',
+      BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_JY: 'http://192.168.51.198:18002',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_LYF: 'http://dev.uuser-facade.ucnholding.com',
@@ -16,7 +17,7 @@ export default {
       BASE_JML2: 'http://dev.umessage-facade.ucnholding.com',
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       BASE_HSM: 'http://dev.uwarehouse.ucnholding.com:18100',
-      BASE_LJ: 'http://http://dev.upurchase-facade.ucnholding.com:18100',
+      BASE_LJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_dictionary: 'http://dev.umeta-facade.ucnholding.com',
       BASE_BJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_SELLER: 'http://dev.usupply-facade.ucnholding.com:18100',
@@ -27,6 +28,7 @@ export default {
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
 
 
+      LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
       USSO_URL: 'http://dev.usso-facade.ucnholding.com:18100', // sso 服务
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100', // 用户中心
@@ -39,7 +41,6 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     develop: {
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端

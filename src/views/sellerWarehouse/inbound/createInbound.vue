@@ -72,11 +72,11 @@
         </div>
         <div class="btns">
             <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
-            <el-button type="danger">{{$i._warehouse.removeProduct}}</el-button>
+            <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
         <v-table
                 v-loading="loadingProductTable"
-                :data="productTableData"
+                :data="productData"
                 @change-checked="changeProductChecked"></v-table>
 
 
@@ -117,17 +117,8 @@
 
         <div class="footBtn">
             <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i._warehouse.submit}}</el-button>
-            <el-button :loading="disabledSubmit">{{$i._warehouse.cancel}}</el-button>
+            <el-button @click="cancel">{{$i._warehouse.cancel}}</el-button>
         </div>
-
-
-
-
-
-
-
-
-
 
         <el-dialog
                 title="Add Product From Order"
@@ -163,7 +154,6 @@
                 <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i._warehouse.clear}}</el-button>
             </div>
 
-
             <v-table
                     v-loading="loadingTable"
                     :data="tableDataList"
@@ -193,6 +183,7 @@
                  * 页面基础配置
                  * */
                 labelPosition:'right',
+                disableRemoveProduct:true,
                 disabledSubmit:false,
                 pickerOptions1: {
                     disabledDate(time) {
@@ -221,7 +212,17 @@
                 },
                 addOrderDialogVisible:false,
                 productTableData:[],
+                selectProductList:[],
                 loadingProductTable:false,
+
+                /**
+                 * 外部展示数据
+                 * */
+                productIds:[],                  //用于存储用于外部展示的产品ID
+                productData:[],                 //添加到外部用于展示的产品详细信息
+
+
+
                 inboundData:{
                     inboundNo:'',       //新建的时候不传
                     inboundDate:'',
@@ -279,6 +280,7 @@
         methods:{
             //新增产品
             addProduct(){
+                //先把在外部的数据的id取出来，拿到内部去对比
                 this.selectList=[];
                 this.addOrderDialogVisible=true;
                 this.loadingTable=true;
@@ -287,6 +289,15 @@
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_productInfo,this.orderProduct).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundOrderTable, res.datas);
+                    // this.productTableData.forEach(v=>{
+                    //     this.tableDataList.forEach(m=>{
+                    //         if(v.id.value===m.id.value){
+                    //             m._disabled=true;
+                    //             m._checked=true;
+                    //         }
+                    //     });
+                    // });
+
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
                     this.loadingTable=false;
@@ -297,22 +308,48 @@
                 });
             },
 
-            //改变product table选中状态时触发的事件
-            changeProductChecked(){
-
+            //移除产品
+            removeProduct(){
+                this.$confirm('确定移除产品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.productTableData=_.difference(this.productTableData,this.selectProductList);
+                    this.disableRemoveProduct=true;
+                    this.$message({
+                        type: 'success',
+                        message: '移除成功!'
+                    });
+                }).catch(() => {
+                });
             },
 
-
+            //改变product table选中状态时触发的事件
+            changeProductChecked(e){
+                this.selectProductList=e;
+            },
 
             //提交表单
             submit(){
-                console.log(this.inboundData)
-                // this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
-                //     console.log(res)
-                // }).catch(err=>{
-                //
-                // });
+                this.disabledSubmit=true;
+                this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
+                    this.disabledSubmit=false;
+                    this.$message({
+                        message: '新增成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/sellerWarehouse/inbound');
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
             },
+
+            cancel(){
+                window.close();
+            },
+
+
 
 
 
@@ -341,12 +378,37 @@
                 this.selectList=e;
             },
             postData(){
-                console.log(this.selectList)
+                let arr=this.$copyArr(this.selectList);
+                arr.forEach(v=>{
+                    if(v._checked && !v._disabled){
+                        v._checked=false;
+                        v._disabled=false;
+                        this.productIds.push(v);
+                    }
+                });
+
+                this.$ajax.post(this.$apis.get_skuListByIds,[12]).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+
+                });
+
+                console.log(this.productIds)
+                this.addOrderDialogVisible=false;
             },
         },
         created(){
-            console.log(this.$db)
+
         },
+        watch:{
+            selectProductList(n){
+                if(n.length>0){
+                    this.disableRemoveProduct=false;
+                }else{
+                    this.disableRemoveProduct=true;
+                }
+            }
+        }
     }
 </script>
 

@@ -552,7 +552,8 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
+                console.log(1234)
+                this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
                     this.dropData=res;
                 }).catch(err=>{
                     console.log(err)
