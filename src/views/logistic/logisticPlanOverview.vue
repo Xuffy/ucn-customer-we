@@ -39,7 +39,7 @@
     :loading="tableLoading"
     ref="tab"
     />
-    <v-pagination :page-data="pageObj" @size-change="pageChange"/>
+    <v-pagination :page-data="pageObj" @page-size-change="sizeChange" @page-change="pageChange"/>
 </div>
 </template>
 <script>
@@ -51,6 +51,10 @@ export default {
       pageObj: {},
       tableLoading: true,
       ls_plan: [],
+      pageParams: {
+        pn: 1,
+        ps: 10
+      },
       totalCount: 0,
       selectCount: [],
       fillterArr: [],
@@ -102,6 +106,9 @@ export default {
     action () {
       console.log(123)
     },
+    sizeChange (e) {
+      console.log(e)
+    },
     pageChange (e) {
       console.log(e)
     },
@@ -118,9 +125,7 @@ export default {
     },
     getPlanList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.gei_plan_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
-        this.pageObj = res
-        console.log(this.pageObj)
+      this.$ajax.post(this.$apis.gei_plan_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
@@ -128,12 +133,13 @@ export default {
             return val
           })
         })
+        this.pageObj = res
         this.tableLoading = false
       })
     },
     getTransportationList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.get_transportation_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
+      this.$ajax.post(this.$apis.get_transportation_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
@@ -141,12 +147,13 @@ export default {
             return val
           })
         })
+        this.pageObj = res
         this.tableLoading = false
       })
     },
     getSKUList () {
       this.tableLoading = true
-      this.$ajax.post(this.$apis.get_SKU_list, {pn: 1, ps: 10, lgStatus: this.fillterArr}).then(res => {
+      this.$ajax.post(this.$apis.get_SKU_list, {lgStatus: this.fillterArr, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {
@@ -154,6 +161,7 @@ export default {
             return val
           })
         })
+        this.pageObj = res
         this.tableLoading = false
       })
     }
