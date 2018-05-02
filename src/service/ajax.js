@@ -17,7 +17,7 @@ const axios = Axios.create({
   timeout: _config.TIMEOUT,
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
-    'U-Session-Token':'e682431b-15fb-43fa-956f-23b665379175',
+    'U-Session-Token':'b3551677-5c47-46ed-bbab-a360a86d2a95'
   },
   transformRequest: [function (data) {
     return data;
@@ -81,7 +81,7 @@ const $ajax = (config) => {
       options.data = JSON.stringify(options.data);
     }
 
-    if (!config._noAuth) {
+    if (!config._noAuth && _config.AUTH) {
       options.headers['U-Session-Token'] = t;
     }
     return [options, config]
@@ -207,7 +207,7 @@ NProgress.configure({
 axios.interceptors.request.use(config => {
   NProgress.start();
 
-  if (!config.headers['U-Session-Token'] && !config._noAuth) {
+  if (!config.headers['U-Session-Token'] && !config._noAuth && _config.AUTH) {
     Message({
       message: '登录失效，请重新登录',
       type: 'warning',

@@ -16,67 +16,6 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
-      path: '/sellerSellerSettings',
-      name: 'sellerSellerSettings',
-      component: Layout,
-      redirect: '/sellerSellerSettings/CategorySetting',
-      meta: {
-        name: 'Settings',
-      },
-      children:[
-        {
-          path: 'CategorySetting',
-          name: 'CategorySetting',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerSettings/CategorySetting'),
-        }
-      ]
-    },
-    {
-      path: '/sellerNegotiation',
-      name: 'sellerNegotiation',
-      component: Layout,
-      redirect: '/sellerNegotiation/CategorySetting',
-      meta: {
-        name: 'sellerNegotiation',
-      },
-      children:[
-        {
-          path: 'sellerNegotiationInquiry',
-          name: 'sellerNegotiationInquiry',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerNegotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'sellerNegotiationInquiryDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Inquiry Detail',
-            messageBoard: 'code'
-          },
-          component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'draft',
-          name: 'sellerDraft',
-          component: () => import('../views/sellerNegotiation/draft')
-        },
-        {
-          path: 'recycleBin',
-          name: 'sellerRecycleBin',
-          component: () => import('../views/sellerNegotiation/recycleBin')
-        }
-      ]
-    },
-    {
       path: '/login',
       hidden: true,
       component: () => import('../views/login/index.vue')
@@ -346,7 +285,7 @@ export const routerMap = [
           component: () => import('../views/negotiation/compare')
         },
         {
-          path:'draft/:type',
+          path: 'draft/:type',
           name: 'negotiationDraft',
           hidden: true,
           meta: {
@@ -434,7 +373,7 @@ export const routerMap = [
           component: () => import('../views/order/draftOverview.vue')
         }, {
           path: 'recycleBin',
-          name: 'recycleBin',
+          name: 'orderRecycleBin',
           meta: {
             draft: true,
             recycleBin: true,
@@ -512,7 +451,29 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Plan Overview'
+            name: 'planOverview'
+          },
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'loadingList',
+          name: 'loadingList',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'loadingList'
+          },
+          component: () => import('../views/logistic/logisticPlanOverview')
+        },
+        {
+          path: 'draft',
+          name: 'logisticDraft',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'logisticDraft'
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -832,7 +793,97 @@ export const routerMap = [
           component: () => import('../views/sellerWarehouse/qc/qcOverview'),
         },
       ]
-    }
+    },
+    {
+
+      path: '/customer',
+      component: Layout,
+      meta: {name: 'customer'},
+      redirect: '/customer/overview',
+      noDropdown: true,
+      hidden: false,
+      children: [
+        {
+          path: 'overview',
+          name: 'recycleBin',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/customer/overview.vue')
+        },
+          {
+          path: 'detail',
+          name: 'recycleBin',
+          meta: {
+            draft: false,
+            recycleBin: false,
+            log: false,
+          },
+          component: () => import('../views/customer/customerDetail.vue')}
+          ]},
+     { path: '/sellerSellerSettings',
+      name: 'sellerSellerSettings',
+      component: Layout,
+      redirect: '/sellerSellerSettings/CategorySetting',
+      meta: {
+        name: 'Settings',
+      },
+      children: [
+        {
+          path: 'CategorySetting',
+          name: 'CategorySetting',
+          meta: {
+            name: 'Category setting',
+          },
+          component: () => import('../views/sellerSettings/CategorySetting'),
+        }
+      ]
+    },
+    {
+      path: '/sellerNegotiation',
+      name: 'sellerNegotiation',
+      component: Layout,
+      redirect: '/sellerNegotiation/CategorySetting',
+      meta: {
+        name: 'sellerNegotiation',
+      },
+      children: [
+        {
+          path: 'sellerNegotiationInquiry',
+          name: 'sellerNegotiationInquiry',
+          meta: {
+            name: 'Category setting',
+          },
+          component: () => import('../views/sellerNegotiation/inquiryOverview')
+        },
+        {
+          path: 'inquiryDetail',
+          name: 'sellerNegotiationInquiryDetail',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Inquiry Detail',
+            messageBoard: 'code'
+          },
+          component: () => import('../views/sellerNegotiation/inquiryDetail')
+        },
+        {
+          path: 'draft',
+          name: 'sellerDraft',
+          component: () => import('../views/sellerNegotiation/draft')
+        },
+        {
+          path: 'recycleBin',
+          name: 'sellerRecycleBin',
+          component: () => import('../views/sellerNegotiation/recycleBin')
+
+        }
+      ]
+    },
   ]
 ;
 

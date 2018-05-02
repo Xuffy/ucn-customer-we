@@ -14,7 +14,7 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.download }}({{ 'all' }})</el-button>
+        <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
         <el-button>{{ $i.placeLogisticPlan }}</el-button>
         <el-button type="danger" :disabled="true">{{ $i.delete }}</el-button>
       </div>
@@ -37,7 +37,7 @@
     @action="action"
     @change-checked="changeChecked"
     @page-change="pageChange"
-    :loading="false"
+    :loading="!tabData.length"
     ref="tab"
     />
 </div>
@@ -48,7 +48,8 @@ export default {
   name:'logisticPlanOverview',
   data () {
     return {
-      // tabLoad: false,
+      totalCount: 0,
+      selectCount: [],
       fillterArr: [],
       tabColumn: [],
       tabData: [],
@@ -69,12 +70,17 @@ export default {
       ]
     }
   },
+  computed: {
+    pageName () {
+      return this.$route.meta.name
+    }
+  },
   components: {
     selectSearch,
     VTable
   },
   mounted () {
-    this.getDictionary()
+    // this.getDictionary()
     this.viewByChange(this.viewBy)
   },
   watch: {
@@ -86,8 +92,8 @@ export default {
     handleCheckedLabelChange () {
       console.log(this.fillterArr)
     },
-    changeChecked () {
-      // console.log('aaa')
+    changeChecked (arr) {
+      this.selectCount = arr
     },
     action () {
       console.log(123)
@@ -105,6 +111,7 @@ export default {
     },
     getPlanList () {
       this.$ajax.post(this.$apis.gei_plan_list, {pn: 1, ps: 10}).then(res => {
+        this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
@@ -115,7 +122,8 @@ export default {
     },
     getTransportationList () {
       this.$ajax.post(this.$apis.get_transportation_list, {pn: 1, ps: 10}).then(res => {
-        this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
+        this.totalCount = res.tc
+        this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
             return val
@@ -125,7 +133,8 @@ export default {
     },
     getSKUList () {
       this.$ajax.post(this.$apis.get_SKU_list, {pn: 1, ps: 10}).then(res => {
-        this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
+        this.totalCount = res.tc
+        this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {
             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
             return val

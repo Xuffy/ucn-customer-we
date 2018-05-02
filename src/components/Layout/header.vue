@@ -38,9 +38,10 @@
 
         </el-menu>
       </div>
+
       <div class="header-right" style="color: #999999!important;">
         <div class="message-box" v-popover:messageBox>
-          <el-badge :value="3">
+          <el-badge :value="message.list.length">
             <i class="el-icon-bell"></i>
           </el-badge>
 
@@ -51,77 +52,27 @@
             width="300"
             v-model="message.show"
             trigger="click">
-            <h3 class="ucn-content-title">System Message（4 New ）</h3>
-            <ul class="list">
-              <li class="unread">
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-              <li>
-                <p>The system will be updated at 12:00 today</p>
-                <span>1 hour ago</span>
-              </li>
-            </ul>
-            <el-row>
-              <el-col :span="12" style="text-align: left;padding: 5px 10px">
-                <el-button type="text" size="mini">Mark as readed</el-button>
-              </el-col>
-              <el-col :span="12" style="text-align: right;padding: 5px 10px">
-                <el-button type="text" size="mini" @click="goMessage">More</el-button>
-              </el-col>
-            </el-row>
+            <div v-loading="message.loading">
+              <h3 class="ucn-content-title">System Message（{{message.list.length}} New ）</h3>
+              <ul class="list" v-if="message.list.length">
+                <li class="unread" v-for="item in message.list">
+                  <p v-text="item.content"></p>
+                  <span v-text="$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')"></span>
+                </li>
+              </ul>
+              <div v-else style="color: #999999;height: 100px;width: 100%;text-align: center;line-height: 100px">
+                暂无最新消息
+              </div>
+              <el-row>
+                <el-col :span="12" style="text-align: left;padding: 5px 10px">
+                  <el-button type="text" size="mini" @click="readMessage" v-if="message.list.length">Mark as readed
+                  </el-button>
+                </el-col>
+                <el-col :span="12" style="text-align: right;padding: 5px 10px">
+                  <el-button type="text" size="mini" @click="goMessage">More</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </el-popover>
         </div>
 
@@ -162,9 +113,19 @@
         activeName: null,
         activeOpen: [],
         message: {
-          show: false
+          show: false,
+          list: [],
+          loading: false,
         },
-
+      }
+    },
+    watch: {
+      $route() {
+        this.updateMenuActive();
+        this.getMessage();
+      },
+      'message.show'(val) {
+        val && this.getMessage();
       }
     },
     created() {
@@ -184,6 +145,8 @@
       });
 
       this.updateMenuActive()
+
+      this.getMessage();
     },
     methods: {
       logout() {
@@ -230,13 +193,38 @@
         }
 
         return _.indexOf(param, user.userType) !== -1;
+      },
+      getMessage() {
+        this.message.loading = true;
+        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
+          .then(data => {
+            this.message.list = data || [];
+          })
+          .finally(() => {
+            this.message.loading = false;
+          });
+      },
+      readMessage() {
+        let list = [];
+        if (_.isEmpty(this.message.list)) return false;
+
+
+        this.message.loading = true;
+
+
+        _.map(this.message.list, val => {
+          let {id, type} = val;
+          list.push({id, type});
+        });
+        this.$ajax.post(this.$apis.UNREADMESSAGE_UPDATEUNREAD, list)
+          .then(() => {
+            this.getMessage();
+          })
+          .finally(() => {
+            this.message.loading = false;
+          });
       }
     },
-    watch: {
-      $route() {
-        this.updateMenuActive()
-      }
-    }
   }
 </script>
 

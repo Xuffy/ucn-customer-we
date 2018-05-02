@@ -48,11 +48,14 @@
 <!--      搜索结果  -->
             <div v-show='isButton'>
              <div class="btnline">
+<!--
                   <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectNumber.length}})</el-button>
                   <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}</el-button>
                   <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectNumber.length}})</el-button>
                   <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i._baseText.addToBookmark}}({{selectNumber.length}})</el-button>
+-->
                   <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.delete}}({{selectNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -90,13 +93,13 @@
             VTable
         },
         props: {
-            isButton:{
-                type:Boolean,
-                default:true
+            isButton: {
+                type: Boolean,
+                default: true
             },
-             disabledLine:{
-                type:Array,
-                default:function () {
+            disabledLine: {
+                type: Array,
+                default: function() {
                     return []
                 }
             },
@@ -110,15 +113,20 @@
                 pageTotal: "",
                 endpn: "",
                 parms: {
-                    conditions: {},
-                    description: "",
-                    mainBusiness: [],
-                    name: '',
-                    pn: 1,
-                    ps: 10,
-                    skuCode: "",
-                    skuNameEn: "",
-                    type: ''
+                    "city": "",
+                    "companyId": '',
+                    "country": "",
+                    "incoterm": '',
+                    "name": "",
+                    "payment": '',
+                    "pn": 1,
+                    "ps": 10,
+                    //                    "sorts": [{
+                    //                        "nativeSql": true,
+                    //                        "orderBy": "string",
+                    //                        "orderType": "string",
+                    //                        "resultMapId": "string"
+                    //                    }],
                 },
                 tabData: [],
                 selectedData: [],
@@ -143,8 +151,8 @@
                 this.parms.mainBusiness = ''
             },
             //当作为主键时
-            emitData(){
-                this.$emit('handleOkClick',this.selectedData)
+            emitData() {
+                this.$emit('handleOkClick', this.selectedData)
             },
             //搜查
             search() {
@@ -164,30 +172,31 @@
                 });
             },
             //........compare
-          compare() {
-                let id='';
-                this.selectedData.forEach((v,k)=>{
-                    let item=_.findWhere(v,{key:'id'});
-                    if(k===this.selectedData.length-1){
-                        id+=item.value;
-                    }else{
-                        id+=(item.value+',');
+            compare() {
+                let id = '';
+                this.selectedData.forEach((v, k) => {
+                    let item = _.findWhere(v, {
+                        key: 'id'
+                    });
+                    if (k === this.selectedData.length - 1) {
+                        id += item.value;
+                    } else {
+                        id += (item.value + ',');
                     }
                 });
                 this.$windowOpen({
-                    url:'/supplier/compareDetail/{type}',
-                    params:{
-                        type:'new',
-                        id:id,
+                    url: '/supplier/compareDetail/{type}',
+                    params: {
+                        type: 'new',
+                        id: id,
                     }
                 });
             },
             //...........进入detail
             detail(item) {
                 this.$windowOpen({
-                    url: '/supplier/sourcingDetail',
+                    url: '/customer/detail',
                     params: {
-                        companyId: item.companyId.value,
                         id: item.id.value
                     }
 
@@ -206,23 +215,28 @@
             //.....拿数据
             get_data() {
                 this.loading = true
-                this.$ajax.post(this.$apis.get_listSupplier, this.parms)
+                this.$ajax.post(this.$apis.post_getCustomerList, this.parms)
                     .then(res => {
+                        console.log(res);
                         this.pageTotal = res.datas.tc
                         this.endpn = res.datas.end
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
-                        if(this.disabledLine.length>0){
-                            this.disabledLine.forEach(v=>{
-                                let id=_.findWhere(v,{key:'id'}).value;
-                                this.tabData.forEach(m=>{
-                                    let newId=_.findWhere(m,{key:'id'}).value;
-                                    if(id===newId){
-                                        m._disabled=true;
-                                    }
-                                })
-                            })
-                        }
+                        //                        if (this.disabledLine.length > 0) {
+                        //                            this.disabledLine.forEach(v => {
+                        //                                let id = _.findWhere(v, {
+                        //                                    key: 'id'
+                        //                                }).value;
+                        //                                this.tabData.forEach(m => {
+                        //                                    let newId = _.findWhere(m, {
+                        //                                        key: 'id'
+                        //                                    }).value;
+                        //                                    if (id === newId) {
+                        //                                        m._disabled = true;
+                        //                                    }
+                        //                                })
+                        //                            })
+                        //                        }
                     })
                     .catch((res) => {
                         this.loading = false
@@ -266,7 +280,7 @@
         height: 32px;
         line-height: 32px;
         color: #666666;
-       
+
     }
 
     .title-btn {

@@ -70,6 +70,11 @@
     "inquiryDraft": "Inquiry draft",
     "inquiryRecycleBin": "Inquiry recycle bin",
     "recover": "Recover",
-    "compareRecycleBin": "Compare recycle bin"
+    "compareRecycleBin": "Compare recycle bin",
+    "applyRework": "Apply rework",
+    "confirmedRework": "Confirmed rework",
+    "applyReturn": "Apply return",
+    "confirmedReturn": "Confirmed return",
+    "confirmed": "Confirmed"
 }
 

@@ -36,10 +36,10 @@
           <span v-else>{{ scope.row.skuNameEn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameCn" width="160" align="center" sortable>
+      <el-table-column :label="$i.skuNameCN" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.skuNameCn.value" v-if="scope.row.skuNameCn.edit"></el-input>
-          <span v-else>{{ scope.row.skuNameCn.value }}</span>
+          <el-input placeholder="请输入内容" v-model="scope.row.skuNameCN.value" v-if="scope.row.skuNameCN.edit"></el-input>
+          <span v-else>{{ scope.row.skuNameCN.value }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.productDescription" width="160" align="center" sortable>

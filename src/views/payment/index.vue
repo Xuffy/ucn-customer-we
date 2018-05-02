@@ -134,7 +134,7 @@
                 console.log(val);
             },
             getList(item){
-              console.log(item)
+              console.log()
                 this.tabLoad = true;
                 if(item){
                     const params ={
