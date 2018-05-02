@@ -67,7 +67,7 @@ export default {
   }[process.env.NODE_ENV],
 
   // 是否开启token验证
-  AUTH: false,
+  AUTH: true,
 
   // 环境标识
   ENV_FLAG: process.env.NODE_ENV,
