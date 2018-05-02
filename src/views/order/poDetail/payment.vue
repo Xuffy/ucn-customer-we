@@ -57,13 +57,14 @@
                                         align="right"
                                         type="date"
                                         placeholder="选择日期"
-                                        value-format="yyyy-MM-dd"
+                                       
                                         :picker-options="pickerOptions1">
                                 </el-date-picker>
+                            
                           </div>
                    
                           <div v-else>
-                                {{scope.row[v.prop]}}   
+                              {{scope.row[v.prop]}}   
                           </div>   
                        
                     </div>
@@ -107,7 +108,7 @@
                             <el-button type="text" :disabled="disabledBtn" @click="cancelSaveNewLine(scope.row)">取消</el-button>
                         </div>
                         <div v-else>
-                            <div v-if="scope.row[columns[11].prop]===10||scope.row[columns[11].prop]===20||scope.row[columns[11].prop]===30">
+                            <div v-if="scope.row[columns[11].prop]===10||scope.row[columns[11].prop]===30">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
@@ -117,7 +118,7 @@
                                     <el-button type="text" :disabled="disabledBtn" @click="confirmLine(scope.row)">确认</el-button>
                                 </div>
                             </div>
-                             <div v-else-if="scope.row[columns[11].prop]===2">
+                             <div v-else-if="scope.row[columns[11].prop]===20">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
                                     <el-button type="text" :disabled="disabledBtn" @click="saveLine(scope.row)">保存</el-button>
@@ -133,14 +134,6 @@
                                 <el-button type="text" :disabled="disabledBtn" @click="recoverLine(scope.row)">恢复</el-button>
                             </div>
                         </div>
-                   
-<!--
-                    <div v-if="type==='simple'">
-                        <div v-if="scope.row[columns[11].prop]!==2">
-                            <el-button type="text"  :disabled="disabledBtn" @click="confirmLine(scope.row)">确认</el-button>
-                        </div>
-                    </div>
--->
                 </template>
 </el-table-column>
 </el-table>
@@ -148,9 +141,9 @@
 </template>
 <script>
     /*
-    10:待采购商确认,20:待供应商确认,30:待服务商确认，4:已确认,5:作废
-     orderType :10 采购订单
-    */
+                                                                                                                                                                                    10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
+                                                                                                                                                                                     orderType :10 采购订单
+                                                                                                                                                                                    */
     export default {
         name: 'payment-table',
         props: {
@@ -161,6 +154,16 @@
             disabledBtn: {
                 type: Boolean,
                 default: false
+            },
+            orderNo: {
+                type: String,
+                default:'999'
+            },
+            currencyCode: {
+                type: String,
+            },
+            payToId: {
+                type: String
             }
         },
         data() {
@@ -263,62 +266,25 @@
                         width: 150
 
                     },
-                   {
-                        label: 'Currency',
+                    {
+                        label: 'currency',
                         prop: 'currency',
                         type: 'Input',
                         width: 150,
-                       belong: "customer",
+                        belong: "customer",  //............
                     },
                     {
                         label: 'Avilable',
-                        prop: 'available',
+                        prop: 'status',
                         type: 'Text'
                     },
                 ],
-                paymentData: [
-//                    {
-//                        paymentNumber: 1512547574887,
-//                        paymentItem: 'QC预付款',
-//                        estPayDate: '2018-02-23', //预计付款时间
-//                        estAmount: 19025, //预计付款金额
-//                        actPayDate: '2018-04-01', //实际付款时间
-//                        actualPayAmount: 12345, //实际付款金额
-//                        estRefundDate: '',
-//                        estRefundAmount: '',
-//                        actRefundDate: '',
-//                        actRefundAmount: '',
-//                        available: 1, //有效性,1:待确认,2:已确认,3:作废
-//                    },
-//                    {
-//                        paymentNumber: 1512547574887,
-//                        paymentItem: 'QC预付款',
-//                        estPayDate: '2018-02-23', //预计付款时间
-//                        estAmount: 19025, //预计付款金额
-//                        actPayDate: '2018-04-01', //实际付款时间
-//                        actualPayAmount: 12345, //实际付款金额
-//                        estRefundDate: '',
-//                        estRefundAmount: '123',
-//                        actRefundDate: '',
-//                        actRefundAmount: '123',
-//                        available: 2, //有效性,1:待确认,2:已确认,3:作废
-//                    },
-//                    {
-//                        paymentNumber: 236987239862,
-//                        paymentItem: 'QC尾款',
-//                        estPayDate: '2018-03-11', //预计付款时间
-//                        estAmount: 6723, //预计付款金额
-//                        actPayDate: '2018-06-01', //实际付款时间
-//                        actualPayAmount: 1351, //实际付款金额
-//                        estRefundDate: '2018-03-11',
-//                        estRefundAmount: 1325456,
-//                        actRefundDate: '2018-03-11',
-//                        actRefundAmount: 213554,
-//                        available: 5, //有效性,1:待确认,2:已确认,3:作废
-//                    },
-                ],
+                paymentData: [ ],
                 //用于备份data
                 copyData: [],
+                orderType: 10,
+                type: '10', //10 付款  20退款
+               
             }
         },
         methods: {
@@ -327,7 +293,7 @@
                 row,
                 rowIndex
             }) {
-                if (row[this.columns[11].prop] === 3) {
+                if (row[this.columns[11].prop] === -1) {
                     return 'warning-row';
                 }
                 return '';
@@ -346,7 +312,7 @@
                         return;
                     } else if (index === 4 || index === 6 || index == 8 || index == 10) {
                         const values = data.map(item => {
-                            if (item[this.columns[11].prop] === 2) {
+                            if (item[this.columns[11].prop] === 40) {
                                 return Number(item[column.property])
                             }
                         });
@@ -372,70 +338,83 @@
 
             //处理顶部按钮点击
             handleClick() {
-                this.disabledBtn = true;
-//                this.$ajax.post(this.$api.paymentGetNo,{}).then(
-//                res=>{
-//                    console.log(res)
-//                }
-//                ).catch(res=>{
-//                    console.log(res)
-//                })
-                this.paymentData.push({
-                    no: 890807,
-                    name: '',
-                    planPayDt: '', //预计付款时间
-                    planPayAmount: 0, //预计付款金额
-                    actualPayDt: '', //实际付款时间
-                    actualPayAmount: 0, //实际付款金额
-                    planRefundDt:'',
-                    planRefundAmount:'',
-                    actualRefundDt:'',
-                    actualRefundAmount:'',
-                    Currency:'',
-                    available: 1, //有效性,1:待确认,2:已确认,3:无效
-                    isNew: true, //新增的数据全部处于新增状态
-                });
-
+                //                this.disabledBtn = true;
+                this.$ajax.post(this.$apis.paymentGetNo, {}).then(
+                    res => {
+                        this.paymentData.push({
+                            no: res,
+                            name: '',
+                            planPayDt: '', //预计付款时间
+                            planPayAmount: '', //预计付款金额
+                            actualPayDt: '', //实际付款时间
+                            actualPayAmount: '', //实际付款金额
+                            type: this.type, //10 付款  20退款
+                            payToId: this.payToId, //order的数据
+                            currencyCode: this.currencyCode,
+                            currency: '', //order的数据
+                            //                            status: 1, //10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
+                            isNew: true, //新增的数据全部处于新增状态
+                        });
+                    }
+                ).catch(res => {
+                    console.log(res)
+                })
             },
 
             //修改一行数据
             changeLine(e) {
                 this.$set(e, 'isEdit', true);
-                // e.isEdit=true;
             },
 
             //作废一行数据
             abandonLine(e) {
-                this.$set(e, 'available', 5);
+                 this.$ajax.post(this.$apis.paymentAbandon, {id:e.id}).then((res) => {
+                       _.map(this.paymentData,(key,value)=>{                         
+                         if(key.no==res.no){
+                              this.paymentData.splice(value,1,res)
+//                               this.$set(e, 'status', -1);
+                         }
+                     })
+                    }).catch((res) => {
+                        console.log(res)
+             })
             },
 
             //恢复一行数据
             recoverLine(e) {
-                this.$set(e, 'available', 1);
+                      this.$ajax.post(this.$apis.paymentRecover, {id:e.id}).then((res) => {
+                       _.map(this.paymentData,(key,value)=>{                         
+                         if(key.no==res.no){
+                              this.paymentData.splice(value,1,res)
+                         }
+                     })
+                    }).catch((res) => {
+                        console.log(res)
+                 })
             },
 
             //保存修改一行数据(调用接口之后也要同步更新copyData)
             saveLine(e) {
                 let targetKey = this.columns[0].prop;
-                //先判断columns的前三个参数都不能为空
-                if (!e[this.columns[1].prop] || !e[this.columns[2].prop] || !e[this.columns[3].prop]) {
-
-                    this.$message.error('XXX不能为空');
-                } else {
-                    this.$set(e, 'isEdit', false);
-                    this.$emit('restoreData', e);
-                    let key;
-                    this.copyData.forEach((v, k) => {
-                        if (v[targetKey] === e[targetKey]) {
-                            key = k;
-                        }
-                    });
-                    this.copyData.splice(key, 1, e);
+                let params={
+                    id:e.id,
+                    name:e.name,
+                    planPayDt:e.planPayDt,
+                    planPayAmount:e.planPayAmount,
+                    actualPayDt:e.actualPayDt,
+                    actualPayAmount:e.actualPayAmount,
+                    version:e.version
                 }
+              this.$ajax.post(this.$apis.paymentUpdata, params).then((res) => {
+                       _.map(this.paymentData,(key,value)=>{                         
+                         if(key.no==res.no){
+                              this.paymentData.splice(value,1,res)
+                         }
+                     })
+                    }).catch((res) => {
+                        console.log(res)
+                    })
 
-
-
-                this.$set(e, 'isEdit', false);
             },
 
             //取消保存一行数据
@@ -453,12 +432,24 @@
 
             //保存新的一行
             saveNewLine(e) {
-                if (!e.estPayDate) {
-                    console.log(e.estPayDate)
+                if (e.planPayDt == '') {
                     this.$message.error('XXX不能为空');
                 } else {
                     this.$set(e, 'isNew', false);
                     this.copyData.push(Object.assign({}, e));
+                    let params = (Object.assign({}, e))
+                    delete params.isNew
+                    params.orderNo = this.orderNo,
+                        params.orderType = 10,
+                        this.$ajax.post(this.$apis.paymentSave, params).then(res => {
+                     _.map(this.paymentData,(key,value)=>{                         
+                         if(key.no==res.no){
+                              this.paymentData.splice(value,1,res)
+                         }
+                     })     
+                        }).catch(res => {
+                            console.log(res)
+                        })
                     this.disabledBtn = false;
                 }
             },
@@ -472,7 +463,13 @@
 
             //确认一行数据(调用接口之后把状态改为已确认即可)
             confirmLine(e) {
-                this.$set(e, 'available', 2);
+                console.log(e.id)
+                this.$ajax.post(this.$apis.paymentAccept,{id:e.id}).then(res=>{
+                    
+                    console.log(res)
+                }).catch(res=>{
+                    console.log(res)
+                })
             },
             //深克隆方法
             copyArr(arr) {
@@ -484,24 +481,31 @@
                     }
                 })
             },
-            get_list(){
-                this.$ajax.post(this.$apis.post_order_paymentlist,{
-                        orderNo:'0004',
-                        orderType:10
-                    }).then((res)=>{
-                    this.paymentData=res.datas
-                        console.log( this.paymentData)
-                    }).catch((res)=>{
+            get_list() {
+                this.$ajax.post(this.$apis.post_order_paymentlist, {
+                    orderNo: this.orderNo,
+                    orderType: this.orderType
+                }).then((res) => {
+                    this.paymentData = res.datas
+                  
+                }).catch((res) => {
                     console.log(res)
-                    })
-                }
+                })
+            }
         },
         created() {
             this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
-            
+
         },
+        watch:{
+            orderNo(val){
+                if(val){
+                     this.get_list()
+                }
+            }
+        }
     }
 
 </script>

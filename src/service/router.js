@@ -181,6 +181,18 @@ export const routerMap = [
           },
           component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
+           {
+          path: 'recycleBin',
+          name: 'supplierRecycleBin',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Bookmark recycleBin'
+          },
+          component: () => import ('../views/supplier/bookmark/recycleBin.vue')
+        },
         {
           path: 'sourcingDetail',
           name: 'supplierSourcingDetail',
