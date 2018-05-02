@@ -119,7 +119,12 @@
             },
 
             btnClick(e){
-                console.log(e)
+                this.$windowOpen({
+                    url:'/sellerWarehouse/inboundDetail',
+                    params:{
+                        id:e.id.value
+                    }
+                })
             },
 
             changeChecked(e){

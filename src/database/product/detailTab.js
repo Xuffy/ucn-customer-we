@@ -149,8 +149,8 @@ export default {
         showType:'input',
         belongTab:'basicInfo',
     },
-    categoryId:{            //分类名称
-        key:'categoryId',
+    categoryName:{            //分类名称
+        key:'categoryName',
         type: 'String',
         showType:'dropdown',
         belongTab:'basicInfo',

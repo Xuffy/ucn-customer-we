@@ -24,7 +24,6 @@ export default {
         showType:'text',
         fullLine:false,                      //是否占一行
     },
-
     incoterm:{
         key:'incoterm',
         type: 'String',
