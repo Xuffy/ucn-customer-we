@@ -1,6 +1,6 @@
 export default {
   //payment
-  post_ledgerPage:['/ledger/page','BASE_BJ','UPURCHASE_URL'],
+  post_ledgerPage:['/ledger/page','BASE_BJ_p','UPURCHASE_URL'],
   //message
   post_companymessage_query:['/companymessage/query','BASE_JML_msg','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','BASE_JML_msg','UMESSAGE_URL'],
@@ -13,7 +13,7 @@ export default {
   get_messagesetting_query:['/messagesetting/query','BASE_JML_msg','UMESSAGE_URL'],
   post_messagesetting_updatesetting:['/messagesetting/updatesetting','BASE_JML_msg','UMESSAGE_URL'],
   //logs
-  post_bizloQuery:['/bizlog/query','BASE_JML_logs','UBIZLOG_URL'],
+  post_bizloQuery:['/bizlog/query','UBIZLOG_URL','UBIZLOG_URL'],
   //Personal Setting
   get_user_profile:['/user/profile','BASE_UUSER','UUSER_URL'],
   put_user_profile:['/user/profile','BASE_UUSER','UUSER_URL'],

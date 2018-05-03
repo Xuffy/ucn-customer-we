@@ -26,6 +26,7 @@ export default {
       BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
       BASE_HSM_W: 'http://192.168.51.248:11001',
+      BASE_BJ_p: 'http://dev.upurchase-facade.ucnholding.com:18300',
 
 
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',

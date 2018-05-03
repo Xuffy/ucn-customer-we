@@ -5,14 +5,14 @@
       <div class="state">
         <span>{{ $i._baseText.qcStatus }}</span>
         <el-radio-group v-model="params.qcStatusDictCode" @change="getQcOrderList">
-          <el-radio-button label="1">{{$i._baseText.waitingQC}}</el-radio-button>
-          <el-radio-button label="2">{{$i._baseText.completedQC}}</el-radio-button>
+          <el-radio-button label="WAITING_QC">{{$i._baseText.waitingQC}}</el-radio-button>
+          <el-radio-button label="COMPLETED_QC">{{$i._baseText.completedQC}}</el-radio-button>
         </el-radio-group>
       </div>
       <div style="float: right">
         <select-search
           :options="options"
-          @inputChange="inputEnter"
+          @inputEnter="inputEnter"
           :searchLoad="searchLoad"
         />
       </div>
@@ -30,16 +30,22 @@
       @action="onAction"
       @change-checked='checked'
     />
+    <v-pagination
+      :page-data.sync="params"
+      @change="handleSizeChange"
+      @size-change="pageSizeChange"
+    />
   </div>
 </template>
 <script>
-import { selectSearch, VTable } from '@/components/index';
+import { selectSearch, VTable ,VPagination} from '@/components/index';
 
     export default {
         name: "qc-overview",
         components:{
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         data(){
             return{
@@ -51,12 +57,15 @@ import { selectSearch, VTable } from '@/components/index';
                 }],
                 searchLoad:false,
                 loading: false,
+                pageTotal: 0,
+                pazeSize: [10, 20, 30, 40, 50, 100],
                 params: {
                   pn: 1,
                   ps: 10,
+                  tc:0,
                   purchaseId: '',
                   qcOrderNo: '',
-                  qcStatusDictCode: 1,
+                  qcStatusDictCode: 'WAITING_QC',
                   serviceProviderId: '',
                   sorts: [
                     {
@@ -73,13 +82,14 @@ import { selectSearch, VTable } from '@/components/index';
             }
         },
         methods:{
-            //获取表格data
-            //table操作
-            pageChange(page) {
-                console.log(page)
-            },
             getSort(val, key) {
                 console.log(val, key)
+            },
+            handleSizeChange(val) {
+              this.params.pn = val;
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
             },
             checked(item) {
               this.selectedDate = item
@@ -90,19 +100,20 @@ import { selectSearch, VTable } from '@/components/index';
               this.selectedNumber=obj
             },
             inputEnter(val) {
+              console.log(val)
               if (!val.keyType) return this.$message('请选中搜索类型');
               if (!val.key) return this.$message('搜索内容不能为空');
               if (val.keyType == '1') {
-                console.log(val)
                 this.params.qcOrderNo = val.key
               }
-              this.getdata()
+              this.getQcOrderList()
             },
             onAction(item, type) {
               //点击后跳转到此验货单详情页面
               this.$windowOpen({
                 url: '',
                 params: {
+
                 }
               });
             },
@@ -121,6 +132,7 @@ import { selectSearch, VTable } from '@/components/index';
               this.$ajax.post(this.$apis.post_qc_page,this.params)
                 .then(res => {
                     this.loading = false
+                    res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                     this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas);
                 })
                 .catch((res) => {

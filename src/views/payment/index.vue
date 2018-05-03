@@ -26,7 +26,7 @@
                     <div class="search">
                         <select-search  class="search"
                                         :options=options
-                                        @inputChange="inputEnter"
+                                        @inputEnter="inputEnter"
                                         :searchLoad="searchLoad"></select-search>
                     </div>
                     <div class="Date">
@@ -67,8 +67,7 @@
 </template>
 <script>
 
-    import selectSearch from '@/components/common/fnCompon/selectSearch';
-    import {VTable,VPagination} from '@/components/common/table/index'
+    import {VTable,VPagination,selectSearch} from '@/components/index'
     export default {
         name:'payment',
         components:{
@@ -78,8 +77,7 @@
         },
         data(){
             return{
-                flag:true,
-                time:1523959983,
+                // flag:true,
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 pageTotal:0,
                 searchLoad: false,
@@ -89,9 +87,6 @@
                 options: [{
                   id: '1',
                   label: 'Order No'
-                }, {
-                  id: '2',
-                  label: 'Order create date',
                 }],
                 params:{
                   conditions: {
@@ -148,20 +143,29 @@
         watch: {
             date(){
                 console.log(this.date)
+              this.params.conditions.orderEntryStartDt = this.date[0]
+              this.params.conditions.orderEntryEndDt = this.date[1]
+              this.getList()
             },
-            params: {
-              handler(val, oldVal) {
-                this.getdata();
-              },
-              deep: true
-            }
+            // params: {
+            //   handler(val, oldVal) {
+            //     this.getList();
+            //   },
+            //   deep: true
+            // }
         },
         methods:{
             onFilterValue(val) {
                 console.log(val);
             },
-            inputEnter(){
-
+            inputEnter(val) {
+              console.log(val)
+              if (!val.keyType) return this.$message('请选中搜索类型');
+              if (!val.key) return this.$message('搜索内容不能为空');
+              if (val.keyType == '1') {
+                this.params.conditions.orderNoLike = val.key
+              }
+              this.getList()
             },
             handleSizeChange(val) {
               this.params.pn = val;
@@ -170,9 +174,7 @@
               this.params.ps = val;
             },
             getList(){
-              console.log()
               this.tabLoad = true;
-              console.log(this.params)
               this.$ajax.post(this.$apis.post_ledgerPage, this.params)
                 .then(res => {
                   res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
@@ -182,7 +184,8 @@
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
                     // this.flag = item.waitPayment.value === 0;
-                    this.$set(this.flag,item.waitPayment.value === 0)
+                    // this.$set(this.flag,item.waitPayment.value === 0)
+
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
@@ -194,15 +197,17 @@
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    if(item.currencyCode.value ==='BTC'){
-                      item._totalRow.label = 'BTC';
-                    }else if(item.currencyCode.value ==='HKD'){
-                      item._totalRow.label = 'HKD';
-                    }else{
-                      item._totalRow.label = 'EUR';
-                    }
+                    // if(item.currencyCode.value ==='BTC'){
+                    //   item._totalRow.label = 'BTC';
+                    // }else if(item.currencyCode.value ==='HKD'){
+                    //   item._totalRow.label = 'HKD';
+                    // }else{
+                    //   item._totalRow.label = 'EUR';
+                    // }
                     return item;
                   });
+
+                  console.log(this.tableDataList)
                 })
                 .catch((res) => {
                   this.tabLoad = false;
