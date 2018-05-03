@@ -74,10 +74,13 @@
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$i._baseText.fromNewSearch" name="FromNewSearch">
                            <v-product                     
-                                :hideBtns="true"
+                               :hideBtns="true"
                                 :hideBtn="true"
                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
+                                :forceUpdateNumber="trig" 
+                                :type="product"
+                                :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
                         <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
@@ -126,7 +129,7 @@
                 tableTatal: [],
                 markAsImportant: true, //底部单选 mark as important
                 hideTheSame: true, //底部单选 Hide The Same
-                hightlightTheDifferent: true, //底选hightlightTheDifferent
+                hightlightTheDifferent: false, //底选hightlightTheDifferent
                 dialogAddproduct: false, //弹窗框 addproduct弹窗区域
                 TabsAddproduct: 'FromNewSearch', //tab
                 statusModify: true, //页面输入框是否可写
@@ -137,7 +140,7 @@
                 orderNo: "", // payment
                 currencyCode: '', // payment
                 payToId: '', // payment
-                orderStatus:'',
+                orderStatus: '',
                 loading: false, //表格加载
                 id_type: '',
                 historyColumn: {},
@@ -149,6 +152,7 @@
                     deleteDetailIds: []
                 },
                 disabledLine: [],
+                trig: 0,
                 tableTatal: []
             }
         },
@@ -163,7 +167,6 @@
             },
             //..............底部cancel
             modifyCancel() { //页面编辑取消
-                console.log(this.productTabData)
                 this.newProductTabData = this.productTabData;
                 this.productCancel();
                 this.statusModify = true;
@@ -172,14 +175,14 @@
                 //                console.log(item, type)
             },
             //........取消订单
-            cancelOrder(){
-                this.$ajax.post(this.$apis.post_cancleOrder,{
-                    ids:[this.orderId]
-                }).then(res=>{
-                   this.$router.push({
-                    path:'/order/overview',
-                });
-                }).catch(res=>{
+            cancelOrder() {
+                this.$ajax.post(this.$apis.post_cancleOrder, {
+                    ids: [this.orderId]
+                }).then(res => {
+                    this.$router.push({
+                        path: '/order/overview',
+                    });
+                }).catch(res => {
                     console.log(res)
                 })
             },
@@ -189,27 +192,29 @@
                         id: this.orderId
                     })
                     .then((res) => {
-                        this.orderStatus=res.status
+
+                        this.orderStatus = res.status
                         //.传递给[payment]组件的数据
                         this.orderNo = res.orderNo
                         this.currencyCode = res.currency
                         this.payToId = res.companyId
-                        
+
+                        this.markAsImportant = res.importantSupplier //importantCustomer端不一样
                         //..........basicinfo
-                        this.$refs.basicinfo.formItem = res;
+                        this.$refs.basicInfo.formItem = res;
                         //..........caculate
                         this.$refs.caculate.caculateForm = res
                         //..........responsibility
                         this.$refs.responsibility.tableData = res.orderResponsibilityList
                         //..........exchangerate
-                        this.$refs.exchange.exchangeRateList = res.exchangeRateList
+                        this.$refs.exchangeList.exchangeRateList = res.exchangeRateList
                         //..........attachment
                         //..........productinfo
                         this.newProductTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
                             item => {
                                 return item;
                             });
-                        
+
                         this.productTabData = this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.skuList),
                             item => {
                                 return item;
@@ -228,19 +233,26 @@
                 this.historyColumn = this.$db.order.productInfo;
                 switch (type) {
                     case 'histoty':
-
                         this.fnBasicInfoHistoty(data, 'productInfo', {
                             type: 'histoty',
-                            data: data.id.value
+                            data: data.skuId.value
                         });
                         break;
                     case 'modify':
                         this.oSwitch = true;
                         this.fnBasicInfoHistoty(data, 'productInfo', {
                             type: 'modify',
-                            data: data.id.value
+                            data: data.skuId.value
                         });
                         break;
+                        break;
+                    case 'detail':
+                        this.$windowOpen({
+                            url: '/product/sourcingDetail',
+                            params: {
+                                id: data.skuId.value
+                            }
+                        });
                 }
             },
             productInfoBtn(item) { //Product info 按钮创建
@@ -279,32 +291,32 @@
             },
             //..........addproduct 弹窗
             getList(item) {
-                let tabData = [];
-                item.forEach(items => {
-                    items._checked = false;
-                    tabData.push(Object.assign({}, items))
-                });
-                this.newProductTabData = tabData;
-                this.dialogAddproduct = false;
+                this.$ajax.post(this.$apis.post_order_skus, item)
+                    .then(res => {
+                        _.map(res, item => {
+                            item.displayStyle = 0;
+                        });
+                        this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                        this.dialogAddproduct = false;
+                    });
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.post(this.$apis.get_order_history, {
-                        orderId: this.orderId,
+                        orderNo: this.$refs.basicInfo.formItem.orderNo,
                         skuId: item.id.value
                     })
                     .then(res => {
                         let arr = [];
-                        column = this.$db.order.productInfo;
                         _.map(this.newProductTabData, items => {
                             if (_.findWhere(items, {
-                                    'key': 'id'
-                                }).value === config.data) arr.push(items)
+                                    'key': 'skuId'
+                                }).value + '' === config.data + '') arr.push(items)
                         });
                         if (config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(column, this.$refs.HM.getFilterData(res.datas)), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
                         }
                     });
             },
@@ -321,30 +333,34 @@
                 // 反填 productTabData
                 this.newProductTabData = _.map(this.newProductTabData, val => {
                     if (_.findWhere(val, {
-                            'key': 'id'
+                            'key': 'skuId'
                         }).value + '' === _.findWhere(data[0], {
-                            'key': 'id'
+                            'key': 'skuId'
                         }).value + '' && !val._remark && !data[0]._remark) {
-                        console.log(val)
                         val = data[0];
                         val._modify = true;
+                        val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        });
                     } else if (_.findWhere(val, {
-                            'key': 'id'
+                            'key': 'skuId'
                         }).value + '' === _.findWhere(data[1], {
-                            'key': 'id'
+                            'key': 'skuId'
                         }).value + '' && val._remark && data[1]._remark) {
                         val = data[1];
                         val._modify = true;
+                        val.displayStyle = 1;
+                        _.mapObject(val, (item, k) => {
+                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        });
                     }
                     return val;
                 });
             },
             removeProduct() { //删除product 某个单
-                this.newProductTabData.forEach((item, index) => {
-                    if (item._checked) {
-                        item._disabled = true;
-                        this.$set(this.newProductTabData, index, item);
-                    };
+                _.map(this.newProductTabData, (item, index) => {
+                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
                 });
             },
             dataFilter(data) {
@@ -382,7 +398,6 @@
                 });
             },
             send() {
-              
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
                 //参数一堆堆 我靠
                 let params = {
@@ -390,13 +405,15 @@
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
                     skuList: parentNode,
                     responsibilityList: this.$refs.responsibility.tableData,
-                    draftCustomer: false
+                    draftCustomer: false,
+                    importantCustomer: false,
+                    importantSupplier: this.markAsImportant,
                 }
-                 var basic = this.$refs.basicInfo.formItem
+                var basic = this.$refs.basicInfo.formItem
                 _.extendOwn(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extendOwn(params, caculate)
-                 this.$ajax.post(this.$apis.post_updataOrder, params)
+                this.$ajax.post(this.$apis.post_updataOrder, params)
                     .then(res => {
                         this.$router.push('/order/overview')
                     })
@@ -406,29 +423,27 @@
             },
             addProduct() {
                 let arr = [];
-                _.map(this.tabData, item => {
+                _.map(this.newProductTabData, item => {
                     if (!item._disabled) arr.push(item);
                 });
                 this.disabledLine = arr;
                 this.trig = new Date().getTime();
-                this.dialogTableVisible = true;
+                this.dialogAddproduct = true;
             },
             //表格底部计算
             tableTatalCal() {
                 let obj = this.$depthClone(this.newProductTabData[0]);
                 console.log(_.values(this.newProductTabData))
                 _.map(this.newProductTabData, value => {
-                    _.map(value, (val,k) => {
-                        if (obj[val.key] && obj[val.key]._calu) {   
-                           obj[val.key].value = (obj[val.key].value + val.value);
-                            
-                            console.log(obj[val.key].value);
-                        }else{                         
-                            obj[val.key].value=''
+                    _.map(value, (val, k) => {
+                        if (obj[val.key] && obj[val.key]._calu) {
+                            obj[val.key].value = (obj[val.key].value + val.value)
+                        } else {
+                            obj[val.key].value = ''
                         }
-                         this.tableTatal = [obj]
+                        this.tableTatal = [obj]
                     });
-                });             
+                });
             }
         },
         mounted() {
@@ -439,15 +454,15 @@
             this.submitData.id = this.$route.query.id;
         },
         watch: {
-//            newProductTabData:{
-//               　handler(curVal,oldVal){
-//　　　　　　　　　　　　if(curVal){
-//                        console.log('in')
-//                        this.tableTatalCal()
-//                        }
-//　　　　　　　　　　},
-//　　　　　　　　　　deep:true
-//            }
+            //            newProductTabData:{
+            //               　handler(curVal,oldVal){
+            //　　　　　　　　　　　　if(curVal){
+            //                        console.log('in')
+            //                        this.tableTatalCal()
+            //                        }
+            //　　　　　　　　　　},
+            //　　　　　　　　　　deep:true
+            //            }
         }
     }
 

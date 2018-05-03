@@ -24,7 +24,7 @@
                 <div class="btns" v-if="noEdit">
                     <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
                     <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>
-                    <el-button @click='addToCompare'>{{$i._baseText.addToCompare}}</el-button>
+                    <el-button @click='addCompare'>{{$i._baseText.addToCompare}}</el-button>
                     <el-button @click='supplierProducts'>{{$i._baseText.supplierProducts}}</el-button>
                     <el-button @click='remove' type='danger'>{{$i._baseText.remove}}</el-button>
                 </div>
@@ -102,7 +102,7 @@
                 noEdit: true,
                 id: this.$route.query.id,
                 tabName: 'address', //默认打开的tab
-                basicDate: '',
+                basicDate: [],
                 accounts: [],
                 concats: [],
                 address: [],
@@ -110,8 +110,8 @@
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
-                compareData:[],
-                showCompareList:false
+                compareData: [],
+                showCompareList: false
             }
         },
         methods: {
@@ -121,8 +121,13 @@
                 });
             },
             createOrder() {
-                this.windowOpen('/order/creat', {
-                    supplierId: this.id //供应商信息将被带入
+                this.$windowOpen({
+                    url: '/order/creat',
+                    params: {
+                        type: 'supplier',
+                        supplierName: this.basicDate.name,
+                        supplierNo: this.basicDate.code
+                    }
                 });
             },
             addToCompare() {
@@ -133,73 +138,82 @@
                     supplierId: this.id //供应商信息将被带入
                 });
             },
-                         //添加比较
-            addCompare(){
-                this.showCompareList=true;
-                let compareList=this.$localStore.get('compareSupplierList');
-                let hasAdd=false;
-                if(!compareList){
-                    compareList=[];
+            //添加比较
+            addCompare() {
+                this.showCompareList = true;
+                let compareList = this.$localStore.get('compareSupplierList');
+                let hasAdd = false;
+                if (!compareList) {
+                    compareList = [];
                 }
-                compareList.forEach(v=>{
-                    if(v.id===this.basicDate.id){
+                compareList.forEach(v => {
+                    if (v.id === this.basicDate.id) {
                         //代表该商品已经添加了
-                        hasAdd=true;
+                        hasAdd = true;
                     }
                 });
-                if(hasAdd){
+                if (hasAdd) {
                     this.$message({
                         message: '该商品已经添加到列表了',
                         type: 'warning'
                     });
-                }else{
-                    compareList.push({
-                        name:this.basicDate.name,
-                        id:this.basicDate.id
-                    });
-                    this.compareData=compareList;
-                    this.$localStore.set('compareSupplierList',compareList)
+                } else {
+
+                    if (this.basicDate.id && this.basicDate != '') {
+                        compareList.push({
+                            name: this.basicDate.name,
+                            id: this.basicDate.id
+                        });
+                        this.compareData = compareList;
+                        this.$localStore.set('compareSupplierList', compareList)
+                    } else {
+                        this.$message({
+                            message: '添加失败',
+                            type: 'warning'
+                        });
+                    }
+
                 }
             },
-            getCompareList(){
-                let data=this.$localStore.get('compareSupplierList');
-                if(!data){
-                    this.compareData=[];
-                }else{
-                    this.compareData=data;
+            getCompareList() {
+                let data = this.$localStore.get('compareSupplierList');
+                if (!data) {
+                    this.compareData = [];
+                } else {
+                    this.compareData = data;
                 }
             },
-            goCompare(){
-                let data=this.$localStore.get('compareSupplierList');
-                let id='';
-                data.forEach((v,k)=>{
-                    if(k===data.length-1){
-                        id+=v.id;
-                    }else{
-                        id+=(v.id+',');
+            goCompare() {
+                let data = this.$localStore.get('compareSupplierList');
+                let id = '';
+                data.forEach((v, k) => {
+                    if (k === data.length - 1) {
+                        id += v.id;
+                    } else {
+                        id += (v.id + ',');
                     }
                 });
                 this.$windowOpen({
-                    url:'supplier/compareDetail/{type}',
-                    params:{
-                        type:'new',
-                        id:id,
+                    url: 'supplier/compareDetail/{type}',
+                    params: {
+                        type: 'new',
+                        id: id,
                     }
                 });
             },
-            handleClose(e){
+            handleClose(e) {
                 let key;
-                this.compareData.forEach((v,k)=>{
-                    if(v.id===e.id){
-                        key=k;
+                this.compareData.forEach((v, k) => {
+                    if (v.id === e.id) {
+                        key = k;
                     }
                 });
-                this.compareData.splice(key,1);
-                this.$localStore.set('compareSupplierList',this.compareData);
+                this.compareData.splice(key, 1);
+                this.$localStore.set('compareSupplierList', this.compareData);
             },
-            clearData(){
+            clearData() {
                 this.$localStore.remove('compareSupplierList');
-                this.compareData=[];
+                this.compareData = [];
             },
             remove() {
                 this.$ajax.post(this.$apis.post_supplier_deletebookmark, {

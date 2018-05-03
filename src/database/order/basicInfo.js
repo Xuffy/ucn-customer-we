@@ -2,7 +2,7 @@ export default {
     orderNo: {
         key: 'orderNo',
         ismodify: false,
-        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
         type: 'text',
     },
@@ -46,17 +46,17 @@ export default {
     supplierName: {
         key: 'supplierName',
         ismodify: false,
-        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
-        type: 'textdialog',
+        type: 'selectMore',
     },
     //弹窗修改
     supplierNo: {
         key: 'supplierNo',
         ismodify: false,
-        isDefaultEdit: true,
+//        isDefaultEdit: true,
         rules: [],
-        type: 'textdialog',
+        type: 'selectMore',
     },
     quotationNo: {
         key: 'quotationNo',
@@ -179,10 +179,16 @@ export default {
     },
     remark: {
         key: 'remark',
-
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
         type: 'textarea',
+    },
+    currency:{
+        key:'currency',
+        ismodify: false,
+        isDefaultEdit: false,
+        rules: [],
+        type: 'select',
     }
 }
