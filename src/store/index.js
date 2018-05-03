@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import * as type from './types';
+import type from './types';
 
 Vue.use(Vuex);
 
@@ -30,14 +30,21 @@ const state = {
   }*/
 };
 
-const actions = {};
+const actions = {
+  setDraft({ commit }, newData) {
+    commit(type.SETDRAFT, newData);
+  },
+  setRecycleBin({ commit }, newData) {
+    commit(type.SETRECYCLEBIN, newData);
+  }
+};
 
 const mutations = {
-  setDraft(state, params = {}) {
-    state.quickLink.draft = _.extend(state.quickLink.draft, params);
+  [type.SETDRAFT](state, newData) {
+    state.quickLink.draft = newData;
   },
-  setRecycleBin(state, params = {}) {
-    state.quickLink.recycleBin = _.extend(state.quickLink.recycleBin, params);
+  [type.SETRECYCLEBIN](state, newData) {
+    state.quickLink.recycleBin = newData;
   }
 };
 

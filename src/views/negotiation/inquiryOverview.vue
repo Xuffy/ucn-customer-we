@@ -59,6 +59,7 @@
      * @param options 下拉框 原始数据 
     */
     import { selectSearch, VTable, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name:'',
         data() {
@@ -107,6 +108,20 @@
         },
         created() {
             this.viewByStatus = 0;
+            this.setDraft({
+                name: 'negotiationDraft',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             viewByStatus() {
@@ -121,6 +136,10 @@
             
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin'
+            ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
                 if(!val.key) return this.$message('搜索内容不能为空');
