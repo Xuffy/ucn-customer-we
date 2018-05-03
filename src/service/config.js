@@ -41,6 +41,7 @@ export default {
       UMETA_URL: '//192.168.51.248:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
       ULOG_URL: '//192.168.51.248:11008', // 日志服务
+
       UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
       USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
       USERVICE_URL: '//192.168.51.248:11003', // 服务商端
@@ -51,19 +52,21 @@ export default {
 
     },
     develop: {
-      BASE_URL: '//dev.upurchase-facade.ucnholding.com:18100', // 采购端
-      USSO_URL: '//dev.usso-facade.ucnholding.com:18100', // sso 服务
-      UUSER_URL: '//dev.uuser-facade.ucnholding.com:18100', // 用户中心
-      UMETA_URL: '//dev.umeta-facade.ucnholding.com:18100', // 元数据
-      UMESSAGE_URL: '//dev.umessage-facade.ucnholding.com:18100', // 消息服务
-      UOSS_URL: '//dev.uoss-facade.ucnholding.com:18100', // 对象存储服务
-      ULOG_URL: '//dev.ulog-facade.ucnholding.com:18100', // 日志服务
-      UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com:18100', // 采购端
-      USUPPLY_URL: '//dev.usupply-facade.ucnholding.com:18100', // 供应商端
-      USERVICE_URL: '//dev.uservice.ucnholding.com:18100', // 服务商端
-      UBIZLOG_URL: '//dev.ubizlog.ucnholding.com:18100', // 业务日志
-      UWORKBENCH_URL: '//dev.uworkbench-facade.ucnholding.com:18100',
-      LOGIN_URL: '//dev.auth.ucnscm.cn', // 登录授权
+      LOGIN_URL: '//dev.auth.ucnscm.cn',
+      BASE_URL: '//192.168.51.248:11001', // 采购端
+      USSO_URL: '//192.168.51.248:11006', // sso 服务
+      UUSER_URL: '//192.168.51.248:11004', // 用户中心
+      UMETA_URL: '//192.168.51.248:11005', // 元数据
+      UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
+      ULOG_URL: '//192.168.51.248:11008', // 日志服务
+
+      UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
+      USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
+      USERVICE_URL: '//192.168.51.248:11003', // 服务商端
+
+      UOSS_URL: '//192.168.51.248:', // 对象存储服务
+      UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
+      UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
     },
     test: {
       BASE_URL: '//test.upurchase-facade.ucnscm.cn', // 采购端
