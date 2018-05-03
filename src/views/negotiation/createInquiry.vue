@@ -136,6 +136,7 @@
                 :hideBtn="true"
                 :disabledLine="disabledLine"
                 @handleOK="getList"
+                @handleCancel="handleCancel"
                 :forceUpdateNumber="trig" 
                 :type="radio"
                 :isInquiry="true"
@@ -230,10 +231,18 @@
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    console.log(res, '=====')
+                    if(res.exportLicense) {
+                        res.exportLicense = 1;
+                    } else {
+                        res.exportLicense = 0;
+                    }
+                    res.suppliers.forEach(items => {})
                     this.fromArg = res;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
+            },
+            handleCancel() {
+                this.dialogTableVisible = false;
             },
             addProduct() {
                 let arr = [];
@@ -275,22 +284,10 @@
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
-                    this.selectAll.paymentMethod = _.map(_.findWhere(res, {'code': 'PMT'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.transport = _.map(_.findWhere(res, {'code': 'MD_TN'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.incoterm = _.map(_.findWhere(res, {'code': 'ITM'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.currency = _.map(_.findWhere(res, {'code': 'CY_UNIT'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
+                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
+                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
+                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
                     this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
                         item.code = Number(item.code);
                         return item;

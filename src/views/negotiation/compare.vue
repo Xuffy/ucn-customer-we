@@ -57,6 +57,7 @@
 </template>
 <script>
     import { VTable, dropDownSingle, addNewInqury, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name:'compareOverview',
         data() {
@@ -98,6 +99,13 @@
                 this.params.id = this.$route.query.id;
             };
             this.$route.params.type ? this.compareType = this.$route.params.type : '';
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'compare'
+                },
+                show: true
+            });
         },
         watch: {
             compareBy () {
@@ -111,6 +119,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setRecycleBin'
+            ]),
             compareByChange(str) {
                 this.compareBy = str;
             },

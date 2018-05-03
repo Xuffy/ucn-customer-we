@@ -25,12 +25,6 @@
                     </div>
                 </div>
                 <div class="basic-info">
-                    <div class="basesic-hd">
-                        <h5>{{ $i._baseText.productInfo }}</h5>
-                        <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i._baseText.addProduct }}</el-button>
