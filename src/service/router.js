@@ -69,8 +69,8 @@ export const routerMap = [
           path: 'index',
           name: 'workbench',
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: false,
           },
           component: () => import('../views/workbench/index.vue')
@@ -700,7 +700,7 @@ export const routerMap = [
       meta: {
         name: 'sellerProduct'
       },
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'overview',

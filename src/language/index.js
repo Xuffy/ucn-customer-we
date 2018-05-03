@@ -41,7 +41,10 @@ export default _.extend(
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
 
   {_product: require(`./${lang}/product/product.basic`)},
+  {_productCn:require(`./${lang}/productCn/product.basic`)},
+
   require(`./${lang}/product/productOverview`),
+  require(`./${lang}/productCn/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
 
   require(`./${lang}/warehouse/qcWarehouse`),
@@ -50,6 +53,6 @@ export default _.extend(
 
   //CN配置
 
-  {_warehouse: require(`./${lang}/warehouseEn/warehouse.basic`)},
-  require(`./${lang}/warehouseEn/warehouse.index`),
+  {_warehouse: require(`./${lang}/warehouseCn/warehouse.basic`)},
+  require(`./${lang}/warehouseCn/warehouse.index`),
 )

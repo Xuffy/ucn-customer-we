@@ -1,6 +1,6 @@
 <template>
     <div class="add-product">
-        <div class="title">{{$i._product.basicInformation}}</div>
+        <div class="title">{{$i._productCn.basicInformation}}</div>
         <div class="addPic">
             <div class="name">
                 Pic:
@@ -62,28 +62,28 @@
                     </el-form-item>
                 </el-col>
                 <el-col class="list" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item :label="$i._product.productVisible">
-                        <el-radio v-model="productForm.visibility" :label="true">{{$i._product.allSee}}</el-radio>
-                        <el-radio v-model="productForm.visibility" :label="false">{{$i._product.partSee}}</el-radio>
+                    <el-form-item :label="$i._productCn.productVisible">
+                        <el-radio v-model="productForm.visibility" label="全网可见">{{$i._productCn.allSee}}</el-radio>
+                        <el-radio v-model="productForm.visibility" label="部分客户可见">{{$i._productCn.partSee}}</el-radio>
 
                         <div v-if="!productForm.visibility">
                             <el-button
                                     @click="addCustomer"
                                     size="mini"
-                                    type="primary">{{$i._product.add}}</el-button>
+                                    type="primary">{{$i._productCn.add}}</el-button>
                             <el-table
                                     :data="tableData"
                                     style="width: 511px"
                                     border>
                                 <el-table-column
                                         prop="date"
-                                        :label="$i._product.customerName"
+                                        :label="$i._productCn.customerName"
                                         align="center"
                                         width="180">
                                 </el-table-column>
                                 <el-table-column
                                         prop="name"
-                                        :label="$i._product.customerCode"
+                                        :label="$i._productCn.customerCode"
                                         align="center"
                                         width="180">
                                 </el-table-column>
@@ -91,7 +91,7 @@
                                         prop="address"
                                         width="150"
                                         align="center"
-                                        :label="$i._product.action">
+                                        :label="$i._productCn.action">
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -100,7 +100,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i._product.customerInfo}}</div>
+        <div class="title">{{$i._productCn.customerInfo}}</div>
         <el-form :model="productForm" ref="productForm2" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -152,7 +152,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i._product.priceInfo}}</div>
+        <div class="title">{{$i._productCn.priceInfo}}</div>
         <el-form :model="productForm" ref="productForm3" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-table
                     :data="productForm.price"
@@ -163,17 +163,17 @@
                         width="180">
                     <template slot-scope="scope">
                         <div v-if="scope.$index===0">
-                            {{$i._product.costPrice}}
+                            {{$i._productCn.costPrice}}
                         </div>
                         <div v-if="scope.$index===1">
-                            {{$i._product.quotedPrice}}
+                            {{$i._productCn.quotedPrice}}
                         </div>
                     </template>
                 </el-table-column>
                 <el-table-column
                         prop="fobCurrency"
                         align="center"
-                        :label="$i._product.fobCurrency"
+                        :label="$i._productCn.fobCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -191,7 +191,7 @@
                 <el-table-column
                         prop="fobPrice"
                         align="center"
-                        :label="$i._product.fobPrice"
+                        :label="$i._productCn.fobPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -206,7 +206,7 @@
                 <el-table-column
                         prop="fobPort"
                         align="center"
-                        :label="$i._product.fobPort"
+                        :label="$i._productCn.fobPort"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -220,7 +220,7 @@
                 <el-table-column
                         prop="exwPrice"
                         align="center"
-                        :label="$i._product.exwPrice"
+                        :label="$i._productCn.exwPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -235,7 +235,7 @@
                 <el-table-column
                         prop="exwCurrency"
                         align="center"
-                        :label="$i._product.exwCurrency"
+                        :label="$i._productCn.exwCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -253,7 +253,7 @@
                 <el-table-column
                         prop="otherIncoterm"
                         align="center"
-                        :label="$i._product.cifPrice"
+                        :label="$i._productCn.cifPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -268,7 +268,7 @@
                 <el-table-column
                         prop="otherIncotermPrice"
                         align="center"
-                        :label="$i._product.cifCurrency"
+                        :label="$i._productCn.cifCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -286,7 +286,7 @@
                 <el-table-column
                         prop="otherIncotermArea"
                         align="center"
-                        :label="$i._product.cifArea"
+                        :label="$i._productCn.cifArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -300,7 +300,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i._product.dduPrice"
+                        :label="$i._productCn.dduPrice"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -315,7 +315,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i._product.dduCurrency"
+                        :label="$i._productCn.dduCurrency"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -333,7 +333,7 @@
                 <el-table-column
                         prop="otherIncotermCurrency"
                         align="center"
-                        :label="$i._product.dduArea"
+                        :label="$i._productCn.dduArea"
                         width="180">
                     <template slot-scope="scope">
                         <el-form-item class="tableList">
@@ -347,7 +347,7 @@
             </el-table>
         </el-form>
 
-        <div class="title">{{$i._product.packingInfo}}</div>
+        <div class="title">{{$i._productCn.packingInfo}}</div>
         <el-form :model="productForm" ref="productForm4" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -399,7 +399,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i._product.logisticInfo}}</div>
+        <div class="title">{{$i._productCn.logisticInfo}}</div>
         <el-form :model="productForm" ref="productForm5" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
                 <el-col style="height: 51px;" v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -451,7 +451,7 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i._product.otherInfo}}</div>
+        <div class="title">{{$i._productCn.otherInfo}}</div>
         <el-form :model="productForm" ref="productForm6" class="speForm" label-width="230px" :label-position="labelPosition">
             <el-row>
 
@@ -545,12 +545,12 @@
             </el-row>
         </el-form>
 
-        <div class="title">{{$i._product.attachment}}</div>
+        <div class="title">{{$i._productCn.attachment}}</div>
 
         <input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._product.finish}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._productCn.finish}}</el-button>
         </div>
 
 
@@ -561,7 +561,7 @@
                 <el-row class="speZone">
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i._product.customerName">
+                        <el-form-item prop="name" :label="$i._productCn.customerName">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.name"></el-input>
@@ -569,7 +569,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i._product.customerType">
+                        <el-form-item prop="name" :label="$i._productCn.customerType">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.type"></el-input>
@@ -577,7 +577,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i._product.customerCountry">
+                        <el-form-item prop="name" :label="$i._productCn.customerCountry">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.country"></el-input>
@@ -585,7 +585,7 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
 
-                        <el-form-item prop="name" :label="$i._product.customerCity">
+                        <el-form-item prop="name" :label="$i._productCn.customerCity">
                             <el-input
                                     size="mini"
                                     v-model="customerQuery.city"></el-input>
@@ -1301,7 +1301,7 @@
             },
 
             getCategoryId(){
-                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_supply_category,{}).then(res=>{
                     this.dropData=res;
                 }).catch(err=>{
                     console.log(err)
@@ -1320,7 +1320,8 @@
             finish(){
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 this.$set(this.productForm,'lengthWidthHeight',size);
-                // this.disabledSubmit=true;
+                this.disabledSubmit=true;
+
 
 
                 if(this.$route.query.id && this.$route.query.isEdit){
@@ -1360,6 +1361,7 @@
             },
         },
         created(){
+            this.getCategoryId();
             this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
                 this.dropData=res;
                 let id=this.$route.query.id;
