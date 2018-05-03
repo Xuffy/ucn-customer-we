@@ -33,6 +33,6 @@ export default {
     disabled: true
   },
   containerType: {
-    type: 'number'
+    type: 'select'
   }
 }

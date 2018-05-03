@@ -6,5 +6,8 @@ export default {
   get_dictionary: ['/code/part', 'UMETA_URL'],
   delete_by_ids: ['/logistics/plan/deleteByIds', 'UPURCHASE_URL'],
   get_new_logistics_no: ['/logistics/plan/getNo', 'UPURCHASE_URL'],
-  get_currency: ['/currency/all', 'UMETA_URL']
+  get_currency: ['/currency/all', 'UMETA_URL'],
+  get_container_type: ['/containertype/all', 'UMETA_URL'],
+  get_plan_details: ['/logistics/plan/get/', 'UPURCHASE_URL'],
+  get_payment_list: ['/payment/list/', 'BASE_HSM_W']
 }

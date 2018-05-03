@@ -3,7 +3,7 @@
 */
 
 export const basicInfoInput = [
-  // 'logisticsNo',
+  'logisticsNo',
   'logisticsStatus',
   'shipServiceProvider',
   'receiptCompany',
@@ -22,8 +22,8 @@ export const basicInfoInput = [
   'departureCountry',
   'departurePort',
   'destinationCountry',
-  'destinationPort'
-  // 'customerName'
+  'destinationPort',
+  'customerName'
 ]
 
 export const basicInfoSelector = [
