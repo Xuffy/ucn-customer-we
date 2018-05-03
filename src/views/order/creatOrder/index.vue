@@ -37,7 +37,7 @@
                  <el-button @click='send'>{{$i._baseText.send}}</el-button>
                  <el-button @click='saveAsDraft'>{{$i._baseText.saveAsDraft}}</el-button>
                  <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="checked">{{$i._baseText.markAsImportant}}</el-checkbox>
+                 <el-checkbox v-model="markAsImportant">{{$i._baseText.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
@@ -55,9 +55,11 @@
                              <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
+                                 @handleCancel='canceldialog'
+                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
                                 :forceUpdateNumber="trig" 
-                                :type="radio"
+                                type="product"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
@@ -65,9 +67,11 @@
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
+                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
+                              @handleCancel='canceldialog'
                                 :forceUpdateNumber="trig" 
-                                :type="radio"
+                                type="bookmark"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
@@ -117,7 +121,7 @@
             return {
                 tableTatal: [],
                 textarea: "", //order remark输入内容
-                checked: true, //底部单选 mark as important
+                markAsImportant: true, //底部单选 mark as important
                 dialogQuickcreate: false, // 弹出框quickcreate弹窗区域
                 dialogHistory: false, //弹出框 productinfo 弹窗区域
                 dialogAddproduct: false,
@@ -304,6 +308,7 @@
                 }],
                 trig: 0,
                 radio: 'product',
+                disabledLine: [],
             }
         },
         methods: {
@@ -316,15 +321,21 @@
                 this.trig = new Date().getTime();
                 this.dialogAddproduct = true;
             },
+            canceldialog() {
+                this.dialogAddproduct = false
+            },
             //......................提交
             send() {
                 //正则  if (!this.$refs.basicInfo.submitForm()) { // return // }
+                return console.log(this.dataFilter(this.tabData))
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.skuList,
+                    skuList: this.tabData,
                     responsibilityList: this.$refs.responsibility.tableData,
-                    draftCustomer: false
+                    draftCustomer: false,
+                    importantCustomer: false,
+                    importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
                 _.extendOwn(params, basic)
@@ -339,8 +350,8 @@
                         console.log(res)
                     });
             },
-            saveAsDraft(){
-                  let params = {
+            saveAsDraft() {
+                let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
                     skuList: this.skuList,
@@ -373,11 +384,12 @@
                 UnpaidAmount:''
             */
             summary() {
-                this.TotalQuantity = this.skuList.length
-                this.TotalSKUPrice = _.reduce(_.pluck(this.skuList, 'skuPrice'))
-                this.TotalOuterCartonQuantity = _.reduce(_.pluck(this.skuList, 'skuOuterCartonQty'))
-                this.TotalOuterCartonNetWet = _.reduce(_.pluck(this.skuList, 'skuOuterCartonNetWeight'))
-                this.TotalOuterCartonVolume = _.reduce(_.pluck(this.skuList, 'skuOuterCartonVolume'))
+                let arr = this.dataFilter(this.tabData)
+                this.TotalQuantity = _.reduce(_.pluck(arr, 'skuPrice'))
+                this.TotalSKUPrice = _.reduce(_.pluck(arr, 'skuPrice'))
+                this.TotalOuterCartonQuantity = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
+                this.TotalOuterCartonNetWet = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+                this.TotalOuterCartonVolume = _.reduce(_.pluck(arr, 'skuOuterCartonVolume'))
             },
             productInfoBtn(item) { //Product info 按钮创建
                 return [{
@@ -407,6 +419,13 @@
                             data: data.skuId.value
                         });
                         break;
+                    case 'detail':
+                        this.$windowOpen({
+                            url: '/product/sourcingDetail',
+                            params: {
+                                id: data.skuId.value
+                            }
+                        });
                 }
             },
             changeChecked(item) { //获取选中的单 集合
@@ -414,17 +433,13 @@
             },
             //..........addproduct 弹窗
             getList(item) {
-                let tabData = item,
-                arr = [];
-               //{ids: [12, 13, 17, 20, 21, 22, 23, 24, 25, 26]}
-                this.$ajax.post(this.$apis.post_order_skus, 
-                    tabData)
-                    .then(res => {                   
-//                        _.map(res, item => {
-//                            item.displayStyle = 0;
-//                        });
+                this.$ajax.post(this.$apis.post_order_skus, item)
+                    .then(res => {
+                        _.map(res, item => {
+                            item.displayStyle = 0;
+                        });
                         this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
-                        this.dialogTableVisible = false;
+                        this.dialogAddproduct = false;
                     });
             },
             dataFilter(data) {
@@ -455,18 +470,17 @@
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.post(this.$apis.get_order_history, {
-                        orderId: this.orderId,
+                        orderNo: this.$refs.basicInfo.formItem.orderNo,
                         skuId: item.skuId.value
                     })
                     .then(res => {
                         let arr = [];
-                        column = this.$db.order.productInfo;
+
                         _.map(this.tabData, items => {
                             if (_.findWhere(items, {
                                     'key': 'skuId'
-                                }).value === config.data) arr.push(items)
+                                }).value + '' === config.data + '' && !items._disabled) arr.push(items)
                         });
-
                         if (config.type === 'histoty') {
                             this.$refs.HM.init(arr, this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
                         } else {
@@ -474,15 +488,6 @@
                         }
                     });
             },
-            //            productModify() { //  提交 product 编辑 
-            //                this.tabData.forEach((item, index) => {
-            //                    if (!item._remove && item._disabled) {
-            //                        item._remove = true;
-            //                        this.submitData.deleteDetailIds.push(item);
-            //                    };
-            //                    this.$set(this.tabData, index, item);
-            //                });
-            //            },
             save(data) { //modify 编辑完成反填数据
                 this.tabData = _.map(this.tabData, val => {
                     if (_.findWhere(val, {
@@ -493,6 +498,9 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        })
                     } else if (_.findWhere(val, {
                             'key': 'skuId'
                         }).value === _.findWhere(data[1], {
@@ -501,6 +509,9 @@
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        })
                     }
                     return val;
                 });
@@ -522,7 +533,10 @@
             //...........................................带入数据
             //supplier带入
             getSupplierDetail() {
-
+                this.$nextTick(() => {
+                    this.$refs.basicInfo.formItem.supplierName = this.$route.query.supplierName
+                    this.$refs.basicInfo.formItem.supplierNo = this.$route.query.supplierNo
+                })
             },
             //inquiry带入
             addinquiry(data) {
@@ -559,7 +573,15 @@
             },
             //product带入
             getProductDetail() {
-
+                let arr = this.$route.query.ids
+                this.$ajax.post(this.$apis.post_order_skus, arr)
+                    .then(res => {
+                        _.map(res, arr => {
+                            arr.displayStyle = 0;
+                        });
+                        this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                        this.dialogAddproduct = false;
+                    });
             },
             //表格底部计算
             tableTatalCal() {
@@ -580,21 +602,28 @@
             let fromData = this.$route.query.type
             switch (fromData) {
                 case 'supplier':
-
+                    this.getSupplierDetail()
                     break;
                 case 'inquiry':
                     this.getInquiryDetail(this.$route.query.id)
                     break;
                 case 'product':
-
+                    this.getProductDetail()
                     break;
                 default:
                     console.log("裸进")
             }
         },
-        mounted() {
-            //            this.getInquiryDetail(17)
-        },
+        mounted() {},
+        watch: {
+            tabData: {
+                handler(curVal) {
+                    console.log('in')
+                    //                    this.tableTatalCal()
+                },
+                deep: true
+            }
+        }
     }
 
 </script>

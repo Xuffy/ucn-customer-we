@@ -93,7 +93,7 @@
                 params: {
                     orderNo: '',
                     skuCode: '',
-                    status:'',
+                    status: '',
                     view: 1, //view by的按钮组
                     ps: 10,
                     pn: 1
@@ -104,7 +104,6 @@
         },
         methods: {
             onAction(item, type) {
-                console.log(item)
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {
@@ -128,48 +127,50 @@
             },
             checked(item) {
                 this.selectedDate = item
-                var obj=[]
+                var obj = []
                 this.selectedDate.forEach(item => {
                     obj.push(item.id.value);
                 });
-                 this.selectedNumber=obj
+                this.selectedNumber = obj
             },
             changeStatus() {
-                if(this.params.view==1){
-                      this.getdata(this.$db.order.overview)
-                   }else{
-                       this.getdata(this.$db.order.overviewBysku)
-                   } 
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
             },
             changeView() {
-                if(this.params.view==1){
-                      this.getdata(this.$db.order.overview)
-                   }else{
-                       this.getdata(this.$db.order.overviewBysku)
-                   }            
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message('请选中搜索类型');
                 if (!val.key) return this.$message('搜索内容不能为空');
                 if (val.keyType == '1') {
                     this.params.orderNo = val.key
-                    if(this.params.view==1){
-                      this.getdata(this.$db.order.overview)
-                   }else{
-                       this.getdata(this.$db.order.overviewBysku)
-                   } 
+                    if (this.params.view == 1) {
+                        this.getdata(this.$db.order.overview)
+                    } else {
+                        this.getdata(this.$db.order.overviewBysku)
+                    }
                 } else {
                     this.params.skuCode = val.key
-                    if(this.params.view==1){
-                      this.getdata(this.$db.order.overview)
-                   }else{
-                       this.getdata(this.$db.order.overviewBysku)
-                   } 
+                    if (this.params.view == 1) {
+                        this.getdata(this.$db.order.overview)
+                    } else {
+                        this.getdata(this.$db.order.overviewBysku)
+                    }
                 }
                 this.getdata()
             },
-            finish(){
-                 this.$ajax.post(this.$apis.post_finishPost, {ids:this.selectedNumber})
+            finish() {
+                this.$ajax.post(this.$apis.post_finishPost, {
+                        ids: this.selectedNumber
+                    })
                     .then((res) => {
                         console.log(res)
                     })
@@ -178,7 +179,9 @@
                     });
             },
             download() {
-                this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
+                this.$ajax.post(this.$apis.download_order, {
+                        ids: this.selectedNumber
+                    })
                     .then((res) => {
                         console.log(res)
                     })
@@ -187,13 +190,15 @@
                     });
             },
             deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {ids:this.selectedNumber})
+                this.$ajax.post(this.$apis.delete_order, {
+                        ids: this.selectedNumber
+                    })
                     .then((res) => {
-                        if(this.params.view==1){
-                          this.getdata(this.$db.order.overview)
-                       }else{
-                           this.getdata(this.$db.order.overviewBysku)
-                       } 
+                        if (this.params.view == 1) {
+                            this.getdata(this.$db.order.overview)
+                        } else {
+                            this.getdata(this.$db.order.overviewBysku)
+                        }
                     })
                     .catch((res) => {
                         console.log(res)
