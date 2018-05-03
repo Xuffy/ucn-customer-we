@@ -21,47 +21,36 @@ export default {
     key: 'remark'
   },
   qualifiedProductsTotalCTNS: {
-    _important:true,
-    key: ''
+    key: 'qualifiedSkuCartonTotalQty'
   },
   qualifiedProductsTotalQTYS: {
-    _important:true,
-    key: ''
+    key: 'qualifiedSkuQty'
   },
   qualifiedProductsTotalCBM: {
-    _important:true,
-    key: ''
+    key: 'qualifiedSkuVolume'
   },
   qualifiedProductTotalNW: {
-    _important:true,
-    key: ''
+    key: 'qualifiedSkuNetWeight'
   },
   qualifiedProductTotalGW: {
-    _important:true,
-    key: ''
+    key: 'qualifiedSkuGrossWeight'
   },
   unqualifiedProductsQTY: {
-    _important:true,
-    key: ''
+    key: 'unqualifiedSkuQty'
   },
   unqualifiedProductTotalCTNS: {
-    _important:true,
-    key: ''
+    key: 'unqualifiedSkuCartonTotalQty'
   },
   unqualifiedProductTotalNW: {
-    _important:true,
-    key: ''
+    key: 'unqualifiedSkuNetWeight'
   },
   unqualifiedProductsTotalCBM: {
-    _important:true,
-    key: ''
+    key: 'unqualifiedSkuVolume'
   },
   unqualifiedProductTotalGW: {
-    _important:true,
-    key: ''
+    key: 'unqualifiedSkuGrossWeight'
   },
   quantityOfSKU: {
-    _important:true,
     key: ''
   },
   checkOuterCartons: {

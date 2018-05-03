@@ -41,7 +41,7 @@
 
       <div class="header-right" style="color: #999999!important;">
         <div class="message-box" v-popover:messageBox>
-          <el-badge :value="message.list.length">
+          <el-badge :value="message.list.length || ''">
             <i class="el-icon-bell"></i>
           </el-badge>
 
@@ -85,7 +85,7 @@
           </a>
         </div>
 
-        <el-dropdown type="primary">
+        <!--<el-dropdown type="primary">
           <a href="javascript:void(0)">
             <i class="el-icon-goods"></i>
           </a>
@@ -93,7 +93,7 @@
             <el-dropdown-item>User name</el-dropdown-item>
             <el-dropdown-item>Sign out</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown>-->
       </div>
 
     </div>
@@ -122,10 +122,10 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        this.getMessage();
+        // this.getMessage();
       },
       'message.show'(val) {
-        val && this.getMessage();
+        // val && this.getMessage();
       }
     },
     created() {
@@ -146,7 +146,7 @@
 
       this.updateMenuActive()
 
-      this.getMessage();
+      // this.getMessage();
     },
     methods: {
       logout() {
@@ -238,7 +238,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1260px;
+    min-width: 1600px;
     overflow: hidden;
   }
 
@@ -419,6 +419,8 @@
   .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
     color: #909399;
     font-size: 12px;
+    padding: 0;
+    padding-right: 5px;
   }
 
   .ucn-header-menu .el-menu--horizontal > .el-menu-item a {

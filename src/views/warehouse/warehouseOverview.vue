@@ -116,7 +116,7 @@
         this.$windowOpen({
           url: 'product/sourcingDetail',
           params: {
-            // id:item.
+             id:item.skuId
           }
         });
       },
@@ -130,7 +130,6 @@
         this.keyType = val;
       },
       checked(item) {
-        console.log(item)
         this.selectedDate = item
         var obj=[]
         this.selectedDate.forEach(item => {
@@ -139,7 +138,6 @@
         this.selectedNumber=obj
       },
       inputEnter(val) {
-        console.log(val)
         if (!val.keyType) return this.$message('请选中搜索类型');
         if (!val.key) return this.$message('搜索内容不能为空');
         if (val.keyType == '1') {

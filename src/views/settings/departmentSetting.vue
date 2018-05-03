@@ -120,17 +120,17 @@
                 <el-form ref="userData" :model="userData" label-width="100px">
                     <el-row>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item prop="email" :label="$i.departmentSetting.email">
+                            <el-form-item prop="email" :label="$i._departmentSetting.email">
                                 <el-input size="mini" v-model="userData.email"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item prop="userName" :label="$i.departmentSetting.userName">
+                            <el-form-item prop="userName" :label="$i._departmentSetting.userName">
                                 <el-input size="mini" v-model="userData.userName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item prop="gender" :label="$i.departmentSetting.gender">
+                            <el-form-item prop="gender" :label="$i._departmentSetting.gender">
                                 <el-select size="mini" v-model="userData.gender" placeholder="请选择">
                                     <el-option
                                             v-for="item in genderOptions"
@@ -142,7 +142,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :xs="24" :sm="12" :md="6" :lg="6" :xl="6">
-                            <el-form-item prop="status" :label="$i.departmentSetting.status">
+                            <el-form-item prop="status" :label="$i._departmentSetting.status">
                                 <el-select size="mini" v-model="userData.status" placeholder="请选择">
                                     <el-option
                                             v-for="item in statusOptions"
@@ -156,7 +156,7 @@
                     </el-row>
                 </el-form>
                 <div class="btn">
-                    <el-button @click="searchUser" :loading="disabledSearch" class="serachBtn" type="primary">{{$i.departmentSetting.search}}</el-button>
+                    <el-button @click="searchUser" :loading="disabledSearch" class="serachBtn" type="primary">{{$i._departmentSetting.search}}</el-button>
                 </div>
                 <v-table
                         class="speTable"

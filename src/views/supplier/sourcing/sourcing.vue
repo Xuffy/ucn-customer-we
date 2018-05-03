@@ -7,32 +7,32 @@
             <div style='marginTop:20px;'>
                 <el-form ref="parms" :model="parms" label-width="200px" size="mini">
                     <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
+                          <el-col :xs="24" :sm="12" :md="8" :lg="8"
                            v-for='(item,index) in $db.supplier.overview'
                            :key="index+'j'"
-                         
+
                            >
-                            <el-form-item class="form-list" 
+                            <el-form-item class="form-list"
                              v-if="item.showType==='text'"
-                            :label="item.label" 
-                            :prop="item.key"                    
+                            :label="item.label"
+                            :prop="item.key"
                             >
                                 <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label" 
+                            :label="item.label"
                             :prop="item.key" >
                                 <el-select v-model="parms[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label" 
+                                :label="item.label"
                                 :prop="item.key">
                                  <div class="speDropdown">
                                      <drop-down
-                                      ref="dropDown" 
-                                          
-                                       v-model="parms[item.key]" 
-                                     :defaultProps="defaultProps" 
+                                      ref="dropDown"
+
+                                       v-model="parms[item.key]"
+                                     :defaultProps="defaultProps"
                                      :list="dropData"></drop-down>
                                 </div>
                             </el-form-item>
@@ -40,7 +40,7 @@
                         </el-row>
                 </el-form>
             </div>
-         
+
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i._baseText.search}}</el-button>
             <el-button @click="clear('parms')">{{$i._baseText.clear}}</el-button>
@@ -53,26 +53,26 @@
                   <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectNumber.length}})</el-button>
                   <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i._baseText.addToBookmark}}({{selectNumber.length}})</el-button>
                   <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>
-              </div>  
+              </div>
               <div>
-                 
-              </div>          
+
+              </div>
         </div>
 <!--        表格-->
-             <v-table 
+             <v-table
                     :height=360
                     :loading='loading'
-                    :data="tabData" 
+                    :data="tabData"
                     :buttons="[{label: 'detail', type: 1}]"
-                    @action="detail" 
+                    @action="detail"
                     @change-checked='checked'
                     style='marginTop:10px'/>
-                    
+
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
-                <el-button @click='emitData'>{{$i._baseText.ok}}</el-button>     
+                <el-button @click='emitData'>{{$i._baseText.ok}}</el-button>
                 <el-button type="primary">{{$i._baseText.cancel}}</el-button>
-            </div>        
-            
+            </div>
+
     </div>
 </template>
 
@@ -154,7 +154,7 @@
             //....跳入createInquiry
             createInquiry() {
                 this.$windowOpen({
-                    url:'/negotiation/createInquiry', 
+                    url:'/negotiation/createInquiry',
                     params:{
                     selectedData: this.selectedData
                 }});
@@ -271,7 +271,7 @@
         height: 32px;
         line-height: 32px;
         color: #666666;
-       
+
     }
 
     .title-btn {

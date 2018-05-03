@@ -25,6 +25,7 @@
 </template>
 <script>
     import { VTable, selectSearch, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name:'',
         data() {
@@ -70,7 +71,20 @@
             'v-table': VTable,
             'v-pagination': VPagination
         },
+        created() {
+            this.getList();
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'compare'
+                },
+                show: true
+            });
+        },
         methods: {
+            ...mapActions([
+                'setRecycleBin'
+            ]),
             getList() { //获取Compare 列表
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
@@ -147,9 +161,6 @@
                 },
                 deep: true
             }
-        },
-        created() {
-            this.getList();
         }
     }
 </script>

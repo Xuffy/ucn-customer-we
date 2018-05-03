@@ -70,7 +70,7 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
                   sorts: [
                     {
                       nativeSql: true,
-                      orderBy: 'id',
+                      orderBy: '',
                       orderType: 'DESC',
                       resultMapId: ''
                     }

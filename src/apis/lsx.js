@@ -2,6 +2,7 @@ export default {
     //获取category
     get_sys_category: ['/purchase/sys/category', 'BASE_CS1','UPURCHASE_URL'],
     get_my_category:['/purchase/category/tree','BASE_CS1','UPURCHASE_URL'],
+    get_supply_category:['/sys/category','BASE_CS','USUPPLY_URL'],
 
 
     get_productCategory:['/purchase/sys/category','BASE_CS1','UPURCHASE_URL'],
@@ -35,7 +36,7 @@ export default {
      * seller product
      * */
 
-    add_newSKU: ['/sku', 'BASE_CS'],
+    add_newSKU: ['/sku', 'BASE_CS','USUPPLY_URL'],
 
 
 
@@ -45,8 +46,8 @@ export default {
 
 
     //product buyer
-    get_buyerProductList:['/purchase/sku/listSkuByParams','UPURCHASE_URL','UPURCHASE_URL'],
-    get_buyerBookmarkList:['/purchase/sku/listBookmark','UPURCHASE_URL','UPURCHASE_URL'],
+    get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1','UPURCHASE_URL'],
+    get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1','UPURCHASE_URL'],
     add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
     add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1','UPURCHASE_URL'],
     add_bookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
@@ -71,13 +72,14 @@ export default {
     /**
      * seller warehouse
      * */
-    get_inboundData:['/inbound/page','BASE_SELLER','USUPPLY_URL'],
+    get_inboundData:['/inbound/page','BASE_WAREHOUSE','USUPPLY_URL'],
     get_productInfo:['/order/skuListPage','BASE_BUYER','USUPPLY_URL'],
     get_inboundDetail:['/inbound/getById','BASE_SELLER','USUPPLY_URL'],
     add_inbound:['/inbound/add','BASE_SELLER','USUPPLY_URL'],
     // get_productInfo:['/order/skuListPage','BASE_BUYER'],
-    get_warehouseOrderData:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
+    get_warehouseOrderData:['/order/skus','BASE_SELLER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
-    get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELLER','USUPPLY_URL'],
-    get_orderSku:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
+    get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELL','USUPPLY_URL'],
+    get_orderSku:['/order/getAllOrderInfo','BASE_BUYER','UPURCHASE_URL'],
+
 }

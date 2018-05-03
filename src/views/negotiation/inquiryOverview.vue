@@ -6,7 +6,7 @@
                 <span>{{ $i._baseText.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
                     <el-radio-button :label="null">{{$i._baseText.all}}</el-radio-button>
-                    <el-radio-button 
+                    <el-radio-button
                         v-for="item in $db.inquiryOverview.overoiewState"
                         :label="item.id"
                         :key="item.id"
@@ -15,8 +15,8 @@
                     </el-radio-button>
                 </el-radio-group>
             </div>
-            <select-search 
-                :options="options" 
+            <select-search
+                :options="options"
                 @inputChange="inputEnter"
                 :searchLoad="searchLoad"
             />
@@ -37,13 +37,13 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table 
-            :data="tabData" 
-            :buttons="[{label: 'detail', type: 'detail'}]" 
+        <v-table
+            :data="tabData"
+            :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
-            @action="action" 
+            @action="action"
             @change-checked="changeChecked"
-            :loading="tabLoad" 
+            :loading="tabLoad"
             ref="tab"
         />
         <v-pagination
@@ -56,9 +56,10 @@
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
-     * @param options 下拉框 原始数据 
+     * @param options 下拉框 原始数据
     */
     import { selectSearch, VTable, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex'
     export default {
         name:'',
         data() {
@@ -85,7 +86,7 @@
                 tabData: [],
                 viewByStatus: '',
                 params: {
-                    status: null,
+                    status: 22,
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -107,6 +108,20 @@
         },
         created() {
             this.viewByStatus = 0;
+            this.setDraft({
+                name: 'negotiationDraft',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             viewByStatus() {
@@ -118,9 +133,13 @@
                 },
                 deep: true
             }
-            
+
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin'
+            ]),
             inputEnter(val) {
                 if(!val.keyType) return this.$message('请选中搜索类型');
                 if(!val.key) return this.$message('搜索内容不能为空');
@@ -144,10 +163,10 @@
                     this.checkedData = [];
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
                 })
                 .catch(() => {
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
                     this.tabLoad = false;
                 })
             },
@@ -165,7 +184,7 @@
                     this.$message({
                         type: 'info',
                         message: '已取消删除'
-                    });          
+                    });
                 });
             },
             ajaxInqueryAction(type) {
@@ -187,10 +206,11 @@
                 }
             },
             detail(item) {
+                let id = _.findWhere(item, {'key': 'inquiryId'})?_.findWhere(item, {'key': 'inquiryId'}).value:_.findWhere(item, {'key': 'id'}).value;
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: _.findWhere(item, {'key': 'id'}).value
+                        id: id
                     }
                 });
             },
@@ -206,7 +226,7 @@
                 let argId = this.getChildrenId('str');
                 this.$windowOpen({
                     url: '/negotiation/compareDetail/{type}',
-                    params: {   
+                    params: {
                         type: 'new',
                         ids: argId.join(',')
                     }

@@ -104,7 +104,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
-                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ $i._baseText.remove }}</el-button>
+                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ `${$i._baseText.remove}(${checkedAll.length})` }}</el-button>
             </div>
             <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
@@ -136,6 +136,7 @@
                 :hideBtn="true"
                 :disabledLine="disabledLine"
                 @handleOK="getList"
+                @handleCancel="handleCancel"
                 :forceUpdateNumber="trig" 
                 :type="radio"
                 :isInquiry="true"
@@ -230,10 +231,23 @@
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    console.log(res, '=====')
+                    if(res.exportLicense) {
+                        res.exportLicense = 1;
+                    } else {
+                        res.exportLicense = 0;
+                    }
+                
+                    // res.suppliers.forEach(items => {
+                    //     _.mapObject(items, (val, k) => {
+                    //         if(/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
+                    //     });
+                    // });
                     this.fromArg = res;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
+            },
+            handleCancel() {
+                this.dialogTableVisible = false;
             },
             addProduct() {
                 let arr = [];
@@ -245,9 +259,12 @@
                 this.dialogTableVisible = true;
             },
             removeList() {
+                let arr = [];
                 _.map(this.tabData, (item, index) => {
-                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), item.skuId.value) !== -1) this.$set(item, '_disabled', true);
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.tabData = _.difference(this.tabData, arr);
+                this.checkedAll = [];
             },
             inputEnter(val) {
 
@@ -275,22 +292,10 @@
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
-                    this.selectAll.paymentMethod = _.map(_.findWhere(res, {'code': 'PMT'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.transport = _.map(_.findWhere(res, {'code': 'MD_TN'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.incoterm = _.map(_.findWhere(res, {'code': 'ITM'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
-                    this.selectAll.currency = _.map(_.findWhere(res, {'code': 'CY_UNIT'}).codes, item => {
-                        item.code = Number(item.code);
-                        return item;
-                    });
+                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
+                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
+                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
                     this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
                         item.code = Number(item.code);
                         return item;
@@ -381,7 +386,7 @@
                 });
             },
             productInfoBtn (item) { //Product info 按钮创建
-                return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'negotiate', type: 'modify'}, {label: 'Detail', type: 'detail'}];
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;

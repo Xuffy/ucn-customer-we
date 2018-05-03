@@ -128,5 +128,9 @@ export default {
   },
   skuCode: {
     key: 'skuCode'
+  },
+  skuId: {
+    key:'skuId',
+    _hide:true
   }
 }
