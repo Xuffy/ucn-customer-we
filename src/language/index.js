@@ -53,6 +53,6 @@ export default _.extend(
 
   //CN配置
 
-  {_warehouse: require(`./${lang}/warehouseEn/warehouse.basic`)},
-  require(`./${lang}/warehouseEn/warehouse.index`),
+  {_warehouse: require(`./${lang}/warehouseCn/warehouse.basic`)},
+  require(`./${lang}/warehouseCn/warehouse.index`),
 )

@@ -8,12 +8,12 @@
                 <span>{{$i._warehouse.status}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="1">待验货</el-radio-button>
-                    <el-radio-button label="2">申请返工</el-radio-button>
-                    <el-radio-button label="3">确认返工</el-radio-button>
-                    <el-radio-button label="4">申请退货</el-radio-button>
-                    <el-radio-button label="5">确认退货</el-radio-button>
-                    <el-radio-button label="6">已确认</el-radio-button>
+                    <el-radio-button label="WAIT_FOR_QC">待验货</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_REWORK">申请返工</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_REWORK">确认返工</el-radio-button>
+                    <el-radio-button label="APPLY_FOR_RETURN">申请退货</el-radio-button>
+                    <el-radio-button label="CONFIRMATION_OF_RETURN">确认退货</el-radio-button>
+                    <el-radio-button label="CONFIRMED">已确认</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -27,6 +27,7 @@
                     <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
+                        :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
@@ -52,6 +53,7 @@
                 /**
                  * 页面基本配置
                  * */
+                loadingTable:false,
                 inboundStatus:'0',
                 tableDataList:[],
                 downloadBtnInfo:'All',
@@ -101,27 +103,27 @@
         },
         methods:{
             changeStatus(e){
-                let num=Number(e);
-                if(num===0){
-                    this.inboundConfig.inboundTypeDictCode=null;
+                if(e==='0'){
+                    this.warehouseConfig.skuInventoryStatusDictCode=null;
                 }else{
-                    this.inboundConfig.inboundTypeDictCode=num;
+                    this.warehouseConfig.skuInventoryStatusDictCode=e;
                 }
                 this.getInboundData();
             },
 
             //获取表格数据
             getInboundData(){
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_warehouseOverviewData,this.warehouseConfig).then(res=>{
-                    console.log(res)
-                    // this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                    //     e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                    //     e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
-                    //     e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
-                    //     return e;
-                    // });
+                    this.tableDataList = this.$getDB(this.$db.warehouse.sellerWarehouseTable, res.datas,(e)=>{
+                        // e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        // e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        // e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        // return e;
+                    });
+                    this.loadingTable=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.loadingTable=false;
                 });
             },
 
@@ -133,8 +135,12 @@
             },
 
             searchInbound(e){
-                this.inboundConfig.inboundNo=e.key;
-                this.getInboundData();
+                // this.warehouseConfig.inboundNo=e.key;
+                console.log(e)
+                if(!e.keyType){
+                    this.warehouseConfig.skuInventoryStatusDictCode=null;
+                }
+                // this.getInboundData();
             },
 
             btnClick(e){

@@ -36,7 +36,7 @@ export default {
      * seller product
      * */
 
-    add_newSKU: ['/sku', 'BASE_CS'],
+    add_newSKU: ['/sku', 'BASE_CS','USUPPLY_URL'],
 
 
 
@@ -72,7 +72,7 @@ export default {
     /**
      * seller warehouse
      * */
-    get_inboundData:['/inbound/page','BASE_SELLER','USUPPLY_URL'],
+    get_inboundData:['/inbound/page','BASE_WAREHOUSE','USUPPLY_URL'],
     get_productInfo:['/order/skuListPage','BASE_BUYER','USUPPLY_URL'],
     get_inboundDetail:['/inbound/getById','BASE_SELLER','USUPPLY_URL'],
     add_inbound:['/inbound/add','BASE_SELLER','USUPPLY_URL'],

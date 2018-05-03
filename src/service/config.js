@@ -27,8 +27,6 @@ export default {
       BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
       BASE_HSM_W: 'http://192.168.51.248:11001',
-      BASE_BUY:'http://192.168.51.248:11001',
-      BASE_SELL:'http://192.168.51.248:11002',
 
 
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
@@ -45,7 +43,17 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      UWORKBENCH_URL: 'http://dev.uworkbench-facade.ucnholding.com:18100',
+      UWORKBENCH_URL: 'http://dev.uworkbench.ucnholding.com:18100',
+
+
+
+
+
+
+        BASE_BUY:'http://192.168.51.248:11001',
+        BASE_SELL:'http://192.168.51.248:11002',
+        BASE_WAREHOUSE:'http://192.168.51.248:12005',
+
     },
     develop: {
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
