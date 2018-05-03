@@ -835,6 +835,14 @@ export const routerMap = [
           },
           component: () => import('../views/sellerWarehouse/qc/qcOverview'),
         },
+        {
+          path: 'sellerQCOrderDetail',
+          name: 'sellerQCOrderDetail',
+          meta: {
+            name: 'sellerQCOrderDetail'
+          },
+          component: () => import('../views/sellerWarehouse/qc/QCOrderDetail')
+        }
       ]
     },
     {

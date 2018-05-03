@@ -1,6 +1,6 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="hasId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
+    <div class="hd-top" v-if="planId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
     <div class="hd-top" v-else>{{ $i.placeNewLogisticPlan }}</div>
     <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.basicInfoTitle"/>
     <el-row :gutter="10">
@@ -18,7 +18,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.containerInfoTitle }}</div>
-      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit"/>
+      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="containerType"/>
     </div>
 
     <div>
@@ -30,7 +30,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList"/>
+      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -79,6 +79,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      remark: '',
       showProductDialog: false,
       showAddProductDialog: false,
       selectionContainer: [],
@@ -86,16 +87,17 @@ export default {
       edit: false,
       basicInfoObj,
       transportInfoObj: {
-        "transportCompany": "",
-        "vesselName": "",
-        "vesselNo": "",
-        "departureCountry": "",
-        "departurePort": "",
-        "destinationCountry": "",
-        "destinationPort": ""
+        transportCompany: "",
+        vesselName: "",
+        vesselNo: "",
+        departureCountry: "",
+        departurePort: "",
+        destinationCountry: "",
+        destinationPort: ""
       },
       transportInfoArr: [],
       basicInfoArr: [],
+      containerType: [],
       productbButtons: [
         {
           label: 'Negociate',
@@ -111,50 +113,50 @@ export default {
         }
       ],
       exchangeRateList: [
-        {
-          text: '￥-$',
-          value: 0
-        },
-        {
-          text: '$-￥',
-          value: 0
-        },
-        {
-          text: '￥-€',
-          value: 0
-        },
-        {
-          text: '€-￥',
-          value: 0
-        },
-        {
-          text: '$-€',
-          value: 0
-        },
-        {
-          text: '€-$',
-          value: 0
-        }
+        // {
+        //   text: '￥-$',
+        //   value: 0
+        // },
+        // {
+        //   text: '$-￥',
+        //   value: 0
+        // },
+        // {
+        //   text: '￥-€',
+        //   value: 0
+        // },
+        // {
+        //   text: '€-￥',
+        //   value: 0
+        // },
+        // {
+        //   text: '$-€',
+        //   value: 0
+        // },
+        // {
+        //   text: '€-$',
+        //   value: 0
+        // }
       ],
       feeList: [
-        {
-          "fclTransportCharge": "FCL Transport Charge",
-          "fclTransportChargeCurrency": "FCL Transport Charge Currency",
-          "handlingCharges": "Handling Charges",
-          "handlingChargesCurrency": "Handling Charges Currency",
-          "otherPortCharges": "Other Port Charges",
-          "otherPortChargesCurrency": "Other Port Charges Currency",
-          "oceanFreight": "Ocean Freight",
-          "oceanFreightCurrency": "Ocean Freight Currency",
-          "insuranceCharges": "Insurance Charges",
-          "insuranceChargesCurrency": "Insurance Charges Currency",
-          "otherCharges": "Other Charges",
-          "otherChargesCurrency": "Other Charges Currency",
-          "otherChargesExchangeRate": "Other Charges Exchange Rate",
-          "otherChargesRemark": "Other Charges Remark",
-          "commissionCharges": "Commission Charges",
-          "commissionChargesCurrency": "Commission Charges Currency"
-        }
+        // {
+        //   "fclTransportCharge": "FCL Transport Charge",
+        //   "fclTransportChargeCurrency": "FCL Transport Charge Currency",
+        //   "handlingCharges": "Handling Charges",
+        //   "handlingChargesCurrency": "Handling Charges Currency",
+        //   "otherPortCharges": "Other Port Charges",
+        //   "otherPortChargesCurrency": "Other Port Charges Currency",
+        //   "oceanFreight": "Ocean Freight",
+        //   "oceanFreightCurrency": "Ocean Freight Currency",
+        //   "insuranceCharges": "Insurance Charges",
+        //   "insuranceChargesCurrency": "Insurance Charges Currency",
+        //   "otherCharges": "Other Charges",
+        //   "otherChargesCurrency": "Other Charges Currency",
+        //   "otherChargesExchangeRate": "Other Charges Exchange Rate",
+        //   "otherChargesRemark": "Other Charges Remark",
+        //   "commissionCharges": "Commission Charges",
+        //   "commissionChargesCurrency": "Commission Charges Currency"
+        // }
       ],
       productList: [
         {
@@ -225,55 +227,56 @@ export default {
         }
       ],
       paymentList: [
-        {
-          "paymentNumber": "casd122",
-          "paymentItem": "Payment Item",
-          "estPayDate": "Est. Pay Date",
-          "estAmount": "123",
-          "actPayDate": "Act. Pay Date",
-          "actAmount": "44",
-          "currency": "Currency",
-          "avilable": "Avilable",
-          "operation": "Operation"
-        }
+        // {
+        //   "paymentNumber": "casd122",
+        //   "paymentItem": "Payment Item",
+        //   "estPayDate": "Est. Pay Date",
+        //   "estAmount": "123",
+        //   "actPayDate": "Act. Pay Date",
+        //   "actAmount": "44",
+        //   "currency": "Currency",
+        //   "avilable": "Avilable",
+        //   "operation": "Operation"
+        // }
       ],
       tableData: [
-        {
-          "containerNo": 1,
-          "sealNumber": 2,
-          "containerWeight": "3",
-          "containerType": "4",
-          "vgm": "22",
-          "totalQuantityInContainer": "13",
-          "totalVolumeInContainer": "3",
-          "totalNetWeightInContainer": "12",
-          "totalQuantityOfOuterCartonsInContainer": "43",
-          "totalSkuPriceInContainer": "45",
-          "exchangeCurrency": "Exchange Currency"
-        },
-        {
-          "containerNo": 1,
-          "sealNumber": 2,
-          "containerWeight": "3",
-          "containerType": "4",
-          "vgm": "11",
-          "totalQuantityInContainer": "22",
-          "totalVolumeInContainer": "12",
-          "totalNetWeightInContainer": "1",
-          "totalQuantityOfOuterCartonsInContainer": "12",
-          "totalSkuPriceInContainer": "33",
-          "exchangeCurrency": "Exchange Currency"
-        }
+        // {
+        //   "containerNo": 1,
+        //   "sealNumber": 2,
+        //   "containerWeight": "3",
+        //   "containerType": "4",
+        //   "vgm": "22",
+        //   "totalQuantityInContainer": "13",
+        //   "totalVolumeInContainer": "3",
+        //   "totalNetWeightInContainer": "12",
+        //   "totalQuantityOfOuterCartonsInContainer": "43",
+        //   "totalSkuPriceInContainer": "45",
+        //   "exchangeCurrency": "Exchange Currency"
+        // },
+        // {
+        //   "containerNo": 1,
+        //   "sealNumber": 2,
+        //   "containerWeight": "3",
+        //   "containerType": "4",
+        //   "vgm": "11",
+        //   "totalQuantityInContainer": "22",
+        //   "totalVolumeInContainer": "12",
+        //   "totalNetWeightInContainer": "1",
+        //   "totalQuantityOfOuterCartonsInContainer": "12",
+        //   "totalSkuPriceInContainer": "33",
+        //   "exchangeCurrency": "Exchange Currency"
+        // }
       ],
+      paymentSum: {},
       selectArr: {
         permitedForTransportation: [
           {
-            code: 1,
-            name: '是'
+            code: '1',
+            name: this.$i.yes
           },
           {
-            code: 0,
-            name: '否'
+            code: '0',
+            name: this.$i.no
           }
         ]
       }
@@ -300,51 +303,80 @@ export default {
     }
   },
   computed: {
-    hasId () {
-      return !!this.$route.query.id
+    planId () {
+      return this.$route.query.id
     }
   },
   mounted () {
-    this.getDictionary(['PMT'], 'payment')
-    this.getDictionary(['MD_TN'], 'transportationWay')
-    this.getCurrency()
-    if (!this.hasId) {
-      this.edit = true
-      this.getNewLogisticsNo()
-    }
-    this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
-    this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
-
+    this.getDictionary()
+    this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
+      return {
+        type: this.computeType(key),
+        label: this.$i[key],
+        key,
+        value
+      }
+    })
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
         label: this.$i[key],
+        key,
         value
       }
     })
+    this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
+    this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
+    if (this.planId) {
+      this.getDetails()
+    } else {
+      this.edit = true
+      this.getNewLogisticsNo()
+    }
   },
   methods: {
-    getNewLogisticsNo () {
-      this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
-        this.basicInfoObj.logisticsNo = res
-        this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
-          return {
-            type: this.computeType(key),
-            label: this.$i[key],
-            key,
-            value
-          }
+    getDetails () {
+      this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
+        this.basicInfoArr.forEach(a => {
+          a.value = res[a.key]
+        })
+        this.transportInfoArr.forEach(a => {
+          a.value = res[a.key]
+        })
+        this.exchangeRateList = res.currencyExchangeRate
+        this.remark = res.remark
+        this.tableData = res.containerDetail
+        this.feeList = [res.fee]
+        this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
+          this.paymentList = res.datas
+          this.paymentSum = res.statisticsDatas[0]
         })
       })
     },
-    getCurrency () {
+    getNewLogisticsNo () {
+      this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
+        this.basicInfoArr.find(a => {
+          if (a.key === 'logisticsNo') return a
+        }).value = res
+      })
+    },
+    getDictionary () {
       this.$ajax.get(this.$apis.get_currency).then(res => {
         this.selectArr.exchangeCurrency = res
       })
+      this.$ajax.get(this.$apis.get_container_type, '_cache').then(res => {
+        this.containerType = res
+      })
+      this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
+      // this.getDictionaryPart([], 'transportationWay')
+      // this.getDictionaryPart([], 'blType')
     },
-    getDictionary (keyCode, key) {
+    getDictionaryPart (keyCode, keys) {
       this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
-        this.selectArr[key] = res[0].codes      })
+        keys.forEach((a, i) => {
+          this.selectArr[a] = res[i].codes
+        })
+      })
     },
     handleSelectionContainer (selectArray) {
       this.selectionContainer = selectArray
@@ -395,7 +427,7 @@ export default {
       this.edit = !this.edit
     },
     toExit () {
-      this.hasId ? (this.edit = !this.edit) : this.$router.go(-1)
+      this.planId ? (this.edit = !this.edit) : this.$router.go(-1)
     },
     savePlan () {
       this.basicInfoArr.forEach(a => {

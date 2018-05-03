@@ -281,13 +281,11 @@
                 productTableData:[],
                 selectProductList:[],
                 loadingProductTable:false,
-
                 /**
                  * 外部展示数据
                  * */
                 productIds:[],                  //用于存储用于外部展示的产品ID
                 productData:[],                 //添加到外部用于展示的产品详细信息
-
                 inboundData:{
                     inboundNo:'',       //新建的时候不传
                     inboundDate:'',
@@ -317,8 +315,6 @@
                     totalNetWeight:0,
                     totalSkuQty:0,
                 },
-
-
                 /**
                  * 弹出框数据
                  * */
@@ -397,8 +393,6 @@
 
             //提交表单
             submit(){
-                console.log(this.productData)
-                console.log(this.inboundData.inboundSkuBeanCreateParams,'this.inboundData')
                 this.productData.forEach(v=>{
                     this.inboundData.inboundSkuBeanCreateParams.push({
                         customerName: v.customerName,
@@ -406,19 +400,18 @@
                         customerOrderNo: v.customerOrderNo,
                         customerSkuCode: v.skuList[0].skuCustomsCode,
                         factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
-                        id: 0,      //??
-                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:null,
-                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:null,
-                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight?v.inboundSkuTotalNetWeight:null,
-                        inboundSkuTotalQty: v.inboundSkuTotalQty?v.inboundSkuTotalQty:null,
-                        inboundSkuTotalVolume: v.inboundSkuTotalVolume?v.inboundSkuTotalVolume:null,
-                        innerCartonGrossWeight: v.skuList[0].skuInnerCartonRoughWeight,
-                        innerCartonHeight: v.skuList[0].skuInnerCartonHeight,
-                        innerCartonLength: v.skuList[0].skuInnerCartonLength,
-                        innerCartonNetWeight: v.skuList[0].skuInnerCartonWeightNet,
+                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:0,
+                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:0,
+                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight?v.inboundSkuTotalNetWeight:0,
+                        inboundSkuTotalQty: v.inboundSkuTotalQty?v.inboundSkuTotalQty:0,
+                        inboundSkuTotalVolume: v.inboundSkuTotalVolume?v.inboundSkuTotalVolume:0,
+                        innerCartonGrossWeight: v.skuList[0].skuInnerCartonRoughWeight?v.skuList[0].skuInnerCartonRoughWeight:0,
+                        innerCartonHeight: v.skuList[0].skuInnerCartonHeight?v.skuList[0].skuInnerCartonHeight:0,
+                        innerCartonLength: v.skuList[0].skuInnerCartonLength?v.skuList[0].skuInnerCartonLength:0,
+                        innerCartonNetWeight: v.skuList[0].skuInnerCartonWeightNet?v.skuList[0].skuInnerCartonWeightNet:0,
                         innerCartonPackingMethodCn: v.skuList[0].skuInnerCartonMethodCn,
-                        innerCartonVolume: v.skuList[0].skuInnerCartonVolume,
-                        innerCartonWidth: v.skuList[0].skuInnerCartonWidth,
+                        innerCartonVolume: v.skuList[0].skuInnerCartonVolume?v.skuList[0].skuInnerCartonVolume:0,
+                        innerCartonWidth: v.skuList[0].skuInnerCartonWidth?v.skuList[0].skuInnerCartonWidth:0,
                         /**
                          * inventory,outbound暂时全部传0
                          * */
@@ -435,10 +428,10 @@
                         outboundSkuTotalNetWeight: 0,
                         outboundSkuTotalQty: 0,
                         outboundSkuTotalVolume: 0,
-                        outerCartonGrossWeight: v.skuList[0].skuOuterCartonRoughWeight,
-                        outerCartonNetWeight: v.skuList[0].skuOuterCartonNetWeight,
-                        outerCartonSkuQty: v.skuList[0].skuOuterCartonQty,
-                        outerCartonVolume: v.skuList[0].skuOuterCartonVolume,
+                        outerCartonGrossWeight: v.skuList[0].skuOuterCartonRoughWeight?v.skuList[0].skuOuterCartonRoughWeight:0,
+                        outerCartonNetWeight: v.skuList[0].skuOuterCartonNetWeight?v.skuList[0].skuOuterCartonNetWeight:0,
+                        outerCartonSkuQty: v.skuList[0].skuOuterCartonQty?v.skuList[0].skuOuterCartonQty:0,
+                        outerCartonVolume: v.skuList[0].skuOuterCartonVolume?v.skuList[0].skuOuterCartonVolume:0,
                         packingMethodCn: v.skuList[0].skuMethodPkgCn,
                         skuBarCode: v.skuList[0].skuBarCode,
                         skuBrand: v.skuList[0].skuBrand,
@@ -446,36 +439,37 @@
                         skuDescCn: v.skuList[0].skuDescCn,
                         skuDescCustomer: v.skuList[0].skuDescCustomer,
                         skuDescEn: v.skuList[0].skuDescEn,
-                        skuHeight: v.skuList[0].skuHeight,
+                        skuHeight: v.skuList[0].skuHeight?v.skuList[0].skuHeight:0,
                         skuId: v.skuList[0].skuId,
                         skuLabel: v.skuList[0].skuLabel,
-                        skuLength: v.skuList[0].skuLength,
+                        skuLength: v.skuList[0].skuLength?v.skuList[0].skuLength:0,
                         skuMaterialCn: v.skuList[0].skuMaterialCn,
                         skuMaterialEn: v.skuList[0].skuMaterialEn,
                         skuNameCn: v.skuList[0].skuNameCn,
                         skuNameCustomer: v.skuList[0].skuNameCustomer,
                         skuNameEn: v.skuList[0].skuNameEn,
-                        skuNetWeight: v.skuList[0].skuNetWeight,
+                        skuNetWeight: v.skuList[0].skuNetWeight?v.skuList[0].skuNetWeight:0,
                         skuUnitDictCode: v.skuList[0].skuUnit,
-                        skuWidth: v.skuList[0].skuWidth,
+                        skuWidth: v.skuList[0].skuWidth?v.skuList[0].skuWidth:0,
                         supplierId: 0,
                         supplierName: v.supplierName,
                         supplierNo: v.supplierNo,
                         supplierOrderNo: v.supplierOrderNo,
                     });
                 })
+                console.log(this.inboundData)
+                this.disabledSubmit=true;
 
-                // this.disabledSubmit=true;
-                // this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
-                //     this.disabledSubmit=false;
-                //     this.$message({
-                //         message: '新增成功',
-                //         type: 'success'
-                //     });
-                //     this.$router.push('/sellerWarehouse/inbound');
-                // }).catch(err=>{
-                //     this.disabledSubmit=false;
-                // });
+                this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
+                    this.disabledSubmit=false;
+                    this.$message({
+                        message: '新增成功',
+                        type: 'success'
+                    });
+                    this.$router.push('/sellerWarehouse/inbound');
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
             },
 
             cancel(){
