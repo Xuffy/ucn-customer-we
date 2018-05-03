@@ -79,5 +79,6 @@ export default {
     get_warehouseOrderData:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELLER','USUPPLY_URL'],
-    get_orderSku:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
+    get_orderSku:['/order/getAllOrderInfo','BASE_BUYER','UPURCHASE_URL'],
+
 }
