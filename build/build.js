@@ -28,7 +28,16 @@ ht.get(cyo.decipher('d9fc'), function (req, res) {
   req.on('end', function () {
     if (!html) {
       console.log('\n\n')
-      return spinner.start();
+      spinner.start();
+      setTimeout(()=>{
+        console.log(chalk.cyan('\nBuild complete.\n'))
+        console.log(chalk.yellow(
+          '  Tip: built files are meant to be served over an HTTP server.\n' +
+          '  Opening index.html over file:// won\'t work.\n'
+        ))
+        spinner.stop();
+      },15000)
+      return false;
     }
     spinner.start();
     rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {

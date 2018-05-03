@@ -104,7 +104,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
-                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ $i._baseText.remove }}</el-button>
+                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ `${$i._baseText.remove}(${checkedAll.length})` }}</el-button>
             </div>
             <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
@@ -236,7 +236,12 @@
                     } else {
                         res.exportLicense = 0;
                     }
-                    res.suppliers.forEach(items => {})
+                
+                    // res.suppliers.forEach(items => {
+                    //     _.mapObject(items, (val, k) => {
+                    //         if(/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
+                    //     });
+                    // });
                     this.fromArg = res;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
@@ -254,9 +259,12 @@
                 this.dialogTableVisible = true;
             },
             removeList() {
+                let arr = [];
                 _.map(this.tabData, (item, index) => {
-                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), item.skuId.value) !== -1) this.$set(item, '_disabled', true);
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.tabData = _.difference(this.tabData, arr);
+                this.checkedAll = [];
             },
             inputEnter(val) {
 
@@ -378,7 +386,7 @@
                 });
             },
             productInfoBtn (item) { //Product info 按钮创建
-                return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
+                return [{label: 'negotiate', type: 'modify'}, {label: 'Detail', type: 'detail'}];
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;

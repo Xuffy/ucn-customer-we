@@ -14,13 +14,18 @@
             :buttons="[{label: 'Detail', type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
-            :height="350"
+            :height="450"
             :page-total="pageTotal"
+        />
+        <v-pagination
+            :page-data.sync="bodyData"
+            @change="handleSizeChange"
+            @size-change="pageSizeChange"
         />
     </div>
 </template>
 <script>
-    import { VTable, selectSearch } from '@/components/index';
+    import { VTable, selectSearch, VPagination } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -48,6 +53,7 @@
                     // },
                     ps: 10,
                     pn: 1,
+                    tc: 0,
                     draft: 1,
                     recycleCustomer: 0
                     //recycleSupplier
@@ -65,13 +71,20 @@
         },
         components: {
             'select-search':selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'v-pagination': VPagination
         },
         methods: {
+            handleSizeChange(val) {
+                this.bodyData.pn = val;
+            },
+            pageSizeChange(val) {
+                this.bodyData.ps = val;
+            },
             getInquiryList() { //获取inquirylist
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
-                    this.pageTotal = res.tc;
+                    this.bodyData.tc = res.tc;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 

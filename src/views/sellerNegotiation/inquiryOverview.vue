@@ -56,7 +56,7 @@
      * @param selectChange 下拉框 值发生变更触发
      * @param options 下拉框 原始数据 
     */
-    import { selectSearch, VTable } from '@/components/index';
+    import { selectSearch, VTable, VPagination } from '@/components/index';
     export default {
         name:'',
         data() {
@@ -84,7 +84,7 @@
                 tabData: [],
                 viewByStatus: '',
                 params: {
-                    status: null,
+                    status: 21,
                     keyType: '',
                     key: '',
                     ps: 10,
@@ -99,7 +99,8 @@
         },
         components: {
             'select-search': selectSearch,
-            'v-table': VTable
+            'v-table': VTable,
+            'v-pagination': VPagination
         },
         created() {
             this.viewByStatus = 0;
@@ -207,7 +208,7 @@
                     }
                 });
             },
-            pageChange(No) {
+            pageSizeChange(No) {
                 console.log(No)
             },
             handleSizeChange(val) {

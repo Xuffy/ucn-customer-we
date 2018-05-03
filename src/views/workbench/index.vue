@@ -1,6 +1,5 @@
 <template>
   <div class="workbench">
-
     <div class="quickLink">
       <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"
           @click="$refs.historyModify.edit(mockData,historyData, true)"></h3>
@@ -9,9 +8,10 @@
                  @click="$store.state.quickLink.show = true"></el-button>
       <br/>
       <el-button size="mini" v-for="item in $store.state.quickLink.list" :key="item.id">
-        {{item.label}}
+        <router-link :to="item.link">
+          {{item.label}}
+        </router-link>
       </el-button>
-
     </div>
     <br/><br/>
     <v-data-dashboard></v-data-dashboard>
@@ -68,6 +68,7 @@
       }
     },
     created() {
+
     },
     mounted() {
       this.testId = '123';

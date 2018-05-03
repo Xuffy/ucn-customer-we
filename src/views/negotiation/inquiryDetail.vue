@@ -28,7 +28,7 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i._baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && checkedAll.length - newProductTabData.length/2 && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
                     </div>
@@ -45,6 +45,7 @@
                         <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i._baseText.createOrder }}</el-button> -->
                         <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.modify }}</el-button>
+                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i._baseText.copy }}</el-button>
                         <el-button @click="toCreateInquire">{{ $i._baseText.createInquiry }}</el-button>
                         <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
                     </div>
@@ -81,8 +82,6 @@
                 @save="save"
                 ref="HM"
             >
-        </v-history-modify>
-        <div class="slot-wrap">
             <div slot="transportationWay" slot-scope="{item}">
                 <el-select v-model="item" placeholder="请选择">
                     <el-option
@@ -116,7 +115,7 @@
                     />
                 </el-select>
             </div>
-        </div>
+        </v-history-modify>
     </div>
 </template>
 <script>
@@ -223,7 +222,6 @@
                     if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
                     if(item + '' === '1') data = this.$table.setHighlight(this.tabData);
                 });
-                console.log(data)
                 this.newTabData = data;
             },
             ProductCheckList(val, oldVal) {
@@ -486,10 +484,12 @@
                 });
             },
             removeProduct() { //删除product 某个单
-            // console.log(_.pluck(this.checkedAll,'skuId'))
+                let arr = [];
                 _.map(this.newProductTabData, (item, index) => {
-                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.newProductTabData = _.difference(this.newProductTabData, arr);
+                this.checkedAll = [];
             },
             modifyCancel() { //页面编辑取消
                 this.newTabData = this.tabData;
@@ -637,9 +637,9 @@
                     }
                     .bom-btn-wrap {
                         padding-top:20px;
-                        padding-left:10px;
+                        padding-left:190px;
                         position: fixed;
-                        left:180px;
+                        left:0;
                         bottom:0;
                         background:#fff;
                         z-index:99;

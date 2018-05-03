@@ -273,12 +273,11 @@
                         });          
                     });
                 } else {
+                    let arr = [];
                     _.map(this.tabData, (items, index) => {
-                        if(items._checked) {
-                            items._disabled = true;
-                            this.$set(this.tabData, index, items);
-                        }
+                        if(items._checked) arr.push(items);
                     });
+                    this.tabData = _.difference(this.tabData, arr);
                     this.checkedArg = [];
                 };
             },
