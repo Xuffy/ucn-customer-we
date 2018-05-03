@@ -22,7 +22,7 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                   <el-button @click='deleted' type='danger'>{{$i._baseText.delete}}</el-button>
+<!--                   <el-button @click='deleted' type='danger'>{{$i._baseText.delete}}</el-button>-->
 <!--
                     <el-button @click='createInquiry'>{{$i._baseText.createInquiry}}</el-button>
                     <el-button @click='createOrder'>{{$i._baseText.createOrder}}</el-button>

@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
 import Layout from 'components/Layout/index.vue'
-import {Notification,Message} from 'element-ui';
+import {Notification, Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
 Vue.use(Router);
@@ -24,7 +24,7 @@ export const routerMap = [
       meta: {
         name: 'sellerNegotiation',
       },
-      children:[
+      children: [
         {
           path: 'inquiry',
           name: 'sellerNegotiationInquiry',
@@ -74,8 +74,8 @@ export const routerMap = [
           path: 'index',
           name: 'workbench',
           meta: {
-            draft: false,
-            recycleBin: false,
+            draft: true,
+            recycleBin: true,
             log: false,
           },
           component: () => import('../views/workbench/index.vue')
@@ -223,6 +223,18 @@ export const routerMap = [
             name: 'Bookmark Detail'
           },
           component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
+        },
+           {
+          path: 'recycleBin',
+          name: 'supplierRecycleBin',
+          hidden: true,
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Bookmark recycleBin'
+          },
+          component: () => import ('../views/supplier/bookmark/recycleBin.vue')
         },
         {
           path: 'sourcingDetail',
@@ -431,17 +443,20 @@ export const routerMap = [
       path: '/warehouse',
       component: Layout,
       redirect: '/warehouse/overview',
-      meta: {name: 'Warehouse'},
-      noDropdown: true,
+      name:'Warehouse',
+      meta: {
+        name: 'Warehouse'
+      },
+      noDropdown: false,
       children: [
         {
           path: 'overview',
-          name: 'warehouse',
+          name: 'Warehouse Overview',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Overview'
+            name: 'Warehouse Overview'
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
@@ -656,14 +671,19 @@ export const routerMap = [
     {
       path: '/logs',
       component: Layout,
-      meta: {name: 'Logs'},
       redirect: '/logs/index',
+      meta: {name: 'Logs'},
       noDropdown: true,
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'index',
           name: 'logs',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/logs/logs.vue')
         }
       ]
@@ -891,7 +911,7 @@ export const routerMap = [
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
       component: Layout,
-      redirect: '/sellerNegotiation/CategorySetting',
+      redirect: '/sellerNegotiation/sellerNegotiationInquiry',
       meta: {
         name: 'sellerNegotiation',
       },

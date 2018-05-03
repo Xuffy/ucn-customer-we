@@ -11,9 +11,9 @@
     components: {},
     watch: {
       $route(val) {
-        this.$store.state.quickLink.draft = val.meta.draft;
+        this.$store.state.quickLink.draft = {show: val.meta.draft};
+        this.$store.state.quickLink.recycleBin = {show: val.meta.recycleBin};
         this.$store.state.quickLink.log = val.meta.log;
-        this.$store.state.quickLink.recycleBin = val.meta.recycleBin;
 
         this.$store.state.layout.paddingRight = 0;
         /*if (_.isEmpty(val.meta.messageBoard)) {

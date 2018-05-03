@@ -52,7 +52,7 @@
                         <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
                         <el-button @click="modifyAction">{{ $i._baseText.modify }}</el-button>
                         <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i._baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '21' && tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
