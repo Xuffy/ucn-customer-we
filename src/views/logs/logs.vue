@@ -144,13 +144,16 @@
                         }
                     ]
                 }
-                console.log(this.params)
+                console.log(params)
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,params)
                 .then(res => {
                     console.log(res)
                      this.tabLoad = false;
                     this.logslist = this.$getDB(this.$db.logs.table, res.datas);
+                })
+                .catch((res) => {
+                  this.tabLoad = false
                 });
             }
         },

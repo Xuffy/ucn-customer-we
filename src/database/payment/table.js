@@ -31,7 +31,8 @@ export default {
        type: 'textDate',
     },
     actualDateOfPayment: {
-        key: 'actualPayDt'
+        key: 'actualPayDt',
+        type: 'textDate',
     },
     receivable: {
         key: 'planReceiveAmount'  //应收
