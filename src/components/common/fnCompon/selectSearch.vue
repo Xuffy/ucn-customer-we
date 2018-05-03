@@ -33,8 +33,7 @@
         name:'selectSearch',
         data() {
             return {
-                keyWord:'',
-                keyType: ''
+                keyWord:''
             }
         },
         props: {
@@ -57,16 +56,16 @@
                 default: ''
             }
         },
-        // computed: {
-        //     keyType: {
-        //         // get() {
-        //         //     return this.value;
-        //         // },
-        //         // set(val) {
-        //         //     this.$emit('input', val);
-        //         // }
-        //     }
-        // },
+        computed: {
+            keyType: {
+                get() {
+                    return this.value;
+                },
+                set(val) {
+                    this.$emit('input', val);
+                }
+            }
+        },
         methods: {
             inputEnter() {
                 this.$emit('inputEnter', {

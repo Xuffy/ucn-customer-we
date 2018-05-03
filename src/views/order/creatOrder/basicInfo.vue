@@ -42,18 +42,28 @@
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
-                                          v-model='formItem[item.key]'                 
-                                        :disabled=item.ismodify||disabled||item.isDefaultEdit >
-<!--
-                                          <el-option
-                                              v-for="item in options"
-                                              :key="item.value"
-                                              :label="item.label"
-                                              :value="item.value">
-                                            </el-option>
--->
+                                          v-model='formItem[item.key]'                                                         :disabled=item.ismodify||disabled||item.isDefaultEdit >
                                   </el-select>
-                            </el-form-item>                  
+                            </el-form-item>  
+                          <el-form-item 
+                                  v-if='item.type=="selectMore"'
+                                 :label="item.label"
+                                 :prop="item.key">
+                                 <el-select
+                                          v-model='formItem[item.key]'             reserve-keyword  
+                                              filterable  
+                                              remote 
+                                              value-key="id"
+                                             :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit >
+                                             <el-option
+                                                v-for="item in selectAll[item.key]"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item"
+                                                :id="item.id"
+                                            />
+                                  </el-select>
+                            </el-form-item>                 
                          </el-col>
 
                          <el-col :xs="24" :sm="24" :md="24" :lg="24">
@@ -97,7 +107,7 @@
             return {
                 dialogEditDiv: false,
                 formItem: {
-                    orderNo: '8888', //必填   系统生成 不可编辑
+                    orderNo: '', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
                     customerName: '', //必填 系统生成  
@@ -123,6 +133,9 @@
                     customerAgreementDt: '',
                     remark: '',
                     currency: 'USD' //必填
+                },
+                 selectAll: {                
+                    supplierName: [],
                 },
                 //......................表单正则
                 rules: {
@@ -190,13 +203,19 @@
             dialogEdit() {
                 this.dialogEditDiv = true;
 
-            }
+            },
+              remoteMethod(keyWord) {
+               this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
+               .then(res => {
+                   this.selectAll.supplierName = res;
+               })
+           }
         },
         mounted() {
 
         },
         created() {
-
+            this.remoteMethod('')
         }
     }
 

@@ -2,9 +2,9 @@
   <el-row v-if="list.length">
     <el-col :xs="raster" :sm="raster" :md="raster" :lg="raster" :xl="raster" v-for="(a, i) of list" :key="'list-' + i">
       <div class="right">
-        <span>{{ `${ title }(${ a.text })`}}</span>
-        <el-input :placeholder="a.placeholder" v-model="a.value" v-if="edit"></el-input>
-        <p v-else>{{ a.value }}</p>
+        <span>{{ `${ title }(${ a.fromCurrency }-${a.toCurrency})`}}</span>
+        <el-input :placeholder="a.placeholder" v-model="a.price" v-if="edit"></el-input>
+        <p v-else>{{ a.price }}</p>
       </div>
     </el-col>
   </el-row>
@@ -34,7 +34,7 @@ export default {
   align-items: center;
   padding:10px 0;
   span {
-    width: 140px;
+    width: 200px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     display:inline-block;
     font-size:12px;

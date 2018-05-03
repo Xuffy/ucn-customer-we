@@ -6,7 +6,7 @@
       <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
         <div class="input-item">
           <span>{{ a.label }}</span>
-          <span v-if="!edit || disabledFields.includes(a.key)">{{a.value}}</span>
+          <span v-if="!edit || disabledFields.includes(a.key)">{{ textFilter(a) }}</span>
           <div v-else>
             <el-input placeholder="请输入内容" v-model="a.value" v-if="a.type === 'input'"/>
             <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true">
@@ -53,9 +53,9 @@ export default {
       disabledFields,
       paymentList: [],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now();
+        // },
         shortcuts: [{
           text: 'Today',
           onClick(picker) {
@@ -76,6 +76,16 @@ export default {
             picker.$emit('pick', date);
           }
         }]
+      }
+    }
+  },
+  methods: {
+    textFilter (a) {
+      if (a.type === 'input') return a.value
+      if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
+      if (a.type === 'selector' && this.selectArr[a.key]) {
+        let obj = this.selectArr[a.key].find(item => item.code == a.value)
+        return obj ? obj.name : null
       }
     }
   }
