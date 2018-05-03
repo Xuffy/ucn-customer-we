@@ -8,92 +8,62 @@
       <el-table :data="tableData" border style="width: 100%; margin-top: 20px" show-summary tooltip-effect="dark" :sum-text="$i.sum" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="50" align="center"/>
-        <el-table-column
-        :label="$i.containerNo"
-        align="center">
+        <el-table-column :label="$i.containerNo" width="140" align="center">
           <template slot-scope="scope">
             <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit"></el-input>
             <span v-else>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.sealNumber"
-        prop="sealNumber"
-        align="center">
+        <el-table-column :label="$i.sealNo" prop="sealNo" width="120" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.sealNumber" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.sealNumber }}</span>
+            <el-input placeholder="请输入内容" v-model="scope.row.sealNo" v-if="edit"></el-input>
+            <span v-else>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.containerWeight"
-        prop="containerWeight"
-        align="center">
+        <el-table-column :label="$i.containerWeight" width="140" prop="containerWeight" align="center">
           <template slot-scope="scope">
             <el-input placeholder="请输入内容" v-model="scope.row.containerWeight" v-if="edit"></el-input>
             <span v-else>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.containerType"
-        align="center">
+        <el-table-column :label="$i.containerType" width="140" align="center">
           <template slot-scope="scope">
             <el-select v-model="scope.row.containerType" placeholder="请选择" >
               <el-option v-for="item in containerType" :key="item.id" :label="item.label" :value="item.value"/>
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.vgm"
-        prop="vgm"
-        align="center">
+        <el-table-column :label="$i.vgm" prop="vgm" width="120"align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.vgm }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.totalQuantityInContainer"
-        prop="totalQuantityInContainer"
-        align="center">
+        <el-table-column :label="$i.totalQuantityInContainer" width="200" prop="totalContainerQty" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalQuantityInContainer }}</span>
+            <span>{{ scope.row.totalContainerQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.totalVolumeInContainer"
-        prop="totalVolumeInContainer"
-        align="center">
+        <el-table-column :label="$i.totalVolumeInContainer" width="200" prop="totalContainerVolume" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalVolumeInContainer }}</span>
+            <span>{{ scope.row.totalContainerVolume }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.totalNetWeightInContainer"
-        prop="totalNetWeightInContainer"
-        align="center">
+        <el-table-column :label="$i.totalNetWeightInContainer" width="200" prop="totalContainerNetWeight" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalNetWeightInContainer }}</span>
+            <span>{{ scope.row.totalContainerNetWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.totalQuantityOfOuterCartonsInContainer"
-        prop="totalQuantityOfOuterCartonsInContainer"
-        align="center">
+        <el-table-column :label="$i.totalQuantityOfOuterCartonsInContainer" width="300" prop="totalContainerOuterCartonsQty" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalQuantityOfOuterCartonsInContainer }}</span>
+            <span>{{ scope.row.totalContainerOuterCartonsQty }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.totalSkuPriceInContainer"
-        prop="totalSkuPriceInContainer"
-        align="center">
+        <el-table-column :label="$i.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalSkuPriceInContainer }}</span>
+            <span>{{ scope.row.totalContainerSkuPrice }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-        :label="$i.exchangeCurrency"
-        align="center">
+        <el-table-column :label="$i.exchangeCurrency" width="180" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.exchangeCurrency }}</span>
           </template>
@@ -124,12 +94,7 @@ export default {
     containerType: {
       type: Array,
       default: () => {
-        return [
-          {
-            label: "dada",
-            value: "4"
-          }
-        ]
+        return []
       }
     }
   },

@@ -25,6 +25,7 @@
                     <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
+                        :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: '详情', type: 1}]"
                         @change-checked="changeChecked"
@@ -50,6 +51,7 @@
                 /**
                  * 页面基本配置
                  * */
+                loadingTable:false,
                 inboundStatus:'0',
                 tableDataList:[],
                 downloadBtnInfo:'All',
@@ -98,6 +100,7 @@
 
             //获取表格数据
             getInboundData(){
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
                         e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -105,8 +108,9 @@
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
                         return e;
                     });
+                    this.loadingTable=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.loadingTable=false;
                 });
             },
 
@@ -118,6 +122,13 @@
             },
 
             searchInbound(e){
+                if(!e.keyType){
+                    this.$message({
+                        message: '请选择一个类别',
+                        type: 'warning'
+                    });
+                    return;
+                }
                 this.inboundConfig.inboundNo=e.key;
                 this.getInboundData();
             },

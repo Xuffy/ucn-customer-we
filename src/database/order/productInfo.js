@@ -19,6 +19,7 @@ export default {
     _id: {
         _hide: true
     },
+
     pic: {
         key: 'skuPic',
         type: 'attachment',
@@ -326,6 +327,11 @@ export default {
     },
     comments: {
         key: 'skuComments',
+        _disabled: true,
+    },
+    skuId: {
+        _hide: true,
+        key: 'skuId',
         _disabled: true,
     },
     skuStatus: {

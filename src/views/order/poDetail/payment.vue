@@ -2,7 +2,7 @@
     <div class="payment-table">
         <div class="payment-btn">
             <el-button :disabled="disabledBtn" @click="handleClick" type="primary">{{btnInfo}}</el-button>
-             <el-button :disabled="disabledBtn"  type="primary">提醒供应商退款</el-button>
+             <el-button :disabled="disabledBtn"  type="primary" @click='dunning'>提醒供应商退款</el-button>
         </div>
         <el-table
                 class="speTable"
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <!--作废时显示-->
-                            <div v-else-if="scope.row[columns[11].prop]===5">
+                            <div v-else-if="scope.row[columns[11].prop]===-1">
                                 <el-button type="text" :disabled="disabledBtn" @click="recoverLine(scope.row)">恢复</el-button>
                             </div>
                         </div>
@@ -298,7 +298,16 @@
                 }
                 return '';
             },
-
+            dunning(){
+             this.$ajax.post(this.$apis.paymentDunning, {
+                     orderNo:this.orderNo,
+                     orderType:this.orderType
+             }).then((res) => {
+                        console.log(res)
+                    }).catch((res) => {
+                        console.log(res)
+             })
+            },
             //统计
             getSummaries(param) {
                 const {
@@ -368,7 +377,8 @@
 
             //作废一行数据
             abandonLine(e) {
-                 this.$ajax.post(this.$apis.paymentAbandon, {id:e.id}).then((res) => {
+                console.log(e)
+                 this.$ajax.post(this.$apis.paymentAbandon+'/'+e.id+'?version='+e.version).then((res) => {
                        _.map(this.paymentData,(key,value)=>{                         
                          if(key.no==res.no){
                               this.paymentData.splice(value,1,res)
@@ -382,7 +392,10 @@
 
             //恢复一行数据
             recoverLine(e) {
-                      this.$ajax.post(this.$apis.paymentRecover, {id:e.id}).then((res) => {
+                      this.$ajax.post(this.$apis.paymentRecover, {
+                          id:e.id, 
+                          version:e.version
+                      }).then((res) => {
                        _.map(this.paymentData,(key,value)=>{                         
                          if(key.no==res.no){
                               this.paymentData.splice(value,1,res)
@@ -494,7 +507,7 @@
             }
         },
         created() {
-            this.get_list()
+//            this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
 

@@ -24,7 +24,6 @@
             <div class="section">
                 <div class="btns">
                     <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table
                         :loading="loadingTable"
@@ -70,7 +69,6 @@
                     //     }
                     // ],
                     orderNo: "",
-                    // ownerIds: [1],
                     pn: 1,
                     ps: 50,
                     skuCode: "",
@@ -127,20 +125,30 @@
                 });
             },
 
-            //新建入库单
-            createInbound(){
-                this.$windowOpen({
-                    url:'/sellerWarehouse/createInbound'
-                });
-            },
 
             searchInbound(e){
                 // this.warehouseConfig.inboundNo=e.key;
                 console.log(e)
                 if(!e.keyType){
-                    this.warehouseConfig.skuInventoryStatusDictCode=null;
+                    this.$message({
+                        message: '请至少选择一个类别',
+                        type: 'warning'
+                    });
+                    return;
+                }else if(e.keyType===1){    //订单号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo=e.key;
+                    this.warehouseConfig.skuCode='';
+                }else if(e.keyType===2){    //供应商货号
+                    this.warehouseConfig.inboundNo='';
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode=e.key;
+                }else if(e.keyType===3){    //入库单号
+                    this.warehouseConfig.inboundNo=e.key;
+                    this.warehouseConfig.orderNo='';
+                    this.warehouseConfig.skuCode='';
                 }
-                // this.getInboundData();
+                this.getInboundData();
             },
 
             btnClick(e){

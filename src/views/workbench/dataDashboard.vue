@@ -28,20 +28,22 @@
       <el-col :span="6" v-for="(item,index) in dataList" :key="index">
         <table>
           <tr>
-            <td class="title" v-text="$i._workbench.purchaseOrder"></td>
+            <!--<td class="title" v-text="$i._workbench.purchaseOrder"></td>-->
+            <td class="title" v-text="item.module"></td>
             <td class="value">
-              <div v-if="item[0]" v-text="item[0].value + ' ' + item[0].code"></div>&nbsp;
+              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].code"></div>&nbsp;
             </td>
           </tr>
           <tr>
-            <td class="title" rowspan="2" v-text="$i._workbench.orderPlaced"></td>
+            <!--<td class="title" rowspan="2" v-text="$i._workbench.orderPlaced"></td>-->
+            <td class="title" rowspan="2" v-text="item.theme"></td>
             <td class="value">
-              <div v-if="item[1]" v-text="item[1].value + ' ' + item[1].code"></div>&nbsp;
+              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].code"></div>&nbsp;
             </td>
           </tr>
           <tr>
             <td class="value">
-              <div v-if="item[2]" v-text="item[2].code + ' ' + item[2].value"></div>&nbsp;
+              <div v-if="item.list[2]" v-text="item.list[2].code + ' ' + item.list[2].value"></div>&nbsp;
             </td>
           </tr>
         </table>
@@ -173,6 +175,7 @@
   .data-table .title {
     background-color: #F2F2F2;
     text-align: center;
+    width: 50%;
   }
 
   .data-table .value {
