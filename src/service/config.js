@@ -9,7 +9,7 @@ export default {
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      BASE_JY: 'http://192.168.51.198:18002',
+      BASE_JY: 'http://192.168.51.199:18002',
       BASE_DHC: 'http://dev.upurchase-facade.ucnholding.com',
       BASE_LYF: 'http://dev.uuser-facade.ucnholding.com',
       BASE_JML: 'http://dev.umeta-facade.ucnholding.com',
@@ -42,7 +42,7 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      UWORKBENCH_URL: 'http://dev.uworkbench.ucnholding.com:18100',
+      UWORKBENCH_URL: 'http://dev.uworkbench-facade.ucnholding.com:18100',
     },
     develop: {
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
@@ -57,7 +57,7 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      UWORKBENCH_URL: 'http://dev.uworkbench.ucnholding.com:18100',
+      UWORKBENCH_URL: 'http://dev.uworkbench-facade.ucnholding.com:18100',
       LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     test: {
@@ -73,7 +73,7 @@ export default {
       USERVICE_URL: 'http://test.uservice.ucnscm.cn', // 服务商端
       UBIZLOG_URL: 'http://test.ubizlog.ucnscm.cn', // 业务日志
       UWAREHOUSE_URL: 'http://test.uwarehouse.ucnscm.cn',
-      UWORKBENCH_URL: 'http://test.uworkbench.ucnscm.cn',
+      UWORKBENCH_URL: 'http://test.uworkbench-facade.ucnscm.cn',
       LOGIN_URL: 'http://test.auth.ucnscm.cn', // 登录授权
     },
     production: {
