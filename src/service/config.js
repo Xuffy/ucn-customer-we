@@ -51,7 +51,8 @@ export default {
 
 
         BASE_BUY:'http://192.168.51.248:11001',
-        BASE_SELL:'http://192.168.51.248:11002'
+        BASE_SELL:'http://192.168.51.248:11002',
+        BASE_WAREHOUSE:'http://192.168.51.248:12005'
 
     },
     develop: {
