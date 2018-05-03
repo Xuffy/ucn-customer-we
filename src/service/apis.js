@@ -78,29 +78,6 @@ const apis = {
   //product supplier
   get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_CS'],
 
-  //product buyer
-  get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1'],
-  get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1'],
-  add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1'],
-  add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1'],
-  add_bookmark:['/purchase/sku/bookmark','BASE_CS1'],
-  get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1'],
-  add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1'],
-  update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1'],
-  delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1'],
-  delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1'],
-
-  add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1'],
-  get_compareList:['/purchase/sku/listCompare','BASE_CS1'],
-  recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1'],
-  get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1'],
-  add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1'],
-  delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1'],
-  get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1'],
-  delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1'],
-  get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1'],
-  edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1'],
-  update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_CS1'],
 
 
 
