@@ -705,7 +705,7 @@ export const routerMap = [
       meta: {
         name: 'sellerProduct'
       },
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'overview',

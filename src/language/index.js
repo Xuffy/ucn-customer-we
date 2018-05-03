@@ -40,7 +40,10 @@ export default _.extend(
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
 
   {_product: require(`./${lang}/product/product.basic`)},
+  {_productCn:require(`./${lang}/productCn/product.basic`)},
+
   require(`./${lang}/product/productOverview`),
+  require(`./${lang}/productCn/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
 
   require(`./${lang}/warehouse/qcWarehouse`),

@@ -420,60 +420,50 @@
                         innerCartonVolume: v.skuList[0].skuInnerCartonVolume,
                         innerCartonWidth: v.skuList[0].skuInnerCartonWidth,
                         /**
-                         * ？？？？
+                         * inventory,outbound暂时全部传0
                          * */
                         inventoryOutCartonQty: 0,
                         inventorySkuGrossWeight: 0,
                         inventorySkuNetWeight: 0,
                         inventorySkuQty: 0,
                         inventorySkuVolume: 0,
-                        orderId: 0,     //??没有，只有orderNo
-                        orderNo: "",
-                        orderSkuQty: 0,
+                        orderId: v.id,
+                        orderNo: v.orderNo,
+                        orderSkuQty: v.totalQty,
                         outboundOutCartonTotalQty: 0,
                         outboundSkuTotalGrossWeight: 0,
                         outboundSkuTotalNetWeight: 0,
                         outboundSkuTotalQty: 0,
                         outboundSkuTotalVolume: 0,
-                        outerCartonGrossWeight: 0,
-                        outerCartonNetWeight: 0,
-                        outerCartonSkuQty: 0,
-                        outerCartonVolume: 0,
-                        ownerId: 0,
-                        packingMethodCn: "",
-                        skuBarCode: "",
-                        skuBrand: "",
-                        skuCode: "",
-                        skuDescCn: "",
-                        skuDescCustomer: "",
-                        skuDescEn: "",
-                        skuHeight: 0,
-                        skuId: 0,
-                        skuInventoryStatusDictCode: "",
-                        skuLabel: "",
-                        skuLength: 0,
-                        skuMaterialCn: "",
-                        skuMaterialEn: "",
-                        skuNameCn: "",
-                        skuNameCustomer: "",
-                        skuNameEn: "",
-                        skuNetWeight: 0,
-                        skuQcStatusDictCode: "",
-                        skuUnitDictCode: "",
-                        skuWidth: 0,
+                        outerCartonGrossWeight: v.skuList[0].skuOuterCartonRoughWeight,
+                        outerCartonNetWeight: v.skuList[0].skuOuterCartonNetWeight,
+                        outerCartonSkuQty: v.skuList[0].skuOuterCartonQty,
+                        outerCartonVolume: v.skuList[0].skuOuterCartonVolume,
+                        packingMethodCn: v.skuList[0].skuMethodPkgCn,
+                        skuBarCode: v.skuList[0].skuBarCode,
+                        skuBrand: v.skuList[0].skuBrand,
+                        skuCode: v.skuList[0].skuCode,
+                        skuDescCn: v.skuList[0].skuDescCn,
+                        skuDescCustomer: v.skuList[0].skuDescCustomer,
+                        skuDescEn: v.skuList[0].skuDescEn,
+                        skuHeight: v.skuList[0].skuHeight,
+                        skuId: v.skuList[0].skuId,
+                        skuLabel: v.skuList[0].skuLabel,
+                        skuLength: v.skuList[0].skuLength,
+                        skuMaterialCn: v.skuList[0].skuMaterialCn,
+                        skuMaterialEn: v.skuList[0].skuMaterialEn,
+                        skuNameCn: v.skuList[0].skuNameCn,
+                        skuNameCustomer: v.skuList[0].skuNameCustomer,
+                        skuNameEn: v.skuList[0].skuNameEn,
+                        skuNetWeight: v.skuList[0].skuNetWeight,
+                        skuUnitDictCode: v.skuList[0].skuUnit,
+                        skuWidth: v.skuList[0].skuWidth,
                         supplierId: 0,
-                        supplierName: "string",
-                        supplierNo: "string",
-                        supplierOrderNo: "string",
-                        tenantId: 0,
-                        unqualifiedType: "string",
-                        updateDt: "2018-05-03T02:05:32.215Z",
-                        updateId: 0,
-                        updateName: "string",
+                        supplierName: v.supplierName,
+                        supplierNo: v.supplierNo,
+                        supplierOrderNo: v.supplierOrderNo,
                     });
                 })
-
-
 
                 // this.disabledSubmit=true;
                 // this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
@@ -491,8 +481,6 @@
             cancel(){
                 window.close();
             },
-
-
 
 
 

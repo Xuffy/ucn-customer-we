@@ -68,13 +68,11 @@
                     //     }
                     // ],
                     orderNo: "",
-                    outboundNo: "",
-                    ownerIds: [1],
+                    // ownerIds: [1],
                     pn: 1,
                     ps: 50,
-                    qcOrderNo: "",
                     skuCode: "",
-                    skuInventoryStatusDictCode: 0,
+                    skuInventoryStatusDictCode: null,
                     // sorts: [
                     //     {
                     //         orderBy: "",
