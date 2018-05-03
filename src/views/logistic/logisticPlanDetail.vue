@@ -2,13 +2,13 @@
   <div class="place-logistic-plan">
     <div class="hd-top" v-if="hasId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
     <div class="hd-top" v-else>{{ $i.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :title="$i.basicInfoTitle"/>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.basicInfoTitle"/>
     <el-row :gutter="10">
        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="input-item">
           <span>{{ $i.remark }}</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="basicInfoObj.remark" v-if="edit"></el-input>
-          <p v-else>{{ basicInfoObj.remark }}</p>
+          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="remark" v-if="edit"></el-input>
+          <p v-else>{{ remark }}</p>
         </div>
       </el-col>
       <attachment accept="all" ref="attachment" :title="$i.attachment"/>
@@ -56,7 +56,7 @@
         <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan"/>
   </div>
 </template>
 <script>
@@ -73,6 +73,8 @@ import addProduct from '@/views/logistic/children/addProduct'
 // 测试
 import { basicInfoInput, basicInfoSelector, basicInfoDate } from './children/test'
 
+import { basicInfoObj } from '@/database/logistic/plan/staticData'
+
 export default {
   name: 'logisticPlanDetail',
   data() {
@@ -82,42 +84,7 @@ export default {
       selectionContainer: [],
       productInfoModifyStatus: 0,
       edit: false,
-      basicInfoObj: {
-        "logisticsNo": "",
-        "estContainerStuffingDate": "",
-        "estCustomsCleanceDate": "",
-        "estDepartureDate": "",
-        "estArrivalDate": "",
-        "estReleaseDate": "",
-        "estDelivaryDate": "",
-        "logisticsStatus": "",
-        "createDate": "",
-        "declareDate": "",
-        "bookingDate": "",
-        "actDeliveryDate": "",
-        "actContainerStuffingDate": "",
-        "actCustomsCleanceDate": "",
-        "actDepartureDate": "",
-        "actArrivalDate": "",
-        "actReleaseDate": "",
-        "shipServiceProvider": "",
-        "customerName": "",
-        "receiptCompany": "",
-        "shippingAgent": "",
-        "exchangeCurrency": "",
-        "payment": "",
-        "paymentTerms": "",
-        "transportationWay": "",
-        "loadingType": "",
-        "permitedForTransportation": "",
-        "blType": "",
-        "blQuantity": "",
-        "blNumber": "",
-        "shipper": "",
-        "consignee": "",
-        "notify": "",
-        "remark": ""
-      },
+      basicInfoObj,
       transportInfoObj: {
         "transportCompany": "",
         "vesselName": "",
@@ -297,7 +264,19 @@ export default {
           "totalSkuPriceInContainer": "33",
           "exchangeCurrency": "Exchange Currency"
         }
-      ]
+      ],
+      selectArr: {
+        permitedForTransportation: [
+          {
+            code: 1,
+            name: '是'
+          },
+          {
+            code: 0,
+            name: '否'
+          }
+        ]
+      }
     }
   },
   components: {
@@ -326,20 +305,15 @@ export default {
     }
   },
   mounted () {
+    this.getDictionary(['PMT'], 'payment')
+    this.getDictionary(['MD_TN'], 'transportationWay')
+    this.getCurrency()
     if (!this.hasId) {
       this.edit = true
       this.getNewLogisticsNo()
     }
     this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
     this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
-
-    this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
-      return {
-        type: this.computeType(key),
-        label: this.$i[key],
-        value
-      }
-    })
 
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
@@ -352,8 +326,25 @@ export default {
   methods: {
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
-        console.log(res)
+        this.basicInfoObj.logisticsNo = res
+        this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
+          return {
+            type: this.computeType(key),
+            label: this.$i[key],
+            key,
+            value
+          }
+        })
       })
+    },
+    getCurrency () {
+      this.$ajax.get(this.$apis.get_currency).then(res => {
+        this.selectArr.exchangeCurrency = res
+      })
+    },
+    getDictionary (keyCode, key) {
+      this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
+        this.selectArr[key] = res[0].codes      })
     },
     handleSelectionContainer (selectArray) {
       this.selectionContainer = selectArray
@@ -405,6 +396,16 @@ export default {
     },
     toExit () {
       this.hasId ? (this.edit = !this.edit) : this.$router.go(-1)
+    },
+    savePlan () {
+      this.basicInfoArr.forEach(a => {
+        this.basicInfoObj = a.value
+      })
+      if (!this.basicInfoObj.payment) return this.$message({
+        type: 'error',
+        message: '付款方式为必填!'
+      })
+      console.log(this.basicInfoObj)
     }
   }
 }

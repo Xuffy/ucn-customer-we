@@ -13,10 +13,12 @@
         </div>
 
         <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
-            <i class="el-icon-tickets"></i>
-          </el-tooltip>
-          <span v-text="item.label"></span>
+          <router-link :to="item.link">
+            <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
+              <i class="el-icon-tickets"></i>
+            </el-tooltip>
+            <span v-text="item.label"></span>
+          </router-link>
         </el-menu-item>
         <el-menu-item @click="$store.state.quickLink.show = true" index="1-0">
           <i class="el-icon-more"></i>
@@ -78,7 +80,7 @@
       this.updateMenuActive();
     },
     watch: {
-      $route(val) {
+      $route() {
         this.updateMenuActive();
       }
     },
@@ -184,6 +186,7 @@
   }
 
   .el-menu-item,
+  .el-menu-item a,
   .el-menu-item i {
     line-height: 30px;
     height: 30px;

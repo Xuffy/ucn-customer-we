@@ -50,7 +50,7 @@ export default {
     /**
      * 获取采购端 公共接口
     */
-    PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'UPURCHASE_URL', 'USUPPLY_URL'],
+    PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME: ['/purchase/supplier/listSupplierByName', 'UPURCHASE_URL', 'UPURCHASE_URL'],
     ITEMFAVORITE_PART: ['/itemfavorite/part', 'UMETA_URL', 'UMETA_URL'],
     ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'UMETA_URL', 'UMETA_URL'],
     POST_CODE_PART: ['/code/part', 'UMETA_URL', 'UMETA_URL'],

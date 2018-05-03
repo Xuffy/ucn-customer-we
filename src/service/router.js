@@ -18,7 +18,7 @@ export const routerMap = [
     {
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
-      hidden: true,
+      noDropdown: true,
       component: Layout,
       redirect: '/sellerNegotiation/inquiry',
       meta: {
@@ -27,15 +27,15 @@ export const routerMap = [
       children: [
         {
           path: 'inquiry',
-          name: 'sellerNegotiationInquiry',
+          name: 'sellerInquiry',
           meta: {
-            name: 'sellerNegotiationInquiry',
+            name: 'seller Negotiation inquiry',
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },
         {
           path: 'inquiryDetail',
-          name: 'sellerNegotiationInquiryDetail',
+          name: 'sellerInquiryDetail',
           hidden: true,
           meta: {
             draft: true,
@@ -45,11 +45,6 @@ export const routerMap = [
             messageBoard: 'code'
           },
           component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'draft',
-          name: 'sellerDraft',
-          component: () => import('../views/sellerNegotiation/draft')
         },
         {
           path: 'recycleBin',
@@ -74,8 +69,8 @@ export const routerMap = [
           path: 'index',
           name: 'workbench',
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: false,
           },
           component: () => import('../views/workbench/index.vue')
@@ -284,9 +279,6 @@ export const routerMap = [
           path: 'inquiry',
           name: 'negotiationInquiry',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Inquiry Overview'
           },
           component: () => import('../views/negotiation/inquiryOverview')
@@ -296,9 +288,6 @@ export const routerMap = [
           name: 'negotiationInquiryDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Inquiry Detail',
             messageBoard: 'code'
           },
@@ -309,9 +298,6 @@ export const routerMap = [
           name: 'negotiationCreateInquiry',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Create Inquiry'
           },
           component: () => import('../views/negotiation/createInquiry')
@@ -320,9 +306,6 @@ export const routerMap = [
           path: 'compare',
           name: 'negotiationCompare',
           meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
             name: 'Compare Overview'
           },
           component: () => import('../views/negotiation/compareOverview')
@@ -332,9 +315,6 @@ export const routerMap = [
           name: 'negotiationCompareDetail',
           hidden: true,
           meta: {
-            draft: false,
-            recycleBin: true,
-            log: true,
             name: 'Compare Detail'
           },
           component: () => import('../views/negotiation/compare')
@@ -443,17 +423,20 @@ export const routerMap = [
       path: '/warehouse',
       component: Layout,
       redirect: '/warehouse/overview',
-      meta: {name: 'Warehouse'},
-      noDropdown: true,
+      name:'Warehouse',
+      meta: {
+        name: 'Warehouse'
+      },
+      noDropdown: false,
       children: [
         {
           path: 'overview',
-          name: 'warehouse',
+          name: 'Warehouse Overview',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Overview'
+            name: 'Warehouse Overview'
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
@@ -668,14 +651,19 @@ export const routerMap = [
     {
       path: '/logs',
       component: Layout,
-      meta: {name: 'Logs'},
       redirect: '/logs/index',
+      meta: {name: 'Logs'},
       noDropdown: true,
       hidden: true,
       children: [
         {
           path: 'index',
           name: 'logs',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+          },
           component: () => import('../views/logs/logs.vue')
         }
       ]
@@ -712,7 +700,7 @@ export const routerMap = [
       meta: {
         name: 'sellerProduct'
       },
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'overview',
@@ -881,67 +869,25 @@ export const routerMap = [
       ]
     },
     {
-      path: '/sellerSellerSettings',
-      name: 'sellerSellerSettings',
+      path: '/sellerSettings',
+      name: 'sellerSettings',
+      noDropdown: false,
       component: Layout,
-      redirect: '/sellerSellerSettings/CategorySetting',
+      redirect: '/sellerSettings/CategorySetting',
       meta: {
-        name: 'Settings',
+        name: 'sellerSettings',
       },
       children: [
         {
-          path: 'CategorySetting',
-          name: 'CategorySetting',
+          path: 'sellerCategorySetting',
+          name: 'sellerCategorySetting',
           meta: {
             name: 'Category setting',
           },
           component: () => import('../views/sellerSettings/CategorySetting'),
         }
       ]
-    },
-    {
-      path: '/sellerNegotiation',
-      name: 'sellerNegotiation',
-      component: Layout,
-      redirect: '/sellerNegotiation/sellerNegotiationInquiry',
-      meta: {
-        name: 'sellerNegotiation',
-      },
-      children: [
-        {
-          path: 'sellerNegotiationInquiry',
-          name: 'sellerNegotiationInquiry',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerNegotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'sellerNegotiationInquiryDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Inquiry Detail',
-            messageBoard: 'code'
-          },
-          component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'draft',
-          name: 'sellerDraft',
-          component: () => import('../views/sellerNegotiation/draft')
-        },
-        {
-          path: 'recycleBin',
-          name: 'sellerRecycleBin',
-          component: () => import('../views/sellerNegotiation/recycleBin')
-
-        }
-      ]
-    },
+    }
   ]
 ;
 

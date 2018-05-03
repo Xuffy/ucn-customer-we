@@ -189,11 +189,11 @@
                 const id = children[index].id;
                 if(data.children && data.children.length) return  this.$message({
                     type: 'info',
-                    message: '请先删除子节点!'
+                    message: this.$i.myCategorySettingDelete
                 }); 
-                this.$confirm('此操作将永久删除该分类以及映射关系, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.myCategorySettingDeleteTitle, this.$i.myCategorySettingTitle, {
+                    confirmButtonText: this.$i._baseText.ok,
+                    cancelButtonText: this.$i._baseText.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.get(`${this.$apis.POST_PURCHASE_CATEGORY_DELETE}/{id}`, {
@@ -205,13 +205,13 @@
                         children.splice(index, 1);
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i._baseText.deleteSuccess
                         });
                     });
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消删除'
+                        message: this.$i.undelete
                     });          
                 });
             },

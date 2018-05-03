@@ -356,7 +356,9 @@
             },
 
             addNewProduct(){
-                this.windowOpen('/sellerProduct/addNewProduct');
+                this.$windowOpen({
+                    url:'/sellerProduct/addNewProduct'
+                });
             },
         },
         created(){
