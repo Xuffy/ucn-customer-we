@@ -238,7 +238,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1260px;
+    min-width: 1800px;
     overflow: hidden;
   }
 
