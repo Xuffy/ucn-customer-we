@@ -85,7 +85,7 @@
           </a>
         </div>
 
-        <el-dropdown type="primary">
+        <!--<el-dropdown type="primary">
           <a href="javascript:void(0)">
             <i class="el-icon-goods"></i>
           </a>
@@ -93,7 +93,7 @@
             <el-dropdown-item>User name</el-dropdown-item>
             <el-dropdown-item>Sign out</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown>-->
       </div>
 
     </div>
@@ -238,7 +238,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1366px;
+    min-width: 1600px;
     overflow: hidden;
   }
 
