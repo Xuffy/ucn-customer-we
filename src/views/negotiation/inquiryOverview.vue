@@ -206,10 +206,11 @@
                 }
             },
             detail(item) {
+                let id = _.findWhere(item, {'key': 'inquiryId'})?_.findWhere(item, {'key': 'inquiryId'}).value:_.findWhere(item, {'key': 'id'}).value;
                 this.$router.push({
                     path: '/negotiation/inquiryDetail',
                     query: {
-                        id: _.findWhere(item, {'key': 'id'}).value
+                        id: id
                     }
                 });
             },
