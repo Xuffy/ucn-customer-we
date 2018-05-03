@@ -1,7 +1,7 @@
 <template>
     <div class="select-wrap">
         <div class="select" v-if="selectHide">
-            <el-select v-model="keyType" placeholder="select">
+            <el-select v-model="keyType" placeholder="select" :clearable="true">
                 <el-option
                     v-for="item in options"
                     :key="item.id"
