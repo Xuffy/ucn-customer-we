@@ -5,7 +5,7 @@
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
-          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key">
+          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key" v-if="item.customer">
             <el-checkbox :label="item.key">
               {{item.label}}
             </el-checkbox>
@@ -68,7 +68,8 @@
           .then((data) => {
             let list = [];
             this.checkedList = _.map(data, val => {
-              list.push(this.$db.common.quickLink[val.itemCode]);
+              let v = this.$db.common.quickLink[val.itemCode];
+              v.customer && list.push(this.$db.common.quickLink[val.itemCode]);
               return val.itemCode;
             });
             this.$store.state.quickLink.list = list;

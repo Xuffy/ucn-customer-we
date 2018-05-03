@@ -24,25 +24,31 @@
 
     <br/><br/>
 
-    <el-row class="data-table" :gutter="20">
-      <el-col :span="6">
+    <el-row class="data-table" :gutter="20" v-loading="loading">
+      <el-col :span="6" v-for="(item,index) in dataList" :key="index">
         <table>
           <tr>
             <td class="title" v-text="$i._workbench.purchaseOrder"></td>
-            <td class="value">26 Orders</td>
+            <td class="value">
+              <div v-if="item[0]" v-text="item[0].value + ' ' + item[0].code"></div>&nbsp;
+            </td>
           </tr>
           <tr>
             <td class="title" rowspan="2" v-text="$i._workbench.orderPlaced"></td>
-            <td class="value">281 SKU</td>
+            <td class="value">
+              <div v-if="item[1]" v-text="item[1].value + ' ' + item[1].code"></div>&nbsp;
+            </td>
           </tr>
           <tr>
-            <td class="value">JSD 132.24.00</td>
+            <td class="value">
+              <div v-if="item[2]" v-text="item[2].code + ' ' + item[2].value"></div>&nbsp;
+            </td>
           </tr>
         </table>
       </el-col>
     </el-row>
 
-    <el-dialog title="Data Dashboard" width="90%" :visible.sync="dialog.show">
+    <!--<el-dialog title="Data Dashboard" width="90%" :visible.sync="dialog.show">
 
       <el-checkbox-group v-model="checkedDataList">
         <el-row class="data-table" :gutter="20">
@@ -71,7 +77,7 @@
         <el-button @click="dialog.show = false">取 消</el-button>
         <el-button type="primary" @click="dialog.show = false">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 
@@ -81,12 +87,13 @@
     name: 'VDataDashboard',
     data() {
       return {
+        dataList: [],
+        loading: false,
         dialog: {
           show: false,
         },
-        value7: '',
         // radioTimeType: '',
-        checkedDataList: [],
+        /*checkedDataList: [],
         pickerOptions2: {
           shortcuts: [{
             text: 'recent 7 days',
@@ -125,17 +132,32 @@
           'Create Inquiry17',
           'Create Inquiry18',
           'Create Inquiry19',
-        ]
+        ]*/
       }
     },
     created() {
-
+      this.getData();
     },
-    methods: {}
+    methods: {
+      getData() {
+        this.loading = true;
+        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST)
+          .then(data => {
+            this.dataList = data;
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      }
+    }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .data-table {
+    min-height: 80px;
+  }
+
   .data-table table {
     width: 100%;
   }
@@ -157,6 +179,9 @@
     background-color: #D7D7D7;
     text-align: center;
     border-bottom: 1px solid #FFFFFF;
+  }
+  .data-table .value > div{
+    display: inline-block;
   }
 
   .data-table .el-col-6 {
