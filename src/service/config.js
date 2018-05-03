@@ -30,6 +30,7 @@ export default {
 
 
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
+      
       BASE_URL: 'http://dev.upurchase-facade.ucnholding.com:18100', // 采购端
       USSO_URL: 'http://dev.usso-facade.ucnholding.com:18100', // sso 服务
       UUSER_URL: 'http://dev.uuser-facade.ucnholding.com:18100', // 用户中心
@@ -46,13 +47,9 @@ export default {
       UWORKBENCH_URL: 'http://dev.uworkbench.ucnholding.com:18100',
 
 
-
-
-
-
-        BASE_BUY:'http://192.168.51.248:11001',
-        BASE_SELL:'http://192.168.51.248:11002',
-        BASE_WAREHOUSE:'http://192.168.51.248:12005',
+      BASE_BUY: 'http://192.168.51.248:11001',
+      BASE_SELL: 'http://192.168.51.248:11002',
+      BASE_WAREHOUSE: 'http://192.168.51.248:12005',
 
     },
     develop: {
