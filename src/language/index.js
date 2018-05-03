@@ -16,6 +16,7 @@ export default _.extend(
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
   require(`./${lang}/inquiry/viewByInqury.pending`),
+  require(`./${lang}/message`),
   require(`./${lang}/inquiry/viewByInqury.pending`),
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/basicInfo.pending`),

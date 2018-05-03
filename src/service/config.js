@@ -67,24 +67,10 @@ export default {
       USERVICE_URL: 'http://dev.uservice.ucnholding.com:18100', // 服务商端
       UBIZLOG_URL: 'http://dev.ubizlog.ucnholding.com:18100', // 业务日志
       UWAREHOUSE_URL: 'http://dev.uwarehouse.ucnholding.com:18100',
-      UWORKBENCH_URL: 'http://dev.uworkbench.ucnholding.com:18100',
       LOGIN_URL: 'http://dev.auth.ucnscm.cn', // 登录授权
     },
     test: {
-      BASE_URL: 'http://test.upurchase-facade.ucnscm.cn', // 采购端
-      USSO_URL: 'http://test.usso-facade.ucnscm.cn', // sso 服务
-      UUSER_URL: 'http://test.uuser-facade.ucnscm.cn', // 用户中心
-      UMETA_URL: 'http://test.umeta-facade.ucnscm.cn', // 元数据
-      UMESSAGE_URL: 'http://test.umessage-facade.ucnscm.cn', // 消息服务
-      UOSS_URL: 'http://test.uoss-facade.ucnscm.cn', // 对象存储服务
-      ULOG_URL: 'http://test.ulog-facade.ucnscm.cn', // 日志服务
-      UPURCHASE_URL: 'http://test.upurchase-facade.ucnscm.cn', // 采购端
-      USUPPLY_URL: 'http://test.usupply-facade.ucnscm.cn', // 供应商端
-      USERVICE_URL: 'http://test.uservice.ucnscm.cn', // 服务商端
-      UBIZLOG_URL: 'http://test.ubizlog.ucnscm.cn', // 业务日志
-      UWAREHOUSE_URL: 'http://test.uwarehouse.ucnscm.cn',
-      UWORKBENCH_URL: 'http://test.uworkbench.ucnscm.cn',
-      LOGIN_URL: 'http://test.auth.ucnscm.cn', // 登录授权
+      BASE_API: 'http://store.test.tailorx.cn/api'
     },
     production: {
       BASE_API: 'https://store.tailorx.cn/api'
