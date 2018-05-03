@@ -2,34 +2,48 @@ export default {
   containerNo: {
     type: 'text'
   },
-  sealNumber: {
+  sealNo: {
     type: 'text'
   },
   containerWeight: {
     type: 'text'
   },
   containerType: {
-    type: 'select',
-    select: ['fob', 'exw', '其他']
+    type: 'select'
   },
   vgm: {
     type: 'text'
   },
-  totalQuantityInContainer: {
+  totalContainerNetWeight: {
     type: 'text'
   },
-  totalVolumeInContainer: {
+  totalContainerOuterCartonsQty: {
     type: 'text'
   },
-  totalNetWeightInContainer: {
+  totalContainerQty: {
     type: 'text'
   },
-  totalQuantityOfOuterCartonsInContainer: {
+  totalContainerSkuPrice: {
     type: 'text'
   },
-  totalSkuPriceInContainer: {
+  totalContainerVolume: {
     type: 'text'
   },
+  // totalQuantityInContainer: {
+  //   type: 'text'
+  // },
+  // totalVolumeInContainer: {
+  //   type: 'text'
+  // },
+  // totalNetWeightInContainer: {
+  //   type: 'text'
+  // },
+  // totalQuantityOfOuterCartonsInContainer: {
+  //   type: 'text'
+  // },
+  // totalSkuPriceInContainer: {
+  //   type: 'text'
+  // },
   exchangeCurrency: {
     type: 'text'
   }

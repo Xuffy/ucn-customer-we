@@ -17,7 +17,7 @@
       <div class="fn btn">
         <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
         <el-button @click.stop="addNew">{{ $i.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
+        <el-button type="danger" :disabled="!!viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.viewBy }}&nbsp;</span>
@@ -89,7 +89,8 @@ export default {
     VPagination
   },
   mounted () {
-    this.getDictionary(['LS_PLAN'], this.ls_plan)
+    this.getDictionary(['LS_PLAN'])
+    this.getContainerType()
     this.viewByChange(this.viewBy)
   },
   watch: {
@@ -107,6 +108,7 @@ export default {
       }).then(() => {
         this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
           this.viewByChange(this.viewBy)
+          this.selectCount = []
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -139,9 +141,14 @@ export default {
     viewByChange (viewId) {
       viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
     },
-    getDictionary (keyCode, dataModel) {
+    getDictionary (keyCode) {
       this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
-        dataModel = res[0].code
+        this.ls_plan = res[0].codes
+      })
+    },
+    getContainerType () {
+      this.$ajax.get(this.$apis.get_container_type, '_cache').then(res => {
+        this.containerType = res
       })
     },
     getPlanList () {
@@ -164,11 +171,14 @@ export default {
       this.tableLoading = true
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
-      if (this.fillterVal === 'all') this.fillterVal = []
       this.$ajax.post(this.$apis.get_transportation_list, {lgStatus, ...this.pageParams}).then(res => {
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
+            if (val.type === 'select' && val.value) {
+              let obj = this.containerType.find(a => a.code === val.value)
+              val.value = obj ? obj.name : null
+            }
             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
             return val
           })
