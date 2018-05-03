@@ -659,7 +659,7 @@ export const routerMap = [
       redirect: '/logs/index',
       meta: {name: 'Logs'},
       noDropdown: true,
-      // hidden: true,
+      hidden: true,
       children: [
         {
           path: 'index',

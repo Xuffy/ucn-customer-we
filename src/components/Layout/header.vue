@@ -41,7 +41,7 @@
 
       <div class="header-right" style="color: #999999!important;">
         <div class="message-box" v-popover:messageBox>
-          <el-badge :value="message.list.length">
+          <el-badge :value="message.list.length || ''">
             <i class="el-icon-bell"></i>
           </el-badge>
 
@@ -238,7 +238,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1800px;
+    min-width: 1366px;
     overflow: hidden;
   }
 
@@ -419,6 +419,8 @@
   .ucn-header-menu .el-menu--horizontal > .el-submenu .el-submenu__title {
     color: #909399;
     font-size: 12px;
+    padding: 0;
+    padding-right: 5px;
   }
 
   .ucn-header-menu .el-menu--horizontal > .el-menu-item a {
