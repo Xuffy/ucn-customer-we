@@ -45,8 +45,8 @@ export default {
 
 
     //product buyer
-    get_buyerProductList:['/purchase/sku/listSkuByParams','UPURCHASE_URL','UPURCHASE_URL'],
-    get_buyerBookmarkList:['/purchase/sku/listBookmark','UPURCHASE_URL','UPURCHASE_URL'],
+    get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_CS1','UPURCHASE_URL'],
+    get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_CS1','UPURCHASE_URL'],
     add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
     add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1','UPURCHASE_URL'],
     add_bookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
@@ -79,5 +79,6 @@ export default {
     get_warehouseOrderData:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELLER','USUPPLY_URL'],
-    get_orderSku:['/order/skus','BASE_BUYER','UPURCHASE_URL'],
+    get_orderSku:['/order/getAllOrderInfo','BASE_BUYER','UPURCHASE_URL'],
+
 }

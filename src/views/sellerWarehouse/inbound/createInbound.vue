@@ -75,8 +75,6 @@
             <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i._warehouse.removeProduct}}</el-button>
         </div>
 
-
-
         <el-table
                 v-loading="loadingProductTable"
                 class="product-table"
@@ -91,34 +89,63 @@
                     width="55">
             </el-table-column>
             <el-table-column
-                    prop="id"
-                    label="ID"
+                    v-for="v in $db.warehouse.inboundOrderProductTable"
+                    :key="v.key"
+                    :label="v.key"
+                    align="center"
                     width="180">
-            </el-table-column>
-            <el-table-column
-                    prop="name"
-                    label="姓名">
-            </el-table-column>
-            <el-table-column
-                    prop="amount1"
-                    label="数值 1">
-            </el-table-column>
-            <el-table-column
-                    prop="amount2"
-                    label="数值 2">
-            </el-table-column>
-            <el-table-column
-                    prop="amount3"
-                    label="数值 3">
+                <template slot-scope="scope">
+                    <div v-if="v.belong==='skuList'">
+                        <div v-if="v.showType==='input'">
+                            <el-input
+                                    placeholder="请输入内容"
+                                    v-model="scope.row.skuList[0][v.key]"
+                                    clearable>
+                            </el-input>
+                        </div>
+                        <div v-else>
+                            {{scope.row.skuList[0][v.key]}}
+                        </div>
+                    </div>
+                    <div v-else-if="v.showType==='input'">
+                        <el-input
+                                placeholder="请输入内容"
+                                v-model="scope.row[v.key]"
+                                clearable>
+                        </el-input>
+                    </div>
+                    <div v-else-if="v.showType==='select'">
+                        <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
+                            <el-option
+                                    v-for="item in v.options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div v-else-if="v.showType==='number'">
+                        <el-input-number
+                                :disabled="v.computed"
+                                v-model="scope.row[v.key]"
+                                @blur="handleBlur(v.key)"
+                                :controls="false"
+                                label="请输入"></el-input-number>
+                    </div>
+                    <div v-else-if="v.key==='unqualifiedType'">
+                        0
+                    </div>
+                    <div v-else>
+                        {{scope.row[v.key]}}
+                    </div>
+                </template>
             </el-table-column>
         </el-table>
-
 
         <!--<v-table-->
                 <!--v-loading="loadingProductTable"-->
                 <!--:data="productData"-->
                 <!--@change-checked="changeProductChecked"></v-table>-->
-
 
         <div class="total">
             <div class="title">
@@ -261,8 +288,6 @@
                 productIds:[],                  //用于存储用于外部展示的产品ID
                 productData:[],                 //添加到外部用于展示的产品详细信息
 
-
-
                 inboundData:{
                     inboundNo:'',       //新建的时候不传
                     inboundDate:'',
@@ -372,17 +397,95 @@
 
             //提交表单
             submit(){
-                this.disabledSubmit=true;
-                this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
-                    this.disabledSubmit=false;
-                    this.$message({
-                        message: '新增成功',
-                        type: 'success'
+                console.log(this.productData)
+                console.log(this.inboundData.inboundSkuBeanCreateParams,'this.inboundData')
+                this.productData.forEach(v=>{
+                    this.inboundData.inboundSkuBeanCreateParams.push({
+                        customerName: v.customerName,
+                        customerNo: v.customerNo,
+                        customerOrderNo: v.customerOrderNo,
+                        customerSkuCode: v.skuList[0].skuCustomsCode,
+                        factorySkuCode: v.factorySkuCode?v.factorySkuCode:'',
+                        id: 0,      //??
+                        inboundOutCartonTotalQty: v.inboundOutCartonTotalQty?v.inboundOutCartonTotalQty:null,
+                        inboundSkuTotalGrossWeight: v.inboundSkuTotalGrossWeight?v.inboundSkuTotalGrossWeight:null,
+                        inboundSkuTotalNetWeight: v.inboundSkuTotalNetWeight?v.inboundSkuTotalNetWeight:null,
+                        inboundSkuTotalQty: v.inboundSkuTotalQty?v.inboundSkuTotalQty:null,
+                        inboundSkuTotalVolume: v.inboundSkuTotalVolume?v.inboundSkuTotalVolume:null,
+                        innerCartonGrossWeight: v.skuList[0].skuInnerCartonRoughWeight,
+                        innerCartonHeight: v.skuList[0].skuInnerCartonHeight,
+                        innerCartonLength: v.skuList[0].skuInnerCartonLength,
+                        innerCartonNetWeight: v.skuList[0].skuInnerCartonWeightNet,
+                        innerCartonPackingMethodCn: v.skuList[0].skuInnerCartonMethodCn,
+                        innerCartonVolume: v.skuList[0].skuInnerCartonVolume,
+                        innerCartonWidth: v.skuList[0].skuInnerCartonWidth,
+                        /**
+                         * ？？？？
+                         * */
+                        inventoryOutCartonQty: 0,
+                        inventorySkuGrossWeight: 0,
+                        inventorySkuNetWeight: 0,
+                        inventorySkuQty: 0,
+                        inventorySkuVolume: 0,
+                        orderId: 0,     //??没有，只有orderNo
+                        orderNo: "",
+                        orderSkuQty: 0,
+                        outboundOutCartonTotalQty: 0,
+                        outboundSkuTotalGrossWeight: 0,
+                        outboundSkuTotalNetWeight: 0,
+                        outboundSkuTotalQty: 0,
+                        outboundSkuTotalVolume: 0,
+                        outerCartonGrossWeight: 0,
+                        outerCartonNetWeight: 0,
+                        outerCartonSkuQty: 0,
+                        outerCartonVolume: 0,
+                        ownerId: 0,
+                        packingMethodCn: "",
+                        skuBarCode: "",
+                        skuBrand: "",
+                        skuCode: "",
+                        skuDescCn: "",
+                        skuDescCustomer: "",
+                        skuDescEn: "",
+                        skuHeight: 0,
+                        skuId: 0,
+                        skuInventoryStatusDictCode: "",
+                        skuLabel: "",
+                        skuLength: 0,
+                        skuMaterialCn: "",
+                        skuMaterialEn: "",
+                        skuNameCn: "",
+                        skuNameCustomer: "",
+                        skuNameEn: "",
+                        skuNetWeight: 0,
+                        skuQcStatusDictCode: "",
+                        skuUnitDictCode: "",
+                        skuWidth: 0,
+                        supplierId: 0,
+                        supplierName: "string",
+                        supplierNo: "string",
+                        supplierOrderNo: "string",
+                        tenantId: 0,
+                        unqualifiedType: "string",
+                        updateDt: "2018-05-03T02:05:32.215Z",
+                        updateId: 0,
+                        updateName: "string",
                     });
-                    this.$router.push('/sellerWarehouse/inbound');
-                }).catch(err=>{
-                    this.disabledSubmit=false;
-                });
+                })
+
+
+
+                // this.disabledSubmit=true;
+                // this.$ajax.post(this.$apis.add_inbound,this.inboundData).then(res=>{
+                //     this.disabledSubmit=false;
+                //     this.$message({
+                //         message: '新增成功',
+                //         type: 'success'
+                //     });
+                //     this.$router.push('/sellerWarehouse/inbound');
+                // }).catch(err=>{
+                //     this.disabledSubmit=false;
+                // });
             },
 
             cancel(){
@@ -429,6 +532,7 @@
                 this.loadingProductTable=true;
                 this.$ajax.post(this.$apis.get_orderSku,this.productIds).then(res=>{
                     this.productData=res;
+                    console.log(this.productData)
                     this.loadingProductTable=false;
                 }).catch(err=>{
                     this.loadingProductTable=false;
@@ -437,6 +541,14 @@
                 console.log(this.productIds)
                 this.addOrderDialogVisible=false;
             },
+
+            /**
+             * 页面表格事件
+             * */
+            handleBlur(){
+                console.log(12345)
+            }
+
         },
         created(){
 

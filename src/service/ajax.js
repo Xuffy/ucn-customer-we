@@ -274,7 +274,7 @@ axios.interceptors.response.use(
 
   },
   error => {
-    Message.error(_.isObject(error) || !error ? '网络异常，请稍后重试！' : error);
+    Message.warning(_.isObject(error) || !error ? '网络异常，请稍后重试！' : error);
     NProgress.done();
     return Promise.reject(error)
   }
