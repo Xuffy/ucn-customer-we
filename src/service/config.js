@@ -2,10 +2,11 @@ export default {
   // 环境配置
   ENV: {
     local: {
+      // BASE_CS: 'http://dev.usupply-facade.ucnholding.com:18100',
       BASE_CS: 'http://192.168.51.33:11003',
+      // BASE_CS: 'http://192.168.51.248:11002',
       //BASE_CS1: 'http://192.168.51.33:11007',
-      // BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
-      BASE_CS1: 'http://192.168.51.33:11007',
+      BASE_CS1: 'http://dev.upurchase-facade.ucnholding.com:18100',
       BASE_API: '',
       BASE_CS_cgs: 'http://192.168.51.33:11007',
       BASE_HCJ: 'http://dev.upurchase-facade.ucnholding.com:18100',
@@ -26,6 +27,8 @@ export default {
       BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
       BASE_HSM_W: 'http://192.168.51.248:11001',
+      BASE_BUY:'http://192.168.51.248:11001',
+      BASE_SELL:'http://192.168.51.248:11002',
 
 
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',

@@ -16,6 +16,7 @@ export default _.extend(
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
   require(`./${lang}/inquiry/viewByInqury.pending`),
+  require(`./${lang}/message`),
   require(`./${lang}/inquiry/viewByInqury.pending`),
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/basicInfo.pending`),
@@ -40,7 +41,10 @@ export default _.extend(
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
 
   {_product: require(`./${lang}/product/product.basic`)},
+  {_productCn:require(`./${lang}/productCn/product.basic`)},
+
   require(`./${lang}/product/productOverview`),
+  require(`./${lang}/productCn/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
 
   require(`./${lang}/warehouse/qcWarehouse`),

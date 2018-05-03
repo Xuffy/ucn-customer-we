@@ -86,7 +86,7 @@
                 tabData: [],
                 viewByStatus: '',
                 params: {
-                    status: null,
+                    status: 22,
                     keyType: '',
                     key: '',
                     ps: 10,

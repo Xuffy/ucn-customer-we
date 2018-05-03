@@ -18,7 +18,7 @@ export const routerMap = [
     {
       path: '/sellerNegotiation',
       name: 'sellerNegotiation',
-      hidden: true,
+      noDropdown: true,
       component: Layout,
       redirect: '/sellerNegotiation/inquiry',
       meta: {
@@ -27,15 +27,15 @@ export const routerMap = [
       children: [
         {
           path: 'inquiry',
-          name: 'sellerNegotiationInquiry',
+          name: 'sellerInquiry',
           meta: {
-            name: 'sellerNegotiationInquiry',
+            name: 'seller Negotiation inquiry',
           },
           component: () => import('../views/sellerNegotiation/inquiryOverview')
         },
         {
           path: 'inquiryDetail',
-          name: 'sellerNegotiationInquiryDetail',
+          name: 'sellerInquiryDetail',
           hidden: true,
           meta: {
             draft: true,
@@ -45,11 +45,6 @@ export const routerMap = [
             messageBoard: 'code'
           },
           component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'draft',
-          name: 'sellerDraft',
-          component: () => import('../views/sellerNegotiation/draft')
         },
         {
           path: 'recycleBin',
@@ -705,7 +700,7 @@ export const routerMap = [
       meta: {
         name: 'sellerProduct'
       },
-      hidden: true,
+      // hidden: true,
       children: [
         {
           path: 'overview',
@@ -874,67 +869,25 @@ export const routerMap = [
       ]
     },
     {
-      path: '/sellerSellerSettings',
-      name: 'sellerSellerSettings',
+      path: '/sellerSettings',
+      name: 'sellerSettings',
+      noDropdown: false,
       component: Layout,
-      redirect: '/sellerSellerSettings/CategorySetting',
+      redirect: '/sellerSettings/CategorySetting',
       meta: {
-        name: 'Settings',
+        name: 'sellerSettings',
       },
       children: [
         {
-          path: 'CategorySetting',
-          name: 'CategorySetting',
+          path: 'sellerCategorySetting',
+          name: 'sellerCategorySetting',
           meta: {
             name: 'Category setting',
           },
           component: () => import('../views/sellerSettings/CategorySetting'),
         }
       ]
-    },
-    {
-      path: '/sellerNegotiation',
-      name: 'sellerNegotiation',
-      component: Layout,
-      redirect: '/sellerNegotiation/sellerNegotiationInquiry',
-      meta: {
-        name: 'sellerNegotiation',
-      },
-      children: [
-        {
-          path: 'sellerNegotiationInquiry',
-          name: 'sellerNegotiationInquiry',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerNegotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'sellerNegotiationInquiryDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Inquiry Detail',
-            messageBoard: 'code'
-          },
-          component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'draft',
-          name: 'sellerDraft',
-          component: () => import('../views/sellerNegotiation/draft')
-        },
-        {
-          path: 'recycleBin',
-          name: 'sellerRecycleBin',
-          component: () => import('../views/sellerNegotiation/recycleBin')
-
-        }
-      ]
-    },
+    }
   ]
 ;
 
