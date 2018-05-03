@@ -3,13 +3,12 @@
 */
 
 export const basicInfoInput = [
-  'logisticsNo',
+  // 'logisticsNo',
   'logisticsStatus',
   'shipServiceProvider',
   'receiptCompany',
   'shippingAgent',
   'paymentTerms',
-  'transportationWay',
   'loadingType',
   'blQuantity',
   'blNumber',
@@ -24,13 +23,15 @@ export const basicInfoInput = [
   'departurePort',
   'destinationCountry',
   'destinationPort'
+  // 'customerName'
 ]
 
 export const basicInfoSelector = [
   'exchangeCurrency',
   'payment',
   'permitedForTransportation',
-  'blType'
+  'blType',
+  'transportationWay'
 ]
 
 export const basicInfoDate = [
@@ -49,6 +50,11 @@ export const basicInfoDate = [
   'actDepartureDate',
   'actArrivalDate',
   'actReleaseDate'
+]
+
+export const disabledFields = [
+  'logisticsNo',
+  'customerName'
 ]
 
 
