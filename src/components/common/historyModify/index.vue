@@ -18,7 +18,6 @@
                          :label="item.label">
 
           <template slot-scope="scope" v-if="scope.row[item.key] && !scope.row[item.key]._hide">
-
             <div v-if="!scope.row[item.key]._edit || scope.row[item.key]._title">
               {{scope.row[item.key].value}}
               <p v-if="scope.row[item.key]._title" v-text="scope.row[item.key]._title"></p>
@@ -26,17 +25,16 @@
 
             <div v-else>
               <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
-
-              <div v-else-if="scope.row[item.key]._slot">
-                <slot :name="scope.row[item.key]._slot" :data="scope.row[item.key]"></slot>
+              <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
+                <slot name="transportationWay" :data="scope.row[item.key]"></slot>
               </div>
-
+              
               <div v-else>
-                <el-input v-if="scope.row[item.key].type === 'String'" clearable
+                <el-input v-if="scope.row[item.key].type === 'String' || scope.row._remark" clearable
                           placeholder=""
                           v-model="scope.row[item.key].value" size="mini"></el-input>
-
-                <el-input-number v-else-if="scope.row[item.key].type === 'Number'"
+                
+                <el-input-number v-else-if="scope.row[item.key].type === 'Number' && !scope.row._remark"
                                  v-model="scope.row[item.key].value"
                                  :min="scope.row[item.key].min || 0"
                                  :max="scope.row[item.key].max || 99999999" controls-position="right" size="mini"
@@ -112,9 +110,10 @@
             return val;
           });
         });
-
         // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
+        
+        console.log(this.dataList)
         this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;

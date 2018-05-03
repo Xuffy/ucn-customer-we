@@ -236,11 +236,12 @@
                     } else {
                         res.exportLicense = 0;
                     }
-                    res.suppliers.forEach(items => {
-                        _.mapObject(items, (val, k) => {
-                            if(/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
-                        });
-                    });
+                
+                    // res.suppliers.forEach(items => {
+                    //     _.mapObject(items, (val, k) => {
+                    //         if(/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
+                    //     });
+                    // });
                     this.fromArg = res;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
