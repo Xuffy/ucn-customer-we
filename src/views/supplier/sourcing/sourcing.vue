@@ -66,16 +66,7 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
-                    style='marginTop:10px'/>
-<<<<<<< HEAD
-             <v-pagination
-            :page-data.sync="params"
-            @change="handleSizeChange"
-            @size-change="pageSizeChange"
-            />        
-=======
-
->>>>>>> 638d6331146e746c266d9b865f90d9b59ad3222f
+                    style='marginTop:10px'/>      
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i._baseText.ok}}</el-button>
                 <el-button type="primary">{{$i._baseText.cancel}}</el-button>
@@ -230,7 +221,7 @@
                 this.$ajax.post(this.$apis.get_listSupplier, this.parms)
                     .then(res => {
                         //分页组件的参数
-                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
+//                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
                         //                        this.endpn = res.datas.end
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
