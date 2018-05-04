@@ -5,13 +5,13 @@
         <!--</div>-->
         <div class="body">
             <div class="head">
-                <span>{{$i._warehouse.inboundType}}</span>
+                <span>{{$i._warehouse.outBoundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="0">全部</el-radio-button>
-                    <el-radio-button label="1">采购入库</el-radio-button>
-                    <el-radio-button label="2">验货入库</el-radio-button>
-                    <el-radio-button label="3">客户退货入库</el-radio-button>
-                    <el-radio-button label="4">预发货退货入库</el-radio-button>
+                    <el-radio-button label="1">销售出库</el-radio-button>
+                    <el-radio-button label="2">组装领料出库</el-radio-button>
+                    <el-radio-button label="3">转库</el-radio-button>
+                    <el-radio-button label="4">退回供应商</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"
@@ -22,7 +22,7 @@
             <div class="section">
                 <div class="btns">
                     <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="createInbound">新建</el-button>
+                    <el-button @click="createOutbound">新建</el-button>
                 </div>
                 <v-table
                         :loading="loadingTable"
@@ -56,8 +56,8 @@
                 tableDataList:[],
                 downloadBtnInfo:'All',
                 selectList:[],
-                inboundConfig:{
-                    inboundNo: "",
+                outboundConfig:{
+                    outboundNo: "",
                     pn: 1,
                     ps: 50,
                     // sorts: [
@@ -66,14 +66,14 @@
                     //         orderType: "",
                     //     }
                     // ],
-                    inboundTypeDictCode: null
+                    // outboundTypeDictCode: null
                 },
 
                 searchId:1,
 
                 searchOptions:[
                     {
-                        label:'入库单号',
+                        label:'出库编号',
                         id:1
                     },
                     // {
@@ -99,9 +99,9 @@
             },
 
             //获取表格数据
-            getInboundData(){
+            getOutboundData(){
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_inboundData,this.inboundConfig).then(res=>{
+                this.$ajax.post(this.$apis.get_outboundData,this.outboundConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
                         e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
@@ -115,9 +115,9 @@
             },
 
             //新建入库单
-            createInbound(){
+            createOutbound(){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/createInbound'
+                    url:'/sellerWarehouse/createOutbound'
                 });
             },
 
@@ -147,7 +147,7 @@
             },
         },
         created(){
-            this.getInboundData();
+            this.getOutboundData();
         },
         watch:{
             selectList(n){

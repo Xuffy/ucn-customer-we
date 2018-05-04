@@ -288,7 +288,12 @@
 
             //表格按钮点击
             btnClick(item){
-                this.windowOpen('/sellerProduct/detail',{id:item.id.value});
+                this.$windowOpen({
+                    url:'/sellerProduct/detail',
+                    params:{
+                        id:item.id.value
+                    }
+                })
             },
 
             //设为上架

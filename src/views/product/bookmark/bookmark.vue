@@ -371,7 +371,7 @@
                     this.$windowOpen({
                         url:'/product/bookmarkDetail',
                         params:{
-                            id:item.id.value
+                            id:item.skuId.value
                         }
                     })
                 }

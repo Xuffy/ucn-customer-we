@@ -104,11 +104,10 @@
             this.loading = false;
           });
       },
-      dialogClose(done) {
+      dialogClose() {
         this.checkedList = _.map(this.$store.state.quickLink.list, val => {
-          return val.itemCode;
+          return val.key;
         });
-        // done();
       }
     }
   }
