@@ -10,8 +10,8 @@
              <div class="select-wrap">
                <selectSearch 
                     :options=options
-                    @selectChange="selectChange"
-                    @inputChange="inputEnter"
+                    @inputEnter="inputEnter"
+                     v-model='selectSearch'
                  ></selectSearch>
             </div>         
         </div>
@@ -71,6 +71,7 @@
                 loading: false,
                 pageTotal: 1,
                 rowspan: 1,
+                selectSearch:'1',
                 options: [{
                     id: '1',
                     label: 'Order No'
@@ -128,8 +129,6 @@
                 }
             },
             inputEnter(val) {
-                if (!val.keyType) return this.$message('请选中搜索类型');
-                if (!val.key) return this.$message('搜索内容不能为空');
                 if (val.keyType == '1') {
                     this.params.orderNo = val.key
                     if (this.params.view == 1) {

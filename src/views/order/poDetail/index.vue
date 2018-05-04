@@ -7,9 +7,10 @@
                    <basicinfo :disabled='statusModify' :podisabled=true ref='basicInfo'></basicinfo>
                    <attchment :disabled='statusModify'></attchment>                       
               </div>
+<!--
                <div class='basicinfo_message'>
                      <div class="message_div" v-show='switchStatus'>
-<!--                         <messageBoard ></messageBoard>-->
+                         <messageBoard ></messageBoard>
                      </div>
                      <div class="switch-btn" @click="boardSwitch">
                      {{$i._baseText.messageBoard}}
@@ -17,6 +18,7 @@
                     </div>
                    
                 </div>
+-->
         </div>
 <!--         attachment-->
             
@@ -57,7 +59,7 @@
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
                  <el-button  @click='modify'>{{$i._baseText.modify}}</el-button>
-                 <el-button >{{$i._baseText.confirm}}</el-button>
+                 <el-button @click='confirm'>{{$i._baseText.confirm}}</el-button>
                  <el-button  :disabled='true'>{{$i._baseText.download}}</el-button>
                   <el-button >{{$i._baseText.createOrder}}</el-button>
                   <el-button :disabled="orderStatus==='5'" @click='cancelOrder'>{{$i._baseText.cancel}}</el-button>
@@ -79,7 +81,7 @@
                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
                                 :forceUpdateNumber="trig" 
-                                :type="product"
+                                type="product"
                                 :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
@@ -157,6 +159,15 @@
             }
         },
         methods: {
+            confirm(){
+                 this.$ajax.post(this.$apis.post_confirm, {
+                        ids: [this.orderId]
+                    }).then(res=>{
+                     console.log(res)
+                 }).catch(res=>{
+                     console.log(res)
+                 })
+            },
             //..............messageboard的缩进
             boardSwitch() {
                 this.switchStatus = !this.switchStatus;
@@ -340,9 +351,9 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
-                        _.mapObject(val, (item, k) => {
-                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
-                        });
+//                        _.mapObject(val, (item, k) => {
+//                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+//                        });
                     } else if (_.findWhere(val, {
                             'key': 'skuId'
                         }).value + '' === _.findWhere(data[1], {
@@ -351,9 +362,9 @@
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
-                        _.mapObject(val, (item, k) => {
-                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
-                        });
+//                        _.mapObject(val, (item, k) => {
+//                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+//                        });
                     }
                     return val;
                 });
@@ -399,6 +410,7 @@
             },
             send() {
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
+//                return console.log(parentNode)
                 //参数一堆堆 我靠
                 let params = {
                     // exchangeRateList
@@ -454,15 +466,12 @@
             this.submitData.id = this.$route.query.id;
         },
         watch: {
-            //            newProductTabData:{
-            //               　handler(curVal,oldVal){
-            //　　　　　　　　　　　　if(curVal){
-            //                        console.log('in')
-            //                        this.tableTatalCal()
-            //                        }
-            //　　　　　　　　　　},
-            //　　　　　　　　　　deep:true
-            //            }
+                newProductTabData: {
+                handler(curVal) {
+                  this.tableTatalCal()
+                },
+                deep: true
+            }
         }
     }
 

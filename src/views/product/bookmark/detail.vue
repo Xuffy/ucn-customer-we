@@ -244,9 +244,6 @@
             </div>
         </el-dialog>
 
-
-
-
         <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
             <product
                     :forceUpdateNumber="forceNumber"
@@ -293,7 +290,6 @@
                 forceNumber:0,
                 editRemarkFormVisible:false,
                 disableModifyRemark:false,
-
 
                 editRemarkData:{
                     id: null,
@@ -505,6 +501,8 @@
                     this.disabledClickSaveEdit=false;
                 });
             },
+
+
 
             cancelEdit(){
                 this.notEdit=true;

@@ -165,6 +165,7 @@
                         inboundId: this.$route.query.id,
                         pn: 1,
                         ps: 50,
+
                         // sorts: [
                         //     {
                         //         orderBy: "",

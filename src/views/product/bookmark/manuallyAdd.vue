@@ -552,7 +552,20 @@
 
             //获取类别数据
             getCategoryId(){
-                console.log(1234)
+
+                this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
+                }).catch(err=>{
+
+                });
+                this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
+                });
+
+
+
                 this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
                     this.dropData=res;
                 }).catch(err=>{

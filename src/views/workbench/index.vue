@@ -1,8 +1,9 @@
 <template>
   <div class="workbench">
+
+    <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"
-          @click="$refs.historyModify.edit(mockData,historyData, true)"></h3>
+      <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -31,9 +32,6 @@
       </el-col>
     </el-row>
 
-    <v-history-modify ref="historyModify" @save="save">
-    </v-history-modify>
-
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
@@ -42,7 +40,7 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
-  import {VHistoryModify, VMessageBoard} from '@/components/index';
+  import {VHistoryModify, VMessageBoard, VTimeZone} from '@/components/index';
   import testData from './test'
 
   export default {
@@ -53,25 +51,23 @@
       VBasicInfo,
       VHistoryModify,
       VMessageBoard,
+      VTimeZone,
     },
     data() {
       return {
-        testId: '', // todo 测试
         visible: false,
         pengdingTask: [],
         futureTask: [],
         fyiTask: [],
         pushTask: [],
-        testData: testData.content.details, // todo 测试
-        mockData: [], // todo 测试
-        historyData: [], // todo 测试
+        timeZone: '1', // todo 测试
       }
     },
     created() {
 
     },
     mounted() {
-      this.testId = '123';
+
 
       // this.$store.commit('setDraft', {path: '/login'});
       /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
@@ -84,33 +80,6 @@
       // this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
       //
       // });
-
-
-      this.mockData = this.$getDB(
-        this.$db.inquiryOverview.productInfo,
-        this.$refs.historyModify.getFilterData([this.testData[0]]),
-        item => {
-          if (item.updateDt) {
-            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-          }
-          return item;
-        }
-      );
-      this.historyData = this.$getDB(
-        this.$db.inquiryOverview.productInfo,
-        this.$refs.historyModify.getFilterData(this.testData),
-        item => {
-          if (item.updateDt) {
-            item.updateDt.value = this.$dateFormat(item.updateDt.value, 'yyyy-mm-dd');
-          }
-          return item;
-        }
-      );
-
-
-      const h = this.$createElement;
-      this.$notify.closeAll();
-
       /*this.$notify({
         title: 'Wellcome! Please set your basic info',
         duration: 0,

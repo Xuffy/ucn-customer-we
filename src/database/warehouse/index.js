@@ -5,12 +5,24 @@ import inboundOrderTable from './inboundOrderTable';
 import warehouseTable from './warehouseTable';
 import sellerWarehouseTable from './sellerWarehouseTable';
 import inboundOrderProductTable from './inboundOrderProductTable';
+import inboundDetailProductTable from './inboundDetailProductTable';
+import outbound from './outbound';
+import outboundOrderTable from './outboundOrderTable';
+import outboundProduct from './outboundProduct';
+import qcDetailBasicInfo from './qcDetailBasicInfo';
+import summary from './summary';
 export default {
     inbound,
+    outbound,
     inboundTable,
     qcOrderTable,
     inboundOrderTable,
     warehouseTable,
     inboundOrderProductTable,
-    sellerWarehouseTable
+    sellerWarehouseTable,
+    inboundDetailProductTable,
+    outboundOrderTable,
+    outboundProduct,
+    qcDetailBasicInfo,
+    summary
 }

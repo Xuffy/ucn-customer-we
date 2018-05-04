@@ -9,8 +9,8 @@
              <div class="select-wrap">
                <selectSearch 
                     :options=options
-                    @selectChange="selectChange"
-                    @inputChange="inputEnter"
+                    @inputEnter="inputEnter"
+                     v-model='selectSearch'
                  ></selectSearch>
             </div>         
         </div>
@@ -70,6 +70,7 @@
                 loading: false,
                 pageTotal: 1,
                 rowspan: 1,
+                selectSearch:'1',
                 options: [{
                     id: '1',
                     label: 'Order No'
