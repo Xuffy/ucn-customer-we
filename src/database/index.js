@@ -29,6 +29,7 @@ const db = {
   warehouse
   // inbound,
 };
+/*
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {
@@ -42,8 +43,9 @@ const database = _.mapObject(db, value => {
   });
   return value;
 });
+*/
 
-/*const findLanguage = (key) => {
+const findLanguage = (key) => {
   let val = '';
 
   _.map(language, value => {
@@ -67,8 +69,6 @@ const database = _.mapObject(db, (value, key) => {
   });
   return value;
 });
-
-console.log(database)*/
 
 
 export default database;
