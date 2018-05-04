@@ -24,10 +24,12 @@
                         </el-radio-group>
                     </div>
                     <div class="search">
-                        <select-search  class="search"
-                                        :options=options
-                                        @inputEnter="inputEnter"
-                                        :searchLoad="searchLoad"></select-search>
+                        <select-search
+                          class="search"
+                          :options=options
+                          @inputEnter="inputEnter"
+                          :searchLoad="searchLoad">
+                        </select-search>
                     </div>
                     <div class="Date">
                         <span class="text">Time : </span>
@@ -54,6 +56,7 @@
                 :buttons="setButtons"
                 @action="action"
                 :rowspan="1"
+                :height="450"
                 @filter-value="onFilterValue"
                 ></v-table>
               <v-pagination

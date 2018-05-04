@@ -22,11 +22,12 @@
         <v-table
           :data="tabData"
           @change-checked="changeChecked"
+          :height="450"
         />
       </div>
 
       <div v-show="isShow" class="box">
-        <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+        <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick" >
           <!--<el-tab-pane >-->
           <el-table
             ref="tableData"
@@ -109,7 +110,6 @@
         message:'',
         tabData:[],
         checkedData:[],
-        activeName: 'System Message',
         checkValues: [],
         updatesetting:{
           id:'',
@@ -173,7 +173,6 @@
         }
       },
       inputEnter(val) {
-        console.log(val)
         if(!val.keyType) return this.$message('请选中搜索类型');
         if(!val.key) return this.$message('搜索内容不能为空');
         this.params.mark = val.keyType;

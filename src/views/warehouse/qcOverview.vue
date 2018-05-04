@@ -14,6 +14,7 @@
           :options="options"
           @inputEnter="inputEnter"
           :searchLoad="searchLoad"
+          v-model="qcSearch"
         />
       </div>
     </div>
@@ -29,6 +30,7 @@
       :buttons="[{label: 'detail', type: 1}]"
       @action="onAction"
       @change-checked='checked'
+      :height="450"
     />
     <v-pagination
       :page-data.sync="params"
@@ -51,6 +53,7 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
             return{
                 name:'',
                 value:'',
+                qcSearch:'',
                 options: [{
                   id: 1,
                   label: 'QC Order No'
@@ -67,14 +70,14 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
                   qcOrderNo: '',
                   qcStatusDictCode: 'WAITING_QC',
                   serviceProviderId: '',
-                  sorts: [
-                    {
-                      nativeSql: true,
-                      orderBy: '',
-                      orderType: 'DESC',
-                      resultMapId: ''
-                    }
-                  ]
+                  // sorts: [
+                  //   {
+                  //     nativeSql: true,
+                  //     orderBy: '',
+                  //     orderType: 'DESC',
+                  //     resultMapId: ''
+                  //   }
+                  // ]
                 },
                 tabData:[],
                 selectedDate: [],
@@ -104,6 +107,7 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
               if (!val.keyType) return this.$message('请选中搜索类型');
               if (!val.key) return this.$message('搜索内容不能为空');
               if (val.keyType == '1') {
+                console.log(val)
                 this.params.qcOrderNo = val.key
               }
               this.getQcOrderList()

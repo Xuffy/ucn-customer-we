@@ -215,10 +215,11 @@ export default {
             console.log(this.modifyPass)
             this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
             .then(res => {
-                this.$message({
-                    type: 'success',
-                    message: '修改成功!'
-                });
+              console.log(res)
+                // this.$message({
+                //     type: 'success',
+                //     message: '修改成功!'
+                // });
             });
         },
         handleClose(){
@@ -226,8 +227,8 @@ export default {
         }
     },
     created(){
-           this.getUserProfile()
-           this.postLanguage()
+       this.getUserProfile()
+       this.postLanguage()
     }
 }
 </script>

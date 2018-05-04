@@ -15,9 +15,9 @@ export default {
   //logs
   post_bizloQuery:['/bizlog/query','UBIZLOG_URL','UBIZLOG_URL'],
   //Personal Setting
-  get_user_profile:['/user/profile','BASE_UUSER','UUSER_URL'],
-  put_user_profile:['/user/profile','BASE_UUSER','UUSER_URL'],
-  put_user_profile_password:['/user/profile/password','BASE_UUSER','UUSER_URL'],
+  get_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
+  put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
+  put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
   post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
 
