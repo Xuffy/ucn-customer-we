@@ -163,7 +163,7 @@
                 type: String,
             },
             payToId: {
-                type: String
+                type: Number
             }
         },
         data() {
@@ -377,12 +377,13 @@
 
             //作废一行数据
             abandonLine(e) {
-                console.log(e)
                  this.$ajax.post(this.$apis.paymentAbandon+'/'+e.id+'?version='+e.version).then((res) => {
+                       
                        _.map(this.paymentData,(key,value)=>{                         
-                         if(key.no==res.no){
+                         if(key.id==res.id){
+                            
                               this.paymentData.splice(value,1,res)
-//                               this.$set(e, 'status', -1);
+                               this.$set(e, 'status', -1);
                          }
                      })
                     }).catch((res) => {
@@ -392,12 +393,9 @@
 
             //恢复一行数据
             recoverLine(e) {
-                      this.$ajax.post(this.$apis.paymentRecover, {
-                          id:e.id, 
-                          version:e.version
-                      }).then((res) => {
+                      this.$ajax.post(this.$apis.paymentRecover+'/'+e.id+'?version='+e.version).then((res) => {
                        _.map(this.paymentData,(key,value)=>{                         
-                         if(key.no==res.no){
+                         if(key.id==res.id){
                               this.paymentData.splice(value,1,res)
                          }
                      })
@@ -420,7 +418,7 @@
                 }
               this.$ajax.post(this.$apis.paymentUpdata, params).then((res) => {
                        _.map(this.paymentData,(key,value)=>{                         
-                         if(key.no==res.no){
+                         if(key.id==res.id){
                               this.paymentData.splice(value,1,res)
                          }
                      })

@@ -1,6 +1,6 @@
 <template>
   <div class="creatOrder">
-        <div class="title">New Order No.1121</div>
+        <div class="title">New Order No.待后台数据</div>
 <!--         basicinfo-->
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
@@ -41,13 +41,13 @@
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>
+<!--          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
                     @addInquiry='addinquiry'
                 ></VInquiry>
-        </el-dialog>
+<!--        </el-dialog>-->
 <!--                  addproduct弹窗区域-->
            <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
@@ -327,11 +327,12 @@
             //......................提交
             send() {
                 //正则  if (!this.$refs.basicInfo.submitForm()) { // return // }
-                return console.log(this.dataFilter(this.tabData))
+//                return console.log(this.dataFilter(this.tabData))
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.tabData,
+                    skuList: this.dataFilter(this.tabData),
+//                    skuList:this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: false,
@@ -344,7 +345,7 @@
 
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
-                        console.log(res)
+                        this.$router.push('/order/overview')
                     })
                     .catch((res) => {
                         console.log(res)
@@ -384,12 +385,14 @@
                 UnpaidAmount:''
             */
             summary() {
+               
                 let arr = this.dataFilter(this.tabData)
+                
                 this.TotalQuantity = _.reduce(_.pluck(arr, 'skuPrice'))
-                this.TotalSKUPrice = _.reduce(_.pluck(arr, 'skuPrice'))
-                this.TotalOuterCartonQuantity = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
-                this.TotalOuterCartonNetWet = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
-                this.TotalOuterCartonVolume = _.reduce(_.pluck(arr, 'skuOuterCartonVolume'))
+//                this.TotalSKUPrice = _.reduce(_.pluck(arr, 'skuPrice'))
+//                this.TotalOuterCartonQuantity = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
+//                this.TotalOuterCartonNetWet = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+//                this.TotalOuterCartonVolume = _.reduce(_.pluck(arr, 'skuOuterCartonVolume'))
             },
             productInfoBtn(item) { //Product info 按钮创建
                 return [{
@@ -498,9 +501,9 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
-                        //                        _.mapObject(val, (item, k) => {
-                        //                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-                        //                        })
+//                        _.mapObject(val, (item, k) => {
+//                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+//                        })
                     } else if (_.findWhere(val, {
                             'key': 'skuId'
                         }).value === _.findWhere(data[1], {
@@ -509,9 +512,9 @@
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
-                        //                        _.mapObject(val, (item, k) => {
-                        //                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-                        //                        })
+//                        _.mapObject(val, (item, k) => {
+//                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+//                        })
                     }
                     return val;
                 });
@@ -584,17 +587,18 @@
                     });
             },
             //表格底部计算
-            tableTatalCal() {
-                let obj = _.clone(this.tabData[0]);
-                return console.log(obj)
+             tableTatalCal() {
+                let obj = this.$depthClone(this.tabData[0]);
                 _.map(this.tabData, value => {
-                    _.map(value, val => {
-                        if (val._calu) {
-                            obj[val.key].value = obj[val.key].value + val.value;
+                    _.map(value, (val, k) => {
+                        if (obj[val.key] && obj[val.key]._calu) {
+                            obj[val.key].value = (obj[val.key].value + val.value)
+                        } else {
+                            obj[val.key].value = ''
                         }
+                        this.tableTatal = [obj]
                     });
                 });
-                this.tableTatal = [obj]
             }
         },
         created() {
@@ -618,8 +622,8 @@
         watch: {
             tabData: {
                 handler(curVal) {
-                    console.log('in')
-                    //                    this.tableTatalCal()
+                   this.tableTatalCal()
+//                   this.summary()
                 },
                 deep: true
             }
