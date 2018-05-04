@@ -53,9 +53,9 @@ export default {
       disabledFields,
       paymentList: [],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now();
+        // },
         shortcuts: [{
           text: 'Today',
           onClick(picker) {

@@ -9,4 +9,5 @@ export default {
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'UMETA_URL'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'UMESSAGE_URL'], // 获取留言板
   CHATMESSAGE_ADD: ['/chatmessage/add', 'UMESSAGE_URL'], // 发送留言板消息
+  TIMEZONE_ALL: ['/timezone/all', 'UMETA_URL'], // 查询时区
 }

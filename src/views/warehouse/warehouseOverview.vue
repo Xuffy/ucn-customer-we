@@ -18,7 +18,7 @@
         <selectSearch
           :options=options
           @selectChange="selectChange"
-          @inputChange="inputEnter"
+          @inputEnter="inputEnter"
         ></selectSearch>
       </div>
     </div>
@@ -95,7 +95,7 @@
           tc:0,
           qcOrderNo: "",
           skuCode: "",
-          skuInventoryStatusDictCode: "", //WAIT_FOR_QC
+          skuInventoryStatusDictCode: "WAIT_FOR_QC", //WAIT_FOR_QC
           sorts: [
             {
               nativeSql: true,
@@ -114,8 +114,9 @@
       onAction(item, type) {
       //点击后跳转到此SKU的产品详情页
         this.$windowOpen({
-          url: '',
+          url: 'product/sourcingDetail',
           params: {
+             id:item.skuId
           }
         });
       },
@@ -129,7 +130,6 @@
         this.keyType = val;
       },
       checked(item) {
-        console.log(item)
         this.selectedDate = item
         var obj=[]
         this.selectedDate.forEach(item => {
@@ -142,6 +142,7 @@
         if (!val.key) return this.$message('搜索内容不能为空');
         if (val.keyType == '1') {
           this.params.orderNo = val.key
+          console.log(this.params.orderNo)
         } else if (val.keyType == '2'){
           this.params.skuCode = val.key
         }else{
@@ -161,7 +162,6 @@
       //get_orderlist数据
       getdata() {
         this.loading = true
-        console.log(this.params)
         this.$ajax.post(this.$apis.post_warehouse_page, this.params)
           .then((res) => {
             res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;

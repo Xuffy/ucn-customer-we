@@ -30,7 +30,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList"/>
+      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -227,17 +227,17 @@ export default {
         }
       ],
       paymentList: [
-        {
-          "paymentNumber": "casd122",
-          "paymentItem": "Payment Item",
-          "estPayDate": "Est. Pay Date",
-          "estAmount": "123",
-          "actPayDate": "Act. Pay Date",
-          "actAmount": "44",
-          "currency": "Currency",
-          "avilable": "Avilable",
-          "operation": "Operation"
-        }
+        // {
+        //   "paymentNumber": "casd122",
+        //   "paymentItem": "Payment Item",
+        //   "estPayDate": "Est. Pay Date",
+        //   "estAmount": "123",
+        //   "actPayDate": "Act. Pay Date",
+        //   "actAmount": "44",
+        //   "currency": "Currency",
+        //   "avilable": "Avilable",
+        //   "operation": "Operation"
+        // }
       ],
       tableData: [
         // {
@@ -267,6 +267,7 @@ export default {
         //   "exchangeCurrency": "Exchange Currency"
         // }
       ],
+      paymentSum: {},
       selectArr: {
         permitedForTransportation: [
           {
@@ -346,9 +347,9 @@ export default {
         this.remark = res.remark
         this.tableData = res.containerDetail
         this.feeList = [res.fee]
-        console.log(`${this.$apis.get_payment_list}/${res.logisticNo}/30`)
-        this.$ajax.post(`${this.$apis.get_payment_list}/${res.logisticNo}/30`).then(res => {
-          console.log(res)
+        this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
+          this.paymentList = res.datas
+          this.paymentSum = res.statisticsDatas[0]
         })
       })
     },
@@ -366,7 +367,7 @@ export default {
       this.$ajax.get(this.$apis.get_container_type, '_cache').then(res => {
         this.containerType = res
       })
-      this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE'], ['blType', 'transportationWay', 'payment'])
+      this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
       // this.getDictionaryPart([], 'transportationWay')
       // this.getDictionaryPart([], 'blType')
     },

@@ -2,8 +2,79 @@ import {localStore} from 'service/store';
 import config from 'service/config';
 
 const lang = localStore.get('language') || config.LANGUAGE;
+/*let a = {
+  common: _.extend({},
+    require(`./${lang}/common/quickLinks`)
+  ),
+  inquiry: _.extend({},
+    require(`./${lang}/inquiry/basicInfo.pending`),
+    require(`./${lang}/inquiry/compare.pending`),
+    require(`./${lang}/inquiry/index`),
+    require(`./${lang}/inquiry/viewByInqury.pending`),
+    require(`./${lang}/inquiry/viewBySKU.pending`)
+  ),
+  logistic: _.extend({},
+    require(`./${lang}/logistic/plan/basicInfo.pending`),
+    require(`./${lang}/logistic/plan/overviewBtn.pending`),
+    require(`./${lang}/logistic/plan/plan.base`)
+  ),
+  logs: _.extend({},
+    require(`./${lang}/logs/logs.basic`),
+    require(`./${lang}/logs/logs.basic`)
+  ),
+  message: _.extend({},
+    require(`./${lang}/message/message.table`),
+    require(`./${lang}/message/tabs`)
+  ),
+  order: _.extend({},
+    require(`./${lang}/order/basicinfo.pending`),
+    require(`./${lang}/order/overview`)
+  ),
+  payment: _.extend({},
+    require(`./${lang}/payment/payment`),
+    require(`./${lang}/payment/payment.table`)
+  ),
+  product: _.extend({},
+    require(`./${lang}/product/product.basic`),
+    require(`./${lang}/product/productDetail`),
+    require(`./${lang}/product/productOverview`)
+  ),
+  productCn: _.extend({},
+    require(`./${lang}/productCn/product.basic`),
+    require(`./${lang}/productCn/productDetail`),
+    require(`./${lang}/productCn/productOverview`)
+  ),
+  setting: _.extend({},
+    require(`./${lang}/setting/department`),
+    require(`./${lang}/setting/personalInfo`),
+    require(`./${lang}/setting/setting.basic`)
+  ),
+  supplier: _.extend({},
+    require(`./${lang}/supplier/detail.pending`),
+    require(`./${lang}/supplier/overview`)
+  ),
+  track: _.extend({},
+    require(`./${lang}/track/trackBysku`)
+  ),
+  warehouse: _.extend(
+    require(`./${lang}/warehouse/qcWarehouse`),
+    require(`./${lang}/warehouse/warehouse.table`),
+    require(`./${lang}/warehouse/warehouse.basic`)
+  ),
+  warehouseCn: _.extend({},
+    require(`./${lang}/warehouseCn/warehouse.basic`),
+    require(`./${lang}/warehouseCn/warehouse.index`)
+  ),
+  workbench: _.extend({},
+    require(`./${lang}/workbench/page`),
+    require(`./${lang}/workbench/task`)
+  ),
+}
 
-export default _.extend(
+console.log(a)
+
+export default  a;*/
+export default _.extend({},
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
   require(`./${lang}/workbench/task`),
@@ -26,7 +97,6 @@ export default _.extend(
   require(`/${lang}/order/basicinfo.pending`),
   require(`./${lang}/logistic/plan/overviewBtn.pending`),
   require(`./${lang}/logistic/plan/plan.base`),
-  require(`./${lang}/logistic/plan/overviewCheckbox.status`),
   require(`./${lang}/inquiry/compare.pending`),
   // payment
   {_payment: require(`./${lang}/payment/payment`)},
@@ -41,7 +111,7 @@ export default _.extend(
   {_personalInfo: require(`./${lang}/setting/personalInfo`)},
 
   {_product: require(`./${lang}/product/product.basic`)},
-  {_productCn:require(`./${lang}/productCn/product.basic`)},
+  {_productCn: require(`./${lang}/productCn/product.basic`)},
 
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/productCn/productOverview`),

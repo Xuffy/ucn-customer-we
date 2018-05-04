@@ -122,6 +122,7 @@
             this.$ajax.post(url, this.params)
             .then(res => {
               this.$message('发送成功');
+              this.getMessageList()
             })
             .catch(() => {
               console.log('发送失败')
