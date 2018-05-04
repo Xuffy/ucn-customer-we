@@ -102,7 +102,12 @@ export default {
     skuPrice: {
         key: 'skuPrice',
         _disabled: true,
-        _calu: true
+//        _calu: true
+    },
+    skuQty:{
+          key: 'skuQty',
+//         _disabled: true,
+         _calu: true
     },
     rateValueAddedTax: {
         key: 'skuRateValueAddedTax',
