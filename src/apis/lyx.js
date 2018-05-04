@@ -9,5 +9,6 @@ export default {
   get_currency: ['/currency/all', 'UMETA_URL'],
   get_container_type: ['/containertype/all', 'UMETA_URL'],
   get_plan_details: ['/logistics/plan/get/', 'UPURCHASE_URL'],
-  get_payment_list: ['/payment/list/', 'UPURCHASE_URL']
+  get_payment_list: ['/payment/list/', 'UPURCHASE_URL'],
+  get_product_history: ['/logistics/plan/getProductHistory', 'UPURCHASE_URL']
 }

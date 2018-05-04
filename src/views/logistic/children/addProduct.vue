@@ -15,7 +15,7 @@
           <span>{{ scope.row.x }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameCN" width="120" align="center">
+      <el-table-column :label="$i.skuNameCn" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.x }}</span>
         </template>
