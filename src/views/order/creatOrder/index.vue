@@ -590,6 +590,7 @@
             },
             //表格底部计算
              tableTatalCal() {
+                 return console.log(this.tabData)
                 let obj = this.$depthClone(this.tabData[0]);
                 _.map(this.tabData, value => {
                     _.map(value, (val, k) => {
