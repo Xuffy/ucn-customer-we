@@ -521,7 +521,7 @@
                 // arr.forEach(v=>{
                 //     if(v._checked && !v._disabled){
                 //         v._checked=false;
-                //         v._disabled=false;
+                //         v._gidisabled=false;
                 //         this.productIds.push(v.skuId.value);
                 //     }
                 // });
