@@ -301,7 +301,7 @@
 
           this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
 
-          console.log(sw, sl)
+          // console.log(sw, sl)
 
         });
       },
@@ -339,6 +339,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .ucn-table {
+    height: 100%;
+  }
 
   .ucn-table .table-container {
     position: relative;
