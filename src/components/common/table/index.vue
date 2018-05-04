@@ -301,8 +301,6 @@
 
           this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
 
-          // console.log(sw, sl)
-
         });
       },
       getImage(value, split = ',') {
@@ -339,10 +337,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-  .ucn-table {
-    height: 100%;
-  }
 
   .ucn-table .table-container {
     position: relative;
