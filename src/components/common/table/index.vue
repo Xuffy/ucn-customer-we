@@ -301,6 +301,8 @@
 
           this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
 
+          console.log(sw, sl)
+
         });
       },
       getImage(value, split = ',') {
