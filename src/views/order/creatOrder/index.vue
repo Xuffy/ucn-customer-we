@@ -326,8 +326,10 @@
             },
             //......................提交
             send() {
-                //正则  if (!this.$refs.basicInfo.submitForm()) { // return // }
-//                return console.log(this.dataFilter(this.tabData))
+                //正则 
+                if (!this.$refs.basicInfo.submitForm()) { 
+                     return }
+              
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
