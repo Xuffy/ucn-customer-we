@@ -25,9 +25,9 @@ export default {
     key: 'orderSkuQty'
   },
   skuInventoryStatus: {
-    key: 'skuInventoryStatus'
+    key: 'skuInventoryStatusDictCode'
   },
-  skuQcResults: {
+  skuQcResults: { // 产品验货状态
     key: 'skuQcStatusDictCode'
   },
   skuBarCode: {
@@ -46,12 +46,12 @@ export default {
     key: 'skuDescEn'
   },
   unit: {   //计量单位
-    key: ''
+    key: 'skuUnitDictCode'
   },
   outCartonQuatityOfInbound: {
     key: 'inboundOutCartonTotalQty'
   },
-  outCartonQuatityOfOutbound: {
+  outCartonQuatityOfOutbound: { //出库箱数
     key: 'outboundOutCartonTotalQty'
   },
   inventoryOfCarton: {  //库存箱数
@@ -76,7 +76,7 @@ export default {
     key: 'inventorySkuNetWeight'
   },
   skuQuantityOfOuterCarton: {   //外箱数量
-    key: ''
+    key: 'outerCartonSkuQty'
   },
   netWeightOfOuterCarton: {
     key: 'outerCartonNetWeight'
@@ -112,10 +112,10 @@ export default {
     key: 'innerCartonHeight'
   },
   netWeightOfInnerCarton: {
-    key: 'inboundSkuTotalNetWeight'
+    key: 'innerCartonNetWeight'
   },
   roughWeightOfInnerCarton: { //中箱毛重
-    key: ''
+    key: 'innerCartonGrossWeight'
   },
   volumeOfInnerCarton: {
     key: 'innerCartonVolume'
@@ -128,5 +128,9 @@ export default {
   },
   skuCode: {
     key: 'skuCode'
+  },
+  skuId: {
+    key:'skuId',
+    _hide:true
   }
 }
