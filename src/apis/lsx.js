@@ -83,5 +83,8 @@ export default {
     get_inboundSku:['/inbound/sku/page','BASE_SELL','USUPPLY_URL'],
 
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
+    add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
 
+    GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'BASE_BUY', 'UPURCHASE_URL'],
+    GET_QC_GETBYID: ['/qc/getById', 'BASE_BUY', 'UPURCHASE_URL']
 }

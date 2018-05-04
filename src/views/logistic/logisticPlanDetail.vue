@@ -159,72 +159,72 @@ export default {
         // }
       ],
       productList: [
-        {
-          "orderNo": "orderNo",
-          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
-          "goodsToBeShipped": "goodsToBeShipped",
-          "skuCode": "SKU Code",
-          "skuNameEn": "SKU Name (EN)",
-          "skuNameCN": "SKU Name (CN)",
-          "productDescription": "Product Description",
-          "blSkuName": "B/L SKU Name",
-          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
-          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
-          "hsCode": "HS Code",
-          "reportElements": "Report Elements",
-          "supplierName": "Supplier Name",
-          "supplierNo": "Supplier No",
-          "customerSkuCode": "Customer SKU Code",
-          "factorySKUCode": "Factory SKU Code",
-          "unit": "Unit",
-          "exportUnitPrice": "Export Unit Price",
-          "totalPriceOfExport": "Total Price Of Export",
-          "currency": "Currency",
-          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
-          "outerCartonLength": "Outer Carton Length",
-          "outerCartonWidth": "Outer Carton Width",
-          "outerCartonHeight": "Outer Carton Height",
-          "outerCartonNetWeight": "Outer Carton Net Weight",
-          "outerCartonGrossWeight": "Outer Carton Gross Weight",
-          "outerCartonVolume": "Outer Carton Volume",
-          "shippingMarks": "Shipping Marks",
-          "outerCartonBarCode": "Outer Carton Bar-Code",
-          "outerCartonSkuCode": "Outer Carton SKU Code"
-        }
+        // {
+        //   "orderNo": "orderNo",
+        //   "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
+        //   "goodsToBeShipped": "goodsToBeShipped",
+        //   "skuCode": "SKU Code",
+        //   "skuNameEn": "SKU Name (EN)",
+        //   "skuNameCN": "SKU Name (CN)",
+        //   "productDescription": "Product Description",
+        //   "blSkuName": "B/L SKU Name",
+        //   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
+        //   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
+        //   "hsCode": "HS Code",
+        //   "reportElements": "Report Elements",
+        //   "supplierName": "Supplier Name",
+        //   "supplierNo": "Supplier No",
+        //   "customerSkuCode": "Customer SKU Code",
+        //   "factorySKUCode": "Factory SKU Code",
+        //   "unit": "Unit",
+        //   "exportUnitPrice": "Export Unit Price",
+        //   "totalPriceOfExport": "Total Price Of Export",
+        //   "currency": "Currency",
+        //   "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
+        //   "outerCartonLength": "Outer Carton Length",
+        //   "outerCartonWidth": "Outer Carton Width",
+        //   "outerCartonHeight": "Outer Carton Height",
+        //   "outerCartonNetWeight": "Outer Carton Net Weight",
+        //   "outerCartonGrossWeight": "Outer Carton Gross Weight",
+        //   "outerCartonVolume": "Outer Carton Volume",
+        //   "shippingMarks": "Shipping Marks",
+        //   "outerCartonBarCode": "Outer Carton Bar-Code",
+        //   "outerCartonSkuCode": "Outer Carton SKU Code"
+        // }
       ],
       productModifyList: [
-        {
-          "orderNo": "orderNo",
-          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
-          "goodsToBeShipped": "goodsToBeShipped",
-          "skuCode": "SKU Code",
-          "skuNameEn": "SKU Name (EN)",
-          "skuNameCN": "SKU Name (CN)",
-          "productDescription": "Product Description",
-          "blSkuName": "B/L SKU Name",
-          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
-          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
-          "hsCode": "HS Code",
-          "reportElements": "Report Elements",
-          "supplierName": "Supplier Name",
-          "supplierNo": "Supplier No",
-          "customerSkuCode": "Customer SKU Code",
-          "factorySKUCode": "Factory SKU Code",
-          "unit": "Unit",
-          "exportUnitPrice": "Export Unit Price",
-          "totalPriceOfExport": "Total Price Of Export",
-          "currency": "Currency",
-          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
-          "outerCartonLength": "Outer Carton Length",
-          "outerCartonWidth": "Outer Carton Width",
-          "outerCartonHeight": "Outer Carton Height",
-          "outerCartonNetWeight": "Outer Carton Net Weight",
-          "outerCartonGrossWeight": "Outer Carton Gross Weight",
-          "outerCartonVolume": "Outer Carton Volume",
-          "shippingMarks": "Shipping Marks",
-          "outerCartonBarCode": "Outer Carton Bar-Code",
-          "outerCartonSkuCode": "Outer Carton SKU Code"
-        }
+        // {
+        //   "orderNo": "orderNo",
+        //   "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
+        //   "goodsToBeShipped": "goodsToBeShipped",
+        //   "skuCode": "SKU Code",
+        //   "skuNameEn": "SKU Name (EN)",
+        //   "skuNameCN": "SKU Name (CN)",
+        //   "productDescription": "Product Description",
+        //   "blSkuName": "B/L SKU Name",
+        //   "customsDeclarationNameCn": "Customs Declaration Name(CN)",
+        //   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
+        //   "hsCode": "HS Code",
+        //   "reportElements": "Report Elements",
+        //   "supplierName": "Supplier Name",
+        //   "supplierNo": "Supplier No",
+        //   "customerSkuCode": "Customer SKU Code",
+        //   "factorySKUCode": "Factory SKU Code",
+        //   "unit": "Unit",
+        //   "exportUnitPrice": "Export Unit Price",
+        //   "totalPriceOfExport": "Total Price Of Export",
+        //   "currency": "Currency",
+        //   "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
+        //   "outerCartonLength": "Outer Carton Length",
+        //   "outerCartonWidth": "Outer Carton Width",
+        //   "outerCartonHeight": "Outer Carton Height",
+        //   "outerCartonNetWeight": "Outer Carton Net Weight",
+        //   "outerCartonGrossWeight": "Outer Carton Gross Weight",
+        //   "outerCartonVolume": "Outer Carton Volume",
+        //   "shippingMarks": "Shipping Marks",
+        //   "outerCartonBarCode": "Outer Carton Bar-Code",
+        //   "outerCartonSkuCode": "Outer Carton SKU Code"
+        // }
       ],
       paymentList: [
         // {
@@ -325,8 +325,8 @@ export default {
         value
       }
     })
-    this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
-    this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
+
+    // this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
     if (this.planId) {
       this.getDetails()
     } else {
@@ -347,6 +347,8 @@ export default {
         this.remark = res.remark
         this.tableData = res.containerDetail
         this.feeList = [res.fee]
+        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+        this.productModifyList = this.$getDB(this.$db.logistic.productInfo, res.product)
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.paymentList = res.datas
           this.paymentSum = res.statisticsDatas[0]
