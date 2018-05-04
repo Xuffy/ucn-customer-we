@@ -21,34 +21,34 @@ export default {
     key: 'remark'
   },
   qualifiedProductsTotalCTNS: {
-    key: ''
+    key: 'qualifiedSkuCartonTotalQty'
   },
   qualifiedProductsTotalQTYS: {
-    key: ''
+    key: 'qualifiedSkuQty'
   },
   qualifiedProductsTotalCBM: {
-    key: ''
+    key: 'qualifiedSkuVolume'
   },
   qualifiedProductTotalNW: {
-    key: ''
+    key: 'qualifiedSkuNetWeight'
   },
   qualifiedProductTotalGW: {
-    key: ''
+    key: 'qualifiedSkuGrossWeight'
   },
   unqualifiedProductsQTY: {
-    key: ''
+    key: 'unqualifiedSkuQty'
   },
   unqualifiedProductTotalCTNS: {
-    key: ''
+    key: 'unqualifiedSkuCartonTotalQty'
   },
   unqualifiedProductTotalNW: {
-    key: ''
+    key: 'unqualifiedSkuNetWeight'
   },
   unqualifiedProductsTotalCBM: {
-    key: ''
+    key: 'unqualifiedSkuVolume'
   },
   unqualifiedProductTotalGW: {
-    key: ''
+    key: 'unqualifiedSkuGrossWeight'
   },
   quantityOfSKU: {
     key: ''

@@ -51,11 +51,12 @@ export default {
 
 
     //payment
-    paymentGetNo: ['/payment/genNo', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentSave: ['/payment/save', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentUpdata: ['/payment/update', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentRecover: ['/payment/recover/{id}', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentAbandon: ['/payment/abandon', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentAccept: ['/payment/accept/{id}', 'UPURCHASE_URL', 'UPURCHASE_URL'],
-    paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'UPURCHASE_URL', 'UPURCHASE_URL'],
+    paymentGetNo: ['/payment/genNo', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentSave: ['/payment/save', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentUpdata: ['/payment/update', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentRecover: ['/payment/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentAbandon: ['/payment/abandon', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentAccept: ['/payment/accept/{id}', 'BASE_HCJ', 'UPURCHASE_URL'],
+    paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_HCJ', 'UPURCHASE_URL'],
+    post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_HCJ','BASE_BUYER'],
 }

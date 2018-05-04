@@ -7,7 +7,7 @@
     </div>
     <div class="spe-div">
       <div class="View">
-        <el-radio-group size=""  v-model="viewByStatus">
+        <el-radio-group size=""  v-model="viewByStatus" @change="getDataInfo()">
           <el-radio-button label="1">{{$i._messages.platformMessage}}</el-radio-button>
           <el-radio-button label="2">{{$i._messages.companyMessage}}</el-radio-button>
           <el-radio-button label="3">{{$i._messages.messageSetting}}</el-radio-button>

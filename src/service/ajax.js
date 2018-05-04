@@ -260,7 +260,7 @@ axios.interceptors.response.use(
           rcList.push(val);
         }
       });
-      rcList.push({url: config.url, params: config.params, data: response.data});
+      rcList.push({url: config.url, params: config.params || {}, data: response.data});
       sessionStore.set('request_cache', rcList);
     }
 

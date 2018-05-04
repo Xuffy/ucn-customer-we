@@ -9,6 +9,7 @@ import qcDetailBasicInfo from './qcDetailBasicInfo';
 import summary from './summary';
 export default {
     inbound,
+    outbound,
     inboundTable,
     qcOrderTable,
     inboundOrderTable,
