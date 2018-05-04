@@ -1,59 +1,59 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
-    <div class="hd-top" v-else>{{ $i.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.basicInfoTitle"/>
+    <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="input-item">
-          <span>{{ $i.remark }}</span>
+          <span>{{ $i.logistic.remark }}</span>
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="remark" v-if="edit"></el-input>
           <p v-else>{{ remark }}</p>
         </div>
       </el-col>
-      <attachment accept="all" ref="attachment" :title="$i.attachment"/>
-      <one-line :edit="edit" :list="exchangeRateList" :title="$i.exchangeRate"/>
+      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment"/>
+      <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/>
     </el-row>
-    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.transportInfoTitle"/>
+    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.containerInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
       <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="containerType"/>
     </div>
 
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.feeInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
     </div>
 
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.paymentTitle }}</div>
+      <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
     </div>
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.productInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table :data.sync="productList" @action="action" :buttons="productbButtons">
         <div slot="header" class="product-header">
-          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.addProduct }}</el-button>
-          <el-button type="danger" size="mini">{{ $i.remove }}</el-button>
+          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
+          <el-button type="danger" size="mini">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
       <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" :productId="selectProductId"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showProductDialog = false">{{ $i.cancel }}</el-button>
-        <el-button type="primary" @click="showProductDialog = false">{{ $i.confirm }}</el-button>
+        <el-button @click="showProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="showProductDialog = false">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$i.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
       <add-product/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showAddProductDialog = false">{{ $i.cancel }}</el-button>
-        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
+        <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan"/>
@@ -76,6 +76,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      logisticsNo: '',
       remark: '',
       selectProductId: 0,
       showProductDialog: false,
@@ -113,11 +114,11 @@ export default {
         permitedForTransportation: [
           {
             code: '1',
-            name: this.$i.yes
+            name: this.$i.logistic.yes
           },
           {
             code: '0',
-            name: this.$i.no
+            name: this.$i.logistic.no
           }
         ]
       }
@@ -159,7 +160,7 @@ export default {
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
-        label: this.$i[key],
+        label: this.$i.logistic[key],
         key,
         value
       }
@@ -167,7 +168,7 @@ export default {
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
-        label: this.$i[key],
+        label: this.$i.logistic[key],
         key,
         value
       }
@@ -191,6 +192,7 @@ export default {
         })
         this.exchangeRateList = res.currencyExchangeRate
         this.remark = res.remark
+        this.logisticsNo = res.logisticsNo
         this.tableData = res.containerDetail
         this.feeList = [res.fee]
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
@@ -272,6 +274,9 @@ export default {
         this.productModifyList.unshift(copyNew)
       })
     },
+    getOrderList () {
+      // this.$apis.get_orderlist
+    },
     closeDialog () {
       this.productModifyList = []
       // console.log(this.$refs.productModifyComponents)
@@ -297,6 +302,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .place-logistic-plan {
+  margin-top: 20px;
   position: relative;
   padding-bottom: 80px;
   .hd-top {

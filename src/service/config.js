@@ -37,6 +37,10 @@ export default {
       BASE_SELL: '//172.18.139.137:11002',
       BASE_WAREHOUSE: '//172.18.139.137:12005',
 
+      // 开发服务器 248
+      BASE_DEV: '//192.168.51.248:11001',
+      BASE_DEV_DIC: '//192.168.51.248:11005',
+
 
       LOGIN_URL: '//dev.auth.ucnscm.cn',
       BASE_URL: '//172.18.139.137:11001', // 采购端

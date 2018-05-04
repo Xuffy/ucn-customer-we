@@ -2,159 +2,159 @@
   <el-row>
     <v-table-filter :hideFilterValue="true" class="filter"/>
     <el-table :data="modifyArray" style="width: 100%" class="table">
-      <el-table-column :label="$i.negotiate" width="120" align="center">
+      <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.orderNo" width="100" align="center" sortable>
+      <el-table-column :label="$i.logistic.orderNo" width="100" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.orderNo.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.quantityOfOuterCartonsToBeShipped" width="300" align="center" sortable>
+      <el-table-column :label="$i.logistic.quantityOfOuterCartonsToBeShipped" width="300" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" v-if="scope.row.toShipCartonQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.goodsToBeShipped" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.goodsToBeShipped" width="160" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" v-if="scope.row.toShipQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuCode" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameEn" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuNameEn" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuNameEn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameCn" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuNameCn" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuNameCn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.productDescription" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.productDescription" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuNameCustomer.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.blSkuName" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.blSkuName" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.blSkuName.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameCn" width="240" align="center" sortable>
+      <el-table-column :label="$i.logistic.customsDeclarationNameCn" width="240" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.customDeclarationNameCn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameEn" width="240" align="center" sortable>
+      <el-table-column :label="$i.logistic.customsDeclarationNameEn" width="240" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.customDeclarationNameEn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.hsCode" align="center" width="100" sortable>
+      <el-table-column :label="$i.logistic.hsCode" align="center" width="100" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.hsCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.reportElements" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.reportElements" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.reportElement.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierName" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.supplierName" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.supplierName.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierNo" width="120" align="center" sortable>
+      <el-table-column :label="$i.logistic.supplierNo" width="120" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.supplierCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customerSkuCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.customerSkuCode" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.customerSkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.factorySKUCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.factorySKUCode" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.factorySkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.unit" align="center" sortable>
+      <el-table-column :label="$i.logistic.unit" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.unit.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.exportUnitPrice" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.exportUnitPrice" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.unitExportPrice.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.totalPriceOfExport" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.totalPriceOfExport" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.totalExportPrice.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.currency" width="100" align="center" sortable>
+      <el-table-column :label="$i.logistic.currency" width="100" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.currency.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuQuantityOfOuterCarton" width="220" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuQuantityOfOuterCarton" width="220" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonLength" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonLength" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonLenth.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonWidth" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonWidth" width="180" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonWidth.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonHeight" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonHeight" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonHeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonNetWeight" width="200" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonNetWeight" width="200" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonNetWeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonGrossWeight" width="200" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonGrossWeight" width="200" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonGrossWeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonVolume" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonVolume" width="180" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonVolume.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.shippingMarks" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.shippingMarks" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.shippingMarks.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonBarCode" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonBarCode" width="180" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonBarCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonSkuCode" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonSkuCode" width="180" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.outerCartonSkuCode.value }}</span>
         </template>

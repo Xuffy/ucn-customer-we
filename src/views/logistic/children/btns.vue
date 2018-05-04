@@ -1,17 +1,17 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
     <div v-if="!edit">
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit')">{{ $i.modify }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.confirm }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.cancel }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.copy }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.placeLogisticsPlan }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.download }}</el-button>
-      <el-button size="mini" type="danger">{{ $i.delete }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit')">{{ $i.logistic.modify }}</el-button>
+      <el-button size="mini" type="primary">{{ $i.logistic.confirm }}</el-button>
+      <el-button size="mini" type="primary">{{ $i.logistic.cancel }}</el-button>
+      <el-button size="mini" type="primary">{{ $i.logistic.copy }}</el-button>
+      <el-button size="mini" type="primary">{{ $i.logistic.placeLogisticsPlan }}</el-button>
+      <el-button size="mini" type="primary">{{ $i.logistic.download }}</el-button>
+      <el-button size="mini" type="danger">{{ $i.logistic.delete }}</el-button>
     </div>
     <div v-else>
-      <el-button size="mini" type="primary" @click.stop="$emit('savePlan')">{{ $i.send }}</el-button>
-      <el-button size="mini" type="danger" @click.stop="$emit('toExit')">{{ $i.exit }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('savePlan')">{{ $i.logistic.send }}</el-button>
+      <el-button size="mini" type="danger" @click.stop="$emit('toExit')">{{ $i.logistic.exit }}</el-button>
     </div>
   </el-row>
 </template>
