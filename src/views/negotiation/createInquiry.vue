@@ -242,7 +242,11 @@
                                 if(/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
                             });
                         });
+                    } else {
+                        res.suppliers = {};
                     };
+                    delete res.companyId;
+                    delete res.id;
                     this.fromArg = res;
                     this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });

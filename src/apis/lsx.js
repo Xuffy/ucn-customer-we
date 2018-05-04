@@ -80,5 +80,6 @@ export default {
     get_qcOrderData:['/qc/page','BASE_SELLER','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELL','USUPPLY_URL'],
     get_orderSku:['/order/getAllOrderInfo','BASE_BUY','UPURCHASE_URL'],
-
+    GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'BASE_BUY', 'UPURCHASE_URL'],
+    GET_QC_GETBYID: ['/qc/getById', 'BASE_BUY', 'UPURCHASE_URL']
 }

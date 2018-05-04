@@ -316,10 +316,6 @@
                     type: 'info',
                     message: '请先选择分类'
                 });
-                if(!params.sysId) return this.$message({
-                    type: 'info',
-                    message: '请勾选系统分类'
-                });
                 this.$ajax.post(this.$apis.POST_SAVE_MAPPING_CATEGORY, params)
                 .then(res => {
                     this.mappingRelationData = res;

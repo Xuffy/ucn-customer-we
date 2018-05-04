@@ -143,7 +143,7 @@
                     parentId: data.id || 0,
                     name: name
                 };
-                this.$ajax.post(this.$apis.GET_CATEGORY, params)
+                this.$ajax.post(this.$apis.GET_PURCHASE_CATEGORY, params)
                 .then(res => {
                     this.addData(res, data, name, type);
                     this.myCategory = '';
@@ -315,10 +315,6 @@
                 if(!params.categoryId) return this.$message({
                     type: 'info',
                     message: '请先选择分类'
-                });
-                if(!params.sysId) return this.$message({
-                    type: 'info',
-                    message: '请勾选系统分类'
                 });
                 this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
                 .then(res => {

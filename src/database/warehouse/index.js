@@ -5,6 +5,8 @@ import inboundOrderTable from './inboundOrderTable';
 import warehouseTable from './warehouseTable';
 import sellerWarehouseTable from './sellerWarehouseTable';
 import inboundOrderProductTable from './inboundOrderProductTable';
+import qcDetailBasicInfo from './qcDetailBasicInfo';
+import summary from './summary';
 export default {
     inbound,
     inboundTable,
@@ -12,5 +14,7 @@ export default {
     inboundOrderTable,
     warehouseTable,
     inboundOrderProductTable,
-    sellerWarehouseTable
+    sellerWarehouseTable,
+    qcDetailBasicInfo,
+    summary
 }
