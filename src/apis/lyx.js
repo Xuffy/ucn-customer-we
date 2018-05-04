@@ -10,5 +10,6 @@ export default {
   get_container_type: ['/containertype/all', 'BASE_DEV_DIC'],
   get_plan_details: ['/logistics/plan/get/', 'BASE_DEV'],
   get_payment_list: ['/payment/list/', 'BASE_DEV'],
-  get_product_history: ['/logistics/plan/getProductHistory', 'BASE_DEV']
+  get_product_history: ['/logistics/plan/getProductHistory', 'BASE_DEV'],
+  get_order_list_with_page: ['/order/overview/page', 'BASE_DEV'],
 }

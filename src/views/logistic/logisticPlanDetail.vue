@@ -50,7 +50,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
-      <add-product/>
+      <add-product :tableData="orderList"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="showAddProductDialog = false">{{ $i.logistic.confirm }}</el-button>
@@ -110,6 +110,7 @@ export default {
       paymentList: [],
       tableData: [],
       paymentSum: {},
+      orderList: [],
       selectArr: {
         permitedForTransportation: [
           {
@@ -121,6 +122,10 @@ export default {
             name: this.$i.logistic.no
           }
         ]
+      },
+      pageParams: {
+        pn: 1,
+        ps: 10
       }
     }
   },
@@ -157,6 +162,7 @@ export default {
   },
   mounted () {
     this.getDictionary()
+    this.getOrderList()
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
@@ -275,6 +281,18 @@ export default {
       })
     },
     getOrderList () {
+      this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
+        this.orderList = res.datas.map(a => {
+          let aa = _.mapObject(a, item => {
+            item = 1
+            console.log(item)
+            return item
+          })
+          console.log(aa)
+          return aa
+        })
+        console.log(res)
+      })
       // this.$apis.get_orderlist
     },
     closeDialog () {
