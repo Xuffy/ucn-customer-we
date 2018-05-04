@@ -8,6 +8,7 @@ import inboundOrderProductTable from './inboundOrderProductTable';
 import inboundDetailProductTable from './inboundDetailProductTable';
 import outbound from './outbound';
 import outboundOrderTable from './outboundOrderTable';
+import outboundProduct from './outboundProduct';
 export default {
     inbound,
     outbound,
@@ -18,5 +19,6 @@ export default {
     inboundOrderProductTable,
     sellerWarehouseTable,
     inboundDetailProductTable,
-    outboundOrderTable
+    outboundOrderTable,
+    outboundProduct
 }
