@@ -825,6 +825,39 @@ export const routerMap = [
           component: () => import('../views/sellerWarehouse/inbound/inboundDetail'),
         },
         {
+          path: 'outbound',
+          name: 'Outbound Overview',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'Outbound Overview'
+          },
+          component: () => import('../views/sellerWarehouse/outbound/outboundOverview'),
+        },
+        {
+          path: 'createOutbound',
+          name: 'create Outbound',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'create Outbound'
+          },
+          component: () => import('../views/sellerWarehouse/outbound/createOutbound'),
+        },
+        {
+          path: 'outboundDetail',
+          name: 'outbound Detail',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: 'outbound Detail',
+          },
+          component: () => import('../views/sellerWarehouse/outbound/outboundDetail'),
+        },
+        {
           path: 'qcOverview',
           name: 'qc Overview',
           meta: {
