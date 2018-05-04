@@ -91,6 +91,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                    orderNo:'999'
                 }, {
                     type: '1',
                     id: '',
@@ -99,6 +100,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                     orderNo:'999'
                 }, {
                     type: '2',
                     id: '',
@@ -107,6 +109,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                     orderNo:'999'
                 }, {
                     type: '3',
                     id: '',
@@ -115,6 +118,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                     orderNo:'999'
                 }, {
                     type: '4',
                     id: '',
@@ -123,6 +127,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                     orderNo:'999'
                 }, {
                     type: '5',
                     id: '',
@@ -131,6 +136,7 @@
                     supplier: '',
                     remark: '',
                     actualDt: '',
+                     orderNo:'999'
                 }],
                 copyData: []
             }

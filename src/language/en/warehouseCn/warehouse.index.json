@@ -69,5 +69,13 @@
   "roughWeightOfInnerCarton":"中包毛重",
   "volumeOfInnerCarton":"中包体积",
   "brand":"品牌",
-  "skuNameCN":"中文品名"
+  "skuNameCN":"中文品名",
+
+
+  "outboundNo":"出库单号",
+  "shipmentInvoiceNo":"出运发票号码",
+  "outboundTypeDictCode":"出库类型",
+  "outboundDate":"出库日期",
+  "outboundOperator":"出库人员",
+  "outboundSkuTotalQty":"出库产品总数量"
 }

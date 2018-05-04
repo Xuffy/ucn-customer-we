@@ -16,8 +16,8 @@
             <div class="select-wrap">
                <selectSearch 
                     :options=options
-                    @selectChange="selectChange"
-                    @inputChange="inputEnter"
+                     v-model='selectSearch'
+                    @inputEnter="inputEnter"
                  ></selectSearch>
             </div>
         </div>
@@ -80,6 +80,7 @@
                 prodisabled: true, // finish的状态
                 tabData: [],
                 loading: false,
+                selectSearch:'1',
                 pageTotal: 1,
                 rowspan: 1,
                 options: [{
