@@ -89,51 +89,16 @@
                     width="55">
             </el-table-column>
             <el-table-column
-                    v-for="v in $db.warehouse.inboundOrderProductTable"
+                    v-for="v in $db.warehouse.outboundProduct"
                     :key="v.key"
                     :label="v.key"
                     align="center"
                     width="180">
                 <template slot-scope="scope">
-                    <div v-if="v.belong==='skuList'">
-                        <div v-if="v.showType==='input'">
-                            <el-input
-                                    placeholder="请输入内容"
-                                    v-model="scope.row.skuList[0][v.key]"
-                                    clearable>
-                            </el-input>
-                        </div>
-                        <div v-else>
-                            {{scope.row.skuList[0][v.key]}}
-                        </div>
-                    </div>
-                    <div v-else-if="v.showType==='input'">
-                        <el-input
-                                placeholder="请输入内容"
-                                v-model="scope.row[v.key]"
-                                clearable>
-                        </el-input>
-                    </div>
-                    <div v-else-if="v.showType==='select'">
-                        <el-select v-model="scope.row.skuList[0][v.key]" placeholder="请选择">
-                            <el-option
-                                    v-for="item in v.options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </div>
-                    <div v-else-if="v.showType==='number'">
+                    <div v-if="v.showType==='number'">
                         <el-input-number
-                                :disabled="v.computed"
                                 v-model="scope.row[v.key]"
-                                @blur="handleBlur(v.key)"
-                                :controls="false"
-                                label="请输入"></el-input-number>
-                    </div>
-                    <div v-else-if="v.key==='unqualifiedType'">
-                        0
+                                :controls="false"></el-input-number>
                     </div>
                     <div v-else>
                         {{scope.row[v.key]}}
@@ -143,6 +108,7 @@
             <el-table-column
                     fixed="right"
                     label="操作"
+                    align="center"
                     width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
@@ -305,10 +271,10 @@
                     outboundDate:'',
                     outboundSkuCreateParams: [
                         // {
-                        //     inboundSkuId: 0,
-                        //     inventoryServiceFee: 0,
-                        //     inventorySkuPrice: 0,
-                        //     outboundOutCartonTotalQty: 0
+                        //     inboundSkuId: 1,
+                        //     inventoryServiceFee: 10,
+                        //     inventorySkuPrice: 10,
+                        //     outboundOutCartonTotalQty: 10
                         // }
                     ],
                     outboundSkuTotalQty: 0,
@@ -354,6 +320,12 @@
                     //     }
                     // ],
                 },
+
+
+                /**
+                 * 暂时用data
+                 * */
+                copyData:[]
             }
         },
         methods:{
@@ -367,6 +339,7 @@
                 this.disabledCancelSearch=true;
                 //请求弹出框数据
                 this.$ajax.post(this.$apis.get_inboundSku,this.orderProduct).then(res=>{
+                    this.copyData=res.datas;
                     this.tableDataList = this.$getDB(this.$db.warehouse.outboundOrderTable, res.datas);
                     this.disabledSearch=false;
                     this.disabledCancelSearch=false;
@@ -402,8 +375,22 @@
 
             //提交表单
             submit(){
+                // console.log(this.outboundData,'????')
+                // console.log(this.productData,'productData')
+                let id=1;
+                this.productData.forEach(v=>{
+                    this.outboundData.outboundSkuCreateParams.push({
+                        inboundSkuId: id++,
+                        inventoryServiceFee: v.inventoryServiceFee?v.inventoryServiceFee:0,
+                        inventorySkuPrice: v.inventorySkuPrice?v.inventorySkuPrice:0,
+                        outboundOutCartonTotalQty: v.outboundOutCartonTotalQty?v.outboundOutCartonTotalQty:0
+                    });
+                })
+                console.log(this.outboundData)
 
-                console.log(this.outboundData,'????')
+
+
+
 
                 // this.productData.forEach(v=>{
                 //     this.outboundData.inboundSkuBeanCreateParams.push({
@@ -469,9 +456,16 @@
                 //         supplierOrderNo: v.supplierOrderNo,
                 //     });
                 // })
-                // console.log(this.outboundData)
-                // this.disabledSubmit=true;
-                //
+
+                this.disabledSubmit=true;
+
+                this.$ajax.post(this.$apis.add_outbound,this.outboundData).then(res=>{
+                    console.log(res)
+                    this.disabledSubmit=false;
+                }).catch(err=>{
+                    this.disabledSubmit=false;
+                });
+
                 // this.$ajax.post(this.$apis.add_inbound,this.outboundData).then(res=>{
                 //     this.disabledSubmit=false;
                 //     this.$message({
@@ -516,7 +510,10 @@
                 this.selectList=e;
             },
             postData(){
-                console.log(this.selectList)
+
+                this.productData=this.$copyArr(this.copyData);
+
+                console.log(this.productData)
                 // let arr=this.$copyArr(this.selectList);
                 // arr.forEach(v=>{
                 //     if(v._checked && !v._disabled){

@@ -8,6 +8,9 @@ import inboundOrderProductTable from './inboundOrderProductTable';
 import inboundDetailProductTable from './inboundDetailProductTable';
 import outbound from './outbound';
 import outboundOrderTable from './outboundOrderTable';
+import outboundProduct from './outboundProduct';
+import qcDetailBasicInfo from './qcDetailBasicInfo';
+import summary from './summary';
 export default {
     inbound,
     outbound,
@@ -18,5 +21,8 @@ export default {
     inboundOrderProductTable,
     sellerWarehouseTable,
     inboundDetailProductTable,
-    outboundOrderTable
+    outboundOrderTable,
+    outboundProduct,
+    qcDetailBasicInfo,
+    summary
 }

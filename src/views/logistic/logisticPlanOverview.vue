@@ -156,6 +156,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.gei_plan_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
@@ -172,6 +173,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.get_transportation_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
@@ -192,6 +194,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.get_SKU_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {

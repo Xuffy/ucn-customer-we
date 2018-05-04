@@ -216,24 +216,27 @@ export default {
     return {
       modify: true,
       modifyArray: [],
-      modifyObj: null
+      modifyObj: {}
     }
   },
   mounted () {
     this.createModifyData()
   },
-  watch: {
-    productInfoModifyStatus () {
-      this.createModifyData()
-    }
-  },
+  // watch: {
+  //   tableData (newVal) {
+  //     console.log(newVal)
+  //     newVal.length && this.createModifyData()
+  //   }
+  // },
   methods: {
     createModifyData () {
+      console.log(this.tableData.length)
+      if (!this.tableData.length) return
       if (this.productInfoModifyStatus === 1) {
         this.modifyObj = JSON.parse(JSON.stringify(this.tableData[0]))
         _.mapObject(this.modifyObj, (value, key) => {
-          key === 'skuCode' && (this.modifyObj[key].edit = true)
-          key === 'hsCode' && (this.modifyObj[key].edit = true)
+          key === 'skuCode' && (value.edit = true)
+          key === 'hsCode' && (value.edit = true)
           return value
         })
 
