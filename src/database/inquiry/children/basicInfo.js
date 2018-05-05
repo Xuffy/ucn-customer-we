@@ -164,7 +164,6 @@ export default {
     supplierName: { // 供应商名称 ok
         placeholder: 'Please select',
         rules: [],
-        _slot: 'supplierName',
         width: '150px',
         type: 'manySelect',
         state: 0

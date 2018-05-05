@@ -1,6 +1,5 @@
 {
 
-    "categoryId":"Category",
     "nameEnLike":"SKU Name EN",
     "readilyAvailable":"Readily Available",
     "customerSkuCodeLike":"customer sku code",
@@ -17,10 +16,6 @@
     "descEnLike":"SKU Description EN",
     "descCnLike":"SKU Description CN",
     "descCnDetail":"产品中文描述",
-  
-  
-  
-    "id":"",
     "pic":"pic",
     "saleStatus":"SKU sale status",
     "code":"sku code",
@@ -40,7 +35,6 @@
     "colourEn":"colour(EN)",
     "colourCn":"colour(CN)",
     "minOrderQty":"minimum order quantity",
-    "deliveryDates":"delivery days",
     "design":"product design",
     "categoryId":"Category",
     "categoryLevel1":"category level 1",
@@ -48,26 +42,19 @@
     "categoryLevel3":"category level 3",
     "categoryLevel4":"category level 4",
     "barcode":"bar code",
-    "readilyAvailable":"Readily Available",
     "availableQty":"SKU available",
     "noneSellCountry":"Restricted selling country",
     "applicableAge":"applicable age ",
     "expireDates":"expiration date",
     "expireUnit":"expiration date unit",
     "comments":"explain",
-  
-  
     "fobCurrency":"FOB currency",
-    "fobPrice":"FOB price",
     "fobPort":"FOB Port",
-    "exwPrice":"EXW Price",
     "exwCurrency":"EXW currency",
     "otherIncoterm":"other incoterm",
     "otherIncotermPrice":"other incoterm price",
     "otherIncotermArea":"other incoterm area",
     "otherIncotermCurrency":"other incoterm currency",
-  
-  
     "rateValueAddedTax":"rate of value-added tax",
     "taxRefundRate":"tax refund rate",
     "customsCode":"HS Code",
@@ -84,7 +71,6 @@
     "brandRemark":"brand remark",
     "brandRelated":"related brand",
     "certificat":"certificat",
-  
     "unitWeight":"unit of weight",
     "unitLength":"unit of length",
     "unitVolume":"unit of volume",
@@ -119,7 +105,6 @@
     "outerCartonMethodCn":"packing method of outer carton CN",
     "outerCartonMethodEn":"packing method of outer carton EN",
     "oem":"OEM",
-  
     "gp20SkuQty":"20GP SKU quantity",
     "gp40SkuQty":"40GP SKU quantity",
     "hq40SkuQty":"40HQ SKU quantity",
@@ -142,23 +127,18 @@
     "otherPackInfoCn":"other packing information CN",
     "otherPackInfoEn":"other packing information EN",
     "adjustPackage":"adjust SKU and package or not",
-  
     "cifPrice":"CIF price",
     "cifCurrency":"CIF currency",
     "cifArea":"CIF area",
     "dduPrice":"DDU price",
     "dduCurrency":"DDU currency",
     "dduArea":"DDU area",
-  
     "incoterm":"incoterm",
     "incotermArea":"incoterm Area",
     "incotermPrice":"incoterm Price",
-  
     "compareTime":"Compare Time",
     "compareName":"Compare Name",
     "productName":"Compare Item",
     "operator":"Operator",
-  
     "categoryName":"Category Name"
-  
   }
