@@ -103,35 +103,40 @@ export default {
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'paymentMethod'
     },
     destinationCountry: { //目的国 下拉选择
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'destinationCountry'
     },
     departureCountry: { //发运国 下拉选择所有选项 ok
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'departureCountry'
     },
     incoterm: { //价格条款 选择 ok
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'incoterm'
     },
     currency: { //币种 选择 ok
         placeholder: 'Please select',
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'currency'
     },
     discountRate: { //折扣率 限制输入百分比 ok
         placeholder: 'Please select',
@@ -178,7 +183,8 @@ export default {
         rules: [],
         width: '150px',
         type: 'select',
-        state: 0
+        state: 0,
+        _slot: 'exportLicense'
     },
     relatedOrderNO: { //关联订单号
         placeholder: 'Please select',
@@ -211,6 +217,7 @@ export default {
         xs: 24,
         sm: 24,
         md: 24,
-        lg: 24
+        lg: 24,
+        _slot: 'attachment'
     }
 }

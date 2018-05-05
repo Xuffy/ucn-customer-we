@@ -27,7 +27,7 @@
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button>{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button :disabled="tabData.length <= 0?true:false">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -125,7 +125,6 @@
         },
         watch: {
             viewByStatus() {
-                console.log(this.$db.inquiry.viewBySKU, '====')
                 this.gettabData();
             },
             params: {
