@@ -8,14 +8,14 @@
     <el-menu class="menu-box">
       <el-menu-item-group style="border-bottom: 1px solid rgba(255,255,255,.5);padding-bottom: 10px">
         <div slot="title">
-          <i class="el-icon-menu"></i>
+          <i class="el-icon-menu" style="font-size: 16px"></i>
           <span>Quick Link</span>
         </div>
 
         <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
           <router-link :to="item.link">
             <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
-              <i class="el-icon-tickets"></i>
+              <i class="iconfont" :class="[item.icon || 'icon-sousuo']"></i>
             </el-tooltip>
             <span v-text="item.label"></span>
           </router-link>
@@ -188,18 +188,22 @@
   .el-menu-item,
   .el-menu-item a,
   .el-menu-item i {
-    line-height: 30px;
-    height: 30px;
+    line-height: 34px;
+    height: 36px;
     font-size: 12px;
     color: #FFFFFF;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    background-color: inherit !important;
+    display: block;
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+    /*background-color: inherit !important;*/
   }
 
   .el-menu-item i {
-    width: auto;
+    width: 20px;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
   }
 
   .ucn-menu.hideMenu .fold-box,
@@ -244,6 +248,10 @@
     text-align: right;
   }
 
+  .el-menu-item:hover,
+  .el-menu-item:focus {
+    background-color: rgba(119, 119, 119, .5);
+  }
 
 </style>
 <style>

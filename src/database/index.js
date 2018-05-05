@@ -12,7 +12,9 @@ import message from './message/index';
 import payment from './payment/index';
 import logs from './logs/index';
 
-import warehouse from './warehouse/index';
+import warehouse from './warehouse/index'
+
+import {database} from 'ucn-tool/src/index';
 
 const db = {
   common,
@@ -29,46 +31,4 @@ const db = {
   warehouse
   // inbound,
 };
-/*
-const database = _.mapObject(db, value => {
-  value = _.mapObject(value, val => {
-    val = _.mapObject(val, (v, k) => {
-      if (!v.key) v.key = k;
-      if (!v.type) v.type = 'String';
-      if (!v.length) v.length = 10;
-      v.label = language[k];
-      return v;
-    });
-    return val;
-  });
-  return value;
-});
-*/
-
-const findLanguage = (key) => {
-  let val = '';
-
-  _.map(language, value => {
-    val = value[key];
-  });
-
-  return val;
-}
-
-const database = _.mapObject(db, (value, key) => {
-  value = _.mapObject(value, val => {
-    val = _.mapObject(val, (v, k) => {
-      let lang = language[key];
-      if (!v.key) v.key = k;
-      if (!v.type) v.type = 'String';
-      if (!v.length) v.length = 10;
-      v.label = lang ? lang[k] : findLanguage(k);
-      return v;
-    });
-    return val;
-  });
-  return value;
-});
-
-
-export default database;
+export default database(_, language, db);
