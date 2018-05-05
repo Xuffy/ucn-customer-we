@@ -71,7 +71,7 @@
             <v-table
                     :loading="loadingTable"
                     :data="tableDataList"
-                    :buttons="type==='recycle'?[]:[{label: 'Detail', type: 1}]"
+                    :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick">
               <template slot="header">
@@ -433,8 +433,11 @@
             //获取table数据
             getData(e) {
                 if(this.type==='recycle'){
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
-                        recycle:true
+                        recycle:true,
+                        ps:100,
+                        pn:1
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
@@ -455,8 +458,9 @@
                                 })
                             })
                         }
+                        this.loadingTable=false;
                     }).catch(err=>{
-                        console.log(err)
+                        this.loadingTable=false;
                     });
                 }
                 else{
@@ -543,8 +547,15 @@
 
             //表格按钮点击
             btnClick(item){
-                if(!item._disabled){
-                    // this.$windowOpen('/product/sourcingDetail',{});
+                if(this.type==='recycle'){
+                    this.$windowOpen({
+                        url:'/product/bookmarkDetail',
+                        params:{
+                            id:item.skuId.value,
+                            bookmarkId:item.id.value
+                        }
+                    })
+                }else if(this.type==='product'){
                     this.$windowOpen({
                         url:'/product/sourcingDetail',
                         params:{
@@ -604,8 +615,9 @@
                     id.push(v.id.value);
                 });
                 this.disabledClickRecover=true;
-                this.$ajax.post(this.$apis.recover_bookmark,id).then(res=>{
+                this.$ajax.post(this.$apis.recover_buyerProductBookmark,id).then(res=>{
                     this.selectList=[];
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                         recycle:true
                     }).then(res=>{
@@ -633,8 +645,10 @@
                             type: 'success'
                         });
                         this.disabledClickRecover=false;
+                        this.loadingTable=false;
                     }).catch(err=>{
                         this.disabledClickRecover=false;
+                        this.loadingTable=false;
                     });
                 }).catch(err=>{
                     this.disabledClickRecover=false;

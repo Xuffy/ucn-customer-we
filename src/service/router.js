@@ -99,8 +99,8 @@ export const routerMap = [
           name: 'productSourcingDetail',
           hidden: true,
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: true,
             name: 'Sourcing Detail'
           },
@@ -110,7 +110,7 @@ export const routerMap = [
           path: 'bookmark',
           name: 'productBookmarkOverview',
           meta: {
-            draft: true,
+            draft: false,
             recycleBin: true,
             log: true,
             name: 'Bookmark Overview'
@@ -122,7 +122,7 @@ export const routerMap = [
           name: 'productBookmarkDetail',
           hidden: true,
           meta: {
-            draft: true,
+            draft: false,
             recycleBin: true,
             log: true,
             name: 'Bookmark Detail'
@@ -146,7 +146,7 @@ export const routerMap = [
           name: 'productBookmarkRecycleBin',
           hidden: true,
           meta: {
-            draft: true,
+            draft: false,
             recycleBin: true,
             log: true,
             name: 'Bookmark RecycleBin'

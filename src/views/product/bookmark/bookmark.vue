@@ -139,6 +139,7 @@
     import {dropDownSingle} from '@/components/index'
     import sectionNumber from '../../product/sectionNumber'
     import product from '../addProduct'
+    import { mapActions } from 'vuex'
 
     export default {
         name: "overview",
@@ -241,6 +242,9 @@
             }
         },
         methods:{
+            ...mapActions([
+                'setRecycleBin'
+            ]),
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -414,10 +418,25 @@
                     }
                 });
                 if(this.disabledOrderList.length>0){
-                    console.log(this.disabledOrderList)
                     this.dialogFormVisible=true;
                 }else{
-
+                    if(this.selectList.length===0){
+                        this.$windowOpen({
+                            url:'/order/creat',
+                        })
+                    }else{
+                        let ids='';
+                        this.selectList.forEach(v=>{
+                            ids+=(v.skuId.value+',');
+                        });
+                        this.$windowOpen({
+                            url:'/order/creat',
+                            params:{
+                                type:'product',
+                                ids:ids,
+                            },
+                        })
+                    }
                 }
             },
 
@@ -493,6 +512,10 @@
         created(){
             this.getData();
             this.getCategoryId();
+            this.setRecycleBin({
+                name: 'productBookmarkRecycleBin',
+                show: true
+            });
         },
 
         watch:{

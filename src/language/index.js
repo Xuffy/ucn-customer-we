@@ -42,7 +42,8 @@ const json = {
   product: _.extend({},
     require(`./${lang}/product/product.basic`),
     require(`./${lang}/product/productDetail`),
-    require(`./${lang}/product/productOverview`)
+    require(`./${lang}/product/productOverview`),
+    require(`./${lang}/product/productOverviewTable`),
   ),
   productCn: _.extend({},
     require(`./${lang}/productCn/product.basic`),
