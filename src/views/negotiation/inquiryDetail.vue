@@ -88,22 +88,11 @@
             @save="save"
             ref="HM"
         >
-            <div 
-                v-for="items in $db.inquiry.basicInfo"
-                :key="items.key"
-                :slot="items._slot"
-                slot-scope="{data}"
-            >
-                <el-select placeholder="请选择" v-model="fromArg[item.key]">
-                    <el-option
-                        v-for="item in selectAll[data.key]"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                    </el-option>
+            <template v-for="items in $db.inquiry.basicInfo" :slot="items._slot" slot-scope="{data}">
+                <el-select placeholder="请选择" v-model="fromArg[items.key]">
+                    <el-option v-for="item in selectAll[data.key]" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
-            </div>
+            </template>
         </v-history-modify>
     </div>
 </template>
@@ -191,7 +180,11 @@
         },
         computed: {
             fromArg() {
-                console.log($db.inquiry.basicInfo)            
+                let json = {};
+                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
+                    json[k] = val.key;
+                });
+                return json; 
             }
         },
         components: {

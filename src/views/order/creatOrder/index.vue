@@ -615,7 +615,12 @@
             },
             //product带入
             getProductDetail() {
-                let arr = this.$route.query.ids
+                let arr = [];
+                this.$route.query.ids.split(',').forEach(v=>{
+                    arr.push(Number(v))
+                })     
+                arr.pop()
+                
                 this.$ajax.post(this.$apis.post_order_skus, arr)
                     .then(res => {
                         _.map(res, arr => {
@@ -655,6 +660,7 @@
                     this.getProductDetail()
                     break;
                 default:
+                     this.getProductDetail()
                     console.log("裸进")
             }
         },
