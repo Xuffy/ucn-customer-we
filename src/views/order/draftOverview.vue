@@ -3,9 +3,9 @@
         <h3 class="hd">Draft Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download'>{{($i.common.download)}}({{selectedDate.length}})</el-button>
-                 <el-button @click='send'>{{($i.common.send)}}</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.common.delete)}}</el-button>
+                <el-button @click='download' v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
+                 <el-button @click='send' v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'">{{($i.common.send)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
             </div>
              <div class="select-wrap">
                <selectSearch 

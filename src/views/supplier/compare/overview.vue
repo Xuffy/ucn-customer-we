@@ -3,10 +3,10 @@
         <h3 class="hd">{{$i.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button  :disabled='!selectedData.length>0'
+                <el-button :disabled='!selectedData.length>0'
                  @click='downloadSelected'
                 >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
-                <el-button type="danger" :disabled='!selectedData.length>0'
+                <el-button type="danger" v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DELETE'" :disabled='!selectedData.length>0'
                 @click='remove'
                 >{{$i.common.delete}}({{selectedNumber.length}})</el-button>
             </div>

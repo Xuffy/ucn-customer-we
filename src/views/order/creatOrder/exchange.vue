@@ -1,6 +1,7 @@
 <template>
   <div >
     <el-col :xs="raster" :sm="raster" :md="raster" :lg="raster" :xl="raster" v-for="(a, i) of exchangeRateList" :key="'list-' + i">
+        
       <div class="right">
             <span>
                  <span v-if="a.currency=='CNY|USD'">exchange rate(￥-$)</span>
