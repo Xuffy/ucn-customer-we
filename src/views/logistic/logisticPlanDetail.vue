@@ -2,7 +2,7 @@
   <div class="place-logistic-plan">
     <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle" planId="planId"/>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -157,7 +157,7 @@ export default {
   },
   computed: {
     planId () {
-      return this.$route.query.id
+      return '' + this.$route.query.id
     }
   },
   mounted () {
@@ -208,7 +208,7 @@ export default {
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
-        this.exchangeRateList = res.currencyExchangeRate
+        this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
         this.logisticsNo = res.logisticsNo
         this.containerInfo = res.containerDetail
