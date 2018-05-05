@@ -119,7 +119,7 @@
                 return column;
             },
             history() {
-                let arr = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$filterRemark(this.list, 'fieldRemark'));
+                let arr = this.$getDB(this.$db.inquiry.basicInfo, this.$filterRemark(this.list, 'fieldRemark'));
                 if(this.title === 'Modify') {
                     let json = {};
                     for(let key in this.column) {

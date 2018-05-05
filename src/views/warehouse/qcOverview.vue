@@ -1,5 +1,5 @@
 <template>
-  <div class="inquiryOverview">
+  <div class="inquiry">
     <h3 class="hd"></h3>
     <div class="status">
       <div class="state">

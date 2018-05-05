@@ -72,7 +72,7 @@
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 
                 })

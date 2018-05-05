@@ -207,10 +207,10 @@
                 this.tabLoad = true;
                 if(this.compareBy + '' === '0') {
                     url = this.$apis.POST_INQUIRY_COMPARE;
-                    column = this.$db.inquiryOverview.viewByInqury;
+                    column = this.$db.inquiry.viewByInqury;
                 } else {
                     url = this.$apis.POST_INQUIRY_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
+                    column = this.$db.inquiry.viewBySKU;
                 };
 
                 this.$ajax.post(url, this.params)
@@ -226,10 +226,10 @@
                 this.tabLoad = true;
                 if(this.compareBy + '' === '0') {
                     url = this.$apis.POST_INQIIRY_LIST;
-                    column = this.$db.inquiryOverview.viewByInqury;
+                    column = this.$db.inquiry.viewByInqury;
                 } else {
                     url = this.$apis.POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
+                    column = this.$db.inquiry.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
@@ -305,10 +305,10 @@
                 let url, column;
                 if(this.compareBy+''==='0') {
                     url = this.$apis.POST_INQIIRY_LIST;
-                    column = this.$db.inquiryOverview.viewByInqury;
+                    column = this.$db.inquiry.viewByInqury;
                 } else {
                     url = this.$apis.POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
+                    column = this.$db.inquiry.viewBySKU;
                 };
                 this.$ajax.post(url, {
                     recycleCustomer:0,

@@ -1,13 +1,13 @@
 <template>
-    <div class="inquiryOverview">
-        <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
+    <div class="inquiry">
+        <h3 class="hd"> {{ $i.inquiry.inquiryTitle }}</h3>
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button 
-                        v-for="item in $db.inquiryOverview.overoiewState"
+                        v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
                         :key="item.id"
                     >
@@ -129,10 +129,10 @@
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
                     url = this.$apis.BUYER_POST_INQIIRY_LIST;
-                    column = this.$db.inquiryOverview.viewByInqury;
+                    column = this.$db.inquiry.viewByInqury;
                 } else {
                     url = this.$apis.BUYER_POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
+                    column = this.$db.inquiry.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
@@ -221,7 +221,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .inquiryOverview {
+    .inquiry {
         .hd {
             padding-left:15px;
             height: 50px;

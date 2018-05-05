@@ -325,9 +325,9 @@
                                 }).value + '' === config.data + '') arr.push(items)
                         });
                         if (config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
                         }
                     });
             },

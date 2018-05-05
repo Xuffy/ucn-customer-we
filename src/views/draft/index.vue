@@ -85,7 +85,7 @@
                         item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
                     });
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
+                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
                 });
             },
             searchEnter(item) { // 搜索框

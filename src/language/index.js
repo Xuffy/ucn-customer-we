@@ -14,7 +14,8 @@ const json = {
     require(`./${lang}/inquiry/compare.pending`),
     require(`./${lang}/inquiry/index`),
     require(`./${lang}/inquiry/viewByInqury.pending`),
-    require(`./${lang}/inquiry/viewBySKU.pending`)
+    require(`./${lang}/inquiry/viewBySKU.pending`),
+    require(`./${lang}/inquiry/productInfo.pending`)
   ),
   logistic: _.extend({},
     require(`./${lang}/logistic/plan/basicInfo.pending`),
@@ -62,7 +63,11 @@ const json = {
   warehouse: _.extend(
     require(`./${lang}/warehouse/qcWarehouse`),
     require(`./${lang}/warehouse/warehouse.table`),
-    require(`./${lang}/warehouse/warehouse.basic`)
+    require(`./${lang}/warehouse/warehouse.basic`),
+    require(`./${lang}/warehouse/payment.pending`),
+    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
+    require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
+    require(`./${lang}/warehouse/summary.pending`)
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
