@@ -1,6 +1,6 @@
 <template>
   <div class="QCOrderDetail">
-    <el-form ref="ruleform" :model="fromArg" label-width="190px">
+    <el-form ref="ruleform" :model="fromArg">
       <el-row :gutter="10">
         <el-col
           v-for="(item, index) in $db.warehouse.qcDetailBasicInfo"
@@ -21,17 +21,18 @@
               v-model="basicInfo[item.key]"
               :size="item.size || 'mini'"
               v-if="item.type === 'String' && !item._hide"
+
             />
-            <el-input-number v-model="basicInfo[item.key]"  :min="0" :max="100" v-if="item.type === 'phone'" controls-position="right" size="mini" :controls="false" style="width:100%;"/>
+            <el-input-number v-model="basicInfo[item.key]" :min="0" :max="100" v-if="item.type === 'phone'" controls-position="right" size="mini" :controls="false" style="width:100%;"/>
             <el-select
-              v-model="basicInfo[item.key]"
+              v-model="selectAll[item.key]"
               value-key="id"
               :size="item.size || 'mini'"
               v-if="item.type === 'Select'"
               style="width:100%;"
             >
               <el-option
-                v-for="item in MdOptions"
+                v-for="item in selectAll[item.key]"
                 :key="item.id"
                 :id="item.id"
               />
@@ -44,6 +45,7 @@
               :placeholder="item.placeholder"
               v-if="item.type === 'textarea'"
               resize="none"
+              :disabled="true"
             />
             <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
           </el-form-item>
@@ -51,55 +53,70 @@
       </el-row>
     </el-form>
     <h5 class="solid">付款信息</h5>
-    <el-table
-      :data="tableData6"
-      border
-      show-summary
-      style="width: 100%"
-    >
-      <el-table-column type="index" width="50"></el-table-column>
-      <el-table-column prop="id" label="ID" width="180"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="amount1" sortable label="数值 1"></el-table-column>
-      <el-table-column prop="amount2" sortable label="数值 2"></el-table-column>
-      <el-table-column prop="amount3" sortable label="数值 3"></el-table-column>
-    </el-table>
+    <v-table
+      :data="paymentData"
+    />
     <h5 class="solid">产品信息</h5>
-    <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-      <el-tab-pane label="验货结果" name="first">
-        <el-button>接受</el-button>
-        <v-table
-          :data.sync="tabData"
-          :buttons="[{'label': '详情', type: 'detail'}]"
-          @action="producInfoAction"
-          @change-checked="changeChecked"
-          :totalRow="true"
-        />
-      </el-tab-pane>
-      <el-tab-pane label="返工申请" name="second">
-        <el-button>接受返工</el-button>
-        <v-table
-          :data.sync="tabData"
-          :buttons="[{'label': '详情', type: 'detail'}]"
-          @action="producInfoAction"
-          @change-checked="changeChecked"
-          :totalRow="true"
-        />
-      </el-tab-pane>
-      <el-tab-pane label="退货申请" name="third">
-        <el-button>接受退货</el-button>
-        <v-table
-          :data.sync="tabData"
-          :buttons="[{'label': '详情', type: 'detail'}]"
-          @action="producInfoAction"
-          @change-checked="changeChecked"
-          :totalRow="true"
-        />
-      </el-tab-pane>
-    </el-tabs>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column
+        prop="type"
+        label="Type"
+        width="240">
+        <template slot-scope="scope">
+            <span  v-model="scope.row.type">
+                  <span v-if="scope.row.type==0">NeedLabelDesignInfoDate</span>
+                  <span v-else-if="scope.row.type==1">LableDesignDate</span>
+                  <span v-else-if="scope.row.type==2">DesignNeedConfirmDate</span>
+                  <span v-else-if="scope.row.type==3">ReceiveSampleDate</span>
+                  <span v-else-if="scope.row.type==4">SampleNeedConfirmDate</span>
+                  <span v-else-if="scope.row.type==5">OtherDate</span>
+            </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="customer" label="Me" width="240">
+        <template slot-scope="scope">
+
+          <el-date-picker
+            v-model="scope.row.customer"
+            type="datetime"
+            :disabled='(copyData[scope.$index].customer!="")||scope.$index==1||scope.$index==3||disabled'                              >
+          </el-date-picker>
+        </template>
+      </el-table-column>
+      <el-table-column prop="supplier" label="Supplier" width="240">
+        <template slot-scope="scope">
+          <el-date-picker
+            v-model="scope.row.supplier"
+            type="datetime"
+            placeholder=""
+            :disabled=true
+          >
+          </el-date-picker>
+
+        </template>
+      </el-table-column>
+      <el-table-column prop="remark" label="Remark" width="240">
+        <template slot-scope="scope">
+          <el-input
+            v-model="scope.row.remark"  :disabled='(copyData[scope.$index].remark!="")||disabled'
+          ></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column prop="actualDt" label="Actual Date" width="240">
+        <template slot-scope="scope">
+          <el-date-picker
+            v-model="scope.row.actualDt"
+            type="datetime"
+            :disabled='(copyData[scope.$index].actualDt!="")||disabled'
+          >
+          </el-date-picker>
+
+        </template>
+      </el-table-column>
+    </el-table>
     <h5 class="solid">总结</h5>
     <el-form ref="ruleform" :model="fromArg">
-      <el-row :gutter="12">
+      <el-row :gutter="10">
         <el-col
           v-for="(item, index) in $db.warehouse.summary"
           :key="index"
@@ -113,25 +130,43 @@
             :label="item.label"
             :prop="item.key"
             :rules="item.rules"
-            :label-width="item.width || '280px'"
+            :label-width="item.width || '150px'"
           >
             <el-input
-              v-model="fromArg[item.key]"
+              v-model="basicInfo[item.key]"
               :size="item.size || 'mini'"
               v-if="!item._hide"
-              :disabled="item.disabled"
+              disabled
             />
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="footer">
-        <hr>
-        <span slot="footer">
-            <el-button type="primary" @click="postQcSave">{{$i._baseText.ok}}</el-button>
-            <el-button>{{$i._baseText.cancel}}</el-button>
-        </span>
-      </div>
     </el-form>
+    <!--<div class="add-quick-link">-->
+      <!--<el-dialog title="Add Quick Link" :visible.sync="dialogClose">-->
+        <!--<el-checkbox-group v-model="checkedList">-->
+          <!--<el-row>-->
+            <!--<el-col :span="8" v-for="item in $db.warehouse.qcDetailProductInfo" :key="item.key" v-if="!item._hide">-->
+              <!--<el-checkbox :label="item.key">-->
+                <!--{{item.label}}-->
+              <!--</el-checkbox>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+        <!--</el-checkbox-group>-->
+
+        <!--<div slot="footer" class="dialog-footer">-->
+          <!--<el-button @click="$store.state.quickLink.show = false">取 消</el-button>-->
+          <!--<el-button type="primary">确 定</el-button>-->
+        <!--</div>-->
+      <!--</el-dialog>-->
+    <!--</div>-->
+    <div class="footer">
+      <hr>
+      <span slot="footer">
+            <el-button type="primary" @click="postQcSave">确认</el-button>
+            <el-button>取消</el-button>
+        </span>
+    </div>
   </div>
 </template>
 <script>
@@ -140,46 +175,28 @@
     name: 'QCOrderDetail',
     data() {
       return {
+        selectAll: {
+          QCType:[],
+          QCMethod:[],
+          surveyor:[],
+          QCStatus:[],
+          exchangeCurrency:[]
+
+        },
+        checkedList: [],
+        checkedData: [],
+        paymentData: [],
+        orderType: 20,
         basicInfo: {},
         tabData: [],
-        activeName2: 'first',
-        tableData6: [{
-          id: '12987122',
-          name: '王小虎',
-          amount1: '234',
-          amount2: '3.2',
-          amount3: 10
-        }, {
-          id: '12987123',
-          name: '王小虎',
-          amount1: '165',
-          amount2: '4.43',
-          amount3: 12
-        }, {
-          id: '12987124',
-          name: '王小虎',
-          amount1: '324',
-          amount2: '1.9',
-          amount3: 9
-        }, {
-          id: '12987125',
-          name: '王小虎',
-          amount1: '621',
-          amount2: '2.2',
-          amount3: 17
-        }, {
-          id: '12987126',
-          name: '王小虎',
-          amount1: '539',
-          amount2: '4.1',
-          amount3: 15
-        }],
+        activeName2: '',
+        dialogClose: false,
         id:1,
-        MdOptions:[],
-        StatusOptions:[],
-        TypeOptions:[],
-        CurrencyOptions:[],
-        type:''
+        type:'',
+        tableData: [{
+
+        },],
+        copyData: []
       }
     },
     computed: {
@@ -199,18 +216,9 @@
       this.getDetail();
     },
     methods: {
-      //获取详细信息
-      getDetail() {
-        //this.$route.query.id
-        this.$ajax.get(`${this.$apis.get_qc_getById}?id=${this.id}`)
-          .then(res => {
-            this.basicInfo = res;
-            console.log(res)
-          })
-        console.log(this.basicInfo)
-      },
       handleClick(tab, event) {
-        console.log(tab, event);
+        this.checkedData = [];
+        this.getQcList(tab.name);
       },
       handleSelectionChange() {
 
@@ -218,8 +226,33 @@
       producInfoAction() {
 
       },
-      changeChecked() {
-
+      changeChecked(item) {
+        let arr = [];
+        _.map(item, items => {
+          _.pick(items, (val, k) => {
+            if(k === 'id') arr.push(val.value);
+          })
+        })
+        this.checkedData = arr;
+      },
+      //获取详细信息
+      getDetail() {
+        //this.$route.query.id
+        this.$ajax.get(`${this.$apis.get_qc_getById}?id=${this.id}`)
+          .then(res => {
+            this.basicInfo = res;
+            this.postPaymentList()
+            this.getQcDetailList()
+          })
+      },
+      changeChecked(item) {
+        let arr = [];
+        _.map(item, items => {
+          _.pick(items, (val, k) => {
+            if(k === 'id') arr.push(val.value);
+          })
+        })
+        this.checkedData = arr;
       },
       postQcSave(){
         //提交修改
@@ -229,23 +262,27 @@
           surveyor:this.basicInfo.surveyor,
           serviceFee:this.basicInfo.serviceFee,
         }
-        // this.$ajax.post(this.$apis.get_qcOrderData,this.post_qc_result_save).then(res=>{
-        //
-        //
-        // }).catch(err=>{
-        //   console.log(err)
-        // });
+
+      },
+      getQcDetailList(name) {
+        let params = {
+          pn: 1,
+          ps: 200,
+          qcOrderId: this.basicInfo.id,
+          skuInventoryStatusDictCode: name || ''
+        };
+        this.$ajax.post(this.$apis.post_qc_detail_page, params)
+          .then(res => {
+            this.tabData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
+          });
       },
       postPaymentList(){
         //获取付款信息
-        console.log(this.basicInfo)
-        console.log(this.basicInfo.QCOrderNo,this.basicInfo.QCType)
         this.$ajax.post(this.$apis.post_payment_list,{
-          orderNo:11111111111,
-          orderType:1
+          orderNo: this.basicInfo.qcOrderNo,
+          orderType: this.orderType
         }).then(res=>{
-          console.log(res)
-
+          this.paymentData = res.datas;
         }).catch(err=>{
           console.log(err)
         });
@@ -264,8 +301,7 @@
       getUesrLList(){
         //获取当前登录用户所在企业下所有用户信息
         this.$ajax.post(this.$apis.get_user_list).then(res=>{
-          console.log(res)
-
+          this.selectAll.surveyor = res
         }).catch(err=>{
           console.log(err)
         });
@@ -273,21 +309,9 @@
       getCodePart(){
         //获取元数据 下拉框
         this.$ajax.post(this.$apis.POST_CODE_PART,['QC_TYPE','QC_MD','QC_STATUS']).then(res=>{
-          _.map(res, function(num){
-            if (num.code === 'QC_MD'){   //验货方式
-                this.MdOptions = res.codes
-            }else if (num.code === 'QC_STATUS'){   //验货结果
-                this.StatusOptions = res.codes
-            }else if (num.code === 'QC_TYPE'){
-              console.log(res.codes)
-              console.log(res)
-              this.TypeOptions = res.codes   //验货类型
-              return this.TypeOptions
-              console.log(this.TypeOptions)
-
-            }
-          })
-
+          this.selectAll.QCMethod = _.findWhere(res, {'code': 'QC_MD'}).codes
+          this.selectAll.QCStatus = _.findWhere(res, {'code': 'QC_STATUS'}).codes
+          this.selectAll.QCType = _.findWhere(res, {'code': 'QC_TYPE'}).codes
         }).catch(err=>{
           console.log(err)
         });
@@ -295,21 +319,18 @@
       getCurrency(){
         //币种
         this.$ajax.get(this.$apis.get_currency_all).then(res=>{
-          this.CurrencyOptions = res
-          console.log(this.CurrencyOptions)
-
+          this.selectAll.exchangeCurrency = res
         }).catch(err=>{
           console.log(err)
         });
       }
     },
     created(){
-      // this.getUesrLList()
-      this.getCodePart()
-      // this.getCurrency()
-      // this.getDetail()
-      // this.postPaymentList()
-      console.log(this.TypeOptions)
+       this.getUesrLList()
+       this.getCodePart()
+       this.getCurrency()
+       this.getDetail()
+      console.log(this.$db)
     }
   }
 </script>

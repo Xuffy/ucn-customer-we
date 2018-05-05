@@ -8,9 +8,9 @@
     <div class="spe-div">
       <div class="View">
         <el-radio-group size=""  v-model="viewByStatus" @change="getDataInfo()">
-          <el-radio-button label="1">{{$i.messages.platformMessage}}</el-radio-button>
-          <el-radio-button label="2">{{$i.messages.companyMessage}}</el-radio-button>
-          <el-radio-button label="3">{{$i.messages.messageSetting}}</el-radio-button>
+          <el-radio-button label="1">{{$i.message.platformMessage}}</el-radio-button>
+          <el-radio-button label="2">{{$i.message.companyMessage}}</el-radio-button>
+          <el-radio-button label="3">{{$i.message.messageSetting}}</el-radio-button>
         </el-radio-group>
       </div>
       <div class="search">
@@ -193,10 +193,8 @@
         this.$ajax.post(url, this.params)
           .then(res => {
             this.tabData = this.$getDB(column, res.datas);
-            this.tabData = this.$getDB(column, res.datas,item=>{
-              // item.subscribeId  _hidden
-              return item;
-            });
+            console.log( res.datas)
+            console.log(this.tabData)
             this.tabLoad = false;
             this.searchLoad = false;
           })
@@ -256,7 +254,6 @@
               }else{
                 val.subscribeEmail = false;
               }
-
                 return val;
             });
 
@@ -277,7 +274,7 @@
           this.isShow = false;
           this.isHide = true;
         }
-        this.getDataInfo()
+        // this.getDataInfo()
       }
     },
     created(){

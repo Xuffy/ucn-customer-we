@@ -22,6 +22,7 @@ export default {
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
   post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
+  post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据
   POST_CODE_PART: ['/code/part', 'UMETA_URL','UMETA_URL'],

@@ -62,7 +62,8 @@ const json = {
   warehouse: _.extend(
     require(`./${lang}/warehouse/qcWarehouse`),
     require(`./${lang}/warehouse/warehouse.table`),
-    require(`./${lang}/warehouse/warehouse.basic`)
+    require(`./${lang}/warehouse/warehouse.basic`),
+    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
