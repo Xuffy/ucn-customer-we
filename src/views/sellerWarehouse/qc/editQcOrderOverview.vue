@@ -60,7 +60,6 @@
       <v-table
   :data="tableData"
 />
-    </el-table>
     <h5 class="solid">总结</h5>
     <el-form ref="ruleform" :model="fromArg">
       <el-row :gutter="10">
@@ -89,24 +88,6 @@
         </el-col>
       </el-row>
     </el-form>
-    <!--<div class="add-quick-link">-->
-      <!--<el-dialog title="Add Quick Link" :visible.sync="dialogClose">-->
-        <!--<el-checkbox-group v-model="checkedList">-->
-          <!--<el-row>-->
-            <!--<el-col :span="8" v-for="item in $db.warehouse.qcDetailProductInfo" :key="item.key" v-if="!item._hide">-->
-              <!--<el-checkbox :label="item.key">-->
-                <!--{{item.label}}-->
-              <!--</el-checkbox>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-        <!--</el-checkbox-group>-->
-
-        <!--<div slot="footer" class="dialog-footer">-->
-          <!--<el-button @click="$store.state.quickLink.show = false">取 消</el-button>-->
-          <!--<el-button type="primary">确 定</el-button>-->
-        <!--</div>-->
-      <!--</el-dialog>-->
-    <!--</div>-->
     <div class="footer">
       <hr>
       <span slot="footer">
@@ -140,9 +121,7 @@
         dialogClose: false,
         id:1,
         type:'',
-        tableData: [{
-
-        },],
+        tableData: [],
         copyData: []
       }
     },
