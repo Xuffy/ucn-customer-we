@@ -68,7 +68,8 @@ const json = {
     require(`./${lang}/warehouse/payment.pending`),
     require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
-    require(`./${lang}/warehouse/summary.pending`)
+    require(`./${lang}/warehouse/summary.pending`),
+    require(`./${lang}/warehouse/createQc.basic`),
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
