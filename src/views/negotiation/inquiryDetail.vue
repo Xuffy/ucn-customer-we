@@ -47,7 +47,9 @@
                         <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.modify }}</el-button>
                         <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i._baseText.copy }}</el-button>
                         <el-button @click="toCreateInquire">{{ $i._baseText.createInquiry }}</el-button>
+                        <el-button>{{ $i._baseText.download }}</el-button>
                         <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i._baseText.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
@@ -230,6 +232,26 @@
             }
         },
         methods: {
+            deleteInquiry() {
+                this.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+                        action: 'delete',
+                        ids: [this.$route.query.id]
+                    })
+                    .then(res => {
+                        this.$router.push('/negotiation/inquiry')
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {

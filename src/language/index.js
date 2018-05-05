@@ -118,7 +118,7 @@ export default _.extend({},
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/productCn/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
-
+  require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
   require(`./${lang}/warehouse/qcWarehouse`),
   require(`./${lang}/warehouse/warehouse.table`),
 

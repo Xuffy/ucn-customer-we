@@ -164,6 +164,7 @@
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false;
+                    this.checkedData = [];
                 })
                 .catch(() => {
                     this.searchLoad = false;

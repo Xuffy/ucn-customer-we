@@ -95,12 +95,12 @@
             getInboundData(){
                 this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
                     console.log(res)
-                    // this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                    //     e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                    //     e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
-                    //     e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
-                    //     return e;
-                    // });
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        return e;
+                    });
                 }).catch(err=>{
                     console.log(err)
                 });

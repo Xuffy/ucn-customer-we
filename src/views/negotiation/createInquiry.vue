@@ -243,7 +243,7 @@
                             });
                         });
                     } else {
-                        res.suppliers = {};
+                        res.suppliers = [];
                     };
                     delete res.companyId;
                     delete res.id;

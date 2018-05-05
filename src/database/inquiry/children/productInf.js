@@ -6,6 +6,9 @@ export default {
     _disabled: true,
     _title: 'remark'
   },
+  skuRecycle: {
+    _hide: true
+  },
   skuId: {
     _hide: true
   },
@@ -23,9 +26,6 @@ export default {
     _hide: true
   },
   skuCustomerCreate: {
-    _hide: true
-  },
-  skuRecycle: {
     _hide: true
   },
   pic: {
