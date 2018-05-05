@@ -105,7 +105,6 @@
     import VTable from '@/components/common/table/index'
     import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
-    import {mapActions} from 'vuex'
 
     export default {
         name: "overview",
@@ -420,12 +419,12 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
                     this.categoryList[1].children=res;
                 }).catch(err=>{
 
@@ -531,7 +530,7 @@
                     id.push(v.id.value);
                 });
                 this.disableClickAddBookmark=true;
-                this.$ajax.post(this.$apis.add_bookmark,id).then(res=>{
+                this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
                     this.$message({
                         message: 'successfully add!',
                         type: 'success'
@@ -561,7 +560,7 @@
             createOrder(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
-                        url:'/order/creat'
+                        url:'/order/creat',
                     })
                 }else{
                     let ids='';
@@ -571,7 +570,8 @@
                     this.$windowOpen({
                         url:'/order/creat',
                         params:{
-                            ids:ids
+                            type:'product',
+                            ids:ids,
                         },
                     })
                 }
