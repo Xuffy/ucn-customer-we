@@ -87,8 +87,8 @@ export const routerMap = [
           path: 'sourcing',
           name: 'productSourcingOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: true,
             name: 'Sourcing Overview'
           },
@@ -846,6 +846,14 @@ export const routerMap = [
             name: 'sellerQCOrderDetail'
           },
           component: () => import('../views/sellerWarehouse/qc/QCOrderDetail')
+        },
+        {
+          path: 'sellerEditOrderOverview',
+          name: 'sellerEditOrderOverview',
+          meta: {
+            name: 'sellerEditOrderOverview'
+          },
+          component: () => import('../views/sellerWarehouse/qc/editQcOrderOverview')
         }
       ]
     },

@@ -48,11 +48,14 @@
 <!--      搜索结果  -->
             <div v-show='isButton'>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
-                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>
+<!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
+
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
+<!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
+
               </div>
               <div>
 
@@ -155,10 +158,11 @@
             //....跳入createInquiry
             createInquiry() {
                 this.$windowOpen({
-                    url:'/negotiation/createInquiry',
-                    params:{
-                    selectedData: this.selectedData
-                }});
+                    url: '/negotiation/createInquiry',
+                    params: {
+                        selectedData: this.selectedData
+                    }
+                });
 
             },
             //....跳入createOrder
@@ -221,7 +225,7 @@
                 this.$ajax.post(this.$apis.get_listSupplier, this.parms)
                     .then(res => {
                         //分页组件的参数
-//                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
+                        //                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
                         //                        this.endpn = res.datas.end
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);

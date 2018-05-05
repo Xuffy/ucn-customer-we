@@ -1,7 +1,7 @@
 'use strict';
 export default {
     //order
-    get_orderlist: ['/order/page', 'BASE_HCJ', 'UPURCHASE_URL'],
+    get_orderlist: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_recover_order: ['/order/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
@@ -14,9 +14,9 @@ export default {
     get_order_history: ['/order/skuHistory', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_BUYER', 'UPURCHASE_URL'],
     post_order_skus: ['/order/skus', 'BASE_HCJ', 'UPURCHASE_URL'],
-    post_cancleOrder:['/order/cancle','BASE_HCJ','UPURCHASE_URL'],
-    post_updataOrder:['/order/update','BASE_HCJ','UPURCHASE_URL'],
-    post_confirm:['/order/confirm  ','BASE_HCJ','UPURCHASE_URL'],
+    post_cancleOrder: ['/order/cancle', 'BASE_HCJ', 'UPURCHASE_URL'],
+    post_updataOrder: ['/order/update', 'BASE_HCJ', 'UPURCHASE_URL'],
+    post_confirm: ['/order/confirm  ', 'BASE_HCJ', 'UPURCHASE_URL'],
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark', 'UPURCHASE_URL'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'UPURCHASE_URL'],
@@ -58,5 +58,11 @@ export default {
     paymentAbandon: ['/payment/abandon', 'BASE_HCJ', 'UPURCHASE_URL'],
     paymentAccept: ['/payment/accept/{id}', 'BASE_HCJ', 'UPURCHASE_URL'],
     paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_HCJ', 'UPURCHASE_URL'],
-    post_order_paymentlist:['/payment/list/{orderNo}/{orderType}','BASE_HCJ','BASE_BUYER'],
+    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_HCJ', 'BASE_BUYER'],
+    
+    
+    //字典表数据
+    post_codePart:['/code/part','BASE_CODE','BASE_BUYER'],
+     post_country:['/country/all','BASE_CODE','BASE_BUYER'],
+     post_logisticsport:['/logisticsport/query','BASE_CODE','BASE_BUYER']
 }
