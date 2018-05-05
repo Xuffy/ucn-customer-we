@@ -168,7 +168,7 @@
         computed: {
             fromArg() {
                 let json = {};
-                for(let key in this.$db.inquiryOverview.createbBasicInfo) {
+                for(let key in this.$db.inquiry.createbBasicInfo) {
                     json[key] = '';
                 };
                 return json;

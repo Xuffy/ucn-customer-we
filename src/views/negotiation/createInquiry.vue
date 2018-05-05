@@ -1,12 +1,12 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $i.inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $route.query.id?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
         <div class="select-wrap">
             <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
                     <el-col 
-                            v-for="(item, index) in $db.inquiryOverview.basicInfo" 
+                            v-for="(item, index) in $db.inquiry.basicInfo" 
                             :key="index" 
                             :xs="item.xs || 8" 
                             :sm="item.sm || 8" 
@@ -248,7 +248,7 @@
                     delete res.companyId;
                     delete res.id;
                     this.fromArg = res;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
+                    this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
             },
             handleCancel() {
@@ -386,7 +386,7 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.dialogTableVisible = false;
                 });
             },
@@ -404,9 +404,9 @@
                         if(_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'' && !items._disabled) arr.push(items)
                     });
                     if(config.type === 'histoty') {
-                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                     } else {
-                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                     }
                 });
            },

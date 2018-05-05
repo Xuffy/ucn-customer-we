@@ -3,7 +3,7 @@
         <h3 class="hd">{{ $i.common.compareOverview }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button>{{ $i.common.downloadSelectedCompare }}</el-button>
+                <el-button :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedArg.length>0?checkedArg.length:'all'})` }}</el-button>
                 <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="inputEnter" />
@@ -95,7 +95,7 @@
                         item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
                     });
                     this.bodyData.tc = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
+                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
                 });
             },
             searchEnter(item) { // 搜索框
@@ -135,7 +135,7 @@
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
                     .then(res => {
                         this.getList();
-                        this.checkedData = [];
+                        this.checkedArg = [];
                     });
                 }).catch(() => {
                     this.$message({

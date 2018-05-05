@@ -28,7 +28,7 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && checkedAll.length - newProductTabData.length/2 && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
                     </div>
@@ -39,6 +39,7 @@
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                         :rowspan="2"
+                        :selection="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
@@ -48,8 +49,8 @@
                         <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i.common.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i.common.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i.common.send }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -333,11 +334,11 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -360,7 +361,7 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.newSearchDialogVisible = false;
                 });
             },
@@ -442,25 +443,25 @@
                             if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), true);
                         }
                     } else {
                         _.map(this.newProductTabData, items => {
                             if(_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
                 this.id_type = 'basicInfo';
-                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                this.historyColumn = this.$db.inquiry.basicInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'basicInfo', { type: 'histoty', data: data.id.value});
@@ -473,7 +474,7 @@
            },
            producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInfo;
+                this.historyColumn = this.$db.inquiry.productInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.skuId.value});

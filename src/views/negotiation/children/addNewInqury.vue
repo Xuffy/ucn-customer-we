@@ -1,5 +1,5 @@
 <template>
-    <div class="inquiryOverview">
+    <div class="inquiry">
         <el-dialog
             title="提示"
             :visible.sync="dialogVisible"
@@ -11,7 +11,7 @@
                         <el-radio-group v-model="params.status" size="mini">
                             <el-radio-button :label="''">{{$i.common.all}}</el-radio-button>
                             <el-radio-button 
-                                v-for="item in $db.inquiryOverview.overoiewState"
+                                v-for="item in $db.inquiry.overoiewState"
                                 :label="item.id"
                                 :key="item.id"
                             >
@@ -179,7 +179,7 @@
                     this.pageTotal = res.tc;
                     this.tabLoad = false;   
                     this.searchLoad = false;
-                    let arr = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    let arr = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
                     _.map(this.argDisabled, id => {
                         _.map(arr, items => {
                             if(_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
@@ -244,7 +244,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .inquiryOverview {
+    .inquiry {
         .hd {
             padding-left:15px;
             height: 50px;

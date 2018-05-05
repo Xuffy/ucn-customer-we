@@ -1,13 +1,15 @@
 <template>
   <div class="logistic-plan-overview">
-    <div class="hd-top">{{ $i.logistic.logisticsPlanOverview }}</div>
+    <div class="hd-top">{{ headerText }}</div>
     <div class="status">
       <div class="btn-wrap">
-        <span>{{ $i.logistic.status}}:</span>
-        <el-radio-group v-model="fillterVal" size="mini" @change="viewByChange(viewBy)">
-          <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
-          <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-radio-button>
-        </el-radio-group>
+        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+          <span>{{ $i.logistic.status}}:</span>
+          <el-radio-group v-model="fillterVal" size="mini" @change="viewByChange(viewBy)">
+            <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
+            <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
       <div class="select-search-wrap">
         <select-search :options="options" @inputEnter="searchFn"/>
@@ -47,10 +49,13 @@
 import { selectSearch, VTable, VPagination } from '@/components/index';
 export default {
   name: 'logisticPlanOverview',
+  props: {
+    pageType: String
+  },
   data () {
     return {
       pageObj: {},
-      tableLoading: true,
+      tableLoading: false,
       ls_plan: [],
       pageParams: {
         pn: 1,
@@ -78,28 +83,50 @@ export default {
       ]
     }
   },
-  computed: {
-    pageName () {
-      return this.$route.meta.name
-    }
-  },
   components: {
     selectSearch,
     VTable,
     VPagination
   },
-  mounted () {
-    this.getDictionary(['LS_PLAN'])
-    this.getContainerType()
-    this.viewByChange(this.viewBy)
-  },
   watch: {
     viewBy (newVal) {
       this.selectCount = []
       this.viewByChange(newVal)
+    },
+    pageType () {
+      this.fetchData()
     }
   },
+  computed: {
+    headerText () {
+      return this.pageType === 'plan' ? this.$i.logistic.logisticsPlanOverview : this.pageType === 'loadingList' ? this.$i.logistic.loadingListOverview : this.pageType === 'draft' ? this.$i.logistic.draftOverview : this.$i.logistic.archiveOverview
+    }
+  },
+  mounted () {
+    this.fetchData()
+    this.registerRoutes()
+  },
   methods: {
+    registerRoutes () {
+      this.$store.commit('SETDRAFT', {
+        name: 'overviewDraft',
+        show: true
+      })
+      this.$store.commit('SETRECYCLEBIN', {
+        name: 'overviewArchive',
+        show: true
+      })
+    },
+    fetchData () {
+      if (this.pageType === 'plan') {
+        this.getDictionary(['LS_PLAN'])
+        this.getContainerType()
+        this.viewByChange(this.viewBy)
+      }
+      if (this.pageType === 'loadingList') {
+        this.getDictionary(['LS_STATUS'])
+      }
+    },
     deleteData () {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -142,7 +169,7 @@ export default {
       viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
     },
     getDictionary (keyCode) {
-      this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
+      this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
         this.ls_plan = res[0].codes
       })
     },

@@ -62,11 +62,13 @@
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
+                        <div v-else-if="v.showType==='timeZone'">
+                            <v-time-zone class="speInput" :value.sync="outboundData.timeZone"></v-time-zone>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.warehouse.productInfo}}
         </div>
@@ -155,7 +157,6 @@
                 </el-row>
             </el-form>
         </div>
-
         <div class="footBtn">
             <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
             <el-button @click="cancel">{{$i.warehouse.cancel}}</el-button>
@@ -217,11 +218,13 @@
 <script>
 
     import VTable from '@/components/common/table/index'
+    import {VTimeZone} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
-            VTable
+            VTable,
+            VTimeZone
         },
         data(){
             return{
@@ -265,6 +268,7 @@
                  * */
                 productIds:[],                  //用于存储用于外部展示的产品ID
                 productData:[],                 //添加到外部用于展示的产品详细信息
+                timeZone:'',                    //时区
                 outboundData:{
                     attachment: "",
                     outboundOperator: "",
@@ -621,6 +625,12 @@
     }
     .dialog-footer{
         text-align: center;
+    }
+    .speInput{
+        max-width: 1000px !important;
+    }
+    .speInput >>> .el-select{
+        display: block;
     }
 
 

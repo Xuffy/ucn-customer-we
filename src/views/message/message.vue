@@ -193,8 +193,6 @@
         this.$ajax.post(url, this.params)
           .then(res => {
             this.tabData = this.$getDB(column, res.datas);
-            console.log( res.datas)
-            console.log(this.tabData)
             this.tabLoad = false;
             this.searchLoad = false;
           })

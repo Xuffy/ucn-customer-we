@@ -39,6 +39,7 @@
     "downloadall":"Download All",
     "addproduct":"Add Product",
     "send":"send",
+    "exit": "exit",
     "saveAsDraft":"Save as draft",
     "quickCreate":"quickCreate",
      "markAsImportant":"markAsImportant",
@@ -76,6 +77,7 @@
     "applyReturn": "Apply return",
     "confirmedReturn": "Confirmed return",
     "confirmed": "Confirmed",
-    "copy": "copy"
+    "copy": "copy",
+    "downloadBig":"Download"
 }
 

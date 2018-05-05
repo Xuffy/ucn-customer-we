@@ -14,7 +14,8 @@ const json = {
     require(`./${lang}/inquiry/compare.pending`),
     require(`./${lang}/inquiry/index`),
     require(`./${lang}/inquiry/viewByInqury.pending`),
-    require(`./${lang}/inquiry/viewBySKU.pending`)
+    require(`./${lang}/inquiry/viewBySKU.pending`),
+    require(`./${lang}/inquiry/productInfo.pending`)
   ),
   logistic: _.extend({},
     require(`./${lang}/logistic/plan/basicInfo.pending`),
@@ -64,6 +65,10 @@ const json = {
     require(`./${lang}/warehouse/warehouse.table`),
     require(`./${lang}/warehouse/warehouse.basic`),
     require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
+    require(`./${lang}/warehouse/payment.pending`),
+    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
+    require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
+    require(`./${lang}/warehouse/summary.pending`)
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
@@ -86,7 +91,7 @@ export default _.extend({},
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
-  {_baseText: require(`./${lang}/baseText`)},
+  {_common: require(`./${lang}/common`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
@@ -125,6 +130,10 @@ export default _.extend({},
   require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
   require(`./${lang}/warehouse/qcWarehouse`),
   require(`./${lang}/warehouse/warehouse.table`),
+
+
+    //warehouse qc
+    {_buyerQc: require(`./${lang}/warehouse/createQc.basic`)},
 
 
   //CN配置

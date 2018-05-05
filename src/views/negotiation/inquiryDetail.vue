@@ -39,6 +39,7 @@
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                         :rowspan="2"
+                        :selection="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
@@ -52,8 +53,8 @@
                         <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i.common.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i.common.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i.common.send }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -291,7 +292,7 @@
                     arr.push(item.id);
                 });
                 this.$router.push({
-                    name: 'inquiryCompareDetail',
+                    name: 'negotiationCompareDetail',
                     params: {
                         type: 'new'
                     },
@@ -311,10 +312,6 @@
                 this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             addToCompare() { //添加对比
-                if(!this.tabData[0]) return this.$message({
-                    message: '请加载完毕再操作',
-                    type: 'warning'
-                });
                 this.compareLists = true;
                 let config = {
                     name: this.tabData[0].inquiryNo.value,
@@ -328,7 +325,7 @@
                     });
                 }
                 this.compareConfig.push(config);
-                this.$message('添加对比成功！');
+                this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
                 if(!this.$route.query.id) return this.$message('地址错误');
@@ -337,11 +334,11 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -364,7 +361,7 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.newSearchDialogVisible = false;
                 });
             },
@@ -446,25 +443,25 @@
                             if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), true);
                         }
                     } else {
                         _.map(this.newProductTabData, items => {
                             if(_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
                 this.id_type = 'basicInfo';
-                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                this.historyColumn = this.$db.inquiry.basicInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'basicInfo', { type: 'histoty', data: data.id.value});
@@ -477,7 +474,7 @@
            },
            producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInfo;
+                this.historyColumn = this.$db.inquiry.productInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.skuId.value});
