@@ -129,7 +129,7 @@
             <el-dialog title="Add Quick Link" :visible.sync="dialogClose">
                 <el-checkbox-group v-model="checkedList">
                     <el-row>
-                    <el-col :span="8" v-for="item in $db.warehouse.qcDetailProductInfo" :key="item.key" v-if="!item._hide">
+                    <el-col :span="8" v-for="item in qcDetailProductInfo" :key="item.key" v-if="!item._hide">
                         <el-checkbox :label="item.key">
                         {{item.label}}
                         </el-checkbox>
@@ -151,6 +151,56 @@
         name: 'QCOrderDetail',
         data() {
             return {
+                qcDetailProductInfo: {
+                    innerCartonLength: {
+                        label: 'innerCartonLength',
+                        key: 'innerCartonLength'
+                    },
+                    innerCartonWidth: {
+                        label: 'innerCartonWidth',
+                        key: 'innerCartonWidth'
+                    },
+                    innerCartonHeight: {
+                        label: 'innerCartonHeight',
+                        key: 'innerCartonHeight'
+                    },
+                    innerCartonVolume: {
+                        label: 'innerCartonVolume',
+                        key: 'innerCartonVolume'
+                    },
+                    innerCartonNetWeight: {
+                        label: 'innerCartonNetWeight',
+                        key: 'innerCartonNetWeight'
+                    },
+                    innerCartonGrossWeight: {
+                        label: 'innerCartonGrossWeight',
+                        key: 'innerCartonGrossWeight'
+                    },
+                    outerCartonLength: {
+                        label: 'outerCartonLength',
+                        key: 'outerCartonLength'
+                    },
+                    outerCartonWidth: {
+                        label: 'outerCartonWidth',
+                        key: 'outerCartonWidth'
+                    },
+                    outerCartonHeight: {
+                        label: 'outerCartonHeight',
+                        key: 'outerCartonHeight'
+                    },
+                    outerCartonVolume: {
+                        label: 'outerCartonVolume',
+                        key: 'outerCartonVolume'
+                    },
+                    outerCartonNetWeight: {
+                        label: 'outerCartonNetWeight',
+                        key: 'outerCartonNetWeight'
+                    },
+                    outerCartonGrossWeight:{
+                        label: 'outerCartonGrossWeight',
+                        key: 'outerCartonGrossWeight'
+                    }
+                },
                 checkedList: [],
                 checkedData: [],
                 paymentData: [],
