@@ -5,9 +5,9 @@
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
        
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         <VExchange :disabled=false ref='exchangeList'></VExchange>  
+         <VExchange :disabled=false ref='exchangeList' ></VExchange>  
 <!--             responsibility     -->
-         <VResponsibility ref='responsibility'></VResponsibility>
+         <VResponsibility ref='responsibility' ></VResponsibility>
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
@@ -386,25 +386,29 @@
                 PaidAmount:'',
                 UnpaidAmount:''
             */
+            //数组乘积之和
+            
             summary() {              
-//                let arr = this.dataFilter(this.tabData)
-//                let arrNew=
-//                 return console.log(_.pluck(arr, 'skuOuterCartonQty'),_.pluck(arr, 'skuQty'))
+                let arr = this.dataFilter(this.tabData)
                 
                 // sku数量合计
-                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'))
+                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'),(memo, num)=>{return memo + num; }, 0)
                 // sku行  skutypeqty
-//                this.$refs.caculate.caculateForm.skuQty =  
+                this.$refs.caculate.caculateForm.skuQty = arr.length
                 //sku订单价格之和
-                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'))
+                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'),(memo, num)=>{return memo + num; }, 0)
                 //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
-                this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
+                this.$refs.caculate.caculateForm.totalOuterCartonQty =_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuQty')[index])/key)
+                })),(memo, num)=>{return memo + num; }, 0)
                 //毛重 订单内所有SKU的外箱毛重*外箱数  skuOuterCartonRoughWeight skuOuterCartonQty
-                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonRoughWeight')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
                 //净重 订单内所有SKU的外箱净重*外箱数  skuOuterCartonNetWeight  skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonNetWeight')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
                 //订单内所有SKU的外箱体积*外箱数 skuVolume skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalVolume=_.reduce(_.pluck(arr, 'skuVolume'))
+                 this.$refs.caculate.caculateForm.totalVolume=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuVolume')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
                 //预计付款金额（已确认）-实际付款金额（已确认）-退款金额（已确认）
 //                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
                 //实际付款金额（已确认）
@@ -640,7 +644,7 @@
             tabData: {
                 handler(curVal) {
 //                   this.tableTatalCal()
-//                   this.summary()
+                   this.summary()
                 },
                 deep: true
             }
@@ -676,7 +680,7 @@
     }
 
     .attchment {
-        margin-bottom: 60px;
+/*        margin-bottom: 60px;*/
     }
 
     .pro_button {

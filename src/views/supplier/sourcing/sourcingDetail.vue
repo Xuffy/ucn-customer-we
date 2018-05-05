@@ -206,12 +206,12 @@
                 this.compareData = [];
             },
             supplierProducts() {
-                //                this.$windowOpen({
-                //                    url: '/product/sourcing',
-                //                    params: {
-                //                        supplierCode: this.code 
-                //                    }
-                //                });
+                this.$windowOpen({
+                    url: '/product/sourcing',
+                    params: {
+                        supplierName: this.basicDate.name
+                    }
+                });
             },
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])

@@ -52,7 +52,7 @@
                   <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}</el-button>
                   <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectNumber.length}})</el-button>
                   <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i._baseText.addToBookmark}}({{selectNumber.length}})</el-button>
-                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>
+<!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
               </div>
               <div>
 

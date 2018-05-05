@@ -48,7 +48,7 @@
                   <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectedNumber.length}})</el-button>
                   <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectedNumber.length}})</el-button>
-                  <el-button  :disabled='!selectedData.length>0' >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
+<!--                  <el-button  :disabled='!selectedData.length>0' >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>-->
                   <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i._baseText.remove}}({{selectedNumber.length}})</el-button>
               </div>  
               <div>

@@ -134,8 +134,11 @@
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-                this.windowOpen('/product/sourcing', {
-                    supplierId: this.id //供应商信息将被带入
+                this.$windowOpen({
+                    url: '/product/sourcing',
+                    params: {
+                        supplierName: this.basicDate.name
+                    }
                 });
             },
             //添加比较

@@ -30,7 +30,7 @@
          <v-payment :orderNo='orderNo' 
                     :currencyCode='currencyCode'
                     :payToId='payToId'
-                    
+                    :orderStatus='orderStatus'
          ></v-payment>
 <!--         product_details-->
          <div class="product_details" >
@@ -456,7 +456,34 @@
                         this.tableTatal = [obj]
                     });
                 });
-            }
+            },
+            //summary
+            summary() {              
+                let arr = this.dataFilter(this.tabData)
+                
+                // sku数量合计
+                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'),(memo, num)=>{return memo + num; }, 0)
+                // sku行  skutypeqty
+                this.$refs.caculate.caculateForm.skuQty = arr.length
+                //sku订单价格之和
+                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'),(memo, num)=>{return memo + num; }, 0)
+                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
+                this.$refs.caculate.caculateForm.totalOuterCartonQty =_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuQty')[index])/key)
+                })),(memo, num)=>{return memo + num; }, 0)
+                //毛重 订单内所有SKU的外箱毛重*外箱数  skuOuterCartonRoughWeight skuOuterCartonQty
+                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonRoughWeight')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
+                //净重 订单内所有SKU的外箱净重*外箱数  skuOuterCartonNetWeight  skuOuterCartonQty
+                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonNetWeight')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
+                //订单内所有SKU的外箱体积*外箱数 skuVolume skuOuterCartonQty
+                 this.$refs.caculate.caculateForm.totalVolume=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuVolume')[index])*key)
+                })),(memo, num)=>{return memo + num; }, 0)
+                //预计付款金额（已确认）-实际付款金额（已确认）-退款金额（已确认）
+//                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //实际付款金额（已确认）
+//                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+            },
         },
         mounted() {
 
@@ -466,9 +493,10 @@
             this.submitData.id = this.$route.query.id;
         },
         watch: {
-                newProductTabData: {
+               newProductTabData: {
                 handler(curVal) {
-                  this.tableTatalCal()
+//                  this.tableTatalCal()
+                  this.summary()
                 },
                 deep: true
             }

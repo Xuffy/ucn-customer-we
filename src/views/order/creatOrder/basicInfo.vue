@@ -35,32 +35,60 @@
                                     >
                                     </el-date-picker>
                                       </div>
-                            </el-form-item>
-                            
+                            </el-form-item>                          
                              <el-form-item 
                                   v-if='item.type=="select"'
                                  :label="item.label"
-                                 :prop="item.key">
-                                 <el-select
-                                          v-model='formItem[item.key]'                                                         :disabled=item.ismodify||disabled||item.isDefaultEdit >
+                                 :prop="item.key">                             
+                                  <el-select
+                                           v-model='formItem[item.key]'                      
+                                        :disabled=item.ismodify||disabled||item.isDefaultEdit >
+                                       <el-option
+                                        v-for="item in selectAll[item.key]"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code"
+                                        :id="item.id"
+                                    />    
                                   </el-select>
-                            </el-form-item>  
-                          <el-form-item 
-                                  v-if='item.type=="selectMore"'
+                            </el-form-item> 
+                             <el-form-item 
+                                  v-if='item.type=="supplierName"'
                                  :label="item.label"
                                  :prop="item.key">
                                  <el-select
-                                          v-model='formItem[item.key]'             reserve-keyword  
+                                           v-model='formItem[item.key]'           
+                                             reserve-keyword  
                                               filterable  
                                               remote 
                                               value-key="id"
+                                             :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit 
+                                              @change='selectchangeName'
+                                             >
+                                             <el-option
+                                                v-for="item in selectAll[item.key]"
+                                                :key="item.code"
+                                                :label='item.name'
+                                                :value="item.code"                                            
+                                            />
+                                  </el-select>
+                            </el-form-item>     
+                          <el-form-item 
+                                  v-if='item.type=="supplierNo"'
+                                 :label="item.label"
+                                 :prop="item.key">
+                                 <el-select
+                                           v-model='formItem[item.key]'           
+                                             reserve-keyword  
+                                              filterable  
+                                              remote 
+                                              value-key="id"
+                                               @change='selectchangeNo'
                                              :remote-method="remoteMethod" :disabled=item.ismodify||disabled||item.isDefaultEdit >
                                              <el-option
                                                 v-for="item in selectAll[item.key]"
                                                 :key="item.id"
-                                                :label="item.name"
-                                                :value="item"
-                                                :id="item.id"
+                                                :value="item.code"
                                             />
                                   </el-select>
                             </el-form-item>                 
@@ -81,10 +109,6 @@
                      </el-row>
                  </el-form>
              </div>
-<!--
-               <el-dialog :visible.sync="dialogEditDiv" width='70%'>
-                </el-dialog>
--->
          </div>  
 </template>
 <script>
@@ -118,24 +142,36 @@
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
                     deliveryDt: '', //必填 
-                    incoterm: 'FOB', //必填 
+                    incoterm: '', //必填 
                     incortermAea: '', //必填 
-                    payment: '', //必填 
+                    payment: '', //必填  select
                     lcNo: '',
                     paymentDays: '',
                     paymentStatus: '', //不可编辑
                     departureCountry: '',
                     departurePort: '', //必填
-                    destCountry: '', // ??????
-                    destPort: '', //必填   //?????
+                    destCountry: '', // select
+                    destPort: '', //必填   //select
                     transport: '1', //不可编辑
                     customerAgreementNo: '',
                     customerAgreementDt: '',
                     remark: '',
-                    currency: 'USD' //必填
+                    currency: '' //必填
                 },
-                 selectAll: {                
+                supplierNaNo: '',
+                selectAll: {
                     supplierName: [],
+                    supplierNo: [],
+                    status: [],
+                    payment: [],
+                    incoterm: [],
+                    currency: [],
+                    transport: [],
+                    destinationCountry: [],
+                    departureCountry: [],
+                    departurePort: [],
+                    destPort: [],
+                    status: []
                 },
                 //......................表单正则
                 rules: {
@@ -184,11 +220,16 @@
                         message: '',
                         trigger: 'blur'
                     }, ],
-                    destinationPort: [{
+                    destPort: [{
                         required: true,
                         message: '',
                         trigger: 'blur'
                     }, ],
+                    currency: [{
+                        required: true,
+                        message: '',
+                        trigger: 'blur'
+                    }]
                 },
             }
         },
@@ -204,19 +245,68 @@
                 this.dialogEditDiv = true;
 
             },
-              remoteMethod(keyWord) {
-               this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
-               .then(res => {
-                   this.selectAll.supplierName = res;
-               })
-           }
+            remoteMethod(keyWord) {
+                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
+                    .then(res => {
+                        this.selectAll.supplierName = res;
+                        this.selectAll.supplierNo = res;
+                    })
+            },
+            selectchangeNo(data) {
+                this.formItem.supplierName = _.where(this.selectAll.supplierName, {
+                    code: data
+                })[0].name
+            },
+            selectchangeName(data) {
+                this.formItem.supplierNo = _.where(this.selectAll.supplierName, {
+                    code: data
+                })[0].code
+            },
+            //获取字典表
+            getDictionaries() {
+                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
+                    .then(res => {
+                        this.selectAll.payment = _.findWhere(res, {
+                            'code': 'PMT'
+                        }).codes
+                        this.selectAll.transport = _.findWhere(res, {
+                            'code': 'MD_TN'
+                        }).codes;
+                        this.selectAll.incoterm = _.findWhere(res, {
+                            'code': 'ITM'
+                        }).codes;
+                        this.selectAll.currency = _.findWhere(res, {
+                            'code': 'CY_UNIT'
+                        }).codes;
+                        this.selectAll.status = _.findWhere(res, {
+                            'code': 'ORDER_STATUS'
+                        }).codes;
+                        //                    this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
+                        //                        item.code = Number(item.code);
+                        //                        return item;
+                        //                    });
+                    });
+
+                this.$ajax.get(this.$apis.post_country, '', '_cache')
+                    .then(res => {
+                        this.selectAll.destinationCountry = res;
+                        this.selectAll.departureCountry = res;
+                    });
+                this.$ajax.get(this.$apis.post_logisticsport, '', '_cache')
+                    .then(res => {
+                        this.selectAll.destPort = res;
+                        this.selectAll.departurePort = res;
+                    });
+            },
         },
         mounted() {
 
         },
         created() {
             this.remoteMethod('')
-        }
+            this.getDictionaries()
+        },
+        watch: {}
     }
 
 </script>
