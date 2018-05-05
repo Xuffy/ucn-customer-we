@@ -1,16 +1,16 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i._inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $i._baseText.basicInfo }}</h5>
+                        <h5>{{ $i.common.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="0">{{ $i._baseText.hideTheSame }}</el-checkbox>
-                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
@@ -25,16 +25,10 @@
                     </div>
                 </div>
                 <div class="basic-info">
-                    <div class="basesic-hd">
-                        <h5>{{ $i._baseText.productInfo }}</h5>
-                        <el-checkbox-group v-model="ProductCheckList">
-                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
                     </div>
@@ -45,18 +39,18 @@
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                         :rowspan="2"
+                        :selection="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.accept }}</el-button>
-                        <el-button @click="windowOpen('/order/creatOrder')">{{ $i._baseText.createOrder }}</el-button>
-                        <el-button @click="addToCompare">{{ $i._baseText.addToCompare }}</el-button>
-                        <el-button @click="modifyAction">{{ $i._baseText.modify }}</el-button>
-                        <el-button @click="toCreateInquire" :disabled="checkedAll && checkedAll.length ? false : true">{{ $i._baseText.createInquiry }}<span>({{checkedAll.length}})</span></el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '21' && tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
+                        <el-button>{{ $i.common.download }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i._baseText.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i.common.send }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -64,14 +58,14 @@
         </div>
         <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
         <el-dialog
-                :title="$i._baseText.addProduct"
+                :title="$i.common.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i._baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"
@@ -87,8 +81,6 @@
                 @save="save"
                 ref="HM"
             >
-        </v-history-modify>
-        <div class="slot-wrap">
             <div slot="transportationWay" slot-scope="{item}">
                 <el-select v-model="item" placeholder="请选择">
                     <el-option
@@ -122,7 +114,7 @@
                     />
                 </el-select>
             </div>
-        </div>
+        </v-history-modify>
     </div>
 </template>
 <script>
@@ -224,6 +216,7 @@
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
+                let data = this.tabData;
                 val.forEach(item => {
                     if(item + '' === '0') data = this.$table.setHideSame(this.tabData);
                     if(item + '' === '1') data = this.$table.setHighlight(this.tabData);
@@ -236,6 +229,26 @@
             }
         },
         methods: {
+            deleteInquiry() {
+                this.$confirm('确认删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_ACTION, {
+                        action: 'delete',
+                        ids: [this.$route.query.id]
+                    })
+                    .then(res => {
+                        this.$router.push('/negotiation/inquiry')
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
@@ -321,11 +334,11 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -348,7 +361,7 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.newSearchDialogVisible = false;
                 });
             },
@@ -383,25 +396,36 @@
                         if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
                             val = data[0];
                             val._modify = true;
-                            val.displayStyle = 1;
+                            val.displayStyle.value = 1;
+                            _.mapObject(val, (item, k) => {
+                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            })
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
+                            val.displayStyle.value = 1;
+                            _.mapObject(val, (item, k) => {
+                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            });
                         }
                         return val;
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
                         if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[0], {'key': 'skuId'}).value + '' && !val._remark && !data[0]._remark) {
-                            console.log(val)
                             val = data[0];
                             val._modify = true;
-                            val.displayStyle = 1;
+                            val.displayStyle.value = 1;
+                            _.mapObject(val, (item, k) => {
+                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            });
                         } else if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
+                            val.displayStyle.value = 1;
+                            _.mapObject(val, (item, k) => {
+                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            });
                         }
                         return val;
                     });
@@ -416,28 +440,28 @@
                     let arr = [];
                     if(type === 'basicInfo') {
                         _.map(this.newTabData, items => {
-                            if(_.findWhere(items, {'key': 'id'}).value === config.data) arr.push(items)
+                            if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.basicInfo, this.$refs.HM.getFilterData(res)), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), true);
                         }
                     } else {
                         _.map(this.newProductTabData, items => {
                             if(_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
                 this.id_type = 'basicInfo';
-                this.historyColumn = this.$db.inquiryOverview.basicInfo;
+                this.historyColumn = this.$db.inquiry.basicInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'basicInfo', { type: 'histoty', data: data.id.value});
@@ -450,7 +474,7 @@
            },
            producInfoAction(data, type) { //Produc info 按钮操作
                 this.id_type = 'producInfo';
-                this.historyColumn = this.$db.inquiryOverview.productInfo;
+                this.historyColumn = this.$db.inquiry.productInfo;
                 switch(type) {
                         case 'histoty':
                             this.fnBasicInfoHistoty(data, 'productInfo', { type: 'histoty', data: data.skuId.value});
@@ -465,16 +489,7 @@
                this.checkedAll = item;
            },
             toCreateInquire() { //创建单
-                let arr = [];
-                this.checkedAll.forEach(item => {
-                    arr.push(item.id.value);
-                });
-                this.$router.push({
-                    path: '/negotiation/createInquiry',
-                    query: {
-                        id :arr.join(',')
-                    }
-                });
+                this.$router.push('/negotiation/createInquiry');
             },
             ajaxInqueryAction(type) { //接受单
                 const argId = [];
@@ -484,14 +499,16 @@
                     ids:argId
                 })
                 .then(res => {
-                    this.$router.push('/sellerNegotiation/inquiry')
+                    this.$router.push('/negotiation/inquiry')
                 });
             },
             removeProduct() { //删除product 某个单
-            // console.log(_.pluck(this.checkedAll,'skuId'))
+                let arr = [];
                 _.map(this.newProductTabData, (item, index) => {
-                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
+                    if(_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.newProductTabData = _.difference(this.newProductTabData, arr);
+                this.checkedAll = [];
             },
             modifyCancel() { //页面编辑取消
                 this.newTabData = this.tabData;
@@ -514,7 +531,6 @@
                     this.productTabData = this.newProductTabData;
                     this.productModify();
                     this.statusModify = false;
-                    this.$router.push('/sellerNegotiation/inquiry');
                 });
             },
             dataFilter (data) {
@@ -640,9 +656,9 @@
                     }
                     .bom-btn-wrap {
                         padding-top:20px;
-                        padding-left:10px;
+                        padding-left:190px;
                         position: fixed;
-                        left:180px;
+                        left:0;
                         bottom:0;
                         background:#fff;
                         z-index:99;

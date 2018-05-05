@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i._supplierBookmark}}            
+             {{$i.supplierBookmark}}            
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -39,17 +39,19 @@
             </div>
            
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$i._baseText.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i._baseText.clear}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                  <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectedNumber.length}})</el-button>
-<!--                  <el-button  :disabled='!selectedData.length>0' >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i._baseText.remove}}({{selectedNumber.length}})</el-button>
+
+                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
+                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
+<!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
+                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+
               </div>  
               <div>
                  

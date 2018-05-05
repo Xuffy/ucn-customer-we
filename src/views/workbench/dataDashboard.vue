@@ -1,7 +1,7 @@
 <template>
   <div class="dataDashboard">
 
-    <h3 class="ucn-content-title inline" v-text="$i._workbench.dataDashboard"></h3>
+    <h3 class="ucn-content-title inline" v-text="$i.workbench.dataDashboard"></h3>
     <!--<div class="block" style="display: inline-block;margin-left: 80px">
       <span class="demonstration">Time：</span>
       <el-date-picker
@@ -28,14 +28,14 @@
       <el-col :span="6" v-for="(item,index) in dataList" :key="index">
         <table>
           <tr>
-            <!--<td class="title" v-text="$i._workbench.purchaseOrder"></td>-->
+            <!--<td class="title" v-text="$i.workbench.purchaseOrder"></td>-->
             <td class="title" v-text="item.module"></td>
             <td class="value">
               <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].code"></div>&nbsp;
             </td>
           </tr>
           <tr>
-            <!--<td class="title" rowspan="2" v-text="$i._workbench.orderPlaced"></td>-->
+            <!--<td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>-->
             <td class="title" rowspan="2" v-text="item.theme"></td>
             <td class="value">
               <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].code"></div>&nbsp;
@@ -60,11 +60,11 @@
                 <td rowspan="3" style="width: 20px">
                   <el-checkbox lable="a1"></el-checkbox>
                 </td>
-                <td class="title" v-text="$i._workbench.purchaseOrder"></td>
+                <td class="title" v-text="$i.workbench.purchaseOrder"></td>
                 <td class="value">26 Orders</td>
               </tr>
               <tr>
-                <td class="title" rowspan="2" v-text="$i._workbench.orderPlaced"></td>
+                <td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>
                 <td class="value">281 SKU</td>
               </tr>
               <tr>

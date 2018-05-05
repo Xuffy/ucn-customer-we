@@ -3,7 +3,7 @@
 
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"></h3>
+      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -15,7 +15,7 @@
       </el-button>
     </div>
     <br/><br/>
-    <v-data-dashboard></v-data-dashboard>
+    <v-data-dashboard v-authorize="'WORKBENCH:DATA_DASHBOARD'"></v-data-dashboard>
     <br/><br/>
     <el-row :gutter="10">
       <el-col :span="12">

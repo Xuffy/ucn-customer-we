@@ -1,4 +1,6 @@
 {
+  "placeLogisticPlan": "Place Logistic Plan",
+  "orderNo": "Order No",
   "yes": "Yes",
   "no": "No",
   "blNo": "B/L No",
@@ -107,8 +109,8 @@
   "addProduct": "Add Product",
   "remove": "Remove",
   "skuCode": "SKU Code",
-  "skuNameEN": "SKU Name (EN)",
-  "skuNameCN": "SKU Name (CN)",
+  "skuNameEn": "SKU Name (EN)",
+  "skuNameCn": "SKU Name (CN)",
   "productDescription": "Product Description",
   "blSkuName": "B/L SKU Name",
   "customsDeclarationNameCn": "Customs Declaration Name(CN)",

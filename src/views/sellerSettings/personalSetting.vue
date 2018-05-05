@@ -82,8 +82,8 @@
         </el-row>
     </el-form>
     <div class="button_div">
-        <el-button @click="putUserProfile">{{$i.baseText.modify}}</el-button>
-        <el-button  type="danger">{{$i.baseText.cancel}}</el-button>
+        <el-button @click="putUserProfile">{{$i.common.modify}}</el-button>
+        <el-button  type="danger">{{$i.common.cancel}}</el-button>
     </div>
     <el-dialog
         class="speDialog"
@@ -102,8 +102,8 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="putUserPassword">{{$i.baseText.ok}}</el-button>
-            <el-button @click="dialogVisibleO = false">{{$i.baseText.cancel}}</el-button>
+            <el-button type="primary" @click="putUserPassword">{{$i.common.ok}}</el-button>
+            <el-button @click="dialogVisibleO = false">{{$i.common.cancel}}</el-button>
         </span>
     </el-dialog>
  </div>

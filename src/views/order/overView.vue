@@ -5,12 +5,12 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label=" ">{{($i._baseText.all)}}</el-radio-button>
-                            <el-radio-button label="1"> {{ $i._baseText.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="2">{{($i._baseText.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="3">{{($i._baseText.process)}}</el-radio-button>
-                            <el-radio-button label="4">{{($i._baseText.finish)}}</el-radio-button>
-                            <el-radio-button label="5">{{($i._baseText.cancel)}}</el-radio-button>
+                            <el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>
+                            <el-radio-button label="1"> {{ $i.common.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="2">{{($i.common.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
+                            <el-radio-button label="4">{{($i.common.finish)}}</el-radio-button>
+                            <el-radio-button label="5">{{($i.common.cancel)}}</el-radio-button>
                     </el-radio-group>
             </div>
             <div class="select-wrap">
@@ -23,16 +23,16 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
-                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i._baseText.createOrder)}}</el-button>
+                <el-button @click='download'>{{($i.common.download)}}({{selectedDate.length}})</el-button>
+                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)'>{{($i.common.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i._baseText.delete)}}</el-button>
+                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder'>{{($i.common.delete)}}</el-button>
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
                    <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                            <el-radio-button label=1>{{($i._baseText.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($i._baseText.SKU)}}</el-radio-button>
+                            <el-radio-button label=1>{{($i.common.order)}}</el-radio-button>
+                            <el-radio-button label=2>{{($i.common.SKU)}}</el-radio-button>
                     </el-radio-group>
             </div>
         </div>
