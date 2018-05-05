@@ -529,7 +529,9 @@ export const routerMap = [
           name: 'placeLogisticPlan',
           hidden: true,
           meta: {
-            name: 'Place Logistic Plan'
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'placeLogisticPlan'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -538,7 +540,9 @@ export const routerMap = [
           name: 'logisticPlanDetail',
           hidden: true,
           meta: {
-            name: 'Plan Detail'
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'planDetail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         }

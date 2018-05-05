@@ -79,6 +79,11 @@ export default {
       }
     }
   },
+  // compited: {
+  //   planId () {
+  //     return this.$route.query.id
+  //   }
+  // },
   methods: {
     textFilter (a) {
       if (a.type === 'input') return a.value

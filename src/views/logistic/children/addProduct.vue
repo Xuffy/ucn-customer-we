@@ -165,7 +165,7 @@ export default {
   },
   data () {
     return {
-      selectArr: [],
+      selectArrData: [],
       options: [
         {
           id: '1',
@@ -187,7 +187,7 @@ export default {
       row.index = rowIndex
     },
     handleSelectionChange (arr) {
-      this.selectArr = arr.map(a => a.id)
+      this.selectArrData = arr.map(a => a.id)
     }
   }
 }
