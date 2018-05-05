@@ -87,8 +87,8 @@ export const routerMap = [
           path: 'sourcing',
           name: 'productSourcingOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: true,
             name: 'Sourcing Overview'
           },
@@ -484,43 +484,46 @@ export const routerMap = [
       children: [
         {
           path: 'plan',
-          name: 'logisticPlan',
+          name: 'overviewPlan',
           meta: {
             draft: '/logistic/draft',
+            recycleBin: true,
             name: 'planOverview'
           },
-          component: () => import('../views/logistic/logisticPlanOverview')
+          component: () => import('../views/logistic/overviewWrapper')
         },
         {
           path: 'loadingList',
-          name: 'loadingList',
+          name: 'overviewLoadingList',
           meta: {
             draft: '/logistic/draft',
+            recycleBin: true,
             name: 'loadingList'
           },
-          component: () => import('../views/logistic/logisticPlanOverview')
+          component: () => import('../views/logistic/overviewWrapper')
         },
         {
           path: 'draft',
-          name: 'logisticDraft',
+          name: 'overviewDraft',
           hidden: true,
           meta: {
+            draft: '/logistic/draft',
+            recycleBin: true,
             name: 'logisticDraft'
           },
-          component: () => import('../views/logistic/logisticPlanOverview')
+          component: () => import('../views/logistic/overviewWrapper')
         },
-        // {
-        //   path: 'placeLogisticPlan',
-        //   name: 'logisticPlaceLogisticPlan',
-        //   hidden: true,
-        //   meta: {
-        //     draft: true,
-        //     recycleBin: true,
-        //     log: true,
-        //     name: 'Place Logistic Plan'
-        //   },
-        //   component: () => import('../views/logistic/placeLogisticPlan')
-        // },
+        {
+          path: 'archive',
+          name: 'overviewArchive',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'logisticArchive'
+          },
+          component: () => import('../views/logistic/overviewWrapper')
+        },
         {
           path: 'placeLogisticPlan',
           name: 'placeLogisticPlan',
@@ -538,44 +541,8 @@ export const routerMap = [
             name: 'Plan Detail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
-        },
-        // {
-        //   path: 'orderOverview',
-        //   name: 'logisticOrder',
-        //   meta: {
-        //     draft: true,
-        //     recycleBin: true,
-        //     log: true,
-        //     name: 'Order Overview'
-        //   },
-        //   component: () => import('../views/logistic/logisticOrderOverview')
-        // },
-        // {
-        //   path: 'placeLogisticOrder',
-        //   name: 'logisticPlaceLogisticOrder',
-        //   hidden: true,
-        //   meta: {
-        //     draft: true,
-        //     recycleBin: true,
-        //     log: true,
-        //     name: 'Place Logistic Order'
-        //   },
-        //   component: () => import('../views/logistic/placeLogisticOrder')
-        // },
-        // {
-        //   path: 'orderDetail',
-        //   name: 'logisticOrderDetail',
-        //   hidden: true,
-        //   meta: {
-        //     draft: true,
-        //     recycleBin: true,
-        //     log: true,
-        //     name: 'Order Detail'
-        //   },
-        //   component: () => import('../views/logistic/logisticOrderDetail')
-        // }
+        }
       ]
-
     },
     {
       path: '/settings',
@@ -875,6 +842,14 @@ export const routerMap = [
             name: 'sellerQCOrderDetail'
           },
           component: () => import('../views/sellerWarehouse/qc/QCOrderDetail')
+        },
+        {
+          path: 'sellerEditOrderOverview',
+          name: 'sellerEditOrderOverview',
+          meta: {
+            name: 'sellerEditOrderOverview'
+          },
+          component: () => import('../views/sellerWarehouse/qc/editQcOrderOverview')
         }
       ]
     },

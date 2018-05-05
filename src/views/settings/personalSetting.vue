@@ -3,12 +3,12 @@
     <el-form label-width="190px" ref="form" :model="form" :inline="true" >
         <el-row>
             <el-col :span="12">
-                <el-form-item :label="$i.personalInfo.email">
+                <el-form-item :label="$i.setting.email">
                     <el-input type="email" style="max-width:200px;" v-model="form.email" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12" >
-                <el-form-item :label="$i.personalInfo.userName">
+                <el-form-item :label="$i.setting.userName">
                     <el-input style="max-width:200px" v-model="form.userName"></el-input>
                 </el-form-item>
             </el-col>
@@ -20,24 +20,24 @@
                 </el-form-item>
             </el-col>
              <el-col :span="12">
-                <el-form-item  :label="$i.personalInfo.tel">
+                <el-form-item  :label="$i.setting.tel">
                     <el-input style="max-width:200px" v-model="form.tel"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item :label="$i.personalInfo.birthday">
+                <el-form-item :label="$i.setting.birthday">
                     <div style="display:flex;max-width:200px;">
                         <el-date-picker type="date" placeholder="选择日期" value-format="timestamp" v-model="form.birthday"  style="max-width:300px;"></el-date-picker>
                     </div>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="department" :label="$i.personalInfo.department" >
+                <el-form-item prop="department" :label="$i.setting.department" >
                   <el-input style="max-width:200px"v-model="form.deptName"  disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="language" :label="$i.personalInfo.language">
+                <el-form-item prop="language" :label="$i.setting.language">
                     <el-select v-model="form.lang" placeholder="请选择" style="width: 200px">
                         <el-option
                                 v-for="item in language"
@@ -50,12 +50,12 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="role" :label="$i.personalInfo.role">
+                <el-form-item prop="role" :label="$i.setting.role">
                   <el-input style="max-width:200px" v-model="form.roleName" disabled="disabled"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="gender" :label="$i.personalInfo.gender">
+                <el-form-item prop="gender" :label="$i.setting.gender">
                     <el-select v-model="form.gender" placeholder="please input" style="width: 200px">
                         <el-option
                                 v-for="item in genderOptions"
@@ -79,13 +79,13 @@
         width="30%"
         :before-close="handleClose">
         <el-form :rules="rules"  ref="modifyPass" :model="modifyPass">
-            <el-form-item :label="$i.personalInfo.oldPassword" prop="password" :label-width="formLabelWidth">
+            <el-form-item :label="$i.setting.oldPassword" prop="password" :label-width="formLabelWidth">
                 <el-input type="password" auto-complete="off" v-model="modifyPass.password"></el-input>
             </el-form-item>
-            <el-form-item :label="$i.personalInfo.newPassword" prop="newPassword"  :label-width="formLabelWidth">
+            <el-form-item :label="$i.setting.newPassword" prop="newPassword"  :label-width="formLabelWidth">
                 <el-input type="password" auto-complete="off" v-model="modifyPass.newPassword"></el-input>
             </el-form-item>
-            <el-form-item :label="$i.personalInfo.confirmPassword" prop="comfirmNewPassword" :label-width="formLabelWidth">
+            <el-form-item :label="$i.setting.confirmPassword" prop="comfirmNewPassword" :label-width="formLabelWidth">
                 <el-input type="password" auto-complete="off" v-model="modifyPass.comfirmNewPassword"></el-input>
             </el-form-item>
         </el-form>
@@ -215,10 +215,11 @@ export default {
             console.log(this.modifyPass)
             this.$ajax.put(this.$apis.put_user_profile_password,this.modifyPass)
             .then(res => {
-                this.$message({
-                    type: 'success',
-                    message: '修改成功!'
-                });
+              console.log(res)
+                // this.$message({
+                //     type: 'success',
+                //     message: '修改成功!'
+                // });
             });
         },
         handleClose(){
@@ -226,8 +227,9 @@ export default {
         }
     },
     created(){
-           this.getUserProfile()
-           this.postLanguage()
+       this.getUserProfile()
+       this.postLanguage()
+      console.log
     }
 }
 </script>

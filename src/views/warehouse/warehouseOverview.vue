@@ -19,6 +19,7 @@
           :options=options
           @selectChange="selectChange"
           @inputEnter="inputEnter"
+          v-model="warehouseSearch"
         ></selectSearch>
       </div>
     </div>
@@ -68,6 +69,7 @@
         keyWord: '',
         tabData: [],
         loading: false,
+        warehouseSearch:'',
         rowspan: 1,
         pazeSize: [10, 20, 30, 40, 50, 100],
         options: [{

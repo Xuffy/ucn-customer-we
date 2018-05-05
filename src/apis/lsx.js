@@ -4,6 +4,11 @@ export default {
     get_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
     get_supply_category:['/sys/category','BASE_CS','USUPPLY_URL'],
 
+    get_buyer_sys_category:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
+
+
+
+
     get_productCategory:['/purchase/sys/category','BASE_CS1','UPURCHASE_URL'],
     get_productDetail: ['/sku/{id}', 'BASE_SELL','USUPPLY_URL'],
     delete_product: ['/sku/{id}/delete', 'BASE_CS','USUPPLY_URL'],
@@ -85,11 +90,22 @@ export default {
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
 
+
+    /**
+     * buyer Warehouse
+     * */
+    get_qcProductData:['/qc/inbound/sku/all','BASE_BUY','UPURCHASE_URL'],
+    get_serviceProviders:['/purchase/servicer/listServicerByName','BASE_BUY','UPURCHASE_URL'],
+    get_supplyProviders:['/purchase/supplier/listSupplierByName','BASE_BUY','UPURCHASE_URL'],
+    get_currency:['/currency/all','UMETA_URL','UMETA_URL'],
+    add_buyerQcOrder:['/qc/add','BASE_BUY','UPURCHASE_URL'],
     GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     GET_QC_GETBYID: ['/qc/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
     GET_QC_GETBYQCORDERNO: ['/qc/getByQcOrderNo', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_QC_DETAIL_PAGE: ['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_QC_RESULT_ACCEPT: ['/qc/result/accept', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_RETURN_HANDLE: ['/qc/return/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
-    POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL']
+    POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
+    get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
+    get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
 }
