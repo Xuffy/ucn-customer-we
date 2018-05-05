@@ -106,16 +106,18 @@
                 <el-button @click="addProduct">{{ $i.common.addProduct }}</el-button>
                 <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ `${$i.common.remove}(${checkedAll.length})` }}</el-button>
             </div>
-            <select-search :options="[]" @inputEnter="inputEnter" />
+            <!-- <select-search :options="[]" @inputEnter="inputEnter" /> -->
         </div>
         <v-table 
             :data.sync="tabData"
             :buttons="productInfoBtn"
             :loading="tableLoad"
+            :height="500"
             @action="producInfoAction"
             @change-checked="changeChecked"
             :parId="'skuId'"
             :rowspan="2"
+            :hideFilterColumn="true"
         />
         <div class="bom-btn-wrap">
             <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>

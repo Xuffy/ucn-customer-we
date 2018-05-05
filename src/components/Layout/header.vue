@@ -327,7 +327,17 @@
   .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
     background-color: inherit;
     color: #FFFFFF !important;
+    /*background-color: rgba(119, 119, 119, .5);*/
   }
+
+  /*.el-menu-item:hover,
+  .el-menu--horizontal > .el-menu-item.is-active,
+  .el-menu--horizontal .el-menu-item:focus,
+  .el-menu--horizontal .el-menu-item:hover,
+  .el-menu--horizontal .el-submenu:focus,
+  .el-menu--horizontal .el-submenu:hover {
+    background-color: rgba(119, 119, 119, .5);
+  }*/
 
   .message-box {
     position: relative;

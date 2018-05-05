@@ -529,7 +529,9 @@ export const routerMap = [
           name: 'placeLogisticPlan',
           hidden: true,
           meta: {
-            name: 'Place Logistic Plan'
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'placeLogisticPlan'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -538,7 +540,9 @@ export const routerMap = [
           name: 'logisticPlanDetail',
           hidden: true,
           meta: {
-            name: 'Plan Detail'
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'planDetail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         }
@@ -842,6 +846,14 @@ export const routerMap = [
             name: 'sellerQCOrderDetail'
           },
           component: () => import('../views/sellerWarehouse/qc/QCOrderDetail')
+        },
+        {
+          path: 'sellerEditOrderOverview',
+          name: 'sellerEditOrderOverview',
+          meta: {
+            name: 'sellerEditOrderOverview'
+          },
+          component: () => import('../views/sellerWarehouse/qc/editQcOrderOverview')
         }
       ]
     },

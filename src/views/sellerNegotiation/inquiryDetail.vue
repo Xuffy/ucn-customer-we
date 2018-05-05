@@ -358,10 +358,16 @@
             getList(ids) {
                 this.$ajax.post(this.$apis.BUYER_POST_INQUIRY_SKUS, ids)
                 .then(res => {
-                    _.map(res, item => {
+                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'));
+                    _.map(arr, item => {
+                        _.mapObject(item, (val, k) => {
+                            val._style = 'color:#27b7b6';
+                        });
+                    });
+                    this.newProductTabData = arr.concat(this.newProductTabData);
                     this.newSearchDialogVisible = false;
                 });
             },

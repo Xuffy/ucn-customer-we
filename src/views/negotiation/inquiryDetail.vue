@@ -21,6 +21,7 @@
                             :loading="tableLoad"
                             :rowspan="2"
                             @action="basicInfoAction"
+                            :hideFilterColumn="statusModify"
                         />
                     </div>
                 </div>
@@ -28,18 +29,20 @@
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && checkedAll.length - newProductTabData.length/2 && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
-                        <select-search :options="options" v-model="id" />
+                        <select-search :options="options" v-model="id" v-show="!statusModify" />
                     </div>
                     <v-table 
                         :data.sync="newProductTabData"
                         :buttons="productInfoBtn"
                         :loading="tableLoad"
+                        :height="450"
                         @action="producInfoAction"
                         @change-checked="changeChecked"
                         :rowspan="2"
                         :selection="statusModify"
+                        :hideFilterColumn="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
                         <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
@@ -82,42 +85,14 @@
             ></v-product>
         </el-dialog>
         <v-history-modify
-                @save="save"
-                ref="HM"
-            >
-            <div slot="transportationWay" slot-scope="{item}">
-                <el-select v-model="item" placeholder="请选择">
-                    <el-option
-                        v-for="item in selectAll.transportationWay"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                    </el-option>
+            @save="save"
+            ref="HM"
+        >
+            <template v-for="items in $db.inquiry.basicInfo" :slot="items._slot" slot-scope="{data}">
+                <el-select placeholder="请选择" v-model="fromArg[items.key]">
+                    <el-option v-for="item in selectAll[data.key]" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
-            </div>
-            <div slot="supplierName" slot-scope="{item}">
-                <el-select
-                    style="width:100%;"
-                    v-model="item"
-                    multiple
-                    filterable
-                    remote
-                    reserve-keyword
-                    value-key="id"
-                    size="mini"
-                    placeholder="请输入关键词"
-                    :remote-method="remoteMethod"
-                    :loading="loading">
-                    <el-option
-                        v-for="item in selectAll.supplierName"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item"
-                        :id="item.id"
-                    />
-                </el-select>
-            </div>
+            </template>
         </v-history-modify>
     </div>
 </template>
@@ -140,6 +115,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                loading: false,
                 disabledLine: [],
                 trig: 0,
                 disabledTabData: [],
@@ -200,6 +176,15 @@
                     destinationCountry: [],
                     departureCountry: []
                 }
+            }
+        },
+        computed: {
+            fromArg() {
+                let json = {};
+                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
+                    json[k] = val.key;
+                });
+                return json; 
             }
         },
         components: {
@@ -361,7 +346,13 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.newProductTabData = this.newProductTabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'));
+                    _.map(arr, item => {
+                        _.mapObject(item, (val, k) => {
+                            val._style = 'color:#27b7b6';
+                        });
+                    });
+                    this.newProductTabData = arr.concat(this.newProductTabData);
                     this.newSearchDialogVisible = false;
                 });
             },
