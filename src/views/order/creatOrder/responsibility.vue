@@ -2,7 +2,7 @@
     <div class="responsibility">
          <div>
               <div class="r_title">
-                 {{$i.responsibility}}
+                 responsibility
               </div>
               <div class="r_table">
    <el-table :data="tableData" style="width: 100%">
@@ -153,10 +153,13 @@
 </script>
 
 <style scoped>
+    .responsibility{
+        margin-top: 60px
+    }
     .r_title {
         font-size: 14px;
         height: 60px;
-        line-height: 60px;
+        line-height: 40px;
         border-bottom: 1px solid #ccc;
         padding: 0 15px;
     }

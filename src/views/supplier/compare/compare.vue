@@ -16,19 +16,19 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button>{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'" @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}</el-button>
+                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
 
-                <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
+                <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
 
-                <el-button v-if="isModify" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
+                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
                 <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
@@ -44,11 +44,11 @@
 
         <div class="footBtn">
             <div v-if="$route.params.type==='new'">
-                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
+                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary" v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>
-                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare'>Save</el-button>
+                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.deleteTheCompare}}</el-button>
+                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                 <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
         </div>

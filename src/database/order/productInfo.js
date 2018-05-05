@@ -1,5 +1,11 @@
-//   select  attachment select 
-
+/*
+   type: text select attachment 
+   _disabled:true false
+   _hide:true
+   key:后台字段
+   _calu:合计
+   _slot:插槽
+*/
 
 export default {
     _firstColumn: {
@@ -20,328 +26,115 @@ export default {
         _hide: true
     },
 
-    pic: {
+    skuPic: {
         key: 'skuPic',
         type: 'attachment',
         _disabled: true
     },
-    nameEn: {
+    skuNameEn: {
         key: 'skuNameEn',
         type: 'text',
         _disabled: true
     },
-    nameCn: {
+    skuNameCn: {
         key: 'skuNameCn',
         type: 'text',
         _disabled: true
     },
-    descCn: {
+    skuDescCn: {
         key: 'skuDescCn',
         type: 'text',
         _disabled: true
     },
-
-    descEn: {
+    skuDescEn: {
         key: 'skuDescEn',
         type: 'text',
         _disabled: true
     },
-    descCustomer: {
+    skuDescCustomer: {
         key: 'skuDescCustomer',
         _disabled: true
     },
-    nameCustomer: {
+    skuNameCustomer: {
         key: 'skuNameCustomer',
         type: 'text',
         _disabled: true
     },
-    customerSkuCode: {
+    skuCustomerSkuCode: {
         key: 'skuCustomerSkuCode',
         _disabled: true
     },
-    code: {
+    skuCode: {
         key: 'skuCode',
         type: 'text',
         _disabled: true,
         _hide: true
     },
-    supplierName: {
+    skuSupplierName: {
         key: 'skuSupplierName',
         _disabled: true
     },
-    supplierCode: {
-        key: 'skuSupplierCode',
-        _disabled: true
-    },
-    fobCurrency: {
+    //FOB币种
+    skuFobCurrency: {
         key: 'skuFobCurrency',
         type: 'select',
+        _slot:'skuFobCurrency'
     },
-    fobPrice: {
+    skuFobPrice: {
         key: 'skuFobPrice',
         type: 'select',
     },
-    ////////////////////////////////////  departure port   select  弹出框
-    unit: {
+    //????????????????????????????发运港口
+    skuFobPort: {
+        key: "skuFobPort",
+         _slot:'skuFobPort'
+    },
+    skuUnit: {
         key: 'skuUnit'
     },
-    materialEn: {
+    skuMaterialEn: {
         key: 'skuMaterialEn',
-        _disabled: true,
+
     },
-    materialCn: {
+    skuMaterialCn: {
         key: 'skuMaterialCn',
-        _disabled: true,
+
     },
-    /////？？？quantity
-    qualityStander: {
-        key: 'skuQualityStander',
-        _disabled: true,
+    skuQty: {
+        key: 'skuQty',
+        _calu: true
     },
-    //自动计算?????
     skuPrice: {
         key: 'skuPrice',
-        _disabled: true,
-//        _calu: true
+        _calu: true
     },
-    skuQty:{
-          key: 'skuQty',
-//         _disabled: true,
-         _calu: true
-    },
-    rateValueAddedTax: {
+    skuRateValueAddedTax: {
         key: 'skuRateValueAddedTax',
-        _disabled: true,
+
     },
-    taxRefundRate: {
+    skuTaxRefundRate: {
         key: 'skuTaxRefundRate',
-        _disabled: true,
+
     },
-    colourEn: {
+
+    skuColourEn: {
         key: 'skuColourEn',
-        _disabled: true
+
     },
-    colourCn: {
+    skuColourCn: {
         key: 'skuColourCn',
-        _disabled: true
+
     },
-    minOrderQty: {
+    skuMinOrderQty: {
         key: 'skuMinOrderQty'
         // S可编辑/C不可编辑
     },
-    deliveryDates: {
+    skuDeliveryDates: {
         key: 'skuDeliveryDates',
-        _disabled: true
-    },
-    design: {
-        key: 'skuDesign'
-    },
-    customsCode: {
-        key: 'skuCustomsCode',
-        _disabled: true,
-    },
-    customsNameCn: {
-        key: 'skuCustomsNameCn',
-        _disabled: true,
-    },
-    customsNameEn: {
-        key: 'skuCustomsNameEn',
-        _disabled: true,
-    },
-    tradeMarkCn: {
-        key: 'skuTradeMarkCn',
-        _disabled: true,
-    },
-    tradeMarkEn: {
-        key: 'skuTradeMarkEn',
-        _disabled: true,
-    },
-    commodityInspectionCn: {
-        key: 'skuCommodityInspectionCn',
-        _disabled: true,
-    },
-    commodityInspectionEn: {
-        key: 'skuCommodityInspectionEn',
-        _disabled: true,
-    },
-    declareElement: {
-        key: 'skuDeclareElement',
-        _disabled: true,
-    },
-    origin: {
-        key: 'skuOrigin',
-        _disabled: true,
-    },
-    inspectQuarantineCategory: {
-        key: 'skuInspectQuarantineCategory',
-        _disabled: true,
-    },
-    unitWeight: {
-        key: 'skuUnitWeight',
-        _disabled: true,
-    },
-    unitLength: {
-        key: 'skuUnitLength',
-        _disabled: true,
-    },
-    unitVolume: {
-        key: 'skuUnitVolume',
-        _disabled: true,
-    },
-    length: {
-        key: 'skuLength',
-        _disabled: true,
-    },
-    width: {
-        key: 'skuWidth',
-        _disabled: true,
-    },
-    height: {
-        key: 'skuHeight',
-        _disabled: true,
-    },
-    netWeight: {
-        key: 'skuNetWeight',
-        _disabled: true,
-    },
-    volume: {
-        key: 'skuVolume',
-        _disabled: true,
-    },
-    methodPkgCn: {
-        key: 'skuMethodPkgCn',
-        _disabled: true,
-    },
-    methodPkgEn: {
-        key: 'skuMethodPkgEn',
-        _disabled: true,
-    },
-    innerCartonUnit: {
-        key: 'skuInnerCartonUnit',
-        _disabled: true,
-    },
-    // 合计SKU Quantity Of Inner Carton     
-    //Quantity of Inner Box in Outer Carton
 
-    innerCartonQty: {
-        key: 'skuInnerCartonQty',
-        _disabled: true,
-        _calu: true
     },
-    innerCartonLength: {
-        key: 'skuInnerCartonLength',
-        _disabled: true,
-    },
-    innerCartonWidth: {
-        key: 'skuInnerCartonWidth',
-        _disabled: true,
-    },
-    innerCartonHeight: {
-        key: 'skuInnerCartonHeight',
-        _disabled: true,
-    },
-    innerCartonWeightNet: {
-        key: 'skuInnerCartonWeightNet',
-        _disabled: true,
-    },
-    innerCartonRoughWeight: {
-        key: 'skuInnerCartonRoughWeight',
-        _disabled: true,
-    },
-    innerCartonVolume: {
-        key: 'skuInnerCartonVolume',
-        _disabled: true,
-    },
-    innerCartonDesc: {
-        key: 'skuInnerCartonDesc',
-        _disabled: true,
-    },
-    innerCartonMethodCn: {
-        key: 'skuInnerCartonMethodCn',
-        _disabled: true,
-    },
-    innerCartonMethodEn: {
-        key: 'skuInnerCartonMethodEn',
-        _disabled: true,
-    },
-    outerCartonUnit: {
-        key: 'skuOuterCartonUnit',
-        _disabled: true,
-    },
-    outerCartonDesc: {
-        key: 'skuOuterCartonDesc',
-        _disabled: true,
-    },
-    innerCartonOuterNum: {
-        key: 'skuInnerCartonOuterNum',
-        _disabled: true,
-    },
-    //SKU Quantity of Outer Carton
-    outerCartonQty: {
-        key: 'skuOuterCartonQty',
-        _disabled: true,
-        _calu: true
-    },
-    outerCartonLength: {
-        key: 'skuOuterCartonLength',
-        _disabled: true,
-    },
-    outerCartonWidth: {
-        key: 'skuOuterCartonWidth',
-        _disabled: true,
-    },
-    outerCartonHeight: {
-        key: 'skuOuterCartonHeight',
-        _disabled: true,
-    },
-    outerCartonNetWeight: {
-        key: 'skuOuterCartonNetWeight',
-        _disabled: true,
-    },
-    outerCartonRoughWeight: {
-        key: 'skuOuterCartonRoughWeight',
-        _disabled: true,
-    },
-    outerCartonVolume: {
-        key: 'skuOuterCartonVolume',
-        _disabled: true,
-    },
-    outerCartonMethodCn: {
-        key: 'skuOuterCartonMethodCn',
-        _disabled: true,
-    },
-    outerCartonMethodEn: {
-        key: 'skuOuterCartonMethodEn',
-        _disabled: true,
-    },
-    brand: {
-        key: 'skuBrand',
-        _disabled: true,
-    },
-    applicableAge: {
-        key: 'skuApplicableAge',
-        _disabled: true,
-    },
-    expireDates: {
-        key: 'skuExpireDates',
-        _disabled: true,
-    },
-    expireUnit: {
-        key: 'skuExpireUnit',
-        _disabled: true,
-    },
-    comments: {
-        key: 'skuComments',
-        _disabled: true,
-    },
-    skuId: {
-        _hide: true,
-        key: 'skuId',
-        _disabled: true,
-    },
-    skuStatus: {
-        key: 'skuStatus',
-        _disabled: true,
+    skuDesign: {
+        key: 'skuDesign'
     },
     skuCategoryOne: {
         key: 'skuCategoryOne',
@@ -355,15 +148,249 @@ export default {
         key: 'skuCategoryThree',
         _disabled: true,
     },
+    skuCategoryFour: {
+        key: 'skuCategoryFour',
+        _disabled: true,
+    },
+    skuCustomsCode: {
+        key: 'skuCustomsCode',
+        _disabled: true,
+    },
+    skuCustomsNameCn: {
+        key: 'skuCustomsNameCn',
+
+    },
+    skuCustomsNameEn: {
+        key: 'skuCustomsNameEn',
+
+    },
+    
+    //jpag
+    skuTradeMarkCn: {
+        key: 'skuTradeMarkCn',
+        type:'attachment'
+    },
+    skuTradeMarkEn: {
+        key: 'skuTradeMarkEn',
+        type:'attachment'
+    },
+    
+    
+    skuCommodityInspectionCn: {
+        key: 'skuCommodityInspectionCn',
+
+    },
+    skuCommodityInspectionEn: {
+        key: 'skuCommodityInspectionEn',
+
+    },
+    skuDeclareElement: {
+        key: 'skuDeclareElement',
+
+    },
+    //原产地
+    skuOrigin: {
+        key: 'skuOrigin',
+        _slot:'skuOrigin'
+        //select
+    },
+    //检验检疫类别
+    skuInspectQuarantineCategory: {
+        key: 'skuInspectQuarantineCategory',
+          _slot:'skuInspectQuarantineCategory'
+        //select
+    },
+    //重量单位
+    skuUnitWeight: {
+        key: 'skuUnitWeight',
+          _slot:'skuUnitWeight'
+        //select
+    },
+    //长度单位
+    skuUnitLength: {
+        key: 'skuUnitLength',
+          _slot:'skuUnitLength'
+        //select
+    },
+    //体积单位
+    skuUnitVolume: {
+        key: 'skuUnitVolume',
+          _slot:'skuUnitVolume'
+        //select
+    },
+    skuLength: {
+        key: 'skuLength',
+    },
+    skuWidth: {
+        key: 'skuWidth',
+    },
+    skuHeight: {
+        key: 'skuHeight',
+    },
+    skuGrossWeight:{
+        key: 'skuNetWeight',
+    },
+    skuNetWeight: {
+        key: 'skuNetWeight',
+       
+    },
+    skuVolume: {
+        key: 'skuVolume',
+       
+    },
+
+    //产品包装方式CN
+    skuMethodPkgCn: {
+        key: 'skuMethodPkgCn',
+         _slot:'skuMethodPkgCn'
+    },
+    //产品包装方式EN
+    skuMethodPkgEn: {
+        key: 'skuMethodPkgEn',
+        _slot:'skuMethodPkgEn'
+    },
+    //中包单位
+    skuInnerCartonUnit: {
+        key: 'skuInnerCartonUnit',
+         _slot:'skuInnerCartonUnit'
+    },
+    skuInnerCartonQty: {
+        key: 'skuInnerCartonQty',
+        _calu: true
+    },
+    skuInnerCartonLength: {
+        key: 'skuInnerCartonLength',
+
+    },
+    skuInnerCartonWidth: {
+        key: 'skuInnerCartonWidth',
+        _disabled: true,
+    },
+    skuInnerCartonHeight: {
+        key: 'skuInnerCartonHeight',
+
+    },
+    skuInnerCartonWeightNet: {
+        key: 'skuInnerCartonWeightNet',
+
+    },
+    skuInnerCartonRoughWeight: {
+        key: 'skuInnerCartonRoughWeight',
+
+    },
+    skuInnerCartonVolume: {
+        key: 'skuInnerCartonVolume',
+
+    },
+    skuInnerCartonDesc: {
+        key: 'skuInnerCartonDesc',
+
+    },
+    //中包包装方式CN
+    skuInnerCartonMethodCn: {
+        key: 'skuInnerCartonMethodCn',
+        _slot:'skuInnerCartonMethodCn'
+    },
+    //中包包装方式EN
+    skuInnerCartonMethodEn: {
+        key: 'skuInnerCartonMethodEn',
+        _slot:'skuInnerCartonMethodEn'
+    },
+
+    skuOuterCartonUnit: {
+        key: 'skuOuterCartonUnit',
+
+    },
+    skuOuterCartonDesc: {
+        key: 'skuOuterCartonDesc',
+
+    },
+    skuInnerCartonOuterNum: {
+        key: 'skuInnerCartonOuterNum',
+        _calu: true
+    },
+    skuOuterCartonQty: {
+        key: 'skuOuterCartonQty',
+        _calu: true
+    },
+    skuOuterCartonLength: {
+        key: 'skuOuterCartonLength',
+
+    },
+    skuOuterCartonWidth: {
+        key: 'skuOuterCartonWidth',
+
+    },
+    skuOuterCartonHeight: {
+        key: 'skuOuterCartonHeight',
+
+    },
+    skuOuterCartonNetWeight: {
+        key: 'skuOuterCartonNetWeight',
+
+    },
+    skuOuterCartonRoughWeight: {
+        key: 'skuOuterCartonRoughWeight',
+
+    },
+    skuOuterCartonVolume: {
+        key: 'skuOuterCartonVolume',
+
+    },
+    //外包装方式CN
+    skuOuterCartonMethodCn: {
+        key: 'skuOuterCartonMethodCn',
+        _slot:'skuOuterCartonMethodCn'
+    },
+    //外包装方式EN
+    skuOuterCartonMethodEn: {
+        key: 'skuOuterCartonMethodEn',
+        _slot:'skuOuterCartonMethodEn'
+    },
+
+    skuBrand: {
+        key: 'skuBrand',
+    },
+    skuApplicableAge: {
+        key: 'skuApplicableAge',
+
+    },
+    skuExpireDates: {
+        key: 'skuExpireDates',
+
+    },
+    skuExpireUnit: {
+        key: 'skuExpireUnit',
+
+    },
+    skuComments: {
+        key: 'skuComments',
+        _disabled: true,
+    },
+
+    skuId: {
+        _hide: true,
+        key: 'skuId',
+        _disabled: true,
+    },
+    
+//产品状态
+    skuStatus: {
+        key: 'skuStatus',
+        _slot:'skuStatus'
+    },
+
     skuSaleStatus: {
         key: 'skuSaleStatus'
     },
     skuLabel: {
         key: 'skuLabel'
     },
+
     skuBarCode: {
         key: 'skuBarCode'
     },
+
     skuInnerPackBarCode: {
         key: 'skuInnerPackBarCode',
 
@@ -374,6 +401,7 @@ export default {
     skuInnerPackCode: {
         key: 'skuInnerPackCode'
     },
+
     skuShippingMarks: {
         key: 'skuShippingMarks'
     },
@@ -384,54 +412,53 @@ export default {
         key: 'skuOuterCartonCode'
     },
     skuLabelPic: {
-        key: "skuLabelPic"
+        key: "skuLabelPic",
+        type: 'attachment',
     },
     skuLabelDesc: {
         key: 'skuLabelDesc'
     },
     skuPkgMethodPic: {
-        key: 'skuPkgMethodPic'
+        key: 'skuPkgMethodPic',
+          type: 'attachment',
     },
     skuInnerCartonPic: {
-        key: 'skuInnerCartonPic'
+        key: 'skuInnerCartonPic',
+          type: 'attachment',
     },
     skuOuterCartonPic: {
-        key: 'skuOuterCartonPic'
+        key: 'skuOuterCartonPic',
+          type: 'attachment',
     },
-    //.........need sample 
+    //是否需要样品
     skuSample: {
         key: 'skuSample',
-        type: 'select'
+        // 是否
+       _slot:'skuSample'
     },
-    //合计
     skuSampleQty: {
         key: 'skuSampleQty',
         type: 'text',
         _calu: true
     },
-    //合计
     skuSamplePrice: {
         key: 'skuSamplePrice',
         type: 'text',
         _calu: true
     },
-    //Undelivered Quantity ？？？
     skuDeliveredQty: {
         key: 'skuDeliveredQty',
         _disabled: true,
         _calu: true
     },
-    skuDepartureDt: {
-        key: 'skuDepartureDt',
-
+    skuUndeliveredQty: {
+        key: 'skuDeliveredQty',
+        _disabled: true,
+        _calu: true
     },
     skuQuotationNo: {
         key: 'skuQuotationNo',
         _disabled: true,
-        _calu: true
-    },
-    skuModifyStatus: {
-        key: 'skuModifyStatus'
     },
     skuRemarkOne: {
         key: 'skuRemarkOne'
@@ -444,178 +471,29 @@ export default {
     },
     skuAdditionalOne: {
         key: 'skuAdditionalOne',
-        type: 'pic'
+        type: 'attachment',
     },
     skuAdditionalTwo: {
         key: 'skuAdditionalTwo',
-        type: 'pic'
+        
+        type: 'attachment',
     },
     skuAdditionalThree: {
         key: 'skuAdditionalThree',
-        type: 'pic'
+      type: 'attachment',
     },
     skuAdditionalFour: {
         key: 'skuAdditionalFour',
-        type: 'pic'
+        type: 'attachment',
     },
-    //Undelivered Quantity  
-    //Qualified products total QTYS    Total Quantity of Quantified SKU
-    //Uninspected QC SKU Quantity
-
-
-
-
-
-
-    formation: {
-        key: 'skuFormation',
+    skuUntestedQty: {
+        key: 'skuUntestedQty',
         _disabled: true,
+        _calu: true
     },
-    categoryId: {
-        key: 'skuCategoryId',
+    skuQualifiedQty: {
+        key: 'skuQualifiedQty',
         _disabled: true,
-    },
-
-    readilyAvailable: {
-        key: 'skuReadilyAvailable',
-        _disabled: true,
-    },
-    availableQty: {
-        key: 'skuAvailableQty',
-        _disabled: true,
-    },
-    noneSellCountry: {
-        key: 'skuNoneSellCountry',
-        _disabled: true,
-    },
-
-    fobPort: {
-        key: 'skuFobPort',
-        _disabled: true,
-    },
-    exwPrice: {
-        key: 'skuExwPrice',
-        _disabled: true,
-    },
-    exwCurrency: {
-        key: 'skuExwCurrency',
-        _disabled: true,
-    },
-    otherIncoterm: {
-        key: 'skuOtherIncoterm',
-        _disabled: true,
-    },
-    otherIncotermPrice: {
-        key: 'skuOtherIncotermPrice',
-        _disabled: true,
-    },
-    otherIncotermArea: {
-        key: 'skuOtherIncotermArea',
-        _disabled: true,
-    },
-    otherIncotermCurrency: {
-        key: 'skuOtherIncotermCurrency',
-        _disabled: true,
-    },
-    brandRemark: {
-        key: 'skuBrandRemark',
-        _disabled: true,
-    },
-    brandRelated: {
-        key: 'skuBrandRelated',
-        _disabled: true,
-    },
-    certificat: {
-        key: 'skuCertificat',
-        _disabled: true,
-    },
-
-    oem: {
-        key: 'skuOem',
-        _disabled: true,
-    },
-    gp20SkuQty: {
-        key: 'skuGp20SkuQty',
-        _disabled: true,
-    },
-    gp40SkuQty: {
-        key: 'skuGp40SkuQty',
-        _disabled: true,
-    },
-    hq40SkuQty: {
-        key: 'skuHq40SkuQty',
-        _disabled: true,
-    },
-    tryDimension: {
-        key: 'skuTryDimension',
-        _disabled: true,
-    },
-    skuQtyPerTray: {
-        key: 'skuSkuQtyPerTray',
-        _disabled: true,
-    },
-    specialTransportRequire: {
-        key: 'skuSpecialTransportRequire',
-        _disabled: true,
-    },
-    inventoryCostMethod: {
-        key: 'skuInventoryCostMethod',
-        _disabled: true,
-    },
-    warehourceDefault: {
-        key: 'skuWarehourceDefault',
-        _disabled: true,
-    },
-    inventory: { //自有库存?????不知道对不对
-        key: 'skuInventory',
-        _disabled: true,
-    },
-    safeInventory: {
-        key: 'skuSafeInventory',
-        _disabled: true,
-    },
-    minInventory: {
-        key: 'skuMinInventory',
-        _disabled: true,
-    },
-    mainSaleCountry: {
-        key: 'skuMainSaleCountry',
-        _disabled: true,
-    },
-    mainSaleArea: {
-        key: 'skuMainSaleArea',
-        _disabled: true,
-    },
-    productionDates: {
-        key: 'skuProductionDates',
-        _disabled: true,
-    },
-    yearListed: {
-        key: 'skuYearListed',
-        _disabled: true,
-    },
-    useDisplayBox: {
-        key: 'skuUseDisplayBox',
-        _disabled: true,
-    },
-    displayBoxQty: {
-        key: 'skuDisplayBoxQty',
-        _disabled: true,
-    },
-    lengthWidthHeight: {
-        key: 'skuLengthWidthHeight',
-        _disabled: true,
-    },
-    otherPackInfoCn: {
-        key: 'skuOtherPackInfoCn',
-        _disabled: true,
-    },
-    otherPackInfoEn: {
-        key: 'skuOtherPackInfoEn',
-        _disabled: true,
-    },
-    adjustPackage: {
-        key: 'skuAdjustPackage',
-        _disabled: true,
+        _calu: true
     }
 }
