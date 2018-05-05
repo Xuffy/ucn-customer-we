@@ -18,7 +18,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="containerType"/>
+      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
     </div>
 
     <div>
@@ -88,7 +88,6 @@ export default {
       transportInfoObj,
       transportInfoArr: [],
       basicInfoArr: [],
-      containerType: [],
       productbButtons: [
         {
           label: 'Negociate',
@@ -108,10 +107,11 @@ export default {
       productList: [],
       productModifyList: [],
       paymentList: [],
-      tableData: [],
+      containerInfo: [],
       paymentSum: {},
       orderList: [],
       selectArr: {
+        containerType: [],
         permitedForTransportation: [
           {
             code: '1',
@@ -144,8 +144,8 @@ export default {
   watch: {
     edit (newValue) {
       if (newValue) return
-      this.tableData.forEach((a, i) => {
-        !Object.keys(a).length && this.arraySplite(this.tableData, i)
+      this.containerInfo.forEach((a, i) => {
+        !Object.keys(a).length && this.arraySplite(this.containerInfo, i)
       })
     },
     selectProductId (newValue) {
@@ -171,7 +171,7 @@ export default {
         value
       }
     })
-    console.log(this.basicInfoArr)
+
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
@@ -200,7 +200,7 @@ export default {
         this.exchangeRateList = res.currencyExchangeRate
         this.remark = res.remark
         this.logisticsNo = res.logisticsNo
-        this.tableData = res.containerDetail
+        this.containerInfo = res.containerDetail
         this.feeList = [res.fee]
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
@@ -219,7 +219,7 @@ export default {
         this.$set(this.selectArr, 'exchangeCurrency', res)
       })
       this.$ajax.get(this.$apis.get_container_type).then(res => {
-        this.containerType = res
+        this.$set(this.selectArr, 'containerType', res)
       })
       this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
     },
@@ -240,7 +240,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.selectionContainer.forEach(i => this.arraySplite(this.tableData, i))
+        this.selectionContainer.forEach(i => this.arraySplite(this.containerInfo, i))
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -253,20 +253,9 @@ export default {
     arrayAppend(arrKey) {
       this[arrKey].push({})
     },
-    tailBtnCance () {
-      this.tableData.pop();
-    },
-    tailBtnOk (item) {
-      this.tableData.pop();
-      this.tableData.push(item);
-    },
     arraySplite (array, index) {
       array.splice(index, 1);
     },
-    modify () {
-      this.isModify = false;
-    },
-    tailBtnCancel () {},
     action (e, i) {
       if (i === 3) return
       this.productInfoModifyStatus = i
