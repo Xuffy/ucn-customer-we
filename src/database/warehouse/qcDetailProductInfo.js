@@ -272,7 +272,7 @@ export default{
     },
     remark:{
         key: 'remark',
-        type: 'String'
+        type: 'String',
     },
     SKUInventoryStatus:{
         key: 'skuInventoryStatusDictCode',

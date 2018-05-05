@@ -105,5 +105,7 @@ export default {
     POST_QC_DETAIL_PAGE: ['/qc/detail/page', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_QC_RESULT_ACCEPT: ['/qc/result/accept', 'USUPPLY_URL', 'USUPPLY_URL'],
     POST_RETURN_HANDLE: ['/qc/return/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
-    POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL']
+    POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
+    get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
+    get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
 }

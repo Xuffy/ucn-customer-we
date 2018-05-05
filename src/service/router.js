@@ -87,8 +87,8 @@ export const routerMap = [
           path: 'sourcing',
           name: 'productSourcingOverview',
           meta: {
-            draft: true,
-            recycleBin: true,
+            draft: false,
+            recycleBin: false,
             log: true,
             name: 'Sourcing Overview'
           },

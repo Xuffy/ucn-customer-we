@@ -77,7 +77,7 @@
               <template slot="header">
                 <div class="btns" v-if="!hideBtn">
                   <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                  <el-button>{{$i.product.createOrder}}</el-button>
+                  <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                   <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                   <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
                   <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
@@ -105,6 +105,7 @@
     import VTable from '@/components/common/table/index'
     import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "overview",
@@ -556,6 +557,24 @@
 
             createInquiry(){
                 console.log(1234)
+            },
+            createOrder(){
+                if(this.selectList.length===0){
+                    this.$windowOpen({
+                        url:'/order/creat'
+                    })
+                }else{
+                    let ids='';
+                    this.selectList.forEach(v=>{
+                        ids+=(v.id.value+',');
+                    });
+                    this.$windowOpen({
+                        url:'/order/creat',
+                        params:{
+                            ids:ids
+                        },
+                    })
+                }
             },
 
             //对比product
