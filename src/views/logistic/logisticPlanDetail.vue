@@ -35,7 +35,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table :data.sync="productList" @action="action" :buttons="productbButtons">
+      <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini">{{ $i.logistic.remove }}</el-button>
@@ -50,10 +50,10 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
-      <add-product :tableData="orderList"/>
+      <add-product :tableData="orderList" ref="addProduct"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.logistic.confirm }}</el-button>
+        <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan"/>
@@ -285,15 +285,22 @@ export default {
         this.orderList = res.datas.map(a => {
           let aa = _.mapObject(a, item => {
             item = 1
-            console.log(item)
             return item
           })
-          console.log(aa)
           return aa
         })
-        console.log(res)
+        // this.orderList = res.datas
       })
-      // this.$apis.get_orderlist
+    },
+    closeAddProduct (status) {
+      this.showAddProductDialog = false
+      const selectArr = this.$refs.addProduct.selectArr
+      if (!status || !selectArr.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+      console.log(selectArr)
+      // TODO
+    },
+    selectProduct (arr) {
+      this.selectProductArr = arr.map(a => a.id.value)
     },
     closeDialog () {
       this.productModifyList = []

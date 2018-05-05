@@ -1,4 +1,7 @@
 {
+  "archiveOverview": "Archive Overview",
+  "draftOverview": "Draft Overview",
+  "loadingListOverview": "Loading List Overview",
   "placeLogisticPlan": "Place Logistic Plan",
   "orderNo": "Order No",
   "yes": "Yes",

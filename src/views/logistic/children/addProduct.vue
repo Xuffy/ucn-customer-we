@@ -3,7 +3,7 @@
     <div class="select-search-wrap">
       <select-search :options="options"/>
     </div>
-    <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName">
+    <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
       <el-table-column type="selection" width="30"></el-table-column>
       <el-table-column :label="$i.logistic.skuCode" align="center">
         <template slot-scope="scope">
@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.productDescription" width="140" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.productDescription }}</span>
+          <span>{{ scope.row.skuNameCustomer }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.blSkuName" width="120" align="center">
@@ -32,22 +32,22 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.customsDeclarationNameCn" width="220" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.customsDeclarationNameCn }}</span>
+          <span>{{ scope.row.skuCustomsNameCn }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.customsDeclarationNameEn" width="220" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.customsDeclarationNameEn }}</span>
+          <span>{{ scope.row.skuCustomsNameEn }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.hsCode" width="80" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.hsCode }}</span>
+          <span>{{ scope.row.skuCustomsCode }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.reportElements" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.reportElements }}</span>
+          <span>{{ scope.row.skuDeclareElement }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" width="120" align="center">
@@ -57,12 +57,12 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierNo" width="100" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.supplierNo }}</span>
+          <span>{{ scope.row.supplierCode }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.customerSkuCode" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.customerSkuCode }}</span>
+          <span>{{ scope.row.sku_customerSkuCode }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.factorySkuCode" width="160"align="center">
@@ -72,7 +72,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.unit" width="80" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.unit }}</span>
+          <span>{{ scope.row.skuUnit }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.exportUnitPrice " width="140" align="center">
@@ -97,47 +97,47 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonLength" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonLength }}</span>
+          <span>{{ scope.row.skuOuterCartonLength }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonWidth" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonWidth }}</span>
+          <span>{{ scope.row.skuOuterCartonWidth }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonHeight" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonHeight }}</span>
+          <span>{{ scope.row.skuOuterCartonHeight }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonNetWeight" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonNetWeight }}</span>
+          <span>{{ scope.row.skuOuterCartonNetWeight }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonGrossWeight" width="200" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonGrossWeight }}</span>
+          <span>{{ scope.row.skuOuterCartonRoughWeight }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonVolume" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonVolume }}</span>
+          <span>{{ scope.row.skuOuterCartonVolume }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.shippingMarks" width="140" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippingMarks }}</span>
+          <span>{{ scope.row.skuShippingMarks }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonBarCode" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonBarCode }}</span>
+          <span>{{ scope.row.skuOuterCartonBarCode }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.outerCartonSkuCode" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.outerCartonSkuCode }}</span>
+          <span>{{ scope.row.skuOuterCartonCode }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="active" width="100">
@@ -165,6 +165,7 @@ export default {
   },
   data () {
     return {
+      selectArr: [],
       options: [
         {
           id: '1',
@@ -185,8 +186,8 @@ export default {
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex
     },
-    handleSelectionChange (val) {
-      console.log(val.map(a => a.index))
+    handleSelectionChange (arr) {
+      this.selectArr = arr.map(a => a.id)
     }
   }
 }
@@ -198,7 +199,6 @@ export default {
   .select {
     width: 110px;
     margin-right:5px;
-    input {}
   }
 }
 </style>
