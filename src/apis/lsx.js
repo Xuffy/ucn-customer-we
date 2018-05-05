@@ -1,10 +1,9 @@
 export default {
     //获取category
-    get_sys_category: ['/purchase/sys/category', 'BASE_BUY','UPURCHASE_URL'],
-    get_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
+    get_buyer_sys_category: ['/purchase/sys/category', 'BASE_BUY','UPURCHASE_URL'],
+    get_buyer_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
     get_supply_category:['/sys/category','BASE_CS','USUPPLY_URL'],
 
-    get_buyer_sys_category:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
 
 
 
@@ -52,24 +51,21 @@ export default {
     //product buyer
     get_buyerProductList:['/purchase/sku/listSkuByParams','BASE_BUY','UPURCHASE_URL'],
     get_buyerBookmarkList:['/purchase/sku/listBookmark','BASE_BUY','UPURCHASE_URL'],
-    add_buyerBookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
-    add_buyerOneBookmark:['/purchase/sku/bookmark/one/{id}','BASE_CS1','UPURCHASE_URL'],
-    add_bookmark:['/purchase/sku/bookmark','BASE_CS1','UPURCHASE_URL'],
-    get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_CS1','UPURCHASE_URL'],
+    add_buyerBookmark:['/purchase/sku/bookmark','BASE_BUY','UPURCHASE_URL'],
+    get_buyerRemarkList:['/purchase/sku/listSkuRemark/{id}','BASE_BUY','UPURCHASE_URL'],
     add_buyerProductRemark:['/purchase/sku/remark','BASE_CS1','UPURCHASE_URL'],
     update_buyerProductRemark:['/purchase/sku/remark/{id}','BASE_CS1','UPURCHASE_URL'],
-    delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_CS1','UPURCHASE_URL'],
-    delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_CS1','UPURCHASE_URL'],
+    delete_buyerProductBookmark:['/purchase/sku/deleteBookmark','BASE_BUY','UPURCHASE_URL'],
     add_customerSku:['/purchase/sku/addCustomerSku','BASE_CS1','UPURCHASE_URL'],
     get_compareList:['/purchase/sku/listCompare','BASE_CS1','UPURCHASE_URL'],
     recover_bookmark:['/purchase/sku/recoverBookmark','BASE_CS1','UPURCHASE_URL'],
-    get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_CS1','UPURCHASE_URL'],
+    get_skuListByIds:['/purchase/sku/listSkuByIds','BASE_BUY','UPURCHASE_URL'],
     add_buyerProductCompare:['/purchase/sku/compare','BASE_CS1','UPURCHASE_URL'],
     delete_buyerProductCompareDetail:['/purchase/supplier/listCompareDetails','BASE_CS1','UPURCHASE_URL'],
     get_buyerProductCompareDetail:['/purchase/sku/listCompareDetails','BASE_CS1','UPURCHASE_URL'],
     delete_buyerProductCompare:['/purchase/sku/deleteCompare','BASE_CS1','UPURCHASE_URL'],
-    get_buyerProductDetail:['/purchase/sku/{id}','BASE_CS1','UPURCHASE_URL'],
-    edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_CS1','UPURCHASE_URL'],
+    get_buyerProductDetail:['/purchase/sku/{id}','BASE_BUY','UPURCHASE_URL'],
+    edit_buyerProductBookmark:['/purchase/sku/bookmark/{id}','BASE_BUY','UPURCHASE_URL'],
     update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_CS1','UPURCHASE_URL'],
 
 

@@ -167,6 +167,7 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             if(e.status.value===1){
@@ -177,9 +178,10 @@
                             return e;
                         });
                         this.hasLoading=true;
+                        this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-
+                        this.loadingTable=false;
                     });
                 }
                 else if(this.$route.params.type==='modify'){
