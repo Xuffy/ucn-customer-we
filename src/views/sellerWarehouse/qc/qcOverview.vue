@@ -1,11 +1,11 @@
 <template>
     <div class="inbound-overview">
         <!--<div class="title">-->
-            <!--<span>{{$i._warehouse.inboundOverview}}</span>-->
+            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
         <!--</div>-->
         <div class="body">
             <div class="head">
-                <span>{{$i._warehouse.status}}</span>
+                <span>{{$i.warehouse.status}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="qcOrderStatus" size="mini">
                     <el-radio-button label="0">待验货</el-radio-button>
                     <el-radio-button label="1">已验货</el-radio-button>
@@ -18,7 +18,7 @@
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
                 </div>
                 <v-table
                         :data="tableDataList"
@@ -95,12 +95,12 @@
             getInboundData(){
                 this.$ajax.post(this.$apis.get_qcOrderData,this.qcOrderConfig).then(res=>{
                     console.log(res)
-                    // this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                    //     e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                    //     e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
-                    //     e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
-                    //     return e;
-                    // });
+                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        return e;
+                    });
                 }).catch(err=>{
                     console.log(err)
                 });

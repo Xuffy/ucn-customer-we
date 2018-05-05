@@ -3,8 +3,8 @@
         <h3 class="hd">{{ title }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.submit}(${checkedArg.length})` }}</el-button>
-                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})` }}</el-button>
+                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
@@ -72,7 +72,7 @@
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.viewByInqury, res.datas);
+                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false; 
                 })
@@ -161,7 +161,7 @@
             this.getList();
             switch(this.$route.params.type) {
                 case 'inquiry':
-                    this.title = this.$i._baseText.inquiryDraft
+                    this.title = this.$i.common.inquiryDraft
                     break;
             }
         }
