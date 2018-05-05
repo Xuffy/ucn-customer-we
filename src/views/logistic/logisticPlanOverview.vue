@@ -1,11 +1,11 @@
 <template>
   <div class="logistic-plan-overview">
-    <div class="hd-top">{{ $i.logisticsPlanOverview }}</div>
+    <div class="hd-top">{{ $i.logistic.logisticsPlanOverview }}</div>
     <div class="status">
       <div class="btn-wrap">
-        <span>{{ $i.status}}:</span>
+        <span>{{ $i.logistic.status}}:</span>
         <el-radio-group v-model="fillterVal" size="mini" @change="viewByChange(viewBy)">
-          <el-radio-button label="all">{{ $i.all }}</el-radio-button>
+          <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
           <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-radio-button>
         </el-radio-group>
       </div>
@@ -15,12 +15,12 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.download }}({{ selectCount.length || $i.all }})</el-button>
-        <el-button @click.stop="addNew">{{ $i.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="!!viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.delete }}</el-button>
+        <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+        <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+        <el-button type="danger" :disabled="!!viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button>
       </div>
       <div class="view-by-btn">
-        <span>{{ $i.viewBy }}&nbsp;</span>
+        <span>{{ $i.logistic.viewBy }}&nbsp;</span>
         <el-radio-group v-model="viewBy" size="mini">
           <el-radio-button 
             v-for="item in $db.logistic.overviewBtn"
@@ -156,6 +156,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.gei_plan_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
           _.mapObject(item, val => {
@@ -172,6 +173,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.get_transportation_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
           _.mapObject(item, val => {
@@ -192,6 +194,7 @@ export default {
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
       this.$ajax.post(this.$apis.get_SKU_list, {lgStatus, ...this.pageParams}).then(res => {
+        if (!res) return (this.tableLoading = false)
         this.totalCount = res.tc
         this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
           _.mapObject(item, val => {
@@ -208,6 +211,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .logistic-plan-overview {
+  margin-top: 20px;
   .hd-top {
     font-size: 18px;
     color: #666;

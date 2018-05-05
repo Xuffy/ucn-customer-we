@@ -1,59 +1,59 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId">{{ $i.logisticPlan + 'HDAMC18005' }}</div>
-    <div class="hd-top" v-else>{{ $i.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.basicInfoTitle"/>
+    <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <div class="input-item">
-          <span>{{ $i.remark }}</span>
+          <span>{{ $i.logistic.remark }}</span>
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="remark" v-if="edit"></el-input>
           <p v-else>{{ remark }}</p>
         </div>
       </el-col>
-      <attachment accept="all" ref="attachment" :title="$i.attachment"/>
-      <one-line :edit="edit" :list="exchangeRateList" :title="$i.exchangeRate"/>
+      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment"/>
+      <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/>
     </el-row>
-    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.transportInfoTitle"/>
+    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.containerInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
       <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="containerType"/>
     </div>
 
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.feeInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
     </div>
 
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.paymentTitle }}</div>
+      <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
     </div>
     <div>
       <div class="hd"></div>
-      <div class="hd active">{{ $i.productInfoTitle }}</div>
+      <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table :data.sync="productList" @action="action" :buttons="productbButtons">
         <div slot="header" class="product-header">
-          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.addProduct }}</el-button>
-          <el-button type="danger" size="mini">{{ $i.remove }}</el-button>
+          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
+          <el-button type="danger" size="mini">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
-      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
+    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" :productId="selectProductId"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showProductDialog = false">{{ $i.cancel }}</el-button>
-        <el-button type="primary" @click="showProductDialog = false">{{ $i.confirm }}</el-button>
+        <el-button @click="showProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="showProductDialog = false">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$i.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
-      <add-product/>
+    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+      <add-product :tableData="orderList"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showAddProductDialog = false">{{ $i.cancel }}</el-button>
-        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.confirm }}</el-button>
+        <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="showAddProductDialog = false">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan"/>
@@ -70,31 +70,22 @@ import btns from '@/views/logistic/children/btns'
 import productModify from '@/views/logistic/children/productModify'
 import addProduct from '@/views/logistic/children/addProduct'
 
-// 测试
-import { basicInfoInput, basicInfoSelector, basicInfoDate } from './children/test'
-
-import { basicInfoObj } from '@/database/logistic/plan/staticData'
+import { basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
 export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      logisticsNo: '',
       remark: '',
+      selectProductId: 0,
       showProductDialog: false,
       showAddProductDialog: false,
       selectionContainer: [],
       productInfoModifyStatus: 0,
       edit: false,
       basicInfoObj,
-      transportInfoObj: {
-        transportCompany: "",
-        vesselName: "",
-        vesselNo: "",
-        departureCountry: "",
-        departurePort: "",
-        destinationCountry: "",
-        destinationPort: ""
-      },
+      transportInfoObj,
       transportInfoArr: [],
       basicInfoArr: [],
       containerType: [],
@@ -112,173 +103,29 @@ export default {
           type: 3
         }
       ],
-      exchangeRateList: [
-        // {
-        //   text: '￥-$',
-        //   value: 0
-        // },
-        // {
-        //   text: '$-￥',
-        //   value: 0
-        // },
-        // {
-        //   text: '￥-€',
-        //   value: 0
-        // },
-        // {
-        //   text: '€-￥',
-        //   value: 0
-        // },
-        // {
-        //   text: '$-€',
-        //   value: 0
-        // },
-        // {
-        //   text: '€-$',
-        //   value: 0
-        // }
-      ],
-      feeList: [
-        // {
-        //   "fclTransportCharge": "FCL Transport Charge",
-        //   "fclTransportChargeCurrency": "FCL Transport Charge Currency",
-        //   "handlingCharges": "Handling Charges",
-        //   "handlingChargesCurrency": "Handling Charges Currency",
-        //   "otherPortCharges": "Other Port Charges",
-        //   "otherPortChargesCurrency": "Other Port Charges Currency",
-        //   "oceanFreight": "Ocean Freight",
-        //   "oceanFreightCurrency": "Ocean Freight Currency",
-        //   "insuranceCharges": "Insurance Charges",
-        //   "insuranceChargesCurrency": "Insurance Charges Currency",
-        //   "otherCharges": "Other Charges",
-        //   "otherChargesCurrency": "Other Charges Currency",
-        //   "otherChargesExchangeRate": "Other Charges Exchange Rate",
-        //   "otherChargesRemark": "Other Charges Remark",
-        //   "commissionCharges": "Commission Charges",
-        //   "commissionChargesCurrency": "Commission Charges Currency"
-        // }
-      ],
-      productList: [
-        {
-          "orderNo": "orderNo",
-          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
-          "goodsToBeShipped": "goodsToBeShipped",
-          "skuCode": "SKU Code",
-          "skuNameEn": "SKU Name (EN)",
-          "skuNameCN": "SKU Name (CN)",
-          "productDescription": "Product Description",
-          "blSkuName": "B/L SKU Name",
-          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
-          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
-          "hsCode": "HS Code",
-          "reportElements": "Report Elements",
-          "supplierName": "Supplier Name",
-          "supplierNo": "Supplier No",
-          "customerSkuCode": "Customer SKU Code",
-          "factorySKUCode": "Factory SKU Code",
-          "unit": "Unit",
-          "exportUnitPrice": "Export Unit Price",
-          "totalPriceOfExport": "Total Price Of Export",
-          "currency": "Currency",
-          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
-          "outerCartonLength": "Outer Carton Length",
-          "outerCartonWidth": "Outer Carton Width",
-          "outerCartonHeight": "Outer Carton Height",
-          "outerCartonNetWeight": "Outer Carton Net Weight",
-          "outerCartonGrossWeight": "Outer Carton Gross Weight",
-          "outerCartonVolume": "Outer Carton Volume",
-          "shippingMarks": "Shipping Marks",
-          "outerCartonBarCode": "Outer Carton Bar-Code",
-          "outerCartonSkuCode": "Outer Carton SKU Code"
-        }
-      ],
-      productModifyList: [
-        {
-          "orderNo": "orderNo",
-          "quantityOfOuterCartonsToBeShipped": "quantityOfOuterCartonsToBeShipped",
-          "goodsToBeShipped": "goodsToBeShipped",
-          "skuCode": "SKU Code",
-          "skuNameEn": "SKU Name (EN)",
-          "skuNameCN": "SKU Name (CN)",
-          "productDescription": "Product Description",
-          "blSkuName": "B/L SKU Name",
-          "customsDeclarationNameCn": "Customs Declaration Name(CN)",
-          "customsDeclarationNameEn": "Customs Declaration Name(EN)",
-          "hsCode": "HS Code",
-          "reportElements": "Report Elements",
-          "supplierName": "Supplier Name",
-          "supplierNo": "Supplier No",
-          "customerSkuCode": "Customer SKU Code",
-          "factorySKUCode": "Factory SKU Code",
-          "unit": "Unit",
-          "exportUnitPrice": "Export Unit Price",
-          "totalPriceOfExport": "Total Price Of Export",
-          "currency": "Currency",
-          "skuQuantityOfOuterCarton": "SKU Quantity Of Outer Carton",
-          "outerCartonLength": "Outer Carton Length",
-          "outerCartonWidth": "Outer Carton Width",
-          "outerCartonHeight": "Outer Carton Height",
-          "outerCartonNetWeight": "Outer Carton Net Weight",
-          "outerCartonGrossWeight": "Outer Carton Gross Weight",
-          "outerCartonVolume": "Outer Carton Volume",
-          "shippingMarks": "Shipping Marks",
-          "outerCartonBarCode": "Outer Carton Bar-Code",
-          "outerCartonSkuCode": "Outer Carton SKU Code"
-        }
-      ],
-      paymentList: [
-        // {
-        //   "paymentNumber": "casd122",
-        //   "paymentItem": "Payment Item",
-        //   "estPayDate": "Est. Pay Date",
-        //   "estAmount": "123",
-        //   "actPayDate": "Act. Pay Date",
-        //   "actAmount": "44",
-        //   "currency": "Currency",
-        //   "avilable": "Avilable",
-        //   "operation": "Operation"
-        // }
-      ],
-      tableData: [
-        // {
-        //   "containerNo": 1,
-        //   "sealNumber": 2,
-        //   "containerWeight": "3",
-        //   "containerType": "4",
-        //   "vgm": "22",
-        //   "totalQuantityInContainer": "13",
-        //   "totalVolumeInContainer": "3",
-        //   "totalNetWeightInContainer": "12",
-        //   "totalQuantityOfOuterCartonsInContainer": "43",
-        //   "totalSkuPriceInContainer": "45",
-        //   "exchangeCurrency": "Exchange Currency"
-        // },
-        // {
-        //   "containerNo": 1,
-        //   "sealNumber": 2,
-        //   "containerWeight": "3",
-        //   "containerType": "4",
-        //   "vgm": "11",
-        //   "totalQuantityInContainer": "22",
-        //   "totalVolumeInContainer": "12",
-        //   "totalNetWeightInContainer": "1",
-        //   "totalQuantityOfOuterCartonsInContainer": "12",
-        //   "totalSkuPriceInContainer": "33",
-        //   "exchangeCurrency": "Exchange Currency"
-        // }
-      ],
+      exchangeRateList: [],
+      feeList: [],
+      productList: [],
+      productModifyList: [],
+      paymentList: [],
+      tableData: [],
       paymentSum: {},
+      orderList: [],
       selectArr: {
         permitedForTransportation: [
           {
             code: '1',
-            name: this.$i.yes
+            name: this.$i.logistic.yes
           },
           {
             code: '0',
-            name: this.$i.no
+            name: this.$i.logistic.no
           }
         ]
+      },
+      pageParams: {
+        pn: 1,
+        ps: 10
       }
     }
   },
@@ -300,6 +147,12 @@ export default {
       this.tableData.forEach((a, i) => {
         !Object.keys(a).length && this.arraySplite(this.tableData, i)
       })
+    },
+    selectProductId (newValue) {
+      newValue && this.getProductHistory(newValue)
+    },
+    productInfoModifyStatus () {
+      this.getProductHistory(this.selectProductId)
     }
   },
   computed: {
@@ -309,10 +162,11 @@ export default {
   },
   mounted () {
     this.getDictionary()
+    this.getOrderList()
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
-        label: this.$i[key],
+        label: this.$i.logistic[key],
         key,
         value
       }
@@ -320,13 +174,12 @@ export default {
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
-        label: this.$i[key],
+        label: this.$i.logistic[key],
         key,
         value
       }
     })
-    this.productList = this.$getDB(this.$db.logistic.productInfo, this.productList)
-    this.productModifyList = this.$getDB(this.$db.logistic.productInfo, this.productModifyList)
+
     if (this.planId) {
       this.getDetails()
     } else {
@@ -345,8 +198,10 @@ export default {
         })
         this.exchangeRateList = res.currencyExchangeRate
         this.remark = res.remark
+        this.logisticsNo = res.logisticsNo
         this.tableData = res.containerDetail
         this.feeList = [res.fee]
+        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.paymentList = res.datas
           this.paymentSum = res.statisticsDatas[0]
@@ -355,9 +210,7 @@ export default {
     },
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
-        this.basicInfoArr.find(a => {
-          if (a.key === 'logisticsNo') return a
-        }).value = res
+        this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
       })
     },
     getDictionary () {
@@ -368,8 +221,6 @@ export default {
         this.containerType = res
       })
       this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
-      // this.getDictionaryPart([], 'transportationWay')
-      // this.getDictionaryPart([], 'blType')
     },
     getDictionaryPart (keyCode, keys) {
       this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
@@ -419,9 +270,34 @@ export default {
       if (i === 3) return
       this.productInfoModifyStatus = i
       this.showProductDialog = true
+      this.selectProductId = e.id.value
+    },
+    getProductHistory (productId) {
+      this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+        this.productModifyList = this.$getDB(this.$db.logistic.productModify, res.history)
+        delete res.history
+        const [ copyNew ] = this.$getDB(this.$db.logistic.productModify, [res])
+        this.productModifyList.unshift(copyNew)
+      })
+    },
+    getOrderList () {
+      this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
+        this.orderList = res.datas.map(a => {
+          let aa = _.mapObject(a, item => {
+            item = 1
+            console.log(item)
+            return item
+          })
+          console.log(aa)
+          return aa
+        })
+        console.log(res)
+      })
+      // this.$apis.get_orderlist
     },
     closeDialog () {
-      console.log(this.$refs.productModifyComponents)
+      this.productModifyList = []
+      // console.log(this.$refs.productModifyComponents)
     },
     switchEdit () {
       this.edit = !this.edit
@@ -444,6 +320,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .place-logistic-plan {
+  margin-top: 20px;
   position: relative;
   padding-bottom: 80px;
   .hd-top {
@@ -477,9 +354,9 @@ export default {
       padding-right:10px;
       box-sizing: border-box;
     }
-    .el-select, .el-input {
-      flex:1;
-    }
+    // .el-select, .el-input {
+    //   flex:1;
+    // }
   }
   .product-header {
     margin-bottom: 20px;
