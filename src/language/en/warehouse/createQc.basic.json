@@ -5,5 +5,11 @@
   "summary":"Summary",
   "submit":"Submit",
   "cancel":"Cancel",
-  "qcOrderDetail":"QC Order Detail"
+  "qcOrderDetail":"QC Order Detail",
+  "payment":"Payment",
+  "add":"Add",
+  "confirmSKU":"Confirm SKU",
+  "restartQc":"Restart QC",
+  "rework":"Rework",
+  "return":"Return"
 }
