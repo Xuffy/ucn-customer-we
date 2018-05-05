@@ -1,6 +1,8 @@
 export default {
   //payment
   post_ledgerPage:['/ledger/page','BASE_BJ_p','UPURCHASE_URL'],
+  post_payment_list:['/payment/list/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
+  post_payment_accept:['/payment/accept/{id}','UPURCHASE_URL','UPURCHASE_URL'],
   //message
   post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],
@@ -22,11 +24,17 @@ export default {
   post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据
-  POST_CODE_PART: ['/code/part', 'BASE_JML','UMETA_URL'],
-  GET_COUNTRY_ALL: ['/country/all', 'BASE_JML','UMETA_URL'],
+  POST_CODE_PART: ['/code/part', 'UMETA_URL','UMETA_URL'],
+  GET_COUNTRY_ALL: ['/country/all', 'UMETA_URL','UMETA_URL'],
+  get_currency_all: ['/currency/all', 'UMETA_URL','UMETA_URL'],
 
   //warehouse
-  post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','UPURCHASE_URL']
+  post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','UPURCHASE_URL'],
   // post_warehouse_page: ['/warehouse/overview/page','UWAREHOUSE_URL']
+  get_qc_getById: ['/qc/getById','USERVICE_URL','USERVICE_URL'],
+  post_qc_result_save: ['/qc/result/save','USERVICE_URL','USERVICE_URL'],
+
+  //user
+  get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'] //获取当前登录用户所在企业下所有用户信息
 
 }

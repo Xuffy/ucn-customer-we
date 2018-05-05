@@ -38,7 +38,7 @@
             <el-table-column
               label="Message Type"
               align="center">
-              <template slot-scope="scope">{{ scope.row.messageType }}</template>
+              <template slot-scope="scope">{{ scope.row.message }}</template>
             </el-table-column>
             <el-table-column
               label="Notification Method"
@@ -115,6 +115,7 @@
           id:'',
           subscribeEmail:0,
           subscribePlatform:1,
+          messageType:''
         }
       }
     },
@@ -137,6 +138,7 @@
       handleCheckedCitiesChange(index, row){
         let url = this.$apis.post_messagesetting_updatesetting
         this.updatesetting.id = row.id
+        this.updatesetting.messageType = row.messageType
         // 0：不订阅，1：订阅
         if (row.subscribeEmail){
           this.updatesetting.subscribeEmail = 1
@@ -183,7 +185,7 @@
         let url, column;
         this.tabLoad = true;
         column = this.$db.message.table;
-        if(this.viewByStatus + '' === '1') {;
+        if(this.viewByStatus + '' === '1') {
           url = this.$apis.post_systemmessage_query;
         } else {
           url = this.$apis.post_companymessage_query;
@@ -230,22 +232,23 @@
               switch (val.messageType)
               {
                 case 1:
-                  val.messageType = 'System message'
+                  // val.messageType = 'System message'
+                  val.message = 'System message'
                   break;
                 case 2:
-                  val.messageType = 'company message'
+                  val.message = 'company message'
                   break;
                 case 3:
-                  val.messageType = 'Pending task'
+                  val.message = 'Pending task'
                   break;
                 case 4:
-                  val.messageType = 'Future task'
+                  val.message = 'Future task'
                   break;
                 case 5:
-                  val.messageType = 'Push'
+                  val.message = 'Push'
                   break;
                 case 6:
-                  val.messageType = 'FYI'
+                  val.message = 'FYI'
                   break;
               }
               if (val.subscribeEmail == 1){
