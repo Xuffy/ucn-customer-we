@@ -304,9 +304,8 @@ export default {
     },
     savePlan () {
       this.basicInfoArr.forEach(a => {
-        this.basicInfoObj = a.value
+        this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? +a.value : a.value)
       })
-      console.log(this.basicInfoObj.payment)
       if (!this.basicInfoObj.payment) return this.$message({
         type: 'error',
         message: '付款方式为必填!'
