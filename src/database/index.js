@@ -3,7 +3,7 @@ import workbench from './workbench/index';
 import product from './product/index';
 import logistic from './logistic';
 
-import inquiryOverview from './inquiry';
+import inquiry from './inquiry';
 import order from './order/index';
 import supplier from './supplier/index';
 import setting from './setting/index';
@@ -18,7 +18,7 @@ const db = {
   common,
   workbench,
   product,
-  inquiryOverview,
+  inquiry,
   logistic,
   order,
   supplier,

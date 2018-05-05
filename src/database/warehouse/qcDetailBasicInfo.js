@@ -16,6 +16,7 @@ export default {
         type: 'Select'
     },
     FactoryContactPhone: {
+		key: 'factoryContactPhone',
         type: 'phone'
     },
     QCStatus: {
@@ -27,9 +28,11 @@ export default {
         type: 'Select'
     },
     surveyor: {
+		key: 'surveyor',
         type: 'Select'
     },
     serviceFee: {
+		key: 'serviceFee',
         type: 'String'
     },
     serviceProvidersNo: {
@@ -48,6 +51,7 @@ export default {
         _hide: true
     },
     remark: {
+		key: 'remark',
         type: 'textarea',
         xs: 24,
         sm: 24,
@@ -55,6 +59,7 @@ export default {
         lg: 24
     },
     attachment: {
+		key: 'attachment',
         type: 'attachment',
         xs: 24,
         sm: 24,

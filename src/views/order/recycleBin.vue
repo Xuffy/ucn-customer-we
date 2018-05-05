@@ -3,7 +3,7 @@
         <h3 class="hd">RecycleBin Overview</h3>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
+                <el-button @click='download'>{{($i.common.download)}}({{selectedDate.length}})</el-button>
                  <el-button @click='recover'>recover</el-button>
             </div>
              <div class="select-wrap">
@@ -18,8 +18,8 @@
              <div class="viewBy">
                 <span>View by&nbsp</span>
                 <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                    <el-radio-button label=1>{{($i._baseText.order)}}</el-radio-button>
-                    <el-radio-button label=2>{{($i._baseText.SKU)}}</el-radio-button>
+                    <el-radio-button label=1>{{($i.common.order)}}</el-radio-button>
+                    <el-radio-button label=2>{{($i.common.SKU)}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>

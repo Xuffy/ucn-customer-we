@@ -1,11 +1,11 @@
 <template>
     <div class="inbound-overview">
         <!--<div class="title">-->
-            <!--<span>{{$i._warehouse.inboundOverview}}</span>-->
+            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
         <!--</div>-->
         <div class="body">
             <div class="head">
-                <span>{{$i._warehouse.outBoundType}}</span>
+                <span>{{$i.warehouse.outBoundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="0">全部</el-radio-button>
                     <el-radio-button label="1">销售出库</el-radio-button>
@@ -21,7 +21,7 @@
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
                     <el-button @click="createOutbound">新建</el-button>
                 </div>
                 <v-table
@@ -102,10 +102,10 @@
             getOutboundData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_outboundData,this.outboundConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                    this.tableDataList = this.$getDB(this.$db.warehouse.outboundOverviewTable, res.datas,(e)=>{
+                        e.outboundDate.value=this.$dateFormat(e.outboundDate.value,'yyyy-mm-dd');
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         return e;
                     });
                     this.loadingTable=false;
@@ -135,7 +135,7 @@
 
             btnClick(e){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/inboundDetail',
+                    url:'/sellerWarehouse/outboundDetail',
                     params:{
                         id:e.id.value
                     }

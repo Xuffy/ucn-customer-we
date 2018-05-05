@@ -1,7 +1,7 @@
 <template>
     <div class="manually-add">
         <div class="title">
-            {{$i._product.basicInformation}}
+            {{$i.product.basicInformation}}
         </div>
         <div class="addPic">
             <div class="name">
@@ -53,7 +53,7 @@
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
                                     class="speInput"
-                                    :list="dropData"
+                                    :list="categoryList"
                                     :defaultProps="defaultProps"
                                     v-model="productForm[v.key]"
                                     ref="dropDown"></drop-down>
@@ -65,7 +65,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.customerInfo}}
+            {{$i.product.customerInfo}}
         </div>
         <el-form :modal="productForm" ref="customerInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
@@ -114,7 +114,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.priceInfo}}
+            {{$i.product.priceInfo}}
         </div>
         <el-form :modal="productForm" ref="priceInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
@@ -163,7 +163,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.packingInfo}}
+            {{$i.product.packingInfo}}
         </div>
         <el-form :modal="productForm" ref="packingInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -212,7 +212,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.logisticInfo}}
+            {{$i.product.logisticInfo}}
         </div>
         <el-form :modal="productForm" ref="logisticInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -261,7 +261,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.otherInfo}}
+            {{$i.product.otherInfo}}
         </div>
         <el-form :modal="productForm" ref="otherInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
@@ -321,7 +321,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._product.attachment}}
+            {{$i.product.attachment}}
         </div>
 
 
@@ -329,7 +329,7 @@
         <!--<input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">-->
 
         <div class="footBtn">
-            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i._product.finishEn}}</el-button>
+            <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
         </div>
     </div>
 </template>
@@ -388,7 +388,18 @@
                     children:'children'
                 },
                 //categoryID配置
-                dropData:[],
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[]
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[]
+                    },
+                ],
                 //整个页面数据配置
                 productForm:{
                     adjustPackage: true,
@@ -552,25 +563,21 @@
 
             //获取类别数据
             getCategoryId(){
-
-                this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
-                }).catch(err=>{
-
-                });
-
-
-
-                this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
-                    this.dropData=res;
-                }).catch(err=>{
-                    console.log(err)
-                });
+                // this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
+                //     this.categoryList[1].children=res;
+                // }).catch(err=>{
+                //
+                // });
+                // this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
+                //     this.dropData=res;
+                // }).catch(err=>{
+                //     console.log(err)
+                // });
             },
 
             //完成新增

@@ -1,7 +1,7 @@
 <template>
     <div class="create-inbound">
         <div class="title">
-            {{$i._warehouse.basicInfo}}
+            {{$i.warehouse.basicInfo}}
         </div>
         <el-form :modal="outboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
@@ -62,17 +62,19 @@
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </div>
+                        <div v-else-if="v.showType==='timeZone'">
+                            <v-time-zone class="speInput" :value.sync="outboundData.timeZone"></v-time-zone>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
-            {{$i._warehouse.productInfo}}
+            {{$i.warehouse.productInfo}}
         </div>
         <div class="btns">
-            <el-button @click="addProduct">{{$i._warehouse.addProduct}}</el-button>
-            <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i._warehouse.removeProduct}}</el-button>
+            <el-button @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
+            <el-button @click="removeProduct" :disabled="disableRemoveProduct" type="danger">{{$i.warehouse.removeProduct}}</el-button>
         </div>
 
         <el-table
@@ -123,42 +125,41 @@
 
         <div class="total">
             <div class="title">
-                {{$i._warehouse.total}}
+                {{$i.warehouse.total}}
             </div>
             <el-form :modal="outboundSummary" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalCartonQty">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalCartonQty">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="outboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalGrossWeight">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalGrossWeight">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="outboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalVolume">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalVolume">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="outboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalNetWeight">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalNetWeight">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="outboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="asd" :label="$i._warehouse.totalSkuQty">
+                        <el-form-item prop="asd" :label="$i.warehouse.totalSkuQty">
                             <el-input size="mini" class="speInput" :disabled="true" v-model="outboundSummary.totalCartonQty"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
         </div>
-
         <div class="footBtn">
-            <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i._warehouse.submit}}</el-button>
-            <el-button @click="cancel">{{$i._warehouse.cancel}}</el-button>
+            <el-button :loading="disabledSubmit" @click="submit" type="primary">{{$i.warehouse.submit}}</el-button>
+            <el-button @click="cancel">{{$i.warehouse.cancel}}</el-button>
         </div>
 
         <el-dialog
@@ -169,35 +170,35 @@
             <el-form :modal="orderProduct" ref="orderProduct" label-width="200px" :label-position="labelPosition">
                 <el-row>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="orderNo" :label="$i._warehouse.orderNo">
+                        <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
                             <el-input size="mini" class="speInput" v-model="orderProduct.orderNo"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuCode" :label="$i._warehouse.skuCode">
+                        <el-form-item prop="skuCode" :label="$i.warehouse.skuCode">
                             <el-input size="mini" class="speInput" v-model="orderProduct.skuCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuNameCn" :label="$i._warehouse.nameCn">
+                        <el-form-item prop="skuNameCn" :label="$i.warehouse.nameCn">
                             <el-input size="mini" class="speInput" v-model="orderProduct.skuNameCn"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="skuBarCode" :label="$i._warehouse.barCode">
+                        <el-form-item prop="skuBarCode" :label="$i.warehouse.barCode">
                             <el-input size="mini" class="speInput" v-model="orderProduct.skuBarCode"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="inboundNo" :label="$i._warehouse.inboundNo">
+                        <el-form-item prop="inboundNo" :label="$i.warehouse.inboundNo">
                             <el-input size="mini" class="speInput" v-model="orderProduct.inboundNo"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div class="search-btn">
-                <el-button :disabled="disabledSearch" :loading="disabledClickSubmit" @click="searchOrderData" type="primary">{{$i._warehouse.search}}</el-button>
-                <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i._warehouse.clear}}</el-button>
+                <el-button :disabled="disabledSearch" :loading="disabledClickSubmit" @click="searchOrderData" type="primary">{{$i.warehouse.search}}</el-button>
+                <el-button :disabled="disabledCancelSearch" @click="clearSearchData">{{$i.warehouse.clear}}</el-button>
             </div>
 
             <v-table
@@ -217,11 +218,13 @@
 <script>
 
     import VTable from '@/components/common/table/index'
+    import {VTimeZone} from '@/components/index'
 
     export default {
         name: "createInbound",
         components:{
-            VTable
+            VTable,
+            VTimeZone
         },
         data(){
             return{
@@ -265,6 +268,7 @@
                  * */
                 productIds:[],                  //用于存储用于外部展示的产品ID
                 productData:[],                 //添加到外部用于展示的产品详细信息
+                timeZone:'',                    //时区
                 outboundData:{
                     attachment: "",
                     outboundOperator: "",
@@ -621,6 +625,12 @@
     }
     .dialog-footer{
         text-align: center;
+    }
+    .speInput{
+        max-width: 1000px !important;
+    }
+    .speInput >>> .el-select{
+        display: block;
     }
 
 

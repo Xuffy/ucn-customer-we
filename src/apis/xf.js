@@ -4,7 +4,7 @@ export default {
   USER_PRIVILEGE: ['/user/privilege', 'UUSER_URL'],
   UTASK_PAGELIST: ['/utask/pageList', 'UWORKBENCH_URL'],
   UTASK_TYPELIST: ['/utask/typeList', 'UWORKBENCH_URL'],
-  UDA_FINDDATAANALYSISLIST: ['/uda/findDataAnalysisList', 'BASE_JY'],
+  UDA_FINDDATAANALYSISLIST: ['/uda/findDataAnalysisList', 'BASE_JY', 'UWORKBENCH_URL'],
   ITEMFAVORITE_PART: ['/itemfavorite/part', 'UMETA_URL'],
   ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'UMETA_URL'],
   CHATMESSAGE_QUERY: ['/chatmessage/query', 'UMESSAGE_URL'], // 获取留言板

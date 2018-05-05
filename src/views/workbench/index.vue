@@ -15,7 +15,7 @@
       </el-button>
     </div>
     <br/><br/>
-    <v-data-dashboard></v-data-dashboard>
+    <v-data-dashboard v-authorize="'WORKBENCH:DATA_DASHBOARD'"></v-data-dashboard>
     <br/><br/>
     <el-row :gutter="10">
       <el-col :span="12">

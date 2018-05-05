@@ -37,7 +37,7 @@ const viewBy = {
 };
 
 const text = {
-    inquiryOverview: "inquiryOverview",
+    inquiry: "inquiry",
     inquiryDetail: "Inquiry No.1273",
     basicInfo: "Basic Info",
     hideTheSame: "Hide the Same",
