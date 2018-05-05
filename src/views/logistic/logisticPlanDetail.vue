@@ -161,6 +161,7 @@ export default {
     }
   },
   mounted () {
+    this.registerRoutes()
     this.getDictionary()
     this.getOrderList()
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
@@ -189,6 +190,16 @@ export default {
     }
   },
   methods: {
+    registerRoutes () {
+      this.$store.commit('SETDRAFT', {
+        name: 'overviewDraft',
+        show: true
+      })
+      this.$store.commit('SETRECYCLEBIN', {
+        name: 'overviewArchive',
+        show: true
+      })
+    },
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.basicInfoArr.forEach(a => {
@@ -286,7 +297,8 @@ export default {
       this.showAddProductDialog = false
       const selectArrData = this.$refs.addProduct.selectArrData
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
-      console.log(selectArrData)
+      this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
+      // console.log(selectArrData)
       // TODO
     },
     selectProduct (arr) {
@@ -306,11 +318,25 @@ export default {
       this.basicInfoArr.forEach(a => {
         this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? +a.value : a.value)
       })
+
+      this.transportInfoArr.forEach(a => {
+        this.$set(this.transportInfoObj, a.key, a.value)
+      })
+
+      this.basicInfoObj.remark = this.remark
       if (!this.basicInfoObj.payment) return this.$message({
         type: 'error',
         message: '付款方式为必填!'
       })
-      console.log(this.basicInfoObj)
+
+
+      const data = {
+        ...this.basicInfoObj,
+        ...this.transportInfoObj,
+        containerDetail: this.containerInfo,
+        fee: this.feeList
+      }
+      console.log(data)
     }
   }
 }

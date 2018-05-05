@@ -1,4 +1,7 @@
 {
+  "transportationUnit": "Transportation Unit",
+  "plan": "Plan",
+  "logisticPlanNo": "logistic Plan No",
   "saveAsDraft": "Save As Draft",
   "archiveOverview": "Archive Overview",
   "draftOverview": "Draft Overview",
