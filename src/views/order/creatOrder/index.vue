@@ -326,18 +326,18 @@
             },
             //......................提交
             send() {
-               // 正则 
-//                if (!this.$refs.basicInfo.submitForm()) { 
-//                     return }
-              
+                // 正则 
+                //                if (!this.$refs.basicInfo.submitForm()) { 
+                //                     return }
+                return console.log(this.dataFilter(this.tabData))
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-//                    skuList: this.dataFilter(this.tabData),
-                    skuList:this.skuList,
+                    skuList: this.dataFilter(this.tabData),
+                    //                    skuList: this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
-                    importantCustomer: false,
+                    //                    importantCustomer: false,
                     importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
@@ -357,9 +357,11 @@
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.skuList,
+                    skuList: this.dataFilter(this.tabData),
                     responsibilityList: this.$refs.responsibility.tableData,
-                    draftCustomer: true
+                    draftCustomer: true,
+                    //                    importantCustomer: false,
+                    importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
                 _.extendOwn(params, basic)
@@ -386,33 +388,47 @@
                 PaidAmount:'',
                 UnpaidAmount:''
             */
-            //数组乘积之和
-            
-            summary() {              
+            summary() {
                 let arr = this.dataFilter(this.tabData)
-                
+
                 // sku数量合计
-                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 // sku行  skutypeqty
                 this.$refs.caculate.caculateForm.skuQty = arr.length
                 //sku订单价格之和
-                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
-                this.$refs.caculate.caculateForm.totalOuterCartonQty =_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuQty')[index])/key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuQty')[index]) / key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //毛重 订单内所有SKU的外箱毛重*外箱数  skuOuterCartonRoughWeight skuOuterCartonQty
-                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonRoughWeight')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuOuterCartonRoughWeight')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //净重 订单内所有SKU的外箱净重*外箱数  skuOuterCartonNetWeight  skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonNetWeight')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalNetWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuOuterCartonNetWeight')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //订单内所有SKU的外箱体积*外箱数 skuVolume skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalVolume=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuVolume')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalVolume = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuVolume')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //预计付款金额（已确认）-实际付款金额（已确认）-退款金额（已确认）
-//                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
                 //实际付款金额（已确认）
-//                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
             },
             productInfoBtn(item) { //Product info 按钮创建
                 return [{
@@ -458,9 +474,9 @@
             getList(item) {
                 this.$ajax.post(this.$apis.post_order_skus, item)
                     .then(res => {
-                        _.map(res, item => {
-                            item.displayStyle = 0;
-                        });
+
+                        //                        _.map(res, item => { // item.displayStyle = 0; // });
+
                         this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                         this.dialogAddproduct = false;
                     });
@@ -521,9 +537,9 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
-//                        _.mapObject(val, (item, k) => {
-//                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-//                        })
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        })
                     } else if (_.findWhere(val, {
                             'key': 'skuId'
                         }).value === _.findWhere(data[1], {
@@ -532,17 +548,20 @@
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
-//                        _.mapObject(val, (item, k) => {
-//                            if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-//                        })
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        })
                     }
                     return val;
                 });
             },
-            removeList() { //删除product 某个单
+            removeList() {
+                let arr = [];
                 _.map(this.tabData, (item, index) => {
-                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), item.skuId.value) !== -1) this.$set(item, '_disabled', true);
+                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.tabData = _.difference(this.tabData, arr);
+                this.checkedAll = [];
             },
             productCancel() { //  取消 product 编辑 
                 this.tabData.forEach((item, index) => {
@@ -607,11 +626,11 @@
                     });
             },
             //表格底部计算
-             tableTatalCal() {
+            tableTatalCal() {
                 let obj = this.$depthClone(this.tabData[0]);
                 _.map(this.tabData, value => {
                     _.map(value, (val, k) => {
-                       
+
                         if (obj[val.key] && obj[val.key]._calu) {
                             obj[val.key].value = (obj[val.key].value + val.value)
                         } else {
@@ -643,8 +662,8 @@
         watch: {
             tabData: {
                 handler(curVal) {
-//                   this.tableTatalCal()
-                   this.summary()
+                    //                   this.tableTatalCal()
+                    this.summary()
                 },
                 deep: true
             }
@@ -680,7 +699,7 @@
     }
 
     .attchment {
-/*        margin-bottom: 60px;*/
+        /*        margin-bottom: 60px;*/
     }
 
     .pro_button {

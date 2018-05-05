@@ -32,7 +32,8 @@ const json = {
   ),
   order: _.extend({},
     require(`./${lang}/order/basicinfo.pending`),
-    require(`./${lang}/order/overview`)
+    require(`./${lang}/order/overview`),
+    require(`./${lang}/order/productinfo.pending`)
   ),
   payment: _.extend({},
     require(`./${lang}/payment/payment`),

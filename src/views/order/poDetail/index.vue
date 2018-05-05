@@ -7,18 +7,6 @@
                    <basicinfo :disabled='statusModify' :podisabled=true ref='basicInfo'></basicinfo>
                    <attchment :disabled='statusModify'></attchment>                       
               </div>
-<!--
-               <div class='basicinfo_message'>
-                     <div class="message_div" v-show='switchStatus'>
-                         <messageBoard ></messageBoard>
-                     </div>
-                     <div class="switch-btn" @click="boardSwitch">
-                     {{$i.common.messageBoard}}
-                     <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
-                    </div>
-                   
-                </div>
--->
         </div>
 <!--         attachment-->
             
@@ -38,8 +26,8 @@
                  {{$i.common.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i.common.addproduct}}</el-button>
-                  <el-button type='danger' @click='removeProduct' :disabled='statusModify'>{{$i.common.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
+                  <el-button type='danger' @click='removeProduct' :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'">{{$i.common.remove}}</el-button>
 
              </div>
              <div class="pro_table">
@@ -58,12 +46,12 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
-                 <el-button  @click='modify'>{{$i.common.modify}}</el-button>
-                 <el-button @click='confirm'>{{$i.common.confirm}}</el-button>
-                 <el-button  :disabled='true'>{{$i.common.download}}</el-button>
-                  <el-button >{{$i.common.createOrder}}</el-button>
-                  <el-button :disabled="orderStatus==='5'" @click='cancelOrder'>{{$i.common.cancel}}</el-button>
-                 <el-checkbox v-model="markAsImportant">{{$i.common.markAsImportant}}</el-checkbox>
+                 <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'">{{$i.common.modify}}</el-button>
+                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'">{{$i.common.confirm}}</el-button>
+                 <el-button  :disabled='true' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
+                  <el-button v-authorize="'ORDER:DETAIL:CREATE'">{{$i.common.createOrder}}</el-button>
+                  <el-button :disabled="orderStatus==='5'" @click='cancelOrder' v-authorize="'ORDER:DETAIL:CANCEL'">{{$i.common.cancel}}</el-button>
+                 <el-checkbox v-model="markAsImportant" v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'">{{$i.common.markAsImportant}}</el-checkbox>
                  <el-checkbox v-model="hightlightTheDifferent">{{$i.common.highlightTheDifferent}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
@@ -95,7 +83,8 @@
                @save="save"            
                 ref="HM"
             >
-        </v-history-modify>
+            
+           </v-history-modify>
   </div>
 </template>
 
@@ -159,14 +148,14 @@
             }
         },
         methods: {
-            confirm(){
-                 this.$ajax.post(this.$apis.post_confirm, {
-                        ids: [this.orderId]
-                    }).then(res=>{
-                     console.log(res)
-                 }).catch(res=>{
-                     console.log(res)
-                 })
+            confirm() {
+                this.$ajax.post(this.$apis.post_confirm, {
+                    ids: [this.orderId]
+                }).then(res => {
+                    console.log(res)
+                }).catch(res => {
+                    console.log(res)
+                })
             },
             //..............messageboard的缩进
             boardSwitch() {
@@ -351,9 +340,9 @@
                         val = data[0];
                         val._modify = true;
                         val.displayStyle = 1;
-//                        _.mapObject(val, (item, k) => {
-//                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
-//                        });
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        });
                     } else if (_.findWhere(val, {
                             'key': 'skuId'
                         }).value + '' === _.findWhere(data[1], {
@@ -362,17 +351,20 @@
                         val = data[1];
                         val._modify = true;
                         val.displayStyle = 1;
-//                        _.mapObject(val, (item, k) => {
-//                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
-//                        });
+                        //                        _.mapObject(val, (item, k) => {
+                        //                            if (item.length) this.$set(item, '_style', 'color:#27b7b6')
+                        //                        });
                     }
                     return val;
                 });
             },
             removeProduct() { //删除product 某个单
+                let arr = [];
                 _.map(this.newProductTabData, (item, index) => {
-                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) this.$set(item, '_disabled', true);
+                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
                 });
+                this.newProductTabData = _.difference(this.newProductTabData, arr);
+                this.checkedAll = [];
             },
             dataFilter(data) {
                 let arr = [],
@@ -410,7 +402,7 @@
             },
             send() {
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
-//                return console.log(parentNode)
+                //                return console.log(parentNode)
                 //参数一堆堆 我靠
                 let params = {
                     // exchangeRateList
@@ -458,31 +450,47 @@
                 });
             },
             //summary
-            summary() {              
+            summary() {
                 let arr = this.dataFilter(this.tabData)
-                
+
                 // sku数量合计
-                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 // sku行  skutypeqty
                 this.$refs.caculate.caculateForm.skuQty = arr.length
                 //sku订单价格之和
-                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
-                this.$refs.caculate.caculateForm.totalOuterCartonQty =_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuQty')[index])/key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuQty')[index]) / key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //毛重 订单内所有SKU的外箱毛重*外箱数  skuOuterCartonRoughWeight skuOuterCartonQty
-                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonRoughWeight')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuOuterCartonRoughWeight')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //净重 订单内所有SKU的外箱净重*外箱数  skuOuterCartonNetWeight  skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuOuterCartonNetWeight')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalNetWeight = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuOuterCartonNetWeight')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //订单内所有SKU的外箱体积*外箱数 skuVolume skuOuterCartonQty
-                 this.$refs.caculate.caculateForm.totalVolume=_.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'),(key,index)=>{ return ( (_.pluck(arr, 'skuVolume')[index])*key)
-                })),(memo, num)=>{return memo + num; }, 0)
+                this.$refs.caculate.caculateForm.totalVolume = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
+                    return ((_.pluck(arr, 'skuVolume')[index]) * key)
+                })), (memo, num) => {
+                    return memo + num;
+                }, 0)
                 //预计付款金额（已确认）-实际付款金额（已确认）-退款金额（已确认）
-//                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
                 //实际付款金额（已确认）
-//                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
             },
         },
         mounted() {
@@ -493,10 +501,10 @@
             this.submitData.id = this.$route.query.id;
         },
         watch: {
-               newProductTabData: {
+            newProductTabData: {
                 handler(curVal) {
-//                  this.tableTatalCal()
-                  this.summary()
+                    //                  this.tableTatalCal()
+                    this.summary()
                 },
                 deep: true
             }

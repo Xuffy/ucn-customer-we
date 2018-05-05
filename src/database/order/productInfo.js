@@ -1,3 +1,12 @@
+/*
+   type: text select attachment 
+   _disabled:true false
+   _hide:true
+   key:后台字段
+   _calu:合计
+   _slot:插槽
+*/
+
 export default {
     _firstColumn: {
         key: 'updateDt',
@@ -65,16 +74,20 @@ export default {
         key: 'skuSupplierName',
         _disabled: true
     },
+    //FOB币种
     skuFobCurrency: {
         key: 'skuFobCurrency',
         type: 'select',
+        _slot:'skuFobCurrency'
     },
     skuFobPrice: {
         key: 'skuFobPrice',
         type: 'select',
     },
+    //????????????????????????????发运港口
     skuFobPort: {
         key: "skuFobPort",
+         _slot:'skuFobPort'
     },
     skuUnit: {
         key: 'skuUnit'
@@ -151,14 +164,18 @@ export default {
         key: 'skuCustomsNameEn',
 
     },
+    
+    //jpag
     skuTradeMarkCn: {
         key: 'skuTradeMarkCn',
-
+        type:'attachment'
     },
     skuTradeMarkEn: {
         key: 'skuTradeMarkEn',
-
+        type:'attachment'
     },
+    
+    
     skuCommodityInspectionCn: {
         key: 'skuCommodityInspectionCn',
 
@@ -171,62 +188,71 @@ export default {
         key: 'skuDeclareElement',
 
     },
+    //原产地
     skuOrigin: {
         key: 'skuOrigin',
+        _slot:'skuOrigin'
         //select
     },
+    //检验检疫类别
     skuInspectQuarantineCategory: {
         key: 'skuInspectQuarantineCategory',
+          _slot:'skuInspectQuarantineCategory'
         //select
     },
+    //重量单位
     skuUnitWeight: {
         key: 'skuUnitWeight',
+          _slot:'skuUnitWeight'
         //select
     },
+    //长度单位
     skuUnitLength: {
         key: 'skuUnitLength',
+          _slot:'skuUnitLength'
         //select
     },
+    //体积单位
     skuUnitVolume: {
         key: 'skuUnitVolume',
+          _slot:'skuUnitVolume'
         //select
     },
     skuLength: {
         key: 'skuLength',
-        //select
     },
     skuWidth: {
         key: 'skuWidth',
-        //select
     },
     skuHeight: {
         key: 'skuHeight',
-        //select
     },
     skuGrossWeight:{
         key: 'skuNetWeight',
     },
     skuNetWeight: {
         key: 'skuNetWeight',
-        //select
+       
     },
     skuVolume: {
         key: 'skuVolume',
-        //select
+       
     },
 
-
+    //产品包装方式CN
     skuMethodPkgCn: {
         key: 'skuMethodPkgCn',
-        //select
+         _slot:'skuMethodPkgCn'
     },
+    //产品包装方式EN
     skuMethodPkgEn: {
         key: 'skuMethodPkgEn',
-        //select
+        _slot:'skuMethodPkgEn'
     },
+    //中包单位
     skuInnerCartonUnit: {
         key: 'skuInnerCartonUnit',
-        //select
+         _slot:'skuInnerCartonUnit'
     },
     skuInnerCartonQty: {
         key: 'skuInnerCartonQty',
@@ -260,13 +286,15 @@ export default {
         key: 'skuInnerCartonDesc',
 
     },
+    //中包包装方式CN
     skuInnerCartonMethodCn: {
         key: 'skuInnerCartonMethodCn',
-        //select
+        _slot:'skuInnerCartonMethodCn'
     },
+    //中包包装方式EN
     skuInnerCartonMethodEn: {
         key: 'skuInnerCartonMethodEn',
-        //select
+        _slot:'skuInnerCartonMethodEn'
     },
 
     skuOuterCartonUnit: {
@@ -309,13 +337,15 @@ export default {
         key: 'skuOuterCartonVolume',
 
     },
+    //外包装方式CN
     skuOuterCartonMethodCn: {
         key: 'skuOuterCartonMethodCn',
-        //select
+        _slot:'skuOuterCartonMethodCn'
     },
+    //外包装方式EN
     skuOuterCartonMethodEn: {
         key: 'skuOuterCartonMethodEn',
-        //select
+        _slot:'skuOuterCartonMethodEn'
     },
 
     skuBrand: {
@@ -343,10 +373,11 @@ export default {
         key: 'skuId',
         _disabled: true,
     },
-
+    
+//产品状态
     skuStatus: {
         key: 'skuStatus',
-        _disabled: true,
+        _slot:'skuStatus'
     },
 
     skuSaleStatus: {
@@ -381,24 +412,29 @@ export default {
         key: 'skuOuterCartonCode'
     },
     skuLabelPic: {
-        key: "skuLabelPic"
+        key: "skuLabelPic",
+        type: 'attachment',
     },
     skuLabelDesc: {
         key: 'skuLabelDesc'
     },
     skuPkgMethodPic: {
-        key: 'skuPkgMethodPic'
+        key: 'skuPkgMethodPic',
+          type: 'attachment',
     },
     skuInnerCartonPic: {
-        key: 'skuInnerCartonPic'
+        key: 'skuInnerCartonPic',
+          type: 'attachment',
     },
     skuOuterCartonPic: {
-        key: 'skuOuterCartonPic'
+        key: 'skuOuterCartonPic',
+          type: 'attachment',
     },
+    //是否需要样品
     skuSample: {
         key: 'skuSample',
         // 是否
-        type: 'select'
+       _slot:'skuSample'
     },
     skuSampleQty: {
         key: 'skuSampleQty',
@@ -435,19 +471,20 @@ export default {
     },
     skuAdditionalOne: {
         key: 'skuAdditionalOne',
-        type: 'pic'
+        type: 'attachment',
     },
     skuAdditionalTwo: {
         key: 'skuAdditionalTwo',
-        type: 'pic'
+        
+        type: 'attachment',
     },
     skuAdditionalThree: {
         key: 'skuAdditionalThree',
-        type: 'pic'
+      type: 'attachment',
     },
     skuAdditionalFour: {
         key: 'skuAdditionalFour',
-        type: 'pic'
+        type: 'attachment',
     },
     skuUntestedQty: {
         key: 'skuUntestedQty',
@@ -459,13 +496,4 @@ export default {
         _disabled: true,
         _calu: true
     }
-    //Qualified products total QTYS    Total Quantity of Quantified SKU
-    //Uninspected QC SKU Quantity
-
-
-
-
-
-
-
 }

@@ -50,10 +50,10 @@
              <div class="btnline">
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
 
-                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
 
               </div>

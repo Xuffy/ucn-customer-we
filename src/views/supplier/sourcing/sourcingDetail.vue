@@ -22,16 +22,18 @@
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
-                    <el-button @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
-                    <el-button @click='createOrder'>{{$i.common.createOrder}}</el-button>
-                    <el-button @click='addCompare'>{{$i.common.addToCompare}}</el-button>
-                    <el-button @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
-                    <el-button @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
                 </div>
+<!--
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">{{$i.common.finish}}</el-button>
                     <el-button @click="cancelEdit" type="info">{{$i.common.cancel}}</el-button>
                 </div>
+-->
             </div>
         </div>
         <div class="body">

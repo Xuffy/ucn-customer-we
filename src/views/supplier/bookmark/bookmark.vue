@@ -46,11 +46,11 @@
             <div>
              <div class="btnline">
 
-                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-                  <el-button :disabled='!selectedData.length>0'  @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>
 
               </div>  
               <div>
