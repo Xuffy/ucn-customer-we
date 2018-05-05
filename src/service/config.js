@@ -4,17 +4,17 @@ export default {
     local: {
       // BASE_CS: 'http://dev.usupply-facade.ucnholding.com:18100',
       BASE_CS: '//192.168.51.33:11003',
-      // BASE_CS: 'http://172.18.139.137:11002',
+      // BASE_CS: 'http://192.168.51.248:11002',
       // BASE_CS1: 'http://192.168.51.33:11007',
-      // BASE_CS1: 'http://172.18.139.137:11001',
+      // BASE_CS1: 'http://192.168.51.248:11001',
       BASE_CS1: '//dev.upurchase-facade.ucnholding.com:18100',
       // BASE_CS: '//dev.usupply-facade.ucnholding.com:18100',
       // BASE_CS: '//192.168.51.33:11003',
-      // BASE_CS: '//172.18.139.137:11002',
+      // BASE_CS: '//192.168.51.248:11002',
       //BASE_CS1: '//192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: '//192.168.51.33:11007',
-      BASE_HCJ: '//172.18.139.137:11001',
+      BASE_HCJ: '//192.168.51.248:11001',
       BASE_JY: '//192.168.51.199:18002',
       BASE_DHC: '//dev.upurchase-facade.ucnholding.com',
       BASE_LYF: '//dev.uuser-facade.ucnholding.com',
@@ -31,41 +31,41 @@ export default {
       BASE_JML_msg: 'http://dev.umessage-facade.ucnholding.com',
       BASE_JML_logs: 'http://dev.ubizlog-facade.ucnholding.com',
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
-      BASE_HSM_W: 'http://172.18.139.137:11001',
+      BASE_HSM_W: 'http://192.168.51.248:11001',
       BASE_BJ_p: 'http://dev.upurchase-facade.ucnholding.com:18300',
-      BASE_BUY: '//172.18.139.137:11001',
-      BASE_SELL: '//172.18.139.137:11002',
-      BASE_WAREHOUSE: '//172.18.139.137:12005',
+      BASE_BUY: '//192.168.51.248:11001',
+      BASE_SELL: '//192.168.51.248:11002',
+      BASE_WAREHOUSE: '//192.168.51.248:12005',
 
 
       LOGIN_URL: '//dev.auth.ucnscm.cn',
-      BASE_URL: '//172.18.139.137:11001', // 采购端
-      USSO_URL: '//172.18.139.137:11006', // sso 服务
-      UUSER_URL: '//172.18.139.137:11004', // 用户中心
-      UMETA_URL: '//172.18.139.137:11005', // 元数据
-      UMESSAGE_URL: '//172.18.139.137:11007', // 消息服务
-      ULOG_URL: '//172.18.139.137:11008', // 日志服务
-      UPURCHASE_URL: '//172.18.139.137:11001', // 采购端
-      USUPPLY_URL: '//172.18.139.137:11002', // 供应商端
-      USERVICE_URL: '//172.18.139.137:11003', // 服务商端
-      UOSS_URL: '//172.18.139.137:', // 对象存储服务
-      UBIZLOG_URL: '//172.18.139.137:18100', // 业务日志
+      BASE_URL: '//192.168.51.248:11001', // 采购端
+      USSO_URL: '//192.168.51.248:11006', // sso 服务
+      UUSER_URL: '//192.168.51.248:11004', // 用户中心
+      UMETA_URL: '//192.168.51.248:11005', // 元数据
+      UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
+      ULOG_URL: '//192.168.51.248:11008', // 日志服务
+      UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
+      USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
+      USERVICE_URL: '//192.168.51.248:11003', // 服务商端
+      UOSS_URL: '//192.168.51.248:', // 对象存储服务
+      UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
       UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
 
     },
     develop: {
       LOGIN_URL: '//dev.auth.ucnscm.cn',
-      BASE_URL: '//172.18.139.137:11001', // 采购端
-      USSO_URL: '//172.18.139.137:11006', // sso 服务
-      UUSER_URL: '//172.18.139.137:11004', // 用户中心
-      UMETA_URL: '//172.18.139.137:11005', // 元数据
-      UMESSAGE_URL: '//172.18.139.137:11007', // 消息服务
-      ULOG_URL: '//172.18.139.137:11008', // 日志服务
-      UPURCHASE_URL: '//172.18.139.137:11001', // 采购端
-      USUPPLY_URL: '//172.18.139.137:11002', // 供应商端
-      USERVICE_URL: '//172.18.139.137:11003', // 服务商端
-      UOSS_URL: '//172.18.139.137:', // 对象存储服务
-      UBIZLOG_URL: '//172.18.139.137:18100', // 业务日志
+      BASE_URL: '//192.168.51.248:11001', // 采购端
+      USSO_URL: '//192.168.51.248:11006', // sso 服务
+      UUSER_URL: '//192.168.51.248:11004', // 用户中心
+      UMETA_URL: '//192.168.51.248:11005', // 元数据
+      UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
+      ULOG_URL: '//192.168.51.248:11008', // 日志服务
+      UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
+      USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
+      USERVICE_URL: '//192.168.51.248:11003', // 服务商端
+      UOSS_URL: '//192.168.51.248:', // 对象存储服务
+      UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
       UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
     },
     test: {

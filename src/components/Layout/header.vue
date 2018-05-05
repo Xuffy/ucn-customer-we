@@ -122,10 +122,10 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        // this.getMessage();
+        this.getMessage();
       },
       'message.show'(val) {
-        // val && this.getMessage();
+        val && this.getMessage();
       }
     },
     created() {
@@ -146,7 +146,7 @@
 
       this.updateMenuActive()
 
-      // this.getMessage();
+      this.getMessage();
     },
     methods: {
       logout() {
