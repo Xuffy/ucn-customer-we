@@ -26,7 +26,7 @@
             <div v-else>
               <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
               <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
-                <slot name="transportationWay" :data="scope.row[item.key]"></slot>
+                <slot :name="item._slot" :data="scope.row[item.key]"></slot>
               </div>
               
               <div v-else>
@@ -34,11 +34,17 @@
                           placeholder=""
                           v-model="scope.row[item.key].value" size="mini"></el-input>
                 
-                <el-input-number v-else-if="scope.row[item.key].type === 'Number' && !scope.row._remark"
-                                 v-model="scope.row[item.key].value"
-                                 :min="scope.row[item.key].min || 0"
-                                 :max="scope.row[item.key].max || 99999999" controls-position="right" size="mini"
-                                 :controls="false"></el-input-number>
+                <span v-else-if="scope.row[item.key].type === 'Number' && !scope.row._remark">
+                  <el-input-number
+                      v-model="scope.row[item.key].value"
+                      :min="scope.row[item.key].min || 0"
+                      :max="scope.row[item.key].max || 99999999"
+                      controls-position="right" 
+                      size="mini"
+                      :controls="false" 
+                  />
+                  <i>%</i>
+                </span>
                 <!--<span v-if="scope.row[item.key].unit"></span>-->
               </div>
             </div>
