@@ -1,6 +1,6 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $i._baseText.compare }}</h3>
+        <h3 class="hd">{{ $i.common.compare }}</h3>
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
@@ -10,19 +10,19 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i._baseText.modify }}</el-button>
-                <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i._baseText.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ `${$i._baseText.delete}(${checkedArg.length})` }}</el-button>
+                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'">{{ $i.common.modify }}</el-button>
+                <el-button @click="addNewCopare" v-if="compareType  !== 'only'">{{ $i.common.addNew }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
                 <el-checkbox-group v-model="ChildrenCheckList" size="mini">
-                    <el-checkbox :label="0">{{ $i._baseText.hideTheSame }}</el-checkbox>
-                    <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
+                    <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
+                    <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
                 </el-checkbox-group>
             </div>
             <div>
-                <span>{{ $i._baseText.compareBy }}&nbsp;</span>
+                <span>{{ $i.common.compareBy }}&nbsp;</span>
                 <el-radio-group v-model="compareBy"  size="mini">
-                    <el-radio-button label="0">{{$i._baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i._baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -42,10 +42,10 @@
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
         />
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'">{{ $i._baseText.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i._baseText.deleteTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'">{{ $i._baseText.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i._baseText.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'">{{ $i.common.saveTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'">{{ $i.common.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'">{{ $i.common.save }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
         <add-new-inqury 
             v-model="addNew" 
             @addInquiry="addCopare" 

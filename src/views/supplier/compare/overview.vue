@@ -5,10 +5,10 @@
             <div class="btn-wrap">
                 <el-button  :disabled='!selectedData.length>0'
                  @click='downloadSelected'
-                >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
+                >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
                 <el-button type="danger" :disabled='!selectedData.length>0'
                 @click='remove'
-                >{{$i._baseText.delete}}({{selectedNumber.length}})</el-button>
+                >{{$i.common.delete}}({{selectedNumber.length}})</el-button>
             </div>
 
        <div class="select-wrap">       

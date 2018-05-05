@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="head">
-            <el-button @click="addNews">{{$i._baseText.add}}</el-button>
+            <el-button @click="addNews">{{$i.common.add}}</el-button>
         </div>
         <div class="body">
           <v-table

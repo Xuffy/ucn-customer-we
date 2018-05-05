@@ -1,7 +1,7 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i._product.compareDetail}}</span>
+            <span>{{$i.product.compareDetail}}</span>
         </div>
         <div class="name">
             <span>Compare Name</span>
@@ -16,23 +16,23 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button>{{$i._product.createInquiry}}</el-button>
-                <el-button @click="createOrder">{{$i._product.createOrder}}</el-button>
-                <el-button @click="addNewProduct">{{$i._product.addNew}}</el-button>
-                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i._product.delete}}</el-button>
+                <el-button>{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify">{{$i._product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i._product.createOrder}}</el-button>
+                <el-button v-if="!isModify">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
-                <el-button v-if="isModify" @click="addNewProduct">{{$i._product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i._product.delete}}</el-button>
+                <el-button v-if="isModify" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
-                <el-checkbox label="1">{{$i._product.hideTheSame}}</el-checkbox>
-                <el-checkbox label="2">{{$i._product.highlightTheDifferent}}</el-checkbox>
+                <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
+                <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
             </el-checkbox-group>
         </div>
 
@@ -44,10 +44,10 @@
 
         <div class="footBtn">
             <div v-if="$route.params.type==='new'">
-                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i._product.saveTheCompare}}</el-button>
+                <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i._product.deleteTheCompare}}</el-button>
+                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>
                 <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare'>Save</el-button>
                 <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>

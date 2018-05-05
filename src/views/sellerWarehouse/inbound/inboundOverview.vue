@@ -1,11 +1,11 @@
 <template>
     <div class="inbound-overview">
         <!--<div class="title">-->
-            <!--<span>{{$i._warehouse.inboundOverview}}</span>-->
+            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
         <!--</div>-->
         <div class="body">
             <div class="head">
-                <span>{{$i._warehouse.inboundType}}</span>
+                <span>{{$i.warehouse.inboundType}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="inboundStatus" size="mini">
                     <el-radio-button label="0">全部</el-radio-button>
                     <el-radio-button label="1">采购入库</el-radio-button>
@@ -21,7 +21,7 @@
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
                     <el-button @click="createInbound">新建</el-button>
                 </div>
                 <v-table

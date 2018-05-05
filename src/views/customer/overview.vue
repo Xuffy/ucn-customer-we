@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i._supplierSourcing}}
+             {{$i.supplierSourcing}}
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -42,20 +42,20 @@
             </div>
          
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$i._baseText.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i._baseText.clear}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div v-show='isButton'>
              <div class="btnline">
 <!--
-                  <el-button   @click='createInquiry'>{{$i._baseText.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i._baseText.creatOrder}}</el-button>
-                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i._baseText.compare}}({{selectNumber.length}})</el-button>
-                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i._baseText.addToBookmark}}({{selectNumber.length}})</el-button>
+                  <el-button   @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+                  <el-button   @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
+                  <el-button  @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
+                  <el-button  @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
 -->
-                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>
-                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.delete}}({{selectNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>
+                  <el-button :disabled='!selectedData.length>0'>{{$i.common.delete}}({{selectNumber.length}})</el-button>
               </div>  
               <div>
                  
@@ -72,8 +72,8 @@
                     style='marginTop:10px'/>
                     
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
-                <el-button @click='emitData'>{{$i._baseText.ok}}</el-button>     
-                <el-button type="primary">{{$i._baseText.cancel}}</el-button>
+                <el-button @click='emitData'>{{$i.common.ok}}</el-button>     
+                <el-button type="primary">{{$i.common.cancel}}</el-button>
             </div>        
             
     </div>

@@ -5,12 +5,12 @@
             :visible.sync="dialogVisible"
             width="80%"
             >
-                <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
+                <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
                 <div class="status">
                     <div class="state">
-                        <span>{{ $i._baseText.state }}</span>
+                        <span>{{ $i.common.state }}</span>
                         <el-radio-group v-model="params.status" size="mini">
-                            <el-radio-button :label="''">{{$i._baseText.all}}</el-radio-button>
+                            <el-radio-button :label="''">{{$i.common.all}}</el-radio-button>
                             <el-radio-button 
                                 v-for="item in $db.inquiryOverview.overoiewState"
                                 :label="item.id"
@@ -42,8 +42,8 @@
                     :total="pageTotal"
                 />
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">{{ $i._baseText.cancel }}</el-button>
-                <el-button type="primary" @click="addCompare">{{ $i._baseText.ok }}</el-button>
+                <el-button @click="dialogVisible = false">{{ $i.common.cancel }}</el-button>
+                <el-button type="primary" @click="addCompare">{{ $i.common.ok }}</el-button>
             </span>
         </el-dialog>
     </div>

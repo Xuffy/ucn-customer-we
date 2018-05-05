@@ -1,16 +1,16 @@
 <template>
     <div class="inquiryDetail">
         <div class="hd">
-            <h4 class="title">{{ $i._inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
+            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
                     <div class="basesic-hd">
-                        <h5>{{ $i._baseText.basicInfo }}</h5>
+                        <h5>{{ $i.common.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="0">{{ $i._baseText.hideTheSame }}</el-checkbox>
-                            <el-checkbox :label="1">{{ $i._baseText.highlightTheDifferent }}</el-checkbox>
+                            <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
+                            <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                     <div class="tab-msg-wrap">
@@ -27,8 +27,8 @@
                 <div class="basic-info">
                     <div class="status">
                         <div class="btn-wrap">
-                            <el-button @click="addProduct" :disabled="!statusModify">{{ $i._baseText.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && checkedAll.length - newProductTabData.length/2 && statusModify ? false : true" @click="removeProduct()">{{ $i._baseText.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+                            <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
+                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && checkedAll.length - newProductTabData.length/2 && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
                         </div>
                         <select-search :options="options" v-model="id" />
                     </div>
@@ -41,15 +41,15 @@
                         :rowspan="2"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.accept }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.modify }}</el-button>
-                        <el-button>{{ $i._baseText.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i._baseText.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i._baseText.delete }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
+                        <el-button>{{ $i.common.download }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i._baseText.submit }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i._baseText.cancel }}</el-button>
+                        <el-button @click="modify">{{ $i.common.submit }}</el-button>
+                        <el-button type="info" @click="modifyCancel">{{ $i.common.cancel }}</el-button>
                     </div>
                     <div class="bom-btn-wrap-box"></div>
                 </div>
@@ -57,14 +57,14 @@
         </div>
         <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
         <el-dialog
-                :title="$i._baseText.addProduct"
+                :title="$i.common.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="70%"
                 lock-scroll
             >
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i._baseText.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i._baseText.FromMyBookmark }}</el-radio-button>
+                <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
+                <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"

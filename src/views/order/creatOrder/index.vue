@@ -14,8 +14,8 @@
                  {{$i.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="addProduct">{{$i._baseText.addproduct}}</el-button>
-                  <el-button type='danger' @click='removeList'>{{$i._baseText.remove}}</el-button>
+                  <el-button  @click="addProduct">{{$i.common.addproduct}}</el-button>
+                  <el-button type='danger' @click='removeList'>{{$i.common.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  
@@ -34,14 +34,14 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
-                 <el-button @click='saveAsDraft'>{{$i._baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="markAsImportant">{{$i._baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i.common.send}}</el-button>
+                 <el-button @click='saveAsDraft'>{{$i.common.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i.common.quickCreate}}</el-button>
+                 <el-checkbox v-model="markAsImportant">{{$i.common.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-<!--          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
+<!--          <el-dialog :title="$i.common.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
@@ -49,9 +49,9 @@
                 ></VInquiry>
 <!--        </el-dialog>-->
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i.common.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i._baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i.common.addproduct" name="FromNewSearch">
                              <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -63,7 +63,7 @@
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"

@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i._supplierBookmark}}            
+             {{$i.supplierBookmark}}            
 <!--            <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>-->
         </div>
 <!--        搜索条件-->
@@ -40,14 +40,14 @@
             </div>
            
             <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$i._baseText.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i._baseText.clear}}</el-button>
+            <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div>
              <div class="btnline">
-                   <el-button  :disabled='!selectedData.length>0' @click='recycle'>{{$i._baseText.recover}}({{selectedNumber.length}})</el-button>
-                  <el-button  :disabled='!selectedData.length>0' >{{$i._baseText.downloadSelected}}({{selectedNumber.length}})</el-button>
+                   <el-button  :disabled='!selectedData.length>0' @click='recycle'>{{$i.common.recover}}({{selectedNumber.length}})</el-button>
+                  <el-button  :disabled='!selectedData.length>0' >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
               </div>  
               <div>
                  

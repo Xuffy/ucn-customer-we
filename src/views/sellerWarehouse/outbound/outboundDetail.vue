@@ -1,7 +1,7 @@
 <template>
     <div class="inbound-detail" v-loading="loadingTable">
         <div class="title">
-            {{$i._warehouse.basicInfo}}
+            {{$i.warehouse.basicInfo}}
         </div>
         <el-form :modal="inboundData" ref="basicInfo" class="speForm" label-width="200px" :label-position="labelPosition">
             <el-row>
@@ -71,7 +71,7 @@
         </el-form>
 
         <div class="title">
-            {{$i._warehouse.productInfo}}
+            {{$i.warehouse.productInfo}}
         </div>
 
         <v-table
@@ -83,7 +83,7 @@
                 @change-checked="changeChecked"></v-table>
 
         <div class="footBtn">
-            <el-button @click="closeWindow" type="primary">{{$i._warehouse.close}}</el-button>
+            <el-button @click="closeWindow" type="primary">{{$i.warehouse.close}}</el-button>
         </div>
 
     </div>

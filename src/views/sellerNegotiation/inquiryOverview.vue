@@ -1,11 +1,11 @@
 <template>
     <div class="inquiryOverview">
-        <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
+        <h3 class="hd"> {{ $i.inquiry.inquiryOverviewTitle }}</h3>
         <div class="status">
             <div class="state">
-                <span>{{ $i._baseText.state }}</span>
+                <span>{{ $i.common.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
-                    <el-radio-button :label="null">{{$i._baseText.all}}</el-radio-button>
+                    <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button 
                         v-for="item in $db.inquiryOverview.overoiewState"
                         :label="item.id"
@@ -23,15 +23,15 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status===null">{{ $i._baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i._baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button>{{ `${$i._baseText.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+''==='99'||params.status+''==='1'||params.status===null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button>{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $i._baseText.viewBy }}&nbsp;</span>
+                <span>{{ $i.common.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i._baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i._baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>

@@ -1,11 +1,11 @@
 <template>
     <div class="inbound-overview">
         <!--<div class="title">-->
-            <!--<span>{{$i._warehouse.inboundOverview}}</span>-->
+            <!--<span>{{$i.warehouse.inboundOverview}}</span>-->
         <!--</div>-->
         <div class="body">
             <div class="head">
-                <span>{{$i._warehouse.status}}</span>
+                <span>{{$i.warehouse.status}}</span>
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="qcOrderStatus" size="mini">
                     <el-radio-button label="0">待验货</el-radio-button>
                     <el-radio-button label="1">已验货</el-radio-button>
@@ -18,7 +18,7 @@
             </div>
             <div class="section">
                 <div class="btns">
-                    <el-button>{{$i._warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button>{{$i.warehouse.download+' ('+downloadBtnInfo+')'}}</el-button>
                 </div>
                 <v-table
                         :data="tableDataList"
