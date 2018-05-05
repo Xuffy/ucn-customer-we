@@ -2,9 +2,12 @@ import {localStore} from 'service/store';
 import config from 'service/config';
 
 const lang = localStore.get('language') || config.LANGUAGE;
-/*let a = {
+
+const json = {
   common: _.extend({},
-    require(`./${lang}/common/quickLinks`)
+    require(`./${lang}/common/quickLinks`),
+    require(`./${lang}/common/baseText`),
+    require(`./${lang}/common/message`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),
@@ -71,9 +74,10 @@ const lang = localStore.get('language') || config.LANGUAGE;
   ),
 }
 
-console.log(a)
+console.log(`%c这是优化后的国际化配置，请仔细看，修改并不麻烦。\n只需要把之前下划线 ‘$i.’ 去掉就行了`, "color:#409EFF", json,'\n\n');
 
-export default  a;*/
+export default json;
+/*
 export default _.extend({},
   require(`./${lang}/common/quickLinks`),
   {_workbench: require(`./${lang}/workbench/page`)},
@@ -89,7 +93,6 @@ export default _.extend({},
   require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
   require(`./${lang}/warehouse/summary.pending`),
   require(`./${lang}/inquiry/viewByInqury.pending`),
-  require(`./${lang}/message`),
   require(`./${lang}/inquiry/viewByInqury.pending`),
   require(`./${lang}/inquiry/viewBySKU.pending`),
   require(`./${lang}/inquiry/basicInfo.pending`),
@@ -118,7 +121,7 @@ export default _.extend({},
   require(`./${lang}/product/productOverview`),
   require(`./${lang}/productCn/productOverview`),
   require(`./${lang}/logistic/plan/plan.base`),
-
+  require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
   require(`./${lang}/warehouse/qcWarehouse`),
   require(`./${lang}/warehouse/warehouse.table`),
 
@@ -128,3 +131,4 @@ export default _.extend({},
   {_warehouse: require(`./${lang}/warehouseCn/warehouse.basic`)},
   require(`./${lang}/warehouseCn/warehouse.index`),
 )
+*/

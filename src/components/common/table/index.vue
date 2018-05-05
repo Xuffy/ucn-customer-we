@@ -380,6 +380,7 @@
     max-width: 100%;
     overflow-y: scroll;
     overflow-x: auto;
+    border: 1px solid #ebeef5;
   }
 
   .ucn-table table {
@@ -543,8 +544,8 @@
   .ucn-table .empty {
     text-align: center;
     color: #999999;
-    height: 40px;
-    line-height: 40px;
+    height: 200px;
+    line-height: 200px;
   }
 
   .ucn-table .el-pagination {

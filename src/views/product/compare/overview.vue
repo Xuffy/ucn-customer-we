@@ -1,11 +1,11 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i._product.compareOverview}}</span>
+            <span>{{$i.product.compareOverview}}</span>
         </div>
         <div class="btns">
-            <el-button>{{$i._product.download+' ('+downloadBtnInfo+')'}}</el-button>
-            <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i._product.delete}}</el-button>
+            <el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
+            <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>
             <select-search
                     :options="searchOptions"
                     @inputEnter="searchCompare"

@@ -2,8 +2,8 @@
   <div class="workbench">
 
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
-    <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i._workbench.quickLink"></h3>
+    <div class="quickLink" v-authorize="11">
+      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>

@@ -42,25 +42,25 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="!notLoadingDone" v-if="notEdit">
-                    <el-button>{{$i._product.createInquiry}}</el-button>
-                    <el-button>{{$i._product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i._product.addToCompare}}</el-button>
-                    <el-button @click="editProduct">{{$i._product.editEn}}</el-button>
-                    <el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i._product.delete}}</el-button>
-                    <el-button @click="addProduct">{{$i._product.addNewProductEn}}</el-button>
-                    <el-button @click="manuallyAddProduct">{{$i._product.manuallyAdd}}</el-button>
-                    <el-button>{{$i._product.downloadTheProduct}}</el-button>
-                    <el-button>{{$i._product.uploadProduct}}</el-button>
+                    <el-button>{{$i.product.createInquiry}}</el-button>
+                    <el-button>{{$i.product.createOrder}}</el-button>
+                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
+                    <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
+                    <el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>
+                    <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
+                    <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
+                    <el-button>{{$i.product.downloadTheProduct}}</el-button>
+                    <el-button>{{$i.product.uploadProduct}}</el-button>
                 </div>
                 <div class="btns" v-else>
-                    <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i._product.ok}}</el-button>
-                    <el-button @click="cancelEdit">{{$i._product.cancel}}</el-button>
+                    <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i.product.ok}}</el-button>
+                    <el-button @click="cancelEdit">{{$i.product.cancel}}</el-button>
                 </div>
             </div>
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
-                <el-tab-pane :label="$i._product.basicInformation" name="Basic Info">
+                <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
@@ -94,7 +94,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.customerInfo" name="Customer Info">
+                <el-tab-pane :label="$i.product.customerInfo" name="Customer Info">
                     <el-form class="speForm" label-width="290px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='customerInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -105,13 +105,13 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.priceInfo" name="Price Info">
+                <el-tab-pane :label="$i.product.priceInfo" name="Price Info">
                     <v-table
                             class="tabVtable"
                             :selection="false"
                             :data="tableData"></v-table>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.packingInfo" name="Packing Info">
+                <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='packingInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -122,7 +122,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.logisticInfo" name="Logistic">
+                <el-tab-pane :label="$i.product.logisticInfo" name="Logistic">
                     <el-form class="speForm" label-width="280px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='logisticInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -133,7 +133,7 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.otherInfo" name="Other Info">
+                <el-tab-pane :label="$i.product.otherInfo" name="Other Info">
                     <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-col v-if="v.belongTab==='otherInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -144,18 +144,18 @@
                         </el-row>
                     </el-form>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.tradeHistory" name="History">
+                <el-tab-pane :label="$i.product.tradeHistory" name="History">
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.attachment" name="Attachment">
+                <el-tab-pane :label="$i.product.attachment" name="Attachment">
 
                 </el-tab-pane>
-                <el-tab-pane :label="$i._product.remark" name="Remark">
+                <el-tab-pane :label="$i.product.remark" name="Remark">
                     <!--<add-table-->
                     <!--:get_url="getRemarkUrl"-->
                     <!--:id="parseInt($route.query.id)"></add-table>-->
                     <div>
-                        <el-button @click="createRemark" type="primary" size="mini">{{$i._product.add}}</el-button>
+                        <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
                     </div>
                     <br>
                     <el-table
@@ -164,17 +164,17 @@
                             style="width: 100%">
                         <el-table-column
                                 prop="remark"
-                                :label="$i._product.remark"
+                                :label="$i.product.remark"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorName"
-                                :label="$i._product.operator"
+                                :label="$i.product.operator"
                                 align="center">
                         </el-table-column>
                         <el-table-column
                                 prop="operatorDate"
-                                :label="$i._product.time"
+                                :label="$i.product.time"
                                 align="center">
                             <template slot-scope="scope">
                                 {{$dateFormat(scope.row.operatorDate,'yyyy-mm-dd hh:mm:ss')}}
@@ -182,11 +182,11 @@
                         </el-table-column>
                         <el-table-column
                                 fixed="right"
-                                :label="$i._product.action"
+                                :label="$i.product.action"
                                 align="center">
                             <template slot-scope="scope">
-                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.modify}}</el-button>
-                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.delete}}</el-button>
+                                <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
+                                <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>

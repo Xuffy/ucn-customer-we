@@ -1,16 +1,16 @@
 <template>
   <div class="message">
     <div class="head">
-      <el-button @click="manageMessage">{{$i._baseText.messageManagement}}</el-button>
-      <el-button type="primary" @click="postRead">{{$i._baseText.markAsRead}}</el-button>
+      <el-button @click="manageMessage">{{$i.common.messageManagement}}</el-button>
+      <el-button type="primary" @click="postRead">{{$i.common.markAsRead}}</el-button>
       <!-- <h1 style="color:red">这个页面表格要加一列title</h1> -->
     </div>
     <div class="spe-div">
       <div class="View">
         <el-radio-group size=""  v-model="viewByStatus" @change="getDataInfo()">
-          <el-radio-button label="1">{{$i._messages.platformMessage}}</el-radio-button>
-          <el-radio-button label="2">{{$i._messages.companyMessage}}</el-radio-button>
-          <el-radio-button label="3">{{$i._messages.messageSetting}}</el-radio-button>
+          <el-radio-button label="1">{{$i.messages.platformMessage}}</el-radio-button>
+          <el-radio-button label="2">{{$i.messages.companyMessage}}</el-radio-button>
+          <el-radio-button label="3">{{$i.messages.messageSetting}}</el-radio-button>
         </el-radio-group>
       </div>
       <div class="search">

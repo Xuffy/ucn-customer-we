@@ -64,8 +64,8 @@
             </el-form>
         </div>
         <div class="btn-group">
-            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i._product.search}}</el-button>
-            <el-button @click="clear" type="info" plain>{{$i._product.clear}}</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
             <v-table
@@ -76,16 +76,16 @@
                     @action="btnClick">
               <template slot="header">
                 <div class="btns" v-if="!hideBtn">
-                  <el-button @click="createInquiry">{{$i._product.createInquiry}}</el-button>
-                  <el-button>{{$i._product.createOrder}}</el-button>
-                  <el-button @click="compareProducts" :disabled="disabledCompare">{{$i._product.compare}}</el-button>
-                  <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i._product.addToBookmark}}</el-button>
-                  <el-button :disabled="disabledDownload">{{$i._product.download+'('+downloadBtnInfo+')'}}</el-button>
-                  <!--<el-button type="danger">{{$i._product.delete}}</el-button>-->
+                  <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
+                  <el-button>{{$i.product.createOrder}}</el-button>
+                  <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                  <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
+                  <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                  <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                 </div>
                 <div class="btns" v-if="type==='recycle'">
-                  <el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover" type="primary">{{$i._product.recover}}</el-button>
-                  <el-button>{{$i._product.download+'('+downloadRecycleListInfo+')'}}</el-button>
+                  <el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover" type="primary">{{$i.product.recover}}</el-button>
+                  <el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>
                 </div>
               </template>
             </v-table>
@@ -153,7 +153,7 @@
         data(){
             return{
                 hideBody:true,            //是否显示body
-                btnInfo:this.$i._product.advanced,     //按钮默认文字显示
+                btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 selectList:[],
                 downloadBtnInfo:'0',
@@ -639,9 +639,9 @@
         watch:{
             hideBody(n){
                 if(n){
-                    this.btnInfo=this.$i._product.advanced;
+                    this.btnInfo=this.$i.product.advanced;
                 }else{
-                    this.btnInfo=this.$i._product.hideTheAdvanced;
+                    this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
             },
             selectList(n){

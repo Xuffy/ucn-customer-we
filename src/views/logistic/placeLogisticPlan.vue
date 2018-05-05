@@ -1,7 +1,7 @@
 <template>
     <div class="place-logistic-plan">
-        <div class="hd-top">{{ $i.baseText.placeNewLogisticPlan }}</div>
-        <div class="hd active">{{ $i.baseText.basicInfo }}</div>
+        <div class="hd-top">{{ $i.common.placeNewLogisticPlan }}</div>
+        <div class="hd active">{{ $i.common.basicInfo }}</div>
         <el-form ref="ruleform" :model="fromArg">
             <el-row :gutter="10">                    
                 <el-col v-for="(item, index) in $db.logistic.basicInfo" :key="index" :xs="item.xs || 8" :sm="item.sm || 8" :md="item.md || 8" :lg="item.lg || 8">
@@ -74,7 +74,7 @@
                 </el-col>
             </el-row>
         </el-form>
-        <div class="hd">{{ $i.baseText.containerInfo }}</div>
+        <div class="hd">{{ $i.common.containerInfo }}</div>
         <!-- <v-container-info 
             :tableData="tableData" 
             @tabAppend="tabAppend" 
@@ -83,24 +83,24 @@
             @tabSplite="tabSplite"
         /> -->
         
-        <div class="hd">{{ $i.baseText.productInfo }}</div>
+        <div class="hd">{{ $i.common.productInfo }}</div>
         <div class="btn-wrap">
             <div>
-                <el-button @click="newSearchDialogVisible = true">{{ $i.baseText.addProduct }}</el-button>
-                <el-button type="danger">{{ $i.baseText.remove }}</el-button>
+                <el-button @click="newSearchDialogVisible = true">{{ $i.common.addProduct }}</el-button>
+                <el-button type="danger">{{ $i.common.remove }}</el-button>
             </div>
         </div>
         <v-table 
             :data="tabData" 
         />
         <div class="fix-btn">
-            <el-button>{{ $i.baseText.save }}</el-button>
-            <el-button>{{ $i.baseText.sentAsOrder }}</el-button>
-            <el-button type="danger">{{ $i.baseText.delete }}</el-button>
+            <el-button>{{ $i.common.save }}</el-button>
+            <el-button>{{ $i.common.sentAsOrder }}</el-button>
+            <el-button type="danger">{{ $i.common.delete }}</el-button>
         </div>
         <div class="fix-btn-station"></div>
         <el-dialog
-                :title="$i.baseText.addProduct"
+                :title="$i.common.addProduct"
                 :visible.sync="newSearchDialogVisible"
                 width="80%"
                 lock-scroll>
@@ -109,8 +109,8 @@
                 :data="tabData" 
             />
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i.baseText.ok }}</el-button>
-                <el-button @click="newSearchDialogVisible = false">{{ $i.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="newSearchDialogVisible = false">{{ $i.common.ok }}</el-button>
+                <el-button @click="newSearchDialogVisible = false">{{ $i.common.cancel }}</el-button>
             </span>
         </el-dialog>
     </div>

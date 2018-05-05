@@ -5,13 +5,13 @@
       <div class="btn-wrap">
         <span>Status&nbsp</span>
         <el-radio-group v-model="params.skuInventoryStatusDictCode" size="mini" @change="getdata()">
-          <!--<el-radio-button label=" ">{{($i._baseText.all)}}</el-radio-button>-->
-          <el-radio-button label="WAIT_FOR_QC"> {{ $i._baseText.waitingQC }}</el-radio-button>
-          <el-radio-button label="APPLY_FOR_REWORK">{{($i._baseText.applyRework)}}</el-radio-button>
-          <el-radio-button label="CONFIRMATION_OF_REWORK">{{($i._baseText.confirmedRework)}}</el-radio-button>
-          <el-radio-button label="APPLY_FOR_RETURN">{{($i._baseText.applyReturn)}}</el-radio-button>
-          <el-radio-button label="CONFIRMATION_OF_RETURN">{{($i._baseText.confirmedReturn)}}</el-radio-button>
-          <el-radio-button label="CONFIRMED">{{($i._baseText.confirmed)}}</el-radio-button>
+          <!--<el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>-->
+          <el-radio-button label="WAIT_FOR_QC"> {{ $i.common.waitingQC }}</el-radio-button>
+          <el-radio-button label="APPLY_FOR_REWORK">{{($i.common.applyRework)}}</el-radio-button>
+          <el-radio-button label="CONFIRMATION_OF_REWORK">{{($i.common.confirmedRework)}}</el-radio-button>
+          <el-radio-button label="APPLY_FOR_RETURN">{{($i.common.applyReturn)}}</el-radio-button>
+          <el-radio-button label="CONFIRMATION_OF_RETURN">{{($i.common.confirmedReturn)}}</el-radio-button>
+          <el-radio-button label="CONFIRMED">{{($i.common.confirmed)}}</el-radio-button>
         </el-radio-group>
       </div>
       <div class="select-wrap">
@@ -25,7 +25,7 @@
     </div>
     <div class="fn">
       <div class="btn-wrap">
-        <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
+        <el-button @click='download'>{{($i.common.download)}}({{selectedDate.length}})</el-button>
       </div>
     </div>
     <!--form-->

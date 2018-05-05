@@ -3,13 +3,16 @@ export default {
     type: 'text',
     _hide: true
   },
+  "entryDt": {
+    type: 'text'
+  },
   "orderNo": {
     type: 'text'
   },
-  "quantityOfOuterCartonsToBeShipped": {
+  "toShipCartonQty": {
     type: 'text'
   },
-  "goodsToBeShipped": {
+  "toShipQty": {
     type: 'text'
   },
   "skuCode": {
@@ -21,52 +24,52 @@ export default {
   "skuNameCn": {
     type: 'text'
   },
-  "productDescription": {
+  "skuNameCustomer": {
     type: 'text'
   },
   "blSkuName": {
     type: 'text'
   },
-  "customsDeclarationNameCn": {
+  "customDeclarationNameCn": {
     type: 'text'
   },
-  "customsDeclarationNameEn": {
+  "customDeclarationNameEn": {
     type: 'text'
   },
   "hsCode": {
     type: 'text'
   },
-  "reportElements": {
+  "reportElement": {
     type: 'text'
   },
   "supplierName": {
     type: 'text'
   },
-  "supplierNo": {
+  "supplierCode": {
     type: 'text'
   },
   "customerSkuCode": {
     type: 'text'
   },
-  "factorySKUCode": {
+  "factorySkuCode": {
     type: 'text'
   },
   "unit": {
     type: 'text'
   },
-  "exportUnitPrice": {
+  "unitExportPrice": {
     type: 'text'
   },
-  "totalPriceOfExport": {
+  "totalExportPrice": {
     type: 'text'
   },
   "currency": {
     type: 'text'
   },
-  "skuQuantityOfOuterCarton": {
+  "outerCartonQty": {
     type: 'text'
   },
-  "outerCartonLength": {
+  "outerCartonLenth": {
     type: 'text'
   },
   "outerCartonWidth": {

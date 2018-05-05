@@ -105,15 +105,14 @@
             if (!_.isObject(val)) return val;
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
-            val.value = val.value || '';
-            val.value = _.isBoolean(val.value) ? '' : val.value; // todo 屏蔽Boolean
+            val.value = val.value || val.value + '';
+            val.value = _.isBoolean(val.value) ? val.value + '' : val.value; // todo 屏蔽Boolean
             return val;
           });
         });
         // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
         
-        console.log(this.dataList)
         this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;

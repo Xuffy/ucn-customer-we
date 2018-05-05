@@ -8,7 +8,7 @@
                 <div>
                     <span class="text">Status : </span>
                     <el-radio-group size="mini" v-model="params.conditions.overdue" @change="getList">
-                        <el-radio-button label="-1" border>{{$i._baseText.all}}</el-radio-button>
+                        <el-radio-button label="-1" border>{{$i.common.all}}</el-radio-button>
                         <el-radio-button label="1" >已逾期</el-radio-button>
                         <el-radio-button label="0" >未逾期</el-radio-button>
                     </el-radio-group>
@@ -17,10 +17,10 @@
                     <div class="View">
                         <span class="text">View : </span>
                         <el-radio-group size="mini"  v-model="params.conditions.orderType"  @change="getList">
-                            <el-radio-button label="" border>{{$i._baseText.all}}</el-radio-button>
-                            <el-radio-button label="30">{{$i._baseText.logisticOrder}}</el-radio-button>
-                            <el-radio-button label="10">{{$i._baseText.purchaseOrder}}</el-radio-button>
-                            <el-radio-button label="20">{{$i._baseText.qcOrder}}</el-radio-button>
+                            <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
+                            <el-radio-button label="30">{{$i.common.logisticOrder}}</el-radio-button>
+                            <el-radio-button label="10">{{$i.common.purchaseOrder}}</el-radio-button>
+                            <el-radio-button label="20">{{$i.common.qcOrder}}</el-radio-button>
                         </el-radio-group>
                     </div>
                     <div class="search">

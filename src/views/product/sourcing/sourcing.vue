@@ -22,7 +22,7 @@
         },
         data(){
             return{
-                title:this.$i._product.title,
+                title:this.$i.product.title,
                 type:'product',
             }
         },

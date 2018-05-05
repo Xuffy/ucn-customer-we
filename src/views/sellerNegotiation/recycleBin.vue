@@ -3,8 +3,8 @@
         <h3 class="hd">{{ title }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i._baseText.recover}(${checkedArg.length})` }}</el-button>
-                <el-button type="primary">{{ `${$i._baseText.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button>
+                <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
+                <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button>
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
@@ -170,11 +170,11 @@
         created() {
             switch(this.$route.params.type) {
                 case 'inquiry':
-                    this.title = this.$i._baseText.inquiryRecycleBin;
+                    this.title = this.$i.common.inquiryRecycleBin;
                     this.bodyData.recycleCustomer = 1;
                     break;
                 case 'compare':
-                    this.title = this.$i._baseText.compareRecycleBin;
+                    this.title = this.$i.common.compareRecycleBin;
                     this.bodyData.recycle = 1;
                     //recycleSupplier
                     break;

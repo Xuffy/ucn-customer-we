@@ -52,8 +52,8 @@
             <VTable :data.sync="history" :rowspan="2" :selection="false" v-if="title === 'Histoty'" />
 
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="modify" v-if="title !== 'Histoty'">{{ $i.baseText.ok }}</el-button>
-                <el-button @click="value = false">{{ $i.baseText.cancel }}</el-button>
+                <el-button type="primary" @click="modify" v-if="title !== 'Histoty'">{{ $i.common.ok }}</el-button>
+                <el-button @click="value = false">{{ $i.common.cancel }}</el-button>
             </span>
         </el-dialog>
     </div>

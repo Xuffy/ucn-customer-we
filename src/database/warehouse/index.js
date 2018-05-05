@@ -11,6 +11,8 @@ import outboundOrderTable from './outboundOrderTable';
 import outboundProduct from './outboundProduct';
 import qcDetailBasicInfo from './qcDetailBasicInfo';
 import summary from './summary';
+import payment from './payment';
+import qcDetailProductInfo from './qcDetailProductInfo';
 export default {
     inbound,
     outbound,
@@ -24,5 +26,7 @@ export default {
     outboundOrderTable,
     outboundProduct,
     qcDetailBasicInfo,
-    summary
+    summary,
+    payment,
+    qcDetailProductInfo
 }
