@@ -12,7 +12,8 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" :defaultProps="defaultProps" ref="dropDown" :expandOnClickNode="false"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
+                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
@@ -217,7 +218,18 @@
                 },
 
                 //Category下拉组件数据
-                dropData:[],
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[]
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[]
+                    },
+                ],
                 defaultProps:{
                     label:'name',
                     children:'children'
@@ -270,6 +282,7 @@
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
 
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     // res.datas.forEach(v=>{
                     //     if(v.status===0){
@@ -281,8 +294,10 @@
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
                     this.selectList=[];
+                    this.loadingTable=false;
                 }).catch(err=>{
                     this.disabledSearch=false;
+                    this.loadingTable=false;
                 });
 
             },
@@ -306,22 +321,28 @@
 
             //获取类别数据
             getCategoryId(){
-                this.$ajax.get(this.$apis.getCategory,{}).then(res=>{
-                    this.dropData=res;
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
-                    console.log(err)
+
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
                 });
             },
-
             //获取table数据
             getData() {
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,{
                     recycle:false,
                     ps:100
                 }).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    this.loadingTable=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.loadingTable=false;
                 });
             },
 
@@ -371,7 +392,8 @@
                     this.$windowOpen({
                         url:'/product/bookmarkDetail',
                         params:{
-                            id:item.skuId.value
+                            id:item.skuId.value,
+                            bookmarkId:item.id.value
                         }
                     })
                 }

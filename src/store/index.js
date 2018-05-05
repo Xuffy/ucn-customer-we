@@ -36,7 +36,7 @@ const actions = {
   },
   setRecycleBin({ commit }, newData) {
     commit(type.SETRECYCLEBIN, newData);
-  }
+  },
 };
 
 const mutations = {
