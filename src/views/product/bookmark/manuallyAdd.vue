@@ -53,7 +53,7 @@
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
                                     class="speInput"
-                                    :list="dropData"
+                                    :list="categoryList"
                                     :defaultProps="defaultProps"
                                     v-model="productForm[v.key]"
                                     ref="dropDown"></drop-down>
@@ -388,7 +388,18 @@
                     children:'children'
                 },
                 //categoryID配置
-                dropData:[],
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[]
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[]
+                    },
+                ],
                 //整个页面数据配置
                 productForm:{
                     adjustPackage: true,
@@ -552,25 +563,21 @@
 
             //获取类别数据
             getCategoryId(){
-
-                this.$ajax.get(this.$apis.get_sys_category,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
                     this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
-                this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
-                }).catch(err=>{
-
-                });
-
-
-
-                this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
-                    this.dropData=res;
-                }).catch(err=>{
-                    console.log(err)
-                });
+                // this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
+                //     this.categoryList[1].children=res;
+                // }).catch(err=>{
+                //
+                // });
+                // this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
+                //     this.dropData=res;
+                // }).catch(err=>{
+                //     console.log(err)
+                // });
             },
 
             //完成新增

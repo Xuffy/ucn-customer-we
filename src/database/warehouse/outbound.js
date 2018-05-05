@@ -43,7 +43,7 @@ export default {
     timeZone:{
         key:'timeZone',
         belong:'basicInfo',
-        showType:'input',
+        showType:'timeZone',
     },
     attachment:{
         key:'attachment',

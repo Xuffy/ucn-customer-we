@@ -90,7 +90,7 @@ export default _.extend({},
   {_setting: require(`./${lang}/setting`)},
   {_departmentSetting: require(`./${lang}/setting/department`)},
   require(`./${lang}/setting/setting.basic`),
-  {_baseText: require(`./${lang}/baseText`)},
+  {_common: require(`./${lang}/common`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
   {_inquiry: require(`./${lang}/inquiry/index`)},
   {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
@@ -130,6 +130,10 @@ export default _.extend({},
   require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
   require(`./${lang}/warehouse/qcWarehouse`),
   require(`./${lang}/warehouse/warehouse.table`),
+
+
+    //warehouse qc
+    {_buyerQc: require(`./${lang}/warehouse/createQc.basic`)},
 
 
   //CN配置
