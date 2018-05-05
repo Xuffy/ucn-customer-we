@@ -3,6 +3,8 @@
         <div class="hd">
             <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
         </div>
+        
+        {{selectAll}}
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
@@ -115,6 +117,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 loading: false,
                 disabledLine: [],
                 trig: 0,
@@ -176,15 +179,6 @@
                     destinationCountry: [],
                     departureCountry: []
                 }
-            }
-        },
-        computed: {
-            fromArg() {
-                let json = {};
-                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
-                    json[k] = val.key;
-                });
-                return json; 
             }
         },
         components: {
