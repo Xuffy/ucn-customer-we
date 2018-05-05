@@ -1,12 +1,12 @@
 <template>
     <div class="create-inquiry">
-        <h3 class="hd">{{ $i._inquiry.inquiryNo }}</h3>
+        <h3 class="hd">{{ $route.query.id?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
         <div class="select-wrap">
-            <h4 class="content-hd">{{ $i._inquiry.basicInfo }}</h4>
+            <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
             <el-form ref="ruleform" :model="fromArg">
                 <el-row :gutter="10">                    
                     <el-col 
-                            v-for="(item, index) in $db.inquiryOverview.basicInfo" 
+                            v-for="(item, index) in $db.inquiry.basicInfo" 
                             :key="index" 
                             :xs="item.xs || 8" 
                             :sm="item.sm || 8" 
@@ -100,11 +100,11 @@
                 </el-row>
             </el-form>
         </div>
-        <h4 class="content-hd">{{ $i._baseText.productInfo }}</h4>
+        <h4 class="content-hd">{{ $i.common.productInfo }}</h4>
         <div class="status">
             <div class="btn-wrap">
-                <el-button @click="addProduct">{{ $i._baseText.addProduct }}</el-button>
-                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ `${$i._baseText.remove}(${checkedAll.length})` }}</el-button>
+                <el-button @click="addProduct">{{ $i.common.addProduct }}</el-button>
+                <el-button type="danger" :disabled="checkedAll.length <= 0" @click="removeList">{{ `${$i.common.remove}(${checkedAll.length})` }}</el-button>
             </div>
             <select-search :options="[]" @inputEnter="inputEnter" />
         </div>
@@ -118,8 +118,8 @@
             :rowspan="2"
         />
         <div class="bom-btn-wrap">
-            <el-button @click="submitForm()">{{ $i._baseText.submit }}</el-button>
-            <el-button @click="submitForm('draft')">{{ $i._baseText.saveAsDraft }}</el-button>
+            <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>
+            <el-button @click="submitForm('draft')">{{ $i.common.saveAsDraft }}</el-button>
         </div>
         <div class="bom-btn-wrap-station"></div>
         <el-dialog
@@ -128,8 +128,8 @@
                 width="80%"
                 lock-scroll>
             <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{$i._baseText.fromNewSearch}}</el-radio-button>
-                <el-radio-button label="bookmark">{{$i._baseText.FromMyBookmark}}</el-radio-button>
+                <el-radio-button label="product">{{$i.common.fromNewSearch}}</el-radio-button>
+                <el-radio-button label="bookmark">{{$i.common.FromMyBookmark}}</el-radio-button>
             </el-radio-group>
             <v-product 
                 :hideBtns="true"
@@ -243,12 +243,12 @@
                             });
                         });
                     } else {
-                        res.suppliers = {};
+                        res.suppliers = [];
                     };
                     delete res.companyId;
                     delete res.id;
                     this.fromArg = res;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
+                    this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
                 });
             },
             handleCancel() {
@@ -386,7 +386,7 @@
                     _.map(res, item => {
                         item.displayStyle = 0;
                     });
-                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
+                    this.tabData = this.tabData.concat(this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                     this.dialogTableVisible = false;
                 });
             },
@@ -404,9 +404,9 @@
                         if(_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'' && !items._disabled) arr.push(items)
                     });
                     if(config.type === 'histoty') {
-                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
                     } else {
-                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                        this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                     }
                 });
            },

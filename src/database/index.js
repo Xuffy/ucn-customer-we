@@ -3,7 +3,7 @@ import workbench from './workbench/index';
 import product from './product/index';
 import logistic from './logistic';
 
-import inquiryOverview from './inquiry';
+import inquiry from './inquiry';
 import order from './order/index';
 import supplier from './supplier/index';
 import setting from './setting/index';
@@ -18,7 +18,7 @@ const db = {
   common,
   workbench,
   product,
-  inquiryOverview,
+  inquiry,
   logistic,
   order,
   supplier,
@@ -29,6 +29,7 @@ const db = {
   warehouse
   // inbound,
 };
+/*
 const database = _.mapObject(db, value => {
   value = _.mapObject(value, val => {
     val = _.mapObject(val, (v, k) => {
@@ -42,8 +43,9 @@ const database = _.mapObject(db, value => {
   });
   return value;
 });
+*/
 
-/*const findLanguage = (key) => {
+const findLanguage = (key) => {
   let val = '';
 
   _.map(language, value => {
@@ -67,8 +69,6 @@ const database = _.mapObject(db, (value, key) => {
   });
   return value;
 });
-
-console.log(database)*/
 
 
 export default database;

@@ -13,7 +13,7 @@
                          <messageBoard ></messageBoard>
                      </div>
                      <div class="switch-btn" @click="boardSwitch">
-                     {{$i._baseText.messageBoard}}
+                     {{$i.common.messageBoard}}
                      <i :class="switchStatus ? 'el-icon-arrow-right' : 'el-icon-arrow-left'"></i>
                     </div>
                    
@@ -35,11 +35,11 @@
 <!--         product_details-->
          <div class="product_details" >
              <div class="pro_title">
-                 {{$i._baseText.productInfo}}
+                 {{$i.common.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i._baseText.addproduct}}</el-button>
-                  <el-button type='danger' @click='removeProduct' :disabled='statusModify'>{{$i._baseText.remove}}</el-button>
+                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify'>{{$i.common.addproduct}}</el-button>
+                  <el-button type='danger' @click='removeProduct' :disabled='statusModify'>{{$i.common.remove}}</el-button>
 
              </div>
              <div class="pro_table">
@@ -58,23 +58,23 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
-                 <el-button  @click='modify'>{{$i._baseText.modify}}</el-button>
-                 <el-button @click='confirm'>{{$i._baseText.confirm}}</el-button>
-                 <el-button  :disabled='true'>{{$i._baseText.download}}</el-button>
-                  <el-button >{{$i._baseText.createOrder}}</el-button>
-                  <el-button :disabled="orderStatus==='5'" @click='cancelOrder'>{{$i._baseText.cancel}}</el-button>
-                 <el-checkbox v-model="markAsImportant">{{$i._baseText.markAsImportant}}</el-checkbox>
-                 <el-checkbox v-model="hightlightTheDifferent">{{$i._baseText.highlightTheDifferent}}</el-checkbox>
+                 <el-button  @click='modify'>{{$i.common.modify}}</el-button>
+                 <el-button @click='confirm'>{{$i.common.confirm}}</el-button>
+                 <el-button  :disabled='true'>{{$i.common.download}}</el-button>
+                  <el-button >{{$i.common.createOrder}}</el-button>
+                  <el-button :disabled="orderStatus==='5'" @click='cancelOrder'>{{$i.common.cancel}}</el-button>
+                 <el-checkbox v-model="markAsImportant">{{$i.common.markAsImportant}}</el-checkbox>
+                 <el-checkbox v-model="hightlightTheDifferent">{{$i.common.highlightTheDifferent}}</el-checkbox>
              </div>
                <div class="footer_button" v-else>
-                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
-                 <el-button type='danger' @click='modifyCancel'>{{$i._baseText.cancel}}</el-button>
+                 <el-button @click='send'>{{$i.common.send}}</el-button>
+                 <el-button type='danger' @click='modifyCancel'>{{$i.common.cancel}}</el-button>
              </div>
          </div>
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i._baseText.addproduct" :visible.sync="dialogAddproduct" width='80%'>
+           <el-dialog :title="$i.common.addproduct" :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i._baseText.fromNewSearch" name="FromNewSearch">
+                        <el-tab-pane :label="$i.common.fromNewSearch" name="FromNewSearch">
                            <v-product                     
                                :hideBtns="true"
                                 :hideBtn="true"
@@ -85,7 +85,7 @@
                                 :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
                            <v-product :hideBtns="true"></v-product>
                         </el-tab-pane>
                       </el-tabs>
@@ -325,9 +325,9 @@
                                 }).value + '' === config.data + '') arr.push(items)
                         });
                         if (config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiryOverview.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
                         }
                     });
             },

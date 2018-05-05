@@ -5,144 +5,144 @@
     </div>
     <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName">
       <el-table-column type="selection" width="30"></el-table-column>
-      <el-table-column :label="$i.skuCode" align="center">
+      <el-table-column :label="$i.logistic.skuCode" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.skuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameEn" width="120" align="center">
+      <el-table-column :label="$i.logistic.skuNameEn" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.skuNameEn }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameCN" width="120" align="center">
+      <el-table-column :label="$i.logistic.skuNameCn" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.skuNameCn }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.productDescription" width="140" align="center">
+      <el-table-column :label="$i.logistic.productDescription" width="140" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.productDescription }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.blSkuName" width="120" align="center">
+      <el-table-column :label="$i.logistic.blSkuName" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.blSkuName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameCn" width="220" align="center">
+      <el-table-column :label="$i.logistic.customsDeclarationNameCn" width="220" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.customsDeclarationNameCn }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameEn" width="220" align="center">
+      <el-table-column :label="$i.logistic.customsDeclarationNameEn" width="220" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.customsDeclarationNameEn }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.hsCode" width="80" align="center">
+      <el-table-column :label="$i.logistic.hsCode" width="80" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.hsCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.reportElements" width="120" align="center">
+      <el-table-column :label="$i.logistic.reportElements" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.reportElements }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierName" width="120" align="center">
+      <el-table-column :label="$i.logistic.supplierName" width="120" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.supplierName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierNo" width="100" align="center">
+      <el-table-column :label="$i.logistic.supplierNo" width="100" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.supplierNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customerSkuCode" width="160" align="center">
+      <el-table-column :label="$i.logistic.customerSkuCode" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.customerSkuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.factorySkuCode" width="160"align="center">
+      <el-table-column :label="$i.logistic.factorySkuCode" width="160"align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.factorySkuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.unit" width="80" align="center">
+      <el-table-column :label="$i.logistic.unit" width="80" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.unit }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.exportUnitPrice " width="140" align="center">
+      <el-table-column :label="$i.logistic.exportUnitPrice " width="140" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.exportUnitPrice }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.totalPriceOfExport" width="160" align="center">
+      <el-table-column :label="$i.logistic.totalPriceOfExport" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.totalPriceOfExport }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.currency" width="80" align="center">
+      <el-table-column :label="$i.logistic.currency" width="80" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.currency }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuQuantityOfOuterCarton" width="220" align="center">
+      <el-table-column :label="$i.logistic.skuQuantityOfOuterCarton" width="220" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.skuQuantityOfOuterCarton }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonLength" width="160" align="center">
+      <el-table-column :label="$i.logistic.outerCartonLength" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonLength }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonWidth" width="160" align="center">
+      <el-table-column :label="$i.logistic.outerCartonWidth" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonWidth }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonHeight" width="160" align="center">
+      <el-table-column :label="$i.logistic.outerCartonHeight" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonHeight }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonNetWeight" width="180" align="center">
+      <el-table-column :label="$i.logistic.outerCartonNetWeight" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonNetWeight }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonGrossWeight" width="200" align="center">
+      <el-table-column :label="$i.logistic.outerCartonGrossWeight" width="200" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonGrossWeight }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonVolume" width="160" align="center">
+      <el-table-column :label="$i.logistic.outerCartonVolume" width="160" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonVolume }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.shippingMarks" width="140" align="center">
+      <el-table-column :label="$i.logistic.shippingMarks" width="140" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.shippingMarks }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonBarCode" width="180" align="center">
+      <el-table-column :label="$i.logistic.outerCartonBarCode" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonBarCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonSkuCode" width="180" align="center">
+      <el-table-column :label="$i.logistic.outerCartonSkuCode" width="180" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.x }}</span>
+          <span>{{ scope.row.outerCartonSkuCode }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="active" width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small">{{ $i.detail }}</el-button>
+          <el-button type="text" size="small">{{ $i.logistic.detail }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -156,7 +156,7 @@ export default {
     tableData: {
       type: Array,
       default () {
-        return [{x: 1}]
+        return []
       }
     }
   },

@@ -1,20 +1,20 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{ $i.baseText.compareOverview }}</h3>
+        <h3 class="hd">{{ $i.common.compareOverview }}</h3>
         <div class="status">
             <div class="state"></div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button type="primary" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.submit}(${checkedArg.length})`}}</el-button>
-                <el-button type="danger" @click="inquiryDelete" :disabled="checkedArg.length <= 0">{{ `${$i.baseText.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="primary" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="inquiryDelete" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $i.baseText.viewBy }}&nbsp;</span>
+                <span>{{ $i.common.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i.baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -85,7 +85,7 @@
                         item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
                     });
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiryOverview.compare, data);
+                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
                 });
             },
             searchEnter(item) { // 搜索框

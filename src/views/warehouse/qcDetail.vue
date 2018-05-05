@@ -1,10 +1,10 @@
 <template>
     <div class="qc-detail">
         <div class="title">
-            <span>{{$i._buyerQc.qcOrderDetail}}</span>
+            <span>{{$i.buyerQc.qcOrderDetail}}</span>
         </div>
         <div class="second-title">
-            {{$i._buyerQc.basicInfo}}
+            {{$i.buyerQc.basicInfo}}
         </div>
         <!--<div>-->
             <!--<el-form ref="qcOrder" :model="qcOrderBasic" label-width="190px">-->

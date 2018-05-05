@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <el-button @click="createRemark" type="primary" plain size="mini">{{$i._product.add}}</el-button>
+            <el-button @click="createRemark" type="primary" plain size="mini">{{$i.product.add}}</el-button>
         </div>
         <br>
         <el-table
@@ -10,26 +10,26 @@
                 style="width: 100%">
             <el-table-column
                     prop="remark"
-                    :label="$i._product.remark"
+                    :label="$i.product.remark"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="updateName"
-                    :label="$i._product.operator"
+                    :label="$i.product.operator"
                     align="center">
             </el-table-column>
             <el-table-column
                     prop="updateDt"
-                    :label="$i._product.time"
+                    :label="$i.product.time"
                     align="center">
             </el-table-column>
             <el-table-column
                     fixed="right"
-                    :label="$i._product.action"
+                    :label="$i.product.action"
                     align="center">
                 <template slot-scope="scope">
-                    <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.modify}}</el-button>
-                    <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i._product.delete}}</el-button>
+                    <el-button @click="editRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.modify}}</el-button>
+                    <el-button @click="deleteRemark(scope.$index, scope.row)" type="text" size="small">{{$i.product.delete}}</el-button>
                 </template>
 </el-table-column>
 </el-table>

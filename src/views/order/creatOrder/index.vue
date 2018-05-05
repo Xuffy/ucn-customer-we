@@ -14,8 +14,8 @@
                  {{$i.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="addProduct">{{$i._baseText.addproduct}}</el-button>
-                  <el-button type='danger' @click='removeList'>{{$i._baseText.remove}}</el-button>
+                  <el-button  @click="addProduct">{{$i.common.addproduct}}</el-button>
+                  <el-button type='danger' @click='removeList'>{{$i.common.remove}}</el-button>
              </div>
              <div class="pro_table">
                      <v-table  
@@ -34,14 +34,14 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button">
-                 <el-button @click='send'>{{$i._baseText.send}}</el-button>
-                 <el-button @click='saveAsDraft'>{{$i._baseText.saveAsDraft}}</el-button>
-                 <el-button  @click="dialogQuickcreate = true">{{$i._baseText.quickCreate}}</el-button>
-                 <el-checkbox v-model="markAsImportant">{{$i._baseText.markAsImportant}}</el-checkbox>
+                 <el-button @click='send'>{{$i.common.send}}</el-button>
+                 <el-button @click='saveAsDraft'>{{$i.common.saveAsDraft}}</el-button>
+                 <el-button  @click="dialogQuickcreate = true">{{$i.common.quickCreate}}</el-button>
+                 <el-checkbox v-model="markAsImportant">{{$i.common.markAsImportant}}</el-checkbox>
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-<!--          <el-dialog :title="$i._baseText.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
+<!--          <el-dialog :title="$i.common.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
                 <VInquiry 
                    v-model=dialogQuickcreate
                   :selectionRadio=true
@@ -49,9 +49,9 @@
                 ></VInquiry>
 <!--        </el-dialog>-->
 <!--                  addproduct弹窗区域-->
-           <el-dialog :title="$i._baseText.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
+           <el-dialog :title="$i.common.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
-                        <el-tab-pane :label="$i._baseText.addproduct" name="FromNewSearch">
+                        <el-tab-pane :label="$i.common.addproduct" name="FromNewSearch">
                              <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -63,7 +63,7 @@
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
-                        <el-tab-pane :label="$i._baseText.fromMyBookmark" name="FromMyBookmark">
+                        <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
                               <v-product 
                                 :hideBtns="true"
                                 :hideBtn="true"
@@ -326,15 +326,15 @@
             },
             //......................提交
             send() {
-                //正则 
-                if (!this.$refs.basicInfo.submitForm()) { 
-                     return }
+               // 正则 
+//                if (!this.$refs.basicInfo.submitForm()) { 
+//                     return }
               
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.dataFilter(this.tabData),
-//                    skuList:this.skuList,
+//                    skuList: this.dataFilter(this.tabData),
+                    skuList:this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: false,
@@ -386,15 +386,29 @@
                 PaidAmount:'',
                 UnpaidAmount:''
             */
-            summary() {
-               
-                let arr = this.dataFilter(this.tabData)
+            summary() {              
+//                let arr = this.dataFilter(this.tabData)
+//                let arrNew=
+//                 return console.log(_.pluck(arr, 'skuOuterCartonQty'),_.pluck(arr, 'skuQty'))
                 
-                this.TotalQuantity = _.reduce(_.pluck(arr, 'skuPrice'))
-//                this.TotalSKUPrice = _.reduce(_.pluck(arr, 'skuPrice'))
-//                this.TotalOuterCartonQuantity = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
-//                this.TotalOuterCartonNetWet = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
-//                this.TotalOuterCartonVolume = _.reduce(_.pluck(arr, 'skuOuterCartonVolume'))
+                // sku数量合计
+                this.$refs.caculate.caculateForm.totalQty = _.reduce(_.pluck(arr, 'skuQty'))
+                // sku行  skutypeqty
+//                this.$refs.caculate.caculateForm.skuQty =  
+                //sku订单价格之和
+                this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'))
+                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
+                this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce(_.pluck(arr, 'skuOuterCartonQty'))
+                //毛重 订单内所有SKU的外箱毛重*外箱数  skuOuterCartonRoughWeight skuOuterCartonQty
+                this.$refs.caculate.caculateForm.totalGrossWeight = _.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+                //净重 订单内所有SKU的外箱净重*外箱数  skuOuterCartonNetWeight  skuOuterCartonQty
+                 this.$refs.caculate.caculateForm.totalNetWeight=_.reduce(_.pluck(arr, 'skuOuterCartonNetWeight'))
+                //订单内所有SKU的外箱体积*外箱数 skuVolume skuOuterCartonQty
+                 this.$refs.caculate.caculateForm.totalVolume=_.reduce(_.pluck(arr, 'skuVolume'))
+                //预计付款金额（已确认）-实际付款金额（已确认）-退款金额（已确认）
+//                 this.$refs.caculate.caculateForm.paidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
+                //实际付款金额（已确认）
+//                 this.$refs.caculate.caculateForm.unpaidAmount=_.reduce(_.pluck(arr, 'skuPrice'))
             },
             productInfoBtn(item) { //Product info 按钮创建
                 return [{
@@ -593,6 +607,7 @@
                 let obj = this.$depthClone(this.tabData[0]);
                 _.map(this.tabData, value => {
                     _.map(value, (val, k) => {
+                       
                         if (obj[val.key] && obj[val.key]._calu) {
                             obj[val.key].value = (obj[val.key].value + val.value)
                         } else {
@@ -624,7 +639,7 @@
         watch: {
             tabData: {
                 handler(curVal) {
-                   this.tableTatalCal()
+//                   this.tableTatalCal()
 //                   this.summary()
                 },
                 deep: true

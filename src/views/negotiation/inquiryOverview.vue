@@ -1,13 +1,13 @@
 <template>
-    <div class="inquiryOverview">
-        <h3 class="hd"> {{ $i._inquiry.inquiryOverviewTitle }}</h3>
+    <div class="inquiry">
+        <h3 class="hd"> {{ $i.inquiry.inquiryTitle }}</h3>
         <div class="status">
             <div class="state">
-                <span>{{ $i._baseText.Status }}</span>
+                <span>{{ $i.common.Status }}</span>
                 <el-radio-group v-model="params.status" size="mini">
-                    <el-radio-button :label="null">{{$i._baseText.all}}</el-radio-button>
+                    <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button
-                        v-for="item in $db.inquiryOverview.overoiewState"
+                        v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
                         :key="item.id"
                     >
@@ -23,17 +23,17 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i._baseText.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i._baseText.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i._baseText.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i._baseText.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button>{{ `${$i._baseText.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.common.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button>{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
-                <span>{{ $i._baseText.viewBy }}&nbsp;</span>
+                <span>{{ $i.common.viewBy }}&nbsp;</span>
                 <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i._baseText.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i._baseText.SKU}}</el-radio-button>
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -125,6 +125,7 @@
         },
         watch: {
             viewByStatus() {
+                console.log(this.$db.inquiry.viewBySKU, '====')
                 this.gettabData();
             },
             params: {
@@ -152,10 +153,10 @@
                 this.tabLoad = true;
                 if(this.viewByStatus + '' === '0') {
                     url = this.$apis.POST_INQIIRY_LIST;
-                    column = this.$db.inquiryOverview.viewByInqury;
+                    column = this.$db.inquiry.viewByInqury;
                 } else {
                     url = this.$apis.POST_INQIIRY_LIST_SKU;
-                    column = this.$db.inquiryOverview.viewBySKU;
+                    column = this.$db.inquiry.viewBySKU;
                 };
                 this.$ajax.post(url, this.params)
                 .then(res => {
@@ -164,6 +165,7 @@
                     this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
                     this.searchLoad = false;
+                    this.checkedData = [];
                 })
                 .catch(() => {
                     this.searchLoad = false;
@@ -249,7 +251,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .inquiryOverview {
+    .inquiry {
         .hd {
             padding-left:15px;
             height: 50px;

@@ -1,13 +1,13 @@
 <template>
-  <div class="inquiryOverview">
+  <div class="inquiry">
     <h3 class="hd"></h3>
     <div class="status">
       <div class="state">
-        <span>{{ $i._baseText.qcStatus }}</span>
+        <span>{{ $i.common.qcStatus }}</span>
         <el-radio-group v-model="params.qcStatusDictCode" @change="getQcOrderList">
-          <el-radio-button label="">{{$i._baseText.all}}</el-radio-button>
-          <el-radio-button label="WAITING_QC">{{$i._baseText.waitingQC}}</el-radio-button>
-          <el-radio-button label="COMPLETED_QC">{{$i._baseText.completedQC}}</el-radio-button>
+          <el-radio-button label="">{{$i.common.all}}</el-radio-button>
+          <el-radio-button label="WAITING_QC">{{$i.common.waitingQC}}</el-radio-button>
+          <el-radio-button label="COMPLETED_QC">{{$i.common.completedQC}}</el-radio-button>
         </el-radio-group>
       </div>
       <div style="float: right">
@@ -21,8 +21,8 @@
     </div>
     <div class="fn">
       <div class="btn-wrap">
-        <el-button @click='download'>{{($i._baseText.downloadBig)}}({{selectList.length?selectList.length:'All'}})</el-button>
-        <el-button @click="createQcOrder">{{ $i._baseText.create }}</el-button>
+        <el-button @click='download'>{{($i.common.downloadBig)}}({{selectList.length?selectList.length:'All'}})</el-button>
+        <el-button @click="createQcOrder">{{ $i.common.create }}</el-button>
       </div>
     </div>
     <v-table

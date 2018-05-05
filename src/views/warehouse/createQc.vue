@@ -1,10 +1,10 @@
 <template>
     <div class="create-qc">
         <div class="title">
-            <span>{{$i._buyerQc.createQcOrder}}</span>
+            <span>{{$i.buyerQc.createQcOrder}}</span>
         </div>
         <div class="second-title">
-            {{$i._buyerQc.basicInfo}}
+            {{$i.buyerQc.basicInfo}}
         </div>
         <div>
             <el-form ref="qcOrder" :model="qcOrderBasic" label-width="190px">
@@ -179,7 +179,7 @@
             </el-form>
         </div>
         <div class="second-title">
-            {{$i._buyerQc.productInfo}}
+            {{$i.buyerQc.productInfo}}
         </div>
         <div class="product-info">
             <div class="btns">
@@ -247,13 +247,13 @@
 
         <div class="summary">
             <div class="second-title">
-                {{$i._buyerQc.summary}}
+                {{$i.buyerQc.summary}}
             </div>
         </div>
 
         <div class="footBtn">
-            <el-button @click="submit" :disabled="disableSubmit" type="primary">{{$i._buyerQc.submit}}</el-button>
-            <el-button @click="cancel" type="danger">{{$i._buyerQc.cancel}}</el-button>
+            <el-button @click="submit" :disabled="disableSubmit" type="primary">{{$i.buyerQc.submit}}</el-button>
+            <el-button @click="cancel" type="danger">{{$i.buyerQc.cancel}}</el-button>
         </div>
 
 

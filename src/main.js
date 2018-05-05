@@ -3,7 +3,8 @@ import App from './App'
 import router from 'service/router'
 import ajax from 'service/ajax'
 import config from 'service/config';
-import * as filters from 'service/filters.js'
+import * as filters from 'service/filters'
+import * as directive from 'service/directive'
 import fetch from 'service/fetch';
 import apis from '@/apis/index';
 import util from 'service/util';
@@ -25,7 +26,7 @@ locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 Vue.use(fetch);
 Vue.use(util);
 // Vue.use(VueI18n);
-Vue.use(ElementUI, {size: 'small'});
+Vue.use(ElementUI, {size: 'mini'});
 
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = new ajax();
@@ -46,7 +47,11 @@ if (config.ENV_FLAG === 'production') {
 }
 
 Object.keys(filters).forEach(key => {
-  Vue.filter(key, filters[key])
+  Vue.filter(key, filters[key]);
+});
+
+Object.keys(directive).forEach(key => {
+  Vue.directive(key, directive[key]);
 });
 
 config.AUTH = config.ENV_FLAG === 'local' ? config.AUTH : true;

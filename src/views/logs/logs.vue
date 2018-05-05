@@ -1,7 +1,7 @@
 <template>
     <div class="logs">
         <div class="title">
-           {{$i._logBasic.logs}}
+           {{$i.logBasic.logs}}
         </div>
         <div>
             <el-form label-width="130px" class="searchCondition">
@@ -10,17 +10,17 @@
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
-                        <el-form-item :label="$i._logBasic.description">
+                        <el-form-item :label="$i.logBasic.description">
                             <el-input type="text" v-model="search.description" @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item :label="$i._logBasic.operater">
+                        <el-form-item :label="$i.logBasic.operater">
                             <el-input type="text" v-model="search.operater"  @change="getbizlogs" style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="$i._logBasic.operationDate">
+                        <el-form-item :label="$i.logBasic.operationDate">
                             <el-date-picker
                             v-model="date"
                             type="daterange"

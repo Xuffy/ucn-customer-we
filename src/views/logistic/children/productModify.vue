@@ -1,189 +1,162 @@
 <template>
   <el-row>
     <v-table-filter :hideFilterValue="true" class="filter"/>
-    <el-table :data="modifyArray" style="width: 100%">
-      <el-table-column :label="$i.negotiate" width="100" align="center">
+    <el-table :data="modifyArray" style="width: 100%" class="table">
+      <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
         <template slot-scope="scope">
-          <span>123</span>
+          <span>{{ $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.orderNo" width="100" align="center" sortable>
+      <el-table-column :label="$i.logistic.orderNo" width="100" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.orderNo.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.quantityOfOuterCartonsToBeShipped" width="300" align="center" sortable>
+      <el-table-column :label="$i.logistic.quantityOfOuterCartonsToBeShipped" width="300" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.quantityOfOuterCartonsToBeShipped.value" v-if="scope.row.quantityOfOuterCartonsToBeShipped.edit"></el-input>
-          <span v-else>{{ scope.row.quantityOfOuterCartonsToBeShipped.value }}</span>
+          <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.goodsToBeShipped" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.goodsToBeShipped" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.goodsToBeShipped.value" v-if="scope.row.goodsToBeShipped.edit"></el-input>
-          <span v-else>{{ scope.row.goodsToBeShipped.value }}</span>
+          <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" v-if="scope.row.toShipQty.edit"></el-input>
+          <span v-else>{{ scope.row.toShipQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuCode" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.skuCode.value" v-if="scope.row.skuCode.edit"></el-input>
-          <span v-else>{{ scope.row.skuCode.value }}</span>
+          <span>{{ scope.row.skuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameEn" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuNameEn" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.skuNameEn.value" v-if="scope.row.skuNameEn.edit"></el-input>
-          <span v-else>{{ scope.row.skuNameEn.value }}</span>
+          <span>{{ scope.row.skuNameEn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuNameCN" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuNameCn" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.skuNameCN.value" v-if="scope.row.skuNameCN.edit"></el-input>
-          <span v-else>{{ scope.row.skuNameCN.value }}</span>
+          <span>{{ scope.row.skuNameCn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.productDescription" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.productDescription" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.productDescription.value" v-if="scope.row.productDescription.edit"></el-input>
-          <span v-else>{{ scope.row.productDescription.value }}</span>
+          <span>{{ scope.row.skuNameCustomer.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.blSkuName" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.blSkuName" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.blSkuName.value" v-if="scope.row.blSkuName.edit"></el-input>
-          <span v-else>{{ scope.row.blSkuName.value }}</span>
+          <span>{{ scope.row.blSkuName.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameCn" width="240" align="center" sortable>
+      <el-table-column :label="$i.logistic.customsDeclarationNameCn" width="240" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.customsDeclarationNameCn.value" v-if="scope.row.customsDeclarationNameCn.edit"></el-input>
-          <span v-else>{{ scope.row.customsDeclarationNameCn.value }}</span>
+          <span>{{ scope.row.customDeclarationNameCn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customsDeclarationNameEn" width="240" align="center" sortable>
+      <el-table-column :label="$i.logistic.customsDeclarationNameEn" width="240" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.customsDeclarationNameEn.value" v-if="scope.row.customsDeclarationNameEn.edit"></el-input>
-          <span v-else>{{ scope.row.customsDeclarationNameEn.value }}</span>
+          <span>{{ scope.row.customDeclarationNameEn.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.hsCode" align="center" width="100" sortable>
+      <el-table-column :label="$i.logistic.hsCode" align="center" width="100" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.hsCode.value" v-if="scope.row.hsCode.edit"></el-input>
-          <span v-else>{{ scope.row.hsCode.value }}</span>
+          <span>{{ scope.row.hsCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.reportElements" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.reportElements" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.reportElements.value" v-if="scope.row.reportElements.edit"></el-input>
-          <span v-else>{{ scope.row.reportElements.value }}</span>
+          <span>{{ scope.row.reportElement.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierName" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.supplierName" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.supplierName.value" v-if="scope.row.supplierName.edit"></el-input>
-          <span v-else>{{ scope.row.supplierName.value }}</span>
+          <span>{{ scope.row.supplierName.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.supplierNo" width="120" align="center" sortable>
+      <el-table-column :label="$i.logistic.supplierNo" width="120" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.supplierNo.value" v-if="scope.row.supplierNo.edit"></el-input>
-          <span v-else>{{ scope.row.supplierNo.value }}</span>
+          <span>{{ scope.row.supplierCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.customerSkuCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.customerSkuCode" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.customerSkuCode.value" v-if="scope.row.customerSkuCode.edit"></el-input>
-          <span v-else>{{ scope.row.customerSkuCode.value }}</span>
+          <span>{{ scope.row.customerSkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.factorySKUCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.factorySKUCode" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.factorySKUCode.value" v-if="scope.row.factorySKUCode.edit"></el-input>
-          <span v-else>{{ scope.row.factorySKUCode.value }}</span>
+          <span>{{ scope.row.factorySkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.unit" align="center" sortable>
+      <el-table-column :label="$i.logistic.unit" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.unit.value" v-if="scope.row.unit.edit"></el-input>
-          <span v-else>{{ scope.row.unit.value }}</span>
+          <span>{{ scope.row.unit.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.exportUnitPrice" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.exportUnitPrice" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.exportUnitPrice.value" v-if="scope.row.exportUnitPrice.edit"></el-input>
-          <span v-else>{{ scope.row.exportUnitPrice.value }}</span>
+          <span>{{ scope.row.unitExportPrice.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.totalPriceOfExport" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.totalPriceOfExport" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.totalPriceOfExport.value" v-if="scope.row.totalPriceOfExport.edit"></el-input>
-          <span v-else>{{ scope.row.totalPriceOfExport.value }}</span>
+          <span>{{ scope.row.totalExportPrice.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.currency" width="100" align="center" sortable>
+      <el-table-column :label="$i.logistic.currency" width="100" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.currency.value" v-if="scope.row.currency.edit"></el-input>
-          <span v-else>{{ scope.row.currency.value }}</span>
+          <span>{{ scope.row.currency.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.skuQuantityOfOuterCarton" width="220" align="center" sortable>
+      <el-table-column :label="$i.logistic.skuQuantityOfOuterCarton" width="220" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.skuQuantityOfOuterCarton.value" v-if="scope.row.skuQuantityOfOuterCarton.edit"></el-input>
-          <span v-else>{{ scope.row.skuQuantityOfOuterCarton.value }}</span>
+          <span>{{ scope.row.outerCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonLength" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonLength" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonLength.value" v-if="scope.row.outerCartonLength.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonLength.value }}</span>
+          <span>{{ scope.row.outerCartonLenth.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonWidth" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonWidth" width="180" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonWidth.value" v-if="scope.row.outerCartonWidth.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonWidth.value }}</span>
+          <span>{{ scope.row.outerCartonWidth.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonHeight" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonHeight" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonHeight.value" v-if="scope.row.outerCartonHeight.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonHeight.value }}</span>
+          <span>{{ scope.row.outerCartonHeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonNetWeight" width="200" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonNetWeight" width="200" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonNetWeight.value" v-if="scope.row.outerCartonNetWeight.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonNetWeight.value }}</span>
+          <span>{{ scope.row.outerCartonNetWeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonGrossWeight" width="200" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonGrossWeight" width="200" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonGrossWeight.value" v-if="scope.row.outerCartonGrossWeight.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonGrossWeight.value }}</span>
+          <span>{{ scope.row.outerCartonGrossWeight.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonVolume" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonVolume" width="180" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonVolume.value" v-if="scope.row.outerCartonVolume.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonVolume.value }}</span>
+          <span>{{ scope.row.outerCartonVolume.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.shippingMarks" width="140" align="center" sortable>
+      <el-table-column :label="$i.logistic.shippingMarks" width="140" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.shippingMarks.value" v-if="scope.row.shippingMarks.edit"></el-input>
-          <span v-else>{{ scope.row.shippingMarks.value }}</span>
+          <span>{{ scope.row.shippingMarks.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonBarCode" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonBarCode" width="180" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonBarCode.value" v-if="scope.row.outerCartonBarCode.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonBarCode.value }}</span>
+          <span>{{ scope.row.outerCartonBarCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.outerCartonSkuCode" width="180" align="center" sortable>
+      <el-table-column :label="$i.logistic.outerCartonSkuCode" width="180" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.outerCartonSkuCode.value" v-if="scope.row.outerCartonSkuCode.edit"></el-input>
-          <span v-else>{{ scope.row.outerCartonSkuCode.value }}</span>
+          <span>{{ scope.row.outerCartonSkuCode.value }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -215,29 +188,25 @@ export default {
   data () {
     return {
       modify: true,
-      modifyArray: [],
-      modifyObj: null
+      modifyArray: []
     }
   },
-  mounted () {
-    this.createModifyData()
-  },
   watch: {
-    productInfoModifyStatus () {
+    tableData () {
       this.createModifyData()
     }
   },
   methods: {
     createModifyData () {
+      // this.modifyArray = JSON.parse(JSON.stringify(this.tableData))
       if (this.productInfoModifyStatus === 1) {
-        this.modifyObj = JSON.parse(JSON.stringify(this.tableData[0]))
-        _.mapObject(this.modifyObj, (value, key) => {
-          key === 'skuCode' && (this.modifyObj[key].edit = true)
-          key === 'hsCode' && (this.modifyObj[key].edit = true)
+        const copyTableData = JSON.parse(JSON.stringify(this.tableData))
+        _.mapObject(copyTableData[0], (value, key) => {
+          key === 'toShipCartonQty' && (value.edit = true)
+          key === 'toShipQty' && (value.edit = true)
           return value
         })
-
-        this.modifyArray = [this.modifyObj, ...this.tableData]
+        this.modifyArray = copyTableData
       } else {
         this.modifyArray = this.tableData
       }
@@ -246,6 +215,10 @@ export default {
 }
 </script>
 <style lang="less">
+.table {
+  height: 400px;
+  overflow-y: auto;
+}
 .filter {
   float: right;
 }

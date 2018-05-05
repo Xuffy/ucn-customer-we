@@ -21,16 +21,16 @@
                             v-model="basicInfo[item.key]" 
                             :size="item.size || 'mini'"
                             v-if="item.type === 'String' && !item._hide" 
-                            disabled="true"
+                            :disabled="true"
                         />
-                        <el-input-number v-model="basicInfo[item.key]" disabled="true" :min="0" :max="100" v-if="item.type === 'phone'" controls-position="right" size="mini" :controls="false" style="width:100%;"/>
+                        <el-input-number v-model="basicInfo[item.key]" :disabled="true" :min="0" :max="100" v-if="item.type === 'phone'" controls-position="right" size="mini" :controls="false" style="width:100%;"/>
                         <el-select
                                 v-model="basicInfo[item.key]" 
                                 value-key="id"
                                 :size="item.size || 'mini'"
                                 v-if="item.type === 'Select'"
                                 style="width:100%;"
-                                disabled="true"
+                                :disabled="true"
                             >
                             <el-option
                                 v-for="item in []"
@@ -46,7 +46,7 @@
                             :placeholder="item.placeholder"
                             v-if="item.type === 'textarea'"
                             resize="none"
-                            disabled="true"
+                            :disabled="true"
                         />
                         <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
                     </el-form-item>
@@ -54,23 +54,20 @@
             </el-row>
         </el-form>
         <h5 class="solid">付款信息</h5>
-        <el-table
-                :data="tableData6"
-                border
-                show-summary
-                style="width: 100%"
-            >
+        <el-table :data="paymentData" border show-summary style="width: 100%">
             <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column prop="id" label="ID" width="180"></el-table-column>
-            <el-table-column prop="name" label="姓名"></el-table-column>
-            <el-table-column prop="amount1" sortable label="数值 1"></el-table-column>
-            <el-table-column prop="amount2" sortable label="数值 2"></el-table-column>
-            <el-table-column prop="amount3" sortable label="数值 3"></el-table-column>
+            <el-table-column
+                v-for="item in $db.warehouse.payment"
+                :key="item.id"
+                :prop="item.key"
+                :label="item.label"
+                :width="item.width || 180" 
+            />
         </el-table>
         <h5 class="solid">产品信息</h5>
         <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-            <el-tab-pane label="验货结果" name="first">
-                <el-button>接受</el-button>
+            <el-tab-pane label="验货结果" name="">
+                <el-button @click="dialogClose = true" :disabled="checkedData.length <= 0">接受</el-button>
                 <v-table 
                     :data.sync="tabData"
                     :buttons="[{'label': '详情', type: 'detail'}]"
@@ -79,8 +76,8 @@
                     :totalRow="true"
                 />
             </el-tab-pane>
-            <el-tab-pane label="返工申请" name="second">
-                <el-button>接受返工</el-button>
+            <el-tab-pane label="返工申请" name="APPLY_FOR_REWORK">
+                <el-button @click="rework" :disabled="checkedData.length <= 0">接受返工</el-button>
                 <v-table 
                     :data.sync="tabData"
                     :buttons="[{'label': '详情', type: 'detail'}]"
@@ -89,8 +86,8 @@
                     :totalRow="true"
                 />
             </el-tab-pane>
-            <el-tab-pane label="退货申请" name="third">
-                <el-button>接受退货</el-button>
+            <el-tab-pane label="退货申请" name="APPLY_FOR_RETURN">
+                <el-button @click="returnGoods" :disabled="checkedData.length <= 0">接受退货</el-button>
                 <v-table 
                     :data.sync="tabData"
                     :buttons="[{'label': '详情', type: 'detail'}]"
@@ -119,15 +116,33 @@
                             :label-width="item.width || '150px'"
                         >
                         <el-input 
-                            v-model="fromArg[item.key]" 
+                            v-model="basicInfo[item.key]" 
                             :size="item.size || 'mini'"
                             v-if="!item._hide" 
-                            :disabled="item.disabled"
+                            disabled
                         />
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
+        <div class="add-quick-link">
+            <el-dialog title="Add Quick Link" :visible.sync="dialogClose">
+                <el-checkbox-group v-model="checkedList">
+                    <el-row>
+                    <el-col :span="8" v-for="item in qcDetailProductInfo" :key="item.key" v-if="!item._hide">
+                        <el-checkbox :label="item.key">
+                        {{item.label}}
+                        </el-checkbox>
+                    </el-col>
+                    </el-row>
+                </el-checkbox-group>
+
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="$store.state.quickLink.show = false">取 消</el-button>
+                    <el-button type="primary" @click="accept">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
@@ -136,40 +151,64 @@
         name: 'QCOrderDetail',
         data() {
             return {
+                qcDetailProductInfo: {
+                    innerCartonLength: {
+                        label: 'innerCartonLength',
+                        key: 'innerCartonLength'
+                    },
+                    innerCartonWidth: {
+                        label: 'innerCartonWidth',
+                        key: 'innerCartonWidth'
+                    },
+                    innerCartonHeight: {
+                        label: 'innerCartonHeight',
+                        key: 'innerCartonHeight'
+                    },
+                    innerCartonVolume: {
+                        label: 'innerCartonVolume',
+                        key: 'innerCartonVolume'
+                    },
+                    innerCartonNetWeight: {
+                        label: 'innerCartonNetWeight',
+                        key: 'innerCartonNetWeight'
+                    },
+                    innerCartonGrossWeight: {
+                        label: 'innerCartonGrossWeight',
+                        key: 'innerCartonGrossWeight'
+                    },
+                    outerCartonLength: {
+                        label: 'outerCartonLength',
+                        key: 'outerCartonLength'
+                    },
+                    outerCartonWidth: {
+                        label: 'outerCartonWidth',
+                        key: 'outerCartonWidth'
+                    },
+                    outerCartonHeight: {
+                        label: 'outerCartonHeight',
+                        key: 'outerCartonHeight'
+                    },
+                    outerCartonVolume: {
+                        label: 'outerCartonVolume',
+                        key: 'outerCartonVolume'
+                    },
+                    outerCartonNetWeight: {
+                        label: 'outerCartonNetWeight',
+                        key: 'outerCartonNetWeight'
+                    },
+                    outerCartonGrossWeight:{
+                        label: 'outerCartonGrossWeight',
+                        key: 'outerCartonGrossWeight'
+                    }
+                },
+                checkedList: [],
+                checkedData: [],
+                paymentData: [],
+                orderType: 20,
                 basicInfo: {},
                 tabData: [],
-                activeName2: 'first',
-                tableData6: [{
-                    id: '12987122',
-                    name: '王小虎',
-                    amount1: '234',
-                    amount2: '3.2',
-                    amount3: 10
-                }, {
-                    id: '12987123',
-                    name: '王小虎',
-                    amount1: '165',
-                    amount2: '4.43',
-                    amount3: 12
-                }, {
-                    id: '12987124',
-                    name: '王小虎',
-                    amount1: '324',
-                    amount2: '1.9',
-                    amount3: 9
-                }, {
-                    id: '12987125',
-                    name: '王小虎',
-                    amount1: '621',
-                    amount2: '2.2',
-                    amount3: 17
-                }, {
-                    id: '12987126',
-                    name: '王小虎',
-                    amount1: '539',
-                    amount2: '4.1',
-                    amount3: 15
-                }]
+                activeName2: '',
+                dialogClose: false
             }
         },
         computed: {
@@ -189,14 +228,61 @@
             this.getDetail();
         },
         methods: {
+            rework() {
+                this.$ajax.post(this.$apis.POST_REWORK_HANDLE, {
+                    qcOrderDetailIds: this.checkedData,
+                    accept: true
+                })
+                .then(res => {
+                    
+                });
+            },
+            returnGoods() {
+                this.$ajax.post(this.$apis.POST_RETURN_HANDLE, this.checkedData)
+                .then(res => {
+
+                });
+            },
+            accept() {
+                this.$ajax.post(this.$apis.POST_QC_RESULT_ACCEPT, {
+                    qcOrderDetailIds: this.checkedData,
+                    fields: this.checkedList
+                })
+                .then(res => {
+                    this.dialogClose = false;
+                })
+            },
             getDetail() {
                 this.$ajax.get(`${this.$apis.GET_QC_GETBYID}?id=${this.$route.query.id}`)
                 .then(res => {
                     this.basicInfo = res;
+                    this.getPayment();
+                    this.getQcList();
                 })
             },
+            getQcList(name) {
+                let params = {
+                    pn: 1,
+                    ps: 200,
+                    qcOrderId: this.basicInfo.id,
+                    skuInventoryStatusDictCode: name || ''
+                };
+                this.$ajax.post(this.$apis.POST_QC_DETAIL_PAGE, params)
+                .then(res => {
+                    this.tabData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
+                });
+            },
+            getPayment() {
+                this.$ajax.post(this.$apis.post_order_paymentlist, {
+                    orderNo: this.basicInfo.qcOrderNo,
+                    orderType: this.orderType
+                }).then((res) => {
+                    this.paymentData = res.datas;
+                });
+            },
             handleClick(tab, event) {
-                console.log(tab, event);
+                this.checkedData = [];
+                this.getQcList(tab.name);
             },
             handleSelectionChange() {
 
@@ -204,8 +290,14 @@
             producInfoAction() {
 
             },
-            changeChecked() {
-
+            changeChecked(item) {
+                let arr = [];
+                _.map(item, items => {
+                    _.pick(items, (val, k) => {
+                        if(k === 'id') arr.push(val.value);
+                    })
+                })
+                this.checkedData = arr;
             }
         }
     }

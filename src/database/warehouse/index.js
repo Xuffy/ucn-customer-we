@@ -14,6 +14,8 @@ import summary from './summary';
 import createQcProductDialog from './createQcProductDialog';
 import outboundOverviewTable from './outboundOverviewTable';
 import createQcProductTable from './createQcProductTable';
+import payment from './payment';
+import qcDetailProductInfo from './qcDetailProductInfo';
 export default {
     inbound,
     outbound,
@@ -30,5 +32,7 @@ export default {
     summary,
     createQcProductDialog,
     outboundOverviewTable,
-    createQcProductTable
+    createQcProductTable,
+    payment,
+    qcDetailProductInfo,
 }

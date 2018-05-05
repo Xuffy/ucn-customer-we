@@ -79,7 +79,7 @@ export default {
     supplier: false,
     server: false,
   },
-  inquiryOverview: {
+  inquiry: {
     icon: '', link: '/negotiation/inquiry',
     customer: true,
     supplier: false,
