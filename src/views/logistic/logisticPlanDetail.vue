@@ -2,15 +2,15 @@
   <div class="place-logistic-plan">
     <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle" planId="planId"/>
     <el-row :gutter="10">
-       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+       <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
           <span>{{ $i.logistic.remark }}</span>
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="remark" v-if="edit"></el-input>
           <p v-else>{{ remark }}</p>
         </div>
-      </el-col>
+      <!-- </el-col> -->
       <attachment accept="all" ref="attachment" :title="$i.logistic.attachment"/>
       <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/>
     </el-row>
@@ -18,7 +18,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="tableData" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="containerType"/>
+      <container-info :tableData.sync="containerInfo" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
     </div>
 
     <div>
@@ -56,7 +56,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan" :planId="planId"/>
   </div>
 </template>
 <script>
@@ -88,7 +88,6 @@ export default {
       transportInfoObj,
       transportInfoArr: [],
       basicInfoArr: [],
-      containerType: [],
       productbButtons: [
         {
           label: 'Negociate',
@@ -108,10 +107,11 @@ export default {
       productList: [],
       productModifyList: [],
       paymentList: [],
-      tableData: [],
+      containerInfo: [],
       paymentSum: {},
       orderList: [],
       selectArr: {
+        containerType: [],
         permitedForTransportation: [
           {
             code: '1',
@@ -144,8 +144,8 @@ export default {
   watch: {
     edit (newValue) {
       if (newValue) return
-      this.tableData.forEach((a, i) => {
-        !Object.keys(a).length && this.arraySplite(this.tableData, i)
+      this.containerInfo.forEach((a, i) => {
+        !Object.keys(a).length && this.arraySplite(this.containerInfo, i)
       })
     },
     selectProductId (newValue) {
@@ -171,6 +171,7 @@ export default {
         value
       }
     })
+
     this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
       return {
         type: this.computeType(key),
@@ -199,7 +200,7 @@ export default {
         this.exchangeRateList = res.currencyExchangeRate
         this.remark = res.remark
         this.logisticsNo = res.logisticsNo
-        this.tableData = res.containerDetail
+        this.containerInfo = res.containerDetail
         this.feeList = [res.fee]
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
@@ -215,17 +216,17 @@ export default {
     },
     getDictionary () {
       this.$ajax.get(this.$apis.get_currency).then(res => {
-        this.selectArr.exchangeCurrency = res
+        this.$set(this.selectArr, 'exchangeCurrency', res)
       })
-      this.$ajax.get(this.$apis.get_container_type, '_cache').then(res => {
-        this.containerType = res
+      this.$ajax.get(this.$apis.get_container_type).then(res => {
+        this.$set(this.selectArr, 'containerType', res)
       })
       this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
     },
     getDictionaryPart (keyCode, keys) {
-      this.$ajax.post(this.$apis.get_dictionary, keyCode, '_cache').then(res => {
+      this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
         keys.forEach((a, i) => {
-          this.selectArr[a] = res[i].codes
+          this.$set(this.selectArr, a, res[i].codes)
         })
       })
     },
@@ -239,7 +240,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.selectionContainer.forEach(i => this.arraySplite(this.tableData, i))
+        this.selectionContainer.forEach(i => this.arraySplite(this.containerInfo, i))
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -252,20 +253,9 @@ export default {
     arrayAppend(arrKey) {
       this[arrKey].push({})
     },
-    tailBtnCance () {
-      this.tableData.pop();
-    },
-    tailBtnOk (item) {
-      this.tableData.pop();
-      this.tableData.push(item);
-    },
     arraySplite (array, index) {
       array.splice(index, 1);
     },
-    modify () {
-      this.isModify = false;
-    },
-    tailBtnCancel () {},
     action (e, i) {
       if (i === 3) return
       this.productInfoModifyStatus = i
@@ -282,21 +272,21 @@ export default {
     },
     getOrderList () {
       this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
-        this.orderList = res.datas.map(a => {
-          let aa = _.mapObject(a, item => {
-            item = 1
-            return item
-          })
-          return aa
-        })
-        // this.orderList = res.datas
+        // this.orderList = res.datas.map(a => {
+        //   let aa = _.mapObject(a, item => {
+        //     item = 1
+        //     return item
+        //   })
+        //   return aa
+        // })
+        this.orderList = res.datas
       })
     },
     closeAddProduct (status) {
       this.showAddProductDialog = false
-      const selectArr = this.$refs.addProduct.selectArr
-      if (!status || !selectArr.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
-      console.log(selectArr)
+      const selectArrData = this.$refs.addProduct.selectArrData
+      if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+      console.log(selectArrData)
       // TODO
     },
     selectProduct (arr) {
@@ -316,6 +306,7 @@ export default {
       this.basicInfoArr.forEach(a => {
         this.basicInfoObj = a.value
       })
+      console.log(this.basicInfoObj.payment)
       if (!this.basicInfoObj.payment) return this.$message({
         type: 'error',
         message: '付款方式为必填!'

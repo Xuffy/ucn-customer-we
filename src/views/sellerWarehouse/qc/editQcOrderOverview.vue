@@ -57,63 +57,9 @@
       :data="paymentData"
     />
     <h5 class="solid">产品信息</h5>
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column
-        prop="type"
-        label="Type"
-        width="240">
-        <template slot-scope="scope">
-            <span  v-model="scope.row.type">
-                  <span v-if="scope.row.type==0">NeedLabelDesignInfoDate</span>
-                  <span v-else-if="scope.row.type==1">LableDesignDate</span>
-                  <span v-else-if="scope.row.type==2">DesignNeedConfirmDate</span>
-                  <span v-else-if="scope.row.type==3">ReceiveSampleDate</span>
-                  <span v-else-if="scope.row.type==4">SampleNeedConfirmDate</span>
-                  <span v-else-if="scope.row.type==5">OtherDate</span>
-            </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="customer" label="Me" width="240">
-        <template slot-scope="scope">
-
-          <el-date-picker
-            v-model="scope.row.customer"
-            type="datetime"
-            :disabled='(copyData[scope.$index].customer!="")||scope.$index==1||scope.$index==3||disabled'                              >
-          </el-date-picker>
-        </template>
-      </el-table-column>
-      <el-table-column prop="supplier" label="Supplier" width="240">
-        <template slot-scope="scope">
-          <el-date-picker
-            v-model="scope.row.supplier"
-            type="datetime"
-            placeholder=""
-            :disabled=true
-          >
-          </el-date-picker>
-
-        </template>
-      </el-table-column>
-      <el-table-column prop="remark" label="Remark" width="240">
-        <template slot-scope="scope">
-          <el-input
-            v-model="scope.row.remark"  :disabled='(copyData[scope.$index].remark!="")||disabled'
-          ></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="actualDt" label="Actual Date" width="240">
-        <template slot-scope="scope">
-          <el-date-picker
-            v-model="scope.row.actualDt"
-            type="datetime"
-            :disabled='(copyData[scope.$index].actualDt!="")||disabled'
-          >
-          </el-date-picker>
-
-        </template>
-      </el-table-column>
-    </el-table>
+      <v-table
+  :data="tableData"
+/>
     <h5 class="solid">总结</h5>
     <el-form ref="ruleform" :model="fromArg">
       <el-row :gutter="10">
@@ -130,7 +76,7 @@
             :label="item.label"
             :prop="item.key"
             :rules="item.rules"
-            :label-width="item.width || '150px'"
+            :label-width="item.width || '200px'"
           >
             <el-input
               v-model="basicInfo[item.key]"
@@ -142,24 +88,6 @@
         </el-col>
       </el-row>
     </el-form>
-    <!--<div class="add-quick-link">-->
-      <!--<el-dialog title="Add Quick Link" :visible.sync="dialogClose">-->
-        <!--<el-checkbox-group v-model="checkedList">-->
-          <!--<el-row>-->
-            <!--<el-col :span="8" v-for="item in $db.warehouse.qcDetailProductInfo" :key="item.key" v-if="!item._hide">-->
-              <!--<el-checkbox :label="item.key">-->
-                <!--{{item.label}}-->
-              <!--</el-checkbox>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-        <!--</el-checkbox-group>-->
-
-        <!--<div slot="footer" class="dialog-footer">-->
-          <!--<el-button @click="$store.state.quickLink.show = false">取 消</el-button>-->
-          <!--<el-button type="primary">确 定</el-button>-->
-        <!--</div>-->
-      <!--</el-dialog>-->
-    <!--</div>-->
     <div class="footer">
       <hr>
       <span slot="footer">
@@ -193,9 +121,7 @@
         dialogClose: false,
         id:1,
         type:'',
-        tableData: [{
-
-        },],
+        tableData: [],
         copyData: []
       }
     },
@@ -326,7 +252,7 @@
       }
     },
     created(){
-       this.getUesrLList()
+       // this.getUesrLList()
        this.getCodePart()
        this.getCurrency()
        this.getDetail()
