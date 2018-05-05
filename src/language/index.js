@@ -18,8 +18,7 @@ const json = {
     require(`./${lang}/inquiry/productInfo.pending`)
   ),
   logistic: _.extend({},
-    require(`./${lang}/logistic/plan/basicInfo.pending`),
-    require(`./${lang}/logistic/plan/overviewBtn.pending`),
+    // require(`./${lang}/logistic/plan/basicInfo.pending`),
     require(`./${lang}/logistic/plan/plan.base`)
   ),
   logs: _.extend({},

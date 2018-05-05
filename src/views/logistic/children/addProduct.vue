@@ -187,7 +187,7 @@ export default {
       row.index = rowIndex
     },
     handleSelectionChange (arr) {
-      this.selectArrData = arr.map(a => a.id)
+      this.selectArrData = arr
     }
   }
 }

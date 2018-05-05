@@ -1,11 +1,11 @@
 <template>
   <div class="logistic-plan-overview">
-    <div class="hd-top">{{ headerText }}</div>
+    <div class="hd-top">{{ headerText[pageType] }}</div>
     <div class="status">
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="viewByChange(viewBy)">
+          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList">
             <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
             <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}</el-radio-button>
           </el-radio-group>
@@ -24,25 +24,19 @@
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
         <el-radio-group v-model="viewBy" size="mini">
-          <el-radio-button 
-            v-for="item in $db.logistic.overviewBtn"
-            :key="item.index"
-            :label="item.index"
-            >
-            {{ item.label }}
-          </el-radio-button>
+          <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
         </el-radio-group>
       </div>
     </div>
     <v-table
     :data="tabData"
-    :buttons="!viewBy ? [{label: 'detail', type: 'detail'}] : null"
+    :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null"
     @action="action"
     @change-checked="changeChecked"
     :loading="tableLoading"
     ref="tab"
     />
-    <v-pagination :page-data="pageObj" @page-size-change="sizeChange" @page-change="pageChange"/>
+    <v-pagination :page-data.sync="pageParams" @page-size-change="sizeChange" @page-change="pageChange"/>
 </div>
 </template>
 <script>
@@ -54,33 +48,84 @@ export default {
   },
   data () {
     return {
-      pageObj: {},
       tableLoading: false,
       ls_plan: [],
       pageParams: {
         pn: 1,
         ps: 10
       },
-      totalCount: 0,
       selectCount: [],
       fillterVal: 'all',
-      tabColumn: [],
       tabData: [],
-      viewBy: 0,
+      viewBy: 'plan',
       options: [
         {
           id: 'logisticsNo',
-          label: 'logistic Plan No'
+          label: this.$i.logistic.logisticPlanNo
         },
         {
           id: 'skuCode',
-          label: 'SKU Code'
+          label: this.$i.logistic.skuCode
         },
         {
           id: 'orderNo',
-          label: 'Order No'
+          label: this.$i.logistic.orderNo
         }
-      ]
+      ],
+      headerText: {
+        plan: this.$i.logistic.logisticsPlanOverview,
+        loadingList: this.$i.logistic.loadingListOverview,
+        draft: this.$i.logistic.draftOverview,
+        archive: this.$i.logistic.archiveOverview
+      },
+      urlObj: {
+        plan: {
+          plan: {
+            key: 0,
+            label: 'plan',
+            text: this.$i.logistic.plan,
+            url: this.$apis.gei_plan_list,
+            db: this.$db.logistic.planList
+          },
+          transportation: {
+            key: 1,
+            label: 'transportation',
+            text: this.$i.logistic.transportationUnit,
+            url: this.$apis.get_transportation_list,
+            db: this.$db.logistic.transportationList
+          },
+          sku: {
+            key: 2,
+            label: 'sku',
+            text: this.$i.logistic.sku,
+            url: this.$apis.get_sku_list,
+            db: this.$db.logistic.sku
+          }
+        },
+        loadingList: {
+          plan: {
+            key: 3,
+            label: 'plan',
+            text: this.$i.logistic.plan,
+            url: this.$apis.get_loading_list_plan,
+            db: this.$db.logistic.planList
+          },
+          transportation: {
+            key: 4,
+            label: 'transportation',
+            text: this.$i.logistic.transportationUnit,
+            url: this.$apis.get_loading_list_unit,
+            db: this.$db.logistic.transportationList
+          },
+          sku: {
+            key: 5,
+            label: 'sku',
+            text: this.$i.logistic.sku,
+            url: this.$apis.get_loading_list_sku,
+            db: this.$db.logistic.sku
+          }
+        }
+      }
     }
   },
   components: {
@@ -91,15 +136,10 @@ export default {
   watch: {
     viewBy (newVal) {
       this.selectCount = []
-      this.viewByChange(newVal)
+      this.fetchDataList()
     },
     pageType () {
       this.fetchData()
-    }
-  },
-  computed: {
-    headerText () {
-      return this.pageType === 'plan' ? this.$i.logistic.logisticsPlanOverview : this.pageType === 'loadingList' ? this.$i.logistic.loadingListOverview : this.pageType === 'draft' ? this.$i.logistic.draftOverview : this.$i.logistic.archiveOverview
     }
   },
   mounted () {
@@ -121,11 +161,11 @@ export default {
       if (this.pageType === 'plan') {
         this.getDictionary(['LS_PLAN'])
         this.getContainerType()
-        this.viewByChange(this.viewBy)
       }
       if (this.pageType === 'loadingList') {
         this.getDictionary(['LS_STATUS'])
       }
+      this.fetchDataList()
     },
     deleteData () {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -134,7 +174,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
-          this.viewByChange(this.viewBy)
+          this.fetchDataList()
           this.selectCount = []
           this.$message({
             type: 'success',
@@ -152,57 +192,28 @@ export default {
     searchFn (obj) {
       const { pn, ps } = this.pageParams
       this.pageParams = {pn, ps, [obj.keyType]: obj.key}
-      this.viewByChange(this.viewBy)
+      this.fetchDataList()
     },
     sizeChange (e) {
       this.pageParams.ps = e
-      this.viewByChange(this.viewBy)
+      this.fetchDataList()
     },
     pageChange (e) {
       this.pageParams.pn = e
-      this.viewByChange(this.viewBy)
+      this.fetchDataList()
     },
     addNew () {
       this.$router.push('/logistic/placeLogisticPlan')
     },
-    viewByChange (viewId) {
-      viewId === 0 ? this.getPlanList() : viewId === 1 ? this.getTransportationList() : this.getSKUList()
-    },
-    getDictionary (keyCode) {
-      this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
-        this.ls_plan = res[0].codes
-      })
-    },
-    getContainerType () {
-      this.$ajax.get(this.$apis.get_container_type, '_cache').then(res => {
-        this.containerType = res
-      })
-    },
-    getPlanList () {
+    fetchDataList () {
+      const url = this.urlObj[this.pageType][this.viewBy].url
+      const db = this.urlObj[this.pageType][this.viewBy].db
       this.tableLoading = true
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
-      this.$ajax.post(this.$apis.gei_plan_list, {lgStatus, ...this.pageParams}).then(res => {
+      this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
         if (!res) return (this.tableLoading = false)
-        this.totalCount = res.tc
-        this.tabData = this.$getDB(this.$db.logistic.planList, res.datas, item => {
-          _.mapObject(item, val => {
-            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-            return val
-          })
-        })
-        this.pageObj = res
-        this.tableLoading = false
-      })
-    },
-    getTransportationList () {
-      this.tableLoading = true
-      const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
-
-      this.$ajax.post(this.$apis.get_transportation_list, {lgStatus, ...this.pageParams}).then(res => {
-        if (!res) return (this.tableLoading = false)
-        this.totalCount = res.tc
-        this.tabData = this.$getDB(this.$db.logistic.transportationList, res.datas, item => {
+        this.tabData = this.$getDB(db, res.datas, item => {
           _.mapObject(item, val => {
             if (val.type === 'select' && val.value) {
               let obj = this.containerType.find(a => a.code === val.value)
@@ -212,25 +223,22 @@ export default {
             return val
           })
         })
-        this.pageObj = res
+        this.pageParams = {
+          pn: res.pn,
+          ps: res.ps,
+          tc: res.tc
+        }
         this.tableLoading = false
       })
     },
-    getSKUList () {
-      this.tableLoading = true
-      const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
-
-      this.$ajax.post(this.$apis.get_SKU_list, {lgStatus, ...this.pageParams}).then(res => {
-        if (!res) return (this.tableLoading = false)
-        this.totalCount = res.tc
-        this.tabData = this.$getDB(this.$db.logistic.sku, res.datas, item => {
-          _.mapObject(item, val => {
-            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-            return val
-          })
-        })
-        this.pageObj = res
-        this.tableLoading = false
+    getDictionary (keyCode) {
+      this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
+        this.ls_plan = res[0].codes
+      })
+    },
+    getContainerType () {
+      this.$ajax.get(this.$apis.get_container_type).then(res => {
+        this.containerType = res
       })
     }
   }
@@ -238,7 +246,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .logistic-plan-overview {
-  margin-top: 20px;
   .hd-top {
     font-size: 18px;
     color: #666;
