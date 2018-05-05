@@ -11,6 +11,9 @@ import outboundOrderTable from './outboundOrderTable';
 import outboundProduct from './outboundProduct';
 import qcDetailBasicInfo from './qcDetailBasicInfo';
 import summary from './summary';
+import createQcProductDialog from './createQcProductDialog';
+import outboundOverviewTable from './outboundOverviewTable';
+import createQcProductTable from './createQcProductTable';
 export default {
     inbound,
     outbound,
@@ -24,5 +27,8 @@ export default {
     outboundOrderTable,
     outboundProduct,
     qcDetailBasicInfo,
-    summary
+    summary,
+    createQcProductDialog,
+    outboundOverviewTable,
+    createQcProductTable
 }

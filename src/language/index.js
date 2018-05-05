@@ -123,6 +123,10 @@ export default _.extend({},
   require(`./${lang}/warehouse/warehouse.table`),
 
 
+    //warehouse qc
+    {_buyerQc: require(`./${lang}/warehouse/createQc.basic`)},
+
+
   //CN配置
 
   {_warehouse: require(`./${lang}/warehouseCn/warehouse.basic`)},

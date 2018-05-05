@@ -102,10 +102,10 @@
             getOutboundData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_outboundData,this.outboundConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.inboundTable, res.datas,(e)=>{
-                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
-                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                    this.tableDataList = this.$getDB(this.$db.warehouse.outboundOverviewTable, res.datas,(e)=>{
+                        e.outboundDate.value=this.$dateFormat(e.outboundDate.value,'yyyy-mm-dd');
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                        e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                         return e;
                     });
                     this.loadingTable=false;
@@ -135,7 +135,7 @@
 
             btnClick(e){
                 this.$windowOpen({
-                    url:'/sellerWarehouse/inboundDetail',
+                    url:'/sellerWarehouse/outboundDetail',
                     params:{
                         id:e.id.value
                     }

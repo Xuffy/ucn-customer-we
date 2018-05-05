@@ -5,6 +5,7 @@
       <div class="state">
         <span>{{ $i._baseText.qcStatus }}</span>
         <el-radio-group v-model="params.qcStatusDictCode" @change="getQcOrderList">
+          <el-radio-button label="">{{$i._baseText.all}}</el-radio-button>
           <el-radio-button label="WAITING_QC">{{$i._baseText.waitingQC}}</el-radio-button>
           <el-radio-button label="COMPLETED_QC">{{$i._baseText.completedQC}}</el-radio-button>
         </el-radio-group>
@@ -12,6 +13,7 @@
       <div style="float: right">
         <select-search
           :options="options"
+          v-model="searchValue"
           @inputEnter="inputEnter"
           :searchLoad="searchLoad"
         />
@@ -19,14 +21,14 @@
     </div>
     <div class="fn">
       <div class="btn-wrap">
-        <el-button @click='download'>{{($i._baseText.download)}}({{selectedDate.length}})</el-button>
+        <el-button @click='download'>{{($i._baseText.downloadBig)}}({{selectList.length?selectList.length:'All'}})</el-button>
         <el-button @click="createQcOrder">{{ $i._baseText.create }}</el-button>
       </div>
     </div>
     <v-table
       :data="tabData"
       :loading='loading'
-      :buttons="[{label: 'detail', type: 1}]"
+      :buttons="[{label: 'Detail', type: 1}]"
       @action="onAction"
       @change-checked='checked'
     />
@@ -60,25 +62,22 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
                 pageTotal: 0,
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 params: {
-                  pn: 1,
-                  ps: 10,
-                  tc:0,
-                  purchaseId: '',
-                  qcOrderNo: '',
-                  qcStatusDictCode: 'WAITING_QC',
-                  serviceProviderId: '',
-                  sorts: [
-                    {
-                      nativeSql: true,
-                      orderBy: '',
-                      orderType: 'DESC',
-                      resultMapId: ''
-                    }
-                  ]
+                    pn: 1,
+                    ps: 50,
+                    qcOrderNo: "",
+                    qcStatusDictCode: "",
+
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
                 },
                 tabData:[],
-                selectedDate: [],
-                selectedNumber: []
+                selectList: [],
+                selectedNumber: [],
+                searchValue:1
             }
         },
         methods:{
@@ -92,60 +91,53 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
               this.params.ps = val;
             },
             checked(item) {
-              this.selectedDate = item
-              var obj=[]
-              this.selectedDate.forEach(item => {
-                obj.push(item.id.value);
-              });
-              this.selectedNumber=obj
+              this.selectList = item
             },
             inputEnter(val) {
-              console.log(val)
-              if (!val.keyType) return this.$message('请选中搜索类型');
-              if (!val.key) return this.$message('搜索内容不能为空');
+              if (!val.keyType) return this.$message({
+                  message: 'please choose a type',
+                  type: 'warning'
+              });
               if (val.keyType == '1') {
                 this.params.qcOrderNo = val.key
               }
               this.getQcOrderList()
             },
             onAction(item, type) {
-              //点击后跳转到此验货单详情页面
-              this.$windowOpen({
-                url: '',
-                params: {
-
-                }
-              });
+                this.$windowOpen({
+                    url:'/warehouse/qcDetail',
+                    params:{
+                        id:item.id.value
+                    }
+                })
             },
             download() {
-              this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
-                .then((res) => {
-                  console.log(res)
-                })
-                .catch((res) => {
-                  console.log(res)
-                });
+                console.log('下载')
+                // this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
+                //   .then((res) => {
+                //     console.log(res)
+                //   })
+                //   .catch((res) => {
+                //     console.log(res)
+                //   });
             },
             //获取表格data
             getQcOrderList(){
-              this.loading = true
-              this.$ajax.post(this.$apis.post_qc_page,this.params)
-                .then(res => {
-                    this.loading = false
-                    res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                    this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas);
-                })
-                .catch((res) => {
-                   this.loading = false
-              });
+                this.loading = true;
+                this.$ajax.post(this.$apis.post_qc_page,this.params)
+                    .then(res => {
+                        this.loading = false;
+                        // res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+                        this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas);
+                    })
+                    .catch((res) => {
+                        this.loading = false;
+                    });
             },
             createQcOrder(){
-              this.$router.push({
-                path: '/createQc',
-                query: {
-                  id: id
-                }
-              })
+                this.$windowOpen({
+                    url:'/warehouse/createQc'
+                })
             }
 
         },
@@ -187,7 +179,7 @@ import { selectSearch, VTable ,VPagination} from '@/components/index';
     .fn {
       display:flex;
       justify-content:space-between;
-      padding:30px 15px;
+      padding:10px 15px;
       box-sizing: border-box;
       .viewBy {
         display:flex;
