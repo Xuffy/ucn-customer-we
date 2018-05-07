@@ -10,7 +10,6 @@ import apis from '@/apis/index';
 import util from 'service/util';
 import '../theme/index.css';
 import 'assets/style/main.less';
-// import VueI18n from 'vue-i18n'
 import ElementUI from 'element-ui';
 import store from './store';
 import database from './database/index';
@@ -18,6 +17,7 @@ import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
 import OSS from 'ali-oss';
+import co from 'co';
 
 
 const ossJson = {
@@ -42,7 +42,12 @@ let client = new OSS.Wrapper({
 console.log(client)
 
 
-
+co(function* () {
+  var result = yield client.put('object-key', new Buffer('hello world'));
+  console.log(result);
+}).catch(function (err) {
+  console.log(err);
+});
 
 
 
