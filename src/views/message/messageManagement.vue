@@ -6,6 +6,7 @@
         <div class="body">
           <v-table
             :data="tabData"
+            hide-filter-value
           />
         </div>
 
@@ -31,7 +32,7 @@
             </el-input>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="postAddMessage()">发 布</el-button>
-                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button @click="cencl()">取消</el-button>
             </span>
         </el-dialog>
     </div>
@@ -94,6 +95,10 @@
                 //     .catch(_ => {});
                 done();
             },
+          cencl(){
+            this.dialogVisible = false
+            this.params = {}
+          },
           getMessageList(){
             let url, column;
             this.tabLoad = true;
@@ -122,6 +127,7 @@
             this.$ajax.post(url, this.params)
             .then(res => {
               this.$message('发送成功');
+              this.params = {}
               this.getMessageList()
             })
             .catch(() => {

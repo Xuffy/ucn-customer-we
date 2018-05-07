@@ -81,39 +81,41 @@
                 @save="save"
                 ref="HM"
             >
-            <div slot="transportationWay" slot-scope="{item}">
-                <el-select v-model="item" placeholder="请选择">
-                    <el-option
-                        v-for="item in selectAll.transportationWay"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    >
-                    </el-option>
-                </el-select>
-            </div>
-            <div slot="supplierName" slot-scope="{item}">
+            <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
                 <el-select
-                    style="width:100%;"
-                    v-model="item"
-                    multiple
-                    filterable
-                    remote
-                    reserve-keyword
-                    value-key="id"
-                    size="mini"
-                    placeholder="请输入关键词"
-                    :remote-method="remoteMethod"
-                    :loading="loading">
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                        style="width:100%;"
+                    >
                     <el-option
-                        v-for="item in selectAll.supplierName"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item"
-                        :id="item.id"
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
                     />
                 </el-select>
-            </div>
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+                <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
+            </template>
         </v-history-modify>
     </div>
 </template>
@@ -136,6 +138,7 @@
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 disabledLine: [],
                 trig: 0,
                 disabledTabData: [],
@@ -463,6 +466,7 @@
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
+                    this.fromArg = arr[0];
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 

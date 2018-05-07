@@ -16,44 +16,6 @@ export const routerMap = [
       hidden: true, // 在侧边栏中不显示该菜单
     },
     {
-      path: '/sellerNegotiation',
-      name: 'sellerNegotiation',
-      noDropdown: true,
-      component: Layout,
-      redirect: '/sellerNegotiation/inquiry',
-      meta: {
-        name: 'sellerNegotiation',
-      },
-      children: [
-        {
-          path: 'inquiry',
-          name: 'sellerInquiry',
-          meta: {
-            name: 'seller Negotiation inquiry',
-          },
-          component: () => import('../views/sellerNegotiation/inquiryOverview')
-        },
-        {
-          path: 'inquiryDetail',
-          name: 'sellerInquiryDetail',
-          hidden: true,
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: 'Inquiry Detail',
-            messageBoard: 'code'
-          },
-          component: () => import('../views/sellerNegotiation/inquiryDetail')
-        },
-        {
-          path: 'recycleBin',
-          name: 'sellerRecycleBin',
-          component: () => import('../views/sellerNegotiation/recycleBin')
-        }
-      ]
-    },
-    {
       path: '/login',
       hidden: true,
       component: () => import('../views/login/index.vue')
@@ -885,26 +847,6 @@ export const routerMap = [
             log: false,
           },
           component: () => import('../views/customer/customerDetail.vue')
-        }
-      ]
-    },
-    {
-      path: '/sellerSettings',
-      name: 'sellerSettings',
-      noDropdown: false,
-      component: Layout,
-      redirect: '/sellerSettings/CategorySetting',
-      meta: {
-        name: 'sellerSettings',
-      },
-      children: [
-        {
-          path: 'sellerCategorySetting',
-          name: 'sellerCategorySetting',
-          meta: {
-            name: 'Category setting',
-          },
-          component: () => import('../views/sellerSettings/CategorySetting'),
         }
       ]
     }

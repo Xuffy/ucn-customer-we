@@ -23,6 +23,7 @@
           :data="tabData"
           @change-checked="changeChecked"
           :height="450"
+          hide-filter-value
         />
       </div>
 
@@ -144,14 +145,14 @@
           this.updatesetting.subscribeEmail = 1
           this.$ajax.post(url, this.updatesetting)
           .then(res => {
-            this.$message('系统通过邮件来发送消息');
+            this.$message('配置成功！');
             this.getMessageQuery()
           })
         }else{
           this.updatesetting.subscribeEmail = 0
           this.$ajax.post(url, this.updatesetting)
           .then(res => {
-            this.$message('系统关闭邮件来发送消息');
+            this.$message('配置成功！');
             this.getMessageQuery()
           })
         }
@@ -278,7 +279,6 @@
     created(){
       this.getDataInfo()
       this.getMessageQuery()
-      //  this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
     }
   }
 </script>
@@ -296,6 +296,7 @@
   .spe-div{
     padding-top: 20px;
     overflow: hidden;
+    padding-bottom: 20px;
   }
   .spe-div .View{
     float: left;

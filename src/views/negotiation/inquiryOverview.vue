@@ -23,11 +23,11 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="toCompare" :disabled="checkedData.length >= 2?false:true">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.common.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button :disabled="tabData.length <= 0?true:false">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="cancelInquiry" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button :disabled="!tabData.length">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
