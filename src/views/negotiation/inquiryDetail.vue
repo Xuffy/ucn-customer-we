@@ -15,6 +15,7 @@
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
+                            :height="450"
                             :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
@@ -45,15 +46,15 @@
                         :hideFilterColumn="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
                         <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
                         <el-button @click="addToCompare">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
                         <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i.common.copy }}</el-button>
                         <el-button @click="toCreateInquire">{{ $i.common.createInquiry }}</el-button>
                         <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
+                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value+''!== '22'&&tabData[0].status.value+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + ''!=='99'||tabData[0].status.value+''!=='1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -88,10 +89,40 @@
             @save="save"
             ref="HM"
         >
-            <template v-for="items in $db.inquiry.basicInfo" :slot="items._slot" slot-scope="{data}">
-                <el-select placeholder="请选择" v-model="fromArg[items.key]">
-                    <el-option v-for="item in selectAll[data.key]" :key="item.value" :label="item.label" :value="item.value" />
+            <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.name"
+                        :id="items.id"
+                    />
                 </el-select>
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.name"
+                        :id="items.id"
+                    />
+                </el-select>
+                <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
     </div>
@@ -111,10 +142,12 @@
     import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 loading: false,
                 disabledLine: [],
                 trig: 0,
@@ -178,15 +211,6 @@
                 }
             }
         },
-        computed: {
-            fromArg() {
-                let json = {};
-                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
-                    json[k] = val.key;
-                });
-                return json; 
-            }
-        },
         components: {
             'message-board':messageBoard,
             'select-search':selectSearch,
@@ -202,6 +226,21 @@
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
             };
             this.getDictionaries();
+            this.remoteMethod('');
+            this.setDraft({
+                name: 'negotiationDraft',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -218,6 +257,10 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin'
+            ]),
             deleteInquiry() {
                 this.$confirm('确认删除?', '提示', {
                     confirmButtonText: '确定',
@@ -237,6 +280,12 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            remoteMethod(keyWord) {
+                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
+                .then(res => {
+                    this.selectAll.supplierName = res;
+                })
             },
             getDictionaries() {
                 this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
@@ -319,11 +368,31 @@
                 })
                 .then(res => {
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    let basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    _.map(basicInfoData, item => {
+                        if(!item._remark) _.mapObject(item, (val, k) => {
+                            switch(val.state) {
+                                case 'time':
+                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
+                            }
+                        });
+                    });
+                    this.newTabData = basicInfoData;
+                    this.tabData = basicInfoData;
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    let newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+
+                    _.map(newProductTabData, item => {
+                        if(!item._remark) _.mapObject(item, (val, k) => {
+                            switch(val.state) {
+                                case 'time':
+                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
+                            }
+                        });
+                    });
+
+                    this.newProductTabData = newProductTabData;
+                    this.productTabData = newProductTabData;
                     this.tableLoad = false;
                 })
                 .catch(err => {
@@ -448,6 +517,7 @@
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
                         }
                     }
+                    this.fromArg = arr[0];
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
@@ -473,6 +543,14 @@
                         case 'modify':
                             this.oSwitch = true;
                             this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
+                            break;
+                        case 'detail':
+                            this.$router.push({
+                                path: '/product/sourcingDetail',
+                                query: {
+                                    id: data.skuId.value
+                                }
+                            });
                             break;
                 }
            },
@@ -518,6 +596,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
+                    this.newTabData[0].status.value = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
