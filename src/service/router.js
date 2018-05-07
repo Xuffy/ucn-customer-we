@@ -452,7 +452,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'planOverview'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'loadingList',
@@ -462,7 +462,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'loadingList'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'draft',
@@ -473,7 +473,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'logisticDraft'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'archive',
@@ -484,7 +484,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'logisticArchive'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'placeLogisticPlan',
