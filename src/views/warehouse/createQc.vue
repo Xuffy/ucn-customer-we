@@ -499,8 +499,8 @@
                         });
                     }
                 });
-                this.$ajax.post(this.$apis.add_warehouseOrder,this.qcOrderConfig).then(res=>{
-                    console.log(res)
+                this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
+                    this.$router.push('/warehouse/qcOverview');
                 }).catch(err=>{
 
                 });
