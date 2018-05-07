@@ -4,7 +4,6 @@
 
 export const basicInfoInput = [
   'logisticsNo',
-  'logisticsStatus',
   'shipServiceProvider',
   'receiptCompany',
   'shippingAgent',
@@ -27,6 +26,7 @@ export const basicInfoInput = [
 ]
 
 export const basicInfoSelector = [
+  'logisticsStatus',
   'exchangeCurrency',
   'payment',
   'permitedForTransportation',
@@ -54,7 +54,8 @@ export const basicInfoDate = [
 
 export const disabledFields = [
   'logisticsNo',
-  'customerName'
+  'customerName',
+  'logisticsStatus'
 ]
 
 export const basicInfoObj = {
@@ -65,7 +66,7 @@ export const basicInfoObj = {
   estArrivalDate: '',
   estReleaseDate: '',
   estDelivaryDate: '',
-  logisticsStatus: '',
+  logisticsStatus: '1',
   createDate: '',
   declareDate: '',
   bookingDate: '',

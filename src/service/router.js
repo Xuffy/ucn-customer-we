@@ -507,6 +507,17 @@ export const routerMap = [
             name: 'planDetail'
           },
           component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
+          path: 'planDraftDetail',
+          name: 'logisticDraftDetail',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: true,
+            name: 'planDetail'
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
         }
       ]
     },

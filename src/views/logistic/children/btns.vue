@@ -10,8 +10,8 @@
       <el-button size="mini" type="danger">{{ $i.logistic.delete }}</el-button>
     </div>
     <div v-else>
-      <el-button size="mini" type="primary" @click.stop="$emit('saveAsDraft')" v-if="!planId">{{ $i.logistic.saveAsDraft }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('savePlan')">{{ $i.logistic.send }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'saveAsDraft')" v-if="!planId">{{ $i.logistic.saveAsDraft }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.send }}</el-button>
       <el-button size="mini" type="danger" @click.stop="$emit('toExit')">{{ $i.logistic.exit }}</el-button>
     </div>
   </el-row>
@@ -19,9 +19,7 @@
 <script>
 export default {
   props: {
-    planId: {
-      type: String
-    },
+    planId: [String, Number],
     edit: {
       type: Boolean,
       default: false
