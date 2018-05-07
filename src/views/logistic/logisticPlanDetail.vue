@@ -297,6 +297,12 @@ export default {
       this.showAddProductDialog = false
       const selectArrData = this.$refs.addProduct.selectArrData
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+      selectArrData.forEach(a => {
+        a.blSkuName = ''
+        a.hsCode = ''
+        a.currency = ''
+      })
+      console.log(selectArrData)
       this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       // console.log(selectArrData)
       // TODO

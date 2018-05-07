@@ -331,10 +331,10 @@ export const routerMap = [
           path: 'overview',
           name: 'order',
           meta: {
-            draft: true,
+            draft: '/order/draftOverview',
             recycleBin: true,
             log: true,
-            name: 'Overview'
+            name: 'orderOverview'
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -352,7 +352,7 @@ export const routerMap = [
           path: 'detail',
           name: 'orderDetail',
           meta: {
-            draft: true,
+           
             recycleBin: true,
             log: true,
             name: 'Detail'
@@ -452,7 +452,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'planOverview'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'loadingList',
@@ -462,7 +462,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'loadingList'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'draft',
@@ -473,7 +473,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'logisticDraft'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'archive',
@@ -484,7 +484,7 @@ export const routerMap = [
             recycleBin: true,
             name: 'logisticArchive'
           },
-          component: () => import('../views/logistic/overviewWrapper')
+          component: () => import('../views/logistic/logisticPlanOverview')
         },
         {
           path: 'placeLogisticPlan',

@@ -43,9 +43,6 @@
 import { selectSearch, VTable, VPagination } from '@/components/index';
 export default {
   name: 'logisticPlanOverview',
-  props: {
-    pageType: String
-  },
   data () {
     return {
       tableLoading: false,
@@ -140,6 +137,12 @@ export default {
     },
     pageType () {
       this.fetchData()
+    }
+  },
+  computed: {
+    pageType () {
+      const arr = this.$route.fullPath.split('/')
+      return arr[arr.length - 1]
     }
   },
   mounted () {
