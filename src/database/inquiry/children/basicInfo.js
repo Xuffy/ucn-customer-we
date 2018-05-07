@@ -23,6 +23,7 @@ export default {
     },
     remarkDate: {
         key: 'updateDt',
+        state: 'time',
         label: '22',
         type: 'String',
         _disabled: true,
@@ -33,20 +34,20 @@ export default {
         _hide: true
     },
     operater: { //修改人 系统带入
+        key: 'updateName',
         placeholder: 'Please select',
         width: '150px',
         type: 'String',
-        state: 0,
         _disabled: true,
         _inquiryHide: true
     },
     time: { //时间 系统带入
-        key: 'entryDt',
+        key: 'updateDt',
         placeholder: 'Please select time',
         rules: [],
         width: '150px',
         type: 'String',
-        state: 0,
+        state: 'time',
         _disabled: true,
         _inquiryHide: true
     },
@@ -75,11 +76,12 @@ export default {
         rules: [],
         width: '150px',
         type: 'String',
-        state: 0,
+        state: 'time',
         _inquiryHide: true,
         _disabled: true
     },
     inquiryStatus: { //询价单状态
+        key: 'status',
         placeholder: 'Please select',
         rules: [],
         width: '150px',
