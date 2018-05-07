@@ -331,10 +331,10 @@ export const routerMap = [
           path: 'overview',
           name: 'order',
           meta: {
-            draft: true,
+            draft: '/order/draftOverview',
             recycleBin: true,
             log: true,
-            name: 'Overview'
+            name: 'orderOverview'
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -352,7 +352,7 @@ export const routerMap = [
           path: 'detail',
           name: 'orderDetail',
           meta: {
-            draft: true,
+           
             recycleBin: true,
             log: true,
             name: 'Detail'
