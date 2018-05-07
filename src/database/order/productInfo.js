@@ -13,7 +13,8 @@ export default {
         label: ' ',
         type: 'text',
         _disabled: true,
-        _title: 'remark'
+        _title: 'remark',
+          state: 'time'
     },
     _remark: {
         _hide: true
@@ -25,7 +26,9 @@ export default {
     _id: {
         _hide: true
     },
-
+    _remark: {
+    _hide: true,
+    },
     skuPic: {
         key: 'skuPic',
         type: 'attachment',
@@ -84,7 +87,6 @@ export default {
         key: 'skuFobPrice',
         type: 'select',
     },
-    //????????????????????????????发运港口
     skuFobPort: {
         key: "skuFobPort",
          _slot:'skuFobPort'
