@@ -338,10 +338,10 @@
                     importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
-                _.extendOwn(params, basic)
+                _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
-                _.extendOwn(params, caculate)
-
+                _.extend(params, caculate)
+                
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         this.$router.push('/order/overview')
