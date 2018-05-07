@@ -24,7 +24,7 @@
             </div>
 
             <div v-else>
-              <span v-if="scope.row[item.key]._disabled || !isModify" v-text="scope.row[item.key].value"></span>
+              <span v-if="scope.row[item.key]._disabled || !isModify || scope.row[item.key].type === 'manySelect'" v-text="scope.row[item.key].value"></span>
               <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
                 <slot :name="item._slot" :data="scope.row[item.key]"></slot>
               </div>

@@ -4,10 +4,14 @@ export default {
     label: ' ',
     type: 'text',
     _disabled: true,
-    _title: 'remark'
+    _title: 'remark',
+    state: 'time'
   },
-  skuRecycle: {
+  skuSysCode: {
     _hide: true
+  },
+  tenantId: {
+    _hide: true   
   },
   skuId: {
     _hide: true
@@ -30,47 +34,52 @@ export default {
   },
   pic: {
     key: 'skuPic',
-    type: 'attachment'
+    type: 'img',
+    _hide: true
   },
-  skuSysCode: {
-    type: 'text',
-    _disabled: true
-  },
-  status: {
+  skuSaleStatus: {
     key: 'skuStatus',
-    type: 'text'
+    type: 'Select'
   },
-  code: {
+  deleteOrNotRecycle: {
+    key: "skuRecycle",
+    type: 'String',
+    _hide: true
+  },
+  skuCode: {
     key: 'skuCode',
     type: 'text',
     _disabled: true
   },
-  nameCn: {
+  skuNameCn: {
     key: 'skuNameCn',
     type: 'text',
     _disabled: true
   },
-  descCn: {
+  skuDescriptionCn: {
     key: 'skuDescCn',
     type: 'text',
     _disabled: true
   },
-  nameEn: {
+  skuNameEn: {
     key: 'skuNameEn',
     type: 'text',
     _disabled: true
   },
-  descEn: {
+  skuDescriptionEN: {
     key: 'skuDescEn',
     type: 'text',
     _disabled: true
   },
-  nameCustomer: {
+  productFormation: {
+    key: 'skuProductFormation'
+  },
+  skuNameInCustomerLanguage: {
     key: 'skuNameCustomer',
     type: 'text',
     _disabled: true
   },
-  descCustomer: {
+  skuDescriptionInCustomerLanguage: {
     key: 'skuDescCustomer'
   },
   customerSkuCode: {
@@ -79,7 +88,7 @@ export default {
   supplierName: {
     key: 'skuSupplierName'
   },
-  supplierCode: {
+  supplierNO: {
     key: 'skuSupplierCode'
   },
   unit: {
@@ -88,19 +97,19 @@ export default {
   formation: {
     key: 'skuFormation'
   },
-  materialEn: {
+  skuMaterialEn: {
     key: 'skuMaterialEn'
   },
-  materialCn: {
+  skuMaterialCn: {
     key: 'skuMaterialCn'
   },
-  colourEn: {
+  skuColourEn: {
     key: 'skuColourEn'
   },
-  colourCn: {
+  skuColourCn: {
     key: 'skuColourCn'
   },
-  minOrderQty: {
+  skuMinOrderQty: {
     key: 'skuMinOrderQty'
   },
   deliveryDates: {
@@ -109,37 +118,40 @@ export default {
   design: {
     key: 'skuDesign'
   },
-  categoryId: {
+  skuCategoryId: {
     key: 'skuCategoryId'
   },
   barcode: {
     key: "skuBarcode"
   },
-  readilyAvailable: {
+  skuReadilyAvailable: {
     key: 'skuReadilyAvailable'
   },
-  availableQty: {
+  skuCodeneSellCountry: {
+    key: "skuCodeneSellCountry"
+  },
+  skuAvailableQty: {
     key: 'skuAvailableQty'
   },
   noneSellCountry: {
     key: 'skuNoneSellCountry'
   },
-  applicableAge: {
+  skuApplicableAge: {
     key: 'skuApplicableAge'
   },
-  expireDates: {
+  skuExpireDates: {
     key: 'skuExpireDates'
   },
-  expireUnit: {
+  skuExpireUnit: {
     key: 'skuExpireUnit'
   },
-  comments: {
+  skuComments: {
     key: 'skuComments'
   },
   fobCurrency: {
     key: 'skuFobCurrency'
   },
-  fobPrice: {
+  skuFobPrice: {
     key: 'skuFobPrice'
   },
   fobPort: {

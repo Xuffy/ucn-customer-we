@@ -36,11 +36,11 @@
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items.code"
+                                    :id="items.id"
                                 />
                             </el-select>
 
@@ -53,11 +53,11 @@
                                     style="width:100%;"
                                 >
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.code"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items.code"
+                                    :id="items.id"
                                 />
                             </el-select>
                             <el-select
@@ -74,11 +74,11 @@
                                 :remote-method="remoteMethod"
                                 :loading="loading">
                                 <el-option
-                                    v-for="item in selectAll[item.key]"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item"
-                                    :id="item.id"
+                                    v-for="items in selectAll[item.key]"
+                                    :key="items.id"
+                                    :label="items.name"
+                                    :value="items"
+                                    :id="items.id"
                                 />
                             </el-select>
                             <el-input
@@ -112,7 +112,7 @@
             :data.sync="tabData"
             :buttons="productInfoBtn"
             :loading="tableLoad"
-            :height="500"
+            :height="450"
             @action="producInfoAction"
             @change-checked="changeChecked"
             :parId="'skuId'"
@@ -154,6 +154,7 @@
 <script>
     import { selectSearch, VTable, Upload, VHistoryModify } from '@/components/index';
     import product from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
     export default {
         name:'createInquiry',
         data() {
@@ -223,11 +224,30 @@
             this.getDictionaries();
             this.remoteMethod('');
             if(this.$route.query.id) this.getFefault();
+            
+            this.setDraft({
+                name: 'negotiationDraft',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         computed: {
             
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin'
+            ]),
             getFefault() {
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
@@ -421,6 +441,14 @@
                         case 'modify':
                             this.oSwitch = true;
                             this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
+                            break;
+                        case 'detail':
+                            this.$router.push({
+                                path: '/product/sourcingDetail',
+                                query: {
+                                    id: data.skuId.value
+                                }
+                            });
                             break;
                 }
            },

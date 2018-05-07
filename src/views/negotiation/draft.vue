@@ -8,6 +8,18 @@
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
+        <div class="fn">
+            <div class="btn-wrap">
+                
+            </div>
+            <div class="viewBy">
+                <span>{{ $i.common.viewBy }}&nbsp;</span>
+                <el-radio-group v-model="viewByStatus"  size="mini">
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
+                </el-radio-group>
+            </div>
+        </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
@@ -30,6 +42,7 @@
         name:'',
         data() {
             return {
+                viewByStatus: '0',
                 title: '',
                 pageTotal:0,
                 checkedArg: [],
@@ -82,16 +95,22 @@
                 this.bodyData.ps = val;
             },
             getInquiryList() { //获取inquirylist
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
+                let url, column;
+                this.tabLoad = true;
+                if(this.viewByStatus + '' === '0') {
+                    url = this.$apis.POST_INQIIRY_LIST;
+                    column = this.$db.inquiry.viewByInqury;
+                } else {
+                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    column = this.$db.inquiry.viewBySKU;
+                };
+                this.$ajax.post(url, this.bodyData)
                 .then(res => {
-                    this.bodyData.tc = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
+                    res.tc ? this.bodyData.tc = res.tc : this.bodyData.tc = this.bodyData.tc;
+                    this.checkedArg = [];
+                    this.tabData = this.$getDB(column, res.datas);
                     this.tabLoad = false;
-                    this.searchLoad = false; 
-                })
-                .catch(() => {
-                    this.searchLoad = false; 
-                    this.tabLoad = false;
+                    this.searchLoad = false;
                 })
             },
             searchEnter(item) { // 搜索框
@@ -108,9 +127,15 @@
             },
             changeChecked(item) { //选中的list
                 let arr = [];
-                item.forEach(item => {
-                    arr.push(item.id.value);
-                });
+                if(this.viewByStatus === '0') {
+                    item.forEach(item => {
+                        arr.push(item.id.value);
+                    });
+                } else {
+                    tem.forEach(item => {
+                        arr.push(item.inquiryId.value);
+                    });
+                }
                 this.checkedArg = arr;
             },
             getList() {
@@ -145,7 +170,7 @@
                 })
                 .then(res => {
                     this.getInquiryList();
-                    this.checkedData = [];
+                    this.checkedArg = [];
                 });
             },
             deleteList() { //删除
@@ -173,6 +198,9 @@
                     this.getList();
                 },
                 deep: true
+            },
+            viewByStatus(){
+                this.getList();
             }
         },
         created() {
@@ -206,6 +234,32 @@
                 align-items: center;
                 span {
                     font-size:14px;
+                }
+            }
+        }
+        .fn {
+            display:flex;
+            justify-content:space-between;
+            padding:10px 15px;
+            box-sizing: border-box;
+            .viewBy {
+                display:flex;
+                align-items: center;
+                span {
+                    font-size:14px;
+                    color:#666;
+                }
+                button {
+                    cursor: pointer;
+                    padding:2px 5px;
+                }
+                .set {
+                    cursor: pointer;
+                    padding-left:18px;
+                    color:#999;
+                    i {
+                        font-size:25px;
+                    }
                 }
             }
         }
