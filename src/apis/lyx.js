@@ -2,7 +2,7 @@ export default {
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo', 'BASE_DEV'],
   get_transportation_list: ['/logistics/plan/pageByUnit', 'BASE_DEV'],
-  get_SKU_list: ['/logistics/plan/pageBySkuCode', 'BASE_DEV'],
+  get_sku_list: ['/logistics/plan/pageBySkuCode', 'BASE_DEV'],
   get_dictionary: ['/code/part', 'BASE_DEV_DIC'],
   delete_by_ids: ['/logistics/plan/deleteByIds', 'BASE_DEV'],
   get_new_logistics_no: ['/logistics/plan/getNo', 'BASE_DEV'],
@@ -12,4 +12,7 @@ export default {
   get_payment_list: ['/payment/list/', 'BASE_DEV'],
   get_product_history: ['/logistics/plan/getProductHistory', 'BASE_DEV'],
   get_order_list_with_page: ['/order/skuAllPage', 'BASE_DEV'],
+  get_loading_list_plan: ['/logistics/order/pageByPlanNo', 'BASE_DEV'],
+  get_loading_list_unit: ['/logistics/order/pageByUnit', 'BASE_DEV'],
+  get_loading_list_sku: ['/logistics/order/pageBySkuCode', 'BASE_DEV'],
 }

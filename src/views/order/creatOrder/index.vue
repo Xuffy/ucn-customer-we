@@ -85,9 +85,6 @@
   </div>
 </template>
 
-
-
-
 <script>
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility.vue'
@@ -329,7 +326,7 @@
                 // 正则 
                 //                if (!this.$refs.basicInfo.submitForm()) { 
                 //                     return }
-                return console.log(this.dataFilter(this.tabData))
+//                return console.log(this.dataFilter(this.tabData))
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
@@ -615,7 +612,11 @@
             },
             //product带入
             getProductDetail() {
-                let arr = this.$route.query.ids
+                let arr = [];
+                this.$route.query.ids.split(',').forEach(v=>{
+                    arr.push(Number(v))
+                })     
+                arr.pop()
                 this.$ajax.post(this.$apis.post_order_skus, arr)
                     .then(res => {
                         _.map(res, arr => {
@@ -630,7 +631,6 @@
                 let obj = this.$depthClone(this.tabData[0]);
                 _.map(this.tabData, value => {
                     _.map(value, (val, k) => {
-
                         if (obj[val.key] && obj[val.key]._calu) {
                             obj[val.key].value = (obj[val.key].value + val.value)
                         } else {
@@ -638,7 +638,9 @@
                         }
                         this.tableTatal = [obj]
                     });
+                     
                 });
+                 
             }
         },
         created() {
@@ -662,7 +664,7 @@
         watch: {
             tabData: {
                 handler(curVal) {
-                    //                   this.tableTatalCal()
+//                    this.tableTatalCal()
                     this.summary()
                 },
                 deep: true

@@ -167,6 +167,7 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             if(e.status.value===1){
@@ -177,9 +178,10 @@
                             return e;
                         });
                         this.hasLoading=true;
+                        this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
-
+                        this.loadingTable=false;
                     });
                 }
                 else if(this.$route.params.type==='modify'){
@@ -240,7 +242,8 @@
                     this.$windowOpen({
                         url:'/product/bookmarkDetail',
                         params:{
-                            id:id
+                            id:id,
+                            bookmarkId:e.bookmarkId.value
                         }
                     })
                 }else{
@@ -326,10 +329,25 @@
                     }
                 });
                 if(this.disabledOrderList.length>0){
-                    console.log(this.disabledOrderList)
                     this.dialogFormVisible=true;
                 }else{
-
+                    if(this.selectList.length===0){
+                        this.$windowOpen({
+                            url:'/order/creat',
+                        })
+                    }else{
+                        let ids='';
+                        this.selectList.forEach(v=>{
+                            ids+=(v.id.value+',');
+                        });
+                        this.$windowOpen({
+                            url:'/order/creat',
+                            params:{
+                                type:'product',
+                                ids:ids,
+                            },
+                        })
+                    }
                 }
             },
 
@@ -477,7 +495,6 @@
                     compares: [],
                     name: this.compareName
                 };
-                console.log(this.tableDataList,'this.tableDataList')
                 this.tableDataList.forEach(v=>{
                     let id,name;
                     if(v.speProduct){

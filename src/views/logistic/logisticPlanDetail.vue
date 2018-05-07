@@ -2,7 +2,7 @@
   <div class="place-logistic-plan">
     <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle" planId="planId"/>
+    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -157,10 +157,11 @@ export default {
   },
   computed: {
     planId () {
-      return this.$route.query.id
+      return '' + this.$route.query.id
     }
   },
   mounted () {
+    this.registerRoutes()
     this.getDictionary()
     this.getOrderList()
     this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
@@ -189,6 +190,16 @@ export default {
     }
   },
   methods: {
+    registerRoutes () {
+      this.$store.commit('SETDRAFT', {
+        name: 'overviewDraft',
+        show: true
+      })
+      this.$store.commit('SETRECYCLEBIN', {
+        name: 'overviewArchive',
+        show: true
+      })
+    },
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.basicInfoArr.forEach(a => {
@@ -197,7 +208,7 @@ export default {
         this.transportInfoArr.forEach(a => {
           a.value = res[a.key]
         })
-        this.exchangeRateList = res.currencyExchangeRate
+        this.exchangeRateList = res.currencyExchangeRate || []
         this.remark = res.remark
         this.logisticsNo = res.logisticsNo
         this.containerInfo = res.containerDetail
@@ -286,7 +297,8 @@ export default {
       this.showAddProductDialog = false
       const selectArrData = this.$refs.addProduct.selectArrData
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
-      console.log(selectArrData)
+      this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
+      // console.log(selectArrData)
       // TODO
     },
     selectProduct (arr) {
@@ -304,14 +316,27 @@ export default {
     },
     savePlan () {
       this.basicInfoArr.forEach(a => {
-        this.basicInfoObj = a.value
+        this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? +a.value : a.value)
       })
-      console.log(this.basicInfoObj.payment)
+
+      this.transportInfoArr.forEach(a => {
+        this.$set(this.transportInfoObj, a.key, a.value)
+      })
+
+      this.basicInfoObj.remark = this.remark
       if (!this.basicInfoObj.payment) return this.$message({
         type: 'error',
         message: '付款方式为必填!'
       })
-      console.log(this.basicInfoObj)
+
+
+      const data = {
+        ...this.basicInfoObj,
+        ...this.transportInfoObj,
+        containerDetail: this.containerInfo,
+        fee: this.feeList
+      }
+      console.log(data)
     }
   }
 }
