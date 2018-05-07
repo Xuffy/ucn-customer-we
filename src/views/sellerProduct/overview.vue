@@ -12,7 +12,8 @@
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.sellerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down class="speDropDown" v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="dropData" ref="dropDown"></drop-down>
+                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
+                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
@@ -65,20 +66,20 @@
         <div class="footer">
             <div class="btns">
                 <el-button @click="addNewProduct">{{$i.product.addNewProduct}}</el-button>
-                <el-button @click="setUp">{{$i.product.setUp}}</el-button>
-                <el-button @click="setDown">{{$i.product.setDown}}</el-button>
-                <el-button>{{$i.product.downloadSelected}}</el-button>
+                <el-button :disabled="disabledDeleteGoods" @click="setUp">{{$i.product.setUp}}</el-button>
+                <el-button :disabled="disabledDeleteGoods" @click="setDown">{{$i.product.setDown}}</el-button>
+                <el-button>{{$i.product.downloadSelected}}({{selectList.length?selectList.length:'All'}})</el-button>
                 <el-button @click="deleteGood" :disabled="disabledDeleteGoods" type="danger">{{$i.product.delete}}</el-button>
             </div>
 
             <v-table
+                    :loading="loadingTable"
                     ref="vTable"
                     :data="tableDataList"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
         </div>
-
 
         <el-dialog
                 class="speDialog"
@@ -88,19 +89,8 @@
             <span>当前所选有上架产品，是否下架该产品?</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="partDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="partDialogVisible = false">跳过上架产品</el-button>
+                <el-button @click="putdownExcept" type="primary">跳过上架产品</el-button>
                 <el-button type="primary" @click="partDialogVisible = false">下架产品</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog
-                class="speDialog"
-                title="提示"
-                :visible.sync="allDialogVisible"
-                width="30%">
-            <span>当前所选是上架产品，是否先下架产品?</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="allDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="allDialogVisible = false">下架产品</el-button>
             </span>
         </el-dialog>
     </div>
@@ -123,6 +113,7 @@
         },
         data(){
             return{
+                loadingTable:false,
                 partDialogVisible:false,       //弹出框显示隐藏
                 allDialogVisible:false,        //弹出框显示隐藏
                 hideBody:true,            //是否显示body
@@ -175,48 +166,28 @@
                         { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
                     ],
                 },
+                defaultProps:{
+                    label:'name',
+                    children:'children'
+                },
+                //Category下拉组件数据
+                categoryList:[
+                    {
+                        id:123,
+                        name:"系统分类",
+                        children:[],
+                        _disableClick:true,
+                    },
+                    {
+                        id:5125,
+                        name:"自己的分类",
+                        children:[],
+                        _disableClick:true,
+                    },
+                ],
 
                 //表格选中的条目
-                selectGroups:[],
-
-
-                //Category下拉组件数据
-                dropData:[
-                    {
-                        id: 1,
-                        label: '一级 1',
-                        children: [{
-                            id: 4,
-                            label: '二级 1-1',
-                            children: [{
-                                id: 9,
-                                label: '三级 1-1-1'
-                            }, {
-                                id: 10,
-                                label: '三级 1-1-2'
-                            }]
-                        }]
-                    }, {
-                        id: 2,
-                        label: '一级 2',
-                        children: [{
-                            id: 5,
-                            label: '二级 2-1'
-                        }, {
-                            id: 6,
-                            label: '二级 2-2'
-                        }]
-                    }, {
-                        id: 3,
-                        label: '一级 3',
-                        children: [{
-                            id: 7,
-                            label: '二级 3-1'
-                        }, {
-                            id: 8,
-                            label: '二级 3-2'
-                        }]
-                    }],
+                selectList:[],
 
                 //底部table数据
                 tableDataList:[],
@@ -231,7 +202,7 @@
 
             //表格check状态变更时触发事件
             changeChecked(e){
-                this.selectGroups=e;
+                this.selectList=e;
             },
 
             //清除填写的表格数据
@@ -248,6 +219,7 @@
             //搜索
             search(){
                 this.disabledSearch=true;
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,this.productForm).then(res=>{
                     res.datas.forEach(v=>{
                         if(v.status===0){
@@ -258,8 +230,10 @@
                     });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
                     this.disabledSearch=false;
+                    this.loadingTable=false;
                 }).catch(err=>{
                     this.disabledSearch=false;
+                    this.loadingTable=false;
                 });
 
             },
@@ -270,19 +244,43 @@
 
             //获取table数据
             getData() {
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_productList,{
                     recycle:false,
                 }).then(res=>{
-                    res.datas.forEach(v=>{
-                        if(v.status===0){
-                            v.status='下架';
-                        }else if(v.status===1){
-                            v.status='上架';
+                    // res.datas.forEach(v=>{
+                    //     if(v.status===0){
+                    //         v.status='下架';
+                    //     }else if(v.status===1){
+                    //         v.status='上架';
+                    //     }
+                    // });
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
+                        if(e.status.value===0){
+                            e.status.value='下架';
+                        }else if(e.status.value===1){
+                            e.status.value='上架';
                         }
+                        return e;
                     });
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                    this.selectList=[];
+                    this.loadingTable=false;
                 }).catch(err=>{
-                    console.log(err)
+                    this.loadingTable=false;
+                });
+            },
+
+            //获取类别数据
+            getCategoryId(){
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
+                }).catch(err=>{
+
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
                 });
             },
 
@@ -298,11 +296,29 @@
 
             //设为上架
             setUp(){
-                console.log(this.$refs.vTable.getSelected())
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.set_sellerProductPutAway,id).then(res=>{
+                    this.getData();
+                }).catch(err=>{
+
+                });
             },
 
             //设为下架
-            setDown(){},
+            setDown(){
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
+                    this.getData();
+                }).catch(err=>{
+
+                });
+            },
 
             //删除商品
             deleteGood(){
@@ -312,34 +328,14 @@
                     type: 'warning'
                 }).then(() => {
                     let hasUp=false;            //是否有上架商品，默认为false
-                    let allUp=true;             //假设全部都是上架商品
-                    this.selectGroups.forEach(v=>{
+                    this.selectList.forEach(v=>{
                         if(v.status.value==='上架'){
                             hasUp=true;
-                        }else if(v.status.value==='下架'){
-                            allUp=false;        //有一个下架商品就代表不是全部都是上架
                         }
                     })
                     if(hasUp){
-                        if(allUp){
-                            //如果全部都是上架商品
-                            this.allDialogVisible=true;
-                        }else{
-                            //部分上架商品
-                            this.partDialogVisible=true;
-                        }
+                        this.partDialogVisible=true;
 
-
-                        //
-                        // this.$confirm('当前所选有上架产品，是否下架该产品?', '提示', {
-                        //     confirmButtonText: '下架产品',
-                        //     cancelButtonText: '跳过上架产品',
-                        //     type: 'warning'
-                        // }).then(() => {
-                        //
-                        // }).catch(() => {
-                        //
-                        // });
                     }else{
                         this.$message({
                             message: '删除成功，被删除的产品可在回收站中找回',
@@ -349,6 +345,11 @@
                 }).catch(() => {
 
                 });
+            },
+
+            //删除商品(跳过上架产品)
+            putdownExcept(){
+                console.log(this.selectList,'???')
             },
 
             //表格check状态改变
@@ -368,6 +369,7 @@
         },
         created(){
             this.getData();
+            this.getCategoryId();
         },
 
         watch:{
@@ -378,7 +380,7 @@
                     this.btnInfo=this.$i.product.hideTheAdvanced;
                 }
             },
-            selectGroups(n){
+            selectList(n){
                 if(n.length>=1){
                     this.disabledDeleteGoods=false;
                 }else{

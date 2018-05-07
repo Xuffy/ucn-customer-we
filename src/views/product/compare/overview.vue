@@ -7,6 +7,7 @@
             <el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
             <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>
             <select-search
+                    v-model="searchValue"
                     :options="searchOptions"
                     @inputEnter="searchCompare"
                     class="search"></select-search>
@@ -45,6 +46,7 @@
                 selectList:[],
                 downloadBtnInfo:'All',
                 disableClickDeleteBtn:false,
+                searchValue:1,
                 searchOptions:[
                     {
                         label:'Compare Name',
@@ -87,6 +89,7 @@
 
             //获取data数据
             getList() {
+                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_compareList,this.queryParam).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.compareTable, res.datas,(e)=>{
                         e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
@@ -94,7 +97,9 @@
                     });
                     this.selectList=[];
                     this.loadingTable=false;
+                    this.loadingTable=false;
                 }).catch(err=>{
+                    this.loadingTable=false;
                     this.loadingTable=false;
                 });
             },
@@ -139,17 +144,25 @@
 
             //搜索compare
             searchCompare(e){
-                this.loadingTable=true;
-                if(e.keyType===1){
-                    //compareName
-                    this.queryParam.compareItem='';
-                    this.queryParam.name=e.key;
-                    this.getList();
-                }else if(e.keyType===2){
-                    //compareItem
-                    this.queryParam.name='';
-                    this.queryParam.compareItem=e.key;
-                    this.getList();
+                console.log(e)
+                if(!e.keyType){
+                    this.$message({
+                        message: 'please choose a type',
+                        type: 'warning'
+                    });
+                }else{
+                    this.loadingTable=true;
+                    if(e.keyType===1){
+                        //compareName
+                        this.queryParam.compareItem='';
+                        this.queryParam.name=e.key;
+                        this.getList();
+                    }else if(e.keyType===2){
+                        //compareItem
+                        this.queryParam.name='';
+                        this.queryParam.compareItem=e.key;
+                        this.getList();
+                    }
                 }
             },
 

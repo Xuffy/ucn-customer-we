@@ -242,7 +242,8 @@
                     this.$windowOpen({
                         url:'/product/bookmarkDetail',
                         params:{
-                            id:id
+                            id:id,
+                            bookmarkId:e.bookmarkId.value
                         }
                     })
                 }else{
@@ -328,10 +329,25 @@
                     }
                 });
                 if(this.disabledOrderList.length>0){
-                    console.log(this.disabledOrderList)
                     this.dialogFormVisible=true;
                 }else{
-
+                    if(this.selectList.length===0){
+                        this.$windowOpen({
+                            url:'/order/creat',
+                        })
+                    }else{
+                        let ids='';
+                        this.selectList.forEach(v=>{
+                            ids+=(v.id.value+',');
+                        });
+                        this.$windowOpen({
+                            url:'/order/creat',
+                            params:{
+                                type:'product',
+                                ids:ids,
+                            },
+                        })
+                    }
                 }
             },
 
@@ -479,7 +495,6 @@
                     compares: [],
                     name: this.compareName
                 };
-                console.log(this.tableDataList,'this.tableDataList')
                 this.tableDataList.forEach(v=>{
                     let id,name;
                     if(v.speProduct){

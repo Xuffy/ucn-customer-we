@@ -113,6 +113,7 @@ export default {
   methods: {
     summaryMethod () {
       let SumArr = [this.$i.logistic.sum]
+      if (!this.paymentSum) return SumArr
       SumArr[4] = this.paymentSum.planPayAmount
       SumArr[6] = this.paymentSum.actualPayAmount
       SumArr[7] = this.paymentSum.currencyCode
