@@ -407,16 +407,18 @@
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: parentNode,
+//                    skuList: parentNode,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: false,
                     importantSupplier: this.markAsImportant,
-                }
+                }               
                 var basic = this.$refs.basicInfo.formItem
-                _.extend(params, basic)
+                _.extend(params, basic)              
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(params, caculate)
+                params.skuList=parentNode
+                return console.log(params)
                 this.$ajax.post(this.$apis.post_updataOrder, params)
                     .then(res => {
                         this.$router.push('/order/overview')

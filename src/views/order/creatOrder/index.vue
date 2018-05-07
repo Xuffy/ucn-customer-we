@@ -330,7 +330,7 @@
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.dataFilter(this.tabData),
+//                    skuList: this.dataFilter(this.tabData),
                     //                    skuList: this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
@@ -341,7 +341,7 @@
                 _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(params, caculate)
-                
+                params.skuList=this.dataFilter(this.tabData)
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         this.$router.push('/order/overview')
@@ -354,7 +354,7 @@
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.dataFilter(this.tabData),
+//                    skuList: this.dataFilter(this.tabData),
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: true,
                     //                    importantCustomer: false,
@@ -364,7 +364,7 @@
                 _.extendOwn(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extendOwn(params, caculate)
-
+                params.skuList=this.dataFilter(this.tabData)
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         console.log(res)
