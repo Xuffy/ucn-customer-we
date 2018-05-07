@@ -43,7 +43,7 @@
                 </el-row>
                 <div class="btns" v-show="notLoadingDone">
                     <el-button>{{$i.product.createInquiry}}</el-button>
-                    <el-button>{{$i.product.createOrder}}</el-button>
+                    <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
                     <el-button>{{$i.product.download}}</el-button>
@@ -137,6 +137,7 @@
                     </div>
                     <br>
                     <el-table
+                            v-loading="loadingRemarkTable"
                             :data="remarkTableData"
                             border
                             style="width: 100%">
@@ -402,6 +403,7 @@
                 /**
                  * remark data
                  * */
+                loadingRemarkTable:false,
                 formLabelWidth:'50px',
                 remarkTableData:[],
                 addRemarkData:{
@@ -442,12 +444,16 @@
              *  remark操作
              * */
             getRemarkData(){
+                this.loadingRemarkTable=true;
                 this.$ajax.post(this.$apis.get_buyerRemarkList,{
                     id:Number(this.$route.query.id),
                     pn: 1,
                     ps: 50,
                 }).then(res=>{
                     this.remarkTableData=res.datas;
+                    this.loadingRemarkTable=false;
+                }).catch(err=>{
+                    this.loadingRemarkTable=false;
                 });
             },
             handleSizeChange(e){
@@ -461,10 +467,10 @@
                 this.addRemarkData.id=null;     //新增的时候要置为null
                 this.addRemarkData.skuId=this.productForm.id;
                 this.addRemarkData.remark='';
-
             },
             createRemarkSubmit(){
                 this.disableCreateRemark=true;
+                this.loadingRemarkTable=true;
                 this.$ajax.post(this.$apis.add_buyerProductRemark,this.addRemarkData).then(res=>{
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
@@ -472,10 +478,12 @@
                         message: '新增成功',
                         type: 'success'
                     });
+                    this.loadingRemarkTable=false;
                     this.getRemarkData();
                 }).catch(err=>{
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
+                    this.loadingRemarkTable=false;
                 });
             },
 
@@ -488,6 +496,7 @@
             },
             editRemarkSubmit(){
                 this.disableModifyRemark=true;
+                this.loadingRemarkTable=true;
                 this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
                     .then(res=>{
                         this.$ajax.post(this.$apis.get_buyerRemarkList,{
@@ -503,7 +512,9 @@
                             this.disableModifyRemark=false;
                             this.editRemarkFormVisible=false;
                         });
+                        this.loadingRemarkTable=false;
                 }).catch(err=>{
+                    this.loadingRemarkTable=false;
                     this.disableModifyRemark=false;
                     this.editRemarkFormVisible=false;
                 });
@@ -516,6 +527,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
+                    this.loadingRemarkTable=true;
                     this.$ajax.post(this.$apis.delete_buyerProductRemark,{
                         id:row.id
                     }).then(res=>{
@@ -530,6 +542,16 @@
                 }).catch(() => {
 
                 });
+            },
+
+            createOrder(){
+                this.$windowOpen({
+                    url:'/order/creat',
+                    params:{
+                        type:'product',
+                        ids:this.$route.query.id+',',
+                    },
+                })
             },
 
             //添加比较
@@ -563,9 +585,7 @@
 
             addToBookmark(){
                 this.disableClickAddBookmark=true;
-                this.$ajax.post(this.$apis.add_buyerOneBookmark,{
-                    id:this.productForm.id
-                }).then(res=>{
+                this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
                     this.$message({
                         message: 'Successfully Add!',
                         type: 'success'

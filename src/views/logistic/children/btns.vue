@@ -20,8 +20,7 @@
 export default {
   props: {
     planId: {
-      type: String,
-      default: ''
+      type: String
     },
     edit: {
       type: Boolean,

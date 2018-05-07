@@ -41,7 +41,7 @@
                         </el-form>
                     </el-col>
                 </el-row>
-                <div class="btns" v-show="!notLoadingDone" v-if="notEdit">
+                <div class="btns" v-show="hideBtns" v-if="notEdit">
                     <el-button>{{$i.product.createInquiry}}</el-button>
                     <el-button>{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
@@ -277,6 +277,7 @@
                  * 页面配置
                  * */
                 notEdit:true,          //是否不在编辑状态,默认为true
+                hideBtns:false,
                 value1: 0,
                 tabName:'Basic Info',
                 labelPosition:'left',               //文字靠边参数，left或者right
@@ -486,7 +487,7 @@
                     nameCustomer: "",
                 };
                 params.nameCustomer=this.productForm.nameCustomer;
-                params.id=this.productForm.id;
+                params.id=this.$route.query.bookmarkId;
                 params.descCustomer=this.productForm.descCustomer;
                 params.customerCode=this.productForm.customerSkuCode;
                 this.disabledClickSaveEdit=true;
@@ -519,7 +520,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickDelete=true;
-                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,[this.productForm.id]).then(res=>{
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,[this.$route.query.bookmarkId]).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -589,6 +590,7 @@
                 }).then(res=>{
                     this.productForm=res;
                     this.notLoadingDone=false;
+                    this.hideBtns=true;
                 }).catch(err=>{
                     this.notLoadingDone=false;
                 })

@@ -188,16 +188,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            }
-        ]
+        isCountry:true,
     },
     applicableAge:{
         key:'applicableAge',
@@ -216,21 +207,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
-        options:[
-            {
-                label:'Year',
-                value:1
-            },
-            {
-                label:'Month',
-                value:2
-            },
-            {
-                label:'Day',
-                value:3
-            },
-
-        ]
+        isDateUnit:true
     },
     comments:{
         key:'comments',
@@ -349,32 +326,13 @@ export default {
         key:'fobCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
+        isCurrency:true,
     },
     fobPrice:{
         key:'fobPrice',
         showType:'number',
         belongTab:'priceInfo',
     },
-
-
-
-
-
-
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -389,23 +347,8 @@ export default {
         key:'exwCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
+        isCurrency:true,
     },
-
-
     cifPrice:{
         key:'cifPrice',
         showType:'number',
@@ -415,20 +358,7 @@ export default {
         key:'cifCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
+        isCurrency:true,
     },
     cifArea:{
         key:'cifArea',
@@ -444,20 +374,7 @@ export default {
         key:'dduCurrency',
         showType:'select',
         belongTab:'priceInfo',
-        options:[
-            {
-                label:'USD',
-                value:0,
-            },
-            {
-                label:'CNY',
-                value:1,
-            },
-            {
-                label:'EUR',
-                value:2,
-            },
-        ],
+        isCurrency:true,
     },
     dduArea:{
         key:'dduArea',
@@ -476,60 +393,23 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'t',
-                value:0
-            },
-            {
-                label:'kg',
-                value:1
-            },
-            {
-                label:'lb',
-                value:2
-            },
-        ]
+        isWeightUnit:true,
+
     },
     unitLength:{
         key:'unitLength',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'km',
-                value:0
-            },
-            {
-                label:'mile',
-                value:1
-            },
-            {
-                label:'m',
-                value:2
-            },
-        ]
+        isLengthUnit:true,
+
     },
     unitVolume:{
         key:'unitVolume',
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
-        options:[
-            {
-                label:'m3',
-                value:0
-            },
-            {
-                label:'liter',
-                value:1
-            },
-            {
-                label:'ft3',
-                value:2
-            },
-        ]
+        isVolumeUnit:true,
     },
     length:{
         key:'length',
@@ -808,20 +688,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
-        options:[
-            {
-                label:'中国',
-                value:0
-            },
-            {
-                label:'美国',
-                value:1
-            },
-            {
-                label:'日本',
-                value:2
-            },
-        ]
+        isCountry:true,
     },
     mainSaleArea:{
         key:'mainSaleArea',
