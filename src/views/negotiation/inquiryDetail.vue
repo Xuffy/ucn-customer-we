@@ -27,6 +27,7 @@
                     </div>
                 </div>
                 <div class="basic-info">
+                    <h5>{{ $i.common.productInfo }}</h5>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
@@ -46,15 +47,15 @@
                         :hideFilterColumn="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
                         <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
-                        <el-button @click="addToCompare">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i.common.copy }}</el-button>
-                        <el-button @click="toCreateInquire">{{ $i.common.createInquiry }}</el-button>
+                        <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
+                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                        <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
+                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
                         <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value+''!== '22'&&tabData[0].status.value+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + ''!=='99'||tabData[0].status.value+''!=='1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -125,6 +126,7 @@
                 <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
+        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
     </div>
 </template>
 <script>
@@ -139,7 +141,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
+    import { VMessageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     import { mapActions } from 'vuex'
@@ -212,7 +214,7 @@
             }
         },
         components: {
-            'message-board':messageBoard,
+            'v-message-board':VMessageBoard,
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
@@ -259,7 +261,8 @@
         methods: {
             ...mapActions([
                 'setDraft',
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             deleteInquiry() {
                 this.$confirm('确认删除?', '提示', {
@@ -367,47 +370,30 @@
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    //Basic Info
-                    let basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    _.map(basicInfoData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                    
+                    let basicInfoData, newProductTabData;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        //Basic Info
+                        basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                            this.$filterDic(item);
                         });
-                    });
-                    this.newTabData = basicInfoData;
-                    this.tabData = basicInfoData;
-                    //Product Info
-                    let newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-
-                    _.map(newProductTabData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                        this.newTabData = basicInfoData;
+                        this.tabData = basicInfoData;
+                        //Product Info
+                        newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                            this.$filterDic(item);
                         });
+                        this.newProductTabData = newProductTabData;
+                        this.productTabData = newProductTabData;
+                        this.tableLoad = false;
                     });
-
-                    this.newProductTabData = newProductTabData;
-                    this.productTabData = newProductTabData;
-                    this.tableLoad = false;
+                    
                 })
                 .catch(err => {
                     this.tableLoad = false;
                 });
-            },
-            submit(str) { //留言板发布
-                let json = {};
-                json.time = getData(new Date(), 6);
-                json.name = '罗涛';
-                json.content = str;
-                this.list.push(json);
-            },
-            boardSwitch() { //留言板开关
-                this.switchStatus = !this.switchStatus;
             },
             getList(ids) {
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
@@ -500,7 +486,7 @@
                     let arr = [];
                     if(type === 'basicInfo') {
                         _.map(this.newTabData, items => {
-                            if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
+                            if(_.findWhere(items, {'key': 'id'}).value?_.findWhere(items, {'key': 'id'}).value:_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
@@ -587,7 +573,6 @@
             },
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
-                if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 let arr = [];
                 _.map(this.newProductTabData, item => {
                     if(!item._disabled) arr.push(item);
@@ -609,7 +594,7 @@
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -618,7 +603,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);

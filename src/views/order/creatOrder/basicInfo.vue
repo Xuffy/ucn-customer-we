@@ -370,11 +370,11 @@
     }
 
     .el-select {
-        max-width: 190px
+        max-width: 200px
     }
 
     .el-input {
-        max-width: 190px;
+        max-width: 200px;
     }
 
 </style>
