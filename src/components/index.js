@@ -12,6 +12,7 @@ import Expand from './common/table/expand';
 import FilterColumn from './common/table/filterColumn';
 import FilterValue from './common/table/filterValue';
 import Upload from './common/upload/upload';
+import VUpload from './common/upload/test';
 import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
 import Layout from './Layout/index';
@@ -32,6 +33,7 @@ import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 
 export {
+  VUpload,
   VTimeZone,
   VPagination,
   VHistoryModify,
