@@ -27,7 +27,7 @@ export default {
                   }
                   val[dataBase] = val.value;
                   val.dic = _.findWhere(store.state.dic, {'code': val[transForm]});
-                  if(!val.dic) return;
+                  if(!val.dic||!val.dic) return;
                   val.value = _.findWhere(val.dic.codes, {'code': val[dataBase]+''})?_.findWhere(val.dic.codes, {'code': val[dataBase]+''})[label]:'';
                   
                 }

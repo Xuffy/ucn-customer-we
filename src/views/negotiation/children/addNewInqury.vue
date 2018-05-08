@@ -1,16 +1,16 @@
 <template>
     <div class="inquiry">
         <el-dialog
-            title="提示"
+            :title="$i.common.prompt"
             :visible.sync="dialogVisible"
             width="80%"
             >
                 <div class="status">
                     <div class="state">
-                        <span>{{ $i.common.state }}</span>
+                        <span>{{ $i.common.Status }}</span>
                         <el-radio-group v-model="params.status" size="mini">
-                            <el-radio-button :label="''">{{$i.common.all}}</el-radio-button>
-                            <el-radio-button 
+                            <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
+                            <el-radio-button
                                 v-for="item in $db.inquiry.overoiewState"
                                 :label="item.id"
                                 :key="item.id"
@@ -165,8 +165,8 @@
                 }
             },
             inputEnter(val) {
-                if(!val.keyType) return this.$message('请选中搜索类型');
-                if(!val.key) return this.$message('搜索内容不能为空');
+                if(!val.keyType) return this.$message(this.$i.common.pleaseSelectTheSearchType);
+                if(!val.key) return this.$message(this.$i.common.canTBeEmpty);
                 this.params.keyType = val.keyType;
                 this.params.key = val.key;
                 this.searchLoad = true;
@@ -202,18 +202,13 @@
                 this.ajaxInqueryAction('cancel')
             },
             deleteInquiry() { //删除询价单
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.ajaxInqueryAction('delete');
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();

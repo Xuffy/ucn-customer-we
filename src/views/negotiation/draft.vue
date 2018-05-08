@@ -184,9 +184,9 @@
                 });
             },
             deleteList() { //删除
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     switch(this.$route.params.type) {
@@ -194,12 +194,7 @@
                             this.actionInquiry('delete');
                             break;
                     }
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             }
         },
         watch: {

@@ -34,7 +34,7 @@
                           placeholder=""
                           v-model="scope.row[item.key].value" size="mini"></el-input>
                 
-                <span v-else-if="scope.row[item.key].type === 'Number' && !scope.row._remark">
+                <span v-else-if="scope.row[item.key].type === 'Number' && scope.row[item.key].state === 'rate' && !scope.row._remark">
                   <el-input-number
                       v-model="scope.row[item.key].value"
                       :min="scope.row[item.key].min || 0"
@@ -45,6 +45,15 @@
                   />
                   <i>%</i>
                 </span>
+                <el-input-number
+                      v-else
+                      v-model="scope.row[item.key].value"
+                      :min="scope.row[item.key].min || 0"
+                      :max="scope.row[item.key].max || 99999999"
+                      controls-position="right" 
+                      size="mini"
+                      :controls="false" 
+                  />
                 <!--<span v-if="scope.row[item.key].unit"></span>-->
               </div>
             </div>

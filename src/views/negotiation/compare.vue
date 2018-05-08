@@ -154,9 +154,9 @@
                     });
                 }
                 
-                this.$confirm('此操作将会保存编辑是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.commonthisOperationKeepsAllOperationsContinuing, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.compareName?this.compareName = this.compareName:this.compareName = new Date().getTime();
@@ -181,12 +181,7 @@
                             }
                         });
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             },
             action(item, type) {
                 switch(type) {
@@ -271,21 +266,16 @@
             },
             deleteCompare(type) { //删除
                 if(type === 'all') {
-                    this.$confirm('此操作将删除对比, 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                    this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                        confirmButtonText: this.$i.common.confirm,
+                        cancelButtonText: this.$i.common.cancel,
                         type: 'warning'
                     }).then(() => {
                         this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id])
                         .then(res => {
                             this.$router.push('/negotiation/compare')
                         });
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });          
-                    });
+                    })
                 } else {
                     let arr = [];
                     _.map(this.tabData, (items, index) => {
@@ -315,7 +305,7 @@
                 return arr;
             },
             addCopare(arg) { //add new compare
-                if(!arg.length) return this.$message('请先选择inquiry');
+                if(!arg.length) return this.$message(this.$i.common.pleaseChooseGoods);
                 let url, column;
                 if(this.compareBy+''==='0') {
                     url = this.$apis.POST_INQIIRY_LIST;

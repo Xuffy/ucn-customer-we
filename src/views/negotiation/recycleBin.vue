@@ -175,10 +175,10 @@
             submit() { //删除恢复
                 switch(this.$route.params.type) {
                     case 'inquiry':
-                        this.actionInquiry('restore');
+                        this.actionInquiry('revert');
                         break;
                     case 'compare':
-                        this.actionCompare('restore');
+                        this.actionCompare('revert');
                         break;
                 }
             },

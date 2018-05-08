@@ -265,9 +265,9 @@
                 'setDic'
             ]),
             deleteInquiry() {
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
@@ -277,12 +277,7 @@
                     .then(res => {
                         this.$router.push('/negotiation/inquiry')
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                })
             },
             remoteMethod(keyWord) {
                 this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
@@ -291,12 +286,11 @@
                 })
             },
             getDictionaries() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
                     this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
                     this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
                     this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
                     this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
                 });
 
@@ -317,7 +311,7 @@
                 this.newSearchDialogVisible = true;
             },
             handleOK(item) { //添加 product
-                if(item && !item.length) return this.$message('请选择商品');
+                if(item && !item.length) return this.$message(this.$i.common.pleaseChooseGoods);
                 let ids = [];
                 _.map(item, items => {
                     ids.push(_.findWhere(items, {'key': 'id'}).value)
@@ -356,24 +350,26 @@
                 };
 
                 for(let i = 0; i < this.compareConfig.length; i++) {
-                    if(this.compareConfig[i].id === config.id) return this.$message({
-                        message: '这个订单已经添加到对比',
-                        type: 'warning'
-                    });
+                    if(this.compareConfig[i].id === config.id) return;
                 }
                 this.compareConfig.push(config);
                 this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
-                if(!this.$route.query.id) return this.$message('地址错误');
+                if(!this.$route.query.id) return this.$message(this.$i.common.addressError);
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
                     
                     let basicInfoData, newProductTabData;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'EL_IS', 'MD_TN',], '_cache')
                     .then(data => {
+                        this.$ajax.post(this.$apis.POST_LOGISTICSPORT_QUERY)
+                        .then(datas => {
+                            console.log(datas, '===')
+                        });
+                        return;
                         this.setDic(data);
                         //Basic Info
                         basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
@@ -381,6 +377,7 @@
                         });
                         this.newTabData = basicInfoData;
                         this.tabData = basicInfoData;
+                        //SKU_UNIT 
                         //Product Info
                         newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
                             this.$filterDic(item);
@@ -413,22 +410,22 @@
             },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
-                    label: 'Modify',
+                    label: this.$i.common.modify,
                     type: 'modify'
                 }, { 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
 
                 if(item.id.value) return [{ 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
             }, 
             productInfoBtn (item) { //Product info 按钮创建
-                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(this.statusModify && item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
+                if(this.statusModify && !item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
+                if(this.statusModify && item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
+                if(!item._disabled) return [{label: this.$i.common.histoty, type: 'histoty', _disabled: false}, {label: this.$i.common.detail, type: 'detail', _disabled: false}];
             },
             fromChange(val) {
                this.trig = new Date().getTime();
@@ -581,7 +578,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
-                    this.newTabData[0].status.value = res.status;
+                    this.newTabData[0].status.dataBase = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();

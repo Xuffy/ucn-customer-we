@@ -216,12 +216,12 @@
                 });
             },
             add(data, type) {
-                this.$prompt('添加分类', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消'
+                this.$prompt(this.$i.common.addClassification, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel
                 }).then(({ value }) => {
                     if(!value) return this.$message({
-                        message: '分类名不能为空',
+                        message: this.$i.common.theClassificationNameCanNotBeEmpty,
                         type: 'warning'
                     });
                     if(type === 'parents') return this.addNewCategory(data, value, type);
@@ -233,9 +233,9 @@
                         })
                         .then(res => {
                             if(!res) return this.addNewCategory(data, value, type);
-                            this.$confirm('添加子集会导致父级节点对应关系被清空，请问确定添加吗？', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
+                            this.$confirm(this.$i.common.addEmptying, this.$i.common.prompt, {
+                                confirmButtonText: this.$i.common.confirm,
+                                cancelButtonText: this.$i.common.cancel,
                                 type: 'warning'
                             }).then(() => {
                                 this.addNewCategory(data, value, type)
@@ -247,22 +247,21 @@
                 });
             },
             edit(data) {
-                this.$prompt('请编辑', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$prompt(this.$i.common.pleaseEdit, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     inputValue: data.name
                 }).then(({ value }) => {
                     if(!value) return this.$message({
-                        message: '不能为空',
+                        message: this.$i.common.canTBeEmptys,
                         type: 'warning'
                     });
                     if(data.name === value) return this.$message({
                         type: 'info',
-                        message: '不修改和以前同'
+                        message: this.$i.common.canTBeEmptys
                     });  
-                    this.$ajax.post(this.$apis.POST_PURCHASE_UPDATE_CATEGORY, {
-                        id: data.id,
-                        name: value
+                    this.$ajax.post(`${this.$apis.POST_PURCHASE_UPDATE_CATEGORY}/?name=${value}`, {
+                        id: data.id
                     })
                     .then(res => {
                         data.name = value;
@@ -275,24 +274,24 @@
             },
             genCheckBox(id, list) {
                 list.forEach(items => {
-                    if(id) {
-                        if(id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
-                    } else {
-                        this.$refs.tree1.setChecked(items.id, false, true);
-                    }
+                    if(id === items.id + '') this.$refs.tree1.setChecked(items.id, true, true);
                     if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(id, items[this.defaultProps.children]);
                 });
             },
+            setCheckBox(list) {
+                list.forEach(items => {
+                    this.$refs.tree1.setChecked(items.id, false, true);
+                    if(items[this.defaultProps.children] && items[this.defaultProps.children].length) this.setCheckBox(items[this.defaultProps.children]);
+                });
+            },
             myCategoryChange(val) {
-                if(val.children && val.children.length) return; // this.$message({
-                    //     type: 'info',
-                    //     message: '父节点不能添加映射关系'
-                    // });
+                if(val.children && val.children.length) return this.myCategory = '';
                 this.myCategory = val.id;
                 this.$ajax.get(this.$apis.GET_PURCHASE_CHANGE_MAPPING_CATEGORY, {
                     id: val.id
                 })
                 .then(res => {
+                    this.setCheckBox(this.mgeneralCategoryData)
                     if(res) {
                         const genCheckBox = res.split(',');
                         genCheckBox.forEach(item => {
@@ -314,7 +313,7 @@
                 };
                 if(!params.categoryId) return this.$message({
                     type: 'info',
-                    message: '请先选择分类'
+                    message: this.$i.common.pleaseSelectTheLeafNode
                 });
                 this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
                 .then(res => {
