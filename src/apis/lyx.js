@@ -17,6 +17,9 @@ export default {
   get_loading_list_sku: ['/logistics/order/pageBySkuCode', 'BASE_DEV'],
   update_logistic_plan: ['/logistics/plan/update', 'BASE_DEV'],
   send_logistic_plan: ['/logistics/plan/send', 'BASE_DEV'],
-  send_draft_logistic_plan: ['/web/v1/logistics/plan/sendDraft', 'BASE_DEV'],
-  save_draft_logistic_plan: ['/web/v1/logistics/plan/saveDraft', 'BASE_DEV']
+  send_draft_logistic_plan: ['/logistics/plan/sendDraft', 'BASE_DEV'],
+  save_draft_logistic_plan: ['/logistics/plan/saveDraft', 'BASE_DEV'],
+  get_payment_no: ['/payment/genNo', 'BASE_DEV'],
+  save_plan_payment: ['/payment/save', 'BASE_DEV'],
+  get_supplier: ['/logistics/plan/getSupplier', 'BASE_DEV']
 }

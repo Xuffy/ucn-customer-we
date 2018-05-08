@@ -30,7 +30,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
+      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @deletePaymentList="deletePaymentList" @savaPayment="savaPayment" :selectArr="selectArr" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -150,10 +150,6 @@ export default {
           saveAsDraft: this.$apis.save_draft_logistic_plan,
           send: this.$apis.send_draft_logistic_plan
         }
-        // send: this.$apis.send_logistic_plan,
-        // update: this.$apis.update_logistic_plan,
-        // saveDraft: this.$apis.save_draft_logistic_plan,
-        // sendDraft: this.$apis.send_draft_logistic_plan,
       }
     }
   },
@@ -170,12 +166,6 @@ export default {
     addProduct
   },
   watch: {
-    edit (newValue) {
-      if (newValue) return
-      this.containerInfo.forEach((a, i) => {
-        !Object.keys(a).length && this.arraySplite(this.containerInfo, i)
-      })
-    },
     selectProductId (newValue) {
       newValue && this.getProductHistory(newValue)
     },
@@ -235,9 +225,15 @@ export default {
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.createdPlanData(res)
-        this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/${this.planId}`).then(res => {
+        this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
+        this.getSupplier(res.logisticsNo)
+      })
+    },
+    getSupplier (logisticsNo) {
+      this.$ajax.get(`${this.$apis.get_supplier}?logisticsNo=${logisticsNo}`).then(res => {
+        this.selectArr.supplier = res
       })
     },
     createdPlanData (res = this.oldPlanObject) {
@@ -251,7 +247,7 @@ export default {
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
       this.logisticsNo = res.logisticsNo
-      this.containerInfo = res.containerDetail
+      this.containerInfo = res.containerDetail || []
       this.feeList = res.fee ? [res.fee] : null
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
@@ -263,6 +259,7 @@ export default {
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
+        this.getSupplier(res)
       })
     },
     getDictionary () {
@@ -325,6 +322,26 @@ export default {
         // const [ copyNew ] = this.$getDB(this.$db.logistic.productModify, [res])
         // this.productModifyList.unshift(copyNew)
       })
+    },
+    addPayment () {
+      this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
+        edit: true,
+        no: res,
+        status: 20
+      }))
+    },
+    savaPayment (i) {
+      const paymentData = {
+        ...this.paymentList[i],
+        orderNo: this.oldPlanObject.planNo,
+        orderType: '30'
+      }
+      this.$ajax.post(this.$apis.save_plan_payment, paymentData).then(res => {
+        console.log(res)
+      })
+    },
+    deletePaymentList (i) {
+      this.arraySplite(this.paymentList, i)
     },
     getOrderList () {
       this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
@@ -412,6 +429,7 @@ export default {
       this.$ajax.post(url, this.oldPlanObject).then(res => {
         console.log(res)
       })
+
       console.log(this.oldPlanObject)
     }
   }
