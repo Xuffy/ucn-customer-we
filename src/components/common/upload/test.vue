@@ -34,72 +34,35 @@
           let client = this.signature(data)
             , files = this.$refs.upload.files;
 
-          client.multipartUpload(files[0].name, files[0], {
-            progress: (p) => {
-              console.log('进度：', p)
-            }
-          }).then(function (result) {
-            console.log(result.name);
-            let signUrl = client.signatureUrl(result.name);
-            console.log(signUrl)
+          co(function* () {
+            let result = yield client.multipartUpload(files[0].name, files[0], {
+              progress: p => {
+                return done => {
+                  console.log('进度：', p);
+                  done();
+                }
+              }
+            });
+            console.log(result);
+            let head = yield client.head(files[0].name);
+            console.log(head);
           }).catch(function (err) {
             console.log(err);
           });
+          /*
+                    client.multipartUpload(files[0].name, files[0], {
+                      progress: (p) => {
+                        console.log('进度：', p)
+                      }
+                    }).then(function (result) {
+                      console.log(result.name);
+                      let signUrl = client.signatureUrl(result.name);
+                      console.log(signUrl)
+                    }).catch(function (err) {
+                      console.log(err);
+                    });*/
 
         });
-        /*co(function* () {
-          let result = yield client.multipartUpload('upload-file', files[0], {
-            progress: (p) => {
-              console.log('进度：', p)
-            }
-          })/!*.then(function (res) {
-            console.log('upload success: %j', res);
-            // return listFiles(client);
-          })*!/
-
-          console.log(result);
-        }).catch(function (err) {
-          console.log(err);
-        });
-      });
-*/
-
-        /*let client = this.signature()
-          , file = null;
-
-        if (!client) {
-          return false;
-        }
-        console.log(client);
-        console.log(this.$refs.upload.files);
-        file = this.$refs.upload.files[0];
-*/
-        /*return client.multipartUpload('1', file, {
-          progress(p){
-            console.log('进度：',p)
-          }
-        }).then(function (res) {
-          console.log('upload success: %j', res);
-          // return listFiles(client);
-        });*/
-        /*return client.multipartUpload('1', file, {
-          progress(p) {
-            console.log('进度：', p)
-          }
-        }).then(function (res) {
-          console.log('upload success: %j', res);
-          // return listFiles(client);
-        });*/
-        /*
-        let file = document.getElementById('file').files[0];
-        let key = document.getElementById('object-key-file').value.trim() || 'object';
-        console.log(file.name + ' => ' + key);
-        return client.multipartUpload(key, file, {
-          progress: progress
-        }).then(function (res) {
-          console.log('upload success: %j', res);
-          return listFiles(client);
-        });*/
       },
       signature(params) {
         /*return new OSS({
