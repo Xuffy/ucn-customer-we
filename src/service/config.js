@@ -3,9 +3,9 @@ export default {
   ENV: {
     local: {
       // BASE_CS: 'http://dev.usupply-facade.ucnholding.com:18100',
-      BASE_CS: '//192.168.51.33:11003',
+      BASE_CS: '//192.168.51.33:11001',
       // BASE_CS: 'http://192.168.51.248:11002',
-      // BASE_CS1: 'http://192.168.51.33:11007',
+//       BASE_CS1: 'http://192.168.51.33:11001',
       // BASE_CS1: 'http://192.168.51.248:11001',
       BASE_CS1: '//dev.upurchase-facade.ucnholding.com:18100',
       // BASE_CS: '//dev.usupply-facade.ucnholding.com:18100',

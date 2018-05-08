@@ -128,7 +128,7 @@
                     tc: 0,
                     skuCode: "",
                     skuNameEn: "",
-                    type: ''
+                    type:''
                 },
                 tabData: [],
                 selectedData: [],
@@ -150,7 +150,8 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
-                this.params.mainBusiness = ''
+                
+                this.params.tc=0
             },
             //当作为主键时
             emitData() {
