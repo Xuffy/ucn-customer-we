@@ -1,7 +1,13 @@
 <template>
   <div class='ucn-upload'>
-    <input type="file" ref="upload"/>
-    <el-button type="primary" @click="uploadFile">主要按钮</el-button>
+    <input type="file" multiple="multiple" ref="upload" @change="uploadFile"/>
+    <!--<el-button type="primary" @click="uploadFile">主要按钮</el-button>-->
+    <ul>
+      <li v-for="item in fileList">
+        <span v-text="item.fileName"></span>
+        <el-progress :text-inside="true" :stroke-width="18" :percentage="item.progress*100"></el-progress>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -18,7 +24,10 @@
     props: {},
     components: {},
     data() {
-      return {}
+      return {
+
+        fileList: {},
+      }
     },
     created() {
 
@@ -32,51 +41,50 @@
       uploadFile() {
         this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
-            , _this = this
-            , files = this.$refs.upload.files;
+            , files = this.$refs.upload.files
+            , fileNames = _.pluck(_.values(this.fileList), 'fileName');
 
-          co(function* () {
-            let result = yield client.multipartUpload(`${_this.$getUUID()}/${files[0].name}`, files[0], {
-              progress: p => {
-                return done => {
-                  console.log('进度：', p);
-                  done();
-                }
-              }
-            }).then(result=>{
-              console.log(result);
-              let signUrl = client.signatureUrl(result.name);
-              console.log(signUrl)
-            });
-            // console.log(result);
-            // let head = yield client.head(files[0].name);
-            // console.log(head);
-          }).catch(function (err) {
-            console.log(err);
+          _.map(files, val => {
+            _.indexOf(fileNames, val.name) === -1 && this.startUpload(client, val);
           });
-          /*
-                    client.multipartUpload(files[0].name, files[0], {
-                      progress: (p) => {
-                        console.log('进度：', p)
-                      }
-                    }).then(function (result) {
-                      console.log(result.name);
-                      let signUrl = client.signatureUrl(result.name);
-                      console.log(signUrl)
-                    }).catch(function (err) {
-                      console.log(err);
-                    });*/
 
         });
       },
+      startUpload(client, files) {
+        let _this = this
+          , uid = _this.$getUUID();
+        _this.fileList[uid] = {fileName: files.name, progress: 0, id: uid};
+
+        co(function* () {
+          yield client.multipartUpload(`${uid}/${files.name}`, files, {
+            progress: p => {
+              return done => {
+                if (_this.fileList[uid]){
+                  _this.fileList[uid].progress=p;
+                }
+                /*_this.fileList = _.map(_this.fileList, val => {
+                  console.log(files.name, val.fileName, p);
+                  if (files.name === val.fileName) {
+                    val.progress = p;
+                  }
+                  return val;
+                });*/
+                done();
+              }
+            }
+          }).then(result => {
+            let signUrl = client.signatureUrl(result.name);
+            // console.log(_this.fileList);
+            // console.log(result);
+            // console.log(signUrl)
+            console.log('2-------');
+          });
+          // let head = yield client.head(files[0].name);
+        }).catch(function (err) {
+          console.log(err);
+        });
+      },
       signature(params) {
-        /*return new OSS({
-          region: 'oss-cn-hangzhou' || params.ossEndpoint,
-          accessKeyId: '123' || params.accessKeyId,
-          accessKeySecret: '123' || params.accessKeySecret,
-          stsToken: '123' || params.securityToken,
-          bucket: '123' || 'ucn-oss-dev'
-        });*/
         return new OSS.Wrapper({
           region: 'oss-cn-hangzhou' || params.ossEndpoint,
           accessKeyId: params.accessKeyId,
@@ -85,19 +93,6 @@
           bucket: 'ucn-oss-dev'
         });
 
-        /*return OSS.urllib.request(params.ossEndpoint, {
-          method: 'GET'
-        }).then(function (result) {
-          let creds = JSON.parse(result.data);
-          let client = new OSS({
-            region: region,
-            accessKeyId: creds.AccessKeyId,
-            accessKeySecret: creds.AccessKeySecret,
-            stsToken: creds.SecurityToken,
-            bucket: bucket
-          });
-          return func(client);
-        });*/
       }
     },
   }
