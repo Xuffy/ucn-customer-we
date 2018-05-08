@@ -3,6 +3,10 @@ export default {
     type: 'text',
     _hide: true
   },
+  "supplierId": {
+    type: 'text',
+    _hide: true
+  },
   "orderNo": {
     type: 'text'
   },
@@ -39,19 +43,19 @@ export default {
   "reportElements": {
     type: 'text'
   },
-  "supplierName": {
+  "skuSupplierName": {
     type: 'text'
   },
   "supplierNo": {
     type: 'text'
   },
-  "customerSkuCode": {
+  "skuCustomerSkuCode": {
     type: 'text'
   },
   "factorySKUCode": {
     type: 'text'
   },
-  "unit": {
+  "skuUnit": {
     type: 'text'
   },
   "exportUnitPrice": {
@@ -66,31 +70,52 @@ export default {
   "skuQuantityOfOuterCarton": {
     type: 'text'
   },
-  "outerCartonLength": {
+  "skuOuterCartonLength": {
     type: 'text'
   },
-  "outerCartonWidth": {
+  "skuOuterCartonWidth": {
     type: 'text'
   },
-  "outerCartonHeight": {
+  "skuOuterCartonHeight": {
     type: 'text'
   },
-  "outerCartonNetWeight": {
+  "skuOuterCartonNetWeight": {
     type: 'text'
   },
-  "outerCartonGrossWeight": {
+  "skuOuterCartonRoughWeight": {
     type: 'text'
   },
-  "outerCartonVolume": {
+  "skuOuterCartonVolume": {
     type: 'text'
   },
-  "shippingMarks": {
+  "skuShippingMarks": {
     type: 'text'
   },
-  "outerCartonBarCode": {
+  "skuOuterCartonBarCode": {
     type: 'text'
   },
-  "outerCartonSkuCode": {
+  "skuOuterCartonCode": {
     type: 'text'
   }
 }
+/*
+*field("supplierId","skuSupplierId")
+  .field("supplierCode","skuSupplierCode")
+  .field("supplierName","skuSupplierName")
+  .field("skuDescriptioinCn","skuDescCn")
+  .field("skuDescriptioinEn","skuDescEn")
+  .field("customerSkuCode","skuCustomerSkuCode")
+  .field("customDeclarationNameCn","skuCustomsNameCn")
+  .field("customDeclarationNameEn","skuCustomsNameEn")
+  .field("unit","skuUnit")
+  .field("outerCartonQty","skuOuterCartonQty")
+  .field("outerCartonLenth","skuOuterCartonLength")
+  .field("outerCartonWidth","skuOuterCartonWidth")
+  .field("outerCartonHeight","skuOuterCartonHeight")
+  .field("outerCartonVolume","skuOuterCartonVolume")
+  .field("outerCartonNetWeight","skuOuterCartonNetWeight")
+  .field("outerCartonGrossWeight","skuOuterCartonRoughWeight")
+  .field("shippingMarks","skuShippingMarks")
+  .field("outerCartonBarCode","skuOuterCartonBarCode")
+  .field("outerCartonSkuCode","skuOuterCartonCode")
+*/

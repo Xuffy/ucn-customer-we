@@ -1,6 +1,6 @@
 export default {
   //payment
-  post_ledgerPage:['/ledger/page','BASE_BJ_p','UPURCHASE_URL'],
+  post_ledgerPage:['/ledger/page','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_list:['/payment/list/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_accept:['/payment/accept/{id}','UPURCHASE_URL','UPURCHASE_URL'],
   //message

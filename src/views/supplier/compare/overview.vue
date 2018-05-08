@@ -1,6 +1,6 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{$i.compareOverview}}</h3>
+        <h3 class="hd">{{$i.supplier.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
                 <el-button :disabled='!selectedData.length>0'
@@ -29,12 +29,18 @@
                 @action="detail" 
                 @change-checked='checked'
                 style='marginTop:10px'/>
+           <v-pagination
+                :page-data.sync="params"
+                 @change="handleSizeChange"
+                @size-change="pageSizeChange"
+            /> 
     </div>
 </template>
 <script>
     import {
         dropDown,
-        selectSearch
+        selectSearch,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -43,7 +49,7 @@
         name: '',
         data() {
             return {
-                selectSearch:'1',
+                selectSearch: '1',
                 options: [{
                     id: '1',
                     label: 'compareName'
@@ -54,7 +60,7 @@
                 params: {
                     id: '',
                     name: "",
-                    compareName:'',
+                    compareName: '',
                     //                      "operatorFilters": [
                     //                        {
                     //                          "columnName": "string",
@@ -66,6 +72,7 @@
                     //                      ],
                     pn: 1,
                     ps: 10,
+                    tc: 0,
                     //                      "recycle": true,
                     //                      "sorts": [
                     //                        {
@@ -84,20 +91,21 @@
         components: {
             dropDown,
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         methods: {
             inputEnter(keyWord) {
                 console.log(keyWord.key)
-                if(keyWord.keyType==1){
-                     params.compareName=keyWord.key
-                    
-                      this.get_data()
-                   }else{
-                        params.compareName=keyWord.key
-                       this.get_data()
-                      
-                   }
+                if (keyWord.keyType == 1) {
+                    params.compareName = keyWord.key
+
+                    this.get_data()
+                } else {
+                    params.compareName = keyWord.key
+                    this.get_data()
+
+                }
             },
             checked(item) {
                 this.selectedData = item
@@ -107,42 +115,44 @@
                 });
                 this.selectedNumber = number
             },
-            detail(e,type) {
-                if(type===1){
+            detail(e, type) {
+                if (type === 1) {
                     //modify
                     this.$windowOpen({
-                        url:'/supplier/compareDetail/{type}',
-                        params:{
-                            type:'modify',
-                            isModify:true,
-                            compareId:e.id.value,
-                            compareName:e.name.value
+                        url: '/supplier/compareDetail/{type}',
+                        params: {
+                            type: 'modify',
+                            isModify: true,
+                            compareId: e.id.value,
+                            compareName: e.name.value
                         },
                     });
-                }else if(type===2){
+                } else if (type === 2) {
                     //Detail
                     this.$windowOpen({
-                        url:'/supplier/compareDetail/{type}',
-                        params:{
-                            type:'modify',
-                            compareId:e.id.value,
-                            compareName:e.name.value
+                        url: '/supplier/compareDetail/{type}',
+                        params: {
+                            type: 'modify',
+                            compareId: e.id.value,
+                            compareName: e.name.value
                         },
 
                     });
                 }
-                
+
             },
             get_data() {
                 this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
                     .then(res => {
+                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas);
                     })
                     .catch((res) => {
 
                     });
             },
-            downloadSelected() {               this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
+            downloadSelected() {
+                this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
                     .then(res => {
                         console.log(res.datas)
                     })
@@ -158,7 +168,15 @@
                     .catch((res) => {
 
                     });
-            }
+            },
+            handleSizeChange(val) {
+                this.params.pn = val;
+                this.get_data()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.get_data()
+            },
         },
         created() {
             this.get_data()

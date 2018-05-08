@@ -302,6 +302,10 @@
                 });
                 this.$ajax.post(this.$apis.set_sellerProductPutAway,id).then(res=>{
                     this.getData();
+                    this.$message({
+                        message: '上架成功',
+                        type: 'success'
+                    });
                 }).catch(err=>{
 
                 });
@@ -315,6 +319,10 @@
                 });
                 this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
                     this.getData();
+                    this.$message({
+                        message: '下架成功',
+                        type: 'success'
+                    });
                 }).catch(err=>{
 
                 });
@@ -335,7 +343,6 @@
                     })
                     if(hasUp){
                         this.partDialogVisible=true;
-
                     }else{
                         this.$message({
                             message: '删除成功，被删除的产品可在回收站中找回',
@@ -347,9 +354,28 @@
                 });
             },
 
-            //删除商品(跳过上架产品)
+            //删除商品(跳过上架产品,只删除选中的列表中已经下架的商品)
             putdownExcept(){
-                console.log(this.selectList,'???')
+                let id=[];
+                this.selectList.forEach(v=>{
+                    if(v.status.value==='下架'){
+                        id.push(v.id.value);
+                    }
+                });
+                if(id.length===0){
+                    //当前没有已经下架了的产品
+                    this.$message({
+                        message: '当前选择中没有已下架的产品',
+                        type: 'warning'
+                    });
+                    this.partDialogVisible=false;
+                }else{
+                    // this.$ajax.post(this.$apis.set_sellerProductPutDown,id).then(res=>{
+                    //     this.getData();
+                    // }).catch(err=>{
+                    //
+                    // });
+                }
             },
 
             //表格check状态改变

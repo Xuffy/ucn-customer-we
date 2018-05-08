@@ -5,7 +5,7 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>
+                            <el-radio-button label="">{{($i.common.all)}}</el-radio-button>
                             <el-radio-button label="1"> {{ $i.common.TBCByCustomer }}</el-radio-button>
                             <el-radio-button label="2">{{($i.common.TBCBySupplier)}}</el-radio-button>
                             <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
@@ -45,9 +45,12 @@
           :loading='loading'
           :pageTotal='pageTotal'
           @change-checked='checked'
-          @page-size-change(size)='pagesizechange'
-          @page-change(page)='pagechange'
-           style='marginTop:10px'/>     
+           style='marginTop:10px'/>  
+         <v-pagination
+            :page-data.sync="params"
+             @change="handleSizeChange"
+            @size-change="pageSizeChange"
+        />   
     </div>
 </template>
 <script>
@@ -60,7 +63,8 @@
 
     import {
         dropDown,
-        selectSearch
+        selectSearch,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -70,7 +74,8 @@
         components: {
             dropDown,
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         data() {
             return {
@@ -97,7 +102,8 @@
                     status: '',
                     view: 1, //view by的按钮组
                     ps: 10,
-                    pn: 1
+                    pn: 1,
+                    tc:0,
                 },
                 selectedDate: [],
                 selectedNumber: []
@@ -210,6 +216,7 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
+                      res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.loading = false
                         this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
@@ -222,7 +229,15 @@
                         this.loading = false
 
                     });
-            }
+            },
+             handleSizeChange(val) {
+                this.params.pn = val;
+                this.getdata()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getdata()
+            },
         },
         computed: {
 

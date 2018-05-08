@@ -1,10 +1,10 @@
 <template>
     <div class="create-qc">
         <div class="title">
-            <span>{{$i.buyerQc.createQcOrder}}</span>
+            <span>{{$i.warehouse.createQcOrder}}</span>
         </div>
         <div class="second-title">
-            {{$i.buyerQc.basicInfo}}
+            {{$i.warehouse.basicInfo}}
         </div>
         <div>
             <el-form ref="qcOrder" :model="qcOrderBasic" label-width="190px">
@@ -179,7 +179,7 @@
             </el-form>
         </div>
         <div class="second-title">
-            {{$i.buyerQc.productInfo}}
+            {{$i.warehouse.productInfo}}
         </div>
         <div class="product-info">
             <div class="btns">
@@ -247,13 +247,13 @@
 
         <div class="summary">
             <div class="second-title">
-                {{$i.buyerQc.summary}}
+                {{$i.warehouse.summary}}
             </div>
         </div>
 
         <div class="footBtn">
-            <el-button @click="submit" :disabled="disableSubmit" type="primary">{{$i.buyerQc.submit}}</el-button>
-            <el-button @click="cancel" type="danger">{{$i.buyerQc.cancel}}</el-button>
+            <el-button @click="submit" :disabled="disableSubmit" type="primary">{{$i.warehouse.submit}}</el-button>
+            <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
 
@@ -500,7 +500,7 @@
                     }
                 });
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
-                    console.log(res)
+                    this.$router.push('/warehouse/qcOverview');
                 }).catch(err=>{
 
                 });

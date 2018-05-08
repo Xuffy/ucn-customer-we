@@ -2,7 +2,7 @@ export default {
     //获取category
     get_buyer_sys_category: ['/purchase/sys/category', 'BASE_BUY','UPURCHASE_URL'],
     get_buyer_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
-    get_supply_category:['/sys/category','BASE_CS','USUPPLY_URL'],
+    get_supply_category:['/sys/category','BASE_SELL','USUPPLY_URL'],
 
 
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],

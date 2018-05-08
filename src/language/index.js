@@ -76,7 +76,8 @@ const json = {
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
-    require(`./${lang}/warehouseCn/warehouse.index`)
+    require(`./${lang}/warehouseCn/warehouse.index`),
+    require(`./${lang}/warehouseCn/inboundOverview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
