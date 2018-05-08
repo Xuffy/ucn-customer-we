@@ -34,7 +34,11 @@
           let client = this.signature(data)
             , files = this.$refs.upload.files;
 
-          client.multipartUpload(files[0].name, files[0]).then(function (result) {
+          client.multipartUpload(files[0].name, files[0], {
+            progress: (p) => {
+              console.log('进度：', p)
+            }
+          }).then(function (result) {
             console.log(result.name);
             let signUrl = client.signatureUrl(result.name);
             console.log(signUrl)
