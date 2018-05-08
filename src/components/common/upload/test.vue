@@ -32,20 +32,25 @@
       uploadFile() {
         this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
+            , _this = this
             , files = this.$refs.upload.files;
 
           co(function* () {
-            let result = yield client.multipartUpload(files[0].name, files[0], {
+            let result = yield client.multipartUpload(`${_this.$getUUID()}/${files[0].name}`, files[0], {
               progress: p => {
                 return done => {
                   console.log('进度：', p);
                   done();
                 }
               }
+            }).then(result=>{
+              console.log(result);
+              let signUrl = client.signatureUrl(result.name);
+              console.log(signUrl)
             });
-            console.log(result);
-            let head = yield client.head(files[0].name);
-            console.log(head);
+            // console.log(result);
+            // let head = yield client.head(files[0].name);
+            // console.log(head);
           }).catch(function (err) {
             console.log(err);
           });
