@@ -1,5 +1,5 @@
 <template>
-    <div class="create-qc">
+    <div class="create-qc" v-loading="loadingData">
         <div class="title">
             <span>{{$i.warehouse.createQcOrder}}</span>
         </div>
@@ -14,7 +14,7 @@
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="系统生成"
+                                    placeholder="System Generation"
                                     v-model="value"
                                     :disabled="true">
                             </el-input>
@@ -22,7 +22,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Type">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="请选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商填写">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -70,17 +70,17 @@
                         <el-form-item prop="11" label="QC status">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="qcStatusCode" placeholder="请选择">
                                 <el-option
-                                        v-for="item in qcStatus"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in qcStatusOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Method">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="请选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商选择">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -92,7 +92,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="Surveyor">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="请选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商选择">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -108,7 +108,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     size="mini"
-                                    placeholder="please input"
+                                    placeholder="服务商填写"
                                     v-model="value">
                             </el-input>
                         </el-form-item>
@@ -123,7 +123,7 @@
                                     filterable
                                     remote
                                     reserve-keyword
-                                    placeholder="请输入关键词"
+                                    placeholder="请输入/选择"
                                     :remote-method="remoteMethod"
                                     :loading="loading">
                                 <el-option
@@ -183,8 +183,8 @@
         </div>
         <div class="product-info">
             <div class="btns">
-                <el-button type="primary" @click="addProduct">Add Product</el-button>
-                <el-button type="danger" :disabled="disableRemoveProduct" @click="removeProduct">Remove</el-button>
+                <el-button type="primary" @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
+                <el-button type="danger" :disabled="disableRemoveProduct" @click="removeProduct">{{$i.warehouse.remove}}</el-button>
             </div>
 
 
@@ -391,13 +391,15 @@
                 /**
                  * 页面基本配置
                  * */
+                loadingData:false,
                 disableRemoveProduct:true,
                 loadingProductTable:false,
                 disableSubmit:false,
                 serviceDialogVisible:false,
                 radio:'',
                 currencyOptions:[],
-                qcStatusCode:0,
+                qcStatusCode:'2',
+                qcStatusOption:[],
                 qcStatus:[
                     {
                         label:'未验货',
@@ -510,16 +512,6 @@
                 window.close();
             },
 
-
-            /**
-             * 获取币种
-             * */
-            getCurrency(){
-                this.$ajax.get(this.$apis.get_currency,{},{_cache:true}).then(res=>{
-                    this.currencyOptions=res;
-                });
-            },
-
             /**
              * 选择服务商的方法
              * */
@@ -564,6 +556,19 @@
                 this.loadingProductDialogTable=true;
                 this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
                     this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
+                    this.productTableData.forEach(v=>{
+                        this.productDialogTableData.forEach(m=>{
+                            if(v.id===m.id.value){
+                                this.$set(m,'_checked',true);
+                                this.$set(m,'_disabled',true);
+                            }
+                        })
+                    });
+                    this.productDialogTableData.forEach(v=>{
+                        if(v.id.value===0){
+                            this.$set(v,'_disabled',true);
+                        }
+                    });
                     this.loadingProductDialogTable=false;
                     this.selectProductList=[];
                 }).catch(err=>{
@@ -632,7 +637,7 @@
                         if(v.id.value===0){
                             this.$set(v,'_disabled',true);
                         }
-                    })
+                    });
                     console.log(this.productDialogTableData,'this.productDialogTableData')
                     this.loadingProductDialogTable=false;
                 }).catch(err=>{
@@ -660,10 +665,41 @@
             handleProductTableChange(e){
                 this.selectProductTableData=e;
             },
+
+            /**
+             * 获取单位
+             * */
+            getUnit(){
+                this.loadingData=true;
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
+                    this.qcStatusOption=res[0].codes;
+                    // this.qcStatusOption.forEach(v=>{
+                    //     if(v.code==='1'){
+                    //         v.label='已验货';
+                    //     }else if(v.code==='2'){
+                    //         v.label='待验货';
+                    //     }
+                    // })
+                    this.loadingData=false;
+                }).catch(err=>{
+                    this.loadingData=false;
+                });
+
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                    this.currencyOptions=res;
+                    this.loadingData=false;
+                }).catch(err=>{
+                    this.loadingData=false;
+                });
+
+            },
         },
         created(){
             this.getService();
-            this.getCurrency();
+            this.getUnit();
+        },
+        mounted(){
+            this.loadingData=true;
         },
         watch:{
             selectProductTableData(n){
@@ -717,6 +753,7 @@
         bottom: 0;
         width: 100%;
         text-align: left;
+        z-index: 1000;
     }
     .speTimezone{
         max-width: 1000px !important;
