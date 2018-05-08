@@ -38,28 +38,28 @@
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card" >          
-                <el-tab-pane :label="$i.address" name="address">
+                <el-tab-pane :label="$i.supplier.address" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.accountInfo"  name="accountInfo">
+                <el-tab-pane :label="$i.supplier.accountInfo"  name="accountInfo">
                     <v-table  :data="accounts"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.contactInfo" name="contactInfo">
+                <el-tab-pane :label="$i.supplier.contactInfo" name="contactInfo">
                     <v-table  :data="concats"   style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.tradeHistory"  name="tradeHistory">
+                <el-tab-pane :label="$i.supplier.tradeHistory"  name="tradeHistory">
 <!--                  <v-table  :data="tabData"   style='marginTop:10px'/>-->
                 </el-tab-pane>
-                <el-tab-pane :label="$i.inquireHistory"  name="inquireHistory">
+                <el-tab-pane :label="$i.supplier.inquireHistory"  name="inquireHistory">
 <!--                  <v-table  :data="tabData"   style='marginTop:10px'/> -->
                 </el-tab-pane>
-                <el-tab-pane :label="$i.remark" name="remark">
+                <el-tab-pane :label="$i.supplier.remark" name="remark">
                     <v-remark  
                      style='marginTop:10px'
                      :id=id              
                      />
                 </el-tab-pane>
-                <el-tab-pane :label="$i.attchment" name="attchment">
+                <el-tab-pane :label="$i.supplier.attchment" name="attchment">
 
 
                    <v-attachment></v-attachment>

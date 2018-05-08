@@ -22,7 +22,7 @@
         </el-form>  
     </div>
 </template>
-<script>
+<script> 
     /*自己ref拿 上传的url数组*/
     import {
         Upload

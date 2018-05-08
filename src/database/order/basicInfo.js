@@ -52,7 +52,7 @@ export default {
     },
     //弹窗修改
     supplierNo: {
-        key: 'supplierNo',
+        key: 'supplierCode',
         ismodify: false,
 //        isDefaultEdit: true,
         rules: [],
@@ -70,7 +70,7 @@ export default {
         ismodify: false,
         isDefaultEdit: false,
         rules: [],
-        type: 'select',
+        type: 'status',
     },
     deliveryDate: {
         key: 'deliveryDt',
