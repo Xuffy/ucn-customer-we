@@ -80,7 +80,7 @@ export const basicInfoObj = {
   customerName: '',
   receiptCompany: '',
   shippingAgent: '',
-  exchangeCurrency: '',
+  currency: '',
   payment: '',
   paymentTerms: '',
   transportationWay: '',

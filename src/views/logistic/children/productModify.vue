@@ -193,6 +193,7 @@ export default {
   },
   watch: {
     tableData () {
+      console.log(123)
       this.createModifyData()
     }
   },

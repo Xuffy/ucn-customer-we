@@ -66,6 +66,21 @@
                                     />    
                                   </el-select>
                             </el-form-item> 
+                              <el-form-item 
+                                  v-if='item.type=="currency"'
+                                 :label="item.label"
+                                 :prop="item.key">                             
+                                  <el-select
+                                           v-model='formItem[item.key]'                      :disabled="item.ismodify||disabled||item.isDefaultEdit">
+                                       <el-option
+                                        v-for="item in selectAll[item.key]"
+                                        :key="item.id"
+                                        :label="item.code"
+                                        :value="item.code"
+                                        :id="item.id"
+                                    />    
+                                  </el-select>
+                            </el-form-item> 
                              <el-form-item 
                                   v-if='item.type=="supplierName"'
                                  :label="item.label"
@@ -294,9 +309,9 @@
                         this.selectAll.incoterm = _.findWhere(res, {
                             'code': 'ITM'
                         }).codes;
-                        this.selectAll.currency = _.findWhere(res, {
-                            'code': 'CY_UNIT'
-                        }).codes;
+//                        this.selectAll.currency = _.findWhere(res, {
+//                            'code': 'CY_UNIT'
+//                        }).codes;
                         this.selectAll.status = _.findWhere(res, {
                             'code': 'ORDER_STATUS'
                         }).codes;
@@ -315,6 +330,11 @@
                     .then(res => {
                         this.selectAll.destPort = res;
                         this.selectAll.departurePort = res;
+                    });
+                 this.$ajax.get(this.$apis.get_currency, '', '_cache')
+                    .then(res => {
+                        this.selectAll.currency = res;
+//                        console.log(res)
                     });
             },
         },

@@ -18,7 +18,7 @@ var plugins = [],
 // }
 
 plugins.push(new webpack.ProvidePlugin(providePlugin));
-process.env.NODE_ENV !== 'local' && plugins.push(new BundleAnalyzerPlugin());
+// process.env.NODE_ENV !== 'local' && plugins.push(new BundleAnalyzerPlugin());
 /*plugins.push(new webpack.optimize.UglifyJsPlugin({
   compress: {
     warnings: false,
@@ -54,7 +54,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['', '.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),

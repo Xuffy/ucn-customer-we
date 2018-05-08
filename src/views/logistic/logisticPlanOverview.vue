@@ -17,9 +17,22 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="!!viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button>
+        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button>
+        </div>
+        <div v-if="pageType === 'draft'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button>{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
+        </div>
+        <div v-if="pageType === 'archive'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
+        </div>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -36,7 +49,7 @@
     :loading="tableLoading"
     ref="tab"
     />
-    <v-pagination :page-data.sync="pageParams" @page-size-change="sizeChange" @page-change="pageChange"/>
+    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
 </div>
 </template>
 <script>

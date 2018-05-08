@@ -6,8 +6,8 @@
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
                             <el-radio-button label="">{{($i.common.all)}}</el-radio-button>
-                            <el-radio-button label="1"> {{ $i.common.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="2">{{($i.common.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="2"> {{ $i.common.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="1">{{($i.common.TBCBySupplier)}}</el-radio-button>
                             <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
                             <el-radio-button label="4">{{($i.common.finish)}}</el-radio-button>
                             <el-radio-button label="5">{{($i.common.cancel)}}</el-radio-button>
