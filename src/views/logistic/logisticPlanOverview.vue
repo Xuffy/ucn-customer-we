@@ -75,6 +75,12 @@ export default {
         draft: this.$i.logistic.draftOverview,
         archive: this.$i.logistic.archiveOverview
       },
+      jumpPage: {
+        plan: 'planDetail',
+        loadingList: 'planDetail',
+        draft: 'planDraftDetail',
+        archive: '',
+      },
       urlObj: {
         plan: {
           plan: {
@@ -119,6 +125,29 @@ export default {
             label: 'sku',
             text: this.$i.logistic.sku,
             url: this.$apis.get_loading_list_sku,
+            db: this.$db.logistic.sku
+          }
+        },
+        draft: {
+          plan: {
+            key: 0,
+            label: 'plan',
+            text: this.$i.logistic.plan,
+            url: this.$apis.gei_plan_list,
+            db: this.$db.logistic.planList
+          },
+          transportation: {
+            key: 1,
+            label: 'transportation',
+            text: this.$i.logistic.transportationUnit,
+            url: this.$apis.get_transportation_list,
+            db: this.$db.logistic.transportationList
+          },
+          sku: {
+            key: 2,
+            label: 'sku',
+            text: this.$i.logistic.sku,
+            url: this.$apis.get_sku_list,
             db: this.$db.logistic.sku
           }
         }
@@ -190,7 +219,7 @@ export default {
       this.selectCount = arr
     },
     action (e) {
-      this.$router.push({path: '/logistic/planDetail', query: {id: e.id.value}})
+      this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
     },
     searchFn (obj) {
       const { pn, ps } = this.pageParams
@@ -214,6 +243,7 @@ export default {
       this.tableLoading = true
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
+      this.pageType === 'draft' && (this.pageParams.planStatus = 1)
       this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
         if (!res) return (this.tableLoading = false)
         this.tabData = this.$getDB(db, res.datas, item => {

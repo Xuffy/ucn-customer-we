@@ -187,6 +187,7 @@ export default {
       row.index = rowIndex
     },
     handleSelectionChange (arr) {
+      arr.forEach(a => (a.id = ''))
       this.selectArrData = arr
     }
   }

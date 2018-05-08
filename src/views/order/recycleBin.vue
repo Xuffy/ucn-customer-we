@@ -33,9 +33,12 @@
           :loading='loading'
           :pageTotal='pageTotal'
           @change-checked='checked'
-          @page-size-change(size)='pagesizechange'
-          @page-change(page)='pagechange'
-           style='marginTop:10px'/>     
+           style='marginTop:10px'/>   
+            <v-pagination
+            :page-data.sync="params"
+             @change="handleSizeChange"
+            @size-change="pageSizeChange"
+        />    
     </div>
 </template>
 <script>
@@ -48,7 +51,8 @@
 
     import {
         dropDown,
-        selectSearch
+        selectSearch,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -58,7 +62,8 @@
         components: {
             dropDown,
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         data() {
             return {
@@ -84,7 +89,8 @@
                     skuCode: '',
                     view: 1, //view by的按钮组
                     ps: 10,
-                    pn: 1
+                    pn: 1,
+                    tc:0
                 },
                 selectedDate: [],
                 selectedNumber: []
@@ -151,8 +157,7 @@
                 }
                 this.getdata()
             },
-            download() {
-                this.$ajax.post(this.$apis.download_order, {
+            download() {            this.$ajax.post(this.$apis.download_order, {
                         ids: this.selectedNumber
                     })
                     .then((res) => {
@@ -162,8 +167,7 @@
                         console.log(res)
                     });
             },
-            recover() {
-                this.$ajax.post(this.$apis.post_recover_order, {
+            recover() {            this.$ajax.post(this.$apis.post_recover_order, {
                         ids: this.selectedNumber
                     })
                     .then((res) => {
@@ -177,8 +181,7 @@
                         console.log(res)
                     });
             },
-            deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {
+            deleteOrder() {              this.$ajax.post(this.$apis.delete_order, {
                         ids: this.selectedNumber
                     })
                     .then((res) => {
@@ -193,6 +196,7 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.get_recycle_orderlist, this.params)
                     .then((res) => {
+                     res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.loading = false
                         this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
@@ -205,7 +209,15 @@
                         this.loading = false
 
                     });
-            }
+            },
+             handleSizeChange(val) {
+                this.params.pn = val;
+                 this.getdata()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getdata()
+            },
         },
         computed: {
 

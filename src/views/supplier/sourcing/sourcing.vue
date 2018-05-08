@@ -5,7 +5,7 @@
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
-                <el-form ref="parms" :model="parms" label-width="200px" size="mini">
+                <el-form ref="params" :model="params" label-width="200px" size="mini">
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="8"
                            v-for='(item,index) in $db.supplier.overview'
@@ -17,12 +17,12 @@
                             :label="item.label"
                             :prop="item.key"
                             >
-                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
+                                <el-input v-model="params[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
                             :label="item.label"
                             :prop="item.key" >
-                                <el-select v-model="parms[item.key]"></el-select>
+                                <el-select v-model="params[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
                                 :label="item.label"
@@ -31,7 +31,7 @@
                                      <drop-down
                                       ref="dropDown"
 
-                                       v-model="parms[item.key]"
+                                       v-model="params[item.key]"
                                      :defaultProps="defaultProps"
                                      :list="dropData"></drop-down>
                                 </div>
@@ -43,7 +43,7 @@
 
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
+            <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div v-show='isButton'>
@@ -69,7 +69,12 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
-                    style='marginTop:10px'/>      
+                    style='marginTop:10px'/>     
+              <v-pagination
+                :page-data.sync="params"
+                 @change="handleSizeChange"
+                @size-change="pageSizeChange"
+            />                         
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
@@ -113,7 +118,7 @@
                 loading: false,
                 pageTotal: "",
                 endpn: "",
-                parms: {
+                params: {
                     //                    conditions: {},
                     description: "",
                     //                    mainBusiness: [],
@@ -145,7 +150,7 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
-                this.parms.mainBusiness = ''
+                this.params.mainBusiness = ''
             },
             //当作为主键时
             emitData() {
@@ -222,11 +227,10 @@
             //.....拿数据
             get_data() {
                 this.loading = true
-                this.$ajax.post(this.$apis.get_listSupplier, this.parms)
+                this.$ajax.post(this.$apis.get_listSupplier, this.params)
                     .then(res => {
                         //分页组件的参数
-                        //                        res.datas.tc ? this.params.tc = res.datas.tc : this.params.tc = this.params.tc;
-                        //                        this.endpn = res.datas.end
+                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         if (this.disabledLine.length > 0) {
