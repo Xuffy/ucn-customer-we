@@ -241,7 +241,9 @@ export const routerMap = [
           path: 'inquiry',
           name: 'negotiationInquiry',
           meta: {
-            name: 'Inquiry Overview'
+            name: 'Inquiry Overview',
+            draft: 'INQUIRY:OVERVIEW:DRAFT',
+            recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/negotiation/inquiryOverview')
         },
@@ -251,7 +253,9 @@ export const routerMap = [
           hidden: true,
           meta: {
             name: 'Inquiry Detail',
-            messageBoard: 'code'
+            messageBoard: 'code',
+            draft: 'INQUIRY:DETAIL:DRAFT',
+            recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN'
           },
           component: () => import('../views/negotiation/inquiryDetail')
         },
@@ -268,7 +272,8 @@ export const routerMap = [
           path: 'compare',
           name: 'negotiationCompare',
           meta: {
-            name: 'Compare Overview'
+            name: 'Compare Overview',
+            recycleBin: 'INQUIRY:COMPARE_OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/negotiation/compareOverview')
         },
