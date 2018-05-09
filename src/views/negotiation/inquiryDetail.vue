@@ -6,13 +6,13 @@
         <div class="container" :class="{'active':switchStatus}">
             <div class="table-wrap">
                 <div class="basic-info">
-                    <div class="basesic-hd">
+                    <!-- <div class="basesic-hd">
                         <h5>{{ $i.common.basicInfo }}</h5>
                         <el-checkbox-group v-model="ChildrenCheckList">
                             <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
                             <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
                         </el-checkbox-group>
-                    </div>
+                    </div> -->
                     <div class="tab-msg-wrap">
                         <v-table 
                             :height="450"
@@ -103,7 +103,7 @@
                         v-for="items in selectAll[item.key]"
                         :key="items.id"
                         :label="items.name"
-                        :value="items.name"
+                        :value="items.code"
                         :id="items.id"
                     />
                 </el-select>
@@ -112,14 +112,14 @@
                         value-key="id"
                         :size="item.size || 'mini'"
                         :placeholder="item.placeholder" 
-                        v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
                         style="width:100%;"
                     >
                     <el-option
                         v-for="items in selectAll[item.key]"
                         :key="items.id"
                         :label="items.name"
-                        :value="items.name"
+                        :value="items.code"
                         :id="items.id"
                     />
                 </el-select>
@@ -293,6 +293,11 @@
                     this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
                     this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
                 });
+                
+                this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
+                .then(res => {
+                    this.selectAll.currency = res;
+                });
 
                 this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
                 .then(res => {
@@ -365,26 +370,25 @@
                     let basicInfoData, newProductTabData;
                     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'EL_IS', 'MD_TN',], '_cache')
                     .then(data => {
-                        this.$ajax.post(this.$apis.POST_LOGISTICSPORT_QUERY)
+                        this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
                         .then(datas => {
-                            console.log(datas, '===')
+                            data.push({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: datas});
+                            this.setDic(data);
+                            //Basic Info
+                            basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                                this.$filterDic(item);
+                            });
+                            this.newTabData = basicInfoData;
+                            this.tabData = basicInfoData;
+                            //SKU_UNIT 
+                            //Product Info
+                            newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                                this.$filterDic(item);
+                            });
+                            this.newProductTabData = newProductTabData;
+                            this.productTabData = newProductTabData;
+                            this.tableLoad = false;
                         });
-                        return;
-                        this.setDic(data);
-                        //Basic Info
-                        basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
-                            this.$filterDic(item);
-                        });
-                        this.newTabData = basicInfoData;
-                        this.tabData = basicInfoData;
-                        //SKU_UNIT 
-                        //Product Info
-                        newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
-                            this.$filterDic(item);
-                        });
-                        this.newProductTabData = newProductTabData;
-                        this.productTabData = newProductTabData;
-                        this.tableLoad = false;
                     });
                     
                 })
@@ -423,9 +427,20 @@
                 }];
             }, 
             productInfoBtn (item) { //Product info 按钮创建
-                if(this.statusModify && !item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
-                if(this.statusModify && item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
-                if(!item._disabled) return [{label: this.$i.common.histoty, type: 'histoty', _disabled: false}, {label: this.$i.common.detail, type: 'detail', _disabled: false}];
+                if(this.statusModify && !item._disabled) return [
+                    {label: this.$i.common.modify, type: 'modify'}, 
+                    {label: this.$i.common.histoty, type: 'histoty'}, 
+                    {label: this.$i.common.detail, type: 'detail'}
+                ];
+                if(this.statusModify && item._disabled) return [
+                    {label: this.$i.common.modify, type: 'modify'}, 
+                    {label: this.$i.common.histoty, type: 'histoty'}, 
+                    {label: this.$i.common.detail, type: 'detail'}
+                ];
+                if(!item._disabled) return [
+                    {label: this.$i.common.histoty, type: 'histoty', _disabled: false}, 
+                    {label: this.$i.common.detail, type: 'detail', _disabled: false}
+                ];
             },
             fromChange(val) {
                this.trig = new Date().getTime();
@@ -656,7 +671,7 @@
                 width:100%;
                 .basic-info {
                     width:100%;
-                    padding:0 10px;
+                    padding:20px 10px;
                     box-sizing: border-box;
                     .tab-msg-wrap {
                         padding-right:25px;
