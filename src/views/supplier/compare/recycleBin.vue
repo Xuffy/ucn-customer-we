@@ -1,6 +1,6 @@
 <template>
     <div class="compare-overview">
-        <h3 class="hd">{{$i.supplier.compareOverview}}</h3>
+        <h3 class="hd"> {{$i.supplier.recycleBin}}</h3>
         <div class="status">
             <div class="btn-wrap">
                 <el-button :disabled='!selectedData.length>0'
@@ -73,7 +73,7 @@
                     pn: 1,
                     ps: 50,
                     tc: 0,
-                   "recycle": false,
+                   "recycle": true,
                     //                      "sorts": [
                     //                        {
                     //                          "nativeSql": true,
