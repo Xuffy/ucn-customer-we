@@ -102,7 +102,7 @@
 <script>
     /* this.$ref.basicInfo*/
     import VResponsibility from './responsibility'
-    import VBasicinfo from './basicinfo'
+    import VBasicinfo from './basicInfo'
     import VAttchment from './attachment'
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
