@@ -492,7 +492,7 @@
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                    id: item.id.value
+                    id: item.skuId.value?item.skuId.value:item.id.value
                 })
                 .then(res => {
                     let arr = [];
@@ -615,7 +615,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
+                                json[k] = item[k].dataBase||item[k].dataBase===0?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);
