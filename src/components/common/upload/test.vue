@@ -18,6 +18,11 @@
              :style="{width: (item.progress * 100) + '%'}">
           <!--<h6 v-text="parseInt(item.progress * 100) + '%'"></h6>-->
         </div>
+
+        <div class="delete-box" v-show="item.progress === 1 || item.url">
+          <i class="el-icon-delete" @click="deleteFile(item)"></i>
+        </div>
+
         <!--<el-progress :text-inside="true" :stroke-width="18" :percentage="item.progress*100"></el-progress>-->
       </li>
     </ul>
@@ -65,15 +70,18 @@
       },
       startUpload(client, files) {
         let _this = this
-          , uid = _this.$getUUID();
+          , uid = _this.$getUUID()
+          , fileKey = `${uid}/${files.name}`;
+
         _this.$set(_this.fileList, uid, _.extend({
+          fileKey,
           fileName: files.name,
           progress: 0,
           id: uid
         }, this.filterType(files.name)));
 
         co(function* () {
-          yield client.multipartUpload(`${uid}/${files.name}`, files, {
+          yield client.multipartUpload(fileKey, files, {
             progress: p => {
               return done => {
                 if (_this.fileList[uid]) {
@@ -83,15 +91,25 @@
               }
             }
           }).then(result => {
-            // let signatureUrl = client.signatureUrl(result.name);
-            // let obj = _this.fileList[uid];
-            // obj.url = client.signatureUrl(result.name);
             _this.$set(_this.fileList[uid], 'url', client.signatureUrl(result.name));
-            // console.log(signatureUrl)
           });
         }).catch(function (err) {
           console.log(err);
         });
+      },
+      deleteFile(params) {
+        let list = {};
+        this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+          let client = this.signature(data);
+          client.delete(params.fileKey);
+        });
+
+        _.map(this.fileList, val => {
+          if (val.id !== params.id) {
+            list[val.id] = val;
+          }
+        });
+        this.fileList = list;
       },
       signature(params) {
         return new OSS.Wrapper({
@@ -120,6 +138,9 @@
         }
 
         return param;
+      },
+      getFiles() {
+        return _.pluck(_.values(this.fileList), 'fileKey');
       }
     },
   }
@@ -175,6 +196,39 @@
     margin-left: 10px;
     position: relative;
     vertical-align: middle;
+    box-sizing: border-box;
+  }
+
+  .delete-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, .8);
+    opacity: 0;
+    transition: all .5s;
+  }
+
+  .delete-box:hover {
+    opacity: 1;
+  }
+
+  .delete-box .el-icon-delete {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 30px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all .5s;
+    transform: translate(-50%, -50%);
+  }
+
+  .delete-box .el-icon-delete:hover {
+    color: #409eff;
   }
 
   .progress {
@@ -224,6 +278,7 @@
     padding: 3px 3px 20px 3px;
     box-sizing: border-box;
     color: #606266;
+    opacity: .7;
   }
 
   .img-box {
