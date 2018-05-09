@@ -22,7 +22,7 @@ export default {
   put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
-  post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
+  post_qc_page:['/qc/page','BASE_BUY','UPURCHASE_URL'],
   post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据

@@ -1,3 +1,10 @@
 {
-  "warehouseOverview":"Warehouse Overview"
+  "warehouseOverview":"Warehouse Overview",
+  "status":"Status",
+  "all":"All",
+  "download":"Download",
+  "qcOverview":"QC Overview",
+  "create":"Create",
+  "addProduct":"Add Product",
+  "remove":"Remove"
 }
