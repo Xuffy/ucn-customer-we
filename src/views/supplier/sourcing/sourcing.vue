@@ -125,7 +125,7 @@
                     //                    mainBusiness: [],
                     name: '',
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     tc: 0,
                     skuCode: "",
                     skuNameEn: "",

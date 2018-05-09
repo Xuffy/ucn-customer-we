@@ -47,7 +47,7 @@
             <div>
              <div class="btnline">
                    <el-button  :disabled='!selectedData.length>0' @click='recycle'>{{$i.common.recover}}({{selectedNumber.length}})</el-button>
-                  <el-button  :disabled='!selectedData.length>0' >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
+<!--                  <el-button  :disabled='!selectedData.length>0' >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
               </div>  
               <div>
                  
