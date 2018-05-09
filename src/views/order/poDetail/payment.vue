@@ -155,6 +155,7 @@
                 type: String,
                 default: '999'
             },
+            //订单哪来的 
             currencyCode: {
                 type: String,
             },
@@ -283,7 +284,8 @@
                 copyData: [],
                 orderType: 10,
                 type: '10', //10 付款  20退款
-                stopEdit: false
+                stopEdit: false,
+                currency:''
             }
         },
         methods: {
@@ -344,8 +346,17 @@
                 return sums;
             },
 
-            //处理顶部按钮点击
+            
+            //1  USD    2 CNY   3  EUR
+            //处理顶部按钮点击 
             handleClick() {
+                 if( this.currencyCode=='CNY'){
+                     this.currency=33
+                }else if(this.currencyCode='USD'){
+                    this.currency=154
+                }else if(this.currencyCode='EUR'){
+                    this.currency=49
+               }
                 this.stopEdit = true;
                 this.$ajax.post(this.$apis.paymentGetNo, {}).then(
                     res => {
@@ -359,7 +370,7 @@
                             type: this.type, //10 付款  20退款
                             payToId: this.payToId, //order的数据
                             currencyCode: this.currencyCode,
-                            currency: this.currencyCode, //order的数据
+                            currency: this.currency, //order的数据
                             //                            status: 1, //10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
                             isNew: true, //新增的数据全部处于新增状态
                         });
@@ -524,7 +535,7 @@
                 if (val) {
                     this.get_list()
                 }
-            }
+            },
         }
     }
 

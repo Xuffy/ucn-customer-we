@@ -27,6 +27,7 @@
                     </div>
                 </div>
                 <div class="basic-info">
+                    <h5>{{ $i.common.productInfo }}</h5>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
@@ -46,15 +47,15 @@
                         :hideFilterColumn="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
                         <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
-                        <el-button @click="addToCompare">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value+''!=='22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i.common.copy }}</el-button>
-                        <el-button @click="toCreateInquire">{{ $i.common.createInquiry }}</el-button>
+                        <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
+                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                        <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
+                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
                         <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value+''!== '22'&&tabData[0].status.value+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + ''!=='99'||tabData[0].status.value+''!=='1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -125,6 +126,7 @@
                 <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
             </template>
         </v-history-modify>
+        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
     </div>
 </template>
 <script>
@@ -139,7 +141,7 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
+    import { VMessageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
     import { mapActions } from 'vuex'
@@ -212,7 +214,7 @@
             }
         },
         components: {
-            'message-board':messageBoard,
+            'v-message-board':VMessageBoard,
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
@@ -259,12 +261,13 @@
         methods: {
             ...mapActions([
                 'setDraft',
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             deleteInquiry() {
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
@@ -274,12 +277,7 @@
                     .then(res => {
                         this.$router.push('/negotiation/inquiry')
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                })
             },
             remoteMethod(keyWord) {
                 this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
@@ -288,12 +286,11 @@
                 })
             },
             getDictionaries() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
                     this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
                     this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
                     this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
                     this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
                 });
 
@@ -314,7 +311,7 @@
                 this.newSearchDialogVisible = true;
             },
             handleOK(item) { //添加 product
-                if(item && !item.length) return this.$message('请选择商品');
+                if(item && !item.length) return this.$message(this.$i.common.pleaseChooseGoods);
                 let ids = [];
                 _.map(item, items => {
                     ids.push(_.findWhere(items, {'key': 'id'}).value)
@@ -353,61 +350,47 @@
                 };
 
                 for(let i = 0; i < this.compareConfig.length; i++) {
-                    if(this.compareConfig[i].id === config.id) return this.$message({
-                        message: '这个订单已经添加到对比',
-                        type: 'warning'
-                    });
+                    if(this.compareConfig[i].id === config.id) return;
                 }
                 this.compareConfig.push(config);
                 this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
-                if(!this.$route.query.id) return this.$message('地址错误');
+                if(!this.$route.query.id) return this.$message(this.$i.common.addressError);
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
-                    //Basic Info
-                    let basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    _.map(basicInfoData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                    
+                    let basicInfoData, newProductTabData;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'EL_IS', 'MD_TN',], '_cache')
+                    .then(data => {
+                        this.$ajax.post(this.$apis.POST_LOGISTICSPORT_QUERY)
+                        .then(datas => {
+                            console.log(datas, '===')
                         });
-                    });
-                    this.newTabData = basicInfoData;
-                    this.tabData = basicInfoData;
-                    //Product Info
-                    let newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-
-                    _.map(newProductTabData, item => {
-                        if(!item._remark) _.mapObject(item, (val, k) => {
-                            switch(val.state) {
-                                case 'time':
-                                    item[k].value = this.$dateFormat(val.value, 'yyyy-mm-dd');
-                            }
+                        return;
+                        this.setDic(data);
+                        //Basic Info
+                        basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                            this.$filterDic(item);
                         });
+                        this.newTabData = basicInfoData;
+                        this.tabData = basicInfoData;
+                        //SKU_UNIT 
+                        //Product Info
+                        newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.newProductTabData = newProductTabData;
+                        this.productTabData = newProductTabData;
+                        this.tableLoad = false;
                     });
-
-                    this.newProductTabData = newProductTabData;
-                    this.productTabData = newProductTabData;
-                    this.tableLoad = false;
+                    
                 })
                 .catch(err => {
                     this.tableLoad = false;
                 });
-            },
-            submit(str) { //留言板发布
-                let json = {};
-                json.time = getData(new Date(), 6);
-                json.name = '罗涛';
-                json.content = str;
-                this.list.push(json);
-            },
-            boardSwitch() { //留言板开关
-                this.switchStatus = !this.switchStatus;
             },
             getList(ids) {
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
@@ -427,22 +410,22 @@
             },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
-                    label: 'Modify',
+                    label: this.$i.common.modify,
                     type: 'modify'
                 }, { 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
 
                 if(item.id.value) return [{ 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
             }, 
             productInfoBtn (item) { //Product info 按钮创建
-                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(this.statusModify && item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
+                if(this.statusModify && !item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
+                if(this.statusModify && item._disabled) return [{label: this.$i.common.modify, type: 'modify'}, {label: this.$i.common.histoty, type: 'histoty'}, {label: this.$i.common.detail, type: 'detail'}];
+                if(!item._disabled) return [{label: this.$i.common.histoty, type: 'histoty', _disabled: false}, {label: this.$i.common.detail, type: 'detail', _disabled: false}];
             },
             fromChange(val) {
                this.trig = new Date().getTime();
@@ -500,7 +483,7 @@
                     let arr = [];
                     if(type === 'basicInfo') {
                         _.map(this.newTabData, items => {
-                            if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
+                            if(_.findWhere(items, {'key': 'id'}).value?_.findWhere(items, {'key': 'id'}).value:_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
                             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
@@ -587,7 +570,6 @@
             },
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
-                if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 let arr = [];
                 _.map(this.newProductTabData, item => {
                     if(!item._disabled) arr.push(item);
@@ -596,7 +578,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
-                    this.newTabData[0].status.value = res.status;
+                    this.newTabData[0].status.dataBase = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
@@ -609,7 +591,7 @@
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -618,7 +600,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);

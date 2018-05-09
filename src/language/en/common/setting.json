@@ -12,9 +12,6 @@
     "accountInfo":"账户信息",
     "contactInfo":"联系人信息",
     "attachment":"附件",
-
-
-
     "factoryName":"工厂名称",
     "factoryAddress":"工厂地址",
     "exportPort":"出口港口",
@@ -25,8 +22,6 @@
     "action":"操作",
     "delete":"删除",
     "add":"新增",
-
-
     "beneficiaryName":"收款人",
     "beneficiaryAccount":"收款账号",
     "beneficiaryAddress":"收款地址",
@@ -34,7 +29,6 @@
     "beneficiaryBankSWIFT":"收款银行代码",
     "accountType":"账户类型",
     "currency":"币种",
-
     "name":"名字",
     "department":"部门",
     "gender":"性别",
@@ -43,8 +37,7 @@
     "faxNumber":"传真号码",
     "emailAddress":"电子邮件",
     "skype":"skype",
-    "qq":"QQ"
-
-
-
+    "qq":"QQ",
+    "pleaseSelectTheLeafNode": "请先选择分类",
+    "addClassification": "添加分类"
 }

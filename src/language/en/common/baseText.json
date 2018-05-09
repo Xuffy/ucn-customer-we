@@ -78,6 +78,9 @@
     "confirmedReturn": "Confirmed return",
     "confirmed": "Confirmed",
     "copy": "copy",
-    "downloadBig":"Download"
+    "downloadBig":"Download",
+    "negotiate": "negotiate",
+    "detail": "Detail",
+    "histoty": "histoty"
 }
 

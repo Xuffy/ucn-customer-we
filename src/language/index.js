@@ -6,7 +6,9 @@ const lang = localStore.get('language') || config.LANGUAGE;
 const json = {
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
+    require(`./${lang}/common/basePlaceholder`),
     require(`./${lang}/common/baseText`),
+    require(`./${lang}/common/setting`),
     require(`./${lang}/common/message`)
   ),
   inquiry: _.extend({},

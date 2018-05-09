@@ -4,14 +4,14 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedArg.length>0?checkedArg.length:'all'})` }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="inputEnter" />
         </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
-            :buttons="[{label: 'Modify', type: 'modify'}, {label: 'Detail', type: 'detail'}]" 
+            :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]" 
             @action="action"
             @change-checked="changeChecked"
             :height="455"
@@ -127,9 +127,9 @@
                 this.checkedArg = arr;
             },
             compareDelete() { //删除compare
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
@@ -137,12 +137,7 @@
                         this.getList();
                         this.checkedArg = [];
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             },
             inputEnter() {
                 

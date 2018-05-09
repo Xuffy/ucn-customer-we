@@ -193,6 +193,7 @@ export default {
   },
   watch: {
     tableData () {
+      console.log(123)
       this.createModifyData()
     }
   },
@@ -201,6 +202,7 @@ export default {
       // this.modifyArray = JSON.parse(JSON.stringify(this.tableData))
       if (this.productInfoModifyStatus === 1) {
         const copyTableData = JSON.parse(JSON.stringify(this.tableData))
+        console.log(copyTableData)
         _.mapObject(copyTableData[0], (value, key) => {
           key === 'toShipCartonQty' && (value.edit = true)
           key === 'toShipQty' && (value.edit = true)

@@ -16,7 +16,7 @@
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
          <v-payment :orderNo='orderNo' 
-                    :currencyCode='currencyCode'
+                    :currency='currency'
                     :payToId='payToId'
                     :orderStatus='orderStatus'
          ></v-payment>
@@ -26,7 +26,7 @@
                  {{$i.common.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
+                  <el-button  @click="addProduct" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
                   <el-button type='danger' @click='removeProduct' :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'">{{$i.common.remove}}</el-button>
 
              </div>
@@ -46,9 +46,9 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
-                 <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'">{{$i.common.modify}}</el-button>
-                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'">{{$i.common.confirm}}</el-button>
-                 <el-button  :disabled='true' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
+                 <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'" :disabled="orderStatus==='5'">{{$i.common.modify}}</el-button>
+                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'" :disabled="orderStatus==='5'">{{$i.common.confirm}}</el-button>
+                 <el-button   v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
                   <el-button v-authorize="'ORDER:DETAIL:CREATE'">{{$i.common.createOrder}}</el-button>
                   <el-button :disabled="orderStatus==='5'" @click='cancelOrder' v-authorize="'ORDER:DETAIL:CANCEL'">{{$i.common.cancel}}</el-button>
                  <el-checkbox v-model="markAsImportant" v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'">{{$i.common.markAsImportant}}</el-checkbox>
@@ -68,13 +68,23 @@
                                 :hideBtn="true"
                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
+                                @handleCancel='canceldialog'
                                 :forceUpdateNumber="trig" 
                                 type="product"
                                 :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
                         <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
-                           <v-product :hideBtns="true"></v-product>
+                            <v-product                     
+                               :hideBtns="true"
+                                :hideBtn="true"
+                                :disabledLine="disabledLine"
+                                @handleOK="getList"
+                                @handleCancel='canceldialog'
+                                :forceUpdateNumber="trig" 
+                                type="bookmark"
+                                :isInquiry="true"
+                           ></v-product>
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
@@ -148,11 +158,16 @@
             }
         },
         methods: {
+            canceldialog() {
+                this.dialogAddproduct = false
+            },
             confirm() {
                 this.$ajax.post(this.$apis.post_confirm, {
                     ids: [this.orderId]
                 }).then(res => {
-                    console.log(res)
+                    this.$router.push({
+                        path: '/order/overview',
+                    });
                 }).catch(res => {
                     console.log(res)
                 })
@@ -179,6 +194,7 @@
                 this.$ajax.post(this.$apis.post_cancleOrder, {
                     ids: [this.orderId]
                 }).then(res => {
+                    console.log(res)
                     this.$router.push({
                         path: '/order/overview',
                     });
@@ -187,12 +203,10 @@
                 })
             },
             //........获取数据
-            get_data() {
-                this.$ajax.get(this.$apis.detail_order, {
+            get_data() {             this.$ajax.get(this.$apis.detail_order, {
                         id: this.orderId
                     })
                     .then((res) => {
-
                         this.orderStatus = res.status
                         //.传递给[payment]组件的数据
                         this.orderNo = res.orderNo
@@ -219,7 +233,7 @@
                             item => {
                                 return item;
                             });
-                        this.tableTatalCal();
+                        //                        this.tableTatalCal();
                         this.tableLoad = false;
                     })
                     .catch((res) => {
@@ -401,24 +415,24 @@
                 });
             },
             send() {
+                //                return console.log(this.newProductTabData)
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
-                //                return console.log(parentNode)
+
                 //参数一堆堆 我靠
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-//                    skuList: parentNode,
+                    // skuList: parentNode,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: false,
                     importantSupplier: this.markAsImportant,
-                }               
+                }
                 var basic = this.$refs.basicInfo.formItem
-                _.extend(params, basic)              
+                _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(params, caculate)
-                params.skuList=parentNode
-                return console.log(params)
+                params.skuList = parentNode
                 this.$ajax.post(this.$apis.post_updataOrder, params)
                     .then(res => {
                         this.$router.push('/order/overview')
@@ -433,6 +447,7 @@
                     if (!item._disabled) arr.push(item);
                 });
                 this.disabledLine = arr;
+
                 this.trig = new Date().getTime();
                 this.dialogAddproduct = true;
             },
