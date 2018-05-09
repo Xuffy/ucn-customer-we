@@ -1,5 +1,6 @@
 <template>
   <div class='ucn-upload'>
+    <p class="upload-btn"></p>
     <input type="file" multiple="multiple" ref="upload" @change="uploadFile"/>
     <!--<el-button type="primary" @click="uploadFile">主要按钮</el-button>-->
     <ul>
@@ -53,33 +54,22 @@
       startUpload(client, files) {
         let _this = this
           , uid = _this.$getUUID();
-        _this.fileList[uid] = {fileName: files.name, progress: 0, id: uid};
+        _this.$set(_this.fileList, uid, {fileName: files.name, progress: 0, id: uid});
 
         co(function* () {
           yield client.multipartUpload(`${uid}/${files.name}`, files, {
             progress: p => {
               return done => {
-                if (_this.fileList[uid]){
-                  _this.fileList[uid].progress=p;
+                if (_this.fileList[uid]) {
+                  _this.fileList[uid].progress = p;
                 }
-                /*_this.fileList = _.map(_this.fileList, val => {
-                  console.log(files.name, val.fileName, p);
-                  if (files.name === val.fileName) {
-                    val.progress = p;
-                  }
-                  return val;
-                });*/
                 done();
               }
             }
           }).then(result => {
-            let signUrl = client.signatureUrl(result.name);
-            // console.log(_this.fileList);
-            // console.log(result);
-            // console.log(signUrl)
-            console.log('2-------');
+            _this.fileList[uid].url = client.signatureUrl(result.name);
+            // console.log('2-------', signUrl);
           });
-          // let head = yield client.head(files[0].name);
         }).catch(function (err) {
           console.log(err);
         });
@@ -102,6 +92,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-
+  .upload-btn {
+    width: ;
+  }
 
 </style>
