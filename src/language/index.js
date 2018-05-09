@@ -9,7 +9,11 @@ const json = {
     require(`./${lang}/common/basePlaceholder`),
     require(`./${lang}/common/baseText`),
     require(`./${lang}/common/setting`),
-    require(`./${lang}/common/message`)
+    require(`./${lang}/common/message`),
+    require(`./${lang}/common/page`),
+    require(`./${lang}/common/message`),
+    require(`./${lang}/common/promptInfo`),
+    require(`./${lang}/common/setting`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),
@@ -84,68 +88,17 @@ const json = {
     require(`./${lang}/workbench/page`),
     require(`./${lang}/workbench/task`)
   ),
+  router: _.extend({},
+    require(`./${lang}/router/index`)
+  ),
+  button: _.extend({},
+    require(`./${lang}/button/index`)
+  ),
+  hintMessage: _.extend({},
+    require(`./${lang}/hintMessage/index`)
+  ),
 }
 
 console.log(`%c这是优化后的国际化配置，请仔细看，修改并不麻烦。\n只需要把之前下划线 ‘$i.’ 去掉就行了`, "color:#409EFF", json,'\n\n');
 
 export default json;
-/*
-export default _.extend({},
-  require(`./${lang}/common/quickLinks`),
-  {_workbench: require(`./${lang}/workbench/page`)},
-  require(`./${lang}/workbench/task`),
-  {_setting: require(`./${lang}/setting`)},
-  {_departmentSetting: require(`./${lang}/setting/department`)},
-  require(`./${lang}/setting/setting.basic`),
-  {_common: require(`./${lang}/common`)},
-  {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
-  {_inquiry: require(`./${lang}/inquiry/index`)},
-  {_basePlaceholder: require(`./${lang}/basePlaceholder`)},
-  {_inquiry: require(`./${lang}/inquiry/index`)},
-  require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
-  require(`./${lang}/warehouse/summary.pending`),
-  require(`./${lang}/inquiry/viewByInqury.pending`),
-  require(`./${lang}/inquiry/viewByInqury.pending`),
-  require(`./${lang}/inquiry/viewBySKU.pending`),
-  require(`./${lang}/inquiry/basicInfo.pending`),
-  require(`./${lang}/supplier/overview`),
-  require(`./${lang}/supplier/detail.pending`),
-  require(`./${lang}/order/overview`),
-  require(`/${lang}/order/basicinfo.pending`),
-  require(`/${lang}/order/productinfo.pending`),
-  require(`./${lang}/logistic/plan/overviewBtn.pending`),
-  require(`./${lang}/logistic/plan/plan.base`),
-  require(`./${lang}/inquiry/compare.pending`),
-  // payment
-  {_payment: require(`./${lang}/payment/payment`)},
-  require(`./${lang}/payment/payment.table`),
-  //message
-  require(`./${lang}/message/message.table`),
-  {_messages: require(`./${lang}/message/tabs`)},
-  //logs
-  require(`./${lang}/logs/logs.table`),
-  {_logBasic: require(`./${lang}/logs/logs.basic`)},
-  {_track: require(`./${lang}/track/trackBysku`)},
-  {_personalInfo: require(`./${lang}/setting/personalInfo`)},
-
-  {_product: require(`./${lang}/product/product.basic`)},
-  {_productCn: require(`./${lang}/productCn/product.basic`)},
-
-  require(`./${lang}/product/productOverview`),
-  require(`./${lang}/productCn/productOverview`),
-  require(`./${lang}/logistic/plan/plan.base`),
-  require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
-  require(`./${lang}/warehouse/qcWarehouse`),
-  require(`./${lang}/warehouse/warehouse.table`),
-
-
-    //warehouse qc
-    {_buyerQc: require(`./${lang}/warehouse/createQc.basic`)},
-
-
-  //CN配置
-
-  {_warehouse: require(`./${lang}/warehouseCn/warehouse.basic`)},
-  require(`./${lang}/warehouseCn/warehouse.index`),
-)
-*/

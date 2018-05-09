@@ -9,6 +9,7 @@
       <el-table
         :data="dataList"
         max-height="400px"
+        style="display:flex;flex-direction:column;"
         :span-method="objectSpanMethod"
         border>
         <el-table-column v-for="item in dataColumn" :key="item.id"

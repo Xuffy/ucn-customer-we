@@ -3,23 +3,23 @@
     <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button>
     <el-table :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :sum-text="$i.logistic.sum" :summary-method="summaryMethod">
       <el-table-column type="index" width="50" align="center"/>
-      <el-table-column :label="$i.logistic.paymentNo" align="center">
+      <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.no }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.paymentItem" align="center">
+      <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.supplierName" align="center">
+      <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.supplierName" placeholder="请输入内容" :clearable="true">
-            <el-option :label="item.supplierName" :value="item.supplierId" v-for="item of selectArr.supplier" :key="'supplier-arr-' + item.supplierId" v-if="selectArr.supplier"/>
+          <el-select v-model="scope.row.payToId" placeholder="请输入内容" :clearable="true" v-if="scope.row.edit">
+            <el-option :label="item.skuSupplierName" :value="item.skuSupplierId" v-for="item of selectArr.supplier" :key="'supplier-arr-' + item.supplierId" v-if="selectArr.supplier"/>
           </el-select>
-          <!-- <span v-else>{{ scope.row.name }}</span> -->
+          <span v-else>{{ computedCurrency('supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId) }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.estPayDate" align="center" width="260">
@@ -29,7 +29,7 @@
           <span v-else>{{ scope.row.planPayDt ? $dateFormat(scope.row.planPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.estAmount" align="center">
+      <el-table-column :label="$i.logistic.estAmount" align="center" width="180">
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.planPayAmount }}</span>
@@ -42,36 +42,42 @@
           <span v-else>{{ scope.row.actualPayDt ? $dateFormat(scope.row.actualPayDt, 'yyyy-mm-dd') : null }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.actAmount" align="center">
+      <el-table-column :label="$i.logistic.actAmount" align="center" width="180">
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.currency" align="center">
+      <el-table-column :label="$i.logistic.currency" align="center" width="180">
         <template slot-scope="scope">
           <!-- <el-input placeholder="请输入内容" v-model="scope.row.currencyCode" v-if="scope.row.edit"></el-input> -->
           <!-- <span v-else>{{ scope.row.currencyCode }}</span> -->
-          <span>{{ scope.row.currencyCode ? conputedCurrency(scope.row.currencyCode) : scope.row.currencyCode()}}</span>
+          <span>{{ computedCurrency('exchangeCurrency', 'code', 'name', scope.row.currencyCode)}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.avilable" align="center">
+      <el-table-column :label="$i.logistic.avilable" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ paymentDec.find(a => a.code === scope.row.status).name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.operation" align="center" width="200">
+      <el-table-column :label="$i.logistic.operation" align="center" width="200" fixed="right">
         <template slot-scope="scope">
-          <div v-if="!scope.row.id">
-            <el-button size="mini" type="primary" @click.stop="$emit('savaPayment', scope.$index)">保存</el-button>
+          <!-- <div v-if="!scope.row.edit">
+            <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">保存</el-button>
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
-          </div>
+          </div> -->
           <div v-if="scope.row.status === -1">
             <el-button size="mini" type="primary">恢复</el-button>
           </div>
-          <div v-if="(scope.row.id && scope.row.status === 20) || (scope.row.id && scope.row.status === 40)">
-            <el-button size="mini" type="primary">修改</el-button>
-            <el-button size="mini" type="primary">作废</el-button>
+          <div v-if="(scope.row.status === 20) || (scope.row.status === 40)">
+            <div v-if="scope.row.edit">
+              <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">保存</el-button>
+              <el-button size="mini" type="primary" @click.stop="cancelPaymentModify(scope.$index)">取消</el-button>
+            </div>
+            <div v-else>
+              <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">修改</el-button>
+              <el-button size="mini" type="primary">作废</el-button>
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -103,6 +109,7 @@ export default {
   },
   data () {
     return {
+      copyPaymentObj: {},
       paymentDec: [
         {
           code: -1,
@@ -156,14 +163,24 @@ export default {
     summaryMethod () {
       let SumArr = [this.$i.logistic.sum]
       if (!this.paymentSum) return SumArr
-      SumArr[4] = this.paymentSum.planPayAmount
-      SumArr[6] = this.paymentSum.actualPayAmount
-      SumArr[7] = this.paymentSum.currencyCode
+
+      SumArr[5] = this.paymentSum.planPayAmount
+      SumArr[7] = this.paymentSum.actualPayAmount
+      SumArr[8] = this.computedCurrency('exchangeCurrency', 'code', 'name', this.paymentSum.currencyCode)
       return SumArr
     },
-    conputedCurrency (code) {
-      const obj = this.selectArr.exchangeCurrency.find(a => a.code === code)
-      return obj ? obj.name : null
+    computedCurrency (key, findKey, returnKey,currencyCode) {
+      if (!this.selectArr[key]) return null
+      const obj = this.selectArr[key].find(a => a[findKey] === currencyCode)
+      return obj ? obj[returnKey] : null
+    },
+    switchModify (i) {
+      this.copyPaymentObj = this.tableData[i]
+      this.$emit('updatePaymentWithView', {i, bool: true})
+    },
+    cancelPaymentModify (i) {
+      if (!this.tableData[i].id) return this.tableData.splice(i, 1)
+      this.$emit('updatePaymentWithView', {i, bool: false})
     }
   }
 }

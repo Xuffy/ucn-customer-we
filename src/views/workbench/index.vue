@@ -32,7 +32,7 @@
       </el-col>
     </el-row>
 
-    <v-message-board module="workbench" code="workbench" id="123"></v-message-board>
+    <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
 

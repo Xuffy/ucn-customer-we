@@ -232,11 +232,19 @@
             },
              handleSizeChange(val) {
                 this.params.pn = val;
-                this.getdata()
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
             },
             pageSizeChange(val) {
                 this.params.ps = val;
-                this.getdata()
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
             },
         },
         computed: {

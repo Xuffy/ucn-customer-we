@@ -3,6 +3,7 @@ export default {
   post_ledgerPage:['/ledger/page','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_list:['/payment/list/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_accept:['/payment/accept/{id}','UPURCHASE_URL','UPURCHASE_URL'],
+  post_payment_dunning:['/payment/dunning/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
   //message
   post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],
@@ -21,7 +22,7 @@ export default {
   put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
-  post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
+  post_qc_page:['/qc/page','BASE_BUY','UPURCHASE_URL'],
   post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据
@@ -36,6 +37,7 @@ export default {
   post_qc_result_save: ['/qc/result/save','USERVICE_URL','USERVICE_URL'],
 
   //user
-  get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'] //获取当前登录用户所在企业下所有用户信息
+  get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'], //获取当前登录用户所在企业下所有用户信息
+  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL']
 
 }
