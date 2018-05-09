@@ -1,7 +1,7 @@
 export default {
   _firstColumn: {
     key: 'updateDt',
-    label: ' ',
+    label: ' 2',
     type: 'text',
     _disabled: true,
     _title: 'remark',
@@ -66,7 +66,7 @@ export default {
     key: 'skuCode',
     _disabled: true
   },
-  nameCn: {
+  skuNameCn: {
     key: 'skuNameCn',
     _disabled: true
   },

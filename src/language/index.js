@@ -10,7 +10,10 @@ const json = {
     require(`./${lang}/common/baseText`),
     require(`./${lang}/common/setting`),
     require(`./${lang}/common/message`),
-    require(`./${lang}/common/page`)
+    require(`./${lang}/common/page`),
+    require(`./${lang}/common/message`),
+    require(`./${lang}/common/promptInfo`),
+    require(`./${lang}/common/setting`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),

@@ -145,9 +145,44 @@
             ></v-product>
         </el-dialog>
         <v-history-modify
-                @save="save"
-                ref="HM"
-            >
+            @save="save"
+            ref="HM"
+        >
+            <template v-for="item in $db.inquiry.basicInfo" :slot="item._slot" slot-scope="{data}">
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+                <el-select
+                        v-model="fromArg[item.key]" 
+                        value-key="id"
+                        :size="item.size || 'mini'"
+                        :placeholder="item.placeholder" 
+                        v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                        style="width:100%;"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+                <v-up-load v-if="item.type === 'attachment' || item.type === 'upData'"/>
+            </template>
         </v-history-modify>
     </div>
 </template>
@@ -292,7 +327,7 @@
                 });
             },
             getDictionaries() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
                 .then(res => {
                     this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
                     this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
@@ -354,13 +389,13 @@
                     });
                 });
             },
-            dataFilter (data) {
+             dataFilter (data) {
                 let arr = [], jsons = {}, json = {};
                 data.forEach(item => {
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -369,7 +404,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);
@@ -391,7 +426,7 @@
                 });
             },
             productInfoBtn (item) { //Product info 按钮创建
-                return [{label: this.$i.common.negotiate, type: 'negotiate'}, {label: this.$i.common.detail, type: 'detail'}];
+                return [{label: this.$i.common.negotiate, type: 'modify'}, {label: this.$i.common.detail, type: 'detail'}];
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;

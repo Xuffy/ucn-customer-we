@@ -159,20 +159,19 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], '_cache')
                     .then(data => {
-                        this.setDic(data);
-                        this.$ajax.post(this.$apis.POST_LOGISTICSPORT_QUERY)
+                        this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
                         .then(datas => {
-                            console.log(datas, '===')
+                            data.push({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: datas});
+                            this.setDic(data);
+                            this.tabData = this.$getDB(column, res.datas, (item) => {
+                                this.$filterDic(item);
+                            });
+                            this.tabLoad = false;
+                            this.searchLoad = false;
+                            this.checkedData = [];
                         });
-                        return;
-                        this.tabData = this.$getDB(column, res.datas, (item) => {
-                            this.$filterDic(item);
-                        });
-                        this.tabLoad = false;
-                        this.searchLoad = false;
-                        this.checkedData = [];
                     });
                 })
                 .catch(() => {
