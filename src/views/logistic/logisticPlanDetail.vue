@@ -30,7 +30,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @deletePaymentList="deletePaymentList" @savaPayment="savaPayment" :selectArr="selectArr" :currencyCode="oldPlanObject.currency"/>
+      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -238,8 +238,13 @@ export default {
     },
     createdPlanData (res = this.oldPlanObject) {
       this.oldPlanObject = JSON.parse(JSON.stringify(res))
+      const stringArray = [
+        'payment',
+        'permitedForTransportation',
+        'blType'
+      ]
       this.basicInfoArr.forEach(a => {
-        a.value = res[a.key]
+        a.value = stringArray.includes(a.key) ? '' + res[a.key] : res[a.key]
       })
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
@@ -315,33 +320,49 @@ export default {
       const modifyObj = this.modifyProductArray.find(a => a.id === this.selectProductId)
 
       this.productModifyList = this.$getDB(this.$db.logistic.productInfo, modifyObj ? [ modifyObj ] : [])
-      console.log(this.productModifyList)
       this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
         this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productInfo, res.history)]
-        // delete res.history
-        // const [ copyNew ] = this.$getDB(this.$db.logistic.productModify, [res])
-        // this.productModifyList.unshift(copyNew)
       })
     },
     addPayment () {
+      const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
+
       this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
         edit: true,
         no: res,
-        status: 20
+        status: 20,
+        currencyCode: obj.value || null
       }))
     },
-    savaPayment (i) {
+    savePayment (i) {
+      const currencyCode = this.paymentList[i].currencyCode
+      const payToId = this.paymentList[i].payToId
+      const skuSupplierObj = this.selectArr.supplier.find(a => a.skuSupplierId === payToId)
+
       const paymentData = {
         ...this.paymentList[i],
-        orderNo: this.oldPlanObject.planNo,
-        orderType: '30'
+        currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
+        currencyCode,
+        orderNo: this.oldPlanObject.logisticsNo,
+        orderType: 30,
+        payToId,
+        payToName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
+        type: 10
       }
-      this.$ajax.post(this.$apis.save_plan_payment, paymentData).then(res => {
-        console.log(res)
+
+      const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
+      this.$ajax.post(url, paymentData).then(res => {
+        this.paymentList[i] = res
+        this.updatePaymentWithView({i, edit: false})
       })
     },
-    deletePaymentList (i) {
-      this.arraySplite(this.paymentList, i)
+    updatePaymentWithView ({ i, edit, status }) {
+      const obj = {
+        ...this.paymentList[i],
+        edit,
+        status: status || this.paymentList[i].status
+      }
+      this.$set(this.paymentList, i, obj)
     },
     getOrderList () {
       this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
@@ -427,10 +448,12 @@ export default {
         return obj
       })
       this.$ajax.post(url, this.oldPlanObject).then(res => {
-        console.log(res)
+        this.$message({
+          message: '发送成功',
+          type: 'success'
+        })
+        this.edit = false
       })
-
-      console.log(this.oldPlanObject)
     }
   }
 }

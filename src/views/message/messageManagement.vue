@@ -7,6 +7,7 @@
           <v-table
             :data="tabData"
             hide-filter-value
+            :height="450"
           />
         </div>
 
@@ -110,7 +111,12 @@
             };
             this.$ajax.post(url,this.pData)
               .then(res => {
-                this.tabData = this.$getDB(column, res.datas);
+                this.tabData = this.$getDB(column, res.datas,item=>{
+                  _.mapObject(item, val => {
+                    val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                    return val
+                  })
+                });
                 this.tabLoad = false;
               })
               .catch(() => {
@@ -126,7 +132,10 @@
             };
             this.$ajax.post(url, this.params)
             .then(res => {
-              this.$message('发送成功');
+              this.$message({
+                message: '添加成功',
+                type: 'success',
+              });
               this.params = {}
               this.getMessageList()
             })

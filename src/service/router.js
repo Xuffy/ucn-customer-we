@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex';
 import Router from 'vue-router'
 import config from 'service/config';
-import Layout from 'components/layout/index.vue'
+import Layout from 'components/layout/index.vue';
+import $i from '../language/index';
 import {Notification, Message} from 'element-ui';
 import {localStore, sessionStore} from 'service/store';
 
@@ -23,7 +24,7 @@ export const routerMap = [
     {
       path: '/workbench',
       component: Layout,
-      meta: {name: 'Workbench'},
+      meta: {name: $i.router.workbench},
       redirect: '/workbench/index',
       noDropdown: true,
       children: [
@@ -42,7 +43,7 @@ export const routerMap = [
     {
       path: '/product',
       component: Layout,
-      meta: {name: 'Product'},
+      meta: {name: $i.router.product},
       redirect: '/product/sourcing',
       children: [
         {
@@ -52,7 +53,7 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: true,
-            name: 'Sourcing Overview'
+            name: $i.router.productSourcingOverview
           },
           component: () => import('../views/product/sourcing/sourcing'),
         },
@@ -64,7 +65,7 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: true,
-            name: 'Sourcing Detail'
+            name: $i.router.productSourcingDetail
           },
           component: () => import('../views/product/sourcing/detail'),
         },
@@ -75,7 +76,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Bookmark Overview'
+            name:$i.router.productBookmarkOverview
           },
           component: () => import('../views/product/bookmark/bookmark'),
         },
@@ -87,7 +88,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Bookmark Detail'
+            name: $i.router.productBookmarkDetail
           },
           component: () => import('../views/product/bookmark/detail'),
         },
@@ -99,7 +100,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Bookmark Manually Add'
+            name: $i.router.productBookmarkManuallyAdd
           },
           component: () => import('../views/product/bookmark/manuallyAdd'),
         },
@@ -111,7 +112,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Bookmark RecycleBin'
+            name: $i.router.productBookmarkRecycleBin
           },
           component: () => import('../views/product/bookmark/recycleBin'),
         },
@@ -123,7 +124,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Compare Overview'
+            name: $i.router.productCompareOverview
           },
           component: () => import('../views/product/compare/overview'),
         },
@@ -135,7 +136,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Compare Detail'
+            name: $i.router.productCompareDetail
           },
           component: () => import('../views/product/compare/compare'),
         },
@@ -144,7 +145,7 @@ export const routerMap = [
     {
       path: '/supplier',
       component: Layout,
-      meta: {name: 'Supplier'},
+      meta: {name: $i.router.supplier},
       redirect: '/supplier/sourcing',
       children: [
         {
@@ -154,7 +155,7 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: true,
-            name: 'Supplier Overview'
+            name: $i.router.supplierOverview
           },
           component: () => import ('../views/supplier/sourcing/sourcing.vue'),
         },
@@ -165,7 +166,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Supplier Bookmark'
+            name:$i.router.supplierBookmark
           },
           component: () => import ('../views/supplier/bookmark/bookmark.vue')
         },
@@ -177,7 +178,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Bookmark Detail'
+            name: $i.router.supplierBookmarkDetail
           },
           component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
@@ -189,7 +190,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Bookmark recycleBin'
+            name: $i.router.supplierBookmarkRecycleBin
           },
           component: () => import ('../views/supplier/bookmark/recycleBin.vue')
         },
@@ -201,7 +202,7 @@ export const routerMap = [
             draft: false,
             recycleBin: false,
             log: true,
-            name: 'Sourcing Detail'
+            name: $i.router.supplierSourcingDetail
           },
           component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
         },
@@ -213,7 +214,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Compare Detail'
+            name: $i.router.supplierCompareDetail
           },
           component: () => import ('../views/supplier/compare/compare.vue')
         },
@@ -224,7 +225,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name: 'Compare Overview'
+            name: $i.router.supplierCompareOverview
           },
           component: () => import ('../views/supplier/compare/overview.vue')
         },
@@ -247,13 +248,13 @@ export const routerMap = [
       component: Layout,
       redirect: '/negotiation/inquiry',
       name: 'negotiation',
-      meta: {name: 'Negotiation'},
+      meta: {name: $i.router.negotiation},
       children: [
         {
           path: 'inquiry',
           name: 'negotiationInquiry',
           meta: {
-            name: 'Inquiry Overview',
+            name: $i.router.negotiationInquiryOverview,
             draft: 'INQUIRY:OVERVIEW:DRAFT',
             recycleBin: 'INQUIRY:OVERVIEW:RECYCLE_BIN'
           },
@@ -264,7 +265,7 @@ export const routerMap = [
           name: 'negotiationInquiryDetail',
           hidden: true,
           meta: {
-            name: 'Inquiry Detail',
+            name: $i.router.negotiationInquiryDetail,
             messageBoard: 'code',
             draft: 'INQUIRY:DETAIL:DRAFT',
             recycleBin: 'INQUIRY:DETAIL:RECYCLE_BIN'
@@ -276,7 +277,7 @@ export const routerMap = [
           name: 'negotiationCreateInquiry',
           hidden: true,
           meta: {
-            name: 'Create Inquiry'
+            name: $i.router.negotiationCreateInquiry
           },
           component: () => import('../views/negotiation/createInquiry')
         },
@@ -284,7 +285,7 @@ export const routerMap = [
           path: 'compare',
           name: 'negotiationCompare',
           meta: {
-            name: 'Compare Overview',
+            name:$i.router.negotiationCompareOverview,
             recycleBin: 'INQUIRY:COMPARE_OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/negotiation/compareOverview')
@@ -294,7 +295,7 @@ export const routerMap = [
           name: 'negotiationCompareDetail',
           hidden: true,
           meta: {
-            name: 'Compare Detail'
+            name: $i.router.negotiationCompareDetail
           },
           component: () => import('../views/negotiation/compare')
         },
@@ -303,7 +304,7 @@ export const routerMap = [
           name: 'negotiationDraft',
           hidden: true,
           meta: {
-            name: 'draft'
+            name: $i.router.negotiationDraft
           },
           component: () => import('../views/negotiation/draft')
         },
@@ -312,7 +313,7 @@ export const routerMap = [
           name: 'negotiationRecycleBin',
           hidden: true,
           meta: {
-            name: 'recycleBin'
+            name: $i.router.negotiationRecycleBin
           },
           component: () => import('../views/negotiation/recycleBin')
         }
@@ -320,7 +321,7 @@ export const routerMap = [
     },
     {
       path: '/payment',
-      meta: {name: 'Payment'},
+      meta: {name: $i.router.payment},
       component: Layout,
       redirect: '/payment/index',
       noDropdown: true,
@@ -341,7 +342,7 @@ export const routerMap = [
       path: '/order',
       component: Layout,
       redirect: '/order/overview',
-      meta: {name: 'Order'},
+      meta: {name:$i.router.order},
       noDropdown: true,
       children: [
         {
@@ -351,7 +352,7 @@ export const routerMap = [
             draft: '/order/draft',
             recycleBin: true,
             log: true,
-            name: 'orderOverview'
+            name: $i.router.orderOverview
           },
           component: () => import('../views/order/overView.vue')
         },
@@ -362,7 +363,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Creat'
+            name: $i.router.orderCreate
           },
           component: () => import('../views/order/creatOrder/index.vue')
         }, {
@@ -372,7 +373,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Order Detail'
+            name: $i.router.orderDetail
           },
           component: () => import('../views/order/poDetail/index.vue')
         }, {
@@ -382,7 +383,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Order Draft'
+            name:$i.router.orderDraft
           },
           component: () => import('../views/order/draftOverview.vue')
         }, {
@@ -392,7 +393,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Order RecycleBin'
+            name: $i.router.orderRecycleBin
           },
           component: () => import('../views/order/recycleBin.vue')
         }
@@ -404,7 +405,7 @@ export const routerMap = [
       redirect: '/warehouse/overview',
       name:'Warehouse',
       meta: {
-        name: 'Warehouse'
+        name: $i.router.warehouse
       },
       noDropdown: false,
       children: [
@@ -415,7 +416,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Warehouse Overview'
+            name:$i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
@@ -426,7 +427,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Qc Overview'
+            name:$i.router.warehouseQcOverview
           },
           component: () => import('../views/warehouse/qcOverview.vue'),
         },
@@ -437,7 +438,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'QcOrder Detail'
+            name:$i.router.warehouseQcOrderDetail
           },
           component: () => import('../views/warehouse/qcDetail.vue'),
         },
@@ -448,7 +449,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Create QcOrder'
+            name: $i.router.warehouseCreateQcOrder
           },
           component: () => import('../views/warehouse/createQc.vue'),
         },
@@ -457,7 +458,7 @@ export const routerMap = [
     {
       path: '/logistic',
       name: 'logistic',
-      meta: {name: 'Logistic'},
+      meta: {name: $i.router.logistic},
       component: Layout,
       redirect: '/logistic/plan',
       children: [
@@ -467,7 +468,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'planOverview'
+            name: $i.router.logisticPlanOverview
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -477,7 +478,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'loadingList'
+            name: $i.router.logisticLoadingList
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -488,7 +489,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'logisticDraft'
+            name: $i.router.logisticLoadingDraft
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -499,7 +500,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'logisticArchive'
+            name: $i.router.logisticLoadingArchive
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -510,7 +511,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'placeLogisticPlan'
+            name: $i.router.logisticPlaceLogisticPlan
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -521,7 +522,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'planDetail'
+            name: $i.router.logisticPlaceDetail
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -532,7 +533,7 @@ export const routerMap = [
           meta: {
             draft: '/logistic/draft',
             recycleBin: true,
-            name: 'planDetail'
+            name: $i.router.logisticPlaceDetail
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         }
@@ -542,7 +543,7 @@ export const routerMap = [
       path: '/settings',
       component: Layout,
       redirect: '/settings/department',
-      meta: {name: 'Settings'},
+      meta: {name: $i.router.settings},
       children: [
         {
           path: 'department',
@@ -551,7 +552,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'department and user setting'
+            name: $i.router.settingsDepartment
           },
           component: () => import('../views/settings/departmentSetting.vue')
         },
@@ -562,7 +563,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Category Setting'
+            name: $i.router.settingsCategory
           },
           component: () => import('../views/settings/CategorySetting')
         },
@@ -573,7 +574,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Personal Setting'
+            name: $i.router.settingsPersonal
           },
           component: () => import('../views/settings/personalSetting')
         },
@@ -584,7 +585,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name: 'Company Info'
+            name: $i.router.settingsCompany
           },
           component: () => import('../views/settings/companyInfo')
         },
@@ -594,7 +595,7 @@ export const routerMap = [
       path: '/track',
       component: Layout,
       redirect: '/track/index',
-      meta: {name: 'Track'},
+      meta: {name:$i.router.track},
       noDropdown: true,
       children: [
         {
@@ -613,7 +614,7 @@ export const routerMap = [
       path: '/logs',
       component: Layout,
       redirect: '/logs/index',
-      meta: {name: 'Logs'},
+      meta: {name: $i.router.logs},
       noDropdown: true,
       hidden: true,
       children: [
@@ -633,7 +634,7 @@ export const routerMap = [
       path: '/message',
       component: Layout,
       redirect: '/message/index',
-      meta: {name: 'Message'},
+      meta: {name: $i.router.message},
       hidden: true,
       children: [
         {
@@ -645,7 +646,7 @@ export const routerMap = [
           name: 'Management',
           path: 'messageManagement',
           meta: {
-            name: 'Management'
+            name: $i.router.messageManagement
           },
           component: () => import('../views/message/messageManagement.vue'),
         },

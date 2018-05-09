@@ -1,14 +1,15 @@
 {
-  "workbench": "Workbench",
-  "product": "Product",
-  "productSourcingOverview": "Sourcing Overview",
-  "productBookmarkOverview": "Bookmark Overview",
-  "productCompareOverview": "Compare Overview",
-  "supplier": "Supplier",
-  "supplierOverview": "Supplier Overview",
-  "supplierBookmark": "Supplier Bookmark",
-  "supplierCompareOverview": "Compare Overview",
-  "negotiation": "Negotiation"
-
-
+  "systemMessage": "System Message",
+  "markAsReaded": "Mark as readed",
+  "more": "More",
+  "signOut": "Sign out",
+  "new": "New",
+  "quickLink": "Quick Link",
+  "addNewLinks": "Add new links",
+  "draft": "Draft",
+  "recycleBin": "Recycle Bin",
+  "log": "Log",
+  "admin": "Admin",
+  "user": "User"
 }
+
