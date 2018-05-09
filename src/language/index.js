@@ -34,7 +34,8 @@ const json = {
   order: _.extend({},
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
-    require(`./${lang}/order/productinfo.pending`)
+    require(`./${lang}/order/productinfo.pending`),
+    require(`./${lang}/order/payment`)
   ),
   payment: _.extend({},
     require(`./${lang}/payment/payment`),

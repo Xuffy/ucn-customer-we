@@ -48,7 +48,7 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -88,7 +88,7 @@
                     orderNo: '',
                     skuCode: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     tc:0
                 },
@@ -97,6 +97,9 @@
             }
         },
         methods: {
+             ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 //                this.$windowOpen('', {
                 //                    orderId: item.id.value
@@ -224,6 +227,14 @@
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false

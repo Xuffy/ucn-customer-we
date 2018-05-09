@@ -37,6 +37,7 @@
     </div>
 </template>
 <script>
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -95,6 +96,9 @@
             VPagination
         },
         methods: {
+              ...mapActions([
+                'setRecycleBin'
+            ]),
             inputEnter(keyWord) {
                 console.log(keyWord.key)
                 if (keyWord.keyType == 1) {
@@ -180,6 +184,10 @@
         },
         created() {
             this.get_data()
+             this.setRecycleBin({
+                name: 'compareRecycleBin',
+                show: true
+            });
         },
     }
 
