@@ -5,7 +5,7 @@
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
-                <el-form ref="parms" :model="parms" label-width="200px" size="mini">
+                <el-form ref="params" :model="params" label-width="200px" size="mini">
                     <el-row>
                           <el-col :xs="24" :sm="12" :md="8" :lg="8" 
                            v-for='(item,index) in $db.supplier.overview'
@@ -16,18 +16,18 @@
                             :label="item.label" 
                             :prop="item.key"                    
                             >
-                                <el-input v-model="parms[item.key]" placeholder="Enter something..."></el-input>
+                                <el-input v-model="params[item.key]" placeholder="Enter something..."></el-input>
                             </el-form-item>
                             <el-form-item class="form-list"  v-if="item.showType==='select'"
                             :label="item.label" 
                             :prop="item.key" >
-                                <el-select v-model="parms[item.key]"></el-select>
+                                <el-select v-model="params[item.key]"></el-select>
                                </el-form-item>
                                <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
                                 :label="item.label" 
                                 :prop="item.key">
                                  <div class="speDropdown">
-                                     <drop-down ref="dropDown"  v-model="parms[item.key]" :list="dropData"
+                                     <drop-down ref="dropDown"  v-model="params[item.key]" :list="dropData"
                                      :defaultProps="defaultProps"
                                      ></drop-down>
                                 </div>
@@ -40,7 +40,7 @@
            
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
-            <el-button @click="clear('parms')">{{$i.common.clear}}</el-button>
+            <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
         </div>
 <!--      搜索结果  -->
             <div>
@@ -66,21 +66,28 @@
                     @change-checked='checked'
                     :loading='loading'
                     style='marginTop:10px'/>
+              <v-pagination
+                :page-data.sync="params"
+                 @change="handleSizeChange"
+                @size-change="pageSizeChange"
+            /> 
     </div>
 </template>
 
 <script>
     import {
-        dropDown
+        dropDown,
+        VPagination
     } from '@/components/index'
     import {
         VTable
     } from '@/components/index';
     export default {
-        name: "SupplierSourcing",
+        name: "SupplierBookMark",
         components: {
             dropDown,
-            VTable
+            VTable,
+            VPagination
         },
         props: {
 
@@ -90,13 +97,14 @@
                 value: 1,
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
-                parms: {
+                params: {
                     conditions: {},
                     description: "",
-                    mainBusiness: [],
+//                    mainBusiness: [],
                     name: '',
                     pn: 1,
                     ps: 10,
+                    tc: 0,
                     skuCode: "",
                     skuNameEn: "",
                     type: '',
@@ -184,8 +192,10 @@
             },
             get_data() {
                 this.loading = true;
-                this.$ajax.post(this.$apis.post_supplier_listbookmark, this.parms)
+                this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
                     .then(res => {
+                        //分页组件的参数
+                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         this.loading = false
 
@@ -211,6 +221,14 @@
                 }).catch(err => {
                     console.log(err)
                 });
+            },
+            handleSizeChange(val) {
+                this.params.pn = val;
+                this.get_data()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.get_data()
             },
         },
         created() {

@@ -49,7 +49,7 @@
                                     value-key="id"
                                     :size="item.size || 'mini'"
                                     :placeholder="item.placeholder" 
-                                    v-if="item.type === 'select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                                    v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
                                     style="width:100%;"
                                 >
                                 <el-option
@@ -70,7 +70,7 @@
                                 reserve-keyword
                                 value-key="id"
                                 :size="item.size || 'mini'"
-                                placeholder="请输入关键词"
+                                :placeholder="$i.common.pleaseEnterTheKeyWords"
                                 :remote-method="remoteMethod"
                                 :loading="loading">
                                 <el-option
@@ -185,32 +185,7 @@
                 
                 tabColumn: '', //tab top
                 tabData: [], //tab Data
-                textarea:'',
-                pickerOptions:{
-                    disabledDate(time) {
-                        return time.getTime() < Date.now();
-                    },
-                    shortcuts: [{
-                        text: 'Today',
-                        onClick(picker) {
-                        picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: 'Yesterday',
-                        onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: 'A week ago',
-                        onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
-                        }
-                    }]
-                }
+                textarea:''
             }
         },
         components: {
@@ -322,11 +297,14 @@
                     this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
                     this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
                     this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
                     this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
                         item.code = Number(item.code);
                         return item;
                     });
+                });
+                this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
+                .then(res => {
+                    this.selectAll.currency = res;
                 });
 
                 this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
@@ -350,7 +328,7 @@
                 }
                 this.$refs.ruleform.validate((valid) => {
                     if(!valid) return this.$message({
-                        message: '请完成填写',
+                        message: this.$i.common.pleaseCompleteTheCompletion,
                         type: 'warning'
                     });
                 });
@@ -413,7 +391,7 @@
                 });
             },
             productInfoBtn (item) { //Product info 按钮创建
-                return [{label: 'negotiate', type: 'modify'}, {label: 'Detail', type: 'detail'}];
+                return [{label: this.$i.common.negotiate, type: 'negotiate'}, {label: this.$i.common.detail, type: 'detail'}];
             },
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;

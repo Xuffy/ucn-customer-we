@@ -6,9 +6,11 @@ const lang = localStore.get('language') || config.LANGUAGE;
 const json = {
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
+    require(`./${lang}/common/basePlaceholder`),
     require(`./${lang}/common/baseText`),
     require(`./${lang}/common/message`),
-    require(`./${lang}/common/promptInfo`)
+    require(`./${lang}/common/promptInfo`),
+    require(`./${lang}/common/setting`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),
@@ -75,11 +77,15 @@ const json = {
   ),
   warehouseCn: _.extend({},
     require(`./${lang}/warehouseCn/warehouse.basic`),
-    require(`./${lang}/warehouseCn/warehouse.index`)
+    require(`./${lang}/warehouseCn/warehouse.index`),
+    require(`./${lang}/warehouseCn/inboundOverview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
     require(`./${lang}/workbench/task`)
+  ),
+  router: _.extend({},
+    require(`./${lang}/router/index`)
   ),
 }
 

@@ -3,20 +3,20 @@
         <div class="title">New Order No.1121</div>
 <!--         basicinfo-->
          <div class="basic">
-               <div class='basicInfo_input'>                
+               <div class='basicInfo_input'>
                    <basicinfo :disabled='statusModify' :podisabled=true ref='basicInfo'></basicinfo>
-                   <attchment :disabled='statusModify'></attchment>                       
+                   <attchment :disabled='statusModify'></attchment>
               </div>
         </div>
 <!--         attachment-->
-            
+
 <!--VExchange-->
-        <VExchange :disabled=false ref='exchangeList'></VExchange> 
+        <VExchange :disabled=false ref='exchangeList'></VExchange>
  <!--             responsibility     -->
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
-         <v-payment :orderNo='orderNo' 
-                    :currencyCode='currencyCode'
+         <v-payment :orderNo='orderNo'
+                    :currency='currency'
                     :payToId='payToId'
                     :orderStatus='orderStatus'
          ></v-payment>
@@ -26,12 +26,12 @@
                  {{$i.common.productInfo}}
              </div>
              <div class="pro_button">
-                  <el-button  @click="dialogAddproduct = true" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
+                  <el-button  @click="addProduct" :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'">{{$i.common.addproduct}}</el-button>
                   <el-button type='danger' @click='removeProduct' :disabled='statusModify' v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'">{{$i.common.remove}}</el-button>
 
              </div>
              <div class="pro_table">
-                   <v-table  
+                   <v-table
                          :data.sync="newProductTabData"
                          :buttons="productInfoBtn"
                          :loading="tableLoad"
@@ -46,9 +46,9 @@
 <!--         底部固定按钮区域-->
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
-                 <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'">{{$i.common.modify}}</el-button>
-                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'">{{$i.common.confirm}}</el-button>
-                 <el-button  :disabled='true' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
+                 <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'" :disabled="orderStatus==='5'">{{$i.common.modify}}</el-button>
+                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'" :disabled="orderStatus==='5'">{{$i.common.confirm}}</el-button>
+                 <el-button   v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
                   <el-button v-authorize="'ORDER:DETAIL:CREATE'">{{$i.common.createOrder}}</el-button>
                   <el-button :disabled="orderStatus==='5'" @click='cancelOrder' v-authorize="'ORDER:DETAIL:CANCEL'">{{$i.common.cancel}}</el-button>
                  <el-checkbox v-model="markAsImportant" v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'">{{$i.common.markAsImportant}}</el-checkbox>
@@ -63,34 +63,44 @@
            <el-dialog :title="$i.common.addproduct" :visible.sync="dialogAddproduct" width='80%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$i.common.fromNewSearch" name="FromNewSearch">
-                           <v-product                     
+                           <v-product
                                :hideBtns="true"
                                 :hideBtn="true"
                                 :disabledLine="disabledLine"
                                 @handleOK="getList"
-                                :forceUpdateNumber="trig" 
+                                @handleCancel='canceldialog'
+                                :forceUpdateNumber="trig"
                                 type="product"
                                 :isInquiry="true"
                            ></v-product>
                         </el-tab-pane>
                         <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
-                           <v-product :hideBtns="true"></v-product>
+                            <v-product
+                               :hideBtns="true"
+                                :hideBtn="true"
+                                :disabledLine="disabledLine"
+                                @handleOK="getList"
+                                @handleCancel='canceldialog'
+                                :forceUpdateNumber="trig"
+                                type="bookmark"
+                                :isInquiry="true"
+                           ></v-product>
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
-           
-            <v-history-modify  
-               @save="save"            
+
+            <v-history-modify
+               @save="save"
                 ref="HM"
             >
-            
+
            </v-history-modify>
   </div>
 </template>
 
 <script>
     import responsibility from '../creatOrder/responsibility.vue'
-    import basicinfo from '../creatOrder/basicinfo.vue'
+    import basicinfo from '../creatOrder/basicInfo.vue'
     import VProduct from '@/views/product/addProduct';
     import attchment from '../creatOrder/attachment'
     import VCaculate from '../creatOrder/caculate'
@@ -148,11 +158,16 @@
             }
         },
         methods: {
+            canceldialog() {
+                this.dialogAddproduct = false
+            },
             confirm() {
                 this.$ajax.post(this.$apis.post_confirm, {
                     ids: [this.orderId]
                 }).then(res => {
-                    console.log(res)
+                    this.$router.push({
+                        path: '/order/overview',
+                    });
                 }).catch(res => {
                     console.log(res)
                 })
@@ -179,6 +194,7 @@
                 this.$ajax.post(this.$apis.post_cancleOrder, {
                     ids: [this.orderId]
                 }).then(res => {
+                    console.log(res)
                     this.$router.push({
                         path: '/order/overview',
                     });
@@ -187,12 +203,10 @@
                 })
             },
             //........获取数据
-            get_data() {
-                this.$ajax.get(this.$apis.detail_order, {
+            get_data() {             this.$ajax.get(this.$apis.detail_order, {
                         id: this.orderId
                     })
                     .then((res) => {
-
                         this.orderStatus = res.status
                         //.传递给[payment]组件的数据
                         this.orderNo = res.orderNo
@@ -219,7 +233,7 @@
                             item => {
                                 return item;
                             });
-                        this.tableTatalCal();
+                        //                        this.tableTatalCal();
                         this.tableLoad = false;
                     })
                     .catch((res) => {
@@ -320,7 +334,7 @@
                         }
                     });
             },
-            productModify() { //  提交 product 编辑 
+            productModify() { //  提交 product 编辑
                 this.newProductTabData.forEach((item, index) => {
                     if (!item._remove && item._disabled) {
                         item._remove = true;
@@ -391,7 +405,7 @@
                 });
                 return arr;
             },
-            productCancel() { //  取消 product 编辑 
+            productCancel() { //  取消 product 编辑
                 this.newProductTabData.forEach((item, index) => {
                     if (!item._remove && item._disabled) {
                         item._disabled = false;
@@ -401,22 +415,24 @@
                 });
             },
             send() {
+                //                return console.log(this.newProductTabData)
                 let parentNode = this.$filterModify(this.dataFilter(this.newProductTabData))
-                //                return console.log(parentNode)
+
                 //参数一堆堆 我靠
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: parentNode,
+                    // skuList: parentNode,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     importantCustomer: false,
                     importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
-                _.extendOwn(params, basic)
+                _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
-                _.extendOwn(params, caculate)
+                _.extend(params, caculate)
+                params.skuList = parentNode
                 this.$ajax.post(this.$apis.post_updataOrder, params)
                     .then(res => {
                         this.$router.push('/order/overview')
@@ -431,6 +447,7 @@
                     if (!item._disabled) arr.push(item);
                 });
                 this.disabledLine = arr;
+
                 this.trig = new Date().getTime();
                 this.dialogAddproduct = true;
             },
@@ -463,7 +480,7 @@
                 this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'), (memo, num) => {
                     return memo + num;
                 }, 0)
-                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
+                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty
                 this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
                     return ((_.pluck(arr, 'skuQty')[index]) / key)
                 })), (memo, num) => {

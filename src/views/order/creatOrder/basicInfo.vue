@@ -41,12 +41,41 @@
                                  :label="item.label"
                                  :prop="item.key">                             
                                   <el-select
-                                           v-model='formItem[item.key]'                      
-                                        :disabled=item.ismodify||disabled||item.isDefaultEdit >
+                                           v-model='formItem[item.key]'                      :disabled=item.ismodify||disabled||item.isDefaultEdit >
                                        <el-option
                                         v-for="item in selectAll[item.key]"
                                         :key="item.id"
                                         :label="item.name"
+                                        :value="item.code"
+                                        :id="item.id"
+                                    />    
+                                  </el-select>
+                            </el-form-item> 
+                             <el-form-item 
+                                  v-if='item.type=="status"'
+                                 :label="item.label"
+                                 :prop="item.key">                             
+                                  <el-select
+                                           v-model='formItem[item.key]'                      :disabled="item.ismodify||disabled||item.isDefaultEdit||formItem[item.key]!='3'">
+                                       <el-option
+                                        v-for="item in selectAll[item.key]"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code"
+                                        :id="item.id"
+                                    />    
+                                  </el-select>
+                            </el-form-item> 
+                              <el-form-item 
+                                  v-if='item.type=="currency"'
+                                 :label="item.label"
+                                 :prop="item.key">                             
+                                  <el-select
+                                           v-model='formItem[item.key]'                      :disabled="item.ismodify||disabled||item.isDefaultEdit">
+                                       <el-option
+                                        v-for="item in selectAll[item.key]"
+                                        :key="item.id"
+                                        :label="item.code"
                                         :value="item.code"
                                         :id="item.id"
                                     />    
@@ -138,7 +167,7 @@
                     customerNo: '', //必填 系统生成 
                     supplierOrderNo: '',
                     supplierName: '', //必填 不可编辑 系统生成 弹出框
-                    supplierNo: '', //必填 不可编辑 系统生成 弹出框
+                    supplierCode: '', //必填 不可编辑 系统生成 弹出框
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
                     deliveryDt: '', //必填 
@@ -256,11 +285,16 @@
                 this.formItem.supplierName = _.where(this.selectAll.supplierName, {
                     code: data
                 })[0].name
+                console.log(this.formItem)
             },
             selectchangeName(data) {
-                this.formItem.supplierNo = _.where(this.selectAll.supplierName, {
+                this.formItem.supplierCode = _.where(this.selectAll.supplierName, {
                     code: data
                 })[0].code
+                this.formItem.supplierName = _.where(this.selectAll.supplierName, {
+                    code: data
+                })[0].name
+                console.log(this.formItem)
             },
             //获取字典表
             getDictionaries() {
@@ -275,9 +309,9 @@
                         this.selectAll.incoterm = _.findWhere(res, {
                             'code': 'ITM'
                         }).codes;
-                        this.selectAll.currency = _.findWhere(res, {
-                            'code': 'CY_UNIT'
-                        }).codes;
+//                        this.selectAll.currency = _.findWhere(res, {
+//                            'code': 'CY_UNIT'
+//                        }).codes;
                         this.selectAll.status = _.findWhere(res, {
                             'code': 'ORDER_STATUS'
                         }).codes;
@@ -296,6 +330,11 @@
                     .then(res => {
                         this.selectAll.destPort = res;
                         this.selectAll.departurePort = res;
+                    });
+                 this.$ajax.get(this.$apis.get_currency, '', '_cache')
+                    .then(res => {
+                        this.selectAll.currency = res;
+//                        console.log(res)
                     });
             },
         },

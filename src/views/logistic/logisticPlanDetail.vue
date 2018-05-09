@@ -11,7 +11,7 @@
           <p v-else>{{ remark }}</p>
         </div>
       <!-- </el-col> -->
-      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment"/>
+      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
       <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/>
     </el-row>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
@@ -21,24 +21,24 @@
       <container-info :tableData.sync="containerInfo" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
     </div>
 
-    <div>
+    <div v-if="planId && feeList">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
     </div>
 
-    <div>
+    <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum"/>
+      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @deletePaymentList="deletePaymentList" @savaPayment="savaPayment" :selectArr="selectArr" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
-        <div slot="header" class="product-header">
+        <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
-          <el-button type="danger" size="mini">{{ $i.logistic.remove }}</el-button>
+          <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
@@ -56,7 +56,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @savePlan="savePlan" :planId="planId"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -84,10 +84,13 @@ export default {
       selectionContainer: [],
       productInfoModifyStatus: 0,
       edit: false,
+      oldPlanObject: {},
+      oldPaymentObject: {},
       basicInfoObj,
       transportInfoObj,
       transportInfoArr: [],
       basicInfoArr: [],
+      modifyProductArray: [],
       productbButtons: [
         {
           label: 'Negociate',
@@ -105,6 +108,7 @@ export default {
       exchangeRateList: [],
       feeList: [],
       productList: [],
+      removeProductList: [],
       productModifyList: [],
       paymentList: [],
       containerInfo: [],
@@ -126,6 +130,26 @@ export default {
       pageParams: {
         pn: 1,
         ps: 10
+      },
+      dictionaryPart: {
+        avl: 'AVL',
+        blType: 'BL_TYPE',
+        logisticsStatus: 'LS_STATUS',
+        transportationWay: 'MD_TN',
+        payment: 'PMT'
+      },
+      configUrl: {
+        placeLogisticPlan: {
+          saveAsDraft: this.$apis.save_draft_logistic_plan,
+          send: this.$apis.send_logistic_plan
+        },
+        planDetail: {
+          send: this.$apis.update_logistic_plan
+        },
+        planDraftDetail: {
+          saveAsDraft: this.$apis.save_draft_logistic_plan,
+          send: this.$apis.send_draft_logistic_plan
+        }
       }
     }
   },
@@ -142,12 +166,6 @@ export default {
     addProduct
   },
   watch: {
-    edit (newValue) {
-      if (newValue) return
-      this.containerInfo.forEach((a, i) => {
-        !Object.keys(a).length && this.arraySplite(this.containerInfo, i)
-      })
-    },
     selectProductId (newValue) {
       newValue && this.getProductHistory(newValue)
     },
@@ -157,7 +175,11 @@ export default {
   },
   computed: {
     planId () {
-      return '' + this.$route.query.id
+      return this.$route.query.id
+    },
+    pageName () {
+      const arr = this.$route.fullPath.split('/')
+      return arr[arr.length - 1].split('?')[0]
     }
   },
   mounted () {
@@ -202,27 +224,42 @@ export default {
     },
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
-        this.basicInfoArr.forEach(a => {
-          a.value = res[a.key]
-        })
-        this.transportInfoArr.forEach(a => {
-          a.value = res[a.key]
-        })
-        this.exchangeRateList = res.currencyExchangeRate || []
-        this.remark = res.remark
-        this.logisticsNo = res.logisticsNo
-        this.containerInfo = res.containerDetail
-        this.feeList = [res.fee]
-        this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+        this.createdPlanData(res)
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
-          this.paymentList = res.datas
-          this.paymentSum = res.statisticsDatas[0]
+          this.createdPaymentData(res)
         })
+        this.getSupplier(res.logisticsNo)
       })
+    },
+    getSupplier (logisticsNo) {
+      this.$ajax.get(`${this.$apis.get_supplier}?logisticsNo=${logisticsNo}`).then(res => {
+        this.selectArr.supplier = res
+      })
+    },
+    createdPlanData (res = this.oldPlanObject) {
+      this.oldPlanObject = JSON.parse(JSON.stringify(res))
+      this.basicInfoArr.forEach(a => {
+        a.value = res[a.key]
+      })
+      this.transportInfoArr.forEach(a => {
+        a.value = res[a.key]
+      })
+      this.exchangeRateList = res.currencyExchangeRate || []
+      this.remark = res.remark
+      this.logisticsNo = res.logisticsNo
+      this.containerInfo = res.containerDetail || []
+      this.feeList = res.fee ? [res.fee] : null
+      this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+    },
+    createdPaymentData (res = this.oldPaymentObject) {
+      this.oldPaymentObject = JSON.parse(JSON.stringify(res))
+      this.paymentList = res.datas
+      this.paymentSum = res.statisticsDatas[0]
     },
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
+        this.getSupplier(res)
       })
     },
     getDictionary () {
@@ -232,12 +269,13 @@ export default {
       this.$ajax.get(this.$apis.get_container_type).then(res => {
         this.$set(this.selectArr, 'containerType', res)
       })
-      this.getDictionaryPart(['PMT', 'MD_TN', 'BL_TYPE', 'AVL'], ['avl', 'blType', 'transportationWay', 'payment'])
+      this.getDictionaryPart()
     },
-    getDictionaryPart (keyCode, keys) {
-      this.$ajax.post(this.$apis.get_dictionary, keyCode).then(res => {
-        keys.forEach((a, i) => {
-          this.$set(this.selectArr, a, res[i].codes)
+    getDictionaryPart () {
+      const params = _.map(this.dictionaryPart, v => v)
+      this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
+        _.mapObject(this.dictionaryPart, (v, k) => {
+          this.$set(this.selectArr, k, res.find(a => a.code === v).codes)
         })
       })
     },
@@ -269,17 +307,41 @@ export default {
     },
     action (e, i) {
       if (i === 3) return
+      this.selectProductId = e.id.value
       this.productInfoModifyStatus = i
       this.showProductDialog = true
-      this.selectProductId = e.id.value
     },
     getProductHistory (productId) {
+      const modifyObj = this.modifyProductArray.find(a => a.id === this.selectProductId)
+
+      this.productModifyList = this.$getDB(this.$db.logistic.productInfo, modifyObj ? [ modifyObj ] : [])
+      console.log(this.productModifyList)
       this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
-        this.productModifyList = this.$getDB(this.$db.logistic.productModify, res.history)
-        delete res.history
-        const [ copyNew ] = this.$getDB(this.$db.logistic.productModify, [res])
-        this.productModifyList.unshift(copyNew)
+        this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productInfo, res.history)]
+        // delete res.history
+        // const [ copyNew ] = this.$getDB(this.$db.logistic.productModify, [res])
+        // this.productModifyList.unshift(copyNew)
       })
+    },
+    addPayment () {
+      this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
+        edit: true,
+        no: res,
+        status: 20
+      }))
+    },
+    savaPayment (i) {
+      const paymentData = {
+        ...this.paymentList[i],
+        orderNo: this.oldPlanObject.planNo,
+        orderType: '30'
+      }
+      this.$ajax.post(this.$apis.save_plan_payment, paymentData).then(res => {
+        console.log(res)
+      })
+    },
+    deletePaymentList (i) {
+      this.arraySplite(this.paymentList, i)
     },
     getOrderList () {
       this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
@@ -297,12 +359,26 @@ export default {
       this.showAddProductDialog = false
       const selectArrData = this.$refs.addProduct.selectArrData
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+      selectArrData.forEach(a => {
+        a.blSkuName = ''
+        a.hsCode = ''
+        a.currency = ''
+        !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
+      })
+
       this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       // console.log(selectArrData)
       // TODO
     },
     selectProduct (arr) {
-      this.selectProductArr = arr.map(a => a.id.value)
+      this.selectProductArr = arr
+    },
+    removeProduct () {
+      this.selectProductArr.forEach(a => {
+        const index = this.productList.indexOf(a)
+        this.removeProductList.push(this.productList[index])
+        this.$delete(this.productList, index)
+      })
     },
     closeDialog () {
       this.productModifyList = []
@@ -312,9 +388,14 @@ export default {
       this.edit = !this.edit
     },
     toExit () {
-      this.planId ? (this.edit = !this.edit) : this.$router.go(-1)
+      if (!this.planId) return this.$router.go(-1)
+      this.edit = !this.edit
+      this.createdPlanData()
+      this.createdPaymentData()
     },
-    savePlan () {
+    sendData (keyString) {
+      const url = this.configUrl[this.pageName][keyString]
+
       this.basicInfoArr.forEach(a => {
         this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? +a.value : a.value)
       })
@@ -329,14 +410,27 @@ export default {
         message: '付款方式为必填!'
       })
 
+      _.mapObject(this.basicInfoObj, (value, key) => {
+        this.oldPlanObject[key] = value
+      })
+      _.mapObject(this.transportInfoObj, (value, key) => {
+        this.oldPlanObject[key] = value
+      })
+      this.oldPlanObject.containerDetail = this.containerInfo
+      this.fee = this.feeList
+      this.oldPlanObject.product = this.modifyProductArray
+      this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
+        const obj = {}
+        _.mapObject(a, (value, key) => {
+          obj[key] = value.value
+        })
+        return obj
+      })
+      this.$ajax.post(url, this.oldPlanObject).then(res => {
+        console.log(res)
+      })
 
-      const data = {
-        ...this.basicInfoObj,
-        ...this.transportInfoObj,
-        containerDetail: this.containerInfo,
-        fee: this.feeList
-      }
-      console.log(data)
+      console.log(this.oldPlanObject)
     }
   }
 }

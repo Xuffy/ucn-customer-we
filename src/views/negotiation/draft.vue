@@ -38,6 +38,7 @@
 </template>
 <script>
     import { VTable, selectSearch, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name:'',
         data() {
@@ -88,6 +89,9 @@
             'v-pagination': VPagination
         },
         methods: {
+            ...mapActions([
+                'setDic'
+            ]),
             handleSizeChange(val) {
                 this.bodyData.pn = val;
             },
@@ -107,10 +111,16 @@
                 this.$ajax.post(url, this.bodyData)
                 .then(res => {
                     res.tc ? this.bodyData.tc = res.tc : this.bodyData.tc = this.bodyData.tc;
-                    this.checkedArg = [];
-                    this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(column, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.checkedArg = [];
+                        this.tabLoad = false;
+                        this.searchLoad = false;
+                    });
                 })
             },
             searchEnter(item) { // 搜索框
@@ -174,9 +184,9 @@
                 });
             },
             deleteList() { //删除
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     switch(this.$route.params.type) {
@@ -184,12 +194,7 @@
                             this.actionInquiry('delete');
                             break;
                     }
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             }
         },
         watch: {

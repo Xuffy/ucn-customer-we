@@ -21,6 +21,7 @@
 </template>
 <script>
     import { VTable, selectSearch } from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name:'',
         data() {
@@ -65,6 +66,9 @@
             'v-table': VTable
         },
         methods: {
+            ...mapActions([
+                'setDic'
+            ]),
             buttonsFn() {
                 if(this.$route.params.type === 'inquiry') return [{label: 'Detail', type: 'detail'}];
             },
@@ -72,9 +76,17 @@
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false; 
+
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.tabLoad = false;
+                        this.searchLoad = false;
+                    });
+                     
                 })
                 .catch(() => {
                     this.searchLoad = false; 
@@ -163,10 +175,10 @@
             submit() { //删除恢复
                 switch(this.$route.params.type) {
                     case 'inquiry':
-                        this.actionInquiry('restore');
+                        this.actionInquiry('revert');
                         break;
                     case 'compare':
-                        this.actionCompare('restore');
+                        this.actionCompare('revert');
                         break;
                 }
             },

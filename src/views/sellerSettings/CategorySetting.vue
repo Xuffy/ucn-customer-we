@@ -10,7 +10,7 @@
                         <span class="text">
                             <b>{{ $i.setting.myCategory }}</b>({{ $i.setting.generalCategory }})({{ $i.setting.tags }})&nbsp;
                         </span>
-                        <el-input :placeholder="$i.basePlaceholder.inputkeyWordToSearch" v-model="mapingCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-input :placeholder="$i.common.inputkeyWordToSearch" v-model="mapingCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         class="filter-tree"
@@ -28,7 +28,7 @@
                 <h5>{{ $i.setting.myCategory }}</h5>
                 <div class="category">
                     <div class="input-hd">
-                        <el-button size="mini" @click="add(myCategoryData, 'parents')">{{ $i.common.add }}</el-button><el-input :placeholder="$i.basePlaceholder.inputkeyWordToSearch" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-button size="mini" @click="add(myCategoryData, 'parents')">{{ $i.common.add }}</el-button><el-input :placeholder="$i.common.inputkeyWordToSearch" v-model="myCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         class="filter-tree"
@@ -51,7 +51,7 @@
                 <h5>{{ $i.setting.generalCategory }}</h5>
                 <div class="category">
                     <div class="input-hd">
-                        <el-input :placeholder="$i.basePlaceholder.inputkeyWordToSearch" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
+                        <el-input :placeholder="$i.common.inputkeyWordToSearch" v-model="generalCategoryKeyWord" suffix-icon="el-icon-search" />
                     </div>
                     <el-tree
                         :data="mgeneralCategoryData"

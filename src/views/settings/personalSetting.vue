@@ -14,7 +14,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item  label="Password">
-                    <el-input style="max-width:140px;" type="password"></el-input>
+                    <el-input style="max-width:140px;" type="password" auto-complete="off"></el-input>
                     <span  @click="dialogVisibleO = true">Replace</span>
                     <!-- <el-button style=" " @click="dialogVisible = true">Replace</el-button> -->
                 </el-form-item>

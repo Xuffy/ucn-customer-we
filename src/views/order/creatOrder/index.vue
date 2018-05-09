@@ -3,9 +3,9 @@
         <div class="title">New Order No.待后台数据</div>
 <!--         basicinfo-->
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
-       
+
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         <VExchange :disabled=false ref='exchangeList' ></VExchange>  
+         <VExchange :disabled=false ref='exchangeList' ></VExchange>
 <!--             responsibility     -->
          <VResponsibility ref='responsibility' ></VResponsibility>
 <!--         productinfo-->
@@ -18,8 +18,8 @@
                   <el-button type='danger' @click='removeList'>{{$i.common.remove}}</el-button>
              </div>
              <div class="pro_table">
-                     <v-table  
-                            :data.sync="tabData" 
+                     <v-table
+                            :data.sync="tabData"
                             :buttons="productInfoBtn"
                             @action="producInfoAction"
                             :loading='tableLoad'
@@ -41,59 +41,73 @@
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-<!--          <el-dialog :title="$i.common.quickCreate" :visible.sync="dialogQuickcreate" width='70%'>-->
-                <VInquiry 
+                <VInquiry
                    v-model=dialogQuickcreate
                   :selectionRadio=true
                     @addInquiry='addinquiry'
                 ></VInquiry>
-<!--        </el-dialog>-->
 <!--                  addproduct弹窗区域-->
            <el-dialog :title="$i.common.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$i.common.addproduct" name="FromNewSearch">
-                             <v-product 
+                             <v-product
                                 :hideBtns="true"
                                 :hideBtn="true"
                                  @handleCancel='canceldialog'
                                  :disabledLine="disabledLine"
                                 @handleOK="getList"
-                                :forceUpdateNumber="trig" 
+                                :forceUpdateNumber="trig"
                                 type="product"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
                         <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
-                              <v-product 
+                              <v-product
                                 :hideBtns="true"
                                 :hideBtn="true"
                                  :disabledLine="disabledLine"
                                 @handleOK="getList"
-                              @handleCancel='canceldialog'
-                                :forceUpdateNumber="trig" 
+                                @handleCancel='canceldialog'
+                                :forceUpdateNumber="trig"
                                 type="bookmark"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
-           <v-history-modify 
+           <v-history-modify
                 @save="save"
                 ref="HM"
             >
-            </v-history-modify>
-  </div>
+
+<template v-for="item in $db.order.productInfo" :slot="item._slot" slot-scope="{data}">
+                <el-select
+                        value-key="id"
+                        v-if="item.type === 'select'"
+                         v-model="fromArg[item.key]"
+                    >
+                    <el-option
+                        v-for="items in selectAll[item.key]"
+                        :key="items.id"
+                        :label="items.name"
+                        :value="items.code"
+                        :id="items.id"
+                    />
+                </el-select>
+            </template>
+</v-history-modify>
+</div>
 </template>
 
 <script>
     /* this.$ref.basicInfo*/
-    import VResponsibility from './responsibility.vue'
-    import VBasicinfo from './basicinfo.vue'
+    import VResponsibility from './responsibility'
+    import VBasicinfo from './basicInfo'
     import VAttchment from './attachment'
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
-    import VExchange from './exchange.vue'
+    import VExchange from './exchange'
     import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
@@ -116,6 +130,7 @@
         },
         data() {
             return {
+                fromArg: {},
                 tableTatal: [],
                 textarea: "", //order remark输入内容
                 markAsImportant: true, //底部单选 mark as important
@@ -126,7 +141,7 @@
                 value: '',
                 keyWord: '',
                 tabData: [],
-                tableLoad: false, //表格加载状态  
+                tableLoad: false, //表格加载状态
                 statusModify: true,
                 id_type: '',
                 historyColumn: {},
@@ -142,6 +157,7 @@
                     "orderId": 0,
                     "orderNo": "string",
                     "ownerId": 0,
+                    "incoterm": 1,
                     "skuAdditionalFour": "string",
                     "skuAdditionalOne": "string",
                     "skuAdditionalThree": "string",
@@ -162,7 +178,7 @@
                     "skuCifCurrency": "string",
                     "skuCifPort": "string",
                     "skuCifPrice": 0,
-                    "skuCode": "string",
+                    "skuCode": "22",
                     "skuColourCn": "string",
                     "skuColourEn": "string",
                     "skuComments": "string",
@@ -173,7 +189,7 @@
                     "skuCustomsCode": "string",
                     "skuCustomsNameCn": "string",
                     "skuCustomsNameEn": "string",
-                    "skuDduCurrency": "string",
+                    "skuDduCurrency": "FOB",
                     "skuDduPort": "string",
                     "skuDduPrice": 0,
                     "skuDeclareElement": "string",
@@ -189,7 +205,7 @@
                     "skuExpireUnit": "string",
                     "skuExwCurrency": "string",
                     "skuExwPrice": 0,
-                    "skuFobCurrency": "CNY",
+                    "skuFobCurrency": 1,
                     "skuFobPort": "string",
                     "skuFobPrice": 0,
                     "skuFormation": "string",
@@ -278,7 +294,7 @@
                     "skuShippingMarks": "string",
                     "skuSpecialTransportRequire": "string",
                     "skuStatus": 0,
-                    "skuSupplierCode": "string",
+                    "skuSupplierCode": "2002018042400001",
                     "skuSupplierId": 0,
                     "skuSupplierName": "string",
                     "skuSysCode": "string",
@@ -306,10 +322,50 @@
                 trig: 0,
                 radio: 'product',
                 disabledLine: [],
+                selectAll: {
+                    skuFobCurrency: [],
+                }
             }
         },
         methods: {
+            //获取字典表
+            getDictionaries() {
+                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
+                    .then(res => {
+                        this.selectAll.payment = _.findWhere(res, {
+                            'code': 'PMT'
+                        }).codes
+                        this.selectAll.transport = _.findWhere(res, {
+                            'code': 'MD_TN'
+                        }).codes;
+                        this.selectAll.incoterm = _.findWhere(res, {
+                            'code': 'ITM'
+                        }).codes;
+                        this.selectAll.skuFobCurrency = _.findWhere(res, {
+                            'code': 'CY_UNIT'
+                        }).codes;
+                        this.selectAll.status = _.findWhere(res, {
+                            'code': 'ORDER_STATUS'
+                        }).codes;
+                        //                    this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
+                        //                        item.code = Number(item.code);
+                        //                        return item;
+                        //                    });
+                    });
+
+                this.$ajax.get(this.$apis.post_country, '', '_cache')
+                    .then(res => {
+                        this.selectAll.destinationCountry = res;
+                        this.selectAll.departureCountry = res;
+                    });
+                this.$ajax.get(this.$apis.post_logisticsport, '', '_cache')
+                    .then(res => {
+                        this.selectAll.destPort = res;
+                        this.selectAll.departurePort = res;
+                    });
+            },
             addProduct() {
+
                 let arr = [];
                 _.map(this.tabData, item => {
                     if (!item._disabled) arr.push(item);
@@ -323,25 +379,24 @@
             },
             //......................提交
             send() {
-                // 正则 
-                //                if (!this.$refs.basicInfo.submitForm()) { 
+                // 正则
+                //                if (!this.$refs.basicInfo.submitForm()) {
                 //                     return }
-//                return console.log(this.dataFilter(this.tabData))
+                //                return console.log(this.dataFilter(this.tabData))
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.dataFilter(this.tabData),
-                    //                    skuList: this.skuList,
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: false,
                     //                    importantCustomer: false,
                     importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
-                _.extendOwn(params, basic)
+                _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
-                _.extendOwn(params, caculate)
-
+                _.extend(params, caculate)
+                params.skuList = this.dataFilter(this.tabData)
+                //                params.skuList = this.skuList
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
                         this.$router.push('/order/overview')
@@ -354,7 +409,6 @@
                 let params = {
                     // exchangeRateList
                     exchangeRateList: this.$refs.exchangeList.exchangeRateList,
-                    skuList: this.dataFilter(this.tabData),
                     responsibilityList: this.$refs.responsibility.tableData,
                     draftCustomer: true,
                     //                    importantCustomer: false,
@@ -364,10 +418,11 @@
                 _.extendOwn(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extendOwn(params, caculate)
-
+                params.skuList = this.dataFilter(this.tabData)
+                //                params.skuList = this.skuList
                 this.$ajax.post(this.$apis.add_order, params)
                     .then(res => {
-                        console.log(res)
+                        this.$router.push('/order/draft')
                     })
                     .catch((res) => {
                         console.log(res)
@@ -398,7 +453,7 @@
                 this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'), (memo, num) => {
                     return memo + num;
                 }, 0)
-                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
+                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty
                 this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
                     return ((_.pluck(arr, 'skuQty')[index]) / key)
                 })), (memo, num) => {
@@ -469,13 +524,14 @@
             },
             //..........addproduct 弹窗
             getList(item) {
+                this.dialogAddproduct = false;
                 this.$ajax.post(this.$apis.post_order_skus, item)
                     .then(res => {
 
                         //                        _.map(res, item => { // item.displayStyle = 0; // });
 
                         this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
-                        this.dialogAddproduct = false;
+
                     });
             },
             dataFilter(data) {
@@ -515,16 +571,21 @@
                         _.map(this.tabData, items => {
                             if (_.findWhere(items, {
                                     'key': 'skuId'
-                                }).value + '' === config.data + '' && !items._disabled) arr.push(items)
+                                }).value + '' === config.data + '') arr.push(items)
                         });
                         if (config.type === 'histoty') {
                             this.$refs.HM.init(arr, this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), false);
                         } else {
                             this.$refs.HM.init(arr, this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res.datas, 'skuId')), true);
                         }
+                        this.fromArg = arr[0];
+                        console.log(this.fromArg)
                     });
+
             },
             save(data) { //modify 编辑完成反填数据
+
+                return console.log(data)
                 this.tabData = _.map(this.tabData, val => {
                     if (_.findWhere(val, {
                             'key': 'skuId'
@@ -560,7 +621,7 @@
                 this.tabData = _.difference(this.tabData, arr);
                 this.checkedAll = [];
             },
-            productCancel() { //  取消 product 编辑 
+            productCancel() { //  取消 product 编辑
                 this.tabData.forEach((item, index) => {
                     if (!item._remove && item._disabled) {
                         item._disabled = false;
@@ -587,7 +648,7 @@
                     })
                     .then(res => {
                         console.log(res)
-                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
+                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/
                         this.$refs.basicInfo.formItem.supplierName = res.supplierName
                         this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
                         this.$refs.basicInfo.formItem.incoterm = res.incoterm
@@ -613,9 +674,9 @@
             //product带入
             getProductDetail() {
                 let arr = [];
-                this.$route.query.ids.split(',').forEach(v=>{
+                this.$route.query.ids.split(',').forEach(v => {
                     arr.push(Number(v))
-                })     
+                })
                 arr.pop()
                 this.$ajax.post(this.$apis.post_order_skus, arr)
                     .then(res => {
@@ -638,12 +699,13 @@
                         }
                         this.tableTatal = [obj]
                     });
-                     
+
                 });
-                 
+
             }
         },
         created() {
+
             //判断从哪个地方带来的数据
             let fromData = this.$route.query.type
             switch (fromData) {
@@ -660,11 +722,14 @@
                     console.log("裸进")
             }
         },
-        mounted() {},
+        mounted() {
+            console.log(this.selectAll)
+            this.getDictionaries()
+        },
         watch: {
             tabData: {
                 handler(curVal) {
-//                    this.tableTatalCal()
+                    //                    this.tableTatalCal()
                     this.summary()
                 },
                 deep: true

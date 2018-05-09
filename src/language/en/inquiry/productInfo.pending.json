@@ -1,4 +1,5 @@
 {
+  "operater": "operater",
   "pic": "pic",
   "skuSaleStatus": "SKU sale status",
   "deleteOrNotRecycle": "delete or not（recycle）",
@@ -26,7 +27,7 @@
   "readilyAvailable": "Readily Available",
   "skuAvailable": "SKU available",
   "restrictedSellingCountry": "Restricted selling country",
-  "applicableAge ": "applicable age",
+  "applicableAge": "applicable age",
   "expirationDate": "expiration date",
   "expirationDateUnit": "expiration date unit",
   "explain": "explain",
@@ -44,7 +45,7 @@
   "referenceDdupriceUsd": "reference DDU price（USD）",
   "dduCurrency": "DDU currency",
   "dduArea": "DDU area",
-  "rateOfValueAddedTax ": "rate of value-added tax",
+  "rateOfValueAddedTax": "rate of value-added tax",
   "taxRefundRate": "tax refund rate",
   "hsCode": "HS Code",
   "customsDeclarationNameCn": "customs declaration name(CN)",
@@ -115,6 +116,5 @@
   "lengthBreadthAndHeightOfDisplayBox": "length breadth and height of display box",
   "otherPackingInformationCn": "other packing information CN",
   "otherPackingInformationEn": "other packing information EN",
-  "adjustSkuAndPackageOrNot": "adjust SKU and package or not",
-  "averageSkuVolume": "average sku volume"
+  "adjustSkuAndPackageOrNot": "adjust SKU and package or not"
 }
