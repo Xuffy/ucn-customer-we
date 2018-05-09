@@ -3,9 +3,9 @@
         <div class="title">New Order No.待后台数据</div>
 <!--         basicinfo-->
          <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
-       
+
          <VAttchment :disabled=false class='attachment'></VAttchment>
-         <VExchange :disabled=false ref='exchangeList' ></VExchange>  
+         <VExchange :disabled=false ref='exchangeList' ></VExchange>
 <!--             responsibility     -->
          <VResponsibility ref='responsibility' ></VResponsibility>
 <!--         productinfo-->
@@ -18,8 +18,8 @@
                   <el-button type='danger' @click='removeList'>{{$i.common.remove}}</el-button>
              </div>
              <div class="pro_table">
-                     <v-table  
-                            :data.sync="tabData" 
+                     <v-table
+                            :data.sync="tabData"
                             :buttons="productInfoBtn"
                             @action="producInfoAction"
                             :loading='tableLoad'
@@ -41,7 +41,7 @@
              </div>
          </div>
 <!--              quickcreate弹窗区域-->
-                <VInquiry 
+                <VInquiry
                    v-model=dialogQuickcreate
                   :selectionRadio=true
                     @addInquiry='addinquiry'
@@ -50,41 +50,41 @@
            <el-dialog :title="$i.common.fromNewSearch"  :visible.sync="dialogAddproduct" width='70%'>
                        <el-tabs v-model="TabsAddproduct" type="card" >
                         <el-tab-pane :label="$i.common.addproduct" name="FromNewSearch">
-                             <v-product 
+                             <v-product
                                 :hideBtns="true"
                                 :hideBtn="true"
                                  @handleCancel='canceldialog'
                                  :disabledLine="disabledLine"
                                 @handleOK="getList"
-                                :forceUpdateNumber="trig" 
+                                :forceUpdateNumber="trig"
                                 type="product"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
                         <el-tab-pane :label="$i.common.fromMyBookmark" name="FromMyBookmark">
-                              <v-product 
+                              <v-product
                                 :hideBtns="true"
                                 :hideBtn="true"
                                  :disabledLine="disabledLine"
                                 @handleOK="getList"
                                 @handleCancel='canceldialog'
-                                :forceUpdateNumber="trig" 
+                                :forceUpdateNumber="trig"
                                 type="bookmark"
                                 :isInquiry="true"
                             ></v-product>
                         </el-tab-pane>
                       </el-tabs>
            </el-dialog>
-           <v-history-modify 
+           <v-history-modify
                 @save="save"
                 ref="HM"
             >
 
 <template v-for="item in $db.order.productInfo" :slot="item._slot" slot-scope="{data}">
-                <el-select                                      
-                        value-key="id"                  
-                        v-if="item.type === 'select'"          
-                         v-model="fromArg[item.key]"          
+                <el-select
+                        value-key="id"
+                        v-if="item.type === 'select'"
+                         v-model="fromArg[item.key]"
                     >
                     <el-option
                         v-for="items in selectAll[item.key]"
@@ -101,13 +101,13 @@
 
 <script>
     /* this.$ref.basicInfo*/
-    import VResponsibility from './responsibility.vue'
-    import VBasicinfo from './basicinfo.vue'
+    import VResponsibility from './responsibility'
+    import VBasicinfo from './basicInfo'
     import VAttchment from './attachment'
     import VCaculate from './caculate'
     import VDialogEdit from './dialogEdit'
     import VProduct from '@/views/product/addProduct';
-    import VExchange from './exchange.vue'
+    import VExchange from './exchange'
     import VInquiry from '../../negotiation/children/addNewInqury'
     import {
         VTable,
@@ -141,7 +141,7 @@
                 value: '',
                 keyWord: '',
                 tabData: [],
-                tableLoad: false, //表格加载状态  
+                tableLoad: false, //表格加载状态
                 statusModify: true,
                 id_type: '',
                 historyColumn: {},
@@ -379,8 +379,8 @@
             },
             //......................提交
             send() {
-                // 正则 
-                //                if (!this.$refs.basicInfo.submitForm()) { 
+                // 正则
+                //                if (!this.$refs.basicInfo.submitForm()) {
                 //                     return }
                 //                return console.log(this.dataFilter(this.tabData))
                 let params = {
@@ -453,7 +453,7 @@
                 this.$refs.caculate.caculateForm.totalSkuPrice = _.reduce(_.pluck(arr, 'skuPrice'), (memo, num) => {
                     return memo + num;
                 }, 0)
-                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty   
+                //订单内所有SKU的（数量/外箱产品数）值的合计，且必须被整除  skuQty skuOuterCartonQty
                 this.$refs.caculate.caculateForm.totalOuterCartonQty = _.reduce((_.map(_.pluck(arr, 'skuOuterCartonQty'), (key, index) => {
                     return ((_.pluck(arr, 'skuQty')[index]) / key)
                 })), (memo, num) => {
@@ -621,7 +621,7 @@
                 this.tabData = _.difference(this.tabData, arr);
                 this.checkedAll = [];
             },
-            productCancel() { //  取消 product 编辑 
+            productCancel() { //  取消 product 编辑
                 this.tabData.forEach((item, index) => {
                     if (!item._remove && item._disabled) {
                         item._disabled = false;
@@ -648,7 +648,7 @@
                     })
                     .then(res => {
                         console.log(res)
-                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/     
+                        //basicinfo /*supplierName  quotationNo incoterm  payment departureCountry departurePort destinationCountry destinationPort transport*/
                         this.$refs.basicInfo.formItem.supplierName = res.supplierName
                         this.$refs.basicInfo.formItem.quotationNo = res.quotationNo
                         this.$refs.basicInfo.formItem.incoterm = res.incoterm
