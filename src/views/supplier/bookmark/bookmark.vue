@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplierBookmark}}            
+             {{$i.supplier.supplierBookmark}}            
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -50,7 +50,7 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>
+<!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
 
               </div>  
               <div>
@@ -75,6 +75,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import {
         dropDown,
         VPagination
@@ -103,7 +104,7 @@
 //                    mainBusiness: [],
                     name: '',
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     tc: 0,
                     skuCode: "",
                     skuNameEn: "",
@@ -122,6 +123,9 @@
             }
         },
         methods: {
+              ...mapActions([
+                'setRecycleBin'
+            ]),
             //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
@@ -233,6 +237,10 @@
         },
         created() {
             this.get_data()
+            this.setRecycleBin({
+                name: 'bookmarkRecycleBin',
+                show: true
+            });
         },
         watch: {
             hideBody(n) {

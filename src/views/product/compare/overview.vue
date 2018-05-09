@@ -27,6 +27,7 @@
     import {dropDown} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
     import VTable from '@/components/common/table/index'
+    import { mapActions } from 'vuex'
 
     export default {
         name: '',
@@ -80,6 +81,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setRecycleBin'
+            ]),
             selectChange() {
 
             },
@@ -197,6 +201,10 @@
         },
         created(){
             this.getList();
+            this.setRecycleBin({
+                name: 'compareRecycleBin',
+                show: true
+            });
         },
         watch:{
             selectList(n){

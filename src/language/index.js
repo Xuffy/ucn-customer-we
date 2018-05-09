@@ -38,7 +38,8 @@ const json = {
   order: _.extend({},
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
-    require(`./${lang}/order/productinfo.pending`)
+    require(`./${lang}/order/productinfo.pending`),
+    require(`./${lang}/order/payment`)
   ),
   payment: _.extend({},
     require(`./${lang}/payment/payment`),
@@ -76,12 +77,13 @@ const json = {
     require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
     require(`./${lang}/warehouse/summary.pending`),
-    require(`./${lang}/warehouse/createQc.basic`),
-  ),
-  warehouseCn: _.extend({},
-    require(`./${lang}/warehouseCn/warehouse.basic`),
-    require(`./${lang}/warehouseCn/warehouse.index`),
-    require(`./${lang}/warehouseCn/inboundOverview`),
+
+
+      /**
+       * 新配置
+       * */
+    require(`./${lang}/warehouse/warehouse.overview`),
+    require(`./${lang}/warehouse/warehouse.createQc`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
