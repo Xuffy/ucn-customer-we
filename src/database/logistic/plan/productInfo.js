@@ -10,10 +10,10 @@ export default {
   "orderNo": {
     type: 'text'
   },
-  "quantityOfOuterCartonsToBeShipped": {
+  "toShipCartonQty": {
     type: 'text'
   },
-  "goodsToBeShipped": {
+  "toShipQty": {
     type: 'text'
   },
   "skuCode": {
