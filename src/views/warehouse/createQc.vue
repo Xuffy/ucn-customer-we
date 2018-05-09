@@ -22,7 +22,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Type">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商填写">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -41,7 +41,7 @@
                                     v-model="value"
                                     align="right"
                                     type="date"
-                                    placeholder="选择日期"
+                                    :placeholder="$i.warehouse.serviceFill"
                                     :picker-options="pickerOptions1">
                             </el-date-picker>
                         </el-form-item>
@@ -80,7 +80,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Method">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -92,7 +92,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="Surveyor">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" placeholder="服务商选择">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -142,14 +142,9 @@
                                         v-for="item in currencyOptions"
                                         :key="item.id"
                                         :label="item.code"
-                                        :value="item.id">
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Time Zone">
-                            <v-time-zone class="speTimezone" :value.sync="qcOrderConfig.timeZone"></v-time-zone>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -186,7 +181,6 @@
                 <el-button type="primary" @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
                 <el-button type="danger" :disabled="disableRemoveProduct" @click="removeProduct">{{$i.warehouse.remove}}</el-button>
             </div>
-
 
             <el-table
                     v-loading="loadingProductTable"
@@ -252,14 +246,14 @@
         </div>
 
         <div class="footBtn">
-            <el-button @click="submit" :disabled="disableSubmit" type="primary">{{$i.warehouse.submit}}</el-button>
+            <el-button @click="submit" :loading="disableClickSubmit" :disabled="disableSubmit" type="primary">{{$i.warehouse.submit}}</el-button>
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
 
 
         <el-dialog width="70%" title="Add Product" :visible.sync="productDialogVisible">
-            <el-form ref="qcOrder" :model="productDialogConfig" label-width="120px">
+            <el-form ref="qcOrder" :model="productDialogConfig" :rules="dialogRules" label-width="120px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" label="Order No">
@@ -304,7 +298,7 @@
                 </el-row>
             </el-form>
             <div class="btn-group">
-                <el-button type="primary" @click="search"  :disabled="loadingProductDialogTable">Search</el-button>
+                <el-button type="primary" @click="search" :loading="loadingProductDialogTable"  :disabled="loadingProductDialogTable">Search</el-button>
                 <el-button @click="clear" :disabled="loadingProductDialogTable">Clear</el-button>
             </div>
             <v-table
@@ -315,7 +309,7 @@
                     @change-checked="changeProductDialogChecked"></v-table>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
-                <el-button :disabled="loadingProductDialogTable" @click="serviceDialogVisible = false">Cancel</el-button>
+                <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">Cancel</el-button>
             </div>
         </el-dialog>
     </div>
@@ -393,12 +387,13 @@
                  * */
                 loadingData:false,
                 disableRemoveProduct:true,
+                disableClickSubmit:false,
                 loadingProductTable:false,
                 disableSubmit:false,
                 serviceDialogVisible:false,
                 radio:'',
                 currencyOptions:[],
-                qcStatusCode:'2',
+                qcStatusCode:'WAITING_QC',
                 qcStatusOption:[],
                 qcStatus:[
                     {
@@ -427,7 +422,8 @@
                 },
 
                 qcOrderConfig:{
-                    exchangeCurrencyDictCode:'',
+
+                    exchangeCurrencyDictCode:'CNY',
                     exchangeCurrencyDictId:'',
                     factoryAddress: "",
                     factoryContactPhone: "",
@@ -443,12 +439,18 @@
                     serviceName: "",
                     serviceProviderId: 0,
                     serviceProviderNo: "",
-                    timeZone:''
                 },
 
                 /**
                  * 弹出框配置
                  * */
+                dialogRules:{
+                    orderNo:[
+                        {
+                            required:true
+                        }
+                    ]
+                },
                 loadingProductDialogTable:false,
                 productDialogTableData:[],
                 selectProductList:[],
@@ -501,10 +503,14 @@
                         });
                     }
                 });
+
+                this.disableClickSubmit=true;
+
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
                     this.$router.push('/warehouse/qcOverview');
+                    this.disableClickSubmit=false;
                 }).catch(err=>{
-
+                    this.disableClickSubmit=false;
                 });
             },
 
@@ -553,26 +559,30 @@
              * 弹出框事件
              * */
             search(){
-                this.loadingProductDialogTable=true;
-                this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
-                    this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
-                    this.productTableData.forEach(v=>{
-                        this.productDialogTableData.forEach(m=>{
-                            if(v.id===m.id.value){
-                                this.$set(m,'_checked',true);
-                                this.$set(m,'_disabled',true);
-                            }
-                        })
-                    });
-                    this.productDialogTableData.forEach(v=>{
-                        if(v.id.value===0){
-                            this.$set(v,'_disabled',true);
-                        }
-                    });
-                    this.loadingProductDialogTable=false;
-                    this.selectProductList=[];
-                }).catch(err=>{
-                    this.loadingProductDialogTable=false;
+                this.$refs.qcOrder.validate((valid)=>{
+                    if(valid){
+                        this.loadingProductDialogTable=true;
+                        this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
+                            this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
+                            this.productTableData.forEach(v=>{
+                                this.productDialogTableData.forEach(m=>{
+                                    if(v.id===m.id.value){
+                                        this.$set(m,'_checked',true);
+                                        this.$set(m,'_disabled',true);
+                                    }
+                                })
+                            });
+                            this.productDialogTableData.forEach(v=>{
+                                if(v.id.value===0){
+                                    this.$set(v,'_disabled',true);
+                                }
+                            });
+                            this.loadingProductDialogTable=false;
+                            this.selectProductList=[];
+                        }).catch(err=>{
+                            this.loadingProductDialogTable=false;
+                        });
+                    }
                 });
             },
             clear(){
@@ -594,7 +604,6 @@
             },
             postProduct(){
                 this.productConfig.ids=[];
-                console.log(this.productDialogTableData,'productDialogTableData')
                 this.productDialogTableData.forEach(v=>{
                     if(v._checked && !v._disabled){
                         this.productConfig.ids.push(v.id.value);
@@ -620,29 +629,29 @@
              * 页面操作事件
              * */
             addProduct(){
+                this.productDialogTableData=[];
                 this.productDialogVisible=true;
-                this.loadingProductDialogTable=true;
-                console.log(this.productTableData,'productTableData')
-                this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
-                    this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
-                    this.productTableData.forEach(v=>{
-                        this.productDialogTableData.forEach(m=>{
-                            if(v.id===m.id.value){
-                                this.$set(m,'_checked',true);
-                                this.$set(m,'_disabled',true);
-                            }
-                        })
-                    });
-                    this.productDialogTableData.forEach(v=>{
-                        if(v.id.value===0){
-                            this.$set(v,'_disabled',true);
-                        }
-                    });
-                    console.log(this.productDialogTableData,'this.productDialogTableData')
-                    this.loadingProductDialogTable=false;
-                }).catch(err=>{
-                    this.loadingProductDialogTable=false;
-                });
+                // this.loadingProductDialogTable=true;
+                // this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
+                //     this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
+                //     this.productTableData.forEach(v=>{
+                //         this.productDialogTableData.forEach(m=>{
+                //             if(v.id===m.id.value){
+                //                 this.$set(m,'_checked',true);
+                //                 this.$set(m,'_disabled',true);
+                //             }
+                //         })
+                //     });
+                //     this.productDialogTableData.forEach(v=>{
+                //         if(v.id.value===0){
+                //             this.$set(v,'_disabled',true);
+                //         }
+                //     });
+                //     console.log(this.productDialogTableData,'this.productDialogTableData')
+                //     this.loadingProductDialogTable=false;
+                // }).catch(err=>{
+                //     this.loadingProductDialogTable=false;
+                // });
             },
             removeProduct(){
 
@@ -665,6 +674,15 @@
             handleProductTableChange(e){
                 this.selectProductTableData=e;
             },
+            handleClick(e){
+                this.$windowOpen({
+                    url:'/product/sourcingDetail',
+                    params:{
+                        id:e.skuId
+                    }
+                });
+            },
+
 
             /**
              * 获取单位
@@ -708,7 +726,16 @@
                 }else{
                     this.disableRemoveProduct=true;
                 }
-            }
+            },
+            productDialogVisible(n){
+                if(!n){
+                    this.clear();
+                    setTimeout(()=>{
+                        this.$refs.qcOrder.clearValidate();
+                    },0);
+
+                }
+            },
         },
     }
 </script>

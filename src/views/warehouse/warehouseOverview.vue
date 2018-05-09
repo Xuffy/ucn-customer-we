@@ -137,13 +137,12 @@
             },
 
             btnClick(e){
-                console.log(e)
-                // this.$windowOpen({
-                //     url:'/sellerWarehouse/inboundDetail',
-                //     params:{
-                //         id:e.id.value
-                //     }
-                // })
+                this.$windowOpen({
+                    url:'/product/sourcingDetail',
+                    params:{
+                        id:e.skuId.value
+                    }
+                })
             },
 
             changeChecked(e){

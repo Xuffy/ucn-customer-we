@@ -33,8 +33,8 @@ export default {
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
       BASE_HSM_W: 'http://192.168.51.248:11001',
       BASE_BJ_p: 'http://dev.upurchase-facade.ucnholding.com:18300',
-      BASE_BUY: '//192.168.51.33:11001',
-      // BASE_BUY: '//192.168.51.248:11001',
+      // BASE_BUY: '//192.168.51.33:11001',
+      BASE_BUY: '//192.168.51.248:11001',
       BASE_SELL: '//192.168.51.248:11002',
       //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
       //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
@@ -60,6 +60,9 @@ export default {
       UOSS_URL: '//192.168.51.248:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
       UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
+
+
+      BASE_BUYTEST:'//192.168.51.33:11001'
 
     },
     develop: {
