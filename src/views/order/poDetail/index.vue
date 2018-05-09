@@ -47,7 +47,7 @@
          <div class="footer">
              <div class="footer_button" v-if='statusModify'>
                  <el-button  @click='modify' v-authorize="'ORDER:DETAIL:MODIFY'" :disabled="orderStatus==='5'">{{$i.common.modify}}</el-button>
-                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'" :disabled="orderStatus==='5'">{{$i.common.confirm}}</el-button>
+                 <el-button @click='confirm' v-authorize="'ORDER:DETAIL:CONFIRM'" :disabled="orderStatus==='3'||orderStatus==='5'">{{$i.common.confirm}}</el-button>
                  <el-button   v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{$i.common.download}}</el-button>
                   <el-button v-authorize="'ORDER:DETAIL:CREATE'">{{$i.common.createOrder}}</el-button>
                   <el-button :disabled="orderStatus==='5'" @click='cancelOrder' v-authorize="'ORDER:DETAIL:CANCEL'">{{$i.common.cancel}}</el-button>
@@ -93,12 +93,12 @@
                @save="save"
                 ref="HM"
             >
-
            </v-history-modify>
   </div>
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import responsibility from '../creatOrder/responsibility.vue'
     import basicinfo from '../creatOrder/basicInfo.vue'
     import VProduct from '@/views/product/addProduct';
@@ -158,6 +158,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             canceldialog() {
                 this.dialogAddproduct = false
             },
@@ -516,6 +519,14 @@
         created() {
             this.get_data()
             this.submitData.id = this.$route.query.id;
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         watch: {
             newProductTabData: {

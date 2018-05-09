@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplierSourcing}}
+             {{$i.supplier.supplierSourcing}}
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     import {
         dropDownSingle
     } from '@/components/index'
@@ -142,6 +143,9 @@
             }
         },
         methods: {
+             ...mapActions([
+                'setRecycleBin'
+            ]),
             //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
@@ -284,6 +288,10 @@
         created() {
             this.get_data()
             this.getCategoryId()
+        this.setRecycleBin({
+                name: 'bookmarkRecycleBin',
+                show: true
+            });
         },
         watch: {}
     }

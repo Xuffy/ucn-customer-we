@@ -294,7 +294,6 @@
                 this.formItem.supplierName = _.where(this.selectAll.supplierName, {
                     code: data
                 })[0].name
-                console.log(this.formItem)
             },
             //获取字典表
             getDictionaries() {
