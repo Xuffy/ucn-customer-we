@@ -22,5 +22,7 @@ export default {
   get_payment_no: ['/payment/genNo', 'BASE_DEV'],
   save_plan_payment: ['/payment/save', 'BASE_DEV'],
   update_plan_payment: ['/payment/update', 'BASE_DEV'],
+  abandon_plan_payment: ['/payment/abandon', 'BASE_DEV'],
+  recover_plan_payment: ['/payment/recover', 'BASE_DEV'],
   get_supplier: ['/logistics/plan/getSupplier', 'BASE_DEV']
 }

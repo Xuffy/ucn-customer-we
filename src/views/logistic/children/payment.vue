@@ -55,7 +55,7 @@
           <span>{{ computedCurrency('exchangeCurrency', 'code', 'name', scope.row.currencyCode)}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.avilable" align="center" width="140">
+      <el-table-column :label="$i.logistic.avilable" align="center" width="200">
         <template slot-scope="scope">
           <span>{{ paymentDec.find(a => a.code === scope.row.status).name }}</span>
         </template>
@@ -67,16 +67,16 @@
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
           </div> -->
           <div v-if="scope.row.status === -1">
-            <el-button size="mini" type="primary">恢复</el-button>
+            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment)">恢复</el-button>
           </div>
-          <div v-if="(scope.row.status === 20) || (scope.row.status === 40)">
+          <div v-if="scope.row.status === 20 || scope.row.status === 40">
             <div v-if="scope.row.edit">
-              <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">保存</el-button>
-              <el-button size="mini" type="primary" @click.stop="cancelPaymentModify(scope.$index)">取消</el-button>
+              <el-button size="mini" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
+              <el-button size="mini" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
             </div>
             <div v-else>
-              <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">修改</el-button>
-              <el-button size="mini" type="primary">作废</el-button>
+              <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
+              <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment)">{{ $i.logistic.invalid }}</el-button>
             </div>
           </div>
         </template>
@@ -113,23 +113,23 @@ export default {
       paymentDec: [
         {
           code: -1,
-          name: '作废'
+          name: this.$i.logistic.confirmed
         },
         {
           code: 10,
-          name: '待采购商确认'
+          name: this.$i.logistic.tbcc
         },
         {
           code: 20,
-          name: '待供应商确认'
+          name: this.$i.logistic.tbcs
         },
         {
           code: 30,
-          name: '待服务商确认'
+          name: this.$i.logistic.tbcsp
         },
         {
           code: 40,
-          name: '已确认'
+          name: this.$i.logistic.confirmed
         }
       ],
       pickerOptions: {
@@ -176,15 +176,17 @@ export default {
     },
     switchModify (i) {
       this.copyPaymentObj = this.tableData[i]
-      this.$emit('updatePaymentWithView', {i, bool: true})
+      this.$emit('updatePaymentWithView', { i, edit: true })
     },
     cancelPaymentModify (i) {
       if (!this.tableData[i].id) return this.tableData.splice(i, 1)
-      this.$emit('updatePaymentWithView', {i, bool: false})
-    }
+      this.$emit('updatePaymentWithView', { i, edit: false })
+    },
+    switchStatus (i, url) {
+      this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {
+        this.$emit('updatePaymentWithView', { i, edit: false, status })
+      })
+    },
   }
 }
 </script>
-<style lang="less" scoped>
-  
-</style>

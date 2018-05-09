@@ -1,4 +1,10 @@
 {
+  "confirmed": "Confirmed",
+  "tbcc": "TBC-Customer",
+  "tbcs": "TBC-Supplier",
+  "tbcsp": "TBC-Service Provider",
+  "invalid": "Invalid",
+  "save": "Save",
   "recover": "Recover",
   "sku": "SKU",
   "transportationUnit": "Transportation Unit",
