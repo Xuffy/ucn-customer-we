@@ -7,7 +7,8 @@ const json = {
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
     require(`./${lang}/common/baseText`),
-    require(`./${lang}/common/message`)
+    require(`./${lang}/common/message`),
+    require(`./${lang}/common/promptInfo`)
   ),
   inquiry: _.extend({},
     require(`./${lang}/inquiry/basicInfo.pending`),
