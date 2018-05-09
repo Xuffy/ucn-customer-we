@@ -3,6 +3,10 @@
   "product": "Product",
   "productSourcingOverview": "ProductSourcingOverview",
   "productBookmarkOverview": "ProductBookmarkOverview",
+  "productCompareOverview": "ProductCompareOverview",
+  "supplier": "Supplier",
+
+
   "addProduct": "Add Product",
   "createInbound": "Create Inbound",
   "createQC": "Create QC",
