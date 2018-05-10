@@ -38,6 +38,13 @@ export default {
 
   //user
   get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'], //获取当前登录用户所在企业下所有用户信息
-  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL']
+  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL'],
+
+  //track
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','BASE_URL','BASE_URL'],
+
+  //companyInfo
+  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
+  // post_purchase_customer_address: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
 
 }

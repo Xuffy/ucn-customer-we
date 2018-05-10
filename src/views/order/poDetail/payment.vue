@@ -71,26 +71,24 @@
                        
                     </div>
                     
-<!--
                      <div v-else-if="v.type==='select'">
                         <div>
                             <el-select
                                     placeholder="请输入内容"
                                     v-model="scope.row[v.prop]"
-                                    disabled=true
+                                    :disabled=true
                                     >
-                                <el-option
-                                        v-for="item in selectAll[item.key]"
-                                        :key="item.id"
-                                        :label="item.code"
-                                        :value="item.id"
-                                        :id="item.id"
-                                    />        
+                                        <el-option                          
+                                            v-for="items in currencyOptions"
+                                            :key="items.id"
+                                            :label="items.code"
+                                            :value="items.id"
+                                            :id="items.id"
+                                        />        
                             </el-select>
                         </div>
                         
                     </div>
--->
                     
                     <div v-else-if="v.type==='Input'&&v.belong==='customer'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
@@ -168,16 +166,12 @@
 </div>
 </template>
 <script>
-    /*
-                                                                                                                                                                                                                        10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
-                                                                                                                                                                                                                         orderType :10 采购订单
-                                                                                                                                                                                                                        */
-    export default {
+export default {
         name: 'payment-table',
         props: {
             orderNo: {
                 type: String,
-                default: '999'
+//                default: '999'
             },
             //订单哪来的 
             currencyCode: {
@@ -293,7 +287,7 @@
                     {
                         label: 'currency',
                         prop: 'currency',
-                        type: 'text',
+                        type: 'select',
                         width: 150,
                         belong: "customer", //............
                     },
@@ -310,11 +304,7 @@
                 type: '10', //10 付款  20退款
                 stopEdit: false,
                 currency:'',
-                selectAll: {
-                    
-                    currency: [],
-                    
-                },
+                currencyOptions: [],
             }
         },
         methods: {
@@ -557,11 +547,9 @@
                 })
             },
             get_currency(){
-                console.log('in','//////////////')
                   this.$ajax.get(this.$apis.get_currency, '', '_cache')
-                    .then(res => {
-                        this.selectAll.currency = res;
-                       console.log(res,'/////////////')
+                    .then(res => {                     
+                        this.currencyOptions = res;                       
                     }).catch(res=>{
                       
                   });
@@ -571,13 +559,14 @@
             //            this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
-//             this.get_currency()
+             
+
         },
         watch: {
             orderNo(val) {
                 if (val) {
                     this.get_list()
-                   
+                   this.get_currency()
                 }
             },
         }

@@ -16,7 +16,7 @@
          <responsibility ref='responsibility' :disabled='statusModify'></responsibility>
 <!--         payment-->
          <v-payment :orderNo='orderNo'
-                    :currency='currency'
+                    :currencyCode='currencyCode'
                     :payToId='payToId'
                     :orderStatus='orderStatus'
          ></v-payment>
@@ -206,7 +206,8 @@
                 })
             },
             //........获取数据
-            get_data() {             this.$ajax.get(this.$apis.detail_order, {
+            get_data() {             
+                this.$ajax.get(this.$apis.detail_order, {
                         id: this.orderId
                     })
                     .then((res) => {
