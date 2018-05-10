@@ -35,21 +35,21 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
+      <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
       <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showProductDialog = false">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="showProductDialog = false">{{ $i.logistic.confirm }}</el-button>
+        <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
+    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
       <add-product :tableData="orderList" ref="addProduct"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
@@ -76,6 +76,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      modefiyProductIndex: 0,
       logisticsNo: '',
       remark: '',
       showProductDialog: false,
@@ -163,14 +164,6 @@ export default {
     btns,
     productModify,
     addProduct
-  },
-  watch: {
-    // selectProductId (newValue) {
-    //   newValue && this.getProductHistory(newValue)
-    // }
-    // productInfoModifyStatus () {
-    //   this.getProductHistory(this.selectProductId)
-    // }
   },
   computed: {
     planId () {
@@ -313,22 +306,17 @@ export default {
       if (status === 3) return
       this.productInfoModifyStatus = status
       this.showProductDialog = true
+      this.modefiyProductIndex = i
       this.getProductHistory(e.id ? e.id.value : null, status, i)
     },
     getProductHistory (productId, status, i) {
-      const modifyObj = this.productList.find(a => a.id === productId)
+      const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
 
-      status === 1 && (this.productModifyList = this.$getDB(this.$db.logistic.productModify, modifyObj ? [ modifyObj ] : []))
-
-      if (productId) {
-        this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
-          this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productModify, res.history)]
-        })
-      } else {
-        this.productModifyList = [JSON.parse(JSON.stringify(this.productList[i]))]
-        console.log(this.productList[i])
-      }
-
+      productId ? this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+        res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history)])
+        : (this.productModifyList = [ currentProduct ])
+      })
+      : this.productModifyList = [ currentProduct ]
     },
     addPayment () {
       const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -389,6 +377,7 @@ export default {
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
         a.id = null
+        a.vId = +new Date()
         a.blSkuName = ''
         a.hsCode = ''
         a.currency = ''
@@ -417,10 +406,15 @@ export default {
         this.$delete(this.productList, index)
       })
     },
-    closeDialog () {
-      // console.log(this.productModifyList)
-      this.productModifyList = []
-      // console.log(this.$refs.productModifyComponents)
+    closeModify (status) {
+      this.showProductDialog = false
+      if (!status) return this.productModifyList = []
+      const currrentProduct = this.productModifyList[0]
+      this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
+      const id = currrentProduct.id.value
+      const vId = currrentProduct.vId.value
+      const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
+      index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
     switchEdit () {
       this.edit = !this.edit
@@ -430,6 +424,19 @@ export default {
       this.edit = !this.edit
       this.createdPlanData()
       this.createdPaymentData()
+    },
+    restoreObj (obj) {
+      return _.mapObject(obj, v => (v = v.value))
+    },
+    restoreArr (arr) {
+      return arr.map(a => {
+        return _.mapObject(a, v => (v = v.value))
+        // const obj = {}
+        // _.mapObject(a, (value, key) => {
+        //   obj[key] = value.value
+        // })
+        // return obj
+      })
     },
     sendData (keyString) {
       const url = this.configUrl[this.pageName][keyString]
@@ -457,13 +464,14 @@ export default {
       this.oldPlanObject.containerDetail = this.containerInfo
       this.fee = this.feeList
       this.oldPlanObject.product = this.modifyProductArray
-      this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
-        const obj = {}
-        _.mapObject(a, (value, key) => {
-          obj[key] = value.value
-        })
-        return obj
-      })
+      // this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
+      //   const obj = {}
+      //   _.mapObject(a, (value, key) => {
+      //     obj[key] = value.value
+      //   })
+      //   return obj
+      // })
+      this.oldPlanObject.product = this.restoreArr(this.removeProductList)
       this.$ajax.post(url, this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功',

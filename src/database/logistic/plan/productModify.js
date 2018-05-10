@@ -3,6 +3,10 @@ export default {
     type: 'text',
     _hide: true
   },
+  "vId": {
+    type: 'text',
+    _hide: true
+  },
   "entryDt": {
     type: 'text'
   },

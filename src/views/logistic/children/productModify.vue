@@ -1,25 +1,4 @@
 <template>
-  <!--
-*field("supplierId","skuSupplierId")
-  .field("supplierCode","skuSupplierCode")
-  .field("supplierName","skuSupplierName")
-  .field("skuDescriptioinCn","skuDescCn")
-  .field("skuDescriptioinEn","skuDescEn")
-  .field("customerSkuCode","skuCustomerSkuCode")
-  .field("customDeclarationNameCn","skuCustomsNameCn")
-  .field("customDeclarationNameEn","skuCustomsNameEn")
-  .field("unit","skuUnit")
-  .field("outerCartonQty","skuOuterCartonQty")
-  .field("outerCartonLenth","skuOuterCartonLength")
-  .field("outerCartonWidth","skuOuterCartonWidth")
-  .field("outerCartonHeight","skuOuterCartonHeight")
-  .field("outerCartonVolume","skuOuterCartonVolume")
-  .field("outerCartonNetWeight","skuOuterCartonNetWeight")
-  .field("outerCartonGrossWeight","skuOuterCartonRoughWeight")
-  .field("shippingMarks","skuShippingMarks")
-  .field("outerCartonBarCode","skuOuterCartonBarCode")
-  .field("outerCartonSkuCode","skuOuterCartonCode")
-  -->
   <el-row>
     <v-table-filter :hideFilterValue="true" class="filter"/>
     <el-table :data="tableData" style="width: 100%" class="table">
@@ -219,7 +198,7 @@ export default {
   },
   methods: {
     createModifyData () {
-      console.log('initData')
+      if (!this.tableData.length) return
       if (this.productInfoModifyStatus === 1) {
         _.mapObject(this.tableData[0], (value, key) => {
           key === 'toShipCartonQty' && (value.edit = true)
