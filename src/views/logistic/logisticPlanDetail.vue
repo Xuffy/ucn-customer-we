@@ -43,7 +43,7 @@
       </v-table>
     </div>
     <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeDialog">
-      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" :productId="selectProductId"/>
+      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showProductDialog = false">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="showProductDialog = false">{{ $i.logistic.confirm }}</el-button>
@@ -78,7 +78,6 @@ export default {
     return {
       logisticsNo: '',
       remark: '',
-      selectProductId: 0,
       showProductDialog: false,
       showAddProductDialog: false,
       selectionContainer: [],
@@ -166,12 +165,12 @@ export default {
     addProduct
   },
   watch: {
-    selectProductId (newValue) {
-      newValue && this.getProductHistory(newValue)
-    },
-    productInfoModifyStatus () {
-      this.getProductHistory(this.selectProductId)
-    }
+    // selectProductId (newValue) {
+    //   newValue && this.getProductHistory(newValue)
+    // }
+    // productInfoModifyStatus () {
+    //   this.getProductHistory(this.selectProductId)
+    // }
   },
   computed: {
     planId () {
@@ -310,23 +309,27 @@ export default {
     arraySplite (array, index) {
       array.splice(index, 1);
     },
-    action (e, i) {
-      console.log(e, i)
-      if (i === 3) return
-      this.selectProductId = e.id.value
-      this.productInfoModifyStatus = i
+    action (e, status, i) {
+      if (status === 3) return
+      this.productInfoModifyStatus = status
       this.showProductDialog = true
+      this.getProductHistory(e.id ? e.id.value : null, status, i)
     },
-    getProductHistory (productId) {
+    getProductHistory (productId, status, i) {
       // console.log(productId, this.modifyProductArray)
-      const modifyObj = this.modifyProductArray.find(a => a.id === this.selectProductId)
+      const modifyObj = this.modifyProductArray.find(a => a.id === productId)
       // console.log(modifyObj)
 
-      this.productModifyList = this.$getDB(this.$db.logistic.productInfo, modifyObj ? [ modifyObj ] : [])
+      status === 1 && (this.productModifyList = this.$getDB(this.$db.logistic.productModify, modifyObj ? [ modifyObj ] : []))
 
-      this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
-        this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productInfo, res.history)]
-      })
+      if (productId) {
+        this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+          this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productModify, res.history)]
+        })
+      } else {
+        this.productModifyList = [JSON.parse(JSON.stringify(this.productList[i]))]
+      }
+
     },
     addPayment () {
       const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -385,6 +388,7 @@ export default {
       const selectArrData = this.$refs.addProduct.selectArrData
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
+        a.id = null
         a.blSkuName = ''
         a.hsCode = ''
         a.currency = ''
@@ -397,8 +401,9 @@ export default {
       // console.log(selectArrData)
       // TODO
     },
+
     selectProduct (arr) {
-      console.log(arr)
+      // console.log(arr)
       this.selectProductArr = arr
     },
     removeProduct () {
@@ -409,7 +414,7 @@ export default {
       })
     },
     closeDialog () {
-      console.log(this.productModifyList)
+      // console.log(this.productModifyList)
       this.productModifyList = []
       // console.log(this.$refs.productModifyComponents)
     },
