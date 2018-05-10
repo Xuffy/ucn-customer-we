@@ -25,49 +25,49 @@ export default {
   "skuNameCn": {
     type: 'text'
   },
-  "productDescription": {
+  "skuNameCustomer": {
     type: 'text'
   },
   "blSkuName": {
     type: 'text'
   },
-  "customsDeclarationNameCn": {
+  "skuCustomsNameCn": {
     type: 'text'
   },
-  "customsDeclarationNameEn": {
+  "skuCustomsNameEn": {
     type: 'text'
   },
   "hsCode": {
     type: 'text'
   },
-  "reportElements": {
+  "reportElement": {
     type: 'text'
   },
   "skuSupplierName": {
     type: 'text'
   },
-  "supplierNo": {
+  "skuSupplierCode": {
     type: 'text'
   },
   "skuCustomerSkuCode": {
     type: 'text'
   },
-  "factorySKUCode": {
+  "factorySkuCode": {
     type: 'text'
   },
   "skuUnit": {
     type: 'text'
   },
-  "exportUnitPrice": {
+  "unitExportPrice": {
     type: 'text'
   },
-  "totalPriceOfExport": {
+  "totalExportPrice": {
     type: 'text'
   },
   "currency": {
     type: 'text'
   },
-  "skuQuantityOfOuterCarton": {
+  "skuOuterCartonQty": {
     type: 'text'
   },
   "skuOuterCartonLength": {
@@ -98,24 +98,3 @@ export default {
     type: 'text'
   }
 }
-/*
-*field("supplierId","skuSupplierId")
-  .field("supplierCode","skuSupplierCode")
-  .field("supplierName","skuSupplierName")
-  .field("skuDescriptioinCn","skuDescCn")
-  .field("skuDescriptioinEn","skuDescEn")
-  .field("customerSkuCode","skuCustomerSkuCode")
-  .field("customDeclarationNameCn","skuCustomsNameCn")
-  .field("customDeclarationNameEn","skuCustomsNameEn")
-  .field("unit","skuUnit")
-  .field("outerCartonQty","skuOuterCartonQty")
-  .field("outerCartonLenth","skuOuterCartonLength")
-  .field("outerCartonWidth","skuOuterCartonWidth")
-  .field("outerCartonHeight","skuOuterCartonHeight")
-  .field("outerCartonVolume","skuOuterCartonVolume")
-  .field("outerCartonNetWeight","skuOuterCartonNetWeight")
-  .field("outerCartonGrossWeight","skuOuterCartonRoughWeight")
-  .field("shippingMarks","skuShippingMarks")
-  .field("outerCartonBarCode","skuOuterCartonBarCode")
-  .field("outerCartonSkuCode","skuOuterCartonCode")
-*/

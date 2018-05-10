@@ -316,9 +316,7 @@ export default {
       this.getProductHistory(e.id ? e.id.value : null, status, i)
     },
     getProductHistory (productId, status, i) {
-      // console.log(productId, this.modifyProductArray)
-      const modifyObj = this.modifyProductArray.find(a => a.id === productId)
-      // console.log(modifyObj)
+      const modifyObj = this.productList.find(a => a.id === productId)
 
       status === 1 && (this.productModifyList = this.$getDB(this.$db.logistic.productModify, modifyObj ? [ modifyObj ] : []))
 
@@ -328,6 +326,7 @@ export default {
         })
       } else {
         this.productModifyList = [JSON.parse(JSON.stringify(this.productList[i]))]
+        console.log(this.productList[i])
       }
 
     },
@@ -386,6 +385,7 @@ export default {
     closeAddProduct (status) {
       this.showAddProductDialog = false
       const selectArrData = this.$refs.addProduct.selectArrData
+
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
         a.id = null
@@ -394,6 +394,10 @@ export default {
         a.currency = ''
         a.toShipCartonQty = ''
         a.toShipQty = ''
+        a.reportElement = ''
+        a.factorySkuCode = ''
+        a.unitExportPrice = ''
+        a.totalExportPrice = ''
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
 

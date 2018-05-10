@@ -98,24 +98,3 @@ export default {
   }
 }
 
-/*
-*field("supplierId","skuSupplierId")
-  .field("supplierCode","skuSupplierCode")
-  .field("supplierName","skuSupplierName")
-  .field("skuDescriptioinCn","skuDescCn")
-  .field("skuDescriptioinEn","skuDescEn")
-  .field("customerSkuCode","skuCustomerSkuCode")
-  .field("customDeclarationNameCn","skuCustomsNameCn")
-  .field("customDeclarationNameEn","skuCustomsNameEn")
-  .field("unit","skuUnit")
-  .field("outerCartonQty","skuOuterCartonQty")
-  .field("outerCartonLenth","skuOuterCartonLength")
-  .field("outerCartonWidth","skuOuterCartonWidth")
-  .field("outerCartonHeight","skuOuterCartonHeight")
-  .field("outerCartonVolume","skuOuterCartonVolume")
-  .field("outerCartonNetWeight","skuOuterCartonNetWeight")
-  .field("outerCartonGrossWeight","skuOuterCartonRoughWeight")
-  .field("shippingMarks","skuShippingMarks")
-  .field("outerCartonBarCode","skuOuterCartonBarCode")
-  .field("outerCartonSkuCode","skuOuterCartonCode")
-*/

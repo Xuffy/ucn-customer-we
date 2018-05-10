@@ -211,7 +211,40 @@ export default {
       modify: true,
       modifyArray: []
     }
+  },
+  watch: {
+    tableData () {
+      this.createModifyData()
+    }
+  },
+  methods: {
+    createModifyData () {
+      console.log('initData')
+      if (this.productInfoModifyStatus === 1) {
+        _.mapObject(this.tableData[0], (value, key) => {
+          key === 'toShipCartonQty' && (value.edit = true)
+          key === 'toShipQty' && (value.edit = true)
+          return value
+        })
+      }
+    }
   }
+  // methods: {
+  //   createModifyData () {
+  //     // this.modifyArray = JSON.parse(JSON.stringify(this.tableData))
+  //     if (this.productInfoModifyStatus === 1) {
+  //       const copyTableData = JSON.parse(JSON.stringify(this.tableData))
+  //       _.mapObject(copyTableData[0], (value, key) => {
+  //         key === 'toShipCartonQty' && (value.edit = true)
+  //         key === 'toShipQty' && (value.edit = true)
+  //         return value
+  //       })
+  //       this.modifyArray = copyTableData
+  //     } else {
+  //       this.modifyArray = this.tableData
+  //     }
+  //   }
+  // }
 }
 </script>
 <style lang="less">
