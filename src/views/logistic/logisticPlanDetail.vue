@@ -311,15 +311,19 @@ export default {
       array.splice(index, 1);
     },
     action (e, i) {
+      console.log(e, i)
       if (i === 3) return
       this.selectProductId = e.id.value
       this.productInfoModifyStatus = i
       this.showProductDialog = true
     },
     getProductHistory (productId) {
+      // console.log(productId, this.modifyProductArray)
       const modifyObj = this.modifyProductArray.find(a => a.id === this.selectProductId)
+      // console.log(modifyObj)
 
       this.productModifyList = this.$getDB(this.$db.logistic.productInfo, modifyObj ? [ modifyObj ] : [])
+
       this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
         this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productInfo, res.history)]
       })
@@ -384,6 +388,8 @@ export default {
         a.blSkuName = ''
         a.hsCode = ''
         a.currency = ''
+        a.toShipCartonQty = ''
+        a.toShipQty = ''
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
 
@@ -392,6 +398,7 @@ export default {
       // TODO
     },
     selectProduct (arr) {
+      console.log(arr)
       this.selectProductArr = arr
     },
     removeProduct () {
@@ -402,6 +409,7 @@ export default {
       })
     },
     closeDialog () {
+      console.log(this.productModifyList)
       this.productModifyList = []
       // console.log(this.$refs.productModifyComponents)
     },

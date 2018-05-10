@@ -12,13 +12,13 @@
           <span>{{ scope.row.orderNo.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.quantityOfOuterCartonsToBeShipped" width="300" align="center" sortable>
+      <el-table-column :label="$i.logistic.toShipCartonQty" width="300" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" v-if="scope.row.toShipCartonQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.goodsToBeShipped" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.toShipQty" width="160" align="center" sortable>
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" v-if="scope.row.toShipQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipQty.value }}</span>
