@@ -1,8 +1,9 @@
 <template>
     <div class="payment-table">
         <div class="payment-btn">
-            <el-button :disabled="orderStatus==='5'||stopEdit" @click="handleClick" type="primary">{{btnInfo}}</el-button>
-             <el-button :disabled="orderStatus==='5'||stopEdit" type="primary" @click='dunning'>提醒供应商退款</el-button>
+            <el-button :disabled="orderStatus==='5'||stopEdit" @click="handleClick" type="primary">{{$i.order.applyPayment}}
+            </el-button>
+             <el-button :disabled="orderStatus==='5'||stopEdit" type="primary" @click='dunning'>{{$i.order.remindSuppliersToPay}}</el-button>
         </div>
         <el-table
                 class="speTable"
@@ -28,19 +29,19 @@
                         <!--有效性-->
                         <div v-if="k===11">
                             <span v-if='scope.row[v.prop]===-1'>
-                                作废
+                               {{$i.order.invalid}}
                             </span>
                             <span v-if='scope.row[v.prop]===10'>
-                                待采购商确认
+                                {{$i.order.confirmedBypurchaser}}
                             </span>
                             <span v-if='scope.row[v.prop]===20'>
-                                待供应商确认
+                                 {{$i.order.confirmedBySupplier}}
                             </span>
                             <span v-if='scope.row[v.prop]===30'>
-                                待服务商确认
+                                {{$i.order.confirmedByService}}
                             </span>
                             <span v-if='scope.row[v.prop]===40'>
-                                已确认
+                                {{$i.order.confirmed}}
                             </span>
                             
                         </div>
@@ -48,6 +49,7 @@
                             {{scope.row[v.prop]}}   
                         </div>
                     </div>
+                    
                     <div v-else-if="v.type==='Date'&& v.belong==='customer'">
                             <div v-if="(scope.row.isEdit || scope.row.isNew)">
                                 <el-date-picker
@@ -68,6 +70,26 @@
                           </div>   
                        
                     </div>
+                    
+                     <div v-else-if="v.type==='select'">
+                        <div>
+                            <el-select
+                                    placeholder="请输入内容"
+                                    v-model="scope.row[v.prop]"
+                                    :disabled=true
+                                    >
+                                        <el-option                          
+                                            v-for="items in currencyOptions"
+                                            :key="items.id"
+                                            :label="items.code"
+                                            :value="items.id"
+                                            :id="items.id"
+                                        />        
+                            </el-select>
+                        </div>
+                        
+                    </div>
+                    
                     <div v-else-if="v.type==='Input'&&v.belong==='customer'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input
@@ -80,6 +102,8 @@
                             {{scope.row[v.prop]}}
                         </div>
                     </div>
+                    
+                    
                     <div v-else-if="v.type==='Number'&&v.belong==='customer'">
                         <div v-if="scope.row.isEdit || scope.row.isNew">
                             <el-input-number
@@ -97,6 +121,8 @@
                     <div v-else>
                          {{scope.row[v.prop]}}
                     </div>
+                    
+                    
                 </template>
 </el-table-column>
 
@@ -104,34 +130,34 @@
     <template slot-scope="scope">                  
                         <!--新增行时显示的按钮-->
                         <div v-if="scope.row.isNew">
-                            <el-button type="text" :disabled="orderStatus==='5'" @click="saveNewLine(scope.row)">保存</el-button>
-                            <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveNewLine(scope.row)">取消</el-button>
+                            <el-button type="text" :disabled="orderStatus==='5'" @click="saveNewLine(scope.row)">{{$i.order.save}}</el-button>
+                            <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveNewLine(scope.row)">{{$i.order.cancel}}</el-button>
                         </div>
                         <div v-else>
                             <div v-if="scope.row[columns[11].prop]===10||scope.row[columns[11].prop]===30">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">保存</el-button>
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveLine(scope.row)">取消</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">{{$i.order.save}}</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveLine(scope.row)">{{$i.order.cancel}}</el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="confirmLine(scope.row)">确认</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="confirmLine(scope.row)">{{$i.order.confirm}}</el-button>
                                 </div>
                             </div>
                              <div v-else-if="scope.row[columns[11].prop]===20">
                                 <!--处在编辑状态-->
                                 <div v-if="scope.row.isEdit">
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">保存</el-button>
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveLine(scope.row)">取消</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="saveLine(scope.row)">{{$i.order.save}}</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="cancelSaveLine(scope.row)">{{$i.order.cancel}}</el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="changeLine(scope.row)">修改</el-button>
-                                    <el-button type="text" :disabled="orderStatus==='5'" @click="abandonLine(scope.row)">作废</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="changeLine(scope.row)">{{$i.order.modify}}</el-button>
+                                    <el-button type="text" :disabled="orderStatus==='5'" @click="abandonLine(scope.row)">{{$i.order.invalid}}</el-button>
                                 </div>
                             </div>
                             <!--作废时显示-->
                             <div v-else-if="scope.row[columns[11].prop]===-1">
-                                <el-button type="text" :disabled="orderStatus==='5'" @click="recoverLine(scope.row)">恢复</el-button>
+                                <el-button type="text" :disabled="orderStatus==='5'" @click="recoverLine(scope.row)">{{$i.order.restore}}</el-button>
                             </div>
                         </div>
                 </template>
@@ -140,20 +166,12 @@
 </div>
 </template>
 <script>
-    /*
-                                                                                                                                                                                                                        10:待采购商确认,20:待供应商确认,30:待服务商确认，40:已确认,-1:作废
-                                                                                                                                                                                                                         orderType :10 采购订单
-                                                                                                                                                                                                                        */
-    export default {
+export default {
         name: 'payment-table',
         props: {
-            btnInfo: {
-                type: String,
-                default: '申请付款'
-            },
             orderNo: {
                 type: String,
-                default: '999'
+//                default: '999'
             },
             //订单哪来的 
             currencyCode: {
@@ -269,7 +287,7 @@
                     {
                         label: 'currency',
                         prop: 'currency',
-                        type: 'Text',
+                        type: 'select',
                         width: 150,
                         belong: "customer", //............
                     },
@@ -285,7 +303,8 @@
                 orderType: 10,
                 type: '10', //10 付款  20退款
                 stopEdit: false,
-                currency:''
+                currency:'',
+                currencyOptions: [],
             }
         },
         methods: {
@@ -296,7 +315,9 @@
             }) {
                 if (row[this.columns[11].prop] === -1) {
                     return 'warning-row';
-                }
+                }else if(row[this.columns[11].prop] === 10){
+                    return 'light-row';   
+                         }
                 return '';
             },
             dunning() {
@@ -354,9 +375,11 @@
                      this.currency=33
                 }else if(this.currencyCode='USD'){
                     this.currency=154
-                }else if(this.currencyCode='EUR'){
+                }else if(this.currencyCode='HKD'){
                     this.currency=49
-               }
+               }else if(this.currencyCode='EUR'){
+                        this.currency=61 
+                        }
                 this.stopEdit = true;
                 this.$ajax.post(this.$apis.paymentGetNo, {}).then(
                     res => {
@@ -522,18 +545,28 @@
                 }).catch((res) => {
                     console.log(res)
                 })
+            },
+            get_currency(){
+                  this.$ajax.get(this.$apis.get_currency, '', '_cache')
+                    .then(res => {                     
+                        this.currencyOptions = res;                       
+                    }).catch(res=>{
+                      
+                  });
             }
         },
         created() {
             //            this.get_list()
             //把data备份，还原的时候emit到父组件进行还原
             this.copyData = this.copyArr(this.data);
+             
 
         },
         watch: {
             orderNo(val) {
                 if (val) {
                     this.get_list()
+                   this.get_currency()
                 }
             },
         }
@@ -544,7 +577,9 @@
     .el-table .warning-row {
         background: rgba(237, 237, 237, 0.5);
     }
-
+    .el-table .light-row {
+        background: #f0f9eb;
+    }
 </style>
 <style scoped>
     .speTable {

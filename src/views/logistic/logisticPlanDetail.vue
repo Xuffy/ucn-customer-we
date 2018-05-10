@@ -238,8 +238,13 @@ export default {
     },
     createdPlanData (res = this.oldPlanObject) {
       this.oldPlanObject = JSON.parse(JSON.stringify(res))
+      const stringArray = [
+        'payment',
+        'permitedForTransportation',
+        'blType'
+      ]
       this.basicInfoArr.forEach(a => {
-        a.value = res[a.key]
+        a.value = stringArray.includes(a.key) ? '' + res[a.key] : res[a.key]
       })
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
@@ -306,22 +311,26 @@ export default {
       array.splice(index, 1);
     },
     action (e, i) {
+      console.log(e, i)
       if (i === 3) return
       this.selectProductId = e.id.value
       this.productInfoModifyStatus = i
       this.showProductDialog = true
     },
     getProductHistory (productId) {
+      // console.log(productId, this.modifyProductArray)
       const modifyObj = this.modifyProductArray.find(a => a.id === this.selectProductId)
+      // console.log(modifyObj)
 
       this.productModifyList = this.$getDB(this.$db.logistic.productInfo, modifyObj ? [ modifyObj ] : [])
+
       this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
         this.productModifyList = [...this.productModifyList, ...this.$getDB(this.$db.logistic.productInfo, res.history)]
       })
     },
     addPayment () {
       const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
-      console.log(obj)
+
       this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
         edit: true,
         no: res,
@@ -332,28 +341,30 @@ export default {
     savePayment (i) {
       const currencyCode = this.paymentList[i].currencyCode
       const payToId = this.paymentList[i].payToId
+      const skuSupplierObj = this.selectArr.supplier.find(a => a.skuSupplierId === payToId)
 
       const paymentData = {
         ...this.paymentList[i],
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
         currencyCode,
-        orderNo: this.oldPlanObject.planNo,
+        orderNo: this.oldPlanObject.logisticsNo,
         orderType: 30,
         payToId,
-        payToName: this.selectArr.supplier.find(a => a.skuSupplierId === payToId).skuSupplierName,
+        payToName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
         type: 10
       }
 
       const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
-        this.updatePaymentWithView(i, false)
+        this.updatePaymentWithView({i, edit: false})
       })
     },
-    updatePaymentWithView ({ i, bool }) {
+    updatePaymentWithView ({ i, edit, status }) {
       const obj = {
         ...this.paymentList[i],
-        edit: bool
+        edit,
+        status: status || this.paymentList[i].status
       }
       this.$set(this.paymentList, i, obj)
     },
@@ -377,6 +388,8 @@ export default {
         a.blSkuName = ''
         a.hsCode = ''
         a.currency = ''
+        a.toShipCartonQty = ''
+        a.toShipQty = ''
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
 
@@ -385,6 +398,7 @@ export default {
       // TODO
     },
     selectProduct (arr) {
+      console.log(arr)
       this.selectProductArr = arr
     },
     removeProduct () {
@@ -395,6 +409,7 @@ export default {
       })
     },
     closeDialog () {
+      console.log(this.productModifyList)
       this.productModifyList = []
       // console.log(this.$refs.productModifyComponents)
     },

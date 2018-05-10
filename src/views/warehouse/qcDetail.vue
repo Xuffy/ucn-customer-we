@@ -190,20 +190,22 @@
             {{$i.warehouse.productInfo}}
         </div>
         <div class="product-info">
-            <div class="btn-group">
-                <el-button>{{$i.warehouse.confirmSKU}}</el-button>
-                <el-button>{{$i.warehouse.restartQc}}</el-button>
-                <el-button>{{$i.warehouse.rework}}</el-button>
-                <el-button>{{$i.warehouse.return}}</el-button>
-            </div>
             <v-table
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
                     :buttons="[{'label': 'Detail', type: 1}]"
                     @action="btnClick"
                     @change-checked="changeChecked"
-                    :totalRow="true"
-            />
+                    :totalRow="true">
+                <template slot="header">
+                    <div class="btn-group">
+                        <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="primary">{{$i.warehouse.rework}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="danger">{{$i.warehouse.return}}</el-button>
+                    </div>
+                </template>
+            </v-table>
 
         </div>
     </div>
@@ -280,6 +282,17 @@
             },
             changeChecked(e){
                 this.selectList=e;
+            },
+            confirm(){
+                let id=[];
+                this.selectList.forEach(v=>{
+                    id.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
+                    console.log(res)
+                }).catch(err=>{
+
+                });
             },
         },
         created(){

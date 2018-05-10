@@ -101,6 +101,7 @@
 
 <script>
     /* this.$ref.basicInfo*/
+     import { mapActions } from 'vuex'
     import VResponsibility from './responsibility'
     import VBasicinfo from './basicInfo'
     import VAttchment from './attachment'
@@ -328,6 +329,9 @@
             }
         },
         methods: {
+              ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             //获取字典表
             getDictionaries() {
                 this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
@@ -721,9 +725,16 @@
                 default:
                     console.log("裸进")
             }
+             this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
-            console.log(this.selectAll)
             this.getDictionaries()
         },
         watch: {
