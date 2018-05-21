@@ -22,7 +22,7 @@ export default {
   put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
-  post_qc_page:['/qc/page','UPURCHASE_URL','UPURCHASE_URL'],
+  post_qc_page:['/qc/page','BASE_BUY','UPURCHASE_URL'],
   post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据
@@ -38,6 +38,13 @@ export default {
 
   //user
   get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'], //获取当前登录用户所在企业下所有用户信息
-  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL']
+  get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL'],
+
+  //track
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','BASE_URL','BASE_URL'],
+
+  //companyInfo
+  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
+  // post_purchase_customer_address: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
 
 }

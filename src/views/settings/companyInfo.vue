@@ -20,10 +20,10 @@
                                 <el-select :disabled="summaryDisabled" class="speWidth" v-model="companyInfo[v.key]" placeholder="请选择">
                                     <el-option
                                             size="mini"
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
+                                            v-for="item in currencyOptions"
+                                            :key="item.code"
+                                            :label="item.name"
+                                            :value="item.code">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -382,9 +382,6 @@
         name: "companyInfo",
         data(){
             return{
-
-
-
                 summaryDisabled:true,
                 addressDialogVisible:false,
                 accountDialogVisible:false,
@@ -451,27 +448,7 @@
                 isModifyAddress:false,
                 isModifyAccount:false,
                 isModifyContact:false,
-
-
-
-                //下拉选择框假数据
-                options: [
-                    {
-                        value: '选项1',
-                        label: '黄金糕'
-                    }, {
-                        value: '选项2',
-                        label: '双皮奶'
-                    }, {
-                        value: '选项3',
-                        label: '蚵仔煎'
-                    }, {
-                        value: '选项4',
-                        label: '龙须面'
-                    }, {
-                        value: '选项5',
-                        label: '北京烤鸭'
-                    }],
+                currencyOptions:[],
             }
         },
         methods:{
@@ -480,12 +457,30 @@
                 this.companyInfo.address=[];
                 this.companyInfo.accounts=[];
                 this.companyInfo.concats=[];
-                this.$ajax.get(this.$apis.get_supplierWhole,{}).then(res=>{
+                this.$ajax.get(this.$apis.get_purchase_supplier,{id:1}).then(res=>{
                     this.companyInfo=res;
                 }).catch(err=>{
                     console.log(err)
                 });
             },
+          //获取币种
+          getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                console.log(res)
+                  this.currencyOptions = res
+              }).catch(err=>{
+                console.log(err)
+              });
+          },
+          //获取字典
+          getCodePart(){
+            this.$ajax.post(this.$apis.POST_CODE_PART,["customer type","country"]).then(res=>{
+              console.log(res)
+
+            }).catch(err=>{
+              console.log(err)
+            });
+          },
 
             //修改顶部简介信息
             modifySummary(){
@@ -732,7 +727,9 @@
             },
         },
         created(){
-            this.getWholeData();
+            // this.supplierWhole();
+               this.getWholeData();
+               this.getCurrency();
             console.log(this.$db,'db')
         },
         watch:{

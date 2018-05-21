@@ -5,35 +5,27 @@
             <!-- {{$t('track.page.trackBySKU')}} -->
         </div>
         <div class="body">
-            <v-table :data="dataList"></v-table>            
-            <!-- <v-simple-table
-                    class="speTable"
-                    :data.sync="dataList"
-                    :column="dataColumn"
-                    @sort-change="getSort"
-                    @page-change="pageChange">
-            </v-simple-table> -->
+            <!--<v-table :data="dataList"></v-table>-->
         </div>
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+  import { VTable } from '@/components/index'
 
     export default {
-        name: "track-bySKU",
+        name: "track-track",
         components:{
-            VSimpleTable
+          VTable
         },
         data(){
             return{
                 dataList: [],
-                dataColumn: [
-                    // {
-                    //     label:'id',
-                    //     props:'id'
-                    // },
-                ],
+                params:{
+                    pn: 1,
+                    ps: 10,
+                    skuNo: '',
+                }
             }
         },
         methods:{
@@ -44,16 +36,11 @@
                 console.log(val, key)
             },
             getList() {
-                this.ajax.get('/getTrackList').then((data)=>{
-                    this.dataList = data;
-                    this.dataColumn = this.$getTableColumn(data, 'track.tableData',{width:200});
-                })
-                // this.ajax.get('/getList').then((data) => {
-                //     this.dataList = data;
-                //     this.dataColumn = this.$getTableColumn(data, 'workbench.tableData');
-                //     console.log(this.dataList,'yyy');
-                //     console.log(this.dataColumn,'xxx');
-                // });
+              this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
+                  console.log(res)
+              }).catch(err=>{
+                console.log(err)
+              });
             }
         },
         created(){

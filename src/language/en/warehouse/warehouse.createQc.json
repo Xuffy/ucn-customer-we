@@ -11,5 +11,14 @@
   "confirmSKU":"Confirm SKU",
   "restartQc":"Restart QC",
   "rework":"Rework",
-  "return":"Return"
+  "return":"Return",
+
+
+
+  "serviceFill":"Service Fill",
+
+  "skuNameCustomer":"Sku Name Customer",
+  "skuMaterialCn":"Material (Cn)",
+  "skuMaterialEn":"Material (En)",
+  "skuDescCn":"SKU Description in Chinese"
 }
