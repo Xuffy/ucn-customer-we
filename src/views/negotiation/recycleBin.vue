@@ -4,15 +4,13 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
-                <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button>
+                <!-- <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button> -->
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
-            :buttons="buttonsFn" 
-            @action="action"
             @change-checked="changeChecked"
             :height="350"
             :page-total="pageTotal"

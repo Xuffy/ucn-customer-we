@@ -90,7 +90,8 @@
         },
         methods: {
             ...mapActions([
-                'setDic'
+                'setDic',
+                'setRecycleBin'
             ]),
             handleSizeChange(val) {
                 this.bodyData.pn = val;
@@ -214,7 +215,14 @@
                 case 'inquiry':
                     this.title = this.$i.common.inquiryDraft
                     break;
-            }
+            };
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         }
     }
 </script>
