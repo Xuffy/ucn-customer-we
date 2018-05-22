@@ -1,8 +1,11 @@
 <template>
-  <div class='ucn-upload'>
+  <div class='ucn-upload small'>
     <p class="upload-btn">
       <i class="el-icon-plus"></i>
-      <input class="upload-file" type="file" multiple="multiple" ref="upload" @change="uploadFile"/>
+      <input v-if="limit === 1" class="upload-file" type="file" ref="upload"
+             @change="uploadFile"
+             v-bind="{multiple:limit !== 1}"
+             :accept="onlyImage ? 'image/*' : ''"/>
     </p>
     <!--<el-button type="primary" @click="uploadFile">主要按钮</el-button>-->
     <ul class="upload-list">
@@ -33,13 +36,24 @@
   import OSS from 'ali-oss';
   import co from 'co';
 
-  /*const urllib = aliOSS.urllib;
-  const OSS = aliOSS.Wrapper;
-  const STS = OSS.STS;*/
+  const imageType = ['JPG', 'PNG'];
 
   export default {
     name: 'VUpload',
-    props: {},
+    props: {
+      limit: {
+        type: Number,
+        default: 1,
+      },
+      onlyImage: {
+        type: Boolean,
+        default: false,
+      },
+      size: {
+        type: String,
+        default: 'normal' // normal 、small
+      }
+    },
     components: {},
     data() {
       return {
@@ -53,9 +67,6 @@
     mounted() {
     },
     methods: {
-      clickUpload() {
-        this.applyTokenDo();
-      },
       uploadFile() {
         this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
@@ -66,12 +77,17 @@
             _.indexOf(fileNames, val.name) === -1 && this.startUpload(client, val);
           });
 
+          this.$refs.upload.value = '';
         });
       },
       startUpload(client, files) {
         let _this = this
           , uid = _this.$getUUID()
           , fileKey = `${uid}/${files.name}`;
+
+        if (_.values(_this.fileList).length >= this.limit) {
+          return this.$message.warning(`只能上传${this.limit}个文件`);
+        }
 
         _this.$set(_this.fileList, uid, _.extend({
           fileKey,
@@ -123,8 +139,7 @@
       },
       filterType(name) {
         let ns = name.split('.')
-          , param = {}
-          , types = ['JPG', 'PNG'];
+          , param = {};
 
         if (ns.length > 1) {
           param.showType = ns.pop().toLocaleUpperCase();
@@ -133,7 +148,7 @@
           param.showName = ns[0];
         }
 
-        if (_.indexOf(types, param.showType) !== -1) {
+        if (_.indexOf(imageType, param.showType) !== -1) {
           param.isImage = true;
         }
 
@@ -161,6 +176,11 @@
     position: relative;
     vertical-align: middle;
     display: inline-block;
+  }
+
+  .ucn-upload.small .upload-btn{
+    width: 50px;
+    height: 50px;
   }
 
   .upload-btn > i {
@@ -197,6 +217,11 @@
     position: relative;
     vertical-align: middle;
     box-sizing: border-box;
+  }
+
+  .ucn-upload.small .upload-list > li {
+    width: 50px;
+    height: 50px;
   }
 
   .delete-box {
