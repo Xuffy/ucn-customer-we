@@ -4,15 +4,13 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
-                <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button>
+                <!-- <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button> -->
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
-            :buttons="[{label: 'Detail', type: 'detail'}]" 
-            @action="action"
             @change-checked="changeChecked"
             :height="350"
             :page-total="pageTotal"
@@ -21,6 +19,7 @@
 </template>
 <script>
     import { VTable, selectSearch } from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name:'',
         data() {
@@ -65,13 +64,27 @@
             'v-table': VTable
         },
         methods: {
+            ...mapActions([
+                'setDic'
+            ]),
+            buttonsFn() {
+                if(this.$route.params.type === 'inquiry') return [{label: 'Detail', type: 'detail'}];
+            },
             getInquiryList() { // 获取inquirylist
                 this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false; 
+
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.tabLoad = false;
+                        this.searchLoad = false;
+                    });
+                     
                 })
                 .catch(() => {
                     this.searchLoad = false; 
@@ -95,7 +108,27 @@
                 this.bodyData.keyType = item.keyType;
             },
             action(item, type) { //操作表单 action
-                
+                switch(this.$route.params.type) {
+                    case 'compare':
+                        this.$router.push({
+                            name: 'negotiationCompareDetail',
+                            query: {
+                                id: item.id.value
+                            },
+                            params: {
+                                type: 'only'
+                            }
+                        })
+                        break;
+                    case 'inquiry':
+                        this.$router.push({
+                            path: '/negotiation/inquiryDetail',
+                            query: {
+                                id: item.id.value
+                            }
+                        })
+                        break;
+                }
             },
             changeChecked(item) { //选中的list
                 let arr = [];
@@ -140,10 +173,10 @@
             submit() { //删除恢复
                 switch(this.$route.params.type) {
                     case 'inquiry':
-                        this.actionInquiry('restore');
+                        this.actionInquiry('revert');
                         break;
                     case 'compare':
-                        this.actionCompare('restore');
+                        this.actionCompare('revert');
                         break;
                 }
             },

@@ -1,7 +1,7 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplierBookmark}}            
+             {{$i.supplier.recycleBin}}            
 <!--            <el-button @click="switchDisplay" class="title-btn" type="text">{{btnInfo}}</el-button>-->
         </div>
 <!--        搜索条件-->
@@ -47,7 +47,7 @@
             <div>
              <div class="btnline">
                    <el-button  :disabled='!selectedData.length>0' @click='recycle'>{{$i.common.recover}}({{selectedNumber.length}})</el-button>
-                  <el-button  :disabled='!selectedData.length>0' >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
+<!--                  <el-button  :disabled='!selectedData.length>0' >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
               </div>  
               <div>
                  
@@ -89,10 +89,10 @@
                 parms: {
                     conditions: {},
                     description: "",
-                    mainBusiness: [],
+//                    mainBusiness: [],
                     name: '',
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     skuCode: "",
                     skuNameEn: "",
                     type: '',

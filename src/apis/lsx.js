@@ -2,7 +2,8 @@ export default {
     //获取category
     get_buyer_sys_category: ['/purchase/sys/category', 'BASE_BUY','UPURCHASE_URL'],
     get_buyer_my_category:['/purchase/category/tree','BASE_BUY','UPURCHASE_URL'],
-    get_supply_category:['/sys/category','BASE_CS','USUPPLY_URL'],
+    get_supply_category:['/sys/category','BASE_SELL','USUPPLY_URL'],
+    get_supply_my_category:['/category/tree','BASE_SELL','USUPPLY_URL'],
 
 
     get_productCategory:['/purchase/sys/category','BASE_BUY','UPURCHASE_URL'],
@@ -35,17 +36,13 @@ export default {
     /**
      * seller product
      * */
-    add_newSKU: ['/sku', 'BASE_CS','USUPPLY_URL'],
+    add_newSKU: ['/sku', 'BASE_SELL','USUPPLY_URL'],
     set_sellerProductPutAway:['/sku/putaway','BASE_SELL','USUPPLY_URL'],
     set_sellerProductPutDown:['/sku/soldout','BASE_SELL','USUPPLY_URL'],
     delete_sellerProduct:['/sku/deleteAll','BASE_SELL','USUPPLY_URL'],
-
-
-
-
-    //product supplier
-    get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_CS','USUPPLY_URL'],
-
+    get_sellerCustomer:['/supplier/sku/setting/listCustomers','BASE_SELL','USUPPLY_URL'],
+    get_sellerCustomerGroup:['/supplier/sku/setting/getCustomerByIds','BASE_SELL','USUPPLY_URL'],
+    update_buyerProductDetail:['/sku/{id}','BASE_SELL','USUPPLY_URL'],
 
 
     //product buyer
@@ -69,23 +66,26 @@ export default {
     delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_BUY','UPURCHASE_URL'],
     recover_buyerProductBookmark:['/purchase/sku/recoverBookmark','BASE_BUY','UPURCHASE_URL'],
 
+
+
+
     /**
      * seller warehouse
      * */
     get_inboundData:['/inbound/page','BASE_SELL','USUPPLY_URL'],
-    get_productInfo:['/order/skuListPage','BASE_BUY','UPURCHASE_URL'],
+    get_productInfo:['/order/skuListPage','BASE_SELL','USUPPLY_URL'],
     get_inboundDetail:['/inbound/getById','BASE_SELL','USUPPLY_URL'],
     add_inbound:['/inbound/add','BASE_SELL','USUPPLY_URL'],
     // get_productInfo:['/order/skuListPage','BASE_BUYER'],
     get_warehouseOrderData:['/order/skus','BASE_SELLER','UPURCHASE_URL'],
     get_qcOrderData:['/qc/page','USUPPLY_URL','USUPPLY_URL'],
     get_warehouseOverviewData:['/warehouse/overview/page','BASE_SELL','USUPPLY_URL'],
-    get_orderSku:['/order/getAllOrderInfo','BASE_BUY','UPURCHASE_URL'],
+    get_orderSku:['/order/getAllOrderInfo','BASE_SELL','USUPPLY_URL'],
     get_inboundSku:['/inbound/sku/page','BASE_SELL','USUPPLY_URL'],
 
     get_outboundData:['/outbound/page','BASE_SELL','USUPPLY_URL'],
     add_outbound:['/outbound/add','BASE_SELL','USUPPLY_URL'],
-
+    get_outboundProductData:['/inbound/sku/queryForOutbound','BASE_SELL','USUPPLY_URL'],
 
     /**
      * buyer Warehouse
@@ -104,7 +104,19 @@ export default {
     POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
     get_qcDetail:['/qc/getById','BASE_BUY','UPURCHASE_URL'],
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
+    get_buyerWarehouseOverview:['/warehouse/overview/page','BASE_BUY','UPURCHASE_URL'],
+    set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
 
+
+
+    /**
+     * service warehouse
+     * */
+    get_serviceQcOrder:['/qc/page','BASE_SERVICE','USERVICE_URL'],
+    get_serviceOrderDetail:['/qc/getById','BASE_SERVICE','USERVICE_URL'],
+    get_serviceQcOrderProduct:['/qc/detail/page','BASE_SERVICE','USERVICE_URL'],
+    get_serviceQcSurveyor:['/user/list','UUSER_URL','UUSER_URL'],
+    save_serviceQcOrder:['/qc/result/save','BASE_SERVICE','USERVICE_URL'],
 
 
     /**
@@ -113,4 +125,5 @@ export default {
     get_currencyUnit:['/currency/all','UMETA_URL','UMETA_URL'],
     get_country:['/country/all','UMETA_URL','UMETA_URL'],
     get_partUnit:['/code/part','UMETA_URL','UMETA_URL'],
+    get_allUnit:['/code/all','UMETA_URL','UMETA_URL']
 }

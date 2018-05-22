@@ -28,9 +28,10 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.containerType" width="140" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.containerType" placeholder="请选择" >
+            <el-select v-model="scope.row.containerType" placeholder="请选择" v-if="edit">
               <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
             </el-select>
+            <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120"align="center">

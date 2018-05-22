@@ -4,14 +4,13 @@
 
 export const basicInfoInput = [
   'logisticsNo',
-  'logisticsStatus',
   'shipServiceProvider',
   'receiptCompany',
   'shippingAgent',
-  'paymentTerms',
+  'paymentTerm',
   'loadingType',
-  'blQuantity',
-  'blNumber',
+  'blQty',
+  'blNo',
   'shipper',
   'consignee',
   'notify',
@@ -27,6 +26,7 @@ export const basicInfoInput = [
 ]
 
 export const basicInfoSelector = [
+  'logisticsStatus',
   'exchangeCurrency',
   'payment',
   'permitedForTransportation',
@@ -54,7 +54,8 @@ export const basicInfoDate = [
 
 export const disabledFields = [
   'logisticsNo',
-  'customerName'
+  'customerName',
+  'logisticsStatus'
 ]
 
 export const basicInfoObj = {
@@ -65,7 +66,7 @@ export const basicInfoObj = {
   estArrivalDate: '',
   estReleaseDate: '',
   estDelivaryDate: '',
-  logisticsStatus: '',
+  logisticsStatus: '1',
   createDate: '',
   declareDate: '',
   bookingDate: '',
@@ -81,13 +82,14 @@ export const basicInfoObj = {
   shippingAgent: '',
   exchangeCurrency: '',
   payment: '',
-  paymentTerms: '',
+  paymentTerm: '',
   transportationWay: '',
   loadingType: '',
   permitedForTransportation: '',
   blType: '',
-  blQuantity: '',
-  blNumber: '',
+  // blQuantity: '',
+  blQty: '',
+  blNo: '',
   shipper: '',
   consignee: '',
   notify: ''

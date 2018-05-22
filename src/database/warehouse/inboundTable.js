@@ -2,8 +2,8 @@ export default {
     id:{
         _hide:true
     },
-    inboundNo:{
-
+    inboundNoCn:{
+        key:'inboundNo'
     },
     inboundDate:{},
     warehouseNo:{},

@@ -6,6 +6,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css';
 import {Message} from 'element-ui';
 import _config from './config';
+import $i from '../language/index';
 import {localStore, sessionStore} from 'service/store';
 
 /**
@@ -36,8 +37,8 @@ const validate_error = (code, msg) => {
 
   }
 
-  Message.warning(msg || '数据返回异常，请重试！');
-  throw new Error(`${msg || '数据返回异常，请重试！'}`);
+  Message.warning(msg || $i.hintMessage.dataException);
+  throw new Error(`${msg || $i.hintMessage.dataException}`);
 }
 
 
@@ -120,7 +121,7 @@ const $ajax = (config) => {
         case 'DELETE':
           return axios.delete(_options.url);
         case 'PUT':
-          return axios.put(_options.url, options.data, config);
+          return axios.put(_options.url, options.data, _options);
         default:
           return axios(_options);
       }
@@ -208,7 +209,7 @@ axios.interceptors.request.use(config => {
 
   if (!config.headers['U-Session-Token'] && !config._noAuth && _config.AUTH) {
     Message({
-      message: '登录失效，请重新登录',
+      message: $i.hintMessage.loginExpired,
       type: 'warning',
       customClass: 'set-top',
       duration: 2000,
@@ -224,7 +225,7 @@ axios.interceptors.request.use(config => {
   return config
 }, error => {
   NProgress.done();
-  Message.warning('请求异常，请重试！');
+  Message.warning($i.hintMessage.requestException);
   Promise.reject(error);
 });
 
@@ -274,7 +275,7 @@ axios.interceptors.response.use(
 
   },
   error => {
-    Message.warning(_.isObject(error) || !error ? '网络异常，请稍后重试！' : error);
+    Message.warning(_.isObject(error) || !error ? $i.hintMessage.networkException : error);
     NProgress.done();
     return Promise.reject(error)
   }

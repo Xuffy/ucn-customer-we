@@ -1,14 +1,16 @@
 <template>
   <div class="inquiry">
-    <h3 class="hd"></h3>
+      <div class="title">
+          <span>{{$i.warehouse.qcOverview}}</span>
+      </div>
     <div class="status">
       <div class="state">
         <span>{{ $i.common.qcStatus }}</span>
-        <el-radio-group v-model="params.qcStatusDictCode" @change="getQcOrderList">
-          <el-radio-button label="">{{$i.common.all}}</el-radio-button>
-          <el-radio-button label="WAITING_QC">{{$i.common.waitingQC}}</el-radio-button>
-          <el-radio-button label="COMPLETED_QC">{{$i.common.completedQC}}</el-radio-button>
-        </el-radio-group>
+
+          <el-radio-group class="radios" @change="getQcOrderList" v-model="params.qcStatusDictCode" size="mini">
+              <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
+              <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
+          </el-radio-group>
       </div>
       <div style="float: right">
         <select-search
@@ -19,24 +21,28 @@
         />
       </div>
     </div>
-    <div class="fn">
-      <div class="btn-wrap">
-        <el-button @click='download'>{{($i.common.downloadBig)}}({{selectList.length?selectList.length:'All'}})</el-button>
-        <el-button @click="createQcOrder">{{ $i.common.create }}</el-button>
-      </div>
-    </div>
-    <v-table
-      :data="tabData"
-      :loading='loading'
-      :buttons="[{label: 'Detail', type: 1}]"
-      @action="onAction"
-      @change-checked='checked'
-    />
-    <v-pagination
-      :page-data.sync="params"
-      @change="handleSizeChange"
-      @size-change="pageSizeChange"
-    />
+      <v-table
+              :data="tabData"
+              :loading='loading'
+              :buttons="[{label: 'Detail', type: 1}]"
+              @action="onAction"
+              @change-checked='checked'
+      >
+          <template slot="header">
+              <div class="fn">
+                  <div class="btn-wrap">
+                      <el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>
+                      <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
+                  </div>
+              </div>
+          </template>
+      </v-table>
+      <v-pagination
+              :page-data.sync="params"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"
+      />
+
   </div>
 </template>
 <script>
@@ -53,6 +59,7 @@
       return{
         name:'',
         value:'',
+          qcStatusOption:[],
         options: [{
           id: 1,
           label: 'QC Order No'
@@ -138,16 +145,46 @@
         this.$windowOpen({
           url:'/warehouse/createQc'
         })
-      }
+      },
+
+        /**
+         * 获取单位
+         * */
+        getUnit(){
+            this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
+                this.qcStatusOption=res[0].codes;
+                // this.qcStatusOption.forEach(v=>{
+                //     if(v.code==='1'){
+                //         v.label='已验货';
+                //     }else if(v.code==='2'){
+                //         v.label='待验货';
+                //     }
+                // })
+            }).catch(err=>{
+
+            });
+        },
 
     },
     created(){
       this.getQcOrderList();
+      this.getUnit();
     },
   }
 </script>
 
 <style scoped>
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+        margin-bottom: 5px;
+    }
+    .radios{
+        margin-left: 10px;
+    }
   .head-list{
     margin-bottom: 10px;
   }
@@ -179,7 +216,7 @@
   .fn {
     display:flex;
     justify-content:space-between;
-    padding:10px 15px;
+    padding:10px 0;
     box-sizing: border-box;
   .viewBy {
     display:flex;

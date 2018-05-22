@@ -71,7 +71,7 @@
             <v-table
                     :loading="loadingTable"
                     :data="tableDataList"
-                    :buttons="[{label: 'Detail', type: 1}]"
+                    :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick">
               <template slot="header">
@@ -729,6 +729,7 @@
         height: 32px;
         line-height: 32px;
         color:#666666;
+        margin-bottom: 5px;
     }
 
     .title-btn{

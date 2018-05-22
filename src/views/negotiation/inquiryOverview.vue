@@ -17,17 +17,17 @@
             </div>
             <select-search
                 :options="options"
-                @inputChange="inputEnter"
+                @inputEnter="inputEnter"
                 :searchLoad="searchLoad"
             />
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2 ? false : true">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})">{{ $i.common.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" :disabled="checkedData.length && checkedData && params.status+'' !== '99' && params.status+'' !== '1' ? false : true">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" :disabled="checkedData.length && checkedData && params.status !== null && params.status+'' !== '22' && params.status+'' !== '21' ? false : true">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button :disabled="tabData.length <= 0?true:false">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="toCompare" :disabled="checkedData.length >= 2?false:true" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
+                <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -96,9 +96,7 @@
                     recycleCustomer: false
                     //recycleSupplier
                 },
-                tabLoad:false,
-                pageTotal: 0,
-                _id: ''
+                tabLoad:false
             }
         },
         components: {
@@ -138,11 +136,12 @@
         methods: {
             ...mapActions([
                 'setDraft',
-                'setRecycleBin'
+                'setRecycleBin',
+                'setDic'
             ]),
             inputEnter(val) {
-                if(!val.keyType) return this.$message('请选中搜索类型');
-                if(!val.key) return this.$message('搜索内容不能为空');
+                if(!val.keyType) return this.$message(this.$i.common.pleaseSelectTheSearchType);
+                if(!val.key) return this.$message(this.$i.common.canTBeEmpty);
                 this.params.keyType = val.keyType;
                 this.params.key = val.key;
                 this.searchLoad = true;
@@ -160,11 +159,20 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                    this.checkedData = [];
-                    this.tabData = this.$getDB(column, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false;
-                    this.checkedData = [];
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], '_cache')
+                    .then(data => {
+                        this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
+                        .then(datas => {
+                            data.push({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: datas});
+                            this.setDic(data);
+                            this.tabData = this.$getDB(column, res.datas, (item) => {
+                                this.$filterDic(item);
+                            });
+                            this.tabLoad = false;
+                            this.searchLoad = false;
+                            this.checkedData = [];
+                        });
+                    });
                 })
                 .catch(() => {
                     this.searchLoad = false;
@@ -175,18 +183,13 @@
                 this.ajaxInqueryAction('cancel')
             },
             deleteInquiry() { //删除询价单
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.ajaxInqueryAction('delete');
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                })
             },
             ajaxInqueryAction(type) {
                 const argId = this.getChildrenId();

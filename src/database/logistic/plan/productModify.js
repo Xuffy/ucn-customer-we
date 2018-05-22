@@ -3,6 +3,10 @@ export default {
     type: 'text',
     _hide: true
   },
+  "vId": {
+    type: 'text',
+    _hide: true
+  },
   "entryDt": {
     type: 'text'
   },
@@ -30,10 +34,10 @@ export default {
   "blSkuName": {
     type: 'text'
   },
-  "customDeclarationNameCn": {
+  "skuCustomsNameCn": {
     type: 'text'
   },
-  "customDeclarationNameEn": {
+  "skuCustomsNameEn": {
     type: 'text'
   },
   "hsCode": {
@@ -42,19 +46,19 @@ export default {
   "reportElement": {
     type: 'text'
   },
-  "supplierName": {
+  "skuSupplierName": {
     type: 'text'
   },
-  "supplierCode": {
+  "skuSupplierCode": {
     type: 'text'
   },
-  "customerSkuCode": {
+  "skuCustomerSkuCode": {
     type: 'text'
   },
   "factorySkuCode": {
     type: 'text'
   },
-  "unit": {
+  "skuUnit": {
     type: 'text'
   },
   "unitExportPrice": {
@@ -66,34 +70,35 @@ export default {
   "currency": {
     type: 'text'
   },
-  "outerCartonQty": {
+  "skuOuterCartonQty": {
     type: 'text'
   },
-  "outerCartonLenth": {
+  "skuOuterCartonLength": {
     type: 'text'
   },
-  "outerCartonWidth": {
+  "skuOuterCartonWidth": {
     type: 'text'
   },
-  "outerCartonHeight": {
+  "skuOuterCartonHeight": {
     type: 'text'
   },
-  "outerCartonNetWeight": {
+  "skuOuterCartonNetWeight": {
     type: 'text'
   },
-  "outerCartonGrossWeight": {
+  "skuOuterCartonRoughWeight": {
     type: 'text'
   },
-  "outerCartonVolume": {
+  "skuOuterCartonVolume": {
     type: 'text'
   },
-  "shippingMarks": {
+  "skuShippingMarks": {
     type: 'text'
   },
-  "outerCartonBarCode": {
+  "skuOuterCartonBarCode": {
     type: 'text'
   },
-  "outerCartonSkuCode": {
+  "skuOuterCartonCode": {
     type: 'text'
   }
 }
+

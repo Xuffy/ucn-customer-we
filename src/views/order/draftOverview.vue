@@ -34,9 +34,12 @@
           :loading='loading'
           :pageTotal='pageTotal'
           @change-checked='checked'
-          @page-size-change(size)='pagesizechange'
-          @page-change(page)='pagechange'
-           style='marginTop:10px'/>     
+           style='marginTop:10px'/> 
+            <v-pagination
+            :page-data.sync="params"
+             @change="handleSizeChange"
+            @size-change="pageSizeChange"
+        />     
     </div>
 </template>
 <script>
@@ -46,10 +49,11 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+import { mapActions } from 'vuex'
     import {
         dropDown,
-        selectSearch
+        selectSearch,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -59,7 +63,8 @@
         components: {
             dropDown,
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         data() {
             return {
@@ -84,14 +89,18 @@
                     orderNo: '',
                     skuCode: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
-                    pn: 1
+                    ps: 50,
+                    pn: 1,
+                    tc:0
                 },
                 selectedDate: [],
                 selectedNumber: []
             }
         },
         methods: {
+               ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -187,6 +196,7 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.get_draft_orderlist, this.params)
                     .then((res) => {
+                      res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.loading = false
                         this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
@@ -199,13 +209,29 @@
                         this.loading = false
 
                     });
-            }
+            },
+              handleSizeChange(val) {
+                this.params.pn = val;
+                this.getdata()
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getdata()
+            },
         },
         computed: {
 
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false

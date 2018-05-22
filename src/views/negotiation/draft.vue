@@ -8,6 +8,18 @@
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
+        <div class="fn">
+            <div class="btn-wrap">
+                
+            </div>
+            <div class="viewBy">
+                <span>{{ $i.common.viewBy }}&nbsp;</span>
+                <el-radio-group v-model="viewByStatus"  size="mini">
+                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
+                </el-radio-group>
+            </div>
+        </div>
         <v-table 
             :data="tabData" 
             :loading="tabLoad"
@@ -26,10 +38,12 @@
 </template>
 <script>
     import { VTable, selectSearch, VPagination } from '@/components/index';
+    import { mapActions } from 'vuex';
     export default {
         name:'',
         data() {
             return {
+                viewByStatus: '0',
                 title: '',
                 pageTotal:0,
                 checkedArg: [],
@@ -75,6 +89,10 @@
             'v-pagination': VPagination
         },
         methods: {
+            ...mapActions([
+                'setDic',
+                'setRecycleBin'
+            ]),
             handleSizeChange(val) {
                 this.bodyData.pn = val;
             },
@@ -82,16 +100,28 @@
                 this.bodyData.ps = val;
             },
             getInquiryList() { //获取inquirylist
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
+                let url, column;
+                this.tabLoad = true;
+                if(this.viewByStatus + '' === '0') {
+                    url = this.$apis.POST_INQIIRY_LIST;
+                    column = this.$db.inquiry.viewByInqury;
+                } else {
+                    url = this.$apis.POST_INQIIRY_LIST_SKU;
+                    column = this.$db.inquiry.viewBySKU;
+                };
+                this.$ajax.post(url, this.bodyData)
                 .then(res => {
-                    this.bodyData.tc = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
-                    this.tabLoad = false;
-                    this.searchLoad = false; 
-                })
-                .catch(() => {
-                    this.searchLoad = false; 
-                    this.tabLoad = false;
+                    res.tc ? this.bodyData.tc = res.tc : this.bodyData.tc = this.bodyData.tc;
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    .then(data => {
+                        this.setDic(data);
+                        this.tabData = this.$getDB(column, res.datas, (item) => {
+                            this.$filterDic(item);
+                        });
+                        this.checkedArg = [];
+                        this.tabLoad = false;
+                        this.searchLoad = false;
+                    });
                 })
             },
             searchEnter(item) { // 搜索框
@@ -108,9 +138,15 @@
             },
             changeChecked(item) { //选中的list
                 let arr = [];
-                item.forEach(item => {
-                    arr.push(item.id.value);
-                });
+                if(this.viewByStatus === '0') {
+                    item.forEach(item => {
+                        arr.push(item.id.value);
+                    });
+                } else {
+                    tem.forEach(item => {
+                        arr.push(item.inquiryId.value);
+                    });
+                }
                 this.checkedArg = arr;
             },
             getList() {
@@ -145,13 +181,13 @@
                 })
                 .then(res => {
                     this.getInquiryList();
-                    this.checkedData = [];
+                    this.checkedArg = [];
                 });
             },
             deleteList() { //删除
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     switch(this.$route.params.type) {
@@ -159,12 +195,7 @@
                             this.actionInquiry('delete');
                             break;
                     }
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+                })
             }
         },
         watch: {
@@ -173,6 +204,9 @@
                     this.getList();
                 },
                 deep: true
+            },
+            viewByStatus(){
+                this.getList();
             }
         },
         created() {
@@ -181,7 +215,14 @@
                 case 'inquiry':
                     this.title = this.$i.common.inquiryDraft
                     break;
-            }
+            };
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         }
     }
 </script>
@@ -206,6 +247,32 @@
                 align-items: center;
                 span {
                     font-size:14px;
+                }
+            }
+        }
+        .fn {
+            display:flex;
+            justify-content:space-between;
+            padding:10px 15px;
+            box-sizing: border-box;
+            .viewBy {
+                display:flex;
+                align-items: center;
+                span {
+                    font-size:14px;
+                    color:#666;
+                }
+                button {
+                    cursor: pointer;
+                    padding:2px 5px;
+                }
+                .set {
+                    cursor: pointer;
+                    padding-left:18px;
+                    color:#999;
+                    i {
+                        font-size:25px;
+                    }
                 }
             }
         }

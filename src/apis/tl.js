@@ -47,6 +47,11 @@ export default {
     BUYER_POST_INQUIRY_SKUS: ['/inquiry/skus', 'USUPPLY_URL', 'USUPPLY_URL'], // sku 转换接口
     BUYER_POST_INQUIRY_ACTION: ['/inquiry/action', 'USUPPLY_URL', 'USUPPLY_URL'], // 操作
     BUYER_GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'USUPPLY_URL', 'USUPPLY_URL'],
+
+    /**
+     * 服务端
+    */
+   
     /**
      * 获取采购端 公共接口
     */
@@ -55,5 +60,6 @@ export default {
     ITEMFAVORITE_UPDATE: ['/itemfavorite/update', 'UMETA_URL', 'UMETA_URL'],
     POST_CODE_PART: ['/code/part', 'UMETA_URL', 'UMETA_URL'],
     POST_LOGISTICSPORT_QUERY: ['/logisticsport/query', 'UMETA_URL', 'UMETA_URL'],
-    GET_COUNTRY_ALL: ['/country/all', 'UMETA_URL', 'UMETA_URL']
+    GET_COUNTRY_ALL: ['/country/all', 'UMETA_URL', 'UMETA_URL'],
+    GET_CURRENCY_ALL: ['/currency/all', 'UMETA_URL', 'UMETA_URL']
 }

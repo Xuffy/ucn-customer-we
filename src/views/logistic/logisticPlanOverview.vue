@@ -17,9 +17,22 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-        <el-button type="danger" :disabled="!!viewBy || !selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button>
+        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button>
+        </div>
+        <div v-if="pageType === 'draft'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button>{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
+        </div>
+        <div v-if="pageType === 'archive'">
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
+        </div>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -36,16 +49,13 @@
     :loading="tableLoading"
     ref="tab"
     />
-    <v-pagination :page-data.sync="pageParams" @page-size-change="sizeChange" @page-change="pageChange"/>
+    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
 </div>
 </template>
 <script>
 import { selectSearch, VTable, VPagination } from '@/components/index';
 export default {
   name: 'logisticPlanOverview',
-  props: {
-    pageType: String
-  },
   data () {
     return {
       tableLoading: false,
@@ -77,6 +87,12 @@ export default {
         loadingList: this.$i.logistic.loadingListOverview,
         draft: this.$i.logistic.draftOverview,
         archive: this.$i.logistic.archiveOverview
+      },
+      jumpPage: {
+        plan: 'planDetail',
+        loadingList: 'planDetail',
+        draft: 'planDraftDetail',
+        archive: '',
       },
       urlObj: {
         plan: {
@@ -124,6 +140,29 @@ export default {
             url: this.$apis.get_loading_list_sku,
             db: this.$db.logistic.sku
           }
+        },
+        draft: {
+          plan: {
+            key: 0,
+            label: 'plan',
+            text: this.$i.logistic.plan,
+            url: this.$apis.gei_plan_list,
+            db: this.$db.logistic.planList
+          },
+          transportation: {
+            key: 1,
+            label: 'transportation',
+            text: this.$i.logistic.transportationUnit,
+            url: this.$apis.get_transportation_list,
+            db: this.$db.logistic.transportationList
+          },
+          sku: {
+            key: 2,
+            label: 'sku',
+            text: this.$i.logistic.sku,
+            url: this.$apis.get_sku_list,
+            db: this.$db.logistic.sku
+          }
         }
       }
     }
@@ -140,6 +179,12 @@ export default {
     },
     pageType () {
       this.fetchData()
+    }
+  },
+  computed: {
+    pageType () {
+      const arr = this.$route.fullPath.split('/')
+      return arr[arr.length - 1]
     }
   },
   mounted () {
@@ -187,7 +232,7 @@ export default {
       this.selectCount = arr
     },
     action (e) {
-      this.$router.push({path: '/logistic/planDetail', query: {id: e.id.value}})
+      this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
     },
     searchFn (obj) {
       const { pn, ps } = this.pageParams
@@ -211,6 +256,7 @@ export default {
       this.tableLoading = true
       const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
+      this.pageType === 'draft' && (this.pageParams.planStatus = 1)
       this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
         if (!res) return (this.tableLoading = false)
         this.tabData = this.$getDB(db, res.datas, item => {

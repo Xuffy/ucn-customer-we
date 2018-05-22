@@ -5,9 +5,9 @@
             <div class="btn-wrap">
                 <span>Status&nbsp</span>
                       <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label=" ">{{($i.common.all)}}</el-radio-button>
-                            <el-radio-button label="1"> {{ $i.common.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="2">{{($i.common.TBCBySupplier)}}</el-radio-button>
+                            <el-radio-button label="">{{($i.common.all)}}</el-radio-button>
+                            <el-radio-button label="2"> {{ $i.common.TBCByCustomer }}</el-radio-button>
+                            <el-radio-button label="1">{{($i.common.TBCBySupplier)}}</el-radio-button>
                             <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
                             <el-radio-button label="4">{{($i.common.finish)}}</el-radio-button>
                             <el-radio-button label="5">{{($i.common.cancel)}}</el-radio-button>
@@ -26,7 +26,7 @@
                 <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
                 <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
+<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>
@@ -45,9 +45,12 @@
           :loading='loading'
           :pageTotal='pageTotal'
           @change-checked='checked'
-          @page-size-change(size)='pagesizechange'
-          @page-change(page)='pagechange'
-           style='marginTop:10px'/>     
+           style='marginTop:10px'/>  
+         <v-pagination
+            :page-data.sync="params"
+             @change="handleSizeChange"
+            @size-change="pageSizeChange"
+        />   
     </div>
 </template>
 <script>
@@ -57,10 +60,11 @@
      * @param options 下拉框 原始数据 
      * @param value 下拉框 选中值
      */
-
+    import { mapActions } from 'vuex'
     import {
         dropDown,
-        selectSearch
+        selectSearch,
+        VPagination
     } from '@/components/index'
     import {
         VTable
@@ -70,7 +74,8 @@
         components: {
             dropDown,
             VTable,
-            selectSearch
+            selectSearch,
+            VPagination
         },
         data() {
             return {
@@ -96,14 +101,18 @@
                     skuCode: '',
                     status: '',
                     view: 1, //view by的按钮组
-                    ps: 10,
-                    pn: 1
+                    ps: 50,
+                    pn: 1,
+                    tc:0,
                 },
                 selectedDate: [],
                 selectedNumber: []
             }
         },
         methods: {
+              ...mapActions([
+                'setRecycleBin','setDraft'
+            ]),
             onAction(item, type) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -210,6 +219,7 @@
                 this.loading = true
                 this.$ajax.post(this.$apis.get_orderlist, this.params)
                     .then((res) => {
+                      res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
                         this.loading = false
                         this.tabData = this.$getDB(overview, res.datas);
                         //                        , item => {
@@ -222,13 +232,37 @@
                         this.loading = false
 
                     });
-            }
+            },
+             handleSizeChange(val) {
+                this.params.pn = val;
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                if (this.params.view == 1) {
+                    this.getdata(this.$db.order.overview)
+                } else {
+                    this.getdata(this.$db.order.overviewBysku)
+                }
+            },
         },
         computed: {
 
         },
         created() {
             this.getdata(this.$db.order.overview)
+            this.setRecycleBin({
+                name: 'orderRecycleBin',
+                show: true
+            });
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         mounted() {
             this.loading = false

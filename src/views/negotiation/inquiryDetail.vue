@@ -8,13 +8,14 @@
                 <div class="basic-info">
                     <div class="basesic-hd">
                         <h5>{{ $i.common.basicInfo }}</h5>
-                        <el-checkbox-group v-model="ChildrenCheckList">
+                        <!-- <el-checkbox-group v-model="ChildrenCheckList">
                             <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
                             <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group>
+                        </el-checkbox-group> -->
                     </div>
                     <div class="tab-msg-wrap">
                         <v-table 
+                            :height="450"
                             :data.sync="newTabData" 
                             :selection="false" 
                             :buttons="basicInfoBtn"
@@ -26,6 +27,7 @@
                     </div>
                 </div>
                 <div class="basic-info">
+                    <h5>{{ $i.common.productInfo }}</h5>
                     <div class="status">
                         <div class="btn-wrap">
                             <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
@@ -45,15 +47,15 @@
                         :hideFilterColumn="statusModify"
                     />
                     <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.accept }}</el-button>
+                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
                         <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
-                        <el-button @click="addToCompare">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.value + '' !== '22'" v-if="tabData[0]">{{ $i.common.modify }}</el-button>
-                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})">{{ $i.common.copy }}</el-button>
-                        <el-button @click="toCreateInquire">{{ $i.common.createInquiry }}</el-button>
+                        <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
+                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
+                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                        <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
+                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
                         <el-button>{{ $i.common.download }}</el-button>
-                        <el-button type="info" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.value + '' !== '22' && tabData[0].status.value + '' !== '21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.value + '' !== '99' && tabData[0].status.value + '' !== '1'" v-if="tabData[0]">{{ $i.common.delete }}</el-button>
                     </div>
                     <div class="bom-btn-wrap" v-show="statusModify">
                         <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -87,13 +89,362 @@
         <v-history-modify
             @save="save"
             ref="HM"
-        >
-            <template v-for="items in $db.inquiry.basicInfo" :slot="items._slot" slot-scope="{data}">
-                <el-select placeholder="请选择" v-model="fromArg[items.key]">
-                    <el-option v-for="item in selectAll[data.key]" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-            </template>
+        >  
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="transportationWay"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="paymentMethod"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="destinationCountry"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="departureCountry"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="incoterm"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="currency"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <v-up-load slot-scope="attachment" />
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="unit"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="category"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="readilyAvailable"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="expirationDateUnit"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="fobCurrency"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="exwCurrency"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="otherIncotermCurrency"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="dduCurrency"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="unitOfWeight"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="unitOfLength"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="unitOfVolume"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="OEM"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="mainsaleCountry"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="yearOfListed"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="useDisplayBoxOrNot"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
+            <el-select
+                value-key="id"
+                size="mini"
+                style="width:100%;"
+                slot="adjustSkuAndPackageOrNot"
+                slot-scope="{data}"
+                v-model="data.dataBase" 
+            >
+                <el-option
+                    v-for="items in selectAll[data.transForm]"
+                    :key="items.id"
+                    :label="items.name"
+                    :value="items.code"
+                    :id="items.id"
+                />
+            </el-select>
         </v-history-modify>
+        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
     </div>
 </template>
 <script>
@@ -108,13 +459,15 @@
      * @param switchStatus 留言板状态
      * @param boardSwitch 留言板开关 Events
     */
-    import { messageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
+    import { VMessageBoard, selectSearch, VTable, compareList, VHistoryModify } from '@/components/index';
     import { getData } from '@/service/base';
     import product from '@/views/product/addProduct';
+    import { mapActions, mapState } from 'vuex';
     export default {
         name:'inquiryDetail',
         data() {
             return {
+                fromArg:{},
                 loading: false,
                 disabledLine: [],
                 trig: 0,
@@ -165,43 +518,51 @@
                 submitData: {
                     deleteDetailIds: []
                 },
-                id_type: '',
-                selectAll: {
-                    paymentMethod: [],
-                    transport: [],
-                    incoterm: [],
-                    currency: [],
-                    supplierName: [],
-                    exportLicense: [],
-                    destinationCountry: [],
-                    departureCountry: []
-                }
-            }
-        },
-        computed: {
-            fromArg() {
-                let json = {};
-                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
-                    json[k] = val.key;
-                });
-                return json; 
+                id_type: ''
             }
         },
         components: {
-            'message-board':messageBoard,
+            'v-message-board':VMessageBoard,
             'select-search':selectSearch,
             'v-table': VTable,
             'v-product': product,
             'v-compare-list': compareList,
             VHistoryModify
         },
+        computed: {
+            ...mapState({
+                primeList:state => state.dic
+            }),
+            selectAll() {
+                let json = {};
+                _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
+                    if(val.transForm&&val.transForm!=='time') {
+                        json[val.transForm] = _.findWhere(this.primeList, {'code':val.transForm})?_.findWhere(this.primeList, {'code':val.transForm}).codes:'';
+                    }
+                });
+                return json;
+            }
+        },
         created() {
-            this.getInquiryDetail();
             this.submitData.id = this.$route.query.id;
             if(this.$localStore.get('$in_quiryCompare')) {
                 this.compareConfig = this.$localStore.get('$in_quiryCompare');
             };
             this.getDictionaries();
+            this.setDraft({
+                name: 'negotiationDraft',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
+            this.setRecycleBin({
+                name: 'negotiationRecycleBin',
+                params: {
+                    type: 'inquiry'
+                },
+                show: true
+            });
         },
         watch: {
             ChildrenCheckList(val, oldVal) {
@@ -218,10 +579,15 @@
             }
         },
         methods: {
+            ...mapActions([
+                'setDraft',
+                'setRecycleBin',
+                'setDic'
+            ]),
             deleteInquiry() {
-                this.$confirm('确认删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+                    confirmButtonText: this.$i.common.confirm,
+                    cancelButtonText: this.$i.common.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
@@ -231,29 +597,26 @@
                     .then(res => {
                         this.$router.push('/negotiation/inquiry')
                     });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                })
             },
-            getDictionaries() {
-                this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN'], '_cache')
+            async getDictionaries() {
+                const postCodePart = () => { // todo 通用字典
+                    return this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'PMT', 'ITM', 'EL_IS', 'SUPPLIER_TYPE', 'MD_TN', 'SKU_SALE_STATUS', 'SKU_UNIT', 'LH_UNIT', 'VE_UNIT', 'OEM_IS', 'UDB_IS', 'SKU_PG_IS'], {_cache: true});
+                }  
+                const getCurrencyAll = () => { // todo 币种 CY_UNIT
+                    return this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', { _cache: true })
+                }  
+                const getCountryAll = () => { // todo 国家 COUNTRY
+                    return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', { _cache: true }) 
+                }
+                await this.$ajax.all([postCodePart(), getCurrencyAll(), getCountryAll()])
                 .then(res => {
-                    this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
-                    this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
-                    this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-                    this.selectAll.currency = _.findWhere(res, {'code': 'CY_UNIT'}).codes;
-                    this.selectAll.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+                    let data = res[0];
+                    data = res[0].concat({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: res[1]});
+                    data = data.concat({code: 'COUNTRY', name: 'COUNTRY(国家)', codes: res[2]});
+                    this.setDic(data);
                 });
-
-                this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
-                .then(res => {
-                    this.selectAll.destinationCountry = res;
-                    this.selectAll.departureCountry = res;
-                });
-
+                this.getInquiryDetail();
             },
             addProduct() {
                 let arr = [];
@@ -265,7 +628,7 @@
                 this.newSearchDialogVisible = true;
             },
             handleOK(item) { //添加 product
-                if(item && !item.length) return this.$message('请选择商品');
+                if(item && !item.length) return this.$message(this.$i.common.pleaseChooseGoods);
                 let ids = [];
                 _.map(item, items => {
                     ids.push(_.findWhere(items, {'key': 'id'}).value)
@@ -304,53 +667,48 @@
                 };
 
                 for(let i = 0; i < this.compareConfig.length; i++) {
-                    if(this.compareConfig[i].id === config.id) return this.$message({
-                        message: '这个订单已经添加到对比',
-                        type: 'warning'
-                    });
+                    if(this.compareConfig[i].id === config.id) return;
                 }
                 this.compareConfig.push(config);
                 this.$localStore.set('$in_quiryCompare', this.compareConfig);
             },
             getInquiryDetail() { //获取 Inquiry detail 数据
-                if(!this.$route.query.id) return this.$message('地址错误');
+                if(!this.$route.query.id) return this.$message(this.$i.common.addressError);
                 this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
                     id: this.$route.query.id
                 })
                 .then(res => {
+                    let basicInfoData, newProductTabData;
                     //Basic Info
-                    this.newTabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
-                    this.tabData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]));
+                    basicInfoData = this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData([res]), (item) => {
+                        this.$filterDic(item);
+                        _.map(item, (val, k) => {
+                            val.defaultData = _.isUndefined(val.dataBase)?val.value:val.dataBase;
+                        });
+                    });
+                    this.newTabData = basicInfoData;
+                    this.tabData = basicInfoData;
+                    //SKU_UNIT 
                     //Product Info
-                    this.newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
-                    this.productTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'));
+                    newProductTabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), (item) => {
+                        this.$filterDic(item);
+                        _.map(item, (val, k) => {
+                            val.defaultData = _.isUndefined(val.dataBase)?val.value:val.dataBase;
+                        });
+                    });
+                    this.newProductTabData = newProductTabData;
+                    this.productTabData = newProductTabData;
                     this.tableLoad = false;
                 })
                 .catch(err => {
                     this.tableLoad = false;
                 });
             },
-            submit(str) { //留言板发布
-                let json = {};
-                json.time = getData(new Date(), 6);
-                json.name = '罗涛';
-                json.content = str;
-                this.list.push(json);
-            },
-            boardSwitch() { //留言板开关
-                this.switchStatus = !this.switchStatus;
-            },
             getList(ids) {
                 this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
                 .then(res => {
-                    _.map(res, item => {
-                        item.displayStyle = 0;
-                    });
-                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'));
-                    _.map(arr, item => {
-                        _.mapObject(item, (val, k) => {
-                            val._style = 'color:#27b7b6';
-                        });
+                    let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+                        this.$filterDic(item);
                     });
                     this.newProductTabData = arr.concat(this.newProductTabData);
                     this.newSearchDialogVisible = false;
@@ -358,22 +716,33 @@
             },
             basicInfoBtn(item) { //Basic info 按钮创建
                 if(item.id.value && this.statusModify) return [{
-                    label: 'Modify',
+                    label: this.$i.common.modify,
                     type: 'modify'
                 }, { 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
 
                 if(item.id.value) return [{ 
-                    label: 'Histoty',
+                    label: this.$i.common.histoty,
                     type: 'histoty'
                 }];
             }, 
             productInfoBtn (item) { //Product info 按钮创建
-                if(this.statusModify && !item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(this.statusModify && item._disabled) return [{label: 'Modify', type: 'modify'}, {label: 'Histoty', type: 'histoty'}, {label: 'Detail', type: 'detail'}];
-                if(!item._disabled) return [{label: 'Histoty', type: 'histoty', _disabled: false}, {label: 'Detail', type: 'detail', _disabled: false}];
+                if(this.statusModify && !item._disabled) return [
+                    {label: this.$i.common.modify, type: 'modify'}, 
+                    {label: this.$i.common.histoty, type: 'histoty'}, 
+                    {label: this.$i.common.detail, type: 'detail'}
+                ];
+                if(this.statusModify && item._disabled) return [
+                    {label: this.$i.common.modify, type: 'modify'}, 
+                    {label: this.$i.common.histoty, type: 'histoty'}, 
+                    {label: this.$i.common.detail, type: 'detail'}
+                ];
+                if(!item._disabled) return [
+                    {label: this.$i.common.histoty, type: 'histoty', _disabled: false}, 
+                    {label: this.$i.common.detail, type: 'detail', _disabled: false}
+                ];
             },
             fromChange(val) {
                this.trig = new Date().getTime();
@@ -382,40 +751,45 @@
                 this.statusModify = true;
             },
             save(data) { //modify 编辑完成反填数据
+                let json = this.$filterName(data[0]), styleJson = {};
                 if(this.id_type === 'basicInfo') { //反填 basicInfo
                     this.newTabData = _.map(this.newTabData, val => {
-                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[0], {'key': 'id'}).value && !val._remark && !data[0]._remark) {
-                            val = data[0];
+                        if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(json, {'key': 'id'}).value && !val._remark && !json._remark) {
+                            val = json;
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
-                            })
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
+                            });
                         } else if(_.findWhere(val, {'key': 'id'}).value === _.findWhere(data[1], {'key': 'id'}).value && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         }
                         return val;
                     });
                 } else if(this.id_type === 'producInfo') { // 反填 productTabData
                     this.newProductTabData = _.map(this.newProductTabData, val => {
-                        if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[0], {'key': 'skuId'}).value + '' && !val._remark && !data[0]._remark) {
-                            val = data[0];
+                        if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
+                            val = json;
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         } else if(_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
                             val = data[1];
                             val._modify = true;
-                            val.displayStyle = 1;
-                            _.mapObject(val, (item, k) => {
-                                if(item.length) this.$set(item, '_style', 'color:#27b7b6')
+                            _.map(val, (item, k) => {
+                                if(item.dataBase||item.dataBase===0?item.dataBase!==item.defaultData:item.value!==item.defaultData) {
+                                    this.$set(item, '_style', 'color:#27b7b6')
+                                };
                             });
                         }
                         return val;
@@ -425,29 +799,38 @@
             fnBasicInfoHistoty(item, type, config) { //查看历史记录
                 let column;
                 this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-                    id: item.id.value
+                    id: item.skuId?item.skuId.value:item.id.value
                 })
                 .then(res => {
                     let arr = [];
                     if(type === 'basicInfo') {
                         _.map(this.newTabData, items => {
-                            if(_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
+                            if(_.findWhere(items, {'key': 'id'}).value?_.findWhere(items, {'key': 'id'}).value:_.findWhere(items, {'key': 'skuId'}).value+'' === config.data+'') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), (item) => {
+                                this.$filterDic(item);
+                            }), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res), (item) => {
+                                this.$filterDic(item);
+                            }), true);
                         }
                     } else {
                         _.map(this.newProductTabData, items => {
                             if(_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
                         });
                         if(config.type === 'histoty') {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+                                this.$filterDic(item);
+                            }), false);
                         } else {
-                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+                            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+                                this.$filterDic(item);
+                            }), true);
                         }
                     }
+                    this.fromArg = arr[0];
                 });
            },
            basicInfoAction(data, type) { // basic info 按钮操作 
@@ -473,6 +856,14 @@
                         case 'modify':
                             this.oSwitch = true;
                             this.fnBasicInfoHistoty(data, 'productInfo', { type:'modify', data: data.skuId.value });
+                            break;
+                        case 'detail':
+                            this.$router.push({
+                                path: '/product/sourcingDetail',
+                                query: {
+                                    id: data.skuId.value
+                                }
+                            });
                             break;
                 }
            },
@@ -509,7 +900,6 @@
             },
             modify() { //页面编辑提交
                 let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
-                if(!parentNode) return this.$message('您没有做任何编辑操作请编辑！');
                 let arr = [];
                 _.map(this.newProductTabData, item => {
                     if(!item._disabled) arr.push(item);
@@ -518,6 +908,7 @@
                 parentNode.draft = 0;
                 this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
                 .then(res => {
+                    this.newTabData[0].status.dataBase = res.status;
                     this.tabData = this.newTabData;
                     this.productTabData = this.newProductTabData;
                     this.productModify();
@@ -530,7 +921,7 @@
                     jsons = {};
                     if(item._remark) { //拼装remark 数据
                         for(let k in item) {
-                            jsons[k] = item[k].value;
+                            jsons[k] = item[k].dataBase?item[k].dataBase:item[k].value;
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -539,7 +930,7 @@
                             if(json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                json[k] = item[k].dataBase||item[k].dataBase===0?item[k].dataBase:item[k].value;
                             }
                         };
                         arr.push(json);

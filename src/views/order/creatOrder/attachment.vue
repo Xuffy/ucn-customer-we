@@ -2,7 +2,7 @@
    <div class='attachment'>
         <el-form  label-width="230px">
         <el-form-item class="form-list"
-            :label="$i.attachment" prop="supplierName">     
+            :label="$i.common.attachment" prop="supplierName">     
             <Upload class='upload' @getres='getres'              :disabled='disabled'></Upload> 
             <div class="order_attchment" >   
                  <div class="attchment_content">
@@ -22,7 +22,7 @@
         </el-form>  
     </div>
 </template>
-<script>
+<script> 
     /*自己ref拿 上传的url数组*/
     import {
         Upload
