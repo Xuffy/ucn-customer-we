@@ -123,6 +123,20 @@ export default {
 
 
     /**
+     * 生成唯一标识
+     * @returns {string}
+     */
+    Vue.prototype.$getUUID = () => {
+      var d = new Date().getTime();
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+      return uuid;
+    }
+
+    /**
      * table 数据过滤
      * @type {{contrast(*=, *=): *, setHighlight(*=): *, setHideSame(*=): *}}
      */
@@ -199,14 +213,14 @@ export default {
     };
     /**
      * 时区转换 传入时区 如 0 8 -1
-    */
+     */
     Vue.prototype.$getLocalTime = (i) => {
-        if (typeof i !== 'number') return;
-        const d = new Date(), 
-              len = d.getTime(),
-              offset = d.getTimezoneOffset() * 60000,
-              utcTime = len + offset;
-        return new Date(utcTime + 3600000 * i);
+      if (typeof i !== 'number') return;
+      const d = new Date(),
+        len = d.getTime(),
+        offset = d.getTimezoneOffset() * 60000,
+        utcTime = len + offset;
+      return new Date(utcTime + 3600000 * i);
     }
     /**
      * $window.open
