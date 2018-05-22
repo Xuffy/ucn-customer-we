@@ -26,7 +26,7 @@
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
-                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>
+<!--                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>-->
                 </div>
 <!--
                 <div class="btns" v-else>

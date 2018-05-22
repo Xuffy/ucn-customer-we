@@ -709,37 +709,6 @@ export const routerMap = [
         }
       ]
     },
-    {
-
-      path: '/customer',
-      component: Layout,
-      meta: {name: 'customer'},
-      redirect: '/customer/overview',
-      noDropdown: true,
-      hidden: false,
-      children: [
-        {
-          path: 'overview',
-          name: 'customerRecycleBin',
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-          },
-          component: () => import('../views/customer/overview.vue')
-        },
-        {
-          path: 'detail',
-          name: 'customerRecycleBinDetail',
-          meta: {
-            draft: false,
-            recycleBin: false,
-            log: false,
-          },
-          component: () => import('../views/customer/customerDetail.vue')
-        }
-      ]
-    }
   ]
 ;
 

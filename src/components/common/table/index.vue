@@ -73,7 +73,7 @@
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
                       :class="{disabled:aItem.disabled || item._disabled}"
-                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type)">
+                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>
               </div>
             </td>

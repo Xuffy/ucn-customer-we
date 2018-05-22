@@ -26,7 +26,7 @@
                 <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
                 <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>
                  <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
+<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
             <div class="viewBy">
                 <span>View by&nbsp</span>

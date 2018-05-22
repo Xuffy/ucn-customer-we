@@ -33,13 +33,19 @@ export default {
       BASE_UUSER: 'http://dev.uuser-facade.ucnholding.com:18100/',
       BASE_HSM_W: 'http://192.168.51.248:11001',
       BASE_BJ_p: 'http://dev.upurchase-facade.ucnholding.com:18300',
+<<<<<<< HEAD
+=======
       // BASE_BUY: '//192.168.51.33:11001',
+>>>>>>> a391ec744643f57feb4b84a73f5f274589c04fc9
       BASE_BUY: '//192.168.51.248:11001',
       BASE_SELL: '//192.168.51.248:11002',
       //BASE_SELL: '//dev.usupply-facade.ucnholding.com',
       //USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
+<<<<<<< HEAD
+=======
       // BASE_BUY: '//192.168.51.248:11001',
       // BASE_SELL: '//192.168.51.248:11002',
+>>>>>>> a391ec744643f57feb4b84a73f5f274589c04fc9
       BASE_WAREHOUSE: '//192.168.51.248:12005',
 
       // 开发服务器 248
@@ -54,10 +60,10 @@ export default {
       UMETA_URL: '//192.168.51.248:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
       ULOG_URL: '//192.168.51.248:11008', // 日志服务
-      // UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
-      // USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
-      UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端
-      USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
+      UPURCHASE_URL: '//192.168.51.248:11001', // 采购端 dev
+      USUPPLY_URL: '//192.168.51.248:11002', // 供应商端 dev
+      // UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端 开发人员电脑
+      // USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端 开发人员电脑
       USERVICE_URL: '//192.168.51.248:11003', // 服务商端
       UOSS_URL: '//192.168.51.248:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
