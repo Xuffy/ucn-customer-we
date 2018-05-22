@@ -1,5 +1,5 @@
 <template>
-    <div class="qc-detail">
+    <div class="qc-detail" v-loading="loadingData">
         <div class="title">
             <span>{{$i.warehouse.qcOrderDetail}}</span>
         </div>
@@ -20,6 +20,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item label="QC Type">
                             <el-input
+                                    :placeholder="$i.warehouse.serviceChoose"
                                     v-model="qcDetail.qcTypeDictCode"
                                     :disabled="true">
                             </el-input>
@@ -28,6 +29,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Date">
                             <el-input
+                                    :placeholder="$i.warehouse.serviceFill"
                                     v-model="qcDetail.qcDate"
                                     :disabled="true">
                             </el-input>
@@ -60,6 +62,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="QC Method">
                             <el-input
+                                    :placeholder="$i.warehouse.serviceChoose"
                                     v-model="qcDetail.qcMethodDictCode"
                                     :disabled="true">
                             </el-input>
@@ -68,6 +71,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="Surveyor">
                             <el-input
+                                    :placeholder="$i.warehouse.serviceChoose"
                                     v-model="qcDetail.surveyor"
                                     :disabled="true">
                             </el-input>
@@ -76,6 +80,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="Service Fee">
                             <el-input
+                                    :placeholder="$i.warehouse.serviceFill"
                                     v-model="qcDetail.serviceFee"
                                     :disabled="true">
                             </el-input>
@@ -97,14 +102,14 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Time Zone">
-                            <el-input
-                                    v-model="qcDetail.timeZone"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item prop="11" label="Time Zone">-->
+                            <!--<el-input-->
+                                    <!--v-model="qcDetail.timeZone"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" label="Remark">
                             <el-input
@@ -208,6 +213,12 @@
             </v-table>
 
         </div>
+
+
+
+        <div class="footBtn">
+            <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
+        </div>
     </div>
 </template>
 <script>
@@ -252,15 +263,19 @@
                 },
                 productInfoData:[],
                 selectList:[],
+
+                loadingData:false,
             }
         },
         methods:{
             getQcOrderDetail(){
+                this.loadingData=true;
                 this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
+                        this.loadingData=false;
                     }).catch(err=>{
-
+                    this.loadingData=false;
                 });
             },
             getProductInfo(){
@@ -284,15 +299,33 @@
                 this.selectList=e;
             },
             confirm(){
-                let id=[];
+                let hasWait=false;
                 this.selectList.forEach(v=>{
-                    id.push(v.id.value);
+                    if(v.skuQcResultDictCode.value==='WAIT_FOR_QC'){
+                        hasWait=true;
+                    }
                 });
-                this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
-                    console.log(res)
-                }).catch(err=>{
+                if(hasWait){
+                    this.$message({
+                        message: '当前选项还有产品未QC,无法操作',
+                        type: 'warning'
+                    });
+                }else{
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
+                        console.log(res)
+                    }).catch(err=>{
 
-                });
+                    });
+                }
+            },
+
+
+            cancel(){
+                window.close();
             },
         },
         created(){
@@ -316,5 +349,17 @@
     }
     .payment-btn{
         margin: 5px 0 10px 0;
+    }
+    .footBtn{
+        border-top: 1px solid #e0e0e0;
+        height: 40px;
+        line-height: 40px;
+        background-color: #ffffff;
+        position: sticky;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: left;
+        z-index: 1000;
     }
 </style>

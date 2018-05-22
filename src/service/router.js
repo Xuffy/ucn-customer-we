@@ -446,6 +446,7 @@ export const routerMap = [
         {
           path: 'qcDetail',
           name: 'warehouseQcOrderDetail',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,

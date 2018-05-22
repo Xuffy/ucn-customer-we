@@ -72,12 +72,11 @@ const json = {
     require(`./${lang}/warehouse/qcWarehouse`),
     require(`./${lang}/warehouse/warehouse.table`),
     require(`./${lang}/warehouse/warehouse.basic`),
-    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/payment.pending`),
     require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
     require(`./${lang}/warehouse/summary.pending`),
-
+    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
 
       /**
        * 新配置

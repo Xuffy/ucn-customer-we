@@ -137,7 +137,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="11" label="Exchange Currency">
-                            <el-select class="speInput" size="mini" v-model="qcOrderConfig.exchangeCurrencyDictId" placeholder="请选择">
+                            <el-select class="speInput" size="mini" v-model="qcOrderConfig.exchangeCurrencyDictCode" placeholder="请选择">
                                 <el-option
                                         v-for="item in currencyOptions"
                                         :key="item.id"
