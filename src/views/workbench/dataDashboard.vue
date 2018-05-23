@@ -76,7 +76,7 @@
           statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
         })
           .then(data => {
-            this.dataList = data;
+            // this.dataList = data;
           })
           .finally(() => {
             this.loading = false;
