@@ -142,7 +142,7 @@ export const routerMap = [
         },
         {
           path: 'compareRecycleBin',
-          name: 'compareRecycleBin',
+          name: 'productCompareRecycleBin',
           hidden: true,
           meta: {
             draft: true,
@@ -243,7 +243,7 @@ export const routerMap = [
         },
           {
           path: 'compareRecycleBin',
-          name: 'compareRecycleBin',
+          name: 'supplierCompareRecycleBin',
           hidden: true,
           meta: {
             draft: false,
