@@ -37,14 +37,28 @@ export default {
   post_qc_result_save: ['/qc/result/save','USERVICE_URL','USERVICE_URL'],
 
   //user
-  get_user_list: ['/user/list','UPURCHASE_URL','UUSER_URL'], //获取当前登录用户所在企业下所有用户信息
+  get_user_list: ['/user/list','UUSER_URL','UUSER_URL'], //获取当前登录用户所在企业下所有用户信息
   get_user_privilege: ['/user/privilege','UUSER_URL','UUSER_URL'],
+  GET_DEPARTMENT:['/department','UUSER_URL','UUSER_URL'],
 
   //track
-  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','BASE_URL','BASE_URL'],
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','WORKBENCH_URL','WORKBENCH_URL'],
 
   //companyInfo
-  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
-  // post_purchase_customer_address: ['/purchase/supplier/{id}','BASE_URL','BASE_URL'],
+  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer: ['/purchase/customer','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_address_id: ['/purchase/customer/address','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_address: ['/purchase/customer/address','BASE_URL_CS','BASE_URL'],
+  get_purchase_customer_getCustomer: ['/purchase/customer/getCustomer','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_deleteAddress: ['/purchase/customer/deleteAddress/{id}','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_concat: ['/purchase/customer/concat','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_concat_id: ['/purchase/customer/concat','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_deleteConcat: ['/purchase/customer/deleteConcat/{id}','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_custom: ['/purchase/customer/custom','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_custom_id: ['/purchase/customer/custom','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_deleteCustom: ['/purchase/customer/deleteCustom/{id}','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_document: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_document_id: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
+  post_purchase_customer_deleteDocument: ['/purchase/customer/deleteDocument/{id}','BASE_URL_CS','BASE_URL'],
 
 }

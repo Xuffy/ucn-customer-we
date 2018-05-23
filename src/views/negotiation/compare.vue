@@ -28,11 +28,11 @@
         </div>
         <v-table
             :height="455"
-            :data="tabData" 
+            :data="tabData"
             :loading="tabLoad"
             @change-checked="changeChecked"
-            :buttons="[{label: 'detail', type: 'detail'}]" 
-            @action="action" 
+            :buttons="[{label: 'detail', type: 'detail'}]"
+            @action="action"
         />
         <v-pagination
             :pageNum.sync="params.pn"
@@ -46,12 +46,12 @@
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:CANCEL'">{{ $i.common.cancel }}</el-button>
-        <add-new-inqury 
-            v-model="addNew" 
-            @addInquiry="addCopare" 
-            :arg-disabled="argDisabled" 
-            :compareId="params.id || null" 
-            :disableds="disableds" 
+        <add-new-inqury
+            v-model="addNew"
+            @addInquiry="addCopare"
+            :arg-disabled="argDisabled"
+            :compareId="params.id || null"
+            :disableds="disableds"
         />
     </div>
 </template>
@@ -140,7 +140,7 @@
                 });
                 this.compareType = 'only';
             },
-            onSubmit(type) { //保存Compare 
+            onSubmit(type) { //保存Compare
                 let arr = [], delIds = [];
                 if(this.compareBy+''==='0') {
                     this.tabData.forEach(item => {
@@ -153,7 +153,7 @@
                         if(item._disabled) delinquiryIds.push(_.findWhere(item, {'key': 'inquiryId'}).value);
                     });
                 }
-                
+
                 this.$confirm(this.$i.commonthisOperationKeepsAllOperationsContinuing, this.$i.common.prompt, {
                     confirmButtonText: this.$i.common.confirm,
                     cancelButtonText: this.$i.common.cancel,
@@ -236,19 +236,18 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    
                     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(column, res.datas, (item) => {
                             this.$filterDic(item);
                         });
-                        this.tabLoad = false;   
-                        this.searchLoad = false; 
+                        this.tabLoad = false;
+                        this.searchLoad = false;
                     });
                 })
                 .catch(() => {
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
                     this.tabLoad = false;
                 })
             },
