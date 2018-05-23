@@ -15,7 +15,6 @@ import Upload from './common/upload/upload';
 import VUpload from './common/upload/test';
 import UploadDialog from './common/UploadDialog/index';
 import Download from './common/UploadDialog/download';
-import Layout from './Layout/index';
 import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
@@ -50,7 +49,6 @@ export {
   Upload,
   UploadDialog,
   Download,
-  Layout,
   messageBoard,
   selectSearch,
   // product,                      //product页面组件
