@@ -315,11 +315,12 @@
                     this.selectList.forEach(v=>{
                         id.push(v.id.value);
                     });
-                    this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
-                        console.log(res)
-                    }).catch(err=>{
-
-                    });
+                    console.log(id,'id')
+                    // this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
+                    //     console.log(res)
+                    // }).catch(err=>{
+                    //
+                    // });
                 }
             },
 
