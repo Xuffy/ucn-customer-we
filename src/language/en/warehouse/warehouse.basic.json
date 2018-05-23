@@ -6,5 +6,8 @@
   "qcOverview":"QC Overview",
   "create":"Create",
   "addProduct":"Add Product",
-  "remove":"Remove"
+  "remove":"Remove",
+
+  "serviceChoose":"Service Choose",
+  "serviceFill":"Service Fill"
 }
