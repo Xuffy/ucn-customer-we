@@ -50,36 +50,6 @@
       </el-col>
     </el-row>
 
-    <!--<el-dialog title="Data Dashboard" width="90%" :visible.sync="dialog.show">
-
-      <el-checkbox-group v-model="checkedDataList">
-        <el-row class="data-table" :gutter="20">
-          <el-col :span="6">
-            <table>
-              <tr>
-                <td rowspan="3" style="width: 20px">
-                  <el-checkbox lable="a1"></el-checkbox>
-                </td>
-                <td class="title" v-text="$i.workbench.purchaseOrder"></td>
-                <td class="value">26 Orders</td>
-              </tr>
-              <tr>
-                <td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>
-                <td class="value">281 SKU</td>
-              </tr>
-              <tr>
-                <td class="value">JSD 132.24.00</td>
-              </tr>
-            </table>
-          </el-col>
-        </el-row>
-      </el-checkbox-group>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialog.show = false">取 消</el-button>
-        <el-button type="primary" @click="dialog.show = false">确 定</el-button>
-      </div>
-    </el-dialog>-->
   </div>
 </template>
 
@@ -94,47 +64,6 @@
         dialog: {
           show: false,
         },
-        // radioTimeType: '',
-        /*checkedDataList: [],
-        pickerOptions2: {
-          shortcuts: [{
-            text: 'recent 7 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: 'recent 15 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: 'recent 30 days',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        dataList: [
-          'Create Inquiry1',
-          'Create Inquiry2',
-          'Create Inquiry3',
-          'Create Inquir5',
-          'Create Inquiry41',
-          'Create Inquiry15',
-          'Create Inquiry16',
-          'Create Inquiry17',
-          'Create Inquiry18',
-          'Create Inquiry19',
-        ]*/
       }
     },
     created() {
@@ -143,7 +72,9 @@
     methods: {
       getData() {
         this.loading = true;
-        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST)
+        this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
+          statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
+        })
           .then(data => {
             this.dataList = data;
           })
@@ -183,7 +114,8 @@
     text-align: center;
     border-bottom: 1px solid #FFFFFF;
   }
-  .data-table .value > div{
+
+  .data-table .value > div {
     display: inline-block;
   }
 

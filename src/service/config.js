@@ -61,7 +61,7 @@ export default {
       USERVICE_URL: '//192.168.51.248:11003', // 服务商端
       UOSS_URL: '//192.168.51.248:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
-      UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
+      UWORKBENCH_URL: '//192.168.51.207:11010',
 
 
       BASE_BUYTEST:'//192.168.51.33:11001'

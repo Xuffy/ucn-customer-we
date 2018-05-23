@@ -42,7 +42,6 @@
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
   import {VHistoryModify, VMessageBoard, VTimeZone, VUpload} from '@/components/index';
-  import testData from './test'
 
   export default {
     name: 'workbench',
