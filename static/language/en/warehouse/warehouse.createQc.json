@@ -1,0 +1,24 @@
+{
+  "createQcOrder":"Create Qc Order",
+  "basicInfo":"Basic Info",
+  "productInfo":"Product Info",
+  "summary":"Summary",
+  "submit":"Submit",
+  "cancel":"Cancel",
+  "qcOrderDetail":"QC Order Detail",
+  "payment":"Payment",
+  "add":"Add",
+  "confirmSKU":"Confirm SKU",
+  "restartQc":"Restart QC",
+  "rework":"Rework",
+  "return":"Return",
+
+
+
+  "serviceFill":"Service Fill",
+
+  "skuNameCustomer":"Sku Name Customer",
+  "skuMaterialCn":"Material (Cn)",
+  "skuMaterialEn":"Material (En)",
+  "skuDescCn":"SKU Description in Chinese"
+}

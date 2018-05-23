@@ -1,3 +1,4 @@
+import test from '../static/language/index'
 import Vue from 'vue'
 import App from './App'
 import router from 'service/router'
@@ -17,7 +18,7 @@ import locale from 'element-ui/lib/locale';
 import {localStore} from 'service/store';
 import 'element-ui/lib/theme-chalk/base.css';
 
-
+console.log(test)
 
 
 ////////////////////////////////////////////////////////
