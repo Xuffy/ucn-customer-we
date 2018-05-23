@@ -9,7 +9,7 @@
 
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="warehouseConfig.skuInventoryStatusDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-                    <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.code}}</el-radio-button>
+                    <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
                 <select-search
                         class="search"

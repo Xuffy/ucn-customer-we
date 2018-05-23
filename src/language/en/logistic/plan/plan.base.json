@@ -133,6 +133,7 @@
   "customsDeclarationNameEn": "Customs Declaration Name(EN)",
   "hsCode": "HS Code",
   "reportElements": "Report Elements",
+  "reportElement": "Report Elements",
   "supplierName": "Supplier Name",
   "supplierNo": "Supplier No",
   "customerSkuCode": "Customer SKU Code",
@@ -180,5 +181,14 @@
   "skuOuterCartonRoughWeight": "Outer Carton Gross Weight",
   "skuShippingMarks": "Shipping Marks",
   "skuOuterCartonBarCode": "Outer Carton Bar-Code",
-  "skuOuterCartonCode": "Outer Carton SKU Code"
+  "skuOuterCartonCode": "Outer Carton SKU Code",
+  "skuSupplierCode": "Supplier Serial Number",
+  "skuDescCn": "SKU Descriptioin (CN)",
+  "skuDescEn": "SKU Descriptioin (EN)",
+  "skuCustomsNameCn": "Customs Declaration Name(CN)",
+  "skuCustomsNameEn": "Custom Declaration Name (EN)",
+  "skuOuterCartonQty": "Outer Carton Quantity",
+  "unitExportPrice": "Export Unit Price",
+  "totalExportPrice": "Total Price Of Export",
+  "skuNameCustomer": "Product Description"
 }

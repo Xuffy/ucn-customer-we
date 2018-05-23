@@ -73,7 +73,7 @@
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
                       :class="{disabled:aItem.disabled || item._disabled}"
-                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type)">
+                      @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>
               </div>
             </td>
@@ -224,25 +224,25 @@
     },
     watch: {
       data(val) {
-        this.dataList = val;
-        this.filterColumn();
+        this.setDataList(val, true);
       },
       column() {
         this.filterColumn();
       },
       checkedAll(value) {
-        this.dataList = _.map(this.dataList, val => {
+        this.setDataList(_.map(this.dataList, val => {
           if (!val._disabled) {
             this.$set(val, '_checked', value);
           }
           return val;
-        });
+        }));
+        // this.dataList = ;
         this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
-      this.dataList = this.data;
-      this.filterColumn();
+      this.setDataList(this.data, true);
+      // this.dataList = this.data;
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
       this.interval = setInterval(() => {
@@ -299,7 +299,7 @@
             }
           });
 
-          this.$refs.tableTitle.style.transform = `translate3d(0,${st}px,0)`;
+          this.$refs.tableTitle.style.transform = `translate3d(0,${!ele.scrollTop ? 0 : st}px,0)`;
 
         });
       },
@@ -314,10 +314,10 @@
       },
       changeCheck(item, value) {
         if (this.selectionRadio) {
-          this.dataList = _.map(this.dataList, val => {
+          this.setDataList(_.map(this.dataList, val => {
             val._checked = false;
             return val;
-          });
+          }));
           item._checked = true;
         }
         this.$emit('change-checked', this.getSelected());
@@ -325,6 +325,14 @@
       getSelected() {
         return this.selectionRadio ? _.findWhere(this.dataList, {_checked: true}) :
           _.where(this.dataList, {_checked: true});
+      },
+      setDataList(val, type) {
+        this.$refs.tableBox.scrollTop = 0;
+        let to = setTimeout(() => {
+          clearTimeout(to);
+          this.dataList = val;
+          type && this.filterColumn();
+        }, 50);
       }
     },
     beforeDestroy() {

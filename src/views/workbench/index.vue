@@ -1,6 +1,7 @@
 <template>
   <div class="workbench">
 
+    <v-upload></v-upload>
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
       <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
@@ -40,12 +41,12 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
-  import {VHistoryModify, VMessageBoard, VTimeZone} from '@/components/index';
-  import testData from './test'
+  import {VHistoryModify, VMessageBoard, VTimeZone, VUpload} from '@/components/index';
 
   export default {
     name: 'workbench',
     components: {
+      VUpload,
       VDataDashboard,
       VTableData,
       VBasicInfo,

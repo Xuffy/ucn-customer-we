@@ -52,11 +52,11 @@
         pictureVisible: true,
         typeLabel: ['Pending Task', 'Future Task', 'FYI', 'Push'],
         dataList: [
-          {page: {}, data: [], label: 'Inquiry', loading: false, search: ''},
-          {page: {}, data: [], label: 'Order', loading: false, search: ''},
-          {page: {}, data: [], label: 'Logistic', loading: false, search: ''},
-          {page: {}, data: [], label: 'Warehouse', loading: false, search: ''},
-          {page: {}, data: [], label: 'Payment', loading: false, search: ''}
+          {page: {}, data: [], label: 'Inquiry', loading: false, search: '', type: 'INQUIRY'},
+          {page: {}, data: [], label: 'Order', loading: false, search: '', type: 'ORDER'},
+          {page: {}, data: [], label: 'Logistic', loading: false, search: '', type: 'LOGISTIC'},
+          {page: {}, data: [], label: 'Warehouse', loading: false, search: '', type: 'WAREHOUSE'},
+          {page: {}, data: [], label: 'Payment', loading: false, search: '', type: 'PAYMENT'}
         ],
         search: '',
         tabIndex: 0,
@@ -96,7 +96,8 @@
         let item = this.dataList[this.tabIndex];
         item.search = this.search;
         item.loading = true;
-        this.$ajax.post(this.$apis.UTASK_TYPELIST, {type: this.type, moduleCode: this.type})
+        this.$ajax.post(this.$apis.UTASK_GETBYTYPEANDMODULE,
+          {type: this.type, moduleCode: item.type})
           .then(data => {
             item.page = data;
             item.data = this.$getDB(this.$db.workbench.taskTable, data.datas, item => {

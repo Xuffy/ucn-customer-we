@@ -3,9 +3,12 @@ export default {
     type: 'text',
     _hide: true
   },
-  "supplierId": {
+  "vId": {
     type: 'text',
     _hide: true
+  },
+  "entryDt": {
+    type: 'text'
   },
   "orderNo": {
     type: 'text'
@@ -25,49 +28,49 @@ export default {
   "skuNameCn": {
     type: 'text'
   },
-  "productDescription": {
+  "skuNameCustomer": {
     type: 'text'
   },
   "blSkuName": {
     type: 'text'
   },
-  "customsDeclarationNameCn": {
+  "skuCustomsNameCn": {
     type: 'text'
   },
-  "customsDeclarationNameEn": {
+  "skuCustomsNameEn": {
     type: 'text'
   },
   "hsCode": {
     type: 'text'
   },
-  "reportElements": {
+  "reportElement": {
     type: 'text'
   },
   "skuSupplierName": {
     type: 'text'
   },
-  "supplierNo": {
+  "skuSupplierCode": {
     type: 'text'
   },
   "skuCustomerSkuCode": {
     type: 'text'
   },
-  "factorySKUCode": {
+  "factorySkuCode": {
     type: 'text'
   },
   "skuUnit": {
     type: 'text'
   },
-  "exportUnitPrice": {
+  "unitExportPrice": {
     type: 'text'
   },
-  "totalPriceOfExport": {
+  "totalExportPrice": {
     type: 'text'
   },
   "currency": {
     type: 'text'
   },
-  "skuQuantityOfOuterCarton": {
+  "skuOuterCartonQty": {
     type: 'text'
   },
   "skuOuterCartonLength": {
@@ -97,101 +100,5 @@ export default {
   "skuOuterCartonCode": {
     type: 'text'
   }
-  // "id": {
-  //   type: 'text',
-  //   _hide: true
-  // },
-  // "entryDt": {
-  //   type: 'text'
-  // },
-  // "orderNo": {
-  //   type: 'text'
-  // },
-  // "toShipCartonQty": {
-  //   type: 'text'
-  // },
-  // "toShipQty": {
-  //   type: 'text'
-  // },
-  // "skuCode": {
-  //   type: 'text'
-  // },
-  // "skuNameEn": {
-  //   type: 'text'
-  // },
-  // "skuNameCn": {
-  //   type: 'text'
-  // },
-  // "skuNameCustomer": {
-  //   type: 'text'
-  // },
-  // "blSkuName": {
-  //   type: 'text'
-  // },
-  // "customDeclarationNameCn": {
-  //   type: 'text'
-  // },
-  // "customDeclarationNameEn": {
-  //   type: 'text'
-  // },
-  // "hsCode": {
-  //   type: 'text'
-  // },
-  // "reportElement": {
-  //   type: 'text'
-  // },
-  // "supplierName": {
-  //   type: 'text'
-  // },
-  // "supplierCode": {
-  //   type: 'text'
-  // },
-  // "customerSkuCode": {
-  //   type: 'text'
-  // },
-  // "factorySkuCode": {
-  //   type: 'text'
-  // },
-  // "unit": {
-  //   type: 'text'
-  // },
-  // "unitExportPrice": {
-  //   type: 'text'
-  // },
-  // "totalExportPrice": {
-  //   type: 'text'
-  // },
-  // "currency": {
-  //   type: 'text'
-  // },
-  // "outerCartonQty": {
-  //   type: 'text'
-  // },
-  // "outerCartonLenth": {
-  //   type: 'text'
-  // },
-  // "outerCartonWidth": {
-  //   type: 'text'
-  // },
-  // "outerCartonHeight": {
-  //   type: 'text'
-  // },
-  // "outerCartonNetWeight": {
-  //   type: 'text'
-  // },
-  // "outerCartonGrossWeight": {
-  //   type: 'text'
-  // },
-  // "outerCartonVolume": {
-  //   type: 'text'
-  // },
-  // "shippingMarks": {
-  //   type: 'text'
-  // },
-  // "outerCartonBarCode": {
-  //   type: 'text'
-  // },
-  // "outerCartonSkuCode": {
-  //   type: 'text'
-  // }
 }
+

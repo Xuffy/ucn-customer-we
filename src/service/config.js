@@ -55,16 +55,20 @@ export default {
       UMETA_URL: '//192.168.51.248:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.248:11007', // 消息服务
       ULOG_URL: '//192.168.51.248:11008', // 日志服务
-      // UPURCHASE_URL: '//192.168.51.248:11001', // 采购端
-      // USUPPLY_URL: '//192.168.51.248:11002', // 供应商端
-      UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端
-      USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端
+      UPURCHASE_URL: '//192.168.51.248:11001', // 采购端 dev
+      USUPPLY_URL: '//192.168.51.248:11002', // 供应商端 dev
+      // UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端 开发人员电脑
+      // USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端 开发人员电脑
       USERVICE_URL: '//192.168.51.248:11003', // 服务商端
       UOSS_URL: '//192.168.51.248:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.248:18100', // 业务日志
-      UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
+      // UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
       BASE_BUYTEST:'//192.168.51.33:11001',
-      WORKBENCH_URL: '//192.168.51.207:11010' //workbench
+      WORKBENCH_URL: '//192.168.51.207:11010' ,//workbench
+      UWORKBENCH_URL: '//192.168.51.207:11010',
+
+
+
 
     },
     develop: {

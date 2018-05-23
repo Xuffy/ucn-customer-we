@@ -73,12 +73,11 @@ const json = {
     require(`./${lang}/warehouse/qcWarehouse`),
     require(`./${lang}/warehouse/warehouse.table`),
     require(`./${lang}/warehouse/warehouse.basic`),
-    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/payment.pending`),
     require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
     require(`./${lang}/warehouse/qcDetailProductInfo.pending`),
     require(`./${lang}/warehouse/summary.pending`),
-
+    require(`./${lang}/warehouse/qcDetailBasicInfo.pending`),
 
       /**
        * 新配置
@@ -100,7 +99,5 @@ const json = {
     require(`./${lang}/hintMessage/index`)
   ),
 }
-
-console.log(`%c这是优化后的国际化配置，请仔细看，修改并不麻烦。\n只需要把之前下划线 ‘$i.’ 去掉就行了`, "color:#409EFF", json,'\n\n');
 
 export default json;
