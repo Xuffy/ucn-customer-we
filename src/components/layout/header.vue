@@ -224,7 +224,7 @@
     position: fixed;
     width: 100%;
     z-index: 999;
-    min-width: 1450px;
+    min-width: 1366px;
     overflow: hidden;
   }
 
@@ -304,7 +304,7 @@
 
   .el-submenu,
   .el-menu-item {
-    padding: 0 0 0 20px;
+    padding: 0 0 0 2.7vw;
     border: none !important;
   }
 

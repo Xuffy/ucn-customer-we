@@ -12,9 +12,9 @@ import Expand from './common/table/expand';
 import FilterColumn from './common/table/filterColumn';
 import FilterValue from './common/table/filterValue';
 import Upload from './common/upload/upload';
-import UploadDialog from './common/uploadDialog/index';
-import Download from './common/uploadDialog/download';
-import Layout from './layout/index';
+import VUpload from './common/upload/test';
+import UploadDialog from './common/UploadDialog/index';
+import Download from './common/UploadDialog/download';
 import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
@@ -32,6 +32,7 @@ import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 
 export {
+  VUpload,
   VTimeZone,
   VPagination,
   VHistoryModify,
@@ -48,7 +49,6 @@ export {
   Upload,
   UploadDialog,
   Download,
-  Layout,
   messageBoard,
   selectSearch,
   // product,                      //product页面组件
