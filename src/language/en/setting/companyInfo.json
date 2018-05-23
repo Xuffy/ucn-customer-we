@@ -23,5 +23,9 @@
   "faxNumber": "fax number",
   "emailAddress": "email address",
   "skype": "skype",
-  "qq": "QQ"
+  "qq": "QQ",
+  "factoryInspectionReport": "factory inspection report",
+  "packingList": "packing list",
+  "invoice": "invoice",
+  "examiningReport": "examining report"
 }

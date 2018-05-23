@@ -151,69 +151,37 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <!--<el-tab-pane :label="$i.setting.contactInfo">-->
-                    <!--<div class="section-btn">-->
-                        <!--<el-button @click="addContact" type="primary">{{$i.button.add}}</el-button>-->
-                    <!--</div>-->
-                    <!--<el-table-->
-                            <!--border-->
-                            <!--style="width: 100%">-->
-                        <!--<el-table-column-->
-                                <!--prop="name"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.name">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="deptName"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.department">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="gender"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.gender">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="cellphone"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.mobileNumber">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="telphone"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.telNumber">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="fax"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.faxNumber">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="email"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.emailAddress">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="skype"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.skype">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--prop="qq"-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.qq">-->
-                        <!--</el-table-column>-->
-                        <!--<el-table-column-->
-                                <!--align="center"-->
-                                <!--:label="$i.setting.action">-->
-                            <!--<template slot-scope="scope">-->
-                                <!--<el-button @click="modifyContact(scope.row)" type="text">{{$i.setting.modify}}</el-button>-->
-                                <!--<el-button @click="deleteContact(scope.row)" type="text">{{$i.setting.delete}}</el-button>-->
-                            <!--</template>-->
-                        <!--</el-table-column>-->
-                    <!--</el-table>-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>-->
+
+                <el-tab-pane :label="$i.setting.documentRequired">
+                    <div class="section-btn">
+                        <el-button @click="addDocument(scope.row)" type="primary">{{$i.button.modify}}</el-button>
+                    </div>
+                  <el-form label-width="200px" :model="companyInfo.documents">
+                    <el-row>
+                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-form-item prop="document" :label="$i.setting.documentRequired">
+                          <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="aduitDetails" :label="$i.setting.factoryInspectionReport">
+                          <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="packingList" :label="$i.setting.packingList">
+                          <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="invoice" :label="$i.setting.invoice">
+                          <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="examiningReport" :label="$i.setting.examiningReport">
+                          <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </el-tab-pane>
+
+                <el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>
+                <el-tab-pane :label="$i.setting.custom">定时任务补偿</el-tab-pane>
+                <el-tab-pane :label="$i.setting.tradeExchangeRate">定时任务补偿</el-tab-pane>
             </el-tabs>
         </div>
 
@@ -359,61 +327,42 @@
             </div>
         </el-dialog>
 
-        <!--<el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">-->
-            <!--<el-form label-width="100px" :model="contactData">-->
-                <!--<el-row>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="name" :label="$i.setting.name">-->
-                            <!--<el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="address" :label="$i.setting.department">-->
-                            <!--<el-input size="mini" v-model="contactData.deptName" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="exportPort" :label="$i.setting.gender">-->
-                            <!--<el-input size="mini" v-model="contactData.gender" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="contactPerson1" :label="$i.setting.mobileNumber">-->
-                            <!--<el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="concatPhone1" :label="$i.setting.telNumber">-->
-                            <!--<el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="contactPerson2" :label="$i.setting.faxNumber">-->
-                            <!--<el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="concatPhone2" :label="$i.setting.emailAddress">-->
-                            <!--<el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="concatPhone2" :label="$i.setting.skype">-->
-                            <!--<el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                        <!--<el-form-item prop="concatPhone2" :label="$i.setting.qq">-->
-                            <!--<el-input size="mini" v-model="contactData.qq" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
-            <!--</el-form>-->
-            <!--<div slot="footer" class="dialog-footer">-->
-                <!--<el-button @click="contactDialogVisible=false">取 消</el-button>-->
-                <!--<el-button :loading="allowAddContact" type="primary" @click="sureAddContact">确 定</el-button>-->
-            <!--</div>-->
-        <!--</el-dialog>-->
+      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="documentDialogVisible">
+        <el-form label-width="200px" :model="documentData">
+          <el-row>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+              <el-form-item prop="name" :label="$i.setting.documentRequired">
+                <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+              <el-form-item prop="name" :label="$i.setting.factoryInspectionReport">
+                <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item prop="name" :label="$i.setting.packingList">
+                  <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item prop="name" :label="$i.setting.invoice">
+                  <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item prop="name" :label="$i.setting.examiningReport">
+                  <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="documentDialogVisible=false">取 消</el-button>
+          <el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">确 定</el-button>
+        </div>
+      </el-dialog>
+
     </div>
 </template>
 
@@ -430,6 +379,7 @@
                 addressDialogVisible:false,
                 accountDialogVisible:false,
                 contactDialogVisible:false,
+                documentDialogVisible:false,
                 //页面page绑定
                 companyInfo:{
                     code:'',            //供应商编号
@@ -493,6 +443,17 @@
                     skype:'',
                     qq:''
                 },
+              documentData:{
+                  aduitDetails: "",
+                  customerId: 0,
+                  document: "",
+                  examiningReport: "",
+                  id: 0,
+                  invoice: "",
+                  packingList: "",
+                  version: 0
+              },
+
 
                 //btn loading状态
                 allowAddAddress:false,
@@ -582,7 +543,6 @@
                     type: this.companyInfo.type,
                 };
                 this.allowModifySummary=true;
-                console.log(params)
                 this.$ajax.post(`${this.$apis.post_purchase_customer}/${1}`,params).then(res=>{
                     this.$message({
                         message: '修改成功',
@@ -806,6 +766,16 @@
 
                 });
             },
+          //document
+          addDocument(e){
+              this.documentData=Object.assign({}, e);
+              this.documentDialogVisible = true;
+          },
+          modifyDocument(){
+            this.documentDialogVisible = false;
+
+
+          },
         },
         created(){
             // this.supplierWhole();
