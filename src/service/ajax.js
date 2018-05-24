@@ -255,13 +255,14 @@ axios.interceptors.response.use(
     resCache = sessionStore.get('request_cache') || [];
 
     if (config._cache) {
+      console.log(response)
       let rcList = [];
       _.map(resCache, val => {
-        if (config.url !== val.url || !_.isEqual(config.params, val.params)) {
+        if (config.url !== val.url || !_.isEqual(config.data, val.params)) {
           rcList.push(val);
         }
       });
-      rcList.push({url: config.url, params: config.params || {}, data: response.data});
+      rcList.push({url: config.url, params: config.data || {}, data: response.data});
       sessionStore.set('request_cache', rcList);
     }
 
