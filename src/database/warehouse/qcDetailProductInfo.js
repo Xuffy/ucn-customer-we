@@ -6,6 +6,10 @@ export default{
         key: 'skuQcResultDictCode',
         type: 'String'
     },
+    SKUInventoryStatus:{
+        key: 'skuInventoryStatusDictCode',
+        type: 'String'
+    },
     SKUCode: {
         key: 'skuCode',
         type: 'String'
@@ -274,8 +278,4 @@ export default{
         key: 'remark',
         type: 'String',
     },
-    SKUInventoryStatus:{
-        key: 'skuInventoryStatusDictCode',
-        type: 'String'
-    }
 }

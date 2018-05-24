@@ -46,131 +46,136 @@
   </div>
 </template>
 <script>
-  import { selectSearch, VTable ,VPagination} from '@/components/index';
+    import { selectSearch, VTable ,VPagination} from '@/components/index';
 
-  export default {
-    name: "qc-overview",
-    components:{
-      VTable,
-      selectSearch,
-      VPagination
-    },
-    data(){
-      return{
-        name:'',
-        value:'',
-          qcStatusOption:[],
-        options: [{
-          id: 1,
-          label: 'QC Order No'
-        }],
-        searchLoad:false,
-        loading: false,
-        pageTotal: 0,
-        pazeSize: [10, 20, 30, 40, 50, 100],
-        params: {
-          pn: 1,
-          ps: 50,
-          qcOrderNo: "",
-          qcStatusDictCode: "",
-
-          // sorts: [
-          //     {
-          //         orderBy: "",
-          //         orderType: "",
-          //     }
-          // ],
+    export default {
+        name: "qc-overview",
+        components:{
+            VTable,
+            selectSearch,
+            VPagination
         },
-        tabData:[],
-        selectList: [],
-        selectedNumber: [],
-        searchValue:1
-      }
-    },
-    methods:{
-      getSort(val, key) {
-        console.log(val, key)
-      },
-      handleSizeChange(val) {
-        this.params.pn = val;
-      },
-      pageSizeChange(val) {
-        this.params.ps = val;
-      },
-      checked(item) {
-        this.selectList = item
-      },
-      inputEnter(val) {
-        if (!val.keyType) return this.$message({
-          message: 'please choose a type',
-          type: 'warning'
-        });
-        if (val.keyType == '1') {
-          this.params.qcOrderNo = val.key
-        }
-        this.getQcOrderList()
-      },
-      onAction(item, type) {
-        this.$windowOpen({
-          url:'/warehouse/qcDetail',
-          params:{
-            id:item.id.value
-          }
-        })
-      },
-      download() {
-        console.log('下载')
-        // this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
-        //   .then((res) => {
-        //     console.log(res)
-        //   })
-        //   .catch((res) => {
-        //     console.log(res)
-        //   });
-      },
-      //获取表格data
-      getQcOrderList(){
-        this.loading = true;
-        this.$ajax.post(this.$apis.post_qc_page,this.params)
-          .then(res => {
-            this.loading = false;
-            // res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-            this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas);
-          })
-          .catch((res) => {
-            this.loading = false;
-          });
-      },
-      createQcOrder(){
-        this.$windowOpen({
-          url:'/warehouse/createQc'
-        })
-      },
+        data(){
+            return{
+                name:'',
+                value:'',
+                qcStatusOption:[],
+                qcMethodsOption:[],
+                options: [
+                    {
+                        id: 1,
+                        label: 'QC Order No'
+                    }
+                ],
+                searchLoad:false,
+                loading: false,
+                pageTotal: 0,
+                pazeSize: [10, 20, 30, 40, 50, 100],
+                params: {
+                    pn: 1,
+                    ps: 50,
+                    qcOrderNo: "",
+                    qcStatusDictCode: "",
 
-        /**
-         * 获取单位
-         * */
-        getUnit(){
-            this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
-                this.qcStatusOption=res[0].codes;
-                // this.qcStatusOption.forEach(v=>{
-                //     if(v.code==='1'){
-                //         v.label='已验货';
-                //     }else if(v.code==='2'){
-                //         v.label='待验货';
-                //     }
-                // })
-            }).catch(err=>{
-
-            });
+                    // sorts: [
+                    //     {
+                    //         orderBy: "",
+                    //         orderType: "",
+                    //     }
+                    // ],
+                },
+                tabData:[],
+                selectList: [],
+                selectedNumber: [],
+                searchValue:1
+            }
         },
+        methods:{
+            getSort(val, key) {
+                console.log(val, key)
+            },
+            handleSizeChange(val) {
+                this.params.pn = val;
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+            },
+            checked(item) {
+                this.selectList = item
+            },
+            inputEnter(val) {
+                if (!val.keyType) return this.$message({
+                    message: 'please choose a type',
+                    type: 'warning'
+                });
+                if (val.keyType == '1') {
+                    this.params.qcOrderNo = val.key
+                }
+                this.getQcOrderList()
+            },
+            onAction(item, type) {
+                this.$windowOpen({
+                    url:'/warehouse/qcDetail',
+                    params:{
+                        id:item.id.value
+                    }
+                })
+            },
+            download() {
+                console.log('下载')
+                // this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
+                //   .then((res) => {
+                //     console.log(res)
+                //   })
+                //   .catch((res) => {
+                //     console.log(res)
+                //   });
+            },
+            //获取表格data
+            getQcOrderList(){
+                this.loading = true;
+                this.$ajax.post(this.$apis.post_qc_page,this.params)
+                .then(res => {
+                    this.loading = false;
+                    console.log(this.qcMethodsOption)
+                    this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas,e=>{
+                        e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
+                        return e;
+                    });
+                })
+                .catch((res) => {
+                    this.loading = false;
+                });
+            },
+            createQcOrder(){
+                this.$windowOpen({
+                    url:'/warehouse/createQc'
+                })
+            },
 
-    },
-    created(){
-      this.getQcOrderList();
-      this.getUnit();
-    },
-  }
+            /**
+            * 获取单位
+            * */
+            getUnit(){
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='QC_STATUS'){
+                            this.qcStatusOption=v.codes;
+                        }else if(v.code==='QC_MD'){
+                            this.qcMethodsOption=v.codes;
+                        }
+                    });
+                    this.getQcOrderList();
+                }).catch(err=>{
+
+                });
+            },
+
+        },
+        created(){
+        this.getUnit();
+        },
+    }
 </script>
 
 <style scoped>

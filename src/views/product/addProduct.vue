@@ -267,7 +267,6 @@
                 this.$set(this.productForm,'maxFobPrice',null);
             },
 
-
             //搜查
             search(){
                 this.disabledSearch=true;
