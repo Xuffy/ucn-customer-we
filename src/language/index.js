@@ -59,7 +59,8 @@ const json = {
   setting: _.extend({},
     require(`./${lang}/setting/department`),
     require(`./${lang}/setting/personalInfo`),
-    require(`./${lang}/setting/setting.basic`)
+    require(`./${lang}/setting/setting.basic`),
+    require(`./${lang}/setting/companyInfo`)
   ),
   supplier: _.extend({},
     require(`./${lang}/supplier/detail.pending`),

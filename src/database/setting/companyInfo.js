@@ -33,7 +33,7 @@ export default {
     },
     citySetting:{
         key: 'city',
-        type: 'select',
+        type: 'input',
         belong:'summary'
     },
     provideIncotermSetting:{

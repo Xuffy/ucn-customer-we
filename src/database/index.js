@@ -13,6 +13,7 @@ import payment from './payment/index';
 import logs from './logs/index';
 
 import warehouse from './warehouse/index';
+import track from './track/index';
 
 import {database} from 'ucn-tool/src/index';
 
@@ -28,7 +29,8 @@ const db = {
   message,
   payment,
   logs,
-  warehouse
+  warehouse,
+  track
   // inbound,
 };
 export default database(_, language, db);
