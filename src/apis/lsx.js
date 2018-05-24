@@ -111,7 +111,8 @@ export default {
     get_qcProductInfo:['/qc/detail/page','BASE_BUY','UPURCHASE_URL'],
     get_buyerWarehouseOverview:['/warehouse/overview/page','BASE_BUY','UPURCHASE_URL'],
     set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
-
+    set_qcResultRework:['/qc/rework','BASE_BUY','UPURCHASE_URL'],
+    set_qcResultReturn:['/qc/return','BASE_BUY','UPURCHASE_URL'],
 
 
     /**

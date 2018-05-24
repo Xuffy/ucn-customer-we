@@ -217,8 +217,8 @@
                     <div class="btn-group">
                         <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
                         <el-button :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="primary">{{$i.warehouse.rework}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="danger">{{$i.warehouse.return}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
                 </template>
             </v-table>
@@ -316,21 +316,22 @@
             changeChecked(e){
                 this.selectList=e;
             },
+
             confirm(){
-                this.$confirm('Sure to Confirm?', 'Info', {
+                this.$confirm('Sure Confirm?', 'Info', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
                     let allow=true;
                     this.selectList.forEach(v=>{
-                        if(v.skuQcResultDictCode.value==='CONFIRMED'){
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
                             allow=false;
                         }
                     });
                     if(!allow){
                         return this.$message({
-                            message: 'Already Confirm',
+                            message: this.$i.warehouse.alreadyHandled,
                             type: 'warning'
                         });
                     }
@@ -338,12 +339,11 @@
                     this.selectList.forEach(v=>{
                         id.push(v.id.value);
                     });
-                    console.log(id,'id')
                     this.loadingProductInfoTable=true;
                     this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: 'Confirm Success'
+                            message: this.$i.warehouse.confirmSuccess
                         });
                         this.getProductInfo();
                     }).catch(err=>{
@@ -355,6 +355,81 @@
 
             },
 
+            rework(){
+                this.$confirm(this.$i.warehouse.sureRework, '提示', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let allow=true;
+                    this.selectList.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                            allow=false;
+                        }
+                    });
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.warehouse.alreadyHandled,
+                            type: 'warning'
+                        });
+                    }
+
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.loadingProductInfoTable=true;
+                    this.$ajax.post(this.$apis.set_qcResultRework,id).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.reworkSuccess
+                        });
+                        this.getProductInfo();
+                    }).catch(err=>{
+                        this.loadingProductInfoTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+
+            returnProduct(){
+                this.$confirm(this.$i.warehouse.sureReturn, '提示', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let allow=true;
+                    this.selectList.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                            allow=false;
+                        }
+                    });
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.warehouse.alreadyHandled,
+                            type: 'warning'
+                        });
+                    }
+
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.loadingProductInfoTable=true;
+                    this.$ajax.post(this.$apis.set_qcResultReturn,id).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.returnSuccess
+                        });
+                        this.getProductInfo();
+                    }).catch(err=>{
+                        this.loadingProductInfoTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
 
             cancel(){
                 window.close();
@@ -385,14 +460,12 @@
                 }else{
                     let allow=false;
                     n.forEach(v=>{
-                        if(v.skuInventoryStatusDictCode.value==='WAIT_FOR_QC'){
+                        if(v.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || v.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
                             allow=true;
                         }
                     });
                     this.disableClickRestart=allow;
                 }
-
-
             }
         }
     }
