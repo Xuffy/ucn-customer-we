@@ -75,12 +75,20 @@
         this.$ajax.post(this.$apis.UDA_FINDDATAANALYSISLIST, {
           statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
         })
-          .then(data => {
+          .then(res => {
+            let codeList = [];
+            _.map(res, value => {
+              codeList.push(value.bizCode)
+            });
+            this.getCode(codeList);
             // this.dataList = data;
           })
           .finally(() => {
             this.loading = false;
           });
+      },
+      getCode() {
+        this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {_cache: true});
       }
     }
   }
