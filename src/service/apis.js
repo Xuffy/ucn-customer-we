@@ -3,9 +3,7 @@ const apis = {
   POST_CODE_PART: ['/code/part', 'BASE_JML'],
   POST_LOGISTICSPORT_QUERY: ['/logisticsport/query', 'BASE_JML'],
   GET_COUNTRY_ALL: ['/country/all', 'BASE_JML'],
-  gridfieldsetting: ['/gridfieldsetting', 'BASE_API'],
   get_listTest: ['/getList', 'BASE_API'],
-  get_itemfavoriteList: ['/itemfavorite/list', 'BASE_API'],
   update_gridfavorite: ['/gridfavorite/{bizCode}/{gridFieldId}', 'BASE_API'],
   GET_SYS_CATEGORY: ['/sys/category', 'BASE_CS'], //供应商 =》 获取系统分类
   BUYER_GET_PURCHASE_SYS_CAREGORY: ['/purchase/sys/category', 'BASE_CS1'], //采购端 => 获取系统分类
@@ -53,7 +51,7 @@ const apis = {
   add_order: ['/order/save', 'BASE_HCJ'],
   detail_order: ['/order/detail/{id}', 'BASE_HCJ'],
   get_order_history:['/order/skuHistory','BASE_HCJ'],
-  
+
   //supplier
   get_listSupplier: ['/purchase/listSupplier', 'BASE_CS_cgs'],
   get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS_cgs'],

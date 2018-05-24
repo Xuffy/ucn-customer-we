@@ -73,6 +73,7 @@
                     :data="tableDataList"
                     :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
+                    @filter-value="tableFilterValue"
                     @action="btnClick">
               <template slot="header">
                 <div class="btns" v-if="!hideBtn">
@@ -251,6 +252,9 @@
             }
         },
         methods:{
+          tableFilterValue(val){
+            console.log(val)
+          },
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;

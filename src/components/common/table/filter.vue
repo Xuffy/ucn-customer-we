@@ -111,32 +111,6 @@
         visible: false,
         dataList: [],
         setFiledData: [],
-        computeTypeList: [
-          {
-            value: '>',
-            label: '大于'
-          },
-          {
-            value: '>=',
-            label: '大于等于'
-          },
-          {
-            value: '=',
-            label: '等于'
-          },
-          {
-            value: '<=',
-            label: '小于等于'
-          },
-          {
-            value: 'like',
-            label: '包含'
-          },
-          {
-            value: 'between',
-            label: '区间'
-          }
-        ],
         conditionList: [
           {property: '', operator: '', value: '', sort: '', tooltipShow: false}
         ],
@@ -144,7 +118,7 @@
     },
     watch: {},
     created() {
-      // this.getConfig();
+      this.getConfig();
     },
     methods: {
       change(e) {
@@ -163,18 +137,20 @@
         }
       },
       getConfig() {
+        // this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'])
+
         this.$ajax.all([
-          this.$ajax.get(this.$apis.gridfieldsetting, {}, {_cache: true}),
-          this.$ajax.get(this.$apis.get_itemfavoriteList, {}, {_cache: true}),
+          this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'], {_cache: true}),
+          // this.$ajax.get(this.$apis.ITEMFAVORITE_PART, {}, {_cache: true}),
         ]).then(data => {
           this.dataList = data[0];
 
-          this.setFiledData = _.map(data[0], val => {
+          /*this.setFiledData = _.map(data[0], val => {
             if (!_.isEmpty(_.findWhere(data[1], {gridFieldId: val.name}))) {
               val._checked = true;
             }
             return val;
-          });
+          });*/
         });
       },
       selectCondition(item) {
