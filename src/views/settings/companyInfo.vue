@@ -156,27 +156,27 @@
                     <div class="section-btn">
                         <el-button @click="addDocument(scope.row)" type="primary">{{$i.button.modify}}</el-button>
                     </div>
-                  <el-form label-width="200px" :model="companyInfo.documents">
-                    <el-row>
-                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-                        <el-form-item prop="document" :label="$i.setting.documentRequired">
-                          <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="aduitDetails" :label="$i.setting.factoryInspectionReport">
-                          <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="packingList" :label="$i.setting.packingList">
-                          <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="invoice" :label="$i.setting.invoice">
-                          <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="examiningReport" :label="$i.setting.examiningReport">
-                          <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                  </el-form>
+                  <!--<el-form label-width="200px" :model="companyInfo.documents">-->
+                    <!--<el-row>-->
+                      <!--<el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">-->
+                        <!--<el-form-item prop="document" :label="$i.setting.documentRequired">-->
+                          <!--<el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item prop="aduitDetails" :label="$i.setting.factoryInspectionReport">-->
+                          <!--<el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item prop="packingList" :label="$i.setting.packingList">-->
+                          <!--<el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item prop="invoice" :label="$i.setting.invoice">-->
+                          <!--<el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>-->
+                        <!--</el-form-item>-->
+                        <!--<el-form-item prop="examiningReport" :label="$i.setting.examiningReport">-->
+                          <!--<el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>-->
+                        <!--</el-form-item>-->
+                      <!--</el-col>-->
+                    <!--</el-row>-->
+                  <!--</el-form>-->
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>
@@ -267,7 +267,7 @@
                       <el-form-item prop="deptId" :label="$i.setting.department">
                         <el-select  v-model="contactData.deptId" placeholder="请选择"  style="width: 285px;">
                           <el-option
-                            v-for="item in options.country"
+                            v-for="item in department"
                             :key="item.code"
                             :label="item.name"
                             :value="item.code">
@@ -473,7 +473,7 @@
             getWholeData(){
                 this.companyInfo.address=[];
                 this.companyInfo.concats=[];
-                // this.companyInfo.concats=[];
+                this.companyInfo.documents=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
                 }).catch(err=>{
@@ -768,7 +768,7 @@
             },
           //document
           addDocument(e){
-              this.documentData=Object.assign({}, e);
+              this.documentData = Object.assign({}, e);
               this.documentDialogVisible = true;
           },
           modifyDocument(){
