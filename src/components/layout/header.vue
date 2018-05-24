@@ -109,7 +109,7 @@
     data() {
       return {
         username: 'User Name',
-        userInfo:{},
+        userInfo: {},
         routerList: [],
         activeName: null,
         activeOpen: [],
@@ -182,7 +182,7 @@
       },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
+        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD, {}, {_cache: true})
           .then(data => {
             this.message.list = data || [];
           })
