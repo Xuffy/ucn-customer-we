@@ -7,5 +7,7 @@
   "systemHints": "System hints",
   "operationSuccessful": "Successful operation",
   "noLatestNews": "No latest news",
-  "operationFailed": "operation failed"
+  "operationFailed": "operation failed",
+  "pleaseEnter": "Please enter",
+  "noData": "No data"
 }

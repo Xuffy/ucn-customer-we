@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css';
 import {Message} from 'element-ui';
 import _config from './config';
 import $i from '../language/index';
+import md5 from 'blueimp-md5';
 import {localStore, sessionStore} from 'service/store';
 
 /**
@@ -101,12 +102,10 @@ const $ajax = (config) => {
 
     if (config._cache) {
       if (!_.isEmpty(resCache) && _.isArray(resCache)) {
-        _.map(resCache, val => {
-          let p = data.params || data;
-          if (url === val.url && _.isEqual(p, val.params)) {
-            resData = val;
-          }
-        });
+        let res = _.findWhere(resCache, {id: md5(url + JSON.stringify(data))});
+        if (res) {
+          resData = res;
+        }
       }
     }
 
@@ -255,14 +254,13 @@ axios.interceptors.response.use(
     resCache = sessionStore.get('request_cache') || [];
 
     if (config._cache) {
-      console.log(response)
       let rcList = [];
       _.map(resCache, val => {
         if (config.url !== val.url || !_.isEqual(config.data, val.params)) {
           rcList.push(val);
         }
       });
-      rcList.push({url: config.url, params: config.data || {}, data: response.data});
+      rcList.push({url: config.url, params: config.data, data: response.data, id: md5(config.url + config.data)});
       sessionStore.set('request_cache', rcList);
     }
 

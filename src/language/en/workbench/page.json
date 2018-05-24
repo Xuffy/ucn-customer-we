@@ -6,5 +6,7 @@
   "pendingTask": "Pending Task",
   "futureTask": "Future Task",
   "fyi": "FYI",
-  "push": "Push"
+  "push": "Push",
+  "number": "Number",
+  "content": "Content"
 }

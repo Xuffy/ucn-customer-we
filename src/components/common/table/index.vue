@@ -98,7 +98,7 @@
         </table>
 
         <div v-else class="empty">
-          暂无数据
+          {{$i.hintMessage.noData}}
         </div>
       </div>
     </div>
