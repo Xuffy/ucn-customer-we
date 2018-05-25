@@ -12,5 +12,6 @@ export default {
   CHATMESSAGE_ADD: ['/chatmessage/add', 'UMESSAGE_URL'], // 发送留言板消息
   TIMEZONE_ALL: ['/timezone/all', 'UMETA_URL'], // 查询时区
   OSS_TOKEN: ['/oss/token', 'UMETA_URL'], // OSS签名参数
-  GRIDFIELDSETTING_PART: ['/gridfieldsetting/part', 'UMETA_URL']
+  GRIDFIELDSETTING_PART: ['/gridfieldsetting/part', 'UMETA_URL'],
+  GRIDFAVORITE_UPDATE: ['/gridfavorite/update', 'UMETA_URL']
 }

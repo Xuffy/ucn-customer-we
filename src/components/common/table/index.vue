@@ -327,7 +327,9 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
-        this.$refs.tableBox.scrollTop = 0;
+        if (this.dataList.length !== val.length) {
+          this.$refs.tableBox.scrollTop = 0;
+        }
         let to = setTimeout(() => {
           clearTimeout(to);
           this.dataList = val;

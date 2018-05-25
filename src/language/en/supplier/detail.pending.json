@@ -1,6 +1,6 @@
 {
-    "SupplierCode": "Supplier Code",
-    "Suppliercompanyname": "Supplier Company Name",
+    "SupplierCode": "Supplier No.",
+    "Suppliercompanyname": "Supplier Name",
     "Suppliertype": "Supplier Type",
     "country": "Country",
     "city": "City",
@@ -61,18 +61,18 @@
     "SKUCode": "SKU Code",
     "orderPrice": "Order Price",
     "orderQuantity": "Order Quantity",
-    "amount": "Amount",
+    "amount": "SKU Quantity",
     "totalNetWeight": "Total Net Weight",
     "totalGrossWeight": " Total Gross Weight",
     "totalVolume": "Total Volume",
 
 
-    "InquiryNumber": "Inquiry number",
+    "InquiryNumber": "Inquiry No.",
     "inquiryDate": "Inquiry Date",
     "payment": "Payment",
     "departurePort": "Departure Port",
     "destinationPort": "Destination Port",
-    "quantity": "Quantity",
+    "quantity": "SKU Quantity",
 
 
     "remark": "Remark",

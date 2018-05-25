@@ -7,21 +7,21 @@
     "businessScope": "Main Business Scope",
     "categoryId": "Category",
     "supplierType": "Supplier Type",
-    "SKUnameEN": "SKU Name(EN)",
+    "SKUnameEN": "SKU Name (EN)",
     "SKUcode": "SKU Code",
-    "description": "description",
+    "description": "Description",
 
 
-    "supplierNO": "Supplier NO",
+    "supplierNO": "Supplier No.",
     "suppliername": "supplier name",
     "suppliertype": "Supplier type",
-    "compareRecycleBin":"Compare RecycleBin",
+    "compareRecycleBin":"Compare archive",
 
 
 
     "provideincoterm": "Provide incoterm",
 
-    "description": "description",
+    "description": "Description",
     "id": "id",
 
 
