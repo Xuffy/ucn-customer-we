@@ -86,10 +86,26 @@
         return data.name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
       },
       clickFilter() {
+        let selected = this.$refs.columnTree.getCheckedNodes()
+          , params = [];
         this.loading = true;
 
         // todo 请求更新接口 update_gridfavorite
 
+        console.log(selected)
+        _.map(selected, value => {
+          let { bizCode,id} = value;
+          params.push({bizCode,gridFieldId:id});
+        });
+
+        console.log(params)
+        console.log(this.$refs.columnTree.getCheckedKeys(), '*****');
+
+
+        /*this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE,{})
+          .then(res=>{
+
+          });*/
         setTimeout(() => {
           this.loading = false;
           this.$emit('filter-column', this.$refs.columnTree.getCheckedKeys());

@@ -8,8 +8,10 @@
 
     <el-dialog title="Table filter" :visible.sync="visible" width="1000px">
       <ul>
+
         <li class="filter-item" v-for="(cItem,index) in conditionList">
-          <el-select v-model="cItem.property" class="compute-key" filterable placeholder="请选择"
+
+          <el-select v-model="cItem.property" class="compute-key" filterable placeholder="请选择列"
                      @change="selectCondition(cItem)">
             <el-option
               v-for="item in dataList"
@@ -19,7 +21,7 @@
             </el-option>
           </el-select>
 
-          <el-select v-model="cItem.operator" class="compute-type" placeholder="请选择">
+          <el-select v-model="cItem.operator" class="compute-type" clearable placeholder="请选择操作">
             <el-option
               v-for="item in cItem.operators"
               :key="item.value"
@@ -28,39 +30,43 @@
             </el-option>
           </el-select>
 
-          <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value"></el-input>
+          <div v-if="cItem.operator" style="display: inline-block">
+            <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value"></el-input>
 
-          <el-input-number v-if="cItem.dataType === 2 || cItem.dataType === 3"
-                           v-model="cItem.value"
-                           controls-position="right" :min="0">
-          </el-input-number>
+            <el-input-number v-if="cItem.dataType === 2 || cItem.dataType === 3"
+                             v-model="cItem.value"
+                             controls-position="right" :min="0">
+            </el-input-number>
 
-          <el-date-picker v-if="cItem.dataType === 4"
-                          v-model="cItem.value"
-                          align="right"
-                          :type="cItem.operator === 'between' ? 'daterange' : 'date'"
-                          :editable="false"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          placeholder="选择日期">
-          </el-date-picker>
-          <el-date-picker v-if="cItem.dataType === 5"
-                          v-model="cItem.value"
-                          align="right"
-                          :type="cItem.operator === 'between' ? 'datetimerange' : 'datetime'"
-                          :editable="false"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          placeholder="选择日期">
-          </el-date-picker>
+            <el-date-picker v-if="cItem.dataType === 4"
+                            v-model="cItem.value"
+                            align="right"
+                            :type="cItem.operator === 'between' ? 'daterange' : 'date'"
+                            :editable="false"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            placeholder="选择日期">
+            </el-date-picker>
+            <el-date-picker v-if="cItem.dataType === 5"
+                            v-model="cItem.value"
+                            align="right"
+                            :type="cItem.operator === 'between' ? 'datetimerange' : 'datetime'"
+                            :editable="false"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            placeholder="选择日期">
+            </el-date-picker>
 
-          <el-radio-group v-model="cItem.sort" size="small" v-if="cItem.sortable">
+          </div>
+
+          <el-radio-group style="display: inline-block;vertical-align: top"
+                          v-model="cItem.sort" size="mini">
             <el-radio-button label="asc">升序</el-radio-button>
             <el-radio-button label="desc">降序</el-radio-button>
           </el-radio-group>
 
-          <el-button icon="el-icon-plus" @click="addCompute"></el-button>
-          <el-button icon="el-icon-minus" @click="cutCompute(index)"></el-button>
+          <el-button style="margin-left: 10px!important" icon="el-icon-edit-outline" @click="addCompute"></el-button>
+          <el-button icon="el-icon-delete" @click="cutCompute(index)"></el-button>
 
         </li>
       </ul>
@@ -137,20 +143,18 @@
         }
       },
       getConfig() {
-        // this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'])
-
         this.$ajax.all([
           this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'], {_cache: true}),
-          // this.$ajax.get(this.$apis.ITEMFAVORITE_PART, {}, {_cache: true}),
+          this.$ajax.post(this.$apis.ITEMFAVORITE_PART, ['Product_Sourcing_sku'], {_cache: true}),
         ]).then(data => {
           this.dataList = data[0];
 
-          /*this.setFiledData = _.map(data[0], val => {
+          this.setFiledData = _.map(data[0], val => {
             if (!_.isEmpty(_.findWhere(data[1], {gridFieldId: val.name}))) {
               val._checked = true;
             }
             return val;
-          });*/
+          });
         });
       },
       selectCondition(item) {
@@ -187,18 +191,17 @@
           , sorts = [];
         for (let i = 0; i < this.conditionList.length; i++) {
           let val = this.conditionList[i]
-            , {operator, property, value} = val;
-          if (!operator || !property || !value) {
+            , {operator, property, value, sort} = val;
+
+          if ((!operator || !property || !value) && !sort) {
             this.$message({
               message: '请输入完整筛选条件',
               type: 'warning'
             });
             return false;
           }
-          if (val.sort) {
-            sorts.push({orderBy: property, orderType: val.sort});
-          }
-          operatorFilters.push({property, operator, value});
+          sort && sorts.push({orderBy: property, orderType: sort});
+          operator && operatorFilters.push({property, operator, value});
         }
         this.visible = false;
         this.$emit('filter-value', {operatorFilters, sorts});
@@ -240,7 +243,7 @@
   }
 
   .compute-type {
-    width: 100px;
+    width: 120px;
   }
 
   .compute-value {

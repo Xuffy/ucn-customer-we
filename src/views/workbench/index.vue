@@ -1,7 +1,7 @@
 <template>
   <div class="workbench">
 
-    <!--<v-upload></v-upload>-->
+    <v-upload></v-upload>
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
       <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
