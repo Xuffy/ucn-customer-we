@@ -10,7 +10,7 @@
             <el-form ref="qcOrder" :model="qcOrderBasic" label-width="190px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Order No">
+                        <el-form-item prop="11" :label="$i.warehouse.qcOrderNo">
                             <el-input
                                     class="speInput"
                                     size="mini"
@@ -21,7 +21,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Type">
+                        <el-form-item prop="11" :label="$i.warehouse.qcType">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -33,7 +33,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Date">
+                        <el-form-item prop="11" :label="$i.warehouse.qcDate">
                             <el-date-picker
                                     :disabled="true"
                                     class="speInput"
@@ -46,7 +46,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory address">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryAddress">
                             <el-input
                                     class="speInput"
                                     size="mini"
@@ -56,7 +56,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory Contact Phone">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryContactPhone">
                             <el-input
                                     class="speInput"
                                     size="mini"
@@ -66,8 +66,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC status">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="qcStatusCode" placeholder="请选择">
+                        <el-form-item prop="11" :label="$i.warehouse.qcStatus">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="qcStatusCode">
                                 <el-option
                                         v-for="item in qcStatusOption"
                                         :key="item.id"
@@ -78,7 +78,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Method">
+                        <el-form-item prop="11" :label="$i.warehouse.qcMethod">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -90,7 +90,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Surveyor">
+                        <el-form-item prop="11" :label="$i.warehouse.surveyor">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -102,7 +102,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service Fee">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceFee">
                             <el-input
                                     :disabled="true"
                                     class="speInput"
@@ -113,7 +113,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service providers">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceProviders">
                             <el-select
                                     clearable
                                     class="speInput"
@@ -122,7 +122,7 @@
                                     filterable
                                     remote
                                     reserve-keyword
-                                    placeholder="请输入/选择"
+                                    placeholder="please input/choose"
                                     :remote-method="remoteMethod"
                                     :loading="loading">
                                 <el-option
@@ -135,7 +135,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Exchange Currency">
+                        <el-form-item prop="11" :label="$i.warehouse.exchangeCurrency">
                             <el-select class="speInput" size="mini" v-model="qcOrderConfig.exchangeCurrencyDictCode" placeholder="请选择">
                                 <el-option
                                         v-for="item in currencyOptions"
@@ -147,7 +147,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Remark">
+                        <el-form-item prop="11" :label="$i.warehouse.remark">
                             <el-input
                                     class="speInput"
                                     type="textarea"
@@ -158,7 +158,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Attachment">
+                        <el-form-item prop="11" :label="$i.warehouse.attachment">
                             <el-input
                                     :disabled="true"
                                     class="speInput"
@@ -226,11 +226,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        align="center"
                         fixed="right"
-                        label="操作"
+                        label="Action"
                         width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">Detail</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -242,15 +243,114 @@
             <div class="second-title">
                 {{$i.warehouse.summary}}
             </div>
-            <el-form label-width="190px">
+            <el-form label-width="280px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item label="QC Order No">
+                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="System Generation"
                                     v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.skuQuantity">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="summaryData.skuQuantity"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -440,6 +540,13 @@
                 qcOrderBasic:{
 
                 },
+
+                /**
+                 * 总计data
+                 * */
+                summaryData:{
+                    skuQuantity:''
+                },
             }
         },
         methods:{
@@ -474,6 +581,10 @@
                 this.disableClickSubmit=true;
 
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
+                    this.$message({
+                        message: this.$i.warehouse.createSuccess,
+                        type: 'success'
+                    });
                     this.$router.push('/warehouse/qcOverview');
                     this.disableClickSubmit=false;
                 }).catch(err=>{
@@ -530,7 +641,6 @@
                     if(valid){
                         this.loadingProductDialogTable=true;
                         this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
-                            console.log(res,'???')
                             this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res,e=>{
                                 if(e.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || e.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || e.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
                                     this.$set(e,'_disabled',true);
@@ -656,7 +766,6 @@
                 });
             },
 
-
             /**
              * 分页操作
              * */
@@ -667,7 +776,6 @@
                 // this.warehouseConfig.ps=e;
                 // this.getWarehouseData();
             },
-
 
             /**
              * 获取单位
@@ -712,6 +820,15 @@
                         this.$refs.qcOrder.clearValidate();
                     },0);
 
+                }
+            },
+            productTableData(n){
+                if(n.length>0){
+                    let sum=0;
+                    n.forEach(v=>{
+                        sum+=v.orderSkuQty;
+                    });
+                    this.summaryData.skuQuantity=sum;
                 }
             },
         },
@@ -772,5 +889,14 @@
     }
     .product-table >>> .el-checkbox{
         margin: 0;
+    }
+    .summary{
+        margin-top: 50px;
+    }
+    .summaryInput{
+        width: 80%;
+    }
+    .summaryInput >>> input{
+        text-align: center;
     }
 </style>

@@ -144,7 +144,7 @@
             {{$i.warehouse.payment}}
         </div>
         <div class="payment-table">
-            <el-button class="payment-btn" type="primary">{{$i.warehouse.add}}</el-button>
+            <el-button class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
             <el-table
                     :data="tableData"
                     border
@@ -225,6 +225,126 @@
 
         </div>
 
+        <div class="summary">
+            <div class="second-title">
+                {{$i.warehouse.summary}}
+            </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.cartonOfQualifiedProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.quantityOfQualifiedProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.volumeOfQualifiedProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.netWeightOfQualifiedProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.grossWeightOfQualifiedProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.quantityOfSubQualityProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.cartonOfSubQualityProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.netWeightOfSubQualityProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.volumeOfSubQualityProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="summaryData.grossWeightOfSubQualityProducts"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.skuQuantity">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="summaryData.skuQuantity"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+
 
 
         <div class="footBtn">
@@ -247,6 +367,7 @@
                 qcTypeOption:[],
                 qcMethodOption:[],
                 disableClickRestart:true,
+                disableAdd:true,
                 /**
                  * paymentTable data
                  * */
@@ -277,8 +398,24 @@
                 },
                 productInfoData:[],
                 selectList:[],
-
                 loadingData:false,
+
+                /**
+                 * summary Data
+                 * */
+                summaryData:{
+                    cartonOfQualifiedProducts:'',
+                    quantityOfQualifiedProducts:'',
+                    volumeOfQualifiedProducts:'',
+                    netWeightOfQualifiedProducts:'',
+                    grossWeightOfQualifiedProducts:'',
+                    quantityOfSubQualityProducts:'',
+                    cartonOfSubQualityProducts:'',
+                    netWeightOfSubQualityProducts:'',
+                    volumeOfSubQualityProducts:'',
+                    grossWeightOfSubQualityProducts:'',
+                    skuQuantity:''
+                },
             }
         },
         methods:{
@@ -287,6 +424,11 @@
                     .then(res=>{
                         this.qcDetail=res;
                         this.loadingData=false;
+                        if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
+                            this.disableAdd=true;
+                        }else{
+                            this.disableAdd=false;
+                        }
                     }).catch(err=>{
                     this.loadingData=false;
                 });
@@ -482,6 +624,7 @@
         font-size: 16px;
         color: #999999;
         padding: 10px 0;
+        margin-top: 40px;
     }
     .payment-btn{
         margin: 5px 0 10px 0;
@@ -497,5 +640,17 @@
         width: 100%;
         text-align: left;
         z-index: 1000;
+    }
+    .speInput{
+        width: 80%;
+    }
+    .summary{
+        margin-top: 50px;
+    }
+    .summaryInput{
+        width: 80%;
+    }
+    .summaryInput >>> input{
+        text-align: center;
     }
 </style>
