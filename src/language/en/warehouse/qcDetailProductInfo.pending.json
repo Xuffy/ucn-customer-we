@@ -1,5 +1,5 @@
 {
-    "SKUInventoryStatus": "SKU inventory status"
+    "SKUInventoryStatus": "SKU inventory status",
     "SKUQCResult": "SKU QC Result",
     "SKUCode": "SKU code",
     "custermerSKUCode": "Custermer SKU Code",
@@ -67,5 +67,5 @@
     "outerCartonMarksResults": "Outer Carton Marks results",
     "QCPic": "QC pic",
     "checkOuterCartons": "Check Outer Cartons",
-    "remark": "Remark",
+    "remark": "Remark"
 }
