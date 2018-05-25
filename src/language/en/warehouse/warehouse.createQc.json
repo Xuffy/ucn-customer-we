@@ -1,5 +1,5 @@
 {
-  "createQcOrder":"Create Qc Order",
+  "createQcOrder":"Create QC Order",
   "basicInfo":"Basic Info",
   "productInfo":"Product Info",
   "summary":"Summary",
@@ -15,10 +15,10 @@
 
 
 
-  "serviceFill":"Service Fill",
+  "serviceFill":"Service fee",
 
-  "skuNameCustomer":"Sku Name Customer",
+  "skuNameCustomer":"SKU Name in Customer language",
   "skuMaterialCn":"Material (Cn)",
   "skuMaterialEn":"Material (En)",
-  "skuDescCn":"SKU Description in Chinese"
+  "skuDescCn":"SKU Description (Cn)"
 }
