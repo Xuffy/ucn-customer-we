@@ -89,7 +89,7 @@
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
                     <div class="section-btn">
-                        <el-button @click="addAccount" type="primary">{{$i.button.add}}</el-button>
+                        <el-button @click="addContact" type="primary">{{$i.button.add}}</el-button>
                     </div>
                     <el-table
                             v-if="companyInfo.concats.length"
@@ -145,8 +145,8 @@
                                 align="center"
                                 :label="$i.setting.action">
                             <template slot-scope="scope">
-                                <el-button @click="modifyAccount(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteAccount(scope.row)" type="text">{{$i.button.delete}}</el-button>
+                                <el-button @click="modifyContact(scope.row)" type="text">{{$i.button.modify}}</el-button>
+                                <el-button @click="deleteContact(scope.row)" type="text">{{$i.button.delete}}</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -154,34 +154,85 @@
 
                 <el-tab-pane :label="$i.setting.documentRequired">
                     <div class="section-btn">
-                        <el-button @click="addDocument(scope.row)" type="primary">{{$i.button.modify}}</el-button>
+                        <el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>
                     </div>
-                  <!--<el-form label-width="200px" :model="companyInfo.documents">-->
+                  <el-form label-width="200px" :model="documentData">
+                    <el-row>
+                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-form-item  :label="$i.setting.documentRequired">
+                          <el-input size="mini" v-model="documentData.document"  placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.factoryInspectionReport">
+                          <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.packingList">
+                          <el-input size="mini"  v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.invoice">
+                          <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.examiningReport">
+                          <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </el-tab-pane>
+
+                <el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>
+                <el-tab-pane :label="$i.setting.custom">
+                  <div class="section-btn">
+                    <el-button @click="addCustom(customData)" type="primary">{{$i.button.modify}}</el-button>
+                  </div>
+                  <!--<el-form label-width="400px" :model="customData">-->
                     <!--<el-row>-->
-                      <!--<el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">-->
-                        <!--<el-form-item prop="document" :label="$i.setting.documentRequired">-->
-                          <!--<el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>-->
+                      <!--<el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">-->
+                        <!--<el-form-item  :label="$i.setting.oceanFreight">-->
+                          <!--<el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>-->
                         <!--</el-form-item>-->
-                        <!--<el-form-item prop="aduitDetails" :label="$i.setting.factoryInspectionReport">-->
-                          <!--<el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>-->
+                        <!--<el-form-item  :label="$i.setting.insuranceExpenses">-->
+                          <!--<el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>-->
                         <!--</el-form-item>-->
-                        <!--<el-form-item prop="packingList" :label="$i.setting.packingList">-->
-                          <!--<el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>-->
+                        <!--<el-form-item :label="$i.setting.priceCurrency">-->
+                          <!--<el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>-->
                         <!--</el-form-item>-->
-                        <!--<el-form-item prop="invoice" :label="$i.setting.invoice">-->
-                          <!--<el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item prop="examiningReport" :label="$i.setting.examiningReport">-->
-                          <!--<el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>-->
+                        <!--<el-form-item  :label="$i.setting.exchangeRate">-->
+                          <!--<el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>-->
                         <!--</el-form-item>-->
                       <!--</el-col>-->
                     <!--</el-row>-->
                   <!--</el-form>-->
                 </el-tab-pane>
-
-                <el-tab-pane :label="$i.setting.attachment">定时任务补偿</el-tab-pane>
-                <el-tab-pane :label="$i.setting.custom">定时任务补偿</el-tab-pane>
-                <el-tab-pane :label="$i.setting.tradeExchangeRate">定时任务补偿</el-tab-pane>
+                <el-tab-pane :label="$i.setting.tradeExchangeRate">
+                  <el-table
+                    v-if="currencyList.length"
+                    :data="currencyList"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                      prop="fromCurrency"
+                      align="center"
+                      :label="$i.setting.from">
+                    </el-table-column>
+                    <el-table-column
+                      prop="toCurrency"
+                      align="center"
+                      :label="$i.setting.to">
+                    </el-table-column>
+                    <el-table-column
+                      prop="price"
+                      align="center"
+                      :label="$i.setting.tradeExchangeRate">
+                    </el-table-column>
+                    <el-table-column
+                      align="center"
+                      :label="$i.setting.action">
+                      <template slot-scope="scope">
+                        <el-button @click="updateExchangerate(scope.row)" type="text">{{$i.button.modify}}</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-tab-pane>
             </el-tabs>
         </div>
 
@@ -331,27 +382,27 @@
         <el-form label-width="200px" :model="documentData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.documentRequired">
+              <el-form-item  :label="$i.setting.documentRequired">
                 <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.factoryInspectionReport">
+              <el-form-item :label="$i.setting.factoryInspectionReport">
                 <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item prop="name" :label="$i.setting.packingList">
+                <el-form-item  :label="$i.setting.packingList">
                   <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item prop="name" :label="$i.setting.invoice">
+                <el-form-item  :label="$i.setting.invoice">
                   <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                <el-form-item prop="name" :label="$i.setting.examiningReport">
+                <el-form-item  :label="$i.setting.examiningReport">
                   <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
                 </el-form-item>
             </el-col>
@@ -363,6 +414,62 @@
         </div>
       </el-dialog>
 
+      <!--<el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="customDialogVisible">-->
+        <!--<el-form label-width="300px" :model="customData">-->
+          <!--<el-row>-->
+            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
+              <!--<el-form-item :label="$i.setting.oceanFreight">-->
+                <!--<el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
+              <!--<el-form-item :label="$i.setting.insuranceExpenses">-->
+                <!--<el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
+              <!--<el-form-item  :label="$i.setting.priceCurrency">-->
+                <!--<el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
+              <!--<el-form-item :label="$i.setting.exchangeRate">-->
+                <!--<el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+        <!--</el-form>-->
+        <!--<div slot="footer" class="dialog-footer">-->
+          <!--<el-button @click="customDialogVisible=false">取 消</el-button>-->
+          <!--<el-button :loading="allowAddAccount" type="primary" @click="modifyCustom">确 定</el-button>-->
+        <!--</div>-->
+      <!--</el-dialog>-->
+
+      <!--<el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="exchangerateDialogVisible">-->
+        <!--<el-form label-width="200px" :model="exchangerateData">-->
+          <!--<el-row>-->
+            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
+              <!--<el-form-item prop="name" :label="$i.setting.from">-->
+                <!--<el-input size="mini" v-model="exchangerateData.fromCurrency" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
+              <!--<el-form-item prop="name" :label="$i.setting.to">-->
+                <!--<el-input size="mini" v-model="exchangerateData.toCurrency" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
+              <!--<el-form-item prop="name" :label="$i.setting.tradeExchangeRate">-->
+                <!--<el-input size="mini" v-model="exchangerateData.price" placeholder="请输入内容"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+        <!--</el-form>-->
+        <!--<div slot="footer" class="dialog-footer">-->
+          <!--<el-button @click="exchangerateDialogVisible=false">取 消</el-button>-->
+          <!--<el-button :loading="allowAddAccount" type="primary" @click="modifyExchangerate">确 定</el-button>-->
+        <!--</div>-->
+      <!--</el-dialog>-->
     </div>
 </template>
 
@@ -380,6 +487,8 @@
                 accountDialogVisible:false,
                 contactDialogVisible:false,
                 documentDialogVisible:false,
+                customDialogVisible:false,
+                exchangerateDialogVisible:false,
                 //页面page绑定
                 companyInfo:{
                     code:'',            //供应商编号
@@ -445,13 +554,29 @@
                 },
               documentData:{
                   aduitDetails: "",
-                  customerId: 0,
+                  customerId: "",
                   document: "",
                   examiningReport: "",
-                  id: 0,
+                  id: "",
                   invoice: "",
                   packingList: "",
-                  version: 0
+                  version: ""
+              },
+              customData:{
+                customerId: "",
+                exchangeRateUSD: "",
+                id:"",
+                insuranceExpensesUSD40HC: "",
+                oceanFreightUSD40HC: "",
+                portWarehousePrice40HC: "",
+                version: ""
+              },
+              exchangerateData: {
+                id: "",
+                fromCurrency: "",
+                toCurrency: "",
+                price: "",
+                symbol: ""
               },
 
 
@@ -465,7 +590,8 @@
                 isModifyAccount:false,
                 isModifyContact:false,
                 options:{},
-                department:[]
+                department:[],
+                currencyList:[]
             }
         },
         methods:{
@@ -473,9 +599,10 @@
             getWholeData(){
                 this.companyInfo.address=[];
                 this.companyInfo.concats=[];
-                this.companyInfo.documents=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    this.documentData = res.documents[0];
+                    this.customData = res.custom
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -628,76 +755,6 @@
             },
 
             /**
-             * account操作
-             * */
-            addAccount(){
-                this.accountDialogVisible=true;
-            },
-            sureAddAccount(){
-                this.allowAddAccount=true;
-                this.accountData.customerId=this.companyInfo.id;
-
-                if(this.isModifyAccount){
-                    //表示是在修改account
-                    console.log(this.accountData,'???')
-                    this.$ajax.post(`${this.$apis.update_account}?id=${this.accountData.id}`,this.accountData).then(res=>{
-                        this.allowAddAccount=false;
-                        this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        this.getWholeData();
-                        this.accountDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAccount=false;
-                        this.accountDialogVisible=false;
-                    });
-                }else{
-                    //表示是在新增account
-                    this.$ajax.post(this.$apis.post_purchase_customer_concat,this.accountData).then(res=>{
-                        this.allowAddAccount=false;
-                        this.$message({
-                            message: '添加成功',
-                            type: 'success'
-                        });
-                        this.getWholeData();
-                        this.accountDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAccount=false;
-                        this.$message({
-                            message: err,
-                            type: 'success'
-                        });
-                        this.accountDialogVisible=false;
-                    });
-                }
-            },
-            modifyAccount(e){
-                this.isModifyAccount=true;      //标识正在修改account
-                this.accountData=Object.assign({}, e);
-                this.accountDialogVisible=true;
-            },
-            deleteAccount(e){
-                this.$confirm('确定删除该账户?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$ajax.post(this.$apis.post_purchase_customer_deleteConcat,{id:e.id}).then(res=>{
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                        this.getWholeData();
-                    }).catch(err=>{
-                        console.log(err)
-                    });
-                }).catch(() => {
-
-                });
-            },
-
-            /**
              * contact操作
              * */
             addContact(){
@@ -709,17 +766,17 @@
 
                 if(this.isModifyContact){
                     //表示是在修改account
-                    this.$ajax.post(`${this.$apis.post_purchase_customer_concat_id}?id=${this.contactData.id}`,this.contactData).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_purchase_customer_concat_id}/${this.contactData.id}`,this.contactData).then(res=>{
                         this.allowAddContact=false;
                         this.$message({
                             message: '修改成功',
                             type: 'success'
                         });
                         this.getWholeData();
-                        this.contactDialogVisible=false;
+                        this.accountDialogVisible=false;
                     }).catch(err=>{
                         this.allowAddContact=false;
-                        this.contactDialogVisible=false;
+                        this.accountDialogVisible=false;
                     });
                 }
                 else{
@@ -731,21 +788,21 @@
                             type: 'success'
                         });
                         this.getWholeData();
-                        this.contactDialogVisible=false;
+                        this.accountDialogVisible=false;
                     }).catch(err=>{
                         this.allowAddContact=false;
                         this.$message({
                             message: err,
                             type: 'success'
                         });
-                        this.contactDialogVisible=false;
+                        this.accountDialogVisible=false;
                     });
                 }
             },
             modifyContact(e){
                 this.isModifyContact=true;      //标识正在修改contact
                 this.contactData=Object.assign({}, e);
-                this.contactDialogVisible=true;
+                this.accountDialogVisible=true;
             },
             deleteContact(e){
                 this.$confirm('确定删除该联系人?', '提示', {
@@ -766,16 +823,91 @@
 
                 });
             },
-          //document
+          /**
+           * document操作
+           * */
           addDocument(e){
               this.documentData = Object.assign({}, e);
               this.documentDialogVisible = true;
           },
           modifyDocument(){
             this.documentDialogVisible = false;
-
+            this.documentData.customerId=this.companyInfo.id;
+            this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+              this.getWholeData();
+              this.documentDialogVisible = false;
+            }).catch(err=>{
+              this.$message({
+                message: err,
+                type: 'success'
+              });
+              this.documentDialogVisible=false;
+            });
+          },
+          /**
+           * custom操作
+           * */
+          addCustom(){
+            this.customDialogVisible = true;
 
           },
+          modifyCustom(){
+            this.customDialogVisible = false;
+            this.customData.customerId=this.companyInfo.id;
+            this.$ajax.post(`${this.$apis.post_purchase_customer_custom_id}/${this.customData.id}`,this.customData).then(res=>{
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+              this.getWholeData();
+              this.customDialogVisible = false;
+            }).catch(err=>{
+              this.$message({
+                message: err,
+                type: 'success'
+              });
+              this.customDialogVisible=false;
+            });
+          },
+
+          /**
+           * Trade exchange rate操作
+           * */
+          getGridfavoritePartData(){
+            this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res=>{
+                this.currencyList = res;
+            }).catch(err=>{
+              this.$message({
+                message: err,
+                type: 'success'
+              });
+            });
+          },
+          updateExchangerate(e){
+            this.exchangerateDialogVisible = true;
+            this.exchangerateData=Object.assign({}, e);
+          },
+          modifyExchangerate(){
+            this.$ajax.post(this.$apis.post_exchangerate_update,this.exchangerateData).then(res=>{
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+              this.getGridfavoritePartData();
+              this.exchangerateDialogVisible = false;
+            }).catch(err=>{
+              this.exchangerateDialogVisible = false;
+              this.$message({
+                message: err,
+                type: 'success'
+              });
+            });
+          }
+
         },
         created(){
             // this.supplierWhole();
@@ -784,6 +916,7 @@
                this.getCountryAll();
                this.getCodePart();
                this.getDepartment();
+               this.getGridfavoritePartData();
 
             // console.log(this.$db,'db')
         },
