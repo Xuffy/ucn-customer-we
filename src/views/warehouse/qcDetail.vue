@@ -10,7 +10,7 @@
             <el-form label-width="190px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item label="QC Order No">
+                        <el-form-item :label="$i.warehouse.qcOrderNo">
                             <el-input
                                     v-model="qcDetail.qcOrderNo"
                                     :disabled="true">
@@ -18,25 +18,33 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item label="QC Type">
-                            <el-input
-                                    :placeholder="$i.warehouse.serviceChoose"
-                                    v-model="qcDetail.qcTypeDictCode"
-                                    :disabled="true">
-                            </el-input>
+                        <el-form-item :label="$i.warehouse.qcTypeDictCode">
+                            <el-select style="width: 100%" placeholder="service choose" :disabled="true" class="speInput" size="mini" v-model="qcDetail.qcTypeDictCode">
+                                <el-option
+                                        v-for="item in qcTypeOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Date">
-                            <el-input
-                                    :placeholder="$i.warehouse.serviceFill"
+                        <el-form-item prop="11" :label="$i.warehouse.qcDate">
+                            <el-date-picker
+                                    style="width: 100%"
+                                    :disabled="true"
+                                    class="speInput"
+                                    size="mini"
                                     v-model="qcDetail.qcDate"
-                                    :disabled="true">
-                            </el-input>
+                                    align="right"
+                                    type="date"
+                                    placeholder="service input">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory address">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryAddress">
                             <el-input
                                     v-model="qcDetail.factoryAddress"
                                     :disabled="true">
@@ -44,7 +52,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory Contact Phone">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryContactPhone">
                             <el-input
                                     v-model="qcDetail.factoryContactPhone"
                                     :disabled="true">
@@ -52,7 +60,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC status">
+                        <el-form-item prop="11" :label="$i.warehouse.qcStatusDictCode">
                             <el-input
                                     v-model="qcDetail.qcStatusDictCode"
                                     :disabled="true">
@@ -60,16 +68,19 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Method">
-                            <el-input
-                                    :placeholder="$i.warehouse.serviceChoose"
-                                    v-model="qcDetail.qcMethodDictCode"
-                                    :disabled="true">
-                            </el-input>
+                        <el-form-item prop="11" :label="$i.warehouse.qcMethodDictCode">
+                            <el-select style="width: 100%;" placeholder="service choose" :disabled="true" class="speInput" size="mini" v-model="qcDetail.qcMethodDictCode">
+                                <el-option
+                                        v-for="item in qcMethodOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Surveyor">
+                        <el-form-item prop="11" :label="$i.warehouse.surveyor">
                             <el-input
                                     :placeholder="$i.warehouse.serviceChoose"
                                     v-model="qcDetail.surveyor"
@@ -78,7 +89,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service Fee">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceFee">
                             <el-input
                                     :placeholder="$i.warehouse.serviceFill"
                                     v-model="qcDetail.serviceFee"
@@ -87,7 +98,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service providers">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceName">
                             <el-input
                                     v-model="qcDetail.serviceName"
                                     :disabled="true">
@@ -95,7 +106,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Exchange Currency">
+                        <el-form-item prop="11" :label="$i.warehouse.exchangeCurrencyDictCode">
                             <el-input
                                     v-model="qcDetail.exchangeCurrencyDictCode"
                                     :disabled="true">
@@ -111,7 +122,7 @@
                         <!--</el-form-item>-->
                     <!--</el-col>-->
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Remark">
+                        <el-form-item prop="11" :label="$i.warehouse.remark">
                             <el-input
                                     v-model="qcDetail.remark"
                                     :disabled="true">
@@ -119,7 +130,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Attachment">
+                        <el-form-item prop="11" :label="$i.warehouse.attachment">
                             <el-input
                                     v-model="qcDetail.attachment"
                                     :disabled="true">
@@ -205,9 +216,9 @@
                 <template slot="header">
                     <div class="btn-group">
                         <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="primary">{{$i.warehouse.restartQc}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="primary">{{$i.warehouse.rework}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="danger">{{$i.warehouse.return}}</el-button>
+                        <el-button :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
+                        <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
                 </template>
             </v-table>
@@ -233,6 +244,9 @@
         data(){
             return{
                 qcDetail:{},
+                qcTypeOption:[],
+                qcMethodOption:[],
+                disableClickRestart:true,
                 /**
                  * paymentTable data
                  * */
@@ -269,7 +283,6 @@
         },
         methods:{
             getQcOrderDetail(){
-                this.loadingData=true;
                 this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
@@ -281,7 +294,12 @@
             getProductInfo(){
                 this.loadingProductInfoTable=true;
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
-                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas);
+                    this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
+                        if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
+                            e._disabled=true;
+                        }
+                        return e;
+                    });
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
@@ -298,40 +316,157 @@
             changeChecked(e){
                 this.selectList=e;
             },
+
             confirm(){
-                let hasWait=false;
-                this.selectList.forEach(v=>{
-                    if(v.skuQcResultDictCode.value==='WAIT_FOR_QC'){
-                        hasWait=true;
-                    }
-                });
-                if(hasWait){
-                    this.$message({
-                        message: '当前选项还有产品未QC,无法操作',
-                        type: 'warning'
+                this.$confirm('Sure Confirm?', 'Info', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let allow=true;
+                    this.selectList.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                            allow=false;
+                        }
                     });
-                }else{
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.warehouse.alreadyHandled,
+                            type: 'warning'
+                        });
+                    }
                     let id=[];
                     this.selectList.forEach(v=>{
                         id.push(v.id.value);
                     });
-                    console.log(id,'id')
-                    // this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
-                    //     console.log(res)
-                    // }).catch(err=>{
-                    //
-                    // });
-                }
+                    this.loadingProductInfoTable=true;
+                    this.$ajax.post(this.$apis.set_qcResultConfirm,id).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.confirmSuccess
+                        });
+                        this.getProductInfo();
+                    }).catch(err=>{
+                        this.loadingProductInfoTable=false;
+                    });
+                }).catch(() => {
+
+                });
+
             },
 
+            rework(){
+                this.$confirm(this.$i.warehouse.sureRework, '提示', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let allow=true;
+                    this.selectList.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                            allow=false;
+                        }
+                    });
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.warehouse.alreadyHandled,
+                            type: 'warning'
+                        });
+                    }
+
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.loadingProductInfoTable=true;
+                    this.$ajax.post(this.$apis.set_qcResultRework,id).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.reworkSuccess
+                        });
+                        this.getProductInfo();
+                    }).catch(err=>{
+                        this.loadingProductInfoTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+
+            returnProduct(){
+                this.$confirm(this.$i.warehouse.sureReturn, '提示', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let allow=true;
+                    this.selectList.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                            allow=false;
+                        }
+                    });
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.warehouse.alreadyHandled,
+                            type: 'warning'
+                        });
+                    }
+
+                    let id=[];
+                    this.selectList.forEach(v=>{
+                        id.push(v.id.value);
+                    });
+                    this.loadingProductInfoTable=true;
+                    this.$ajax.post(this.$apis.set_qcResultReturn,id).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.returnSuccess
+                        });
+                        this.getProductInfo();
+                    }).catch(err=>{
+                        this.loadingProductInfoTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
 
             cancel(){
                 window.close();
             },
         },
         created(){
-            this.getQcOrderDetail();
-            this.getProductInfo();
+            this.loadingData=true;
+            this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD'],{_cache:true})
+                .then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='QC_TYPE'){
+                            this.qcTypeOption=v.codes;
+                        }else if(v.code==='QC_MD'){
+                            this.qcMethodOption=v.codes;
+                        }
+                    });
+                    this.getQcOrderDetail();
+                    this.getProductInfo();
+                })
+                .catch(err=>{
+                    this.loadingData=false;
+                });
+        },
+        watch:{
+            selectList(n){
+                if(n.length===0){
+                    this.disableClickRestart=true;
+                }else{
+                    let allow=false;
+                    n.forEach(v=>{
+                        if(v.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || v.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
+                            allow=true;
+                        }
+                    });
+                    this.disableClickRestart=allow;
+                }
+            }
         }
     }
 </script>

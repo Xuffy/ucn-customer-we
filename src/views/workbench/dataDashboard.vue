@@ -29,21 +29,21 @@
         <table>
           <tr>
             <!--<td class="title" v-text="$i.workbench.purchaseOrder"></td>-->
-            <td class="title" v-text="item.module"></td>
+            <td class="title" v-text="item.title"></td>
             <td class="value">
-              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].code"></div>&nbsp;
+              <div v-if="item.list[0]" v-text="item.list[0].value + ' ' + item.list[0].unit"></div>&nbsp;
             </td>
           </tr>
           <tr>
             <!--<td class="title" rowspan="2" v-text="$i.workbench.orderPlaced"></td>-->
-            <td class="title" rowspan="2" v-text="item.theme"></td>
+            <td class="title" rowspan="2" v-text="item.name"></td>
             <td class="value">
-              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].code"></div>&nbsp;
+              <div v-if="item.list[1]" v-text="item.list[1].value + ' ' + item.list[1].unit"></div>&nbsp;
             </td>
           </tr>
           <tr>
             <td class="value">
-              <div v-if="item.list[2]" v-text="item.list[2].code + ' ' + item.list[2].value"></div>&nbsp;
+              <div v-if="item.list[2]" v-text="item.list[2].value + ' ' + item.list[2].unit"></div>&nbsp;
             </td>
           </tr>
         </table>
@@ -76,19 +76,43 @@
           statPoints: ['CUST_PO_PLACED', 'CUST_PO_IN_PROCESSING', 'CUST_PO_CANCELED', 'CUST_LO_IN_PROCESSING']
         })
           .then(res => {
-            let codeList = [];
-            _.map(res, value => {
-              codeList.push(value.bizCode)
+            this.dataList = [];
+            this.getCode().then(data => {
+              _.map(res, resVal => {
+                let value = {}
+                  , ts = _.findWhere(data, {code: 'UDA_BIZ_CODE'})
+                  , ns = _.findWhere(data, {code: 'STAT_POINT'})
+                  , us = _.findWhere(data, {code: 'STAT_ITEM_UNIT'});
+
+                if (ts) {
+                  let v = _.findWhere(ts.codes, {code: resVal.bizCode});
+                  if (v) {
+                    value.title = v.name;
+                  }
+                }
+
+                if (ns) {
+                  let v = _.findWhere(ns.codes, {code: resVal.statPoint});
+                  if (v) {
+                    value.name = v.name;
+                  }
+                }
+
+                value.list = [];
+                _.map(resVal.items, itemVal => {
+                  let v = _.findWhere(us.codes, {code: itemVal.unit});
+                  value.list.push({unit: v ? v.value || '' : itemVal.unit || '', value: itemVal.value || ''})
+                });
+                this.dataList.push(value)
+              });
             });
-            this.getCode(codeList);
-            // this.dataList = data;
           })
           .finally(() => {
             this.loading = false;
           });
       },
       getCode() {
-        this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {_cache: true});
+        return this.$ajax.post(this.$apis.POST_CODE_PART, ['UDA_BIZ_CODE', 'STAT_POINT', 'STAT_ITEM_UNIT'], {_cache: true});
       }
     }
   }

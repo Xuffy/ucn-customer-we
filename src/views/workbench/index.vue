@@ -1,7 +1,7 @@
 <template>
   <div class="workbench">
 
-    <v-upload></v-upload>
+    <!--<v-upload></v-upload>-->
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
       <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
@@ -26,10 +26,10 @@
         <v-table-data :type="2"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data :type="4"></v-table-data>
+        <v-table-data :type="3"></v-table-data>
       </el-col>
       <el-col :span="12">
-        <v-table-data :type="3"></v-table-data>
+        <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
 
