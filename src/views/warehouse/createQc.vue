@@ -41,8 +41,7 @@
                                     v-model="value"
                                     align="right"
                                     type="date"
-                                    :placeholder="$i.warehouse.serviceFill"
-                                    :picker-options="pickerOptions1">
+                                    :placeholder="$i.warehouse.serviceFill">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -243,6 +242,21 @@
             <div class="second-title">
                 {{$i.warehouse.summary}}
             </div>
+            <el-form label-width="190px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item label="QC Order No">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    placeholder="System Generation"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
 
         <div class="footBtn">
@@ -307,6 +321,11 @@
                     :buttons="[{label: 'Detail', type: 1}]"
                     @action="btnClick"
                     @change-checked="changeProductDialogChecked"></v-table>
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></page>
+
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
                 <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">Cancel</el-button>
@@ -317,60 +336,20 @@
 <script>
 
     import VTable from '@/components/common/table/index'
-    import {VTimeZone} from '@/components/index'
+    import {VTimeZone,VPagination} from '@/components/index'
 
     export default {
         name:'createQc',
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            page:VPagination
         },
         data(){
             return{
                 value:'',
-                options: [
-                    {
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-
+                options: [],
+                pageData:{},
                 tableDataList:[],
                 loadingTable:false,
                 /**
@@ -379,8 +358,6 @@
                 serviceId:'',
                 serviceList:[],         //用于展现的数组
                 serviceMainList:[],     //用于存储总数据的数组
-
-                options4: [],
                 loading: false,
                 /**
                  * 页面基本配置
@@ -395,16 +372,6 @@
                 currencyOptions:[],
                 qcStatusCode:'WAITING_QC',
                 qcStatusOption:[],
-                qcStatus:[
-                    {
-                        label:'未验货',
-                        value:0
-                    },
-                    {
-                        label:'已验货',
-                        value:1
-                    }
-                ],
                 selectProductTableData:[],      //页面上选中的table data
 
 
@@ -563,11 +530,13 @@
                     if(valid){
                         this.loadingProductDialogTable=true;
                         this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
+                            console.log(res,'???')
                             this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res,e=>{
                                 if(e.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || e.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || e.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
                                     this.$set(e,'_disabled',true);
                                 }
                             });
+                            this.pageData={datas:res};
                             this.productTableData.forEach(v=>{
                                 this.productDialogTableData.forEach(m=>{
                                     if(v.id===m.id.value){
@@ -685,6 +654,18 @@
                         id:e.skuId
                     }
                 });
+            },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                console.log(e)
+            },
+            changeSize(e){
+                // this.warehouseConfig.ps=e;
+                // this.getWarehouseData();
             },
 
 

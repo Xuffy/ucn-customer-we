@@ -30,6 +30,10 @@
                         </div>
                     </template>
                 </v-table>
+                <page
+                        @size-change="changeSize"
+                        @change="changePage"
+                        :page-data="pageData"></page>
             </div>
         </div>
     </div>
@@ -38,15 +42,21 @@
 <script>
     import VTable from '@/components/common/table/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
+    import {VPagination} from '@/components/index'
 
     export default {
         name: "warehouseOverview",
         components:{
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data(){
             return{
+                /**
+                 * 分页配置
+                 * */
+                pageData:{},
                 /**
                  * 页面基本配置
                  * */
@@ -60,7 +70,7 @@
                     inboundNo: "",
                     orderNo: "",
                     pn: 1,
-                    ps: 100,
+                    ps: 10,
                     skuCode: "",
                     skuInventoryStatusDictCode: "",
 
@@ -98,6 +108,7 @@
         },
         methods:{
             changeStatus(){
+                this.warehouseConfig.pn=1;
                 this.getWarehouseData();
             },
 
@@ -105,7 +116,11 @@
             getWarehouseData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerWarehouseOverview,this.warehouseConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,e=>{
+                        e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                    });
+                    this.pageData=res;
+                    console.log(res,'?????');
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -156,21 +171,22 @@
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_INVENTORY_STATUS'],{_cache:true}).then(res=>{
                     this.warehouseStatusOption=res[0].codes;
-                    console.log(this.warehouseStatusOption)
-                    // this.warehouseStatusOption.forEach(v=>{
-                    //     if(v.code==='1'){
-                    //         v.label='已验货';
-                    //     }else if(v.code==='2'){
-                    //         v.label='待验货';
-                    //     }
-                    // })
                 }).catch(err=>{
 
                 });
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
             },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.warehouseConfig.pn=e;
+                this.getWarehouseData();
+            },
+            changeSize(e){
+                this.warehouseConfig.ps=e;
+                this.getWarehouseData();
+            }
         },
         created(){
             this.getWarehouseData();

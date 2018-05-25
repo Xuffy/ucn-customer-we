@@ -93,6 +93,7 @@
             <!--分页-->
             <page
                     @change="changePage"
+                    @size-change="changeSize"
                     :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
@@ -153,6 +154,18 @@
         },
         data(){
             return{
+                /**
+                 * 字典配置
+                 * */
+                statusOption:[],
+                lengthOption:[],
+                weightOption:[],
+                volumeOption:[],
+                dateOption:[],
+                skuUnitOption:[],
+                countryOption:[],
+
+
                 hideBody:true,            //是否显示body
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
@@ -194,26 +207,24 @@
                     descEnLike: "",
                     descCnLike: "",
 
-                    // pn: 1,
-                    // ps: 50,
+                    pn: 1,
+                    ps: 10,
 
                     recycle: false,         //是否是在recycle bin里请求
-                    //初始搜索的时候不传，当有筛选条件之后再传
-                    // operatorFilters: [
+                    operatorFilters: [
                     //     {
                     //         operator: "",
                     //         property: "",
                     //         value: {}
                     //     }
-                    // ],
+                    ],
 
-                    //初始搜索的时候不传，当有筛选条件之后再传
-                    // sorts: [
+                    sorts: [
                     //     {
                     //         orderBy: "",
                     //         orderType: "",
                     //     }
-                    // ],
+                    ],
 
                 },
                 //表格验证参数
@@ -252,9 +263,17 @@
             }
         },
         methods:{
-          tableFilterValue(val){
-            console.log(val)
-          },
+            tableFilterValue(val){
+                this.productForm.operatorFilters=[];
+                this.productForm.sorts=[];
+                val.operatorFilters.forEach(v=>{
+                    this.productForm.operatorFilters.push(v);
+                });
+                val.sorts.forEach(v=>{
+                    this.productForm.sorts.push(v);
+                });
+                this.getData();
+            },
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -294,94 +313,7 @@
                 }else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
-
-                if(this.type==='recycle'){
-                    this.productForm.recycle=true;
-                    this.loadingTable=true;
-                    this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
-                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            if(e.status.value===1){
-                                e.status.value='上架';
-                            }else if(e.status.value===0){
-                                e.status.value='下架';
-                            }
-                            return e;
-                        });
-                        this.disabledSearch=false;
-                        this.selectList=[];
-                        if(this.disabledLine.length>0){
-                            this.disabledLine.forEach(v=>{
-                                let id=_.findWhere(v,{key:'id'}).value;
-                                this.tableDataList.forEach(m=>{
-                                    let newId=_.findWhere(m,{key:'id'}).value;
-                                    if(id===newId){
-                                        m._disabled=true;
-                                    }
-                                })
-                            })
-                        }
-                        this.loadingTable=false;
-                    }).catch(err=>{
-                        this.disabledSearch=false;
-                        this.loadingTable=false;
-                    });
-                }
-                else{
-                    let url='';
-                    if(this.type==='product'){
-                        url=this.$apis.get_buyerProductList;
-                    }else if(this.type==='bookmark'){
-                        url=this.$apis.get_buyerBookmarkList;
-                    }
-
-                    this.loadingTable=true;
-                    this.$ajax.post(url,this.productForm).then(res=>{
-                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            if(e.status.value===1){
-                                e.status.value='上架';
-                            }else if(e.status.value===0){
-                                e.status.value='下架';
-                            }
-                            return e;
-                        });
-                        if(this.disabledLine.length>0){
-                            this.disabledLine.forEach(v=>{
-                                let id;
-                                if(this.isInModify){
-                                    id=_.findWhere(v,{key:'skuId'}).value;
-                                }else if(this.isInquiry){
-                                    id=_.findWhere(v,{key:'skuId'}).value;
-                                }else{
-                                    id=_.findWhere(v,{key:'id'}).value;
-                                }
-                                this.tableDataList.forEach(m=>{
-                                    let newId;
-                                    if(this.type==='product'){
-                                        newId=_.findWhere(m,{key:'id'}).value;
-                                    }else if(this.type==='bookmark'){
-                                        newId=_.findWhere(m,{key:'skuId'}).value;
-                                    }
-                                    if(id===newId){
-                                        // m._disabled=true;
-                                        // m._checked=true;
-                                        // console.log(m)
-                                        this.$set(m,'_disabled',true);
-                                        this.$set(m,'_checked',true);
-                                    }
-                                })
-                            })
-                        }
-                        this.$set(this.pageData,'pn',1);
-                        console.log(this.pageData,'?????')
-
-                        this.disabledSearch=false;
-                        this.selectList=[];
-                        this.loadingTable=false;
-                    }).catch(err=>{
-                        this.disabledSearch=false;
-                        this.loadingTable=false;
-                    });
-                }
+                this.getData();
             },
 
             handleChange(value) {
@@ -443,6 +375,7 @@
                         pn:1
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+
                             if(e.status.value===1){
                                 e.status.value='上架';
                             }else if(e.status.value===0){
@@ -462,8 +395,10 @@
                             })
                         }
                         this.loadingTable=false;
+                        this.disabledSearch=false;
                     }).catch(err=>{
                         this.loadingTable=false;
+                        this.disabledSearch=false;
                     });
                 }
                 else{
@@ -474,39 +409,29 @@
                         url=this.$apis.get_buyerBookmarkList;
                     }
                     this.loadingTable=true;
-
-                    this.$ajax.post(url,{
-                        recycle:false,
-                        pn:e?e:1,
-                        ps:10,
-                        // operatorFilters: [
-                        //     {
-                        //         operator: "=",
-                        //         property: "code",
-                        //         value: '12'
-                        //     }
-                        // ],
-                        //
-                        // sorts: [
-                        //     {
-                        //         orderBy: "code",
-                        //         orderType: "desc",
-                        //     }
-                        // ],
-                    }).then(res=>{
+                    this.productForm.recycle=false;
+                    this.$ajax.post(url,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            if(e.status.value===1){
-                                e.status.value='上架';
-                            }else if(e.status.value===0){
-                                e.status.value='下架';
-                            }
+                            let noneSellCountry='';
+                            e.noneSellCountry.value.split(',').forEach(v=>{
+                                this.countryOption.forEach(m=>{
+                                    if(m.code===v){
+                                        noneSellCountry+=(m.name+',');
+                                    }
+                                })
+                            });
+                            noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
+                            e.noneSellCountry.value=noneSellCountry;
+
+                            e.status.value=this.$change(this.statusOption,'status',e,true).name;
+                            e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
+                            e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
+                            e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
+                            e.unitVolume.value=this.$change(this.volumeOption,'unitVolume',e,true).name;
+                            e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
                             return e;
                         });
-                        // this.pageData.tc=this.tableDataList.length;
-                        // this.pageData.pn=1;
-                        // this.pageData.ps=5;
                         this.pageData=res;
-
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 let id;
@@ -536,8 +461,10 @@
                             v._disabled=true;
                         });
                         this.loadingTable=false;
+                        this.disabledSearch=false;
                     }).catch(err=>{
                         this.loadingTable=false;
+                        this.disabledSearch=false;
                     });
                 }
             },
@@ -677,12 +604,44 @@
              * 分页操作
              * */
             changePage(e){
-                this.getData(e);
-            }
+                this.productForm.pn=e;
+                this.getData();
+            },
+            changeSize(e){
+                this.productForm.ps=e;
+                this.getData();
+            },
+
         },
         created(){
-            this.getData();
-            this.getCategoryId();
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+                res.forEach(v=>{
+                    if(v.code==='SKU_SALE_STATUS'){
+                        this.statusOption=v.codes;
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
+                    }else if(v.code==='ED_UNIT'){
+                        this.dateOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='SKU_UNIT'){
+                        this.skuUnitOption=v.codes;
+                    }
+                });
+
+                //国家
+                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                    this.countryOption=res;
+                    this.getData();
+                    this.getCategoryId();
+                }).catch(err=>{
+
+                });
+            }).catch(err=>{
+
+            })
         },
 
         watch:{

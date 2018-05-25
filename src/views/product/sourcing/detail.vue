@@ -1,10 +1,10 @@
 <template>
-    <div class="Details">
+    <div class="Details" v-loading="!notLoadingDone">
         <div class="head">
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail" v-loading="!notLoadingDone">
+            <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
