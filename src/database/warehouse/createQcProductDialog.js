@@ -5,6 +5,9 @@ export default {
     id:{
         _hide:true
     },
+    skuInventoryStatusDictCode:{
+        _hide:true
+    },
     orderNo:{},
     skuBarCode:{},
     skuCode:{},

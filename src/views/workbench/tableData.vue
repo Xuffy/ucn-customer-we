@@ -71,7 +71,6 @@
     },
     mounted() {
       this.getData();
-      console.log(this.$options.data().search)
     },
     watch: {},
     methods: {

@@ -8,8 +8,6 @@
     "canTBeEmpty": "搜索内容不能为空",
     "prompt": "提示",
     "confirmDeletion": "确认删除?",
-    "confirm": "确定",
-    "cancel": "取消",
     "haveCancel": "已取消删除",
     "addressError": "地址错误",
     "pleaseChooseGoods": "请选择商品",

@@ -10,6 +10,8 @@
   "recycleBin": "Recycle Bin",
   "log": "Log",
   "admin": "Admin",
-  "user": "User"
+  "user": "User",
+  "cancel": "cancel",
+  "confirm": "confirm"
 }
 

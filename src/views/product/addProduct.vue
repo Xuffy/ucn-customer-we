@@ -271,7 +271,6 @@
                 this.$set(this.productForm,'maxFobPrice',null);
             },
 
-
             //搜查
             search(){
                 this.disabledSearch=true;
@@ -479,7 +478,21 @@
                     this.$ajax.post(url,{
                         recycle:false,
                         pn:e?e:1,
-                        ps:10
+                        ps:10,
+                        // operatorFilters: [
+                        //     {
+                        //         operator: "=",
+                        //         property: "code",
+                        //         value: '12'
+                        //     }
+                        // ],
+                        //
+                        // sorts: [
+                        //     {
+                        //         orderBy: "code",
+                        //         orderType: "desc",
+                        //     }
+                        // ],
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             if(e.status.value===1){
@@ -664,7 +677,6 @@
              * 分页操作
              * */
             changePage(e){
-
                 this.getData(e);
             }
         },

@@ -6,12 +6,12 @@
                      v-if="!hideFilterColumn">
     </v-filter-column>
 
-    <el-dialog title="Table filter" :visible.sync="visible" width="1000px">
+    <el-dialog :title="$i.table.tableFilter" :visible.sync="visible" width="1000px">
       <ul>
 
         <li class="filter-item" v-for="(cItem,index) in conditionList">
 
-          <el-select v-model="cItem.property" class="compute-key" filterable placeholder="请选择列"
+          <el-select v-model="cItem.property" class="compute-key" filterable :placeholder="$i.table.selectTheColumn"
                      @change="selectCondition(cItem)">
             <el-option
               v-for="item in dataList"
@@ -21,7 +21,7 @@
             </el-option>
           </el-select>
 
-          <el-select v-model="cItem.operator" class="compute-type" clearable placeholder="请选择操作">
+          <el-select v-model="cItem.operator" class="compute-type" clearable :placeholder="$i.table.selectionOperation">
             <el-option
               v-for="item in cItem.operators"
               :key="item.value"
@@ -61,8 +61,8 @@
 
           <el-radio-group style="display: inline-block;vertical-align: top"
                           v-model="cItem.sort" size="mini">
-            <el-radio-button label="asc">升序</el-radio-button>
-            <el-radio-button label="desc">降序</el-radio-button>
+            <el-radio-button label="asc">{{$i.table.asc}}</el-radio-button>
+            <el-radio-button label="desc">{{$i.table.desc}}</el-radio-button>
           </el-radio-group>
 
           <el-button style="margin-left: 10px!important" icon="el-icon-edit-outline" @click="addCompute"></el-button>
@@ -72,8 +72,8 @@
       </ul>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取 消</el-button>
-        <el-button type="primary" @click="submitFilter">确 定</el-button>
+        <el-button @click="visible = false">{{$i.common.cancel}}</el-button>
+        <el-button type="primary" @click="submitFilter">{{$i.common.confirm}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -195,7 +195,7 @@
 
           if ((!operator || !property || !value) && !sort) {
             this.$message({
-              message: '请输入完整筛选条件',
+              message: this.$i.table.checkData,
               type: 'warning'
             });
             return false;
@@ -239,11 +239,11 @@
   }
 
   .compute-key {
-    width: 120px;
+    width: 140px;
   }
 
   .compute-type {
-    width: 120px;
+    width: 150px;
   }
 
   .compute-value {

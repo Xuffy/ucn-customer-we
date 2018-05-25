@@ -95,6 +95,7 @@
         console.log(selected)
         _.map(selected, value => {
           let { bizCode,id} = value;
+          console.log(value)
           params.push({bizCode,gridFieldId:id});
         });
 

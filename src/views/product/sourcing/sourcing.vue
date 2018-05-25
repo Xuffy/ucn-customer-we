@@ -13,7 +13,6 @@
     </div>
 </template>
 <script>
-
     import product from '../addProduct'
     export default {
         name:"sourcing",

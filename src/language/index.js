@@ -4,6 +4,10 @@ import config from 'service/config';
 const lang = localStore.get('language') || config.LANGUAGE;
 
 const json = {
+  table:_.extend({},
+    require(`./${lang}/table/page`),
+    require(`./${lang}/table/message`)
+  ),
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
     require(`./${lang}/common/basePlaceholder`),
@@ -84,6 +88,8 @@ const json = {
        * */
     require(`./${lang}/warehouse/warehouse.overview`),
     require(`./${lang}/warehouse/warehouse.createQc`),
+    require(`./${lang}/warehouse/warehouse.qcOrderDetail`),
+    require(`./${lang}/warehouse/warehouse.prompt`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),

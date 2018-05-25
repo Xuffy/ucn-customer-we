@@ -563,7 +563,11 @@
                     if(valid){
                         this.loadingProductDialogTable=true;
                         this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
-                            this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
+                            this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res,e=>{
+                                if(e.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || e.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || e.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
+                                    this.$set(e,'_disabled',true);
+                                }
+                            });
                             this.productTableData.forEach(v=>{
                                 this.productDialogTableData.forEach(m=>{
                                     if(v.id===m.id.value){
@@ -691,13 +695,6 @@
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
                     this.qcStatusOption=res[0].codes;
-                    // this.qcStatusOption.forEach(v=>{
-                    //     if(v.code==='1'){
-                    //         v.label='已验货';
-                    //     }else if(v.code==='2'){
-                    //         v.label='待验货';
-                    //     }
-                    // })
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
