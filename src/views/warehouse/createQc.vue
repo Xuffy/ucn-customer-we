@@ -14,7 +14,7 @@
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="System Generation"
+                                    :placeholder="$i.warehouse.systemGeneration"
                                     v-model="value"
                                     :disabled="true">
                             </el-input>
@@ -50,7 +50,7 @@
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="please input"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.factoryAddress">
                             </el-input>
                         </el-form-item>
@@ -60,7 +60,7 @@
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="please input"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.factoryContactPhone">
                             </el-input>
                         </el-form-item>
@@ -107,7 +107,7 @@
                                     :disabled="true"
                                     class="speInput"
                                     size="mini"
-                                    placeholder="服务商填写"
+                                    :placeholder="$i.warehouse.serviceFill"
                                     v-model="value">
                             </el-input>
                         </el-form-item>
@@ -122,7 +122,7 @@
                                     filterable
                                     remote
                                     reserve-keyword
-                                    placeholder="please input/choose"
+                                    :placeholder="$i.warehouse.pleaseInputOrChoose"
                                     :remote-method="remoteMethod"
                                     :loading="loading">
                                 <el-option
@@ -151,22 +151,15 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{minRows: 2}"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.remark">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.attachment">
-                            <el-input
-                                    :disabled="true"
-                                    class="speInput"
-                                    type="textarea"
-                                    autosize
-                                    placeholder="please input"
-                                    v-model="value">
-                            </el-input>
+                            <v-upload></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -436,14 +429,15 @@
 <script>
 
     import VTable from '@/components/common/table/index'
-    import {VTimeZone,VPagination} from '@/components/index'
+    import {VTimeZone,VPagination,VUpload} from '@/components/index'
 
     export default {
         name:'createQc',
         components:{
             VTable,
             VTimeZone,
-            page:VPagination
+            page:VPagination,
+            VUpload
         },
         data(){
             return{

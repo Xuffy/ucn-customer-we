@@ -458,6 +458,7 @@ export const routerMap = [
         {
           path: 'createQc',
           name: 'warehouseCreateQcOrder',
+          hidden:true,
           meta: {
             draft: true,
             recycleBin: true,

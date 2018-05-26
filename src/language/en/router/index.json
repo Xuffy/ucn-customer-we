@@ -40,7 +40,7 @@
 
   "warehouse": "Warehouse",
   "warehouseOverview": "Warehouse Overview",
-  "warehouseQcOverview": "QC Overview",
+  "warehouseQcOverview": "QC Order Overview",
   "warehouseQcOrderDetail": "QC Order Detail",
   "warehouseCreateQcOrder": "Create QC Order",
 

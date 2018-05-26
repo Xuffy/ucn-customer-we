@@ -234,7 +234,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.cartonOfQualifiedProducts"
                                     :disabled="true">
@@ -244,7 +244,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.quantityOfQualifiedProducts"
                                     :disabled="true">
@@ -254,7 +254,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.volumeOfQualifiedProducts"
                                     :disabled="true">
@@ -264,7 +264,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.netWeightOfQualifiedProducts"
                                     :disabled="true">
@@ -274,7 +274,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.grossWeightOfQualifiedProducts"
                                     :disabled="true">
@@ -284,7 +284,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.quantityOfSubQualityProducts"
                                     :disabled="true">
@@ -294,7 +294,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.cartonOfSubQualityProducts"
                                     :disabled="true">
@@ -304,7 +304,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.netWeightOfSubQualityProducts"
                                     :disabled="true">
@@ -314,7 +314,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.volumeOfSubQualityProducts"
                                     :disabled="true">
@@ -324,7 +324,7 @@
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
                             <el-input
-                                    class="speInput"
+                                    class="summaryInput"
                                     size="mini"
                                     v-model="summaryData.grossWeightOfSubQualityProducts"
                                     :disabled="true">
@@ -344,8 +344,6 @@
                 </el-row>
             </el-form>
         </div>
-
-
 
         <div class="footBtn">
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
@@ -429,9 +427,11 @@
                         }else{
                             this.disableAdd=false;
                         }
+                        this.getProductInfo();
                     }).catch(err=>{
-                    this.loadingData=false;
-                });
+                        this.loadingData=false;
+                    }
+                );
             },
             getProductInfo(){
                 this.loadingProductInfoTable=true;
@@ -442,12 +442,40 @@
                         }
                         return e;
                     });
+                    let diffData=[];
+                    if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
+                        //如果是等待QC，只统计SKU QTY
+                        this.productInfoData.forEach(v=>{
+                            diffData.push(v.skuId.value+v.orderNo.value);
+                            this.summaryData.skuQuantity=_.uniq(diffData).length;
+                        })
+                    }else{
+                        //否则，统计全部summary
+                        _.mapObject(this.summaryData,(v,index)=>{
+                            this.summaryData[index]=0;
+                        });
+                        this.productInfoData.forEach(v=>{
+                            this.summaryData.cartonOfQualifiedProducts+=v.qualifiedSkuCartonTotalQty.value;
+                            this.summaryData.quantityOfQualifiedProducts+=v.qualifiedSkuQty.value;
+                            this.summaryData.volumeOfQualifiedProducts+=v.qualifiedSkuVolume.value;
+                            this.summaryData.netWeightOfQualifiedProducts+=v.qualifiedSkuNetWeight.value;
+                            this.summaryData.grossWeightOfQualifiedProducts+=v.qualifiedSkuGrossWeight.value;
+                            this.summaryData.quantityOfSubQualityProducts+=v.unqualifiedSkuQty.value;
+                            this.summaryData.cartonOfSubQualityProducts+=v.unqualifiedSkuCartonTotalQty.value;
+                            this.summaryData.netWeightOfSubQualityProducts+=v.unqualifiedSkuNetWeight.value;
+                            this.summaryData.volumeOfSubQualityProducts+=v.unqualifiedSkuVolume.value;
+                            this.summaryData.grossWeightOfSubQualityProducts+=v.unqualifiedSkuGrossWeight.value;
+                            diffData.push(v.skuId.value+v.orderNo.value);
+                        });
+                        this.summaryData.skuQuantity=_.uniq(diffData).length;
+
+                    }
+
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
                 });
             },
-
 
             /**
              * product info表格事件
@@ -589,7 +617,7 @@
                         }
                     });
                     this.getQcOrderDetail();
-                    this.getProductInfo();
+                    // this.getProductInfo();
                 })
                 .catch(err=>{
                     this.loadingData=false;
