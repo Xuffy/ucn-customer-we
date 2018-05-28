@@ -75,85 +75,85 @@ export default {
     key: ''
   },
   unitOfWeight: {
-    key: ''
+    key: 'skuUnitWeight'
   },
   unitOfLength: {
-    key: ''
+    key: 'skuUnitLength'
   },
   unitOfVolume: {
-    key: ''
+    key: 'skuUnitVolume'
   },
   outerCartonLength: {
-    key: ''
+    key: 'skuOuterCartonLength'
   },
   outerCartonWidth: {
-    key: ''
+    key: 'skuOuterCartonWidth'
   },
   outerCartonHeight: {
-    key: ''
+    key: 'skuOuterCartonHeight'
   },
   outerCartonVolume: {
-    key: ''
+    key: 'skuOuterCartonVolume'
   },
   outerCartonNetWeight: {
-    key: ''
+    key: 'skuOuterCartonNetWeight'
   },
   outerCartonGrossWeight: {
-    key: ''
+    key: 'skuOuterCartonRoughWeight'
   },
   skuNetWeight: {
-    key: ''
+    key: 'skuNetWeight'
   },
   skuGrossWeight: {
-    key: ''
+    key: 'skuGrossWeight'
   },
   skuVolume: {
-    key: ''
+    key: 'skuVolume'
   },
   skuBarCode: {
-    key: ''
+    key: 'skuBarCode'
   },
   innerPackingBarCode: {
-    key: ''
+    key: 'skuInnerPackBarCode'
   },
   outerCartonBarCode: {
-    key: ''
+    key: 'skuOuterCartonBarCode'
   },
   skuLabel: {
-    key: ''
+    key: 'skuInnerPackLabel'
   },
   innerPackingLabel: {
     key: ''
   },
   shippingMarks: {
-    key: ''
+    key: 'skuShippingMarks'
   },
   deliveryDays: {
-    key: ''
+    key: 'skuDeliveryDates'
   },
   remark: {
-    key: ''
+    key: 'remark'
   },
   skuStatus: {
-    key: ''
+    key: 'skuStatus'
   },
   sampleProvideDate: {
-    key: ''
+    key: 'sampleReceiveDt'
   },
   sampleNeedConfirmDate: {
-    key: ''
+    key: 'sampleComfirmDt'
   },
   needLabel: {
-    key: ''
+    key: 'needLableDt'
   },
   lableOrDesignDate: {
-    key: ''
+    key: 'lableDt'
   },
   designNeedConfirmDate: {
-    key: ''
+    key: 'designConfirmDt'
   },
   qCDateA: {
-      key: 'firstQcDt'
+    key: 'firstQcDt'
   },
   qCDateB: {
     key: 'secondQcDt'
@@ -165,52 +165,52 @@ export default {
     key: 'confirmQcDt'
   },
   estDeliveryDate: {
-    key: ''
+    key: 'estDeliveryDt'
   },
   actDeliveryDate: {
-    key: ''
+    key: 'actDeliveryDt'
   },
   estDepartureDate: {
     key: ''
   },
   actDepartureDate: {
-    key: ''
+    key: 'actDepartureDt'
   },
   bookingDate: {
-    key: ''
+    key: 'bookingDt'
   },
   shippingSpaceReleaseDate: {
-    key: ''
+    key: 'shippingSpaceReleaseDt'
   },
   estContainerStuffingDate: {
-    key: ''
+    key: 'estContainerStuffingDt'
   },
   actContainerStuffingDate: {
-    key: ''
+    key: 'actContainerStuffingDt'
   },
   declareDate: {
-    key: ''
+    key: 'declareDt'
   },
   estCustomsCleanceDate: {
-    key: ''
+    key: 'estCustomsCleanceDt'
   },
   actCustomsCleanceDate: {
-    key: ''
+    key: 'actCustomsCleanceDt'
   },
   estArrivalDate: {
-    key: ''
+    key: 'estArrivalDt'
   },
   actArrivalDate: {
-    key: ''
+    key: 'actArrivalDt'
   },
   estReleaseDate: {
-    key: ''
+    key: 'estReleaseDt'
   },
   actReleaseDate: {
-    key: ''
+    key: 'actReleaseDt'
   },
   qualifiedProductsTotalQTYS: {
-    key: ''
+    key: 'qualifiedSkuQty'
   },
   deliveredQuantity: {
     key: ''

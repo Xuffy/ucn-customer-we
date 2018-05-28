@@ -1,4 +1,13 @@
 {
+  "customerCode":"customer Code",
+  "customerName": "customer name",
+  "customerShortName": "customer short name",
+  "customerType":"customer type",
+  "provideIncoterm": "Provide incoterm",
+  "exportLicense": "Export license",
+  "currency": "currency",
+  "paymentTerm": "payment term",
+  "shipAgent": "ship agent ",
   "address": "Address",
   "contactInfo": "Contact info",
   "documentRequired": "Document required",
@@ -34,6 +43,5 @@
   "exchangeRate": "exchange rate（domestic currency-USD）",
   "from": "From",
   "to": "To",
-  "tradeExchangeRate": "Trade exchange rate",
   "logo": "logo"
 }

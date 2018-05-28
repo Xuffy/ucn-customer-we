@@ -60,6 +60,8 @@ export default {
   post_purchase_customer_document: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
   post_purchase_customer_document_id: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
   post_purchase_customer_deleteDocument: ['/purchase/customer/deleteDocument/{id}','BASE_URL_CS','BASE_URL'],
+  post_oss_company_batchUpload: ['/purchase/oss/company/batchUpload','BASE_URL_CS','BASE_URL'],
+  post_oss_company_upload: ['/purchase/oss/company/upload','BASE_URL_CS','BASE_URL'],
 
   //自定义币种汇率
   get_customcurrencyexchangerate_query: ['/customcurrencyexchangerate/query','UMETA_URL','UMETA_URL'],
