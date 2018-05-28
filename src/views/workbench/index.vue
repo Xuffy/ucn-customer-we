@@ -4,7 +4,7 @@
     <v-upload></v-upload>
     <!--<v-time-zone :value.sync="timeZone"></v-time-zone>-->
     <div class="quickLink">
-      <h3 class="ucn-content-title inline" v-text="$i.workbench.quickLink"></h3>
+      <h3 class="ucn-content-title inline" @click="$refs.importFile.show()" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
                  style="display: inline-block;margin-left: 30px!important;"
                  @click="$store.state.quickLink.show = true"></el-button>
@@ -33,6 +33,7 @@
       </el-col>
     </el-row>
 
+    <v-import-template ref="importFile"></v-import-template>
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
@@ -41,11 +42,12 @@
   import VDataDashboard from './dataDashboard'
   import VTableData from './tableData'
   import VBasicInfo from './basicInfo'
-  import {VHistoryModify, VMessageBoard, VTimeZone, VUpload} from '@/components/index';
+  import {VHistoryModify, VMessageBoard, VTimeZone, VUpload,VImportTemplate} from '@/components/index';
 
   export default {
     name: 'workbench',
     components: {
+      VImportTemplate,
       VUpload,
       VDataDashboard,
       VTableData,

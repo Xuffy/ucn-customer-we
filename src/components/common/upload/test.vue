@@ -9,7 +9,7 @@
     </p>
     <!--<el-button type="primary" @click="uploadFile">主要按钮</el-button>-->
     <ul class="upload-list">
-      <li v-for="item in fileList">
+      <li v-for="item in fileList" :title="item.showName">
         <template v-if="!item.isImage">
           <label v-text="item.showType"></label>
           <span v-text="item.showName"></span>
@@ -36,6 +36,7 @@
   import OSS from 'ali-oss';
   import co from 'co';
 
+  const bucket = 'ucn-oss-dev';
   const imageType = ['JPG', 'PNG'];
 
   export default {
@@ -57,12 +58,12 @@
     components: {},
     data() {
       return {
-
+        tenantId: '',
         fileList: {},
       }
     },
     created() {
-
+      this.tenantId = (this.$localStore.get('user') || {}).tenantId;
     },
     mounted() {
     },
@@ -83,7 +84,7 @@
       startUpload(client, files) {
         let _this = this
           , uid = _this.$getUUID()
-          , fileKey = `${uid}/${files.name}`;
+          , fileKey = `${this.tenantId}/${uid}/${files.name}`;
 
         if (_.values(_this.fileList).length >= this.limit) {
           return this.$message.warning(`只能上传${this.limit}个文件`);
@@ -133,7 +134,7 @@
           accessKeyId: params.accessKeyId,
           accessKeySecret: params.accessKeySecret,
           stsToken: params.securityToken,
-          bucket: 'ucn-oss-dev'
+          bucket: bucket
         });
 
       },
@@ -155,7 +156,10 @@
         return param;
       },
       getFiles() {
-        return _.pluck(_.values(this.fileList), 'fileKey');
+        let files = _.pluck(_.values(this.fileList), 'fileKey');
+        return _.map(files, val => {
+          return `${bucket}:${val}`;
+        });
       }
     },
   }
@@ -178,7 +182,7 @@
     display: inline-block;
   }
 
-  .ucn-upload.small .upload-btn{
+  .ucn-upload.small .upload-btn {
     width: 50px;
     height: 50px;
   }
@@ -295,6 +299,12 @@
     font-size: 20px;
   }
 
+  .ucn-upload.small .upload-list > li label {
+    font-size: 16px;
+    top: 50%;
+    margin-top: -8px;
+  }
+
   .upload-list > li span {
     display: block;
     height: 100%;
@@ -304,6 +314,10 @@
     box-sizing: border-box;
     color: #606266;
     opacity: .7;
+  }
+
+  .ucn-upload.small .upload-list > li span {
+    display: none;
   }
 
   .img-box {

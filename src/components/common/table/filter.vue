@@ -145,7 +145,7 @@
       getConfig() {
         this.$ajax.all([
           this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'], {_cache: true}),
-          this.$ajax.post(this.$apis.ITEMFAVORITE_PART, ['Product_Sourcing_sku'], {_cache: true}),
+          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: "Product_Sourcing_sku"}, {_cache: true}),
         ]).then(data => {
           this.dataList = data[0];
 

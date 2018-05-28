@@ -4,6 +4,9 @@ import config from 'service/config';
 const lang = localStore.get('language') || config.LANGUAGE;
 
 const json = {
+  importTemplate:_.extend({},
+    require(`./${lang}/importTemplate/page`)
+  ),
   table:_.extend({},
     require(`./${lang}/table/page`),
     require(`./${lang}/table/message`)
