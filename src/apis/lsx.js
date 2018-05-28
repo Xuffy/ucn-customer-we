@@ -112,7 +112,12 @@ export default {
     set_qcResultConfirm:['/qc/result/confirm','BASE_BUY','UPURCHASE_URL'],
     set_qcResultRework:['/qc/rework','BASE_BUY','UPURCHASE_URL'],
     set_qcResultReturn:['/qc/return','BASE_BUY','UPURCHASE_URL'],
-
+    get_qcPaymentData:['/payment/list/{orderNo}/{orderType}','BASE_BUY','UPURCHASE_URL'],
+    get_qcPaymentNo:['/payment/genNo','BASE_BUY','UPURCHASE_URL'],
+    save_qcPayment:['/payment/save','BASE_BUY','UPURCHASE_URL'],
+    update_qcPayment:['/payment/update','BASE_BUY','UPURCHASE_URL'],
+    abandon_qcPayment:['/payment/abandon/{id}?version={version}','BASE_BUY','UPURCHASE_URL'],
+    recover_qcPayment:['/payment/recover/{id}?version={version}','BASE_BUY','UPURCHASE_URL'],
 
     /**
      * service warehouse

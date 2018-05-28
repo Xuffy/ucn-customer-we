@@ -75,5 +75,8 @@
   "deleteTheCompare":"Delete The Compare",
 
   "skuNameEn":"SKU Name En",
-  "skuCode":"SKU Code"
+  "skuCode":"SKU Code",
+
+  "pleaseInput":"Please Input",
+  "pleaseChoose":"Please Choose"
 }

@@ -1,0 +1,37 @@
+export default {
+    no:{
+        key:'paymentNo',
+        realKey:'no'
+    },
+    name:{
+        key:'paymentItem',
+        realKey:'name',
+        type:'input'
+    },
+    planPayDt:{
+        realKey:'planPayDt',
+        type:'date'
+    },
+    planPayAmount:{
+        realKey:'planPayAmount',
+        type:'number'
+    },
+    actualPayDt:{
+        realKey:'actualPayDt',
+        type:'date'
+    },
+    actualPayAmount:{
+        realKey:'actualPayAmount',
+        type:'number'
+    },
+    currencyCode:{
+        realKey:'currencyCode',
+        type:'select',
+        isCurrency:true
+    },
+    status:{
+        key:'available',
+        realKey:'status',
+        isStatus:true
+    }
+}
