@@ -72,24 +72,6 @@
     mounted() {
 
 
-      // this.$store.commit('setDraft', {path: '/login'});
-      /*this.$ajax.post(this.$apis.UTASK_PAGELIST).then(data => {
-        this.pengdingTask = data.pending_task;
-        this.futureTask = data.future_task;
-        this.fyiTask = data.fyi_task;
-        this.pushTask = data.push_task;
-      });*/
-
-      // this.$ajax.post(this.$apis.UTASK_TYPELIST,{}).then(data => {
-      //
-      // });
-      /*this.$notify({
-        title: 'Wellcome! Please set your basic info',
-        duration: 0,
-        offset: 60,
-        dangerouslyUseHTMLString: true,
-        message: h(VBasicInfo)
-      });*/
     },
     methods: {
       save(data) {
