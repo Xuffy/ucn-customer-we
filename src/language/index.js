@@ -54,11 +54,7 @@ const json = {
     require(`./${lang}/product/productDetail`),
     require(`./${lang}/product/productOverview`),
     require(`./${lang}/product/productOverviewTable`),
-  ),
-  productCn: _.extend({},
-    require(`./${lang}/productCn/product.basic`),
-    require(`./${lang}/productCn/productDetail`),
-    require(`./${lang}/productCn/productOverview`)
+    require(`./${lang}/product/product.prompt`),
   ),
   setting: _.extend({},
     require(`./${lang}/setting/department`),

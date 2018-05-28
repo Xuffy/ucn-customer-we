@@ -3,20 +3,13 @@
         <div class="title">
             {{$i.product.basicInformation}}
         </div>
-        <div class="addPic">
-            <div class="name">
-                Pic:
-            </div>
-            <div class="imgGroup">
-                <img-handler :data="imgGroup"></img-handler>
-            </div>
-            <div class="btns">
-                <up-load></up-load>
-                <!--<el-button @click="addPic">Add</el-button>-->
-            </div>
-        </div>
         <el-form :modal="productForm" ref="basicInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
+                <el-col cass="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                    <el-form-item label="Pic">
+                        <v-upload></v-upload>
+                    </el-form-item>
+                </el-col>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
@@ -697,9 +690,6 @@
         </div>
 
 
-
-        <!--<input style="display: none" id="pic" name="file" type="file" accept="image/*" @change="uploadPic">-->
-
         <div class="footBtn">
             <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
         </div>
@@ -707,16 +697,15 @@
 </template>
 
 <script>
-    import upLoad from '@/components/common/upload/upload'
     import imgHandler from './imgHandler'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VUpload} from '@/components/index'
 
     export default {
         name: "manually-add",
         components:{
             imgHandler,
-            upLoad,
-            dropDown:dropDownSingle
+            dropDown:dropDownSingle,
+            VUpload
         },
         data(){
             return{
@@ -777,7 +766,6 @@
                     adjustPackage: true,
                     applicableAge: 0,
                     availableQty: 0,
-
                     barcode: "",
                     brand: "",
                     brandRelated: "",
@@ -923,19 +911,6 @@
             }
         },
         methods:{
-            //上传图片
-            uploadPic(e){
-                let me=this;
-                console.log(e,"????")
-                let file=e.target.files[0];
-                // let param = new FormData(); //创建form对象
-                // param.append('file',file,file.name);//通过append向form对象添加数据
-                let reader=new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload=function (e) {
-                    me.imgGroup.push(e.target.result);
-                }
-            },
 
             //添加图片到暂存区
             addPic(){

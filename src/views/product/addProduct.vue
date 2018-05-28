@@ -39,14 +39,28 @@
                                     :expand-on-click-node="false"
                                     ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.showType==='select'">
+                                <div v-if="v.isCountry">
+                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable placeholder="please choose">
+                                        <el-option
+                                                v-for="item in countryOption"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                                <div v-else>
+                                    <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                        <el-option
+                                                v-for="item in v.options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </div>
                             <div v-if="v.showType==='exwNumber'" class="section-number">
                                 <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
                                 <div class="section-line">--</div>
@@ -172,6 +186,7 @@
                 selectList:[],
                 downloadBtnInfo:'0',
                 downloadRecycleListInfo:'all',
+                selectCountry:[],
 
                 //btn禁用状态
                 disabledAddBookmark:true,
@@ -410,6 +425,7 @@
                     }
                     this.loadingTable=true;
                     this.productForm.recycle=false;
+                    console.log(this.selectCountry,'????')
                     this.$ajax.post(url,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             let noneSellCountry='';
@@ -480,7 +496,7 @@
                 this.disableClickAddBookmark=true;
                 this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
                     this.$message({
-                        message: 'successfully add!',
+                        message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
                     this.disableClickAddBookmark=false;

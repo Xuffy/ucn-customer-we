@@ -428,6 +428,7 @@
                             this.disableAdd=false;
                         }
                         this.getProductInfo();
+                        this.getPaymentData();
                     }).catch(err=>{
                         this.loadingData=false;
                     }
@@ -475,6 +476,9 @@
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
                 });
+            },
+            getPaymentData(){
+                
             },
 
             /**
