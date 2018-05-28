@@ -66,7 +66,7 @@
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
+              <img v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
             </td>
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
