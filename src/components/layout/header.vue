@@ -78,9 +78,16 @@
         </div>
 
         <div style="display: inline-block">
-          <a href="javascript:void(0)">
-            {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
-          </a>
+          <!--<a href="javascript:void(0)">
+          </a>-->
+          <el-dropdown trigger="click">
+            <a href="javascript:void(0)" class="el-dropdown-link" style="cursor: pointer">
+              {{userInfo.userType === 0 ? $i.common.admin : $i.common.user}}&nbsp;&nbsp;|&nbsp;&nbsp;
+            </a>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><span @click="clearData">清理数据缓存</span></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <a href="javascript:void(0)" @click="logout">
             {{$i.common.signOut}}
           </a>
@@ -209,6 +216,11 @@
           .finally(() => {
             this.message.loading = false;
           });
+      },
+      clearData() {
+        // console.log(this.$sessionStore)
+        this.$sessionStore.remove('request_cache');
+        history.go(0);
       }
     },
   }
