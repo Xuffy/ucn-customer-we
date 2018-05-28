@@ -2,6 +2,12 @@ export default{
     id: {
         _hide: true
     },
+    skuId:{
+        _hide:true
+    },
+    orderNo:{
+        _hide:true
+    },
     SKUQCResult: {
         key: 'skuQcResultDictCode',
         type: 'String'

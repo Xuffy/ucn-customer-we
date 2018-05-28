@@ -10,18 +10,18 @@
             <el-form ref="qcOrder" :model="qcOrderBasic" label-width="190px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Order No">
+                        <el-form-item prop="11" :label="$i.warehouse.qcOrderNo">
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="System Generation"
+                                    :placeholder="$i.warehouse.systemGeneration"
                                     v-model="value"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Type">
+                        <el-form-item prop="11" :label="$i.warehouse.qcType">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -33,7 +33,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Date">
+                        <el-form-item prop="11" :label="$i.warehouse.qcDate">
                             <el-date-picker
                                     :disabled="true"
                                     class="speInput"
@@ -41,34 +41,33 @@
                                     v-model="value"
                                     align="right"
                                     type="date"
-                                    :placeholder="$i.warehouse.serviceFill"
-                                    :picker-options="pickerOptions1">
+                                    :placeholder="$i.warehouse.serviceFill">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory address">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryAddress">
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="please input"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.factoryAddress">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Factory Contact Phone">
+                        <el-form-item prop="11" :label="$i.warehouse.factoryContactPhone">
                             <el-input
                                     class="speInput"
                                     size="mini"
-                                    placeholder="please input"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.factoryContactPhone">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC status">
-                            <el-select :disabled="true" class="speInput" size="mini" v-model="qcStatusCode" placeholder="请选择">
+                        <el-form-item prop="11" :label="$i.warehouse.qcStatus">
+                            <el-select :disabled="true" class="speInput" size="mini" v-model="qcStatusCode">
                                 <el-option
                                         v-for="item in qcStatusOption"
                                         :key="item.id"
@@ -79,7 +78,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="QC Method">
+                        <el-form-item prop="11" :label="$i.warehouse.qcMethod">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -91,7 +90,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Surveyor">
+                        <el-form-item prop="11" :label="$i.warehouse.surveyor">
                             <el-select :disabled="true" class="speInput" size="mini" v-model="value" :placeholder="$i.warehouse.serviceFill">
                                 <el-option
                                         v-for="item in options"
@@ -103,18 +102,18 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service Fee">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceFee">
                             <el-input
                                     :disabled="true"
                                     class="speInput"
                                     size="mini"
-                                    placeholder="服务商填写"
+                                    :placeholder="$i.warehouse.serviceFill"
                                     v-model="value">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Service providers">
+                        <el-form-item prop="11" :label="$i.warehouse.serviceProviders">
                             <el-select
                                     clearable
                                     class="speInput"
@@ -123,7 +122,7 @@
                                     filterable
                                     remote
                                     reserve-keyword
-                                    placeholder="请输入/选择"
+                                    :placeholder="$i.warehouse.pleaseInputOrChoose"
                                     :remote-method="remoteMethod"
                                     :loading="loading">
                                 <el-option
@@ -136,7 +135,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="11" label="Exchange Currency">
+                        <el-form-item prop="11" :label="$i.warehouse.exchangeCurrency">
                             <el-select class="speInput" size="mini" v-model="qcOrderConfig.exchangeCurrencyDictCode" placeholder="请选择">
                                 <el-option
                                         v-for="item in currencyOptions"
@@ -148,26 +147,19 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Remark">
+                        <el-form-item prop="11" :label="$i.warehouse.remark">
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{minRows: 2}"
+                                    :placeholder="$i.warehouse.pleaseInput"
                                     v-model="qcOrderConfig.remark">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                        <el-form-item prop="11" label="Attachment">
-                            <el-input
-                                    :disabled="true"
-                                    class="speInput"
-                                    type="textarea"
-                                    autosize
-                                    placeholder="please input"
-                                    v-model="value">
-                            </el-input>
+                        <el-form-item prop="11" :label="$i.warehouse.attachment">
+                            <v-upload></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -227,11 +219,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        align="center"
                         fixed="right"
-                        label="操作"
+                        label="Action"
                         width="100">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">Detail</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -243,6 +236,120 @@
             <div class="second-title">
                 {{$i.warehouse.summary}}
             </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
+                            <el-input
+                                    class="speInput"
+                                    size="mini"
+                                    v-model="value"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.warehouse.skuQuantity">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="summaryData.skuQuantity"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
         </div>
 
         <div class="footBtn">
@@ -307,6 +414,11 @@
                     :buttons="[{label: 'Detail', type: 1}]"
                     @action="btnClick"
                     @change-checked="changeProductDialogChecked"></v-table>
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></page>
+
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
                 <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">Cancel</el-button>
@@ -317,60 +429,21 @@
 <script>
 
     import VTable from '@/components/common/table/index'
-    import {VTimeZone} from '@/components/index'
+    import {VTimeZone,VPagination,VUpload} from '@/components/index'
 
     export default {
         name:'createQc',
         components:{
             VTable,
-            VTimeZone
+            VTimeZone,
+            page:VPagination,
+            VUpload
         },
         data(){
             return{
                 value:'',
-                options: [
-                    {
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-
+                options: [],
+                pageData:{},
                 tableDataList:[],
                 loadingTable:false,
                 /**
@@ -379,8 +452,6 @@
                 serviceId:'',
                 serviceList:[],         //用于展现的数组
                 serviceMainList:[],     //用于存储总数据的数组
-
-                options4: [],
                 loading: false,
                 /**
                  * 页面基本配置
@@ -395,16 +466,6 @@
                 currencyOptions:[],
                 qcStatusCode:'WAITING_QC',
                 qcStatusOption:[],
-                qcStatus:[
-                    {
-                        label:'未验货',
-                        value:0
-                    },
-                    {
-                        label:'已验货',
-                        value:1
-                    }
-                ],
                 selectProductTableData:[],      //页面上选中的table data
 
 
@@ -473,6 +534,13 @@
                 qcOrderBasic:{
 
                 },
+
+                /**
+                 * 总计data
+                 * */
+                summaryData:{
+                    skuQuantity:''
+                },
             }
         },
         methods:{
@@ -507,6 +575,10 @@
                 this.disableClickSubmit=true;
 
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
+                    this.$message({
+                        message: this.$i.warehouse.createSuccess,
+                        type: 'success'
+                    });
                     this.$router.push('/warehouse/qcOverview');
                     this.disableClickSubmit=false;
                 }).catch(err=>{
@@ -568,6 +640,7 @@
                                     this.$set(e,'_disabled',true);
                                 }
                             });
+                            this.pageData={datas:res};
                             this.productTableData.forEach(v=>{
                                 this.productDialogTableData.forEach(m=>{
                                     if(v.id===m.id.value){
@@ -687,6 +760,16 @@
                 });
             },
 
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                console.log(e)
+            },
+            changeSize(e){
+                // this.warehouseConfig.ps=e;
+                // this.getWarehouseData();
+            },
 
             /**
              * 获取单位
@@ -731,6 +814,15 @@
                         this.$refs.qcOrder.clearValidate();
                     },0);
 
+                }
+            },
+            productTableData(n){
+                if(n.length>0){
+                    let sum=0;
+                    n.forEach(v=>{
+                        sum+=v.orderSkuQty;
+                    });
+                    this.summaryData.skuQuantity=sum;
                 }
             },
         },
@@ -791,5 +883,14 @@
     }
     .product-table >>> .el-checkbox{
         margin: 0;
+    }
+    .summary{
+        margin-top: 50px;
+    }
+    .summaryInput{
+        width: 80%;
+    }
+    .summaryInput >>> input{
+        text-align: center;
     }
 </style>

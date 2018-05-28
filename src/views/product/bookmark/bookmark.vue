@@ -83,6 +83,10 @@
                     :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
                     @action="btnClick"></v-table>
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :page-data="pageData"></page>
         </div>
 
 
@@ -96,7 +100,6 @@
                     @handleCancel="handleCancel"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
-
 
         <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
             <el-table
@@ -130,13 +133,12 @@
             </div>
         </el-dialog>
 
-
     </div>
 </template>
 
 <script>
     import VTable from '@/components/common/table/index'
-    import {dropDownSingle} from '@/components/index'
+    import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../../product/sectionNumber'
     import product from '../addProduct'
     import { mapActions } from 'vuex'
@@ -147,17 +149,31 @@
             dropDown:dropDownSingle,
             sectionNumber,
             VTable,
-            product
+            product,
+            page:VPagination
         },
 
         data(){
             return{
+                /**
+                 * 字典配置
+                 * */
+                statusOption:[],
+                lengthOption:[],
+                weightOption:[],
+                volumeOption:[],
+                dateOption:[],
+                skuUnitOption:[],
+                countryOption:[],
+
+
                 hideBody:true,            //是否显示body
                 btnInfo:this.$i.product.advanced,     //按钮默认文字显示
                 disabledSearch:false,
                 loadingTable:false,                     //是否让table处于加载状态
                 selectList:[],
                 downloadBtnInfo:'All',
+                pageData:{},
                 //btn禁用状态
                 disabledCompare:true,
                 disabledRemove:true,
@@ -191,25 +207,23 @@
                     descCnLike: "",
 
                     pn: 1,
-                    ps: 50,
+                    ps: 10,
 
                     recycle: false,         //是否是在recycle bin里请求
-                    //初始搜索的时候不传，当有筛选条件之后再传
-                    // operatorFilters: [
+                    operatorFilters: [
                     //     {
                     //         operator: "",
                     //         property: "",
                     //         value: {}
                     //     }
-                    // ],
+                    ],
 
-                    //初始搜索的时候不传，当有筛选条件之后再传
-                    // sorts: [
+                    sorts: [
                     //     {
                     //         orderBy: "",
                     //         orderType: "",
                     //     }
-                    // ],
+                    ],
                 },
                 //表格验证参数
                 productFormRules:{
@@ -288,14 +302,8 @@
 
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
-                    // res.datas.forEach(v=>{
-                    //     if(v.status===0){
-                    //         v.status='下架(暂时中文)';
-                    //     }else if(v.status===1){
-                    //         v.status='上架';
-                    //     }
-                    // });
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+
                     this.disabledSearch=false;
                     this.selectList=[];
                     this.loadingTable=false;
@@ -339,11 +347,28 @@
             //获取table数据
             getData() {
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_buyerBookmarkList,{
-                    recycle:false,
-                    ps:100
-                }).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
+                        let noneSellCountry='';
+                        e.noneSellCountry.value.split(',').forEach(v=>{
+                            this.countryOption.forEach(m=>{
+                                if(m.code===v){
+                                    noneSellCountry+=(m.name+',');
+                                }
+                            })
+                        });
+                        noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
+                        e.noneSellCountry.value=noneSellCountry;
+
+                        e.status.value=this.$change(this.statusOption,'status',e,true).name;
+                        e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
+                        e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
+                        e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
+                        e.unitVolume.value=this.$change(this.volumeOption,'unitVolume',e,true).name;
+                        e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
+                        return e;
+                    });
+                    this.pageData=res;
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -354,30 +379,48 @@
                 if(e.length===0){
                     //表示一个都没选
                     this.$message({
-                        message: '请选择一条商品',
+                        message: this.$i.product.pleaseChoose,
                         type: 'warning'
                     });
                 }else{
                     this.disabledOkBtn=true;
-
+                    this.addProductDialogVisible=false;
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.add_buyerBookmark,e).then(res=>{
-                        this.$ajax.post(this.$apis.get_buyerBookmarkList,{
-                            recycle:false
-                        }).then(res=>{
-                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
+                        this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
+                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
+                                let noneSellCountry='';
+                                e.noneSellCountry.value.split(',').forEach(v=>{
+                                    this.countryOption.forEach(m=>{
+                                        if(m.code===v){
+                                            noneSellCountry+=(m.name+',');
+                                        }
+                                    })
+                                });
+                                noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
+                                e.noneSellCountry.value=noneSellCountry;
+
+                                e.status.value=this.$change(this.statusOption,'status',e,true).name;
+                                e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
+                                e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
+                                e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
+                                e.unitVolume.value=this.$change(this.volumeOption,'unitVolume',e,true).name;
+                                e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
+                                return e;
+                            });
+                            this.pageData=res;
                             this.$message({
                                 message: '添加成功',
                                 type: 'success'
                             });
+                            this.loadingTable=false;
                             this.disabledOkBtn=false;
-                            this.addProductDialogVisible=false;
                         }).catch(err=>{
-                            console.log(err)
+                            this.loadingTable=false;
                         });
                     }).catch(err=>{
-                        console.log(err)
+                        this.loadingTable=false;
                         this.disabledOkBtn=false;
-                        this.addProductDialogVisible=false;
                     });
                 }
             },
@@ -406,7 +449,6 @@
             createInquiry(){
 
             },
-
 
             //勾选的商品创建order
             createOrder(){
@@ -439,7 +481,6 @@
                     }
                 }
             },
-
 
             compare(){
                 let id='';
@@ -503,15 +544,48 @@
                 }).catch(() => {
 
                 });
-
-
-
             },
 
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.productForm.pn=e;
+                this.getData();
+            },
+            changeSize(e){
+                this.productForm.ps=e;
+                this.getData();
+            }
         },
         created(){
-            this.getData();
-            this.getCategoryId();
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+                res.forEach(v=>{
+                    if(v.code==='SKU_SALE_STATUS'){
+                        this.statusOption=v.codes;
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
+                    }else if(v.code==='ED_UNIT'){
+                        this.dateOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='SKU_UNIT'){
+                        this.skuUnitOption=v.codes;
+                    }
+                });
+                //国家
+                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                    this.countryOption=res;
+                    this.getData();
+                    this.getCategoryId();
+                }).catch(err=>{
+
+                });
+            }).catch(err=>{
+
+            });
             this.setRecycleBin({
                 name: 'productBookmarkRecycleBin',
                 show: true

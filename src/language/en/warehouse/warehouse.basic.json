@@ -3,7 +3,7 @@
   "status":"Status",
   "all":"All",
   "download":"Download",
-  "qcOverview":"QC Overview",
+  "qcOverview":"QC Order Overview",
   "create":"Create",
   "addProduct":"Add Product",
   "remove":"Remove",
@@ -11,5 +11,9 @@
   "serviceChoose":"Service Choose",
   "serviceFill":"Service Fill",
   "sure":"Sure",
-  "cancel":"Cancel"
+  "cancel":"Cancel",
+
+  "systemGeneration":"System Generation",
+  "pleaseInput":"Please Input",
+  "pleaseInputOrChoose":"Please Input/Choose"
 }
