@@ -4,5 +4,6 @@
   "alreadyHandled":"Already Handled",
   "confirmSuccess":"Confirm Success",
   "reworkSuccess":"Rework Success",
-  "returnSuccess":"Return Success"
+  "returnSuccess":"Return Success",
+  "createSuccess":"Create Success"
 }

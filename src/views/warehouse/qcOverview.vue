@@ -7,7 +7,7 @@
       <div class="state">
         <span>{{ $i.common.qcStatus }}</span>
 
-          <el-radio-group class="radios" @change="getQcOrderList" v-model="params.qcStatusDictCode" size="mini">
+          <el-radio-group class="radios" @change="getQcOrderList(true)" v-model="params.qcStatusDictCode" size="mini">
               <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
               <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
           </el-radio-group>
@@ -37,11 +37,10 @@
               </div>
           </template>
       </v-table>
-      <v-pagination
-              :page-data.sync="params"
+      <page
+              :page-data="pageData"
               @change="handleSizeChange"
-              @size-change="pageSizeChange"
-      />
+              @size-change="pageSizeChange"></page>
 
   </div>
 </template>
@@ -53,7 +52,7 @@
         components:{
             VTable,
             selectSearch,
-            VPagination
+            page:VPagination
         },
         data(){
             return{
@@ -67,13 +66,14 @@
                         label: 'QC Order No'
                     }
                 ],
+                pageData:{},
                 searchLoad:false,
                 loading: false,
                 pageTotal: 0,
                 pazeSize: [10, 20, 30, 40, 50, 100],
                 params: {
                     pn: 1,
-                    ps: 50,
+                    ps: 10,
                     qcOrderNo: "",
                     qcStatusDictCode: "",
 
@@ -96,9 +96,11 @@
             },
             handleSizeChange(val) {
                 this.params.pn = val;
+                this.getQcOrderList();
             },
             pageSizeChange(val) {
                 this.params.ps = val;
+                this.getQcOrderList();
             },
             checked(item) {
                 this.selectList = item
@@ -132,16 +134,19 @@
                 //   });
             },
             //获取表格data
-            getQcOrderList(){
+            getQcOrderList(e){
+                if(e){
+                    this.params.pn=1;
+                }
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_qc_page,this.params)
                 .then(res => {
                     this.loading = false;
-                    console.log(this.qcMethodsOption)
                     this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas,e=>{
                         e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
                         return e;
                     });
+                    this.pageData=res;
                 })
                 .catch((res) => {
                     this.loading = false;

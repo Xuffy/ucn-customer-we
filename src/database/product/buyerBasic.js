@@ -100,16 +100,7 @@ export default {
         showType:'select',
         length: 10,
         belongPage:'sellerProductOverview',
-        options:[
-            {
-                label:'中国',
-                value:1
-            },
-            {
-                label:'美国',
-                value:2
-            }
-        ],
+        isCountry:true,
     },
     supplierNameLike:{
         key: 'supplierNameLike',

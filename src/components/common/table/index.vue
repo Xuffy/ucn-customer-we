@@ -66,7 +66,7 @@
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <img v-else :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
+              <img v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.viewPicture.show(cItem.value)"/>
             </td>
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
@@ -103,27 +103,6 @@
       </div>
     </div>
 
-    <!--分页-->
-    <!--<v-pagination :data="dataList"
-                  :page-sizes="pageSizes"
-                  :page-size="pageSize"
-                  :page-num="pageNum"
-                  :page-total="pageTotal"
-                  @size-change="size => {$emit('page-size-change', size)}"
-                  @current-change="page => {$emit('page-change', page)}"></v-pagination>-->
-
-
-    <!--<v-table ref="pendingTable"
-             :data.sync="dataList"
-             :buttons="[{label: 'detail', type: 1,disabled:true}, {label: 'history', type: 2}]"
-             :selection="filterSelection"
-             :rowspan="2"
-             :total-row="totalRow"
-             selection-radio
-             @action="onAction"
-             @filter-value="onFilterValue"
-             @change-checked="changeChecked">
-    </v-table>-->
     <div>
       <slot name="footer"></slot>
     </div>
@@ -327,7 +306,9 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
-        this.$refs.tableBox.scrollTop = 0;
+        if (this.dataList.length !== val.length) {
+          this.$refs.tableBox.scrollTop = 0;
+        }
         let to = setTimeout(() => {
           clearTimeout(to);
           this.dataList = val;

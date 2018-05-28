@@ -66,6 +66,7 @@ export default {
       BASE_BUYTEST:'//192.168.51.33:11001',
       WORKBENCH_URL: '//192.168.51.207:11010' ,//workbench
       UWORKBENCH_URL: '//192.168.51.207:11010',
+      UIE: '//192.168.51.207:13003',
 
 
 
@@ -120,6 +121,7 @@ export default {
   TIMEOUT: 60000,
 
   // 默认语言设置
+  // LANGUAGE: 'zh-CN',
   LANGUAGE: 'en',
 
   // 项目版本号

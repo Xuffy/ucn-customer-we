@@ -4,6 +4,13 @@ import config from 'service/config';
 const lang = localStore.get('language') || config.LANGUAGE;
 
 const json = {
+  importTemplate:_.extend({},
+    require(`./${lang}/importTemplate/page`)
+  ),
+  table:_.extend({},
+    require(`./${lang}/table/page`),
+    require(`./${lang}/table/message`)
+  ),
   common: _.extend({},
     require(`./${lang}/common/quickLinks`),
     require(`./${lang}/common/basePlaceholder`),
@@ -50,11 +57,7 @@ const json = {
     require(`./${lang}/product/productDetail`),
     require(`./${lang}/product/productOverview`),
     require(`./${lang}/product/productOverviewTable`),
-  ),
-  productCn: _.extend({},
-    require(`./${lang}/productCn/product.basic`),
-    require(`./${lang}/productCn/productDetail`),
-    require(`./${lang}/productCn/productOverview`)
+    require(`./${lang}/product/product.prompt`),
   ),
   setting: _.extend({},
     require(`./${lang}/setting/department`),

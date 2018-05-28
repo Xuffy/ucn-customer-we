@@ -12,7 +12,7 @@ export default {
         _hide:true
     },
     pic: {
-
+        _image:true
     },
     status: {
 

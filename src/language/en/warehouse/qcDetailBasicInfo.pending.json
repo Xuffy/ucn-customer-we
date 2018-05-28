@@ -3,7 +3,7 @@
     "QCType": "QC Type",
     "QCDate": "QC Date",
     "factoryAddress": "Factory address",
-    "FactoryContactPhone": "Factory Contact Phone",
+    "FactoryContactPhone": "Factory Phone",
     "QCStatus": "QC status",
     "QCMethod": "QC Method",
     "Surveyor": "Surveyor",
@@ -13,5 +13,5 @@
     "serviceProvidersNo": "Service providers No",
     "serviceProvidersName": "Service providers name",
     "exchangeCurrency": "Exchange Currency",
-    "timeZone": "time zone"
+    "timeZone": "Time zone"
 }

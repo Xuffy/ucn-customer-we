@@ -69,7 +69,6 @@ export default {
     delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_BUY','UPURCHASE_URL'],
     recover_buyerProductBookmark:['/purchase/sku/recoverBookmark','BASE_BUY','UPURCHASE_URL'],
 
-
     /**
      * seller warehouse
      * */
