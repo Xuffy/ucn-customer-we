@@ -156,46 +156,40 @@
                     </el-table>
                 </el-tab-pane>
 
-                <!--<el-tab-pane :label="$i.setting.documentRequired">-->
-                    <!--<div class="section-btn">-->
-                        <!--<el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>-->
-                    <!--</div>-->
-                  <!--<el-form label-width="200px" :model="documentData">-->
-                    <!--<el-row>-->
-                      <!--<el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">-->
-                        <!--<el-form-item  :label="$i.setting.documentRequired">-->
-                          <!--<el-input size="mini" v-model="documentData.document"  placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item :label="$i.setting.factoryInspectionReport">-->
-                          <!--<el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item  :label="$i.setting.packingList">-->
-                          <!--<el-input size="mini"  v-model="documentData.packingList" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item :label="$i.setting.invoice">-->
-                          <!--<el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item :label="$i.setting.examiningReport">-->
-                          <!--<el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                      <!--</el-col>-->
-                    <!--</el-row>-->
-                  <!--</el-form>-->
-                <!--</el-tab-pane>-->
-
-              <el-tab-pane :label="$i.setting.attachment">
-                <div class="section-btn">
-                  <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
-                </div>
-                <v-upload ref="uploadAttachment" :limit="20" />
-              </el-tab-pane>
+                <el-tab-pane :label="$i.setting.documentRequired">
+                    <div class="section-btn">
+                        <el-button @click="addDocument(documentData)" type="primary">{{$i.button.modify}}</el-button>
+                    </div>
+                  <el-form label-width="200px" :model="documentData">
+                    <el-row>
+                      <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
+                        <el-form-item  :label="$i.setting.documentRequired">
+                          <el-input size="mini" v-model="documentData.document"  placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.factoryInspectionReport">
+                          <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.packingList">
+                          <el-input size="mini"  v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.invoice">
+                          <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.examiningReport">
+                          <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
                     <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
                   </div>
-                  <v-upload></v-upload>
+                  <v-upload ref="uploadAttachment" :limit="20" />
                 </el-tab-pane>
+
                 <el-tab-pane :label="$i.setting.custom">
                   <div class="section-btn">
                     <el-button @click="addCustom(customData)" type="primary">{{$i.button.modify}}</el-button>
@@ -395,41 +389,41 @@
             </div>
         </el-dialog>
 
-      <!--<el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="documentDialogVisible">-->
-        <!--<el-form label-width="200px" :model="documentData">-->
-          <!--<el-row>-->
-            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-              <!--<el-form-item  :label="$i.setting.documentRequired">-->
-                <!--<el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-              <!--<el-form-item :label="$i.setting.factoryInspectionReport">-->
-                <!--<el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                <!--<el-form-item  :label="$i.setting.packingList">-->
-                  <!--<el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>-->
-                <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                <!--<el-form-item  :label="$i.setting.invoice">-->
-                  <!--<el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>-->
-                <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">-->
-                <!--<el-form-item  :label="$i.setting.examiningReport">-->
-                  <!--<el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>-->
-                <!--</el-form-item>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-        <!--</el-form>-->
-        <!--<div slot="footer" class="dialog-footer">-->
-          <!--<el-button @click="documentDialogVisible=false">取 消</el-button>-->
-          <!--<el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">确 定</el-button>-->
-        <!--</div>-->
-      <!--</el-dialog>-->
+      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="documentDialogVisible">
+        <el-form label-width="200px" :model="documentData">
+          <el-row>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+              <el-form-item  :label="$i.setting.documentRequired">
+                <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+              <el-form-item :label="$i.setting.factoryInspectionReport">
+                <el-input size="mini" v-model="documentData.aduitDetails" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.packingList">
+                  <el-input size="mini" v-model="documentData.packingList" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.invoice">
+                  <el-input size="mini" v-model="documentData.invoice" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <el-form-item  :label="$i.setting.examiningReport">
+                  <el-input size="mini" v-model="documentData.examiningReport" placeholder="请输入内容"></el-input>
+                </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="documentDialogVisible=false">取 消</el-button>
+          <el-button :loading="allowAddAccount" type="primary" @click="modifyDocument">确 定</el-button>
+        </div>
+      </el-dialog>
 
       <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="customDialogVisible">
         <el-form label-width="300px" :model="customData">
@@ -626,10 +620,12 @@
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
                     if(res.custom){
-                      console.log(1)
                       this.customData = res.custom
                     }
-                    this.documentData = res.documents[0];
+                    if(res.documents[0]){
+                      this.documentData = res.documents[0];
+                    }
+
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -947,12 +943,18 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length === 1){
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                console.log(res)
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
               })
 
             }else{
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                console.log(res)
+                this.$message({
+                  message: '上传成功',
+                  type: 'success'
+                });
               })
             }
           },
@@ -961,9 +963,12 @@
            * */
           uploadLogo(){
             this.logoParmas.id = this.companyInfo.id;
-            this.logoParmas.url = this.$refs.uploadAttachment.getFiles()[0];
+            this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
             this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
-              console.log(res)
+              this.$message({
+                message: '上传成功',
+                type: 'success'
+              });
             })
 
           }
