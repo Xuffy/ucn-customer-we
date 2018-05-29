@@ -22,7 +22,7 @@
           <!--<h6 v-text="parseInt(item.progress * 100) + '%'"></h6>-->
         </div>
 
-        <div class="operation-box" :class="{readonly:readonly,image:item.isImage}"
+        <div class="operation-box" :class="{readonly:readonly,image:readonly && item.isImage}"
              v-show="item.progress === 1 || item.url">
 
           <i class="el-icon-download" @click="downloadFile(item)"></i>
