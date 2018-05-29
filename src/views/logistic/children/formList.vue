@@ -5,8 +5,10 @@
     <el-row :gutter="10">
       <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
         <div class="input-item">
-          <span>{{ a.label }}</span>
-          <span v-if="!edit || disabledFields.includes(a.key)">{{ textFilter(a) }}</span>
+          <div class="label" :title="a.label">{{ a.label }}:</div>
+          <div class="proNo" v-if="!edit || disabledFields.includes(a.key)">
+            <p>{{ textFilter(a) }}</p>
+          </div>
           <div v-else>
             <el-input placeholder="请输入内容" v-model="a.value" v-if="a.type === 'input'"/>
             <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true">
@@ -119,14 +121,23 @@ export default {
   display:flex;
   align-items: center;
   padding:10px 0;
-  span {
-    width: 200px;
+  .proNo>P,.label{
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    display:inline-block;
     font-size:12px;
-    text-align: right;
     padding-right:10px;
     box-sizing: border-box;
+    flex:1;
+    line-height: 28px;
+  }
+  .proNo>P{
+    width: 220px;
+  }
+  .label{
+    text-align: right;
+    width: 200px;
+  }
+  /deep/.el-input__inner{
+    width: 220px;
   }
   .el-select, .el-input {
     flex:1;

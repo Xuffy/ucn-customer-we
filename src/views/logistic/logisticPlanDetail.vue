@@ -7,7 +7,7 @@
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
           <span>{{ $i.logistic.remark }}</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容"v-model="remark" v-if="edit"></el-input>
+          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
           <p v-else>{{ remark }}</p>
         </div>
       <!-- </el-col> -->
@@ -442,7 +442,7 @@ export default {
       const url = this.configUrl[this.pageName][keyString]
 
       this.basicInfoArr.forEach(a => {
-        this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? +a.value : a.value)
+        this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? + this.$dateFormat(a.value) : a.value)
       })
 
       this.transportInfoArr.forEach(a => {
