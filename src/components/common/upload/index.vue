@@ -86,7 +86,7 @@
     },
     watch: {
       fileList() {
-        console.log(this.fileList)
+        // console.log(this.fileList)
       },
       list(val) {
         this.setList(val);
