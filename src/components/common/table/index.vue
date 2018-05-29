@@ -285,7 +285,7 @@
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return false;
 
-        if (_.toString(value)) {
+        if (_.isString(value)) {
           value = value.split(split);
         }
 

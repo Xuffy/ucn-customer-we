@@ -176,7 +176,6 @@
           param.showType = 'File';
         }
 
-
         if (_.indexOf(imageType, param.showType) !== -1) {
           param.isImage = true;
         }
