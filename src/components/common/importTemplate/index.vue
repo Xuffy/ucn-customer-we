@@ -12,18 +12,16 @@
             :action="$apis.IMPORTFILE_IMPORTTASKE"
             :headers="{'U-Session-Token':$localStore.get('token')}"
             :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :limit="5"
+            :limit="10"
             :data="{templateCode:'PRODUCT_SUPPLIER',bizCode:'PRODUCT_SUPPLIER'}"
             name="importFile"
             :on-exceed="handleExceed"
+            :before-upload="beforeAvatarUpload"
             :file-list="fileList">
             <el-button type="primary">{{$i.importTemplate.selectFile}}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
 
-            <!--<el-button size="small" type="primary">选择文件</el-button>-->
           </el-upload>
         </el-form-item>
 
@@ -35,10 +33,10 @@
       </el-form>
 
 
-      <div slot="footer" class="dialog-footer">
+      <!--<div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$i.common.cancel}}</el-button>
         <el-button type="primary" @click="dialogVisible = false">{{$i.common.confirm}}</el-button>
-      </div>
+      </div>-->
     </el-dialog>
   </div>
 </template>
@@ -53,13 +51,7 @@
     data() {
       return {
         dialogVisible: false,
-        fileList: [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }, {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }]
+        fileList: []
       }
     },
     watch: {},
@@ -71,19 +63,18 @@
       show() {
         this.dialogVisible = true;
       },
-
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      beforeAvatarUpload(file) {
+        if (file.name.indexOf('.zip') < 0 && file.name.indexOf('.xls') < 0) {
+          this.$message.warning('请上传 zip 或 xls 文件');
+          return false;
+        }
       },
       handlePreview(file) {
         console.log(file);
       },
       handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        this.$message.warning('导入文件超出限制，请稍候再试');
       },
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${ file.name }？`);
-      }
     }
   }
 

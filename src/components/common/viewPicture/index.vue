@@ -4,7 +4,9 @@
       :visible.sync="visible"
       :show-close="false"
       custom-class="ucn-view-picture">
-      <el-carousel :autoplay="false" height="60vh" class="banner">
+      <el-carousel :autoplay="false" height="60vh" class="banner"
+                   :indicator-position="data.length > 1 ? 'outside' : 'none'"
+                   :arrow="data.length > 1 ? 'always' : 'never'">
         <el-carousel-item v-for="item in data" :key="item">
           <img :src="item" style="width: 100%" alt="">
         </el-carousel-item>
@@ -57,7 +59,7 @@
 </style>
 <style>
   .ucn-view-picture {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     box-shadow: inherit;
   }
 

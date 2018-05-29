@@ -22,21 +22,25 @@
           <!--<h6 v-text="parseInt(item.progress * 100) + '%'"></h6>-->
         </div>
 
-        <div class="delete-box" v-show="item.progress === 1 || item.url">
+        <div class="operation-box" :class="{readonly:readonly,image:item.isImage}"
+             v-show="item.progress === 1 || item.url">
 
           <i class="el-icon-download" @click="downloadFile(item)"></i>
           <i class="el-icon-delete" @click="deleteFile(item)"></i>
+          <i class="el-icon-view" @click="$refs.uploadViewPicture.show(item.url)"></i>
         </div>
 
         <!--<el-progress :text-inside="true" :stroke-width="18" :percentage="item.progress*100"></el-progress>-->
       </li>
     </ul>
+    <v-view-picture ref="uploadViewPicture"></v-view-picture>
   </div>
 </template>
 
 <script>
   import OSS from 'ali-oss';
   import co from 'co';
+  import VViewPicture from '../viewPicture/index'
 
   const bucket = 'ucn-oss-dev';
   const imageType = ['JPG', 'PNG'];
@@ -67,7 +71,7 @@
         default: 'normal' // normal 、small
       }
     },
-    components: {},
+    components: {VViewPicture},
     data() {
       return {
         tenantId: '',
@@ -82,7 +86,7 @@
     },
     watch: {
       fileList() {
-        console.log(this.fileList)
+        // console.log(this.fileList)
       },
       list(val) {
         this.setList(val);
@@ -277,7 +281,7 @@
     height: 50px;
   }
 
-  .delete-box {
+  .operation-box {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -290,11 +294,11 @@
     transition: all .5s;
   }
 
-  .delete-box:hover {
+  .operation-box:hover {
     opacity: 1;
   }
 
-  .delete-box i {
+  .operation-box i {
     position: absolute;
     top: 50%;
     font-size: 18px;
@@ -304,16 +308,31 @@
     transform: translate(-50%, -50%);
   }
 
-  .delete-box .el-icon-download {
+  .operation-box .el-icon-download {
     left: 25%;
   }
 
-  .delete-box .el-icon-delete {
+  .operation-box .el-icon-delete {
     left: 75%;
   }
 
-  .delete-box i:hover {
+  .operation-box .el-icon-view {
+    left: 75%;
+  }
+
+  .operation-box i:hover {
     color: #409eff;
+  }
+
+  .operation-box.readonly .el-icon-delete{
+    display: none;
+  }
+
+  .operation-box:not(.image) .el-icon-view{
+    display: block;
+  }
+  .operation-box:not(.image) .el-icon-download{
+    left: 50%;
   }
 
   .progress {

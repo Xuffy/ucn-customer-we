@@ -76,7 +76,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name:$i.router.productBookmarkOverview
+            name: $i.router.productBookmarkOverview
           },
           component: () => import('../views/product/bookmark/bookmark'),
         },
@@ -178,7 +178,7 @@ export const routerMap = [
             draft: false,
             recycleBin: true,
             log: true,
-            name:$i.router.supplierBookmark
+            name: $i.router.supplierBookmark
           },
           component: () => import ('../views/supplier/bookmark/bookmark.vue')
         },
@@ -194,7 +194,7 @@ export const routerMap = [
           },
           component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
         },
-           {
+        {
           path: 'bookmarkRecycleBin',
           name: 'bookmarkRecycleBin',
           hidden: true,
@@ -241,7 +241,7 @@ export const routerMap = [
           },
           component: () => import ('../views/supplier/compare/overview.vue')
         },
-          {
+        {
           path: 'compareRecycleBin',
           name: 'supplierCompareRecycleBin',
           hidden: true,
@@ -297,7 +297,7 @@ export const routerMap = [
           path: 'compare',
           name: 'negotiationCompare',
           meta: {
-            name:$i.router.negotiationCompareOverview,
+            name: $i.router.negotiationCompareOverview,
             recycleBin: 'INQUIRY:COMPARE_OVERVIEW:RECYCLE_BIN'
           },
           component: () => import('../views/negotiation/compareOverview')
@@ -354,7 +354,7 @@ export const routerMap = [
       path: '/order',
       component: Layout,
       redirect: '/order/overview',
-      meta: {name:$i.router.order},
+      meta: {name: $i.router.order},
       noDropdown: true,
       children: [
         {
@@ -395,7 +395,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name:$i.router.orderDraft
+            name: $i.router.orderDraft
           },
           component: () => import('../views/order/draftOverview.vue')
         }, {
@@ -415,7 +415,7 @@ export const routerMap = [
       path: '/warehouse',
       component: Layout,
       redirect: '/warehouse/overview',
-      name:'Warehouse',
+      name: 'Warehouse',
       meta: {
         name: $i.router.warehouse
       },
@@ -428,7 +428,7 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name:$i.router.warehouseOverview
+            name: $i.router.warehouseOverview
           },
           component: () => import('../views/warehouse/warehouseOverview.vue'),
         },
@@ -439,26 +439,26 @@ export const routerMap = [
             draft: true,
             recycleBin: true,
             log: true,
-            name:$i.router.warehouseQcOverview
+            name: $i.router.warehouseQcOverview
           },
           component: () => import('../views/warehouse/qcOverview.vue'),
         },
         {
           path: 'qcDetail',
           name: 'warehouseQcOrderDetail',
-          hidden:true,
+          hidden: true,
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
-            name:$i.router.warehouseQcOrderDetail
+            name: $i.router.warehouseQcOrderDetail
           },
           component: () => import('../views/warehouse/qcDetail.vue'),
         },
         {
           path: 'createQc',
           name: 'warehouseCreateQcOrder',
-          hidden:true,
+          hidden: true,
           meta: {
             draft: true,
             recycleBin: true,
@@ -609,7 +609,7 @@ export const routerMap = [
       path: '/track',
       component: Layout,
       redirect: '/track/index',
-      meta: {name:$i.router.track},
+      meta: {name: $i.router.track},
       noDropdown: true,
       children: [
         {
@@ -641,6 +641,12 @@ export const routerMap = [
             log: true,
           },
           component: () => import('../views/logs/logs.vue')
+        },
+        {
+          path: 'import',
+          name: 'logsImport',
+          meta: {},
+          component: () => import('../views/logs/import.vue')
         }
       ]
     },
