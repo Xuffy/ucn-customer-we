@@ -517,7 +517,6 @@
                 });
             },
 
-
             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {
                     confirmButtonText: '确定',
