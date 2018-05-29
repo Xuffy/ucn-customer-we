@@ -10,6 +10,7 @@
         <el-form-item :label="$i.importTemplate.upload">
           <el-upload
             :action="$apis.IMPORTFILE_IMPORTTASKE"
+            :headers="{'U-Session-Token':$localStore.get('token')}"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"

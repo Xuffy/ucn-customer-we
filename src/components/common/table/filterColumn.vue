@@ -90,33 +90,26 @@
           , params = [];
         this.loading = true;
 
-        // todo 请求更新接口 update_gridfavorite
-
-        console.log(selected)
         _.map(selected, value => {
-          let { bizCode,id} = value;
-          console.log(value)
-          params.push({bizCode,gridFieldId:id});
+          let {bizCode, id} = value;
+          params.push({bizCode, gridFieldId: id});
         });
 
-        console.log(params)
-        console.log(this.$refs.columnTree.getCheckedKeys(), '*****');
 
+        this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
+          .then(res => {
 
-        /*this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE,{})
-          .then(res=>{
-
-          });*/
-        setTimeout(() => {
+          });
+        /*setTimeout(() => {
           this.loading = false;
           this.$emit('filter-column', this.$refs.columnTree.getCheckedKeys());
           this.visible = false;
-        }, 1000);
+        }, 1000);*/
       },
       defaultChecked() {
         let list = [];
         _.map(this.data, val => {
-          if (val._checked) {
+          if (val.isChecked === '1') {
             list.push(val.property);
           }
         });

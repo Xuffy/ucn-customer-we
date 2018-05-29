@@ -145,16 +145,19 @@
       getConfig() {
         this.$ajax.all([
           this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'], {_cache: true}),
-          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: "Product_Sourcing_sku"}, {_cache: true}),
+          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: 'Product_Sourcing_sku'}, {
+            _cache: true,
+            _contentType: 'F'
+          }),
         ]).then(data => {
           this.dataList = data[0];
-
-          this.setFiledData = _.map(data[0], val => {
+          this.setFiledData = data[1];
+          /*this.setFiledData = _.map(data[0], val => {
             if (!_.isEmpty(_.findWhere(data[1], {gridFieldId: val.name}))) {
               val._checked = true;
             }
             return val;
-          });
+          });*/
         });
       },
       selectCondition(item) {
@@ -176,14 +179,14 @@
 
       },
       onFilterColumn(val) {
-        this.$ajax.get(this.$apis.get_itemfavoriteList).then(data => {
+        /*this.$ajax.get(this.$apis.get_itemfavoriteList).then(data => {
           this.setFiledData = _.map(this.dataList, val => {
             if (!_.isEmpty(_.findWhere(data, {gridFieldId: val.name}))) {
               val._checked = true;
             }
             return val;
           });
-        });
+        });*/
         this.$emit('filter-column', val);
       },
       submitFilter() {
