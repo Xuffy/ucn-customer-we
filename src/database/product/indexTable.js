@@ -12,7 +12,8 @@ export default {
         _hide:true
     },
     pictures: {
-        _image:true
+        _image:true,
+        key:'pictures'
     },
     status: {
 

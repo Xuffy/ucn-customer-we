@@ -8,8 +8,8 @@
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
-                            <el-carousel-item v-for="item in 3" :key="item">
-                                <img src="../../../assets/images/login-back.jpg" style="width: 100%" alt="">
+                            <el-carousel-item v-for="item in productForm.pictures" :key="item">
+                                <img :src="item" style="max-width: 100%;max-height: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -46,7 +46,7 @@
                     <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                    <el-button>{{$i.product.download}}</el-button>
+                    <!--<el-button>{{$i.product.download}}</el-button>-->
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
                     <v-table
                             class="tabVtable"
                             :selection="false"
-                            :data="tableData"></v-table>
+                            :data="priceData"></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
@@ -247,7 +247,7 @@
                 disableClickAddBookmark:false,
                 productForm:{
                     id: '',                         //新增传空
-                    pic: "thisIsAPicture",
+                    pictures: [],
                     status: 0,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
@@ -384,7 +384,15 @@
                 fobPort:'',
                 fobPrice:'',
                 //用于展示的table数据
-                tableData:[],
+                priceData:[],
+                tradeHistory:{
+                    pn:1,
+                    ps:10,
+                    skuCode:'',
+                    sorts:[
+
+                    ],
+                },
 
                 /**
                  * compareList配置
@@ -432,6 +440,31 @@
                 }).then(res=>{
                     this.productForm=res;
                     this.notLoadingDone=true;
+                    this.tradeHistory.skuCode=this.productForm.sysCode;
+                    let priceData=[{
+                        fobCurrency:this.productForm.fobCurrency,
+                        fobPrice:this.productForm.fobPrice,
+                        refFobPrice:this.productForm.refFobPrice,
+                        fobPort:this.productForm.fobPort,
+                        exwPrice:this.productForm.exwPrice,
+                        exwCurrency:this.productForm.exwCurrency,
+                        cifPrice:this.productForm.cifPrice,
+                        refCifPrice:this.productForm.refCifPrice,
+                        cifCurrency:this.productForm.cifCurrency,
+                        cifArea:this.productForm.cifArea,
+                        dduPrice:this.productForm.dduPrice,
+                        refDduPrice:this.productForm.refDduPrice,
+                        dduCurrency:this.productForm.dduCurrency,
+                        dduArea:this.productForm.dduArea,
+                    }];
+
+                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
+
+                    this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
+                        console.log(res)
+                    }).finally(err=>{
+
+                    });
                 }).catch(err=>{
                     console.log(err)
                     this.notLoadingDone=true;

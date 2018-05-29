@@ -68,6 +68,11 @@ export default {
     update_buyerProductCompare:['/purchase/sku/compare/{id}','BASE_BUY','UPURCHASE_URL'],
     delete_buyerProductRemark:['/purchase/sku/deleteSkuRemark/{id}','BASE_BUY','UPURCHASE_URL'],
     recover_buyerProductBookmark:['/purchase/sku/recoverBookmark','BASE_BUY','UPURCHASE_URL'],
+    get_buyerProductTradeList:['/purchase/sku/history','BASE_BUY','UPURCHASE_URL'],
+
+
+
+
 
     /**
      * seller warehouse
@@ -133,6 +138,7 @@ export default {
     /**
      * 字典获取
      * */
+
     get_currencyUnit:['/currency/all','UMETA_URL','UMETA_URL'],
     get_country:['/country/all','UMETA_URL','UMETA_URL'],
     get_partUnit:['/code/part','UMETA_URL','UMETA_URL'],
