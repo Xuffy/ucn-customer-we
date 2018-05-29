@@ -334,7 +334,7 @@
     display: none;
   }
 
-  .operation-box:not(.image) .el-icon-download {
+  .operation-box:not(.image):not(.readonly) .el-icon-download {
     left: 50%;
   }
 
