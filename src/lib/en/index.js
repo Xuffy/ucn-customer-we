@@ -1,5 +1,4 @@
 import workbench from './workbench/index.js'
-import product from './product/index.js'
 import negotiation from './negotiation'
 import supplier from './supplier'
 import order from './order/index.js'
@@ -13,11 +12,9 @@ import setting from './setting'
 /**
  *  供应商端
  * */
-import productSeller from './productSeller'
 
 export default {
   workbench,
-  product,
   negotiation,
   warehouse,
   order,
@@ -26,7 +23,6 @@ export default {
   logistic,
   track,
   payment,
-  productSeller,
   setting
 }
 
