@@ -124,8 +124,6 @@
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <el-button>保存</el-button>
-                    <br>
                     <v-upload ref="upload"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
@@ -518,7 +516,6 @@
                     this.editRemarkFormVisible=false;
                 });
             },
-
 
             deleteRemark(index, row){
                 this.$confirm('确定删除该备注?', '提示', {

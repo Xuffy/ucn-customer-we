@@ -1,11 +1,10 @@
 {
-    "no": "No.",
-    "paymentNumber": "Payment Number",
+    "paymentNo": "Payment Number",
     "paymentItem": "Payment Item",
-    "estPayDate": "Est. Pay Date",
-    "estAmount": "Est. Amount",
-    "actPayDate": "Act. Pay Date",
-    "actAmount": "Act. Amount",
-    "currency": "Currency",
-    "avilable": "Available"
+    "planPayDt": "Est. Pay Date",
+    "planPayAmount": "Est. Amount",
+    "actualPayDt": "Act. Pay Date",
+    "actualPayAmount": "Act. Amount",
+    "currencyCode": "Currency",
+    "available": "Available"
 }

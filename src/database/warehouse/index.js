@@ -23,6 +23,7 @@ import qcDetailProductInfo from './qcDetailProductInfo';
  * 新配置
  * */
 import warehouseOverview from './warehouse/warehouseOverview';
+import qcPaymentTable from './warehouse/warehouse.qcPaymentTable';
 
 export default {
     inbound,
@@ -48,5 +49,6 @@ export default {
     /**
      * 新配置
      * */
-    warehouseOverview
+    warehouseOverview,
+    qcPaymentTable
 }

@@ -15,5 +15,5 @@ export default {
   GRIDFIELDSETTING_PART: ['/gridfieldsetting/part', 'UMETA_URL'],
   GRIDFAVORITE_UPDATE: ['/gridfavorite/update', 'UMETA_URL'],
   IMPORTFILE_IMPORTTASKE: ['/importfile/importtaske', 'UIE'],
-  GRIDFAVORITE_LIST: ['/gridfavorite/list', 'UMETA_URL']
+  GRIDFAVORITE_LIST: ['/gridfieldsetting/list', 'UMETA_URL']
 }
