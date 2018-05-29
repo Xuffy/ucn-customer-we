@@ -177,8 +177,10 @@
         }
 
         if (ns.length > 1) {
+          let k = name.split('?')[0].match(/.com\/(\S*)/);
           param.showType = ns.pop().toLocaleUpperCase();
           param.showName = ns.shift();
+          param.fileKey = k ? k[1] : '';
         } else {
           param.showName = ns[0];
           param.showType = 'File';
@@ -324,14 +326,15 @@
     color: #409eff;
   }
 
-  .operation-box.readonly .el-icon-delete{
+  .operation-box.readonly .el-icon-delete {
     display: none;
   }
 
-  .operation-box:not(.image) .el-icon-view{
-    display: block;
+  .operation-box:not(.image) .el-icon-view {
+    display: none;
   }
-  .operation-box:not(.image) .el-icon-download{
+
+  .operation-box:not(.image) .el-icon-download {
     left: 50%;
   }
 
