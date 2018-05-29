@@ -144,60 +144,107 @@
             {{$i.warehouse.payment}}
         </div>
         <div class="payment-table">
-            <el-button class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
+            <el-button @click="addPayment" :loading="disableClickAdd" class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
             <el-table
-                    :data="tableData"
+                    v-loading='loadingPaymentTable'
+                    :data="paymentTableData"
+                    :row-class-name="tableRowClassName"
                     border
                     style="width: 100%">
                 <el-table-column
-                        label="No."
-                        align="center"
-                        width="60">
+                    label="No"
+                    align="center"
+                    width="60">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="date"
-                        label="Payment Number"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        label="Payment Item"
-                        width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Est. Pay Date">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Act. Pay Date">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Est. Amount">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Act. Amount">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Currency">
-                </el-table-column>
-                <el-table-column
-                        prop="address"
-                        label="Available">
+                        v-for="v in $db.warehouse.qcPaymentTable"
+                        :label="$i.warehouse[v.key]"
+                        :key="v.key"
+                        align="center"
+                        width="200">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.isNew || scope.row.isModify">
+                            <div v-if="v.type==='input'">
+                                <el-input
+                                        :placeholder="$i.warehouse.pleaseInput"
+                                        v-model="scope.row[v.realKey]"
+                                        clearable>
+                                </el-input>
+                            </div>
+                            <div v-else-if="v.type==='date'">
+                                <el-date-picker
+                                        style="width: 160px"
+                                        v-model="scope.row[v.realKey]"
+                                        align="right"
+                                        type="date"
+                                        :editable="false"
+                                        :placeholder="$i.warehouse.pleaseChoose"
+                                        :picker-options="pickerOptions1">
+                                </el-date-picker>
+                            </div>
+                            <div v-else-if="v.type==='number'">
+                                <el-input-number
+                                        v-model="scope.row[v.realKey]"
+                                        :min="0"
+                                        :controls="false"
+                                        label="描述文字"></el-input-number>
+                            </div>
+                            <div v-else-if="v.type==='select'">
+                                <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
+                                    <el-option
+                                            v-for="item in currencyOption"
+                                            :key="item.id"
+                                            :label="item.code"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isStatus">
+                                {{scope.row[v.realKey]===-1?'Invalid':(scope.row[v.realKey]===10 || 20 || 30?'Waite Service Confirm':'Confirm')}}
+                            </div>
+                            <div v-else>
+                                {{scope.row[v.realKey]}}
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div v-if="v.type==='date'">
+                                {{$dateFormat(scope.row[v.realKey],'yyyy-mm-dd')}}
+                            </div>
+                            <div v-else-if="v.isStatus">
+                                {{scope.row[v.realKey]===-1?'Invalid':(scope.row[v.realKey]===10 || 20 || 30?'Waite Service Confirm':'Confirm')}}
+                            </div>
+                            <div v-else>
+                                {{scope.row[v.realKey]}}
+                            </div>
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         fixed="right"
                         label="Action"
-                        width="100">
+                        align="center"
+                        width="150">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        <el-button type="text" size="small">编辑</el-button>
+                        <div v-if="scope.row.status===-1">
+                            <el-button @click="restore(scope.row)" type="text" size="small">{{$i.warehouse.restore}}</el-button>
+                        </div>
+                        <div v-else>
+                            <div v-if="scope.row.isNew">
+                                <el-button @click="sureAdd(scope.row)" type="text" size="small">{{$i.warehouse.submit}}</el-button>
+                                <el-button @click="cancelAdd(scope.row)" type="text" size="small">{{$i.warehouse.cancel}}</el-button>
+                            </div>
+                            <div v-else-if="scope.row.isModify">
+                                <el-button @click="sureModify(scope.row)" type="text" size="small">{{$i.warehouse.submit}}</el-button>
+                                <el-button @click="cancelModify(scope.row)" type="text" size="small">{{$i.warehouse.cancel}}</el-button>
+                            </div>
+                            <div v-else>
+                                <el-button @click="modify(scope.row)" type="text" size="small">{{$i.warehouse.modify}}</el-button>
+                                <el-button @click="invalid(scope.row)" type="text" size="small">{{$i.warehouse.invalid}}</el-button>
+                            </div>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -366,17 +413,39 @@
                 qcMethodOption:[],
                 disableClickRestart:true,
                 disableAdd:true,
+                copyList:[],
                 /**
                  * paymentTable data
                  * */
-                tableData: [
-                    {
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1518 弄'
-                    }
-                ],
-
+                loadingPaymentTable:false,
+                paymentTableData: [],
+                disableClickAdd:false,
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                currencyOption:[],
 
                 /**
                  * product info data
@@ -478,7 +547,206 @@
                 });
             },
             getPaymentData(){
-                
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.get_qcPaymentData,{
+                    orderNo:this.qcDetail.qcOrderNo,
+                    orderType:20
+                }).then(res=>{
+                    this.loadingPaymentTable=false;
+                    this.paymentTableData=res.datas;
+                }).catch(err=>{
+                    this.loadingPaymentTable=false;
+                });
+            },
+
+            /**
+             * payment事件
+             * */
+            tableRowClassName({row}) {
+                if(row.status===-1){
+                    return 'warning-row';
+                }
+                return '';
+            },
+            addPayment(){
+                this.disableClickAdd=true;
+                this.$ajax.post(this.$apis.get_qcPaymentNo).then(res=>{
+                    this.disableClickAdd=false;
+                    this.paymentTableData.push({
+                        no:res,
+                        name:'',
+                        planPayDt:'',
+                        planPayAmount:'',
+                        actualPayDt:'',
+                        actualPayAmount:'',
+                        currencyCode:this.qcDetail.exchangeCurrencyDictCode,
+                        status:10,
+                        isNew:true
+                    });
+                }).catch(err=>{
+                    this.disableClickAdd=false;
+                });
+                console.log(2134)
+            },
+            sureAdd(e){
+                let param={
+                    actualPayAmount: e.actualPayAmount,
+                    actualPayDt: e.actualPayDt,
+                    name: e.name,
+                    no: e.no,
+                    orderNo: this.qcDetail.qcOrderNo,
+                    orderType: 20,
+                    planPayAmount: e.planPayAmount,
+                    planPayDt: e.planPayDt,
+                    type: 10,       //10代表付款
+                    payToId: this.qcDetail.serviceOwnerId,
+                    payToName: this.qcDetail.serviceName,
+                    currency: 0,
+                    currencyCode: '',
+                };
+                this.currencyOption.forEach(v=>{
+                    if(v.code===this.qcDetail.exchangeCurrencyDictCode){
+                        param.currency=v.id;
+                        param.currencyCode=v.code;
+                    }
+                });
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.save_qcPayment,param).then(res=>{
+                    this.$message({
+                        message: this.$i.warehouse.submitSuccess,
+                        type: 'success'
+                    });
+                    this.loadingPaymentTable=false;
+                    this.$set(e,'isNew',false);
+                    this.$set(e,'version',res.version);
+                    this.$set(e,'id',res.id);
+                }).catch(err=>{
+                    this.loadingPaymentTable=false;
+                });
+            },
+            cancelAdd(e){
+                this.$confirm(this.$i.warehouse.sureDelete, 'Info', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.paymentTableData=_.difference(this.paymentTableData,[e]);
+
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+
+                });
+            },
+            modify(e){
+                this.$set(e,'isModify',true);
+                let has=false;
+                this.copyList.forEach(v=>{
+                    if(v.no===e.no){
+                        has=true;
+                    }
+                });
+                if(!has){
+                    this.copyList.push(Object.assign({},e));
+                }
+            },
+            invalid(e){
+                this.$confirm(this.$i.warehouse.sureInvalid, 'Info', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.abandon_qcPayment,{
+                        id:e.id,
+                        version:e.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.invalidSuccess
+                        });
+                        this.$set(e,'status',-1);
+                        this.$set(e,'version',res.version);
+                        this.loadingPaymentTable=false;
+                    }).catch(err=>{
+                        this.loadingPaymentTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+            restore(e){
+                this.$confirm(this.$i.warehouse.sureRestore, 'Info', {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.recover_qcPayment,{
+                        id:e.id,
+                        version:e.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.warehouse.restoreSuccess
+                        });
+                        this.$set(e,'status',30);
+                        this.$set(e,'version',res.version);
+                        this.loadingPaymentTable=false;
+                    }).catch(err=>{
+                        this.loadingPaymentTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+            sureModify(e){
+                let param={
+                    actualPayAmount: e.actualPayAmount,
+                    actualPayDt: e.actualPayDt,
+                    id: e.id,
+                    name: e.name,
+                    planPayAmount: e.planPayAmount,
+                    planPayDt: e.planPayDt,
+                    version:e.version
+                };
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.update_qcPayment,param).then(res=>{
+                    this.$message({
+                        message: this.$i.warehouse.changeSuccess,
+                        type: 'success'
+                    });
+                    this.copyList.forEach(v=>{
+                        if(v.no===e.no){
+                            let obj=Object.assign({},e);
+                            this.$set(v,'name',obj.name);
+                            this.$set(v,'planPayDt',obj.planPayDt);
+                            this.$set(v,'planPayAmount',obj.planPayAmount);
+                            this.$set(v,'actualPayDt',obj.actualPayDt);
+                            this.$set(v,'actualPayAmount',obj.actualPayAmount);
+                        }
+                    });
+                    this.$set(e,'isModify',false);
+                    this.$set(e,'version',res.version);
+                    this.loadingPaymentTable=false;
+                }).catch(err=>{
+                    this.loadingPaymentTable=false;
+                });
+            },
+            cancelModify(e){
+                this.copyList.forEach(v=>{
+                    if(v.no===e.no){
+                        let obj=Object.assign({},v);
+                        this.$set(e,'name',obj.name);
+                        this.$set(e,'planPayDt',obj.planPayDt);
+                        this.$set(e,'planPayAmount',obj.planPayAmount);
+                        this.$set(e,'actualPayDt',obj.actualPayDt);
+                        this.$set(e,'actualPayAmount',obj.actualPayAmount);
+                    }
+                });
+                this.$set(e,'isModify',false);
             },
 
             /**
@@ -608,8 +876,17 @@
             cancel(){
                 window.close();
             },
+
+            getCurrency(){
+                this.$ajax.get(this.$apis.get_currency,{},{_cache:true}).then(res=>{
+                    this.currencyOption=res;
+                }).catch(err=>{
+
+                });
+            },
         },
         created(){
+            this.getCurrency();
             this.loadingData=true;
             this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD'],{_cache:true})
                 .then(res=>{
@@ -645,6 +922,9 @@
     }
 </script>
 <style scoped>
+    .el-table >>> .warning-row {
+        background: #f5f7fa;
+    }
     .title{
         font-weight: bold;
         font-size: 18px;

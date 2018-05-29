@@ -15,5 +15,10 @@
 
   "systemGeneration":"System Generation",
   "pleaseInput":"Please Input",
-  "pleaseInputOrChoose":"Please Input/Choose"
+  "pleaseInputOrChoose":"Please Input/Choose",
+
+  "submit":"Submit",
+  "modify":"Modify",
+  "invalid":"Invalid",
+  "restore":"Restore"
 }
