@@ -1,10 +1,10 @@
 <template>
-    <div class="Details">
+    <div class="Details" v-loading="notLoadingDone">
         <div class="head">
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail" v-loading="notLoadingDone">
+            <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
@@ -70,17 +70,20 @@
                                            {{productForm[v.key]===1?'上架':'下架'}}
                                         </div>
                                         <div v-else>
-                                            <div v-if="v.key==='descCustomer'">
-                                                <el-input
-                                                        :disabled="notEdit"
-                                                        type="textarea"
-                                                        autosize
-                                                        placeholder="please input"
-                                                        v-model="productForm[v.key]">
-                                                </el-input>
+                                            <div v-if="productForm.customerCreate">
+                                                {{productForm[v.key]}}
                                             </div>
                                             <div v-else>
-                                                <div v-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
+                                                <div v-if="v.key==='descCustomer'">
+                                                    <el-input
+                                                            :disabled="notEdit"
+                                                            type="textarea"
+                                                            autosize
+                                                            placeholder="please input"
+                                                            v-model="productForm[v.key]">
+                                                    </el-input>
+                                                </div>
+                                                <div v-else-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
                                                     <el-input :disabled="notEdit" v-model="productForm[v.key]" placeholder="please input"></el-input>
                                                 </div>
                                                 <div v-else>
@@ -704,17 +707,20 @@
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
                 });
-
             },
             deleteRemark(index, row){
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
-                    confirmButtonText: this.$i.product.submit,
+                    confirmButtonText: this.$i.product.sure,
                     cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.delete_buyerProductRemark,{
                         id:row.id
                     }).then(res=>{
+                        if(this.remarkTableData.length===1 && this.remarkConfig.pn>1){
+                            //代表删的是最后一个了
+                            this.remarkConfig.pn-=1;
+                        }
                         this.$message({
                             message: this.$i.product.deleteSuccess,
                             type: 'success'

@@ -84,5 +84,6 @@
   "submit":"Submit",
   "changeRemark":"Change Remark",
   "sureDelete":"Sure Delete?",
-  "prompt":"Prompt"
+  "prompt":"Prompt",
+  "sure":"Sure"
 }
