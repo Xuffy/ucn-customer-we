@@ -428,8 +428,7 @@
 </template>
 <script>
 
-    import VTable from '@/components/common/table/index'
-    import {VTimeZone,VPagination,VUpload} from '@/components/index'
+    import {VTimeZone,VPagination,VUpload,VTable} from '@/components/index'
 
     export default {
         name:'createQc',

@@ -83,6 +83,7 @@
         </div>
         <div class="footer">
             <v-table
+                    :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
