@@ -5,7 +5,10 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-                <v-upload ref="uploadFile"/>
+                <v-upload ref="uploadFile" onlyImage/>
+                <div class="section-btn" style="padding-top:10px">
+                  <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
+                </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth" :prop="v.key" :label="v.label">
@@ -184,38 +187,38 @@
                 <div class="section-btn">
                   <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
                 </div>
-                <v-upload ref="uploadAttachment"/>
+                <v-upload ref="uploadAttachment" :limit="20" />
               </el-tab-pane>
 
-                <!--<el-tab-pane :label="$i.setting.attachment">-->
-                  <!--<div class="section-btn">-->
-                    <!--<el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>-->
-                  <!--</div>-->
-                  <!--<v-upload></v-upload>-->
-                <!--</el-tab-pane>-->
-                <!--<el-tab-pane :label="$i.setting.custom">-->
-                  <!--<div class="section-btn">-->
-                    <!--<el-button @click="addCustom(customData)" type="primary">{{$i.button.modify}}</el-button>-->
-                  <!--</div>-->
-                  <!--<el-form label-width="400px" :model="customData">-->
-                    <!--<el-row>-->
-                      <!--<el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">-->
-                        <!--<el-form-item  :label="$i.setting.oceanFreight">-->
-                          <!--<el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item  :label="$i.setting.insuranceExpenses">-->
-                          <!--<el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item :label="$i.setting.priceCurrency">-->
-                          <!--<el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                        <!--<el-form-item  :label="$i.setting.exchangeRate">-->
-                          <!--<el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>-->
-                        <!--</el-form-item>-->
-                      <!--</el-col>-->
-                    <!--</el-row>-->
-                  <!--</el-form>-->
-                <!--</el-tab-pane>-->
+                <el-tab-pane :label="$i.setting.attachment">
+                  <div class="section-btn">
+                    <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                  </div>
+                  <v-upload></v-upload>
+                </el-tab-pane>
+                <el-tab-pane :label="$i.setting.custom">
+                  <div class="section-btn">
+                    <el-button @click="addCustom(customData)" type="primary">{{$i.button.modify}}</el-button>
+                  </div>
+                  <el-form label-width="400px" :model="customData">
+                    <el-row>
+                      <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
+                        <el-form-item  :label="$i.setting.oceanFreight">
+                          <el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.insuranceExpenses">
+                          <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$i.setting.priceCurrency">
+                          <el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                        <el-form-item  :label="$i.setting.exchangeRate">
+                          <el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.tradeExchangeRate">
                   <el-table
@@ -428,36 +431,36 @@
         <!--</div>-->
       <!--</el-dialog>-->
 
-      <!--<el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="customDialogVisible">-->
-        <!--<el-form label-width="300px" :model="customData">-->
-          <!--<el-row>-->
-            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
-              <!--<el-form-item :label="$i.setting.oceanFreight">-->
-                <!--<el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
-              <!--<el-form-item :label="$i.setting.insuranceExpenses">-->
-                <!--<el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
-              <!--<el-form-item  :label="$i.setting.priceCurrency">-->
-                <!--<el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">-->
-              <!--<el-form-item :label="$i.setting.exchangeRate">-->
-                <!--<el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-        <!--</el-form>-->
-        <!--<div slot="footer" class="dialog-footer">-->
-          <!--<el-button @click="customDialogVisible=false">取 消</el-button>-->
-          <!--<el-button :loading="allowAddAccount" type="primary" @click="modifyCustom">确 定</el-button>-->
-        <!--</div>-->
-      <!--</el-dialog>-->
+      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="customDialogVisible">
+        <el-form label-width="300px" :model="customData">
+          <el-row>
+            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+              <el-form-item :label="$i.setting.oceanFreight">
+                <el-input size="mini" v-model="customData.oceanFreightUSD40HC" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+              <el-form-item :label="$i.setting.insuranceExpenses">
+                <el-input size="mini" v-model="customData.insuranceExpensesUSD40HC" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+              <el-form-item  :label="$i.setting.priceCurrency">
+                <el-input size="mini" v-model="customData.portWarehousePrice40HC" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+              <el-form-item :label="$i.setting.exchangeRate">
+                <el-input size="mini" v-model="customData.exchangeRateUSD" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="customDialogVisible=false">取 消</el-button>
+          <el-button :loading="allowAddAccount" type="primary" @click="modifyCustom">确 定</el-button>
+        </div>
+      </el-dialog>
 
       <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="exchangerateDialogVisible">
         <el-form label-width="200px" :model="exchangerateData">
@@ -596,6 +599,11 @@
                 price: "",
                 symbol: ""
               },
+              logoParmas:{
+                id: "",
+                type: "PICTURE",
+                url: ""
+              },
                 //btn loading状态
                 allowAddAddress:false,
                 allowAddAccount:false,
@@ -617,8 +625,11 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    if(res.custom){
+                      console.log(1)
+                      this.customData = res.custom
+                    }
                     this.documentData = res.documents[0];
-                    this.customData = res.custom
                 }).catch(err=>{
                     console.log(err)
                 });
@@ -677,7 +688,7 @@
                     exportLicense: this.companyInfo.exportLicense,
                     id:this.companyInfo.id,
                     incoterm: this.companyInfo.incoterm,
-                    logo: this.$refs.uploadFile.getFiles()[0],
+                    logo: '',
                     name: this.companyInfo.name,
                     ownerId: this.companyInfo.ownerId,
                     payment: this.companyInfo.payment,
@@ -705,6 +716,7 @@
                 this.companyInfo=Object.assign({},this.cloneData);
                 this.summaryDisabled=true;
             },
+
 
             /**
              * address操作
@@ -899,12 +911,7 @@
           getGridfavoritePartData(){
             this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res=>{
                 this.currencyList = res;
-            }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
-            });
+            })
           },
           updateExchangerate(e){
             this.exchangerateDialogVisible = true;
@@ -920,10 +927,6 @@
               this.exchangerateDialogVisible = false;
             }).catch(err=>{
               this.exchangerateDialogVisible = false;
-              this.$message({
-                message: err,
-                type: 'success'
-              });
             });
           },
           /**
@@ -932,11 +935,41 @@
           upload(){
             console.log(this.$refs.uploadAttachment.getFiles())
               //ATTACHMENT,文件 PICTURE 图片
+            const uploadParams = {
+              id: this.companyInfo.id,
+              type: "ATTACHMENT",
+              url: this.$refs.uploadAttachment.getFiles()[0]
+            };
+            const batchUploadParams = {
+              id: this.companyInfo.id,
+              type: "ATTACHMENT",
+              urls: this.$refs.uploadAttachment.getFiles()
+            };
+            if (this.$refs.uploadAttachment.getFiles().length === 1){
+              this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                console.log(res)
+              })
+
+            }else{
+              this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                console.log(res)
+              })
+            }
+          },
+          /**
+           * Attachment操作
+           * */
+          uploadLogo(){
+            this.logoParmas.id = this.companyInfo.id;
+            this.logoParmas.url = this.$refs.uploadAttachment.getFiles()[0];
+            this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+              console.log(res)
+            })
 
           }
-
         },
         created(){
+
             // this.supplierWhole();
                this.getWholeData();
                this.getCurrency();
