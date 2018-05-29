@@ -42,6 +42,12 @@
   export default {
     name: 'VUpload',
     props: {
+      list: {
+        type: [Array, String],
+        default() {
+          return [];
+        },
+      },
       limit: {
         type: Number,
         default: 1,
@@ -66,6 +72,11 @@
       this.tenantId = (this.$localStore.get('user') || {}).tenantId;
     },
     mounted() {
+    },
+    watch: {
+      list(val) {
+        this.setList(val);
+      }
     },
     methods: {
       uploadFile() {
@@ -139,21 +150,47 @@
 
       },
       filterType(name) {
-        let ns = name.split('.')
+        let rs = name.split('?')[0].split('/')
+          , ns = rs.pop().split('.')
           , param = {};
+
+        if (name.indexOf('?') > -1) {
+          param.url = name;
+          param.id = rs[rs.length - 2];
+        }
 
         if (ns.length > 1) {
           param.showType = ns.pop().toLocaleUpperCase();
-          param.showName = ns.join('');
+          param.showName = ns.shift();
         } else {
           param.showName = ns[0];
         }
+
 
         if (_.indexOf(imageType, param.showType) !== -1) {
           param.isImage = true;
         }
 
+
         return param;
+      },
+      setList(list) {
+        if (_.isEmpty(list)) {
+          return false;
+        }
+
+        if (_.isString(list)) {
+          list = [list];
+        }
+
+        _.map(list, value => {
+          let param = this.filterType(value);
+
+          if (!_.isEmpty(this.fileList[param.id])) {
+            this.$set(this.fileList, param.id, param);
+          }
+        });
+
       },
       getFiles() {
         let files = _.pluck(_.values(this.fileList), 'fileKey');
