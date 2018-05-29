@@ -31,7 +31,7 @@
           <template slot="header">
               <div class="fn">
                   <div class="btn-wrap">
-                      <el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>
+                      <!--<el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>-->
                       <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
                   </div>
               </div>

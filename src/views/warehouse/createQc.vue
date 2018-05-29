@@ -159,7 +159,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.attachment">
-                            <v-upload></v-upload>
+                            <v-upload :limit="20" ref="upload"></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -483,7 +483,7 @@
                 },
 
                 qcOrderConfig:{
-
+                    attachments:[],
                     exchangeCurrencyDictCode:'CNY',
                     exchangeCurrencyDictId:'',
                     factoryAddress: "",
@@ -571,6 +571,7 @@
                         });
                     }
                 });
+                this.qcOrderConfig.attachments=this.$refs.upload.getFiles();
 
                 this.disableClickSubmit=true;
 
@@ -818,11 +819,11 @@
             },
             productTableData(n){
                 if(n.length>0){
-                    let sum=0;
+                    let diffData=[];
                     n.forEach(v=>{
-                        sum+=v.orderSkuQty;
+                        diffData.push(v.skuId+v.orderNo);
                     });
-                    this.summaryData.skuQuantity=sum;
+                    this.summaryData.skuQuantity=_.uniq(diffData).length;
                 }
             },
         },
