@@ -491,11 +491,6 @@
                     .then(res=>{
                         this.qcDetail=res;
                         this.loadingData=false;
-                        if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
-                            this.disableAdd=true;
-                        }else{
-                            this.disableAdd=false;
-                        }
                         this.getProductInfo();
                         this.getPaymentData();
                     }).catch(err=>{
@@ -554,8 +549,14 @@
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
+                    if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
+                        this.disableAdd=true;
+                    }else{
+                        this.disableAdd=false;
+                    }
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
+
                 });
             },
 
@@ -936,7 +937,7 @@
         font-size: 16px;
         color: #999999;
         padding: 10px 0;
-        margin-top: 40px;
+        margin-top: 20px;
     }
     .payment-btn{
         margin: 5px 0 10px 0;
