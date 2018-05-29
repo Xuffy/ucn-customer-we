@@ -28,7 +28,7 @@
       show(pictures, split = ',') {
         if (_.isEmpty(pictures)) return false;
 
-        if (_.toString(pictures)) {
+        if (_.isString(pictures)) {
           pictures = pictures.split(split);
         }
 

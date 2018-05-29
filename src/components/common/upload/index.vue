@@ -1,6 +1,6 @@
 <template>
   <div class='ucn-upload small'>
-    <p class="upload-btn">
+    <p class="upload-btn" v-if="!readonly">
       <i class="el-icon-plus"></i>
       <input class="upload-file" type="file" ref="upload"
              @change="uploadFile"
@@ -49,6 +49,10 @@
         default() {
           return [];
         },
+      },
+      readonly: {
+        type: Boolean,
+        default: false,
       },
       limit: {
         type: Number,
@@ -133,9 +137,9 @@
       },
       deleteFile(item) {
         let list = {};
-        this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+        item.fileKey && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data);
-          client.delete(item.fileKey);
+          client.delete(item.fileKey || '');
         });
 
         _.map(this.fileList, val => {
@@ -179,7 +183,6 @@
         if (_.indexOf(imageType, param.showType) !== -1) {
           param.isImage = true;
         }
-
 
         return param;
       },
