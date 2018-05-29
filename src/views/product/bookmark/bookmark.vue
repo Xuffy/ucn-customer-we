@@ -65,24 +65,26 @@
             <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
         </div>
         <div class="footer">
-            <div class="btns">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
-                <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                <el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
-                <el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>
-                <el-button>{{$i.product.upload}}</el-button>
-                <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
-            </div>
-
             <v-table
                     v-loading="loadingTable"
                     :data="tableDataList"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
-                    @action="btnClick"></v-table>
+                    @action="btnClick">
+                <template slot="header">
+                    <div class="btns">
+                        <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
+                        <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                        <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
+                        <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
+                        <!--<el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                        <!--<el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>-->
+                        <!--<el-button>{{$i.product.upload}}</el-button>-->
+                        <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
+                    </div>
+                </template>
+            </v-table>
             <page
                     @size-change="changeSize"
                     @change="changePage"
