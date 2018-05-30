@@ -131,10 +131,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.attachment">
-                            <el-input
-                                    v-model="qcDetail.attachment"
-                                    :disabled="true">
-                            </el-input>
+                            <v-upload :list="qcDetail.attachments" :limit="20" ref="upload"></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -399,12 +396,13 @@
 </template>
 <script>
 
-    import {VTable } from '@/components/index';
+    import {VTable,VUpload} from '@/components/index';
 
     export default {
         name:'qc-detail',
         components:{
-            VTable
+            VTable,
+            VUpload
         },
         data(){
             return{
@@ -491,13 +489,9 @@
                     .then(res=>{
                         this.qcDetail=res;
                         this.loadingData=false;
-                        if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
-                            this.disableAdd=true;
-                        }else{
-                            this.disableAdd=false;
-                        }
                         this.getProductInfo();
                         this.getPaymentData();
+                        console.log(this.qcDetail)
                     }).catch(err=>{
                         this.loadingData=false;
                     }
@@ -519,7 +513,8 @@
                             diffData.push(v.skuId.value+v.orderNo.value);
                             this.summaryData.skuQuantity=_.uniq(diffData).length;
                         })
-                    }else{
+                    }
+                    else{
                         //否则，统计全部summary
                         _.mapObject(this.summaryData,(v,index)=>{
                             this.summaryData[index]=0;
@@ -538,9 +533,7 @@
                             diffData.push(v.skuId.value+v.orderNo.value);
                         });
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
-
                     }
-
                     this.loadingProductInfoTable=false;
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
@@ -554,8 +547,14 @@
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
+                    if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
+                        this.disableAdd=true;
+                    }else{
+                        this.disableAdd=false;
+                    }
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
+
                 });
             },
 
@@ -936,7 +935,7 @@
         font-size: 16px;
         color: #999999;
         padding: 10px 0;
-        margin-top: 40px;
+        margin-top: 20px;
     }
     .payment-btn{
         margin: 5px 0 10px 0;

@@ -9,6 +9,7 @@ export default {
         type: 'Boolean',
         showType:'select',
         belongTab:'basicInfo',
+        isSaleStatus:true,
         options:[
             {
                 label:'下架',
@@ -90,6 +91,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        isSkuUnit:true,
         options:[
             {
                 label:'kg',
@@ -166,6 +168,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        isReadilyAvailable:true,
         options:[
             {
                 label:'有货',
@@ -298,13 +301,6 @@ export default {
         showType:'input',
         belongTab:'customerInfo',
     },
-    brandRemark:{
-        key:'brandRemark',
-        type: 'String',
-        showType:'textarea',
-        belongTab:'customerInfo',
-        fullLine:true,
-    },
     brandRelated:{
         key:'brandRelated',
         type: 'String',
@@ -316,6 +312,13 @@ export default {
         type: 'String',
         showType:'input',
         belongTab:'customerInfo',
+    },
+    brandRemark:{
+        key:'brandRemark',
+        type: 'String',
+        showType:'textarea',
+        belongTab:'customerInfo',
+        fullLine:true,
     },
 
     /**
@@ -598,6 +601,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'packingInfo',
+        isOem:true,
         options:[
             {
                 label:'yes',
@@ -719,6 +723,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
+        isUseDisplayBox:true,
         options:[
             {
                 label:'yes',
@@ -759,6 +764,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'otherInfo',
+        isAdjustPackage:true,
         options:[
             {
                 label:'yes',

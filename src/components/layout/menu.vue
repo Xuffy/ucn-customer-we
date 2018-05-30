@@ -29,23 +29,34 @@
       <el-menu-item-group>
         <el-menu-item index="2-0" v-show="$store.state.quickLink.draft.show"
                       @click="$router.push($store.state.quickLink.draft)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Draft" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.draft" placement="right">
             <i class="el-icon-edit-outline"></i>
           </el-tooltip>
           <span v-text="$i.common.draft"></span>
         </el-menu-item>
         <el-menu-item index="2-1" v-show="$store.state.quickLink.recycleBin.show"
                       @click="$router.push($store.state.quickLink.recycleBin)">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Recycle Bin" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.recycleBin" placement="right">
             <i class="el-icon-delete"></i>
           </el-tooltip>
           <span v-text="$i.common.recycleBin"></span>
         </el-menu-item>
         <el-menu-item index="2-3" v-show="$store.state.quickLink.log">
-          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" content="Log" placement="right">
+          <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark"
+                      :content="$i.common.log" placement="right">
             <i class="el-icon-tickets"></i>
           </el-tooltip>
           <span v-text="$i.common.log"></span>
+        </el-menu-item>
+        <el-menu-item index="2-4">
+          <router-link to="/logs/import">
+            <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="'导入日志'" placement="right">
+              <i class="el-icon-tickets"></i>
+            </el-tooltip>
+            <span v-text="$i.logs.importTitle"></span>
+          </router-link>
         </el-menu-item>
       </el-menu-item-group>
     </el-menu>

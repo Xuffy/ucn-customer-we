@@ -36,7 +36,8 @@ const json = {
   ),
   logs: _.extend({},
     require(`./${lang}/logs/logs.basic`),
-    require(`./${lang}/logs/logs.basic`)
+    require(`./${lang}/logs/logs.basic`),
+    require(`./${lang}/logs/import`)
   ),
   message: _.extend({},
     require(`./${lang}/message/message.table`),
