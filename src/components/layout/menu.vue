@@ -55,7 +55,7 @@
             <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="'导入日志'" placement="right">
               <i class="el-icon-tickets"></i>
             </el-tooltip>
-            <span v-text="'导入日志'"></span>
+            <span v-text="$i.logs.importTitle"></span>
           </router-link>
         </el-menu-item>
       </el-menu-item-group>

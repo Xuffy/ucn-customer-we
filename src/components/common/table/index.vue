@@ -68,7 +68,7 @@
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <v-image class="img" v-else-if="cItem.value"
+              <v-image class="img" v-else
                        :src="getImage(cItem.value)"
                        height="30px"
                        width="30px"
@@ -240,11 +240,7 @@
     methods: {
       onFilterColumn(checked) {
         // todo 需过滤column
-        // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
-        // this.filterColumn();
-        // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
-        // this.updateTable();
       },
       filterColumn() {
         this.dataColumn = _.values(this.dataList[0]);
@@ -298,7 +294,6 @@
           value = value.split(split);
         }
 
-        console.log(value[0])
         return value[0];
       },
       changeCheck(item, value) {

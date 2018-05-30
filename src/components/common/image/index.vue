@@ -34,13 +34,8 @@
       }
     },
     watch: {
-      src(val) {
-        console.log(val,'+++++++')
-      }
-
     },
     mounted() {
-      console.log(this.src,'-------')
       let {clientHeight, clientWidth} = this.$refs.image;
       this.iconSize = clientHeight <= clientWidth ? clientHeight : clientWidth;
     },

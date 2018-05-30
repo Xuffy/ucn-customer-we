@@ -21,7 +21,6 @@
             <el-button type="primary">{{$i.importTemplate.selectFile}}
               <i class="el-icon-upload el-icon--right"></i>
             </el-button>
-
           </el-upload>
         </el-form-item>
 
@@ -29,6 +28,9 @@
           <h5>1.{{$i.importTemplate.remark1}} <a href="" v-text="$i.importTemplate.template"></a></h5>
           <h5>2.{{$i.importTemplate.remark2}}</h5>
           <h5>3.{{$i.importTemplate.remark3}}</h5>
+          <router-link to="/logs/import">
+            <el-button type="text">{{$i.logs.lookImportTitle}}</el-button>
+          </router-link>
         </el-form-item>
       </el-form>
 
