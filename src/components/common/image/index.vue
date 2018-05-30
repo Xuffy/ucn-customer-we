@@ -1,6 +1,7 @@
 <template>
   <div class="ucn-image" ref="image"
-       :style="{height:height, width:width, backgroundImage:'url('+ src +')'}">
+       @click="val => {$emit('click', val)}"
+       :style="{height:height, width:width}">
 
     <div class="image" :style="{backgroundImage:'url('+ src +')'}"></div>
 
@@ -32,7 +33,14 @@
         iconSize: 0
       }
     },
+    watch: {
+      src(val) {
+        console.log(val,'+++++++')
+      }
+
+    },
     mounted() {
+      console.log(this.src,'-------')
       let {clientHeight, clientWidth} = this.$refs.image;
       this.iconSize = clientHeight <= clientWidth ? clientHeight : clientWidth;
     },

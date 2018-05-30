@@ -8,7 +8,9 @@
                    :indicator-position="data.length > 1 ? 'outside' : 'none'"
                    :arrow="data.length > 1 ? 'always' : 'never'">
         <el-carousel-item v-for="item in data" :key="item">
-          <img :src="item" style="width: 100%" alt="">
+          <!--<img :src="item" style="width: 100%" alt="">-->
+
+          <v-image class="img" :src="item"></v-image>
         </el-carousel-item>
       </el-carousel>
     </el-dialog>
@@ -16,9 +18,12 @@
 </template>
 
 <script>
+  import VImage from '../image/index'
+
   export default {
     name: 'VViewPicture',
     props: {},
+    components: {VImage},
     data() {
       return {
         visible: false,
@@ -46,13 +51,13 @@
 
   }
 
-  .view-picture img {
+  .view-picture .img {
     width: 3rem;
     height: 2rem;
     cursor: pointer;
   }
 
-  .banner img {
+  .banner .img {
     width: 100%;
     height: 100%;
   }
@@ -76,13 +81,16 @@
     vertical-align: middle;
   }
 
-  .ucn-view-picture .el-carousel__item img {
+  .ucn-view-picture .el-carousel__item .img {
     max-width: 100%;
     max-height: 100%;
     width: 100%;
     height: 100%;
     display: inline-block;
     vertical-align: middle;
+  }
+  .ucn-view-picture .el-carousel__item .img .image{
+    background-size: 100% 100%;
   }
 
   .ucn-view-picture .el-dialog__body {

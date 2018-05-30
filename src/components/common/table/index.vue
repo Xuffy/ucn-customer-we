@@ -68,8 +68,11 @@
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <v-image class="img" v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
-              <!--<img :src=""/>-->
+              <v-image class="img" v-else-if="cItem.value"
+                       :src="getImage(cItem.value)"
+                       height="30px"
+                       width="30px"
+                       @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
@@ -289,13 +292,13 @@
         });
       },
       getImage(value, split = ',') {
-          console.log(value,'value')
         if (_.isEmpty(value)) return false;
 
         if (_.isString(value)) {
           value = value.split(split);
         }
 
+        console.log(value[0])
         return value[0];
       },
       changeCheck(item, value) {
@@ -479,8 +482,6 @@
   }
 
   .ucn-table tbody td .img {
-    max-height: 30px;
-    max-width: 30px;
     vertical-align: middle;
     cursor: pointer;
   }
