@@ -21,12 +21,13 @@
                                         <span v-if="v.key==='incoterm'">
                                             FOB
                                         </span>
+
                                         <span v-else>
                                             <span v-if="v.key==='incotermArea'">
-                                                {{fobPort}}
+                                                {{productForm.fobPort}}
                                             </span>
                                             <span v-if="v.key==='incotermPrice'">
-                                                {{fobPrice}}
+                                                {{productForm.fobPrice}}
                                             </span>
                                             <span v-if="v.key==='status'">
                                                 {{productForm[v.key]===1?'上架':'下架'}}
