@@ -118,13 +118,13 @@
           return this.$message.warning(`只能上传${this.limit}个文件`);
         }
 
-        _this.$set(_this.fileList, uid, _.extend({
+        _this.$set(_this.fileList, uid, _.extend(this.filterType(files.name), {
           fileKey,
           fileName: files.name,
           progress: 0,
           id: uid,
           temporary: true
-        }, this.filterType(files.name)));
+        }));
 
         co(function* () {
           yield client.multipartUpload(fileKey, files, {
