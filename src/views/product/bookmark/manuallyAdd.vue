@@ -13,11 +13,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -27,7 +27,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -36,8 +36,18 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isSkuUnit">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in skuUnitOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -47,7 +57,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -57,7 +67,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -67,7 +77,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -76,8 +86,18 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isSaleStatus">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in saleStatus"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -92,18 +112,16 @@
                                     class="speInput"
                                     type="textarea"
                                     autosize
-                                    placeholder="please input"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"
-                                    :min="0"
-                                    label="please input"></el-input-number>
+                                    :controls="false"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -113,7 +131,6 @@
                                     v-model="productForm[v.key]"
                                     ref="dropDown"></drop-down>
                         </div>
-
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -788,7 +805,7 @@
                     customsNameCn: "",
                     customsNameEn: "",
                     declareElement: "",
-                    deliveryDates: 0,
+                    // deliveryDates: 0,
                     descCn: "",
                     descCustomer: "",
                     descEn: "",
@@ -826,8 +843,6 @@
                     materialEn: "",
                     methodPkgCn: "",
                     methodPkgEn: "",
-                    minInventory: 0,
-                    minOrderQty: 0,
                     nameCn: "",
                     nameCustomer: "",
                     nameEn: "",
@@ -880,7 +895,7 @@
                     safeInventory: 0,
                     skuQtyPerTray: 0,
                     specialTransportRequire: "",
-                    status: 1,
+                    status: '1',
                     supplierCode: "",
                     supplierId: null,
                     supplierName: "",
@@ -888,7 +903,7 @@
                     tradeMarkCn: "",
                     tradeMarkEn: "",
                     tryDimension: 0,
-                    unit: null,
+                    unit: '1',
                     unitLength: 0,
                     unitVolume: 0,
                     unitWeight: 0,
@@ -908,6 +923,8 @@
                 weightOption:[],    //重量单位
                 volumeOption:[],    //体积单位
                 lengthOption:[],    //长度单位
+                saleStatus:[],      //销售状态，上下架
+                skuUnitOption:[],   //计量单位
             }
         },
         methods:{
@@ -938,16 +955,22 @@
 
             //完成新增
             finish(){
-                this.productForm.pictures=this.$refs.upload.getFiles();
-                this.productForm.attachments=this.$refs.uploadAttachmemt.getFiles();
-
-                this.disabledSubmit=true;
-                this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
-                    this.disabledSubmit=false;
-                    this.$router.push('/product/bookmark');
-                }).catch(err=>{
-                    this.disabledSubmit=false;
+                let params=Object.assign({},this.productForm);
+                params.pictures=this.$refs.upload.getFiles();
+                params.attachments=this.$refs.uploadAttachmemt.getFiles();
+                let key=['status','unit']
+                _.map(key,v=>{
+                    params[v]=Number(params[v]);
                 });
+
+                console.log(params,"????")
+                // this.disabledSubmit=true;
+                // this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
+                //     this.disabledSubmit=false;
+                //     this.$router.push('/product/bookmark');
+                // }).catch(err=>{
+                //     this.disabledSubmit=false;
+                // });
             },
 
             /**
@@ -968,7 +991,8 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -978,8 +1002,12 @@
                             this.volumeOption=v.codes;
                         }else if(v.code==='LH_UNIT'){
                             this.lengthOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.saleStatus=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
                         }
-                    })
+                    });
                 }).catch(err=>{
 
                 })
@@ -1013,7 +1041,6 @@
                         id: null,
                         status: 2,          //1:基础报价，2:成本价
                     });
-                    console.log(this.productForm);
                     this.getCategoryId();
                     this.getUnitCode();
                 }).catch(err=>{
@@ -1066,6 +1093,9 @@
     }
     .speInput{
         width: 80%;
+    }
+    .speNumber >>> input{
+        text-align: left;
     }
 
     .footBtn{

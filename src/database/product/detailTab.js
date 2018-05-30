@@ -9,6 +9,7 @@ export default {
         type: 'Boolean',
         showType:'select',
         belongTab:'basicInfo',
+        isSaleStatus:true,
         options:[
             {
                 label:'下架',
@@ -90,6 +91,7 @@ export default {
         type: 'String',
         showType:'select',
         belongTab:'basicInfo',
+        isSkuUnit:true,
         options:[
             {
                 label:'kg',
