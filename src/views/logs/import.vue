@@ -70,13 +70,13 @@
         fixed="right"
         :label="$i.logs.uploadAction">
         <template slot-scope="scope">
-          <el-button type="text" size="small"
+          <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
                      @click="downloadLogs(scope.row.successMsgFileUrl)">
-            {{$i.logs.DownSuccess}}
+            {{$i.logs.downSuccess}}
           </el-button>
           <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
                      @click="downloadLogs(scope.row.errorMsgFileUrl)">
-            {{$i.logs.DownError}}
+            {{$i.logs.downError}}
           </el-button>
         </template>
       </el-table-column>

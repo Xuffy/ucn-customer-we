@@ -14,6 +14,6 @@
   "uploadSuccessRows":"成功行数",
   "uploadErrorRows":"失败行数",
   "uploadAction":"执行结果下载",
-  "DownSuccess":"成功日志下载",
-  "DownError":"失败日志下载"
+  "downSuccess":"成功日志下载",
+  "downError":"失败日志下载"
 }

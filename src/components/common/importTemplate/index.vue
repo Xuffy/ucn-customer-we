@@ -13,7 +13,7 @@
             :headers="{'U-Session-Token':$localStore.get('token')}"
             :on-preview="handlePreview"
             :limit="10"
-            :data="{templateCode:'PRODUCT_SUPPLIER',bizCode:'PRODUCT_SUPPLIER'}"
+            :data="{templateCode:code,bizCode:bizCode}"
             name="importFile"
             :on-exceed="handleExceed"
             :before-upload="beforeAvatarUpload"
@@ -44,12 +44,28 @@
 </template>
 
 <script>
+  /**
+   * 导入组件
+   * 用例：
+   * $refs.importFile.show()
+   *
+   * <v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
+   */
 
   export default {
     name: 'VImport',
     components: {},
     //传送的数据
-    props: {},
+    props: {
+      code: {
+        type: String,
+        default: '',
+      },
+      bizCode: {
+        type: String,
+        default: '',
+      },
+    },
     data() {
       return {
         dialogVisible: false,

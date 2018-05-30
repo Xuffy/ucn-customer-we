@@ -195,10 +195,6 @@
       totalRow: {
         type: [Boolean, Array],
         default: false,
-      },
-      parId: {
-        type: String,
-        default: 'id'
       }
     },
     data() {
@@ -288,7 +284,7 @@
         });
       },
       getImage(value, split = ',') {
-        if (_.isEmpty(value)) return false;
+        if (_.isEmpty(value)) return '';
 
         if (_.isString(value)) {
           value = value.split(split);
