@@ -285,6 +285,7 @@
         });
       },
       getImage(value, split = ',') {
+          console.log(value,'value')
         if (_.isEmpty(value)) return false;
 
         if (_.isString(value)) {
