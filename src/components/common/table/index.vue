@@ -66,7 +66,8 @@
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <img v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.tableViewPicture.show(cItem.value)"/>
+              <v-image class="img" v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
+              <!--<img :src=""/>-->
             </td>
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
@@ -137,10 +138,11 @@
 
   import VTableFilter from './filter'
   import VViewPicture from '../viewPicture/index'
+  import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture},
+    components: {VTableFilter, VViewPicture,VImage},
     props: {
       data: {
         type: Array,
@@ -471,7 +473,7 @@
     padding: 10px;
   }
 
-  .ucn-table tbody td img {
+  .ucn-table tbody td .img {
     max-height: 30px;
     max-width: 30px;
     vertical-align: middle;

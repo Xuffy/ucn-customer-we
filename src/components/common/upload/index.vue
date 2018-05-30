@@ -14,9 +14,11 @@
           <label v-text="item.showType"></label>
           <span v-text="item.showName"></span>
         </template>
-        <div v-else-if="item.url" class="img-box"
+
+        <v-image class="img-box" v-else-if="item.url" :src="item.url"></v-image>
+        <!--<div class="img-box"
              :style="{'background-image': 'url('+ item.url +')'}">
-        </div>
+        </div>-->
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
           <!--<h6 v-text="parseInt(item.progress * 100) + '%'"></h6>-->
@@ -41,6 +43,7 @@
   import OSS from 'ali-oss';
   import co from 'co';
   import VViewPicture from '../viewPicture/index'
+  import VImage from '../image/index'
 
   const bucket = 'ucn-oss-dev';
   const imageType = ['JPG', 'PNG'];
@@ -71,7 +74,7 @@
         default: 'normal' // normal 、small
       }
     },
-    components: {VViewPicture},
+    components: {VViewPicture, VImage},
     data() {
       return {
         tenantId: '',
@@ -119,7 +122,8 @@
           fileKey,
           fileName: files.name,
           progress: 0,
-          id: uid
+          id: uid,
+          temporary: true
         }, this.filterType(files.name)));
 
         co(function* () {
@@ -141,7 +145,7 @@
       },
       deleteFile(item) {
         let list = {};
-        item.fileKey && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+        item.temporary && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data);
           client.delete(item.fileKey || '');
         });
