@@ -60,8 +60,10 @@
             <td v-if="rowspan < 2" :rowspan="rowspan">
               <div v-text="index + 1"></div>
             </td>
+
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="cItem._style">
+              <!-- 是否为图片显示 -->
               <div v-if="!cItem._image"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
@@ -69,6 +71,7 @@
               <v-image class="img" v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
               <!--<img :src=""/>-->
             </td>
+            <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button"
@@ -81,6 +84,7 @@
           </tr>
           </tbody>
 
+          <!--合计行显示-->
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
             <td>
