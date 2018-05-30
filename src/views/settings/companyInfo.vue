@@ -5,7 +5,10 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-                <v-upload ref="uploadFile" onlyImage/>
+                <div style="overflow: hidden">
+                  <v-upload ref="uploadFile" onlyImage style="float: left" />
+                  <img :src="companyInfo.logo" class="logo"/>
+                </div>
                 <div class="section-btn" style="padding-top:10px">
                   <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
                 </div>
@@ -61,99 +64,23 @@
                     <div class="section-btn">
                         <el-button @click="addAddress" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                    <el-table
-                            v-if="companyInfo.address.length"
-                            :data="companyInfo.address"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="orderNo"
-                                align="center"
-                                :label="$i.setting.orderNumber">
-                        </el-table-column>
-                        <el-table-column
-                          prop="country"
-                          align="center"
-                          :label="$i.setting.country">
-                        </el-table-column>
-                        <el-table-column
-                          prop="province"
-                          align="center"
-                          :label="$i.setting.province">
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
-                                :label="$i.setting.action">
-                            <template slot-scope="scope">
-                                <el-button @click="modifyAddreess(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteAddress(scope.row)" type="text">{{$i.button.delete}}</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                  <v-table
+                    :data="addressDatas"
+                    :height="500"
+                    :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                    @action="addressAction"
+                  ></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.setting.contactInfo">
                     <div class="section-btn">
                         <el-button @click="addContact" type="primary">{{$i.button.add}}</el-button>
                     </div>
-                    <el-table
-                            v-if="companyInfo.concats.length"
-                            :data="companyInfo.concats"
-                            border
-                            style="width: 100%">
-                        <el-table-column
-                                prop="name"
-                                align="center"
-                                :label="$i.setting.name">
-                        </el-table-column>
-                        <el-table-column
-                                prop="deptName"
-                                align="center"
-                                :label="$i.setting.department">
-                        </el-table-column>
-                        <el-table-column
-                                prop="gender"
-                                align="center"
-                                :label="$i.setting.gender">
-                        </el-table-column>
-                        <el-table-column
-                                prop="cellphone"
-                                align="center"
-                                :label="$i.setting.mobileNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="telphone"
-                                align="center"
-                                :label="$i.setting.telNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="fax"
-                                align="center"
-                                :label="$i.setting.faxNumber">
-                        </el-table-column>
-                        <el-table-column
-                                prop="email"
-                                align="center"
-                                :label="$i.setting.emailAddress">
-                        </el-table-column>
-                        <el-table-column
-                          prop="skype"
-                          align="center"
-                          :label="$i.setting.skype">
-                        </el-table-column>
-                        <el-table-column
-                          prop="qq"
-                          align="center"
-                          :label="$i.setting.qq">
-                        </el-table-column>
-                        <el-table-column
-                                align="center"
-                                :label="$i.setting.action">
-                            <template slot-scope="scope">
-                                <el-button @click="modifyContact(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                                <el-button @click="deleteContact(scope.row)" type="text">{{$i.button.delete}}</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <v-table
+                    :data="accountsData"
+                    :height="500"
+                    :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                    @action="accountAction"
+                  ></v-table>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.documentRequired">
@@ -317,7 +244,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="accountDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
             <el-form label-width="150px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -339,13 +266,14 @@
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
                       <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="gender" :label="$i.setting.gender">
-                          <el-select  v-model="contactData.gender" placeholder="请选择"  style="width: 285px;">
+                        <el-form-item  :label="$i.setting.gender">
+                          <el-select v-model="contactData.gender" placeholder="please input" style="width: 285px">
                             <el-option
-                              v-for="item in options.country"
-                              :key="item.code"
-                              :label="item.name"
-                              :value="item.code">
+                              v-for="item in genderOptions"
+                              :key="item.key"
+                              :label="item.label"
+                              :value="item.key"
+                             >
                             </el-option>
                           </el-select>
                         </el-form-item>
@@ -384,7 +312,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="accountDialogVisible=false">取 消</el-button>
+                <el-button @click="contactDialogVisible=false">取 消</el-button>
                 <el-button :loading="allowAddAccount" type="primary" @click="sureAddContact">确 定</el-button>
             </div>
         </el-dialog>
@@ -502,21 +430,40 @@
                 documentDialogVisible:false,
                 customDialogVisible:false,
                 exchangerateDialogVisible:false,
+                 genderOptions:[{
+                  value: '男',
+                  label: 'Male',
+                  key: 1
+                }, {
+                  value: '女',
+                  label: 'Female',
+                  key: 0
+                }, {
+                  value: '未知',
+                  label: 'Unknown',
+                  key: 2
+                }],
                 //页面page绑定
                 companyInfo:{
-                    logo:'',
-                    code:'',            //供应商编号
-                    name:'',            //供应商名称
-                    type:'',            //供应商类别
-                    country:'',         //国家
-                    city:'',
-                    incoterm:'',
-                    exportLicense:'',   //出口资质
-                    currency:'',        //币种
-                    payment:'',         //付款方式
-                    shortName:'',       //简称
-                    description:'',            //供应商描述
-                    shipAgent:'',
+                  city: "",
+                  code: "",
+                  companyId: 0,
+                  country: "",
+                  currency: 0,
+                  exportLicense: true,
+                  id: 0,
+                  incoterm: 0,
+                  logo: "",
+                  name: "",
+                  ownerId: 0,
+                  payment: 0,
+                  recycle: true,
+                  shortName: "",
+                  status: 0,
+                  tenantId: 0,
+                  type: 0,
+                  shipAgent:'',
+                  version: "",
                 },
                 cloneData:{},                   //用于克隆存储的对象
                 //验证规则
@@ -598,6 +545,8 @@
                 type: "PICTURE",
                 url: ""
               },
+              addressDatas:[],
+              accountsData:[],
                 //btn loading状态
                 allowAddAddress:false,
                 allowAddAccount:false,
@@ -615,10 +564,12 @@
         methods:{
             //获取整个页面数据
             getWholeData(){
-                this.companyInfo.address=[];
+                // this.companyInfo.address=[]; 
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address);
+                    this.accountsData = this.$getDB(this.$db.setting.companyContact, res.concats);
                     if(res.custom){
                       this.customData = res.custom
                     }
@@ -626,9 +577,7 @@
                       this.documentData = res.documents[0];
                     }
 
-                }).catch(err=>{
-                    console.log(err)
-                });
+                })
             },
           //获取币种
           getCurrency(){
@@ -654,6 +603,7 @@
           getCountryAll(){
             this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
               this.options.country = res
+              this.$sessionStore.set('country', res)
             }).catch(err=>{
               console.log(err)
             });
@@ -673,8 +623,6 @@
                 this.cloneData=Object.assign({},this.companyInfo);
             },
             saveModifySummary(){
-               console.log(this.$refs.uploadFile.getFiles())
-              console.log(this.companyInfo.exportLicense)
                 let params={
                     city: this.companyInfo.city,
                     code: this.companyInfo.code,
@@ -693,7 +641,8 @@
                     status: this.companyInfo.status,
                     tenantId: this.companyInfo.tenantId,
                     type: this.companyInfo.type,
-                    shipAgent: this.companyInfo.shipAgent
+                    shipAgent: this.companyInfo.shipAgent,
+                    version: this.companyInfo.version
                 };
                 this.allowModifySummary=true;
                 this.$ajax.post(`${this.$apis.post_purchase_customer}/${this.companyInfo.id}`,params).then(res=>{
@@ -701,9 +650,11 @@
                         message: '修改成功',
                         type: 'success'
                     });
+                    this.getWholeData();
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 }).catch(err=>{
+                    this.getWholeData();
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 });
@@ -712,8 +663,16 @@
                 this.companyInfo=Object.assign({},this.cloneData);
                 this.summaryDisabled=true;
             },
-
-
+          addressAction(item,type){
+            switch(type) {
+              case 1:
+                this.modifyAddress(item);
+                break;
+              case 2:
+                this.deleteAddress(item);
+                break;
+            }
+          },
             /**
              * address操作
              * */
@@ -756,9 +715,13 @@
                     });
                 }
             },
-            modifyAddreess(e){
+            modifyAddress(e){
+               var result = {}
+                for(const i in e){
+                    result[e[i].key]= e[i].value
+                }
                 this.isModifyAddress=true;      //标识正在修改地址
-                this.addressData=Object.assign({}, e);
+                this.addressData=Object.assign({}, result);
                 this.addressDialogVisible=true;
             },
             deleteAddress(e){
@@ -767,7 +730,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_purchase_customer_deleteAddress,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_purchase_customer_deleteAddress,{id:e.id.value}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -787,6 +750,16 @@
             addContact(){
                 this.contactDialogVisible=true;
             },
+            accountAction(item,type){
+              switch(type) {
+                case 1:
+                  this.modifyContact(item);
+                  break;
+                case 2:
+                  this.deleteContact(item);
+                  break;
+              }
+            },
             sureAddContact(){
                 this.allowAddContact=true;
                 this.contactData.customerId=this.companyInfo.id;
@@ -800,10 +773,10 @@
                             type: 'success'
                         });
                         this.getWholeData();
-                        this.accountDialogVisible=false;
+                        this.contactDialogVisible=false;
                     }).catch(err=>{
                         this.allowAddContact=false;
-                        this.accountDialogVisible=false;
+                        this.contactDialogVisible=false;
                     });
                 }
                 else{
@@ -815,21 +788,25 @@
                             type: 'success'
                         });
                         this.getWholeData();
-                        this.accountDialogVisible=false;
+                        this.contactDialogVisible=false;
                     }).catch(err=>{
                         this.allowAddContact=false;
                         this.$message({
                             message: err,
                             type: 'success'
                         });
-                        this.accountDialogVisible=false;
+                        this.contactDialogVisible=false;
                     });
                 }
             },
             modifyContact(e){
+                var result = {}
+                for(const i in e){
+                    result[e[i].key]= e[i].value
+                }
                 this.isModifyContact=true;      //标识正在修改contact
-                this.contactData=Object.assign({}, e);
-                this.accountDialogVisible=true;
+                this.contactData=Object.assign({}, result);
+                this.contactDialogVisible=true;
             },
             deleteContact(e){
                 this.$confirm('确定删除该联系人?', '提示', {
@@ -837,7 +814,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$ajax.post(this.$apis.post_purchase_customer_deleteConcat,{id:e.id}).then(res=>{
+                    this.$ajax.post(this.$apis.post_purchase_customer_deleteConcat,{id:e.id.value}).then(res=>{
                         this.$message({
                             type: 'success',
                             message: '删除成功!'
@@ -868,10 +845,7 @@
               this.getWholeData();
               this.documentDialogVisible = false;
             }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
+              this.getWholeData();
               this.documentDialogVisible=false;
             });
           },
@@ -893,10 +867,7 @@
               this.getWholeData();
               this.customDialogVisible = false;
             }).catch(err=>{
-              this.$message({
-                message: err,
-                type: 'success'
-              });
+              this.getWholeData();
               this.customDialogVisible=false;
             });
           },
@@ -943,6 +914,7 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length === 1){
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
+                this.getWholeData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -951,6 +923,7 @@
 
             }else{
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                this.getWholeData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -959,12 +932,13 @@
             }
           },
           /**
-           * Attachment操作
+           * logo操作
            * */
           uploadLogo(){
             this.logoParmas.id = this.companyInfo.id;
             this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
             this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+              this.getWholeData();
               this.$message({
                 message: '上传成功',
                 type: 'success'
@@ -974,16 +948,12 @@
           }
         },
         created(){
-
-            // this.supplierWhole();
-               this.getWholeData();
                this.getCurrency();
                this.getCountryAll();
                this.getCodePart();
                this.getDepartment();
+               this.getWholeData();
                this.getGridfavoritePartData();
-
-            // console.log(this.$db,'db')
         },
         watch:{
             addressDialogVisible(n){
@@ -1037,6 +1007,14 @@
 
     .section{
         margin-top: 20px;
+    }
+    .logo{
+      width: 48px;
+      height: 48px;
+      float: left;
+      margin-left: 15px;
+      border: 1px solid #cccccc;
+      border-radius: 10%;
     }
 
     /*表格样式调整*/

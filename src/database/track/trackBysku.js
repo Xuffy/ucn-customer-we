@@ -12,7 +12,7 @@ export default {
     key: 'sku_customer_sku_code'
   },
   vendorSKUCode: {
-    key: ''
+    key: 'skuCode'
   },
   supplier: {
     key: 'supplierName'

@@ -65,7 +65,7 @@ export default {
       UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
       // UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
       BASE_BUYTEST:'//192.168.51.33:11001',
-      WORKBENCH_URL: '//192.168.51.207:11010' ,//workbench
+      WORKBENCH_URL: '//192.168.51.208:11010' ,//workbench
       UWORKBENCH_URL: '//192.168.51.207:11010',
       UIE: '//192.168.51.207:13003',
 
@@ -84,7 +84,7 @@ export default {
       UOSS_URL: '//192.168.51.208:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
       UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
-      WORKBENCH_URL: '//192.168.51.207:11010' //workbench
+      WORKBENCH_URL: '//192.168.51.208:11010' //workbench
     },
     test: {
       BASE_URL: '//test.upurchase-facade.ucnscm.cn', // 采购端

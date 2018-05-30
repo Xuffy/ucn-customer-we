@@ -25,6 +25,7 @@
                     </div>
                     <div class="search">
                         <select-search
+                          v-model="searchId"
                           class="search"
                           :options=options
                           @inputEnter="inputEnter"
@@ -56,7 +57,7 @@
                 :buttons="setButtons"
                 @action="action"
                 :rowspan="1"
-                :height="450"
+                :height="500"
                 @filter-value="onFilterValue"
                 ></v-table>
               <v-pagination
@@ -87,6 +88,7 @@
                 viewByStatus:'',
                 date:'',
                 tabLoad:false,
+                searchId:'1',
                 options: [{
                   id: '1',
                   label: 'Order No'
@@ -145,7 +147,6 @@
         },
         watch: {
             date(){
-                console.log(this.date)
               this.params.conditions.orderEntryStartDt = this.date[0]
               this.params.conditions.orderEntryEndDt = this.date[1]
               this.getList()
