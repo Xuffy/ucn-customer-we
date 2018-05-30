@@ -1,15 +1,15 @@
 <template>
-    <div class="Details">
+    <div class="Details" v-loading="notLoadingDone">
         <div class="head">
             <div class="title">
                 {{productForm.nameEn}}
             </div>
-            <div class="detail head-detail" v-loading="notLoadingDone">
+            <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
-                            <el-carousel-item v-for="item in 3" :key="item">
-                                <img src="../../../assets/images/login-back.jpg" style="width: 100%" alt="">
+                            <el-carousel-item v-for="item in productForm.pictures" :key="item">
+                                <img :src="item" style="width: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -46,11 +46,11 @@
                     <el-button>{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
-                    <el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>
+                    <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
                     <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
                     <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                    <el-button>{{$i.product.downloadTheProduct}}</el-button>
-                    <el-button>{{$i.product.uploadProduct}}</el-button>
+                    <!--<el-button>{{$i.product.downloadTheProduct}}</el-button>-->
+                    <!--<el-button>{{$i.product.uploadProduct}}</el-button>-->
                 </div>
                 <div class="btns" v-else>
                     <el-button @click="saveEdit" :loading="disabledClickSaveEdit" type="primary">{{$i.product.ok}}</el-button>
@@ -70,17 +70,20 @@
                                            {{productForm[v.key]===1?'上架':'下架'}}
                                         </div>
                                         <div v-else>
-                                            <div v-if="v.key==='descCustomer'">
-                                                <el-input
-                                                        :disabled="notEdit"
-                                                        type="textarea"
-                                                        autosize
-                                                        placeholder="please input"
-                                                        v-model="productForm[v.key]">
-                                                </el-input>
+                                            <div v-if="productForm.customerCreate">
+                                                {{productForm[v.key]}}
                                             </div>
                                             <div v-else>
-                                                <div v-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
+                                                <div v-if="v.key==='descCustomer'">
+                                                    <el-input
+                                                            :disabled="notEdit"
+                                                            type="textarea"
+                                                            autosize
+                                                            placeholder="please input"
+                                                            v-model="productForm[v.key]">
+                                                    </el-input>
+                                                </div>
+                                                <div v-else-if="v.key==='customerSkuCode' || v.key==='nameCustomer'">
                                                     <el-input :disabled="notEdit" v-model="productForm[v.key]" placeholder="please input"></el-input>
                                                 </div>
                                                 <div v-else>
@@ -109,7 +112,7 @@
                     <v-table
                             class="tabVtable"
                             :selection="false"
-                            :data="tableData"></v-table>
+                            :data="priceTable"></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
@@ -148,17 +151,15 @@
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-
+                    <v-upload readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
-                    <!--<add-table-->
-                    <!--:get_url="getRemarkUrl"-->
-                    <!--:id="parseInt($route.query.id)"></add-table>-->
                     <div>
                         <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
                     </div>
                     <br>
                     <el-table
+                            v-loading="loadingRemark"
                             :data="remarkTableData"
                             border
                             style="width: 100%">
@@ -191,29 +192,25 @@
                         </el-table-column>
                     </el-table>
                     <br>
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage1"
-                            :page-sizes="[100, 200, 300, 400]"
-                            :page-size="100"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="400">
-                    </el-pagination>
-                    <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
+                    <page
+                            @size-change="changeSize"
+                            @change="changePage"
+                            :page-data="pageData"></page>
+
+                    <el-dialog :title="$i.product.addRemark" :visible.sync="addRemarkFormVisible" center width="600px">
                         <el-form :model="addRemarkData">
-                            <el-form-item label="备注:" :label-width="formLabelWidth">
+                            <el-form-item :label="$i.product.remark" :label-width="formLabelWidth">
                                 <el-input
                                         type="textarea"
                                         :rows="4"
-                                        placeholder="请输入内容"
+                                        :placeholder="$i.product.pleaseInput"
                                         v-model="addRemarkData.remark">
                                 </el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">提交</el-button>
-                            <el-button @click="addRemarkFormVisible = false">取 消</el-button>
+                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">{{$i.product.submit}}</el-button>
+                            <el-button @click="addRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
                 </el-tab-pane>
@@ -226,21 +223,20 @@
                 @goCompare="goCompare"
                 @closeTag="handleClose"></compare-list>
 
-
-        <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
+        <el-dialog :title="$i.product.changeRemark" :visible.sync="editRemarkFormVisible" center width="500px">
             <el-form :model="editRemarkData">
-                <el-form-item label="备注:" :label-width="formLabelWidth">
+                <el-form-item :label="$i.product.remark" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
                             :rows="4"
-                            placeholder="请输入内容"
+                            :placeholder="$i.product.pleaseInput"
                             v-model="editRemarkData.remark">
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">提交</el-button>
-                <el-button @click="editRemarkFormVisible = false">取 消</el-button>
+                <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">{{$i.product.submit}}</el-button>
+                <el-button @click="editRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
             </div>
         </el-dialog>
 
@@ -258,10 +254,10 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
     import addTable from '../addlineTable'
     import compareList from '../compareList'
     import product from '../addProduct'
+    import {VTable,VUpload,VPagination} from '@/components/index'
 
     export default {
         name: "detail",
@@ -269,13 +265,16 @@
             addTable,
             compareList,
             VTable,
-            product
+            product,
+            VUpload,
+            page:VPagination
         },
         data(){
             return{
                 /**
                  * 页面配置
                  * */
+                pageData:{},
                 notEdit:true,          //是否不在编辑状态,默认为true
                 hideBtns:false,
                 value1: 0,
@@ -442,7 +441,7 @@
                 fobPort:'',
                 fobPrice:'',
                 //用于展示的table数据
-                tableData:[],
+                priceTable:[],
 
                 /**
                  * compareList配置
@@ -455,7 +454,14 @@
                 /**
                  * remark data
                  * */
-                formLabelWidth:'50px',
+                loadingRemark:false,
+                remarkConfig:{
+                    pn: 1,
+                    ps: 10,
+                    sorts: [],
+                    id:Number(this.$route.query.id),
+                },
+                formLabelWidth:'80px',
                 remarkTableData:[],
                 addRemarkData:{
                     id: null,
@@ -472,11 +478,20 @@
              * 中间按钮组事件
              * */
             editProduct(){
-                this.tabName='Basic Info';
-                this.notEdit=false;
-                this.copyCustomerSkuCode=this.productForm.customerSkuCode;
-                this.copyDescCustomer=this.productForm.descCustomer;
-                this.copyNameCustomer=this.productForm.nameCustomer;
+                if(this.productForm.customerCreate){
+                    this.$windowOpen({
+                        url:'/product/bookmarkManuallyAdd',
+                        params:{
+                            id:this.productForm.id
+                        }
+                    })
+                }else{
+                    this.tabName='Basic Info';
+                    this.notEdit=false;
+                    this.copyCustomerSkuCode=this.productForm.customerSkuCode;
+                    this.copyDescCustomer=this.productForm.descCustomer;
+                    this.copyNameCustomer=this.productForm.nameCustomer;
+                }
             },
 
             saveEdit(){
@@ -503,8 +518,6 @@
                 });
             },
 
-
-
             cancelEdit(){
                 this.notEdit=true;
                 this.productForm.customerSkuCode=this.copyCustomerSkuCode;
@@ -514,7 +527,7 @@
 
             //删除bookmark
             deleteBookmark(){
-                this.$confirm('是否确认删除？', '提示', {
+                this.$confirm(this.$i.product.sureDelete, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
@@ -591,6 +604,26 @@
                     this.productForm=res;
                     this.notLoadingDone=false;
                     this.hideBtns=true;
+
+                    let priceData=[{
+                        fobCurrency:this.productForm.fobCurrency,
+                        fobPrice:this.productForm.fobPrice,
+                        refFobPrice:this.productForm.refFobPrice,
+                        fobPort:this.productForm.fobPort,
+                        exwPrice:this.productForm.exwPrice,
+                        exwCurrency:this.productForm.exwCurrency,
+                        cifPrice:this.productForm.cifPrice,
+                        refCifPrice:this.productForm.refCifPrice,
+                        cifCurrency:this.productForm.cifCurrency,
+                        cifArea:this.productForm.cifArea,
+                        dduPrice:this.productForm.dduPrice,
+                        refDduPrice:this.productForm.refDduPrice,
+                        dduCurrency:this.productForm.dduCurrency,
+                        dduArea:this.productForm.dduArea,
+                    }];
+
+                    this.priceTable = this.$getDB(this.$db.product.detailTab, priceData);
+
                 }).catch(err=>{
                     this.notLoadingDone=false;
                 })
@@ -600,12 +633,13 @@
              *  remark操作
              * */
             getRemarkData(){
-                this.$ajax.post(this.$apis.get_buyerRemarkList,{
-                    id:Number(this.$route.query.id),
-                    pn: 1,
-                    ps: 50,
-                }).then(res=>{
+                this.loadingRemark=true;
+                this.$ajax.post(this.$apis.get_buyerRemarkList,this.remarkConfig).then(res=>{
+                    this.loadingRemark=false;
                     this.remarkTableData=res.datas;
+                    this.pageData=res;
+                }).catch(err=>{
+                    this.loadingRemark=false;
                 });
             },
 
@@ -621,32 +655,37 @@
                 this.disableModifyRemark=true;
                 this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
                     .then(res=>{
-                        this.$ajax.post(this.$apis.get_buyerRemarkList,{
-                            id:Number(this.$route.query.id),
-                            pn: 1,
-                            ps: 50,
-                        }).then(res=>{
-                            this.remarkTableData=res.datas;
-                            this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            });
-                            this.disableModifyRemark=false;
-                            this.editRemarkFormVisible=false;
+                        this.getRemarkData();
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
                         });
+
+                        this.disableModifyRemark=false;
+                        this.editRemarkFormVisible=false;
                     }).catch(err=>{
-                    this.disableModifyRemark=false;
-                    this.editRemarkFormVisible=false;
-                });
+                        this.disableModifyRemark=false;
+                        this.editRemarkFormVisible=false;
+                    }
+                );
             },
 
 
-            handleSizeChange(e){
-
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.remarkConfig.pn=e;
+                this.getRemarkData();
             },
-            handleCurrentChange(e){
-
+            changeSize(e){
+                this.remarkConfig.ps=e;
+                this.getRemarkData();
             },
+
+
+
+
             createRemark(){
                 this.addRemarkFormVisible=true;
                 this.addRemarkData.id=null;     //新增的时候要置为null
@@ -668,24 +707,27 @@
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
                 });
-
             },
             deleteRemark(index, row){
-                this.$confirm('确定删除该备注?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.$ajax.post(this.$apis.delete_buyerProductRemark,{
                         id:row.id
                     }).then(res=>{
+                        if(this.remarkTableData.length===1 && this.remarkConfig.pn>1){
+                            //代表删的是最后一个了
+                            this.remarkConfig.pn-=1;
+                        }
                         this.$message({
-                            message: '删除成功',
+                            message: this.$i.product.deleteSuccess,
                             type: 'success'
                         });
                         this.getRemarkData();
                     }).catch(err=>{
-                        console.log(err)
+
                     });
                 }).catch(() => {
 

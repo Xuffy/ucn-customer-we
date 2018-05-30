@@ -85,7 +85,7 @@
       this.tenantId = (this.$localStore.get('user') || {}).tenantId;
     },
     mounted() {
-      this.setList(this.list);
+
     },
     watch: {
       fileList() {

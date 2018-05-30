@@ -1,5 +1,5 @@
 <template>
-    <div class="manually-add">
+    <div class="manually-add" v-loading="loadingPage">
         <div class="title">
             {{$i.product.basicInformation}}
         </div>
@@ -7,7 +7,7 @@
             <el-row>
                 <el-col cass="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <el-form-item label="Pic">
-                        <v-upload></v-upload>
+                        <v-upload :list="productForm.pictures" :onlyImage="true" :limit="20" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
@@ -688,7 +688,9 @@
         <div class="title">
             {{$i.product.attachment}}
         </div>
-
+        <div style="margin-bottom: 20px">
+            <v-upload :limit="20" ref="uploadAttachmemt"></v-upload>
+        </div>
 
         <div class="footBtn">
             <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
@@ -748,6 +750,7 @@
                     label:'name',
                     children:'children'
                 },
+                loadingPage:false,
                 //categoryID配置
                 categoryList:[
                     {
@@ -763,6 +766,7 @@
                 ],
                 //整个页面数据配置
                 productForm:{
+                    attachments:[],
                     adjustPackage: true,
                     applicableAge: 0,
                     availableQty: 0,
@@ -844,7 +848,7 @@
                     outerCartonUnit: "",
                     outerCartonVolume: 0,
                     outerCartonWidth: 0,
-                    pic: "what the fuck",
+                    pictures: [],
                     pkgId: null,
                     price: [
                         {
@@ -865,10 +869,6 @@
                             fobPort: "",
                             fobPrice: 0,
                             id: null,
-                            otherIncoterm: 0,
-                            otherIncotermArea: 0,
-                            otherIncotermCurrency: 0,
-                            otherIncotermPrice: 0,
                             status: 2,          //1:基础报价，2:成本价
                         }
                     ],
@@ -938,6 +938,9 @@
 
             //完成新增
             finish(){
+                this.productForm.pictures=this.$refs.upload.getFiles();
+                this.productForm.attachments=this.$refs.uploadAttachmemt.getFiles();
+
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
                     this.disabledSubmit=false;
@@ -966,7 +969,6 @@
                 });
 
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT'],{_cache:true}).then(res=>{
-                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -984,8 +986,43 @@
             },
         },
         created(){
-            this.getCategoryId();
-            this.getUnitCode();
+            if(this.$route.query.id){
+                this.loadingPage=true;
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
+                    id:Number(this.$route.query.id)
+                }).then(res=>{
+                    this.loadingPage=false;
+                    this.productForm=res;
+                    this.productForm.price=[];
+                    this.productForm.price.push({
+                        cifArea: "",
+                        cifCurrency: 'USD',
+                        cifPrice: 0,
+                        dduArea: "",
+                        dduCurrency: 'USD',
+                        dduPrice: 0,
+                        refCifPrice: 0,
+                        refDduPrice: 0,
+                        refFobPrice: 0,
+                        //旧的
+                        exwCurrency: 'USD',
+                        exwPrice: 0,
+                        fobCurrency: 'USD',
+                        fobPort: "",
+                        fobPrice: 0,
+                        id: null,
+                        status: 2,          //1:基础报价，2:成本价
+                    });
+                    console.log(this.productForm);
+                    this.getCategoryId();
+                    this.getUnitCode();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            }else{
+                this.getCategoryId();
+                this.getUnitCode();
+            }
         },
     }
 </script>
