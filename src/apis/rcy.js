@@ -1,7 +1,7 @@
 'use strict';
 export default {
     //order
-    get_orderlist: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
+    get_orderList: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_recover_order: ['/order/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
@@ -17,6 +17,10 @@ export default {
     post_cancleOrder: ['/order/cancle', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_updataOrder: ['/order/update', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_confirm: ['/order/confirm  ', 'BASE_HCJ', 'UPURCHASE_URL'],
+
+    ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
+
+
     
     
     

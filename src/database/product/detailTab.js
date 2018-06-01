@@ -74,18 +74,18 @@ export default {
         showType:'input',
         belongTab:'basicInfo',
     },
-    supplierName:{
-        key:'supplierName',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
-    supplierNo:{
-        key:'supplierCode',
-        type: 'String',
-        showType:'input',
-        belongTab:'basicInfo',
-    },
+    // supplierName:{
+    //     key:'supplierName',
+    //     type: 'String',
+    //     showType:'input',
+    //     belongTab:'basicInfo',
+    // },
+    // supplierNo:{
+    //     key:'supplierCode',
+    //     type: 'String',
+    //     showType:'input',
+    //     belongTab:'basicInfo',
+    // },
     unit:{
         key:'unit',
         type: 'String',
