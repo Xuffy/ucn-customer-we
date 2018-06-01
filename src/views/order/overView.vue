@@ -1,66 +1,69 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">Order Overview</h3>
+        <h3 class="hd">{{$i.order.orderOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <span>Status&nbsp</span>
-                      <el-radio-group v-model="params.status" size="mini" @change='changeStatus'>
-                            <el-radio-button label="">{{($i.common.all)}}</el-radio-button>
-                            <el-radio-button label="2"> {{ $i.common.TBCByCustomer }}</el-radio-button>
-                            <el-radio-button label="1">{{($i.common.TBCBySupplier)}}</el-radio-button>
-                            <el-radio-button label="3">{{($i.common.process)}}</el-radio-button>
-                            <el-radio-button label="4">{{($i.common.finish)}}</el-radio-button>
-                            <el-radio-button label="5">{{($i.common.cancel)}}</el-radio-button>
-                    </el-radio-group>
+                <span>{{$i.order.status}}</span>
+                <el-radio-group style="margin-left: 10px" v-model="params.status" size="mini" @change='changeStatus'>
+                    <el-radio-button label="">{{($i.order.all)}}</el-radio-button>
+                    <el-radio-button
+                            v-for="v in orderStatusOption"
+                            :key="v.id"
+                            :label="v.code">
+                        {{v.name}}
+                    </el-radio-button>
+                </el-radio-group>
             </div>
             <div class="select-wrap">
-               <selectSearch 
-                    :options=options
-                     v-model='selectSearch'
-                    @inputEnter="inputEnter"
-                 ></selectSearch>
+                <selectSearch
+                        :options=options
+                        v-model='selectSearch'
+                        @inputEnter="inputEnter">
+                </selectSearch>
             </div>
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
-                <el-button @click='creat_order' :disabled='!(selectedDate.length==1)' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.common.createOrder)}}</el-button>
-                 <el-button :disabled='prodisabled' @click='finish'>finish</el-button>
-<!--                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
+                <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
+                <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
+                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.finish}}</el-button>
+                <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
             <div class="viewBy">
-                <span>View by&nbsp</span>
-                   <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                            <el-radio-button label=1>{{($i.common.order)}}</el-radio-button>
-                            <el-radio-button label=2>{{($i.common.SKU)}}</el-radio-button>
-                    </el-radio-group>
+                <span>{{$i.order.viewBy}}</span>
+                <el-radio-group style="margin-left: 10px" v-model="params.view" size="mini" @change='changeView'>
+                    <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
+                    <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
+                </el-radio-group>
             </div>
         </div>
         <!--form-->
-          <v-table  
-           ref='vtable'
-          :data="tabData" 
-          :buttons="[{label: 'detail', type: 1}]" 
-           @action="onAction"
-          :loading='loading'
-          :pageTotal='pageTotal'
-          @change-checked='checked'
-           style='marginTop:10px'/>  
-         <v-pagination
-            :page-data.sync="params"
-             @change="handleSizeChange"
-            @size-change="pageSizeChange"
-        />   
+        <v-table
+                ref='vtable'
+                :data="tabData"
+                :buttons="[{label: 'Detail', type: 1}]"
+                @action="onAction"
+                :loading='loading'
+                :pageTotal='pageTotal'
+                @change-checked='checked'
+                :height="500"
+                style='marginTop:10px'>
+        </v-table>
+        <page
+                @size-change="changeSize"
+                @change="changePage"
+                :page-sizes="[50,100,200]"
+                :page-data="pageData"></page>
     </div>
 </template>
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
      * @param keyWord search框 值
-     * @param options 下拉框 原始数据 
+     * @param options 下拉框 原始数据
      * @param value 下拉框 选中值
      */
-    import { mapActions } from 'vuex'
+    import {mapActions} from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -69,30 +72,35 @@
     import {
         VTable
     } from '@/components/index';
+
     export default {
         name: 'orderOverview',
         components: {
             dropDown,
             VTable,
             selectSearch,
-            VPagination
+            page: VPagination
         },
         data() {
             return {
+                /**
+                 * 页面基本data
+                 * */
+                pageData: {},
                 value: '',
                 keyWord: '',
                 disabled: false, //delete的状态
-                prodisabled: true, // finish的状态
+                disableFinish: true, // finish的状态
                 tabData: [],
                 loading: false,
-                selectSearch:'1',
+                selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
                 options: [{
-                    id: '1',
+                    id: 1,
                     label: 'Order No'
                 }, {
-                    id: '2',
+                    id: 2,
                     label: 'Sku Code'
                 }],
                 keyType: '',
@@ -100,20 +108,24 @@
                     orderNo: '',
                     skuCode: '',
                     status: '',
-                    view: 1, //view by的按钮组
+                    view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
-                    tc:0,
                 },
-                selectedDate: [],
-                selectedNumber: []
+                selectedList: [],
+                selectedNumber: [],
+
+                /**
+                 * 字典
+                 * */
+                orderStatusOption: [],
             }
         },
         methods: {
-              ...mapActions([
-                'setRecycleBin','setDraft'
+            ...mapActions([
+                'setRecycleBin', 'setDraft'
             ]),
-            onAction(item, type) {
+            onAction(item) {
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {
@@ -121,66 +133,57 @@
                     }
                 });
             },
-            pagesizechange() {
-
-            },
-            pagechange() {
-
-            },
-            creat_order() {
-                this.$windowOpen('/order/detail', {
-                    selectedDate: this.selectedDate
+            createOrder() {
+                this.$windowOpen({
+                    url: '/order/create'
                 });
             },
             selectChange(val) {
                 this.keyType = val;
             },
             checked(item) {
-                this.selectedDate = item
-                var obj = []
-                this.selectedDate.forEach(item => {
-                    obj.push(item.id.value);
-                });
-                this.selectedNumber = obj
+                this.selectedList = item;
             },
             changeStatus() {
-                if (this.params.view == 1) {
-                    this.getdata(this.$db.order.overview)
+                console.log(this.params)
+                if (this.params.view === '1') {
+                    this.getData(this.$db.order.overview);
                 } else {
-                    this.getdata(this.$db.order.overviewBysku)
+                    this.getData(this.$db.order.overviewBysku);
                 }
             },
             changeView() {
-                if (this.params.view == 1) {
-                    this.getdata(this.$db.order.overview)
+                console.log(this.params)
+                if (this.params.view === '1') {
+                    this.getData(this.$db.order.overview)
                 } else {
-                    this.getdata(this.$db.order.overviewBysku)
+                    this.getData(this.$db.order.overviewBysku)
                 }
             },
             inputEnter(val) {
-                if (!val.keyType) return this.$message('请选中搜索类型');
-                if (!val.key) return this.$message('搜索内容不能为空');
-                if (val.keyType == '1') {
-                    this.params.orderNo = val.key
-                    if (this.params.view == 1) {
-                        this.getdata(this.$db.order.overview)
+                if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
+                if (val.keyType === 1) {
+                    this.params.orderNo = val.key;
+                    this.params.skuCode = '';
+                    if (this.params.view === '1') {
+                        this.getData(this.$db.order.overview)
                     } else {
-                        this.getdata(this.$db.order.overviewBysku)
+                        this.getData(this.$db.order.overviewBysku)
                     }
                 } else {
-                    this.params.skuCode = val.key
-                    if (this.params.view == 1) {
-                        this.getdata(this.$db.order.overview)
+                    this.params.orderNo = '';
+                    this.params.skuCode = val.key;
+                    if (this.params.view === '1') {
+                        this.getData(this.$db.order.overview)
                     } else {
-                        this.getdata(this.$db.order.overviewBysku)
+                        this.getData(this.$db.order.overviewBysku)
                     }
                 }
-                this.getdata()
             },
             finish() {
                 this.$ajax.post(this.$apis.post_finishPost, {
-                        ids: this.selectedNumber
-                    })
+                    ids: this.selectedNumber
+                })
                     .then((res) => {
                         console.log(res)
                     })
@@ -190,8 +193,8 @@
             },
             download() {
                 this.$ajax.post(this.$apis.download_order, {
-                        ids: this.selectedNumber
-                    })
+                    ids: this.selectedNumber
+                })
                     .then((res) => {
                         console.log(res)
                     })
@@ -201,8 +204,8 @@
             },
             deleteOrder() {
                 this.$ajax.post(this.$apis.delete_order, {
-                        ids: this.selectedNumber
-                    })
+                    ids: this.selectedNumber
+                })
                     .then((res) => {
                         if (this.params.view == 1) {
                             this.getdata(this.$db.order.overview)
@@ -215,46 +218,49 @@
                     });
             },
             //get_orderlist数据
-            getdata(overview) {
+            getData(query) {
                 this.loading = true
-                this.$ajax.post(this.$apis.get_orderlist, this.params)
+                this.$ajax.post(this.$apis.get_orderList, this.params)
                     .then((res) => {
-                      res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                        this.loading = false
-                        this.tabData = this.$getDB(overview, res.datas);
-                        //                        , item => {
-                        //                            return _.mapObject(item, val => {
-                        //                                val._checked = true
-                        //                            })
-                        //                        }
+                        this.loading = false;
+                        this.tabData = this.$getDB(query, res.datas);
+                        this.pageData = res;
                     })
                     .catch((res) => {
                         this.loading = false
-
                     });
             },
-             handleSizeChange(val) {
-                this.params.pn = val;
-                if (this.params.view == 1) {
-                    this.getdata(this.$db.order.overview)
-                } else {
-                    this.getdata(this.$db.order.overviewBysku)
-                }
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                if (this.params.view == 1) {
-                    this.getdata(this.$db.order.overview)
-                } else {
-                    this.getdata(this.$db.order.overviewBysku)
-                }
-            },
-        },
-        computed: {
 
+            //获取字典
+            getUnit() {
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
+
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {_cache: true}).then(res => {
+                    res.forEach(v => {
+                        if (v.code === 'ORDER_STATUS') {
+                            this.orderStatusOption = v.codes;
+                        }
+                    });
+                    this.getData(this.$db.order.overview);
+                })
+            },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e) {
+                this.params.pn = e;
+                this.getData();
+            },
+            changeSize(e) {
+                this.params.ps = e;
+                this.getData();
+            }
         },
         created() {
-            this.getdata(this.$db.order.overview)
+            this.getUnit();
             this.setRecycleBin({
                 name: 'orderRecycleBin',
                 show: true
@@ -267,30 +273,20 @@
         mounted() {
             this.loading = false
         },
-        updated() {
-
-        },
-        watch: {　
-            params: {　　　　　　　　　　
-                handler(curVal, oldVal) {　　　　　　　　　　　　
-                    if (curVal.view == 1 && curVal.status == 5) {
-                        this.disabled = false
-                    } else if (curVal.status == 3) {
-                        this.prodisabled = false
-                        this.disabled = true
-                    } else {
-                        this.disabled = true
-                        this.prodisabled = true
-                    }　　　　　　　　　　
-                },
-                　deep: true　　　　　　　　
-            }
+        watch: {
+            selectedList(n){
+                if(n.length>0 && this.params.status==='3' && this.params.view==='1'){
+                    this.disableFinish=false;
+                }else{
+                    this.disableFinish=true;
+                }
+            },
         }
     }
 
 </script>
 <style scoped>
-    >>>.el-input-group__append {
+    >>> .el-input-group__append {
         padding: 0 !important;
     }
 
@@ -339,7 +335,8 @@
                 .select {
                     width: 110px;
                     margin-right: 5px;
-                    input {}
+                    input {
+                    }
                 }
             }
 

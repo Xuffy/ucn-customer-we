@@ -1,5 +1,5 @@
 <template>
-    <div class="manually-add">
+    <div class="manually-add" v-loading="loadingPage">
         <div class="title">
             {{$i.product.basicInformation}}
         </div>
@@ -7,17 +7,17 @@
             <el-row>
                 <el-col cass="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                     <el-form-item label="Pic">
-                        <v-upload></v-upload>
+                        <v-upload :list="productForm.pictures" :onlyImage="true" :limit="20" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -27,7 +27,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" multiple filterable collapse-tags :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -36,8 +36,28 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isSkuUnit">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in skuUnitOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isReadilyAvailable">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in availableOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -47,7 +67,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -57,7 +77,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -67,7 +87,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -76,8 +96,18 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isSaleStatus">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in saleStatus"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -91,19 +121,17 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{minRows: 2}"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
-                                    :controls="false"
-                                    :min="0"
-                                    label="please input"></el-input-number>
+                                    :controls="false"></el-input-number>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -113,7 +141,6 @@
                                     v-model="productForm[v.key]"
                                     ref="dropDown"></drop-down>
                         </div>
-
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -127,11 +154,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='customerInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -141,7 +168,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -151,7 +178,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -161,7 +188,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -171,7 +198,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -181,7 +208,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -191,7 +218,7 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -205,14 +232,14 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{minRows: 2}"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
@@ -238,11 +265,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='priceInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -252,7 +279,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -262,7 +289,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -272,7 +299,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -282,7 +309,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -292,7 +319,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -302,7 +329,7 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -317,13 +344,13 @@
                                     class="speInput"
                                     type="textarea"
                                     autosize
-                                    placeholder="please input"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm.price[0][v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm.price[0][v.key]"
                                     :controls="false"
@@ -349,11 +376,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='packingInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -363,7 +390,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -373,7 +400,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -383,7 +410,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -393,7 +420,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -402,8 +429,18 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isOem">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in oemOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -413,7 +450,7 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -427,14 +464,14 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{ minRows: 2}"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
@@ -460,11 +497,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='logisticInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -474,7 +511,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -484,7 +521,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -494,7 +531,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -504,7 +541,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -514,7 +551,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -524,7 +561,7 @@
                                 </el-select>
                             </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -538,14 +575,14 @@
                             <el-input
                                     class="speInput"
                                     type="textarea"
-                                    autosize
-                                    placeholder="please input"
+                                    :autosize="{ minRows: 2}"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
                             <el-input-number
-                                    class="speInput"
+                                    class="speInput speNumber"
                                     size="mini"
                                     v-model="productForm[v.key]"
                                     :controls="false"
@@ -571,11 +608,11 @@
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='otherInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.showType==='input'">
-                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" placeholder="please choose"></el-input>
+                            <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
                         <div v-else-if="v.showType==='select'">
                             <div v-if="v.isCurrency">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -585,7 +622,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isCountry">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" filterable placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" multiple collapse-tags filterable :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -595,7 +632,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isDateUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in dateOption"
                                             :key="item.id"
@@ -605,7 +642,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isWeightUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in weightOption"
                                             :key="item.id"
@@ -615,7 +652,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isVolumeUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in volumeOption"
                                             :key="item.id"
@@ -625,7 +662,7 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isLengthUnit">
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in lengthOption"
                                             :key="item.id"
@@ -634,8 +671,28 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isAdjustPackage">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in packageAdjustOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isUseDisplayBox">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
+                                    <el-option
+                                            v-for="item in showDisplayBoxOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
-                                <el-select class="speInput" size="mini" v-model="productForm.price[0][v.key]" placeholder="please choose">
+                                <el-select class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v.options"
                                             :key="item.value"
@@ -650,18 +707,48 @@
                                     class="speInput"
                                     type="textarea"
                                     autosize
-                                    placeholder="please input"
+                                    :placeholder="$i.product.pleaseInput"
                                     v-model="productForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.showType==='number'">
-                            <el-input-number
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="productForm[v.key]"
-                                    :controls="false"
-                                    :min="0"
-                                    label="please input"></el-input-number>
+                            <div v-if="v.key==='lengthWidthHeight'">
+                                <el-input-number
+                                        class="speNum"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="boxSize.length"
+                                        :min="0"
+                                        label="描述文字">
+                                </el-input-number>
+                                <div class="speIcon">*</div>
+                                <el-input-number
+                                        class="speNum"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="boxSize.width"
+                                        :min="0"
+                                        label="描述文字">
+                                </el-input-number>
+                                <div class="speIcon">*</div>
+                                <el-input-number
+                                        class="speNum"
+                                        size="mini"
+                                        :controls="false"
+                                        v-model="boxSize.height"
+                                        :min="0"
+                                        label="描述文字">
+                                </el-input-number>
+                            </div>
+                            <div v-else>
+                                <el-input-number
+                                        class="speInput speNumber"
+                                        size="mini"
+                                        v-model="productForm[v.key]"
+                                        :controls="false"
+                                        :min="0"
+                                        label="please input"></el-input-number>
+                            </div>
                         </div>
                         <div v-else-if="v.showType==='dropdown'">
                             <drop-down
@@ -674,10 +761,9 @@
                                     class="speInput"
                                     v-model="productForm[v.key]"
                                     align="right"
-                                    type="date"
+                                    type="month"
                                     :editable="false"
-                                    placeholder="please choose"
-                                    :picker-options="pickerOptions1">
+                                    :placeholder="$i.product.pleaseChoose">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -688,7 +774,9 @@
         <div class="title">
             {{$i.product.attachment}}
         </div>
-
+        <div style="margin-bottom: 20px">
+            <v-upload :limit="20" ref="uploadAttachmemt"></v-upload>
+        </div>
 
         <div class="footBtn">
             <el-button @click="finish" :loading="disabledSubmit" type="primary">{{$i.product.finishEn}}</el-button>
@@ -748,6 +836,7 @@
                     label:'name',
                     children:'children'
                 },
+                loadingPage:false,
                 //categoryID配置
                 categoryList:[
                     {
@@ -761,11 +850,15 @@
                         children:[]
                     },
                 ],
+                boxSize:{
+                    length:'',
+                    width:'',
+                    height:''
+                },
                 //整个页面数据配置
                 productForm:{
-                    adjustPackage: true,
-                    applicableAge: 0,
-                    availableQty: 0,
+                    attachments:[],
+                    adjustPackage: '1',
                     barcode: "",
                     brand: "",
                     brandRelated: "",
@@ -784,36 +877,20 @@
                     customsNameCn: "",
                     customsNameEn: "",
                     declareElement: "",
-                    deliveryDates: 0,
+                    // deliveryDates: 0,
                     descCn: "",
                     descCustomer: "",
                     descEn: "",
                     design: "",
-                    displayBoxQty: 0,
-                    expireDates: 0,
-                    expireUnit: null,
+                    expireUnit: '3',
                     formation: "",
-                    gp20SkuQty: 0,
-                    gp40SkuQty: 0,
-                    height: 0,
-                    hq40SkuQty: 0,
                     id: null,
                     innerCartonDesc: "",
-                    innerCartonHeight: 0,
-                    innerCartonLength: 0,
                     innerCartonMethodCn: "",
                     innerCartonMethodEn: "",
-                    innerCartonOuterNum: 0,
-                    innerCartonQty: 0,
-                    innerCartonRoughWeight: 0,
                     innerCartonUnit: "",
-                    innerCartonVolume: 0,
-                    innerCartonWeightNet: 0,
-                    innerCartonWidth: 0,
                     inspectQuarantineCategory: "",
-                    inventory: 0,
                     inventoryCostMethod: "",
-                    length: 0,
                     lengthWidthHeight: "",
                     logisticId: null,
                     mainSaleArea: "",
@@ -822,83 +899,52 @@
                     materialEn: "",
                     methodPkgCn: "",
                     methodPkgEn: "",
-                    minInventory: 0,
-                    minOrderQty: 0,
                     nameCn: "",
                     nameCustomer: "",
                     nameEn: "",
-                    netWeight: 0,
                     noneSellCountry: '',
-                    oem: true,
+                    oem: '1',
                     origin: "",
                     otherPackInfoCn: "",
                     otherPackInfoEn: "",
                     outerCartonDesc: "",
-                    outerCartonHeight: 0,
-                    outerCartonLength: 0,
                     outerCartonMethodCn: "",
                     outerCartonMethodEn: "",
-                    outerCartonNetWeight: 0,
-                    outerCartonQty: 0,
-                    outerCartonRoughWeight: 0,
                     outerCartonUnit: "",
-                    outerCartonVolume: 0,
-                    outerCartonWidth: 0,
-                    pic: "what the fuck",
+                    pictures: [],
                     pkgId: null,
                     price: [
                         {
                             //新增的
                             cifArea: "",
                             cifCurrency: 'USD',
-                            cifPrice: 0,
                             dduArea: "",
                             dduCurrency: 'USD',
-                            dduPrice: 0,
-                            refCifPrice: 0,
-                            refDduPrice: 0,
-                            refFobPrice: 0,
                             //旧的
                             exwCurrency: 'USD',
-                            exwPrice: 0,
                             fobCurrency: 'USD',
                             fobPort: "",
-                            fobPrice: 0,
-                            id: null,
-                            otherIncoterm: 0,
-                            otherIncotermArea: 0,
-                            otherIncotermCurrency: 0,
-                            otherIncotermPrice: 0,
                             status: 2,          //1:基础报价，2:成本价
                         }
                     ],
-                    productionDates: 0,
                     qualityStander: "",
-                    rateValueAddedTax: 0,
-                    readilyAvailable: true,
+                    readilyAvailable: '1',
                     recycle: false,
-                    safeInventory: 0,
-                    skuQtyPerTray: 0,
                     specialTransportRequire: "",
-                    status: 1,
-                    supplierCode: "",
-                    supplierId: null,
-                    supplierName: "",
-                    taxRefundRate: 0,
+                    status: '1',
+                    // supplierCode: "",
+                    // supplierId: null,
+                    // supplierName: "",
                     tradeMarkCn: "",
                     tradeMarkEn: "",
-                    tryDimension: 0,
-                    unit: null,
-                    unitLength: 0,
-                    unitVolume: 0,
-                    unitWeight: 0,
-                    useDisplayBox: true,
-                    volume: 0,
+                    unit: '1',
+                    unitLength: '5',
+                    unitVolume: '3',
+                    unitWeight: '7',
+                    useDisplayBox: '1',
                     warehourceDefault: "",
-                    width: 0,
-                    yearListed: "2018-04-21T03:45:53.903Z"
+                    yearListed: ""
                 },
-
                 /**
                  * 页面字典
                  * */
@@ -908,15 +954,16 @@
                 weightOption:[],    //重量单位
                 volumeOption:[],    //体积单位
                 lengthOption:[],    //长度单位
+                saleStatus:[],      //销售状态，上下架
+                skuUnitOption:[],   //计量单位
+                availableOption:[], //有无货
+                oemOption:[],       //是否可以贴牌
+                showDisplayBoxOption:[],    //是否展示包装盒
+                packageAdjustOption:[],     //产品包装调整
+
             }
         },
         methods:{
-
-            //添加图片到暂存区
-            addPic(){
-                document.getElementById('pic').click();
-            },
-
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
@@ -938,8 +985,33 @@
 
             //完成新增
             finish(){
+                let params=Object.assign({},this.productForm);
+                params.pictures=this.$refs.upload.getFiles();
+                params.attachments=this.$refs.uploadAttachmemt.getFiles();
+                let key=['status','unit','readilyAvailable','expireUnit','unitWeight','unitLength','unitVolume','oem','useDisplayBox','adjustPackage']
+                _.map(key,v=>{
+                    params[v]=Number(params[v]);
+                });
+                let tureFalseKey=['readilyAvailable','oem','useDisplayBox','adjustPackage'];
+                _.map(tureFalseKey,v=>{
+                    params[v]=(params[v]?true:false);
+                });
+                let noneSellCountry='',mainSaleCountry='';
+                params.noneSellCountry.forEach(v=>{
+                    noneSellCountry+=(v+',');
+                });
+                params.mainSaleCountry.forEach(v=>{
+                    mainSaleCountry+=(v+',');
+                });
+                noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
+                mainSaleCountry=mainSaleCountry.slice(0,mainSaleCountry.length-1);
+                params.noneSellCountry=noneSellCountry;
+                params.mainSaleCountry=mainSaleCountry;
+                let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
+                params.lengthWidthHeight=size;
+
                 this.disabledSubmit=true;
-                this.$ajax.post(this.$apis.add_customerSku,this.productForm).then(res=>{
+                this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
                     this.disabledSubmit=false;
                     this.$router.push('/product/bookmark');
                 }).catch(err=>{
@@ -955,7 +1027,7 @@
                 this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
                     this.currencyOption=res;
                 }).catch(err=>{
-
+ b
                 });
 
                 //国家
@@ -965,8 +1037,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT'],{_cache:true}).then(res=>{
-                    console.log(res)
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{_cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -976,16 +1047,77 @@
                             this.volumeOption=v.codes;
                         }else if(v.code==='LH_UNIT'){
                             this.lengthOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.saleStatus=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='SKU_READILY_AVAIALBLE'){
+                            this.availableOption=v.codes;
+                        }else if(v.code==='OEM_IS'){
+                            this.oemOption=v.codes;
+                        }else if(v.code==='UDB_IS'){
+                            this.showDisplayBoxOption=v.codes;
+                        }else if(v.code==='SKU_PG_IS'){
+                            this.packageAdjustOption=v.codes;
                         }
-                    })
+                    });
                 }).catch(err=>{
 
                 })
             },
         },
         created(){
-            this.getCategoryId();
-            this.getUnitCode();
+            if(this.$route.query.id){
+                this.loadingPage=true;
+                this.$ajax.get(this.$apis.get_buyerProductDetail,{
+                    id:Number(this.$route.query.id)
+                }).then(res=>{
+                    this.loadingPage=false;
+
+                    let tureFalseKey=['readilyAvailable','oem','useDisplayBox','adjustPackage'];
+                    _.map(tureFalseKey,v=>{
+                        res[v]=res[v]?1:0;
+                    });
+
+                    let key=['status','unit','readilyAvailable','expireUnit','unitWeight','unitLength','unitVolume','oem','useDisplayBox','adjustPackage']
+                    _.map(key,v=>{
+                        res[v]=String(res[v]);
+                    });
+                    res.noneSellCountry=res.noneSellCountry.split(',');
+                    res.mainSaleCountry=res.mainSaleCountry.split(',');
+                    res.price=[];
+                    res.price.push({
+                        cifArea: res.cifArea,
+                        cifCurrency: res.cifCurrency,
+                        cifPrice: res.cifPrice,
+                        dduArea: res.dduArea,
+                        dduCurrency: res.dduCurrency,
+                        dduPrice: res.dduPrice,
+                        refCifPrice: res.refCifPrice,
+                        refDduPrice: res.refDduPrice,
+                        refFobPrice: res.refFobPrice,
+                        //旧的
+                        exwCurrency: res.exwCurrency,
+                        exwPrice: res.exwPrice,
+                        fobCurrency: res.fobCurrency,
+                        fobPort: res.fobPort,
+                        fobPrice: res.fobPrice,
+                        id: res.priceId,
+                        status: 2,          //1:基础报价，2:成本价
+                    });
+                    this.boxSize.length=Number(res.lengthWidthHeight.split('*')[0]);
+                    this.boxSize.width=Number(res.lengthWidthHeight.split('*')[1]);
+                    this.boxSize.height=Number(res.lengthWidthHeight.split('*')[2]);
+                    this.productForm=res;
+                    this.getCategoryId();
+                    this.getUnitCode();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
+            }else{
+                this.getCategoryId();
+                this.getUnitCode();
+            }
         },
     }
 </script>
@@ -1030,7 +1162,17 @@
     .speInput{
         width: 80%;
     }
-
+    .speNumber >>> input{
+        text-align: left;
+    }
+    .speNum{
+        width: 60px;
+    }
+    .speIcon{
+        display: inline-block;
+        height: 28px;
+        line-height: 28px;
+    }
     .footBtn{
         border-top: 1px solid #e0e0e0;
         height: 40px;

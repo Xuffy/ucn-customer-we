@@ -8,8 +8,8 @@
                 <el-row>
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
-                            <el-carousel-item v-for="item in 3" :key="item">
-                                <img src="../../../assets/images/login-back.jpg" style="width: 100%" alt="">
+                            <el-carousel-item v-for="item in productForm.pictures" :key="item">
+                                <img :src="item" style="max-width: 100%;max-height: 100%" alt="">
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -46,7 +46,7 @@
                     <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                    <el-button>{{$i.product.download}}</el-button>
+                    <!--<el-button>{{$i.product.download}}</el-button>-->
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
                     <v-table
                             class="tabVtable"
                             :selection="false"
-                            :data="tableData"></v-table>
+                            :data="priceData"></v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.packingInfo" name="Packing Info">
                     <el-form class="speForm" label-width="300px" :label-position="labelPosition">
@@ -124,14 +124,11 @@
                     <span style="color:red">暂时接口还没做</span>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
-                    <v-upload ref="upload"></v-upload>
+                    <v-upload readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.remark" name="Remark">
-                    <!--<add-table-->
-                            <!--:get_url="getRemarkUrl"-->
-                            <!--:id="parseInt($route.query.id)"></add-table>-->
                     <div>
-                        <el-button @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
+                        <el-button :disabled="loadingRemarkTable" @click="createRemark" type="primary" size="mini">{{$i.product.add}}</el-button>
                     </div>
                     <br>
                     <el-table
@@ -168,48 +165,43 @@
                         </el-table-column>
                     </el-table>
                     <br>
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage1"
-                            :page-sizes="[100, 200, 300, 400]"
-                            :page-size="100"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :total="400">
-                    </el-pagination>
+                    <page
+                            @size-change="changeSize"
+                            @change="changePage"
+                            :page-data="pageData"></page>
 
-                    <el-dialog title="新增备注" :visible.sync="addRemarkFormVisible" center width="500px">
+                    <el-dialog :title="$i.product.addRemark" :visible.sync="addRemarkFormVisible" center width="600px">
                         <el-form :model="addRemarkData">
-                            <el-form-item label="备注:" :label-width="formLabelWidth">
+                            <el-form-item :label="$i.product.remark" :label-width="formLabelWidth">
                                 <el-input
                                         type="textarea"
                                         :rows="4"
-                                        placeholder="请输入内容"
+                                        :placeholder="$i.product.pleaseInput"
                                         v-model="addRemarkData.remark">
                                 </el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">提交</el-button>
-                            <el-button @click="addRemarkFormVisible = false">取 消</el-button>
+                            <el-button :loading="disableCreateRemark" type="primary" @click="createRemarkSubmit">{{$i.product.submit}}</el-button>
+                            <el-button @click="addRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
 
 
-                    <el-dialog title="修改备注" :visible.sync="editRemarkFormVisible" center width="500px">
+                    <el-dialog :title="$i.product.changeRemark" :visible.sync="editRemarkFormVisible" center width="600px">
                         <el-form :model="editRemarkData">
-                            <el-form-item label="备注:" :label-width="formLabelWidth">
+                            <el-form-item :label="$i.product.remark" :label-width="formLabelWidth">
                                 <el-input
                                         type="textarea"
                                         :rows="4"
-                                        placeholder="请输入内容"
+                                        :placeholder="$i.product.pleaseInput"
                                         v-model="editRemarkData.remark">
                                 </el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">提交</el-button>
-                            <el-button @click="editRemarkFormVisible = false">取 消</el-button>
+                            <el-button :loading="disableModifyRemark" type="primary" @click="editRemarkSubmit">{{$i.product.submit}}</el-button>
+                            <el-button @click="editRemarkFormVisible = false">{{$i.product.cancel}}</el-button>
                         </div>
                     </el-dialog>
 
@@ -226,7 +218,7 @@
 </template>
 
 <script>
-    import {VTable,VUpload} from '@/components/index'
+    import {VTable,VUpload,VPagination} from '@/components/index'
     import addTable from '../addlineTable'
     import compareList from '../compareList'
 
@@ -236,7 +228,8 @@
             addTable,
             compareList,
             VTable,
-            VUpload
+            VUpload,
+            page:VPagination
         },
         data(){
             return{
@@ -245,9 +238,10 @@
                 labelPosition:'left',               //文字靠边参数，left或者right
                 notLoadingDone:false,
                 disableClickAddBookmark:false,
+                pageData:{},
                 productForm:{
                     id: '',                         //新增传空
-                    pic: "thisIsAPicture",
+                    pictures: [],
                     status: 0,                      //0下架 1上架
                     nameEn: "",
                     barcode: "",                    //产品条码
@@ -384,7 +378,15 @@
                 fobPort:'',
                 fobPrice:'',
                 //用于展示的table数据
-                tableData:[],
+                priceData:[],
+                tradeHistory:{
+                    pn:1,
+                    ps:10,
+                    skuCode:'',
+                    sorts:[
+
+                    ],
+                },
 
                 /**
                  * compareList配置
@@ -400,8 +402,14 @@
                 /**
                  * remark data
                  * */
+                remarkConfig:{
+                    pn: 1,
+                    ps: 10,
+                    sorts: [],
+                    id:Number(this.$route.query.id),
+                },
                 loadingRemarkTable:false,
-                formLabelWidth:'50px',
+                formLabelWidth:'80px',
                 remarkTableData:[],
                 addRemarkData:{
                     id: null,
@@ -413,7 +421,6 @@
                     remark: "",
                     skuId: 0,
                 },
-                currentPage1:1,
                 addRemarkFormVisible:false,
                 editRemarkFormVisible:false,
                 disableCreateRemark:false,      //是否禁用提交按钮
@@ -432,6 +439,31 @@
                 }).then(res=>{
                     this.productForm=res;
                     this.notLoadingDone=true;
+                    this.tradeHistory.skuCode=this.productForm.sysCode;
+                    let priceData=[{
+                        fobCurrency:this.productForm.fobCurrency,
+                        fobPrice:this.productForm.fobPrice,
+                        refFobPrice:this.productForm.refFobPrice,
+                        fobPort:this.productForm.fobPort,
+                        exwPrice:this.productForm.exwPrice,
+                        exwCurrency:this.productForm.exwCurrency,
+                        cifPrice:this.productForm.cifPrice,
+                        refCifPrice:this.productForm.refCifPrice,
+                        cifCurrency:this.productForm.cifCurrency,
+                        cifArea:this.productForm.cifArea,
+                        dduPrice:this.productForm.dduPrice,
+                        refDduPrice:this.productForm.refDduPrice,
+                        dduCurrency:this.productForm.dduCurrency,
+                        dduArea:this.productForm.dduArea,
+                    }];
+
+                    this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
+
+                    this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
+                        console.log(res)
+                    }).finally(err=>{
+
+                    });
                 }).catch(err=>{
                     console.log(err)
                     this.notLoadingDone=true;
@@ -440,24 +472,26 @@
             /**
              *  remark操作
              * */
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.remarkConfig.pn=e;
+                this.getRemarkData();
+            },
+            changeSize(e){
+                this.remarkConfig.ps=e;
+                this.getRemarkData();
+            },
             getRemarkData(){
                 this.loadingRemarkTable=true;
-                this.$ajax.post(this.$apis.get_buyerRemarkList,{
-                    id:Number(this.$route.query.id),
-                    pn: 1,
-                    ps: 50,
-                }).then(res=>{
+                this.$ajax.post(this.$apis.get_buyerRemarkList,this.remarkConfig).then(res=>{
                     this.remarkTableData=res.datas;
+                    this.pageData=res;
                     this.loadingRemarkTable=false;
                 }).catch(err=>{
                     this.loadingRemarkTable=false;
                 });
-            },
-            handleSizeChange(e){
-
-            },
-            handleCurrentChange(e){
-
             },
             createRemark(){
                 this.addRemarkFormVisible=true;
@@ -467,20 +501,17 @@
             },
             createRemarkSubmit(){
                 this.disableCreateRemark=true;
-                this.loadingRemarkTable=true;
                 this.$ajax.post(this.$apis.add_buyerProductRemark,this.addRemarkData).then(res=>{
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
                     this.$message({
-                        message: '新增成功',
+                        message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
-                    this.loadingRemarkTable=false;
                     this.getRemarkData();
                 }).catch(err=>{
                     this.disableCreateRemark=false;
                     this.addRemarkFormVisible=false;
-                    this.loadingRemarkTable=false;
                 });
             },
 
@@ -493,34 +524,25 @@
             },
             editRemarkSubmit(){
                 this.disableModifyRemark=true;
-                this.loadingRemarkTable=true;
                 this.$ajax.post(this.$apis.update_buyerProductRemark,this.editRemarkData)
                     .then(res=>{
-                        this.$ajax.post(this.$apis.get_buyerRemarkList,{
-                            id:Number(this.$route.query.id),
-                            pn: 1,
-                            ps: 50,
-                        }).then(res=>{
-                            this.remarkTableData=res.datas;
-                            this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            });
-                            this.disableModifyRemark=false;
-                            this.editRemarkFormVisible=false;
+                        this.getRemarkData();
+                        this.$message({
+                            message: this.$i.product.modifySuccess,
+                            type: 'success'
                         });
-                        this.loadingRemarkTable=false;
+                        this.disableModifyRemark=false;
+                        this.editRemarkFormVisible=false;
                 }).catch(err=>{
-                    this.loadingRemarkTable=false;
                     this.disableModifyRemark=false;
                     this.editRemarkFormVisible=false;
                 });
             },
 
             deleteRemark(index, row){
-                this.$confirm('确定删除该备注?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.loadingRemarkTable=true;
@@ -528,9 +550,12 @@
                         id:row.id
                     }).then(res=>{
                         this.$message({
-                            message: '删除成功',
+                            message: this.$i.product.deleteSuccess,
                             type: 'success'
                         });
+                        if(this.remarkTableData.length===1 && this.remarkConfig.pn>1){
+                            this.remarkConfig.pn-=1;
+                        }
                         this.getRemarkData();
                     }).catch(err=>{
                         console.log(err)

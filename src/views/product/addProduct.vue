@@ -83,6 +83,7 @@
         </div>
         <div class="footer">
             <v-table
+                    :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
                     :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
@@ -95,7 +96,7 @@
                   <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                   <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                   <el-button @click="addToBookmark" :loading="disableClickAddBookmark" :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}</el-button>
-                  <el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                  <!--<el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
                   <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                 </div>
                 <div class="btns" v-if="type==='recycle'">
@@ -390,7 +391,6 @@
                         pn:1
                     }).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-
                             if(e.status.value===1){
                                 e.status.value='上架';
                             }else if(e.status.value===0){
@@ -447,6 +447,7 @@
                             e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
                             return e;
                         });
+                        console.log(this.tableDataList)
                         this.pageData=res;
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{

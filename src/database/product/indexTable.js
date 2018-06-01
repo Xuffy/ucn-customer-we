@@ -11,8 +11,9 @@ export default {
     bookmarkId:{
         _hide:true
     },
-    pic: {
-        _image:true
+    pictures: {
+        _image:true,
+        key:'pictures'
     },
     status: {
 

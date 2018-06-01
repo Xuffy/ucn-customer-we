@@ -1,7 +1,7 @@
 'use strict';
 export default {
     //order
-    get_orderlist: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
+    get_orderList: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_recover_order: ['/order/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
@@ -17,13 +17,17 @@ export default {
     post_cancleOrder: ['/order/cancle', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_updataOrder: ['/order/update', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_confirm: ['/order/confirm  ', 'BASE_HCJ', 'UPURCHASE_URL'],
+
+    ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
+
+
     
     
     
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS','UPURCHASE_URL'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'BASE_CS','UPURCHASE_URL'],
-    get_listSupplier: ['/purchase/listSupplier', 'BASE_CS','UPURCHASE_URL'],
+    get_listSupplier: ['/purchase/listSupplier', 'BASE_URL_CS','UPURCHASE_URL'],
     get_supplier_id: ['/purchase/supplier/{id}', 'BASE_CS','UPURCHASE_URL'],
     post_supplier_list_remark: ['/purchase/supplier/listRemarks','BASE_CS', 'UPURCHASE_URL'],
     post_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS','UPURCHASE_URL'],

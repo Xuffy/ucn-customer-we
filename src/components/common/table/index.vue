@@ -60,14 +60,21 @@
             <td v-if="rowspan < 2" :rowspan="rowspan">
               <div v-text="index + 1"></div>
             </td>
+
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && cItem.key"
                 :style="cItem._style">
+              <!-- 是否为图片显示 -->
               <div v-if="!cItem._image"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem.value"></div>
 
-              <img v-else-if="cItem.value" :src="getImage(cItem.value)" @click="$refs.tableViewPicture.show(cItem.value)"/>
+              <v-image class="img" v-else
+                       :src="getImage(cItem.value)"
+                       height="30px"
+                       width="30px"
+                       @click="$refs.tableViewPicture.show(cItem.value)"></v-image>
             </td>
+            <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
               <div style="white-space: nowrap;">
                 <span class="button"
@@ -80,6 +87,7 @@
           </tr>
           </tbody>
 
+          <!--合计行显示-->
           <tfoot ref="tableFoot" v-if="totalRow">
           <tr v-for="totalItem in totalRow">
             <td>
@@ -137,10 +145,11 @@
 
   import VTableFilter from './filter'
   import VViewPicture from '../viewPicture/index'
+  import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture},
+    components: {VTableFilter, VViewPicture,VImage},
     props: {
       data: {
         type: Array,
@@ -186,10 +195,6 @@
       totalRow: {
         type: [Boolean, Array],
         default: false,
-      },
-      parId: {
-        type: String,
-        default: 'id'
       }
     },
     data() {
@@ -231,11 +236,7 @@
     methods: {
       onFilterColumn(checked) {
         // todo 需过滤column
-        // this.dataList = this.$refs.tableFilter.getFilterColumn(this.dataList, checked);
-        // this.filterColumn();
-        // console.log(this.$refs.tableFilter.getFilterColumn(this.dataList, checked))
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
-        // this.updateTable();
       },
       filterColumn() {
         this.dataColumn = _.values(this.dataList[0]);
@@ -283,9 +284,9 @@
         });
       },
       getImage(value, split = ',') {
-        if (_.isEmpty(value)) return false;
+        if (_.isEmpty(value)) return '';
 
-        if (_.toString(value)) {
+        if (_.isString(value)) {
           value = value.split(split);
         }
 
@@ -471,9 +472,7 @@
     padding: 10px;
   }
 
-  .ucn-table tbody td img {
-    max-height: 30px;
-    max-width: 30px;
+  .ucn-table tbody td .img {
     vertical-align: middle;
     cursor: pointer;
   }

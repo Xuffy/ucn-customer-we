@@ -185,4 +185,5 @@ export default {
         rules: [],
         type: 'textarea',
     },
+
 }

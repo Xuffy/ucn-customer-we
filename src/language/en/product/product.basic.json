@@ -79,5 +79,11 @@
   "skuNameEn": "SKU Name En",
   "skuCode": "SKU Code",
   "pleaseInput": "Please Input",
-  "pleaseChoose": "Please Choose"
+  "pleaseChoose": "Please Choose",
+  "addRemark":"Add Remark",
+  "submit":"Submit",
+  "changeRemark":"Change Remark",
+  "sureDelete":"Sure Delete?",
+  "prompt":"Prompt",
+  "sure":"Sure"
 }

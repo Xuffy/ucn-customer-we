@@ -36,7 +36,8 @@ const json = {
   ),
   logs: _.extend({},
     require(`./${lang}/logs/logs.basic`),
-    require(`./${lang}/logs/logs.basic`)
+    require(`./${lang}/logs/logs.basic`),
+    require(`./${lang}/logs/import`)
   ),
   message: _.extend({},
     require(`./${lang}/message/message.table`),
@@ -46,7 +47,13 @@ const json = {
     require(`./${lang}/order/basicinfo.pending`),
     require(`./${lang}/order/overview`),
     require(`./${lang}/order/productinfo.pending`),
-    require(`./${lang}/order/payment`)
+    require(`./${lang}/order/payment`),
+
+    //新引入
+    require(`./${lang}/order/order.basic`),
+    require(`./${lang}/order/order.prompt`),
+    require(`./${lang}/order/order.overviewTable`),
+    require(`./${lang}/order/order.orderDetail`),
   ),
   payment: _.extend({},
     require(`./${lang}/payment/payment`),

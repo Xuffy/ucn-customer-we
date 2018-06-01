@@ -14,6 +14,8 @@ export default {
   OSS_TOKEN: ['/oss/token', 'UMETA_URL'], // OSS签名参数
   GRIDFIELDSETTING_PART: ['/gridfieldsetting/part', 'UMETA_URL'],
   GRIDFAVORITE_UPDATE: ['/gridfavorite/update', 'UMETA_URL'],
-  IMPORTFILE_IMPORTTASKE: ['/importfile/importtaske', 'UIE'],
-  GRIDFAVORITE_LIST: ['/gridfieldsetting/list', 'UMETA_URL']
+  IMPORTFILE_IMPORTTASKE: ['/importfile/importtaske', 'UIE_URL'],
+  GRIDFAVORITE_LIST: ['/gridfieldsetting/list', 'UMETA_URL'],
+  IMPORTFILE_GETIMPORTTASK: ['/importfile/getimporttask', 'UIE_URL'],
+  IMPORTTEMPLATE_DOWNLOADURL: ['/importtemplate/downloadurl', 'UIE_URL']
 }

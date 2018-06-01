@@ -5,27 +5,44 @@
             <!-- {{$t('track.page.trackBySKU')}} -->
         </div>
         <div class="body">
-            <v-table :data="dataList"></v-table>
+          <div class="search">
+            <select-search
+              v-model="searchId"
+              class="search"
+              :options=options
+              @inputEnter="inputEnter"
+              :searchLoad="searchLoad">
+            </select-search>
+          </div>
+          </div>
+            <v-table :data="dataList" :height="500"></v-table>
         </div>
     </div>
 </template>
 
 <script>
-  import { VTable } from '@/components/index'
+  import { VTable,selectSearch } from '@/components/index'
 
     export default {
         name: "track-track",
         components:{
+          selectSearch,
           VTable
         },
         data(){
             return{
                 dataList: [],
+                searchLoad: false,
+                searchId:'1',
                 params:{
                     pn: 1,
                     ps: 10,
                     skuCode:'',
-                }
+                },
+              options: [{
+                id: '1',
+                label: 'skuCode'
+              }],
             }
         },
         methods:{
@@ -34,6 +51,15 @@
             },
             getSort(val, key) {
                 console.log(val, key)
+            },
+            inputEnter(val) {
+              console.log(val)
+              if (!val.keyType) return this.$message('请选中搜索类型');
+              if (!val.key) return this.$message('搜索内容不能为空');
+              if (val.keyType == '1') {
+                this.params.skuCode= val.key
+              }
+              this.getList()
             },
             getList() {
               this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{

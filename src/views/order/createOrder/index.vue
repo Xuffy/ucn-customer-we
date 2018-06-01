@@ -1,13 +1,13 @@
 <template>
-  <div class="creatOrder">
+  <div class="createOrder">
         <div class="title">New Order No.待后台数据</div>
 <!--         basicinfo-->
-         <VBasicinfo ref='basicInfo' class='basicinfo'></VBasicinfo>
+         <VBasicinfo ref='basicInfo' class='basicInfo'></VBasicinfo>
 
          <VAttchment :disabled=false class='attachment'></VAttchment>
          <VExchange :disabled=false ref='exchangeList' ></VExchange>
 <!--             responsibility     -->
-         <VResponsibility ref='responsibility' ></VResponsibility>
+         <VResponsibility ref='responsibility'></VResponsibility>
 <!--         productinfo-->
          <div class="productinfo">
              <div class="pro_title">
@@ -115,7 +115,7 @@
         VHistoryModify
     } from '@/components/index';
     export default {
-        name: 'creatOrder',
+        name: 'createOrder',
         components: {
             VResponsibility,
             VBasicinfo,

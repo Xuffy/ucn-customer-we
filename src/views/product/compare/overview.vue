@@ -4,8 +4,8 @@
             <span>{{$i.product.compareOverview}}</span>
         </div>
         <div class="btns">
-            <el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
-            <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>
+            <!--<el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>-->
+            <!--<el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>-->
             <select-search
                     v-model="searchValue"
                     :options="searchOptions"
