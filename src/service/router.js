@@ -369,15 +369,15 @@ export const routerMap = [
           component: () => import('../views/order/overView.vue')
         },
         {
-          path: 'creat',
-          name: 'orderCreat',
+          path: 'create',
+          name: 'orderCreate',
           meta: {
             draft: true,
             recycleBin: true,
             log: true,
             name: $i.router.orderCreate
           },
-          component: () => import('../views/order/creatOrder/index.vue')
+          component: () => import('../views/order/createOrder/createOrder.vue')
         }, {
           path: 'detail',
           name: 'Order Detail',

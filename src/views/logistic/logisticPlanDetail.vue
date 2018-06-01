@@ -6,14 +6,15 @@
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
-          <span>{{ $i.logistic.remark }}</span>
+          <span>{{ $i.logistic.remark }}:</span>
           <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
           <p v-else>{{ remark }}</p>
         </div>
       <!-- </el-col> -->
       <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
-      <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/>
+      <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
+    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
@@ -70,7 +71,7 @@ import btns from '@/views/logistic/children/btns'
 import productModify from '@/views/logistic/children/productModify'
 import addProduct from '@/views/logistic/children/addProduct'
 
-import { basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
+// import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
 export default {
   name: 'logisticPlanDetail',
@@ -86,8 +87,9 @@ export default {
       edit: false,
       oldPlanObject: {},
       oldPaymentObject: {},
-      basicInfoObj,
-      transportInfoObj,
+      basicInfoObj:{},
+      transportInfoObj:{},
+      ExchangeRateInfoArr: [],
       transportInfoArr: [],
       basicInfoArr: [],
       modifyProductArray: [],
@@ -178,32 +180,44 @@ export default {
     this.registerRoutes()
     this.getDictionary()
     this.getOrderList()
-    this.basicInfoArr = _.map(this.basicInfoObj, (value, key) => {
-      return {
-        type: this.computeType(key),
-        label: this.$i.logistic[key],
-        key,
-        value
-      }
+    this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
+      return value;
     })
-
-    this.transportInfoArr = _.map(this.transportInfoObj, (value, key) => {
-      return {
-        type: this.computeType(key),
-        label: this.$i.logistic[key],
-        key,
-        value
-      }
+    this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
+      return value;
     })
-
+    this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
+      return value;
+    })
+    this.getRate();
     if (this.planId) {
       this.getDetails()
     } else {
       this.edit = true
+      this.basicInfoArr.forEach((item)=>{
+        this.$set(item,'value',item.defaultVal);
+      })
+      this.transportInfoArr.forEach((item)=>{
+        this.$set(item,'value',item.defaultVal);
+      })
       this.getNewLogisticsNo()
     }
   },
   methods: {
+    //获取实时汇率
+    getRate(){
+      this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
+        this.ExchangeRateInfoArr.forEach((item)=>{
+          res.forEach((_item)=>{
+            if(item.key == _item.symbol){
+              _.map(_item,(v,k)=>{
+                this.$set(item,k=='price' ? 'value' : k,v)
+              })
+            }
+          })
+        })
+      })
+    },
     registerRoutes () {
       this.$store.commit('SETDRAFT', {
         name: 'overviewDraft',
@@ -236,7 +250,7 @@ export default {
         'blType'
       ]
       this.basicInfoArr.forEach(a => {
-        a.value = stringArray.includes(a.key) ? '' + res[a.key] : res[a.key]
+        a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
       })
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
@@ -440,9 +454,9 @@ export default {
     },
     sendData (keyString) {
       const url = this.configUrl[this.pageName][keyString]
-
-      this.basicInfoArr.forEach(a => {
-        this.$set(this.basicInfoObj, a.key, a.value instanceof Date ? + this.$dateFormat(a.value) : a.value)
+      this.basicInfoArr.forEach(a => { 
+        // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
+        this.$set(this.basicInfoObj, a.key, a.value)
       })
 
       this.transportInfoArr.forEach(a => {
@@ -463,7 +477,14 @@ export default {
       })
       this.oldPlanObject.containerDetail = this.containerInfo
       this.fee = this.feeList
-      this.oldPlanObject.product = this.modifyProductArray
+      this.oldPlanObject.product = this.modifyProductArray;
+      this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr),(item)=>{
+        item['price'] = item['value'];
+        delete item['value'];
+        delete item['key'];
+        delete item['label'];
+        return item;
+      });
       // this.oldPlanObject.rmProduct = this.removeProductList.map(a => {
       //   const obj = {}
       //   _.mapObject(a, (value, key) => {
@@ -511,8 +532,7 @@ export default {
     align-items: center;
     padding:10px 0;
     span {
-      width: 200px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      width: 180px;
       display:inline-block;
       font-size:12px;
       text-align: right;

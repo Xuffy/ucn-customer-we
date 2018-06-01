@@ -28,7 +28,6 @@ locale.use(require(`element-ui/lib/locale/lang/${lang}`).default);
 
 Vue.use(fetch);
 Vue.use(util);
-// Vue.use(VueI18n);
 Vue.use(ElementUI, {size: 'mini'});
 
 Vue.config.productionTip = false;
@@ -68,7 +67,6 @@ new Vue({
   el: '#app',
   store,
   router,
-  // i18n,
   template: '<App/>',
   components: {App}
 });
