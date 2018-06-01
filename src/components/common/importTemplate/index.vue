@@ -25,7 +25,8 @@
         </el-form-item>
 
         <el-form-item :label="$i.importTemplate.remark" class="remark-box">
-          <h5>1.{{$i.importTemplate.remark1}} <a href="" v-text="$i.importTemplate.template"></a></h5>
+          <h5>1.{{$i.importTemplate.remark1}}
+            <a :href="downTemplate" v-if="downTemplate" target="_blank" v-text="$i.importTemplate.template"></a></h5>
           <h5>2.{{$i.importTemplate.remark2}}</h5>
           <h5>3.{{$i.importTemplate.remark3}}</h5>
           <router-link to="/logs/import">
@@ -33,8 +34,6 @@
           </router-link>
         </el-form-item>
       </el-form>
-
-
       <!--<div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">{{$i.common.cancel}}</el-button>
         <el-button type="primary" @click="dialogVisible = false">{{$i.common.confirm}}</el-button>
@@ -69,13 +68,15 @@
     data() {
       return {
         dialogVisible: false,
-        fileList: []
+        fileList: [],
+        downTemplate: '',
       }
     },
     watch: {},
     created() {
     },
     mounted() {
+      this.getTemplate();
     },
     methods: {
       show() {
@@ -86,6 +87,12 @@
           this.$message.warning('请上传 zip 或 xls 文件');
           return false;
         }
+      },
+      getTemplate() {
+        this.$ajax.post(this.$apis.IMPORTTEMPLATE_DOWNLOADURL, [this.code])
+          .then(res => {
+            this.downTemplate = res[0].filePath;
+          });
       },
       handlePreview(file) {
         console.log(file);
