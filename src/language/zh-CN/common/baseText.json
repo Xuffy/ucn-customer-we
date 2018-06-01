@@ -3,6 +3,8 @@
     "save": "保存",
     "delete": "删除",
     "ok": "OK",
+    "yes": "是",
+    "no": "否",
     "state": "状态",
     "cancel": "取消",
     "viewBy": "视图模式",
