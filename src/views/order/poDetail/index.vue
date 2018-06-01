@@ -99,13 +99,13 @@
 
 <script>
     import { mapActions } from 'vuex'
-    import responsibility from '../creatOrder/responsibility.vue'
-    import basicinfo from '../creatOrder/basicInfo.vue'
+    import responsibility from '../createOrder/responsibility.vue'
+    import basicinfo from '../createOrder/basicInfo.vue'
     import VProduct from '@/views/product/addProduct';
-    import attchment from '../creatOrder/attachment'
-    import VCaculate from '../creatOrder/caculate'
+    import attchment from '../createOrder/attachment'
+    import VCaculate from '../createOrder/caculate'
     import VPayment from './payment.vue'
-    import VExchange from '../creatOrder/exchange.vue'
+    import VExchange from '../createOrder/exchange.vue'
     import {
         VTable,
         messageBoard,
