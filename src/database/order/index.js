@@ -1,4 +1,3 @@
-import overview from './overview';
 import overviewBysku from './overviewBysku';
 import basicInfo from './basicInfo';
 import responsibility from './responsibility';
@@ -13,7 +12,6 @@ import orderDetail from './orderDetail';
 import createOrder from './createOrder';
 
 export default {
-    overview,
     basicInfo,
     responsibility,
     overviewBysku,
