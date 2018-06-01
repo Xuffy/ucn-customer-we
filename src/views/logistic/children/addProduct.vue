@@ -65,7 +65,7 @@
           <span>{{ scope.row.sku_customerSkuCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.factorySkuCode" width="160"align="center">
+      <el-table-column :label="$i.logistic.factorySkuCode" width="160" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.factorySkuCode }}</span>
         </template>
@@ -138,6 +138,16 @@
       <el-table-column :label="$i.logistic.outerCartonSkuCode" width="180" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.skuOuterCartonCode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.skuSupplierCompanyId" width="180" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuSupplierCompanyId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$i.logistic.skuSupplierTenantId" width="180" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.skuSupplierTenantId }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="active" width="100">
