@@ -79,7 +79,7 @@
             dropDown,
             VTable,
             selectSearch,
-            page: VPagination
+            page: VPagination,
         },
         data() {
             return {
@@ -147,7 +147,7 @@
             changeStatus() {
                 console.log(this.params)
                 if (this.params.view === '1') {
-                    this.getData(this.$db.order.overview);
+                    this.getData(this.$db.order.overviewByOrder);
                 } else {
                     this.getData(this.$db.order.overviewBysku);
                 }
@@ -155,7 +155,7 @@
             changeView() {
                 console.log(this.params)
                 if (this.params.view === '1') {
-                    this.getData(this.$db.order.overview)
+                    this.getData(this.$db.order.overviewByOrder)
                 } else {
                     this.getData(this.$db.order.overviewBysku)
                 }
@@ -166,7 +166,7 @@
                     this.params.orderNo = val.key;
                     this.params.skuCode = '';
                     if (this.params.view === '1') {
-                        this.getData(this.$db.order.overview)
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
                         this.getData(this.$db.order.overviewBysku)
                     }
@@ -174,7 +174,7 @@
                     this.params.orderNo = '';
                     this.params.skuCode = val.key;
                     if (this.params.view === '1') {
-                        this.getData(this.$db.order.overview)
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
                         this.getData(this.$db.order.overviewBysku)
                     }
@@ -208,7 +208,7 @@
                 })
                     .then((res) => {
                         if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overview)
+                            this.getdata(this.$db.order.overviewByOrder)
                         } else {
                             this.getdata(this.$db.order.overviewBysku)
                         }
@@ -243,7 +243,7 @@
                             this.orderStatusOption = v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overview);
+                    this.getData(this.$db.order.overviewByOrder);
                 })
             },
 
