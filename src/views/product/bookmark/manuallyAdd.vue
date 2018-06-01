@@ -932,9 +932,9 @@
                     recycle: false,
                     specialTransportRequire: "",
                     status: '1',
-                    supplierCode: "",
-                    supplierId: null,
-                    supplierName: "",
+                    // supplierCode: "",
+                    // supplierId: null,
+                    // supplierName: "",
                     tradeMarkCn: "",
                     tradeMarkEn: "",
                     unit: '1',
@@ -1009,6 +1009,7 @@
                 params.mainSaleCountry=mainSaleCountry;
                 let size=this.boxSize.length+'*'+this.boxSize.width+'*'+this.boxSize.height;
                 params.lengthWidthHeight=size;
+
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
                     this.disabledSubmit=false;
@@ -1026,7 +1027,7 @@
                 this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
                     this.currencyOption=res;
                 }).catch(err=>{
-
+ b
                 });
 
                 //国家
