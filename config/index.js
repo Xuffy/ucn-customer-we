@@ -27,15 +27,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      // '/cs': { //陈赛
-      //   target:'http://192.168.51.33:8080/web/v1/',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //       '^/cs': ''
-      //   }
-      // }
-    },
+    proxyTable: {},
     useEslint: false,
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

@@ -13,16 +13,15 @@
         </div>
       </div>
       <div class="select-search-wrap">
-        <select-search :options="options" @inputEnter="searchFn"/>
+        <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch"/>
       </div>
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button> -->
           <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}
-          </el-button>
+          <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
         <div v-if="pageType === 'draft'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
@@ -49,6 +48,7 @@
       @action="action"
       @change-checked="changeChecked"
       :loading="tableLoading"
+      :height="height"
       ref="tab"
     />
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
@@ -61,6 +61,8 @@
     name: 'logisticPlanOverview',
     data() {
       return {
+        selectSearch:'',
+        height:500,
         tableLoading: false,
         ls_plan: [],
         pageParams: {

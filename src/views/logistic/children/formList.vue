@@ -6,13 +6,13 @@
       <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
         <div class="input-item">
           <div class="label" :title="a.label">{{ a.label }}:</div>
-          <div class="proNo" v-if="!edit || disabledFields.includes(a.key)">
-            <p>{{ textFilter(a) }}</p>
+          <div class="proNo" v-if="!edit">
+            <p class="textFilter">{{ textFilter(a) }}</p>
           </div>
           <div v-else>
-            <el-input placeholder="请输入内容" v-model="a.value" v-if="a.type === 'input'"/>
-            <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true">
-              <el-option :label="item.name" :value="item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
+            <el-input placeholder="请输入内容" v-model="a.value" :disabled="a.disabled" v-if="a.type === 'input'"/>
+            <el-select v-model="a.value" placeholder="请输入内容" v-if="a.type === 'selector'" :clearable="true" :disabled="a.disabled">
+              <el-option :label="item.name" :value="Number(item.code)" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code" v-if="selectArr[a.key]"/>
             </el-select>
             <el-date-picker v-if="a.type === 'date'" v-model="a.value" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions"/>
           </div>
@@ -22,7 +22,6 @@
   </div>
 </template>
 <script>
-import { disabledFields } from '@/database/logistic/plan/staticData'
 
 export default {
   props: {
@@ -52,7 +51,6 @@ export default {
   },
   data () {
     return {
-      disabledFields,
       paymentList: [],
       pickerOptions: {
         // disabledDate(time) {
@@ -81,14 +79,9 @@ export default {
       }
     }
   },
-  // compited: {
-  //   planId () {
-  //     return this.$route.query.id
-  //   }
-  // },
   methods: {
     textFilter (a) {
-      if (a.type === 'input') return a.value
+      if (a.type === 'input'||a.type === 'text') return a.value
       if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
       if (a.type === 'selector' && this.selectArr[a.key]) {
         let obj = this.selectArr[a.key].find(item => item.code == a.value)
@@ -122,21 +115,23 @@ export default {
   align-items: center;
   padding:10px 0;
   .proNo>P,.label{
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     font-size:12px;
     padding-right:10px;
     box-sizing: border-box;
     flex:1;
-    line-height: 28px;
+    line-height: 14px;
   }
   .proNo>P{
     width: 220px;
+  }
+  p.textFilter{
+    width: 170px;
   }
   .label{
     text-align: right;
     width: 200px;
   }
-  /deep/.el-input__inner{
+  /deep/input.el-input__inner{
     width: 220px;
   }
   .el-select, .el-input {

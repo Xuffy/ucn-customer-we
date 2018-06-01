@@ -4,6 +4,7 @@ import transportationList from './plan/transportationList'
 import containerInfo from './plan/containerInfo'
 import productInfo from './plan/productInfo'
 import productModify from './plan/productModify'
+import {basicInfoObj,transportInfoObj,ExchangeRateInfo} from './plan/staticData'
 import sku from './plan/sku'
 
 export default {
@@ -13,5 +14,8 @@ export default {
   containerInfo,
   productInfo,
   productModify,
-  sku
+  sku,
+  basicInfoObj,
+  transportInfoObj,
+  ExchangeRateInfo
 }
