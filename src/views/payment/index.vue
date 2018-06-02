@@ -60,11 +60,10 @@
                 :height="500"
                 @filter-value="onFilterValue"
                 ></v-table>
-              <v-pagination
-                :page-data.sync="params"
+               <page
+                :page-data="pageData"
                 @change="handleSizeChange"
-                @size-change="pageSizeChange"
-              />
+                @size-change="pageSizeChange"></page>
             </div>
         </div>
     </div>
@@ -77,7 +76,7 @@
         components:{
             selectSearch,
             VTable,
-            VPagination
+            page:VPagination
         },
         data(){
             return{
@@ -89,6 +88,7 @@
                 date:'',
                 tabLoad:false,
                 searchId:'1',
+                pageData:{},
                 options: [{
                   id: '1',
                   label: 'Order No'
@@ -166,10 +166,12 @@
               this.getList()
             },
             handleSizeChange(val) {
-              this.params.pn = val;
+                this.params.pn = val;
+                this.getList();
             },
             pageSizeChange(val) {
-              this.params.ps = val;
+                this.params.ps = val;
+                this.getList();
             },
             getList(){
               this.tabLoad = true;
@@ -204,6 +206,7 @@
                     // }
                     return item;
                   });
+                  this.pageData=res;
                 })
                 .catch((res) => {
                   this.tabLoad = false;
