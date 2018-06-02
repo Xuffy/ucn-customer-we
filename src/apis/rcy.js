@@ -18,12 +18,7 @@ export default {
     post_updataOrder: ['/order/update', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_confirm: ['/order/confirm  ', 'BASE_HCJ', 'UPURCHASE_URL'],
 
-    ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
 
-
-    
-    
-    
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark', 'BASE_CS','UPURCHASE_URL'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}', 'BASE_CS','UPURCHASE_URL'],
@@ -72,5 +67,21 @@ export default {
      post_codePart:['/code/part','UMETA_URL'],
      post_country:['/country/all','UMETA_URL'],
      post_logisticsport:['/logisticsport/query','UMETA_URL'],
-     get_currency:['/currency/all','UMETA_URL']
+     get_currency:['/currency/all','UMETA_URL'],
+
+
+
+
+
+
+
+
+
+    /**
+     * 新格式order接口配置
+     * */
+    ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
+    ORDER_FINISH:['/order/finish','BASE_HCJ','UPURCHASE_URL'],
+    PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME:['/purchase/supplier/listSupplierByName','BASE_HCJ','UPURCHASE_URL'],
+    INQUIERY_LIST:['/inquiry/list','BASE_HCJ','UPURCHASE_URL']
 }

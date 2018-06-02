@@ -50,7 +50,7 @@
                     //     resultMapId: '',
                     //     value: {}
                     // },
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     tc: 0,
                     recycle: 0,

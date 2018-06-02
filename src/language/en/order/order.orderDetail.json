@@ -4,5 +4,11 @@
   "supplierName":"Supplier Name",
   "supplierCode":"Supplier No",
   "destPort":"Destination Port",
-  "transport":"Transportation Way"
+  "transport":"Transportation Way",
+  "CNY|USD":"exchange rate(￥--$)",
+  "CNY|EUR":"exchange rate(￥--€)",
+  "USD|EUR":"exchange rate($--€)",
+  "USD|CNY":"exchange rate($--￥)",
+  "EUR|CNY":"exchange rate(€--￥)",
+  "EUR|USD":"exchange rate(€--$)"
 }

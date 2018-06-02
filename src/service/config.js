@@ -49,15 +49,15 @@ export default {
       BASE_DEV_DIC: '//192.168.51.208:11005',
 
 
-      // LOGIN_URL: '//dev.auth.ucnscm.cn',
-      LOGIN_URL: '//192.168.51.138:8070',
+      LOGIN_URL: '//dev.auth.ucnscm.cn',
+      // LOGIN_URL: '//192.168.51.138:8070',
       BASE_URL: '//192.168.51.208:11001', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
       UUSER_URL: '//192.168.51.208:11004', // 用户中心
       UMETA_URL: '//192.168.51.208:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.208:11007', // 消息服务
       ULOG_URL: '//192.168.51.208:11008', // 日志服务
-      UPURCHASE_URL: '//192.168.51.111:11001', // 采购端 dev
+      UPURCHASE_URL: '//192.168.51.208:11001', // 采购端 dev
       USUPPLY_URL: '//192.168.51.208:11002', // 供应商端 dev
       // UPURCHASE_URL: '//dev.upurchase-facade.ucnholding.com', // 采购端 开发人员电脑
       // USUPPLY_URL: '//dev.usupply-facade.ucnholding.com', // 供应商端 开发人员电脑
