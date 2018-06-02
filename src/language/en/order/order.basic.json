@@ -12,5 +12,7 @@
   "send":"Send",
   "saveAsDraft":"Save As Draft",
   "quickCreate":"Quick Create",
-  "shipped":"Shipped"
+  "shipped":"Shipped",
+  "exchangeRate":"Exchange Rate",
+  "responsibility":"Responsibility"
 }

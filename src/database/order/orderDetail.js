@@ -1,4 +1,7 @@
 export default {
+    /**
+     * basic info
+     * */
     orderNo:{
         type:'input',
         belong:'basicInfo',
@@ -111,7 +114,26 @@ export default {
         belong:'basicInfo',
         fullLine:true
     },
+    attachment:{
+        type:'attachment',
+        belong:'basicInfo',
+        fullLine:true
+    },
 
-
+    /**
+     * exchange Rate
+     * */
+    cnyToUsd:{
+        key:'CNY|USD',
+        belong:'exchangeRate'
+    },
+    cnyToEur:{
+        key:'CNY|EUR',
+        belong:'exchangeRate'
+    },
+    usdToEur:{
+        key:'USD|EUR',
+        belong:'exchangeRate'
+    },
 
 }

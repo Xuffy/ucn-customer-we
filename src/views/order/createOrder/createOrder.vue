@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
+                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <el-input
@@ -77,10 +77,40 @@
                                     v-model="orderForm[v.key]">
                             </el-input>
                         </div>
+                        <div v-else-if="v.type==='attachment'">
+                            <v-upload
+                                    :list="orderForm.attachment"
+                                    :limit="20"
+                                    ref="upload"></v-upload>
+                        </div>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
+
+        <div class="title">
+            {{$i.order.exchangeRate}}
+        </div>
+        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
+            <el-row>
+                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-form-item :label="$i.order[v.currency]">
+                        <el-input-number
+                                :placeholder="$i.order.pleaseInput"
+                                class="speInput speNumber"
+                                v-model="v.exchangeRate"
+                                :controls="false">
+                        </el-input-number>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+
+        <div class="title">
+            {{$i.order.responsibility}}
+        </div>
+
+
 
         <div class="footBtn">
             <el-button @click="send" type="primary">{{$i.order.send}}</el-button>
@@ -111,6 +141,11 @@
                     <!--</div>-->
                 </template>
             </v-table>
+            <page
+                    @size-change="changeSize"
+                    @change="changePage"
+                    :pageSizes="[50,100,200]"
+                    :page-data="pageData"></page>
         </el-dialog>
 
 
@@ -119,14 +154,15 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload} from '@/components/index'
 
     export default {
         name: "createOrder",
         components:{
             VTable,
             page:VPagination,
-            selectSearch
+            selectSearch,
+            VUpload
         },
         data(){
             return{
@@ -135,7 +171,7 @@
                 /**
                  * 页面基础配置
                  * */
-                labelPosition:'left',
+                labelPosition:'right',
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -166,6 +202,7 @@
                 /**
                  * 弹出框data配置
                  * */
+                pageData:{},
                 loadingTable:false,
                 tableDataList:[],
                 searchOptions:[
@@ -175,6 +212,13 @@
                     },
                 ],
                 searchId:1,
+                inquiryConfig:{
+                    inquiryNo: '',
+                    operatorFilters: [],
+                    pn: 1,
+                    ps: 50,
+                    sorts: [],
+                },
 
                 /**
                  * 字典配置
@@ -190,7 +234,7 @@
                     acceptOperationId: 0,
                     actDeliveryDt: "2018-06-01T01:37:58.741Z",
                     archive: true,
-                    attachment: true,
+                    attachment: [],
                     companyId: 0,
                     confirmDt: "2018-06-01T01:37:58.741Z",
                     currency: "string",
@@ -211,22 +255,28 @@
                     entryName: "string",
                     exchangeRateList: [
                         {
-                            companyId: 0,
-                            currency: "string",
-                            entryDt: "2018-06-01T01:37:58.742Z",
-                            entryId: 0,
-                            entryName: "string",
-                            exchangeRate: 0,
-                            id: 0,
-                            orderId: 0,
-                            orderNo: "string",
-                            ownerId: 0,
-                            tenantId: 0,
-                            timeZone: "string",
-                            updateDt: "2018-06-01T01:37:58.742Z",
-                            updateId: 0,
-                            updateName: "string",
-                            version: 0
+                            currency: "CNY|USD",
+                            // exchangeRate: ''
+                        },
+                        {
+                            currency: "CNY|EUR",
+                            // exchangeRate: ''
+                        },
+                        {
+                            currency: "USD|EUR",
+                            // exchangeRate: ''
+                        },
+                        {
+                            currency: "USD|CNY",
+                            // exchangeRate: ''
+                        },
+                        {
+                            currency: "EUR|CNY",
+                            // exchangeRate: ''
+                        },
+                        {
+                            currency: "EUR|USD",
+                            // exchangeRate: ''
                         }
                     ],
                     fieldRemark: {
@@ -532,15 +582,14 @@
 
             quickCreate(){
                 this.quickCreateDialogVisible=true;
+                this.getInquiryData();
+            },
+
+            getInquiryData(){
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.INQUIERY_LIST,{
-                    inquiryNo: '',
-                    operatorFilters: [],
-                    pn: 1,
-                    ps: 50,
-                    sorts: [],
-                }).then(res=>{
+                this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
+                    this.pageData=res;
                 }).finally(err=>{
                     this.loadingTable=false;
                 });
@@ -553,9 +602,11 @@
             searchInquiry(e){
                 console.log(e)
                 if(!e.keyType){return this.$message({
-                    message: '警告哦，这是一条警告消息',
+                    message: this.$i.order.pleaseChooseType,
                     type: 'warning'
                 });}
+                this.inquiryConfig.inquiryNo=e.key;
+                this.getInquiryData();
             },
             changeChecked(){
 
@@ -569,6 +620,19 @@
                 //     console.log(res)
                 // });
             },
+
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.inquiryConfig.pn=e;
+                this.getInquiryData();
+            },
+            changeSize(e){
+                this.inquiryConfig.ps=e;
+                this.getInquiryData();
+            }
         },
         created(){
             this.getOrderNo();
