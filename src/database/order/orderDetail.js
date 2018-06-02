@@ -32,14 +32,15 @@ export default {
         belong:'basicInfo',
         isSupplier:true
     },
-    supplierCode:{  //供应商编号
-        type:'select',
-        belong:'basicInfo',
-    },
+    // supplierCode:{  //供应商编号
+    //     type:'select',
+    //     belong:'basicInfo',
+    // },
     quotationNo:{
         type:'input',
         belong:'basicInfo',
-        disabled:true
+        disabled:true,
+        isQuotationNo:true
     },
     status:{
         type:'select',

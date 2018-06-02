@@ -9,7 +9,7 @@
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <el-input
-                                    :placeholder="$i.order.pleaseInput"
+                                    :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
                                     class="speInput"
                                     :disabled="v.disabled"
                                     v-model="orderForm[v.key]"></el-input>
@@ -26,14 +26,34 @@
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
-                            <el-select :placeholder="$i.order.pleaseChoose" :disabled="v.disabled" class="speInput" v-model="orderForm[v.key]" placeholder="请选择">
-                                <el-option
-                                        v-for="item in options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <div v-if="v.isSupplier">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in supplierOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else>
+                                <el-select
+                                        :placeholder="$i.order.pleaseChoose"
+                                        :disabled="v.disabled"
+                                        class="speInput"
+                                        v-model="orderForm[v.key]">
+                                    <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </div>
                         <div v-else-if="v.type==='number'">
                             <el-input-number
@@ -42,9 +62,9 @@
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
                                     :controls="false"
-                                    :min="1"
-                                    :max="10"
-                                    label="描述文字"></el-input-number>
+                                    :min="1">
+
+                            </el-input-number>
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
@@ -62,20 +82,52 @@
             </el-row>
         </el-form>
 
-
-
-
         <div class="footBtn">
             <el-button @click="send" type="primary">{{$i.order.send}}</el-button>
             <el-button type="primary">{{$i.order.saveAsDraft}}</el-button>
-            <el-button type="primary">{{$i.order.quickCreate}}</el-button>
+            <el-button type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
+
+
+        <el-dialog
+            title=""
+            :visible.sync="quickCreateDialogVisible"
+            width="70%">
+            <v-table
+                    :height="400"
+                    :loading="loadingTable"
+                    :data="tableDataList"
+                    :buttons="[{label: this.$i.order.createOrder, type: 1}]"
+                    @change-checked="changeChecked"
+                    @action="btnClick">
+                <template slot="header">
+                    <select-search
+                            class="search"
+                            @inputEnter="searchInquiry"
+                            v-model="searchId"
+                            :options="searchOptions"></select-search>
+                    <!--<div class="btns">-->
+                    <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                    <!--</div>-->
+                </template>
+            </v-table>
+        </el-dialog>
+
+
     </div>
 </template>
 
 <script>
+
+    import {VTable,VPagination,selectSearch} from '@/components/index'
+
     export default {
         name: "createOrder",
+        components:{
+            VTable,
+            page:VPagination,
+            selectSearch
+        },
         data(){
             return{
                 value:'',
@@ -109,8 +161,27 @@
                         }
                     }]
                 },
+                quickCreateDialogVisible:false,
 
+                /**
+                 * 弹出框data配置
+                 * */
+                loadingTable:false,
+                tableDataList:[],
+                searchOptions:[
+                    {
+                        label:'inquiryNo',
+                        id:1
+                    },
+                ],
+                searchId:1,
 
+                /**
+                 * 字典配置
+                 * */
+                supplierOption:[
+
+                ],
 
                 /**
                  * 提交的数据
@@ -127,7 +198,7 @@
                     customerAgreementNo: "string",
                     // customerName: "string",
                     // customerNo: "string",
-                    customerOrderNo: "string",
+                    customerOrderNo: "",
                     deliveredQty: 0,
                     deliveryDt: "2018-06-01T01:37:58.742Z",
                     departureCountry: "string",
@@ -183,7 +254,7 @@
                     paymentDays: 0,
                     paymentRemark: "",
                     paymentStatus: "string",
-                    quotationNo: "string",
+                    quotationNo: "",
                     recycleCustomer: true,
                     recycleSupplier: true,
                     remark: "string",
@@ -403,7 +474,7 @@
                     status: "string",
                     supplierCode: "string",
                     supplierId: 0,
-                    supplierName: "string",
+                    supplierName: "",
                     supplierOrderNo: "",
                     tenantId: 0,
                     timeZone: "string",
@@ -425,33 +496,83 @@
         methods:{
             //就是保存
             send(){
-                console.log(this.orderForm);
+                let params=Object.assign({},this.orderForm);
+                _.map(this.supplierOption,v=>{
+                    if(params.supplierName===v.id){
+                        params.supplierName=v.name;
+                        params.supplierCode=v.code;
+                        params.supplierId=v.id;
+                    }
+                });
+                console.log(params,'params')
             },
 
-            //获取订单号
+            //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
-                    customerNo:'111'
-                }).then(res=>{
-                    console.log(res)
-                }).catch(err=>{
-
-                });
+                this.orderForm.orderNo=parseInt(Math.random()*10000000);
+                this.getSupplier();
+                this.getUnit();
+                // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
+                //     customerNo:''
+                // }).then(res=>{
+                //     console.log(res)
+                // }).catch(err=>{
+                //
+                // });
             },
 
             //获取供应商
             getSupplier(){
-                this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME)
-                    .then(res=>{
-                        console.log(res)
+                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME}?name=`).then(res=>{
+                        this.supplierOption=res;
                     }).catch(err=>{
 
                     })
             },
+
+            quickCreate(){
+                this.quickCreateDialogVisible=true;
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.INQUIERY_LIST,{
+                    inquiryNo: '',
+                    operatorFilters: [],
+                    pn: 1,
+                    ps: 50,
+                    sorts: [],
+                }).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
+                }).finally(err=>{
+                    this.loadingTable=false;
+                });
+            },
+
+
+            /**
+             * quick create弹出框事件
+             * */
+            searchInquiry(e){
+                console.log(e)
+                if(!e.keyType){return this.$message({
+                    message: '警告哦，这是一条警告消息',
+                    type: 'warning'
+                });}
+            },
+            changeChecked(){
+
+            },
+            btnClick(e){
+                console.log(e)
+            },
+
+            getUnit(){
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
+            },
         },
         created(){
-            // this.getOrderNo();
-            this.getSupplier();
+            this.getOrderNo();
+
         },
     }
 </script>

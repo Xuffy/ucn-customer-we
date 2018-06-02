@@ -10,6 +10,7 @@ import productInfo from './productInfo';
 import overviewByOrder from './overviewByOrder';
 import orderDetail from './orderDetail';
 import createOrder from './createOrder';
+import inquiryOverview from './inquiryOverview';
 
 export default {
     basicInfo,
@@ -22,5 +23,6 @@ export default {
      * */
     overviewByOrder,
     orderDetail,
-    createOrder
+    createOrder,
+    inquiryOverview
 }

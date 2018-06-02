@@ -11,6 +11,6 @@
   "orderNo":"Order No",
   "send":"Send",
   "saveAsDraft":"Save As Draft",
-  "quickCreate":"Quick Create"
-
+  "quickCreate":"Quick Create",
+  "shipped":"Shipped"
 }

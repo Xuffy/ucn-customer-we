@@ -26,7 +26,7 @@
             <div class="btn-wrap">
                 <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
                 <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.finish}}</el-button>
+                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.shipped}}</el-button>
                 <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
             <div class="viewBy">
@@ -153,7 +153,7 @@
                 }
             },
             changeView() {
-                console.log(this.params)
+                this.disableFinish=true;
                 if (this.params.view === '1') {
                     this.getData(this.$db.order.overviewByOrder)
                 } else {
@@ -181,8 +181,16 @@
                 }
             },
             finish() {
-                this.$ajax.post(this.$apis.post_finishPost, {
-                    ids: this.selectedNumber
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.ORDER_FINISH, {
+                    draftCustomer: false,
+                    draftSupplier: false,
+                    ids:ids,
+                    recycleCustomer: false,
+                    recycleSupplier: false,
                 })
                     .then((res) => {
                         console.log(res)
@@ -275,8 +283,19 @@
         },
         watch: {
             selectedList(n){
-                if(n.length>0 && this.params.status==='3' && this.params.view==='1'){
-                    this.disableFinish=false;
+                if(this.params.view==='1'){
+                    if(n.length>0){
+                        console.log(n)
+                        let allow=true;
+                        _.map(n,v=>{
+                            if(v.status.value!=='3'){
+                                allow=false;
+                            }
+                        });
+                        this.disableFinish=(allow?false:true);
+                    }else{
+                        this.disableFinish=true;
+                    }
                 }else{
                     this.disableFinish=true;
                 }
