@@ -1,6 +1,6 @@
 <template>
   <div class="create-inquiry">
-    <h3 class="hd">{{ $route.query.id?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
+    <h3 class="hd">{{ $route.query.id && $route.query.from !== 'copy'?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
     <div class="select-wrap">
       <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
       <el-form ref="ruleform" :model="fromArg">
@@ -12,36 +12,31 @@
             :sm="item.sm || 8"
             :md="item.md || 8"
             :lg="item.lg || 8"
-            v-if="!item._inquiryHide && !item._hide"
-          >
+            v-if="!item._inquiryHide && !item._hide">
             <el-form-item
               :label="item.label"
               :prop="item.key"
               :rules="item.rules"
-              :label-width="item.width || '150px'"
-            >
+              :label-width="item.width || '150px'">
               <el-input
                 v-model="fromArg[item.key]"
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-if="item.type === 'String' && !item._hide && item.types !== 'textarea'"
-                :disabled="item.disabled"
-              />
+                :disabled="item.disabled"/>
               <el-select
                 v-model="fromArg[item.key]"
                 value-key="id"
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
-                style="width:100%;"
-              >
+                style="width:100%;">
                 <el-option
                   v-for="items in selectAll[item.key]"
                   :key="items.id"
                   :label="items.name"
                   :value="items.code"
-                  :id="items.id"
-                />
+                  :id="items.id"/>
               </el-select>
 
               <el-select
@@ -50,15 +45,13 @@
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
                 v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
-                style="width:100%;"
-              >
+                style="width:100%;">
                 <el-option
                   v-for="items in selectAll[item.key]"
                   :key="items.id"
                   :label="items.name"
                   :value="items.code"
-                  :id="items.id"
-                />
+                  :id="items.id"/>
               </el-select>
               <el-select
                 style="width:100%;"
@@ -78,8 +71,7 @@
                   :key="items.id"
                   :label="items.name"
                   :value="items"
-                  :id="items.id"
-                />
+                  :id="items.id"/>
               </el-select>
               <el-input
                 type="textarea"
@@ -89,8 +81,7 @@
                 :placeholder="item.placeholder"
                 v-if="item.types === 'textarea'"
                 resize="none"
-                :disabled="item.disabled"
-              />
+                :disabled="item.disabled"/>
               <span v-if="item.type === 'Number'" style="display:flxe;">
                                 <el-input-number v-model="fromArg[item.key]" :min="0" :max="100"
                                                  controls-position="right" size="mini" :controls="false"
@@ -122,8 +113,7 @@
       @change-checked="changeChecked"
       :parId="'skuId'"
       :rowspan="2"
-      :hideFilterColumn="true"
-    />
+      :hideFilterColumn="true"/>
     <div class="bom-btn-wrap">
       <el-button @click="submitForm()">{{ $i.common.submit }}</el-button>
       <el-button @click="submitForm('draft')">{{ $i.common.saveAsDraft }}</el-button>
@@ -146,28 +136,24 @@
         @handleCancel="handleCancel"
         :forceUpdateNumber="trig"
         :type="radio"
-        :isInquiry="true"
-      ></v-product>
+        :isInquiry="true"></v-product>
     </el-dialog>
     <v-history-modify
       @save="save"
-      ref="HM"
-    >
+      ref="HM">
       <el-select
         value-key="id"
         size="mini"
         style="width:100%;"
         slot="transportationWay"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -175,15 +161,13 @@
         style="width:100%;"
         slot="paymentMethod"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -191,15 +175,13 @@
         style="width:100%;"
         slot="destinationCountry"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -207,15 +189,13 @@
         style="width:100%;"
         slot="departureCountry"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -223,15 +203,13 @@
         style="width:100%;"
         slot="incoterm"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -239,15 +217,13 @@
         style="width:100%;"
         slot="currency"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <v-up-load slot-scope="attachment"/>
       <el-select
@@ -256,15 +232,13 @@
         style="width:100%;"
         slot="unit"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -272,15 +246,13 @@
         style="width:100%;"
         slot="category"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -288,15 +260,13 @@
         style="width:100%;"
         slot="readilyAvailable"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -304,15 +274,13 @@
         style="width:100%;"
         slot="expirationDateUnit"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -320,15 +288,13 @@
         style="width:100%;"
         slot="fobCurrency"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -336,15 +302,13 @@
         style="width:100%;"
         slot="exwCurrency"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -352,15 +316,13 @@
         style="width:100%;"
         slot="otherIncotermCurrency"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -368,15 +330,13 @@
         style="width:100%;"
         slot="dduCurrency"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -384,15 +344,13 @@
         style="width:100%;"
         slot="unitOfWeight"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -400,15 +358,13 @@
         style="width:100%;"
         slot="unitOfLength"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -416,15 +372,13 @@
         style="width:100%;"
         slot="unitOfVolume"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -432,15 +386,13 @@
         style="width:100%;"
         slot="OEM"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -448,15 +400,13 @@
         style="width:100%;"
         slot="mainsaleCountry"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -464,15 +414,13 @@
         style="width:100%;"
         slot="yearOfListed"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -480,15 +428,13 @@
         style="width:100%;"
         slot="useDisplayBoxOrNot"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
       <el-select
         value-key="id"
@@ -496,15 +442,13 @@
         style="width:100%;"
         slot="adjustSkuAndPackageOrNot"
         slot-scope="{data}"
-        v-model="data.dataBase"
-      >
+        v-model="data.dataBase">
         <el-option
           v-for="items in selectAll[data.transForm]"
           :key="items.id"
           :label="items.name"
           :value="items.code"
-          :id="items.id"
-        />
+          :id="items.id"/>
       </el-select>
     </v-history-modify>
   </div>
@@ -599,9 +543,14 @@
             } else {
               res.suppliers = [];
             }
-            ;
-            delete res.companyId;
-            delete res.id;
+            if(this.$route.query.from === 'copy') {
+              delete res.id;
+              delete res.orderNo;
+              delete res.tenantId;
+              delete res.companyId;
+              delete res.inquiryNo;
+              delete res.quotationNo;
+            }
             this.fromArg = res;
             this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
           });

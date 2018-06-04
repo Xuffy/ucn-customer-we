@@ -95,9 +95,9 @@
     "invoiceDate": "商业发票日期",
     "orderReceivedDate": "订单收到日期",
     "orderAcceptedDate": "订单确认日期",
-    "freightToCountryUah": "国际货运，乌克兰",
-    "freightInlandUah": "国内货运，乌克兰",
-    "insuranseUah ": "保险，乌克兰",
+    "freightToCountryUah": "国际货运",
+    "freightInlandUah": "国内货运",
+    "insuranseUah ": "保险",
     "container": "集装箱号",
     "truckNumber": "货车号码",
     "shipServiceProvider": "发运服务商"

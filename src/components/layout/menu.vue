@@ -13,7 +13,7 @@
         </div>
 
         <el-menu-item v-for="(item,index) in $store.state.quickLink.list" :index="'1-' + index" :key="index">
-          <router-link :to="item.link">
+          <router-link :to="item.link || '/'">
             <el-tooltip :disabled="!$store.state.layout.hideMenu" effect="dark" :content="item.label" placement="right">
               <i class="iconfont" :class="[item.icon || 'icon-sousuo']"></i>
             </el-tooltip>

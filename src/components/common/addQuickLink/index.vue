@@ -37,7 +37,7 @@
    *  <v-table></v-table>
    */
 
-  // import {mapState} from 'vuex'
+  import {mapState} from 'vuex'
 
   export default {
     name: 'VAddQuickLink',
@@ -56,14 +56,16 @@
         checkedList: [],
       }
     },
-    computed: {},
+    computed: {
+      // ...mapState({
+      //   quickLink:state => state.quickLink.list
+      // })
+    },
     watch: {},
     mounted() {
-      this.getQuickLink();
     },
     methods: {
       getQuickLink() {
-        // this.$store.state.quickLink.list = this.$db.common.quickLink;
         this.$ajax.post(this.$apis.ITEMFAVORITE_PART, ['QUICK_LINK'])
           .then((data) => {
             let list = [];

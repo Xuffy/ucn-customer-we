@@ -7,7 +7,7 @@
                  @click="$store.state.quickLink.show = true"></el-button>
       <br/>
       <el-button size="mini" v-for="item in $store.state.quickLink.list" :key="item.id">
-        <router-link :to="item.link">
+        <router-link :to="item.link || '/'">
           {{item.label}}
         </router-link>
       </el-button>

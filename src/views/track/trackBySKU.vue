@@ -14,26 +14,35 @@
               :searchLoad="searchLoad">
             </select-search>
           </div>
-          </div>
-            <v-table :data="dataList" :height="500"></v-table>
         </div>
+            <v-table 
+            :data="dataList" 
+            :height="500"
+            :loading='loading'></v-table>
+             <page
+              :page-data="pageData"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"></page>
     </div>
 </template>
 
 <script>
-  import { VTable,selectSearch } from '@/components/index'
+  import { VTable,selectSearch,VPagination } from '@/components/index'
 
     export default {
         name: "track-track",
         components:{
           selectSearch,
-          VTable
+          VTable,
+          page:VPagination
         },
         data(){
             return{
                 dataList: [],
                 searchLoad: false,
+                loading: false,
                 searchId:'1',
+                pageData:{},
                 params:{
                     pn: 1,
                     ps: 10,
@@ -52,8 +61,15 @@
             getSort(val, key) {
                 console.log(val, key)
             },
+            handleSizeChange(val) {
+                this.params.pn = val;
+                this.getList();
+            },
+            pageSizeChange(val) {
+                this.params.ps = val;
+                this.getList();
+            },
             inputEnter(val) {
-              console.log(val)
               if (!val.keyType) return this.$message('请选中搜索类型');
               if (!val.key) return this.$message('搜索内容不能为空');
               if (val.keyType == '1') {
@@ -62,18 +78,20 @@
               this.getList()
             },
             getList() {
-              this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
-                  console.log(res)
-                this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-                  // _.mapObject(item, val => {
-                  //   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                  //   return val
-                  // })
+                this.loading = true;
+                this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
+                    this.loading = false;
+                    this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
+                    // _.mapObject(item, val => {
+                    //   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                    //   return val
+                    // })
 
-                  return item;
+                    return item;
                 });
+                this.pageData=res;
               }).catch(err=>{
-                console.log(err)
+                this.loading = false;
               });
             }
         },
