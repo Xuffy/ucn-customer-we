@@ -68,7 +68,7 @@ export default {
      post_country:['/country/all','UMETA_URL'],
      post_logisticsport:['/logisticsport/query','UMETA_URL'],
      get_currency:['/currency/all','UMETA_URL'],
-
+     CURRENCY_ALL:['/currency/all','UMETA_URL'],
 
 
 
@@ -83,5 +83,8 @@ export default {
     ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
     ORDER_FINISH:['/order/finish','BASE_HCJ','UPURCHASE_URL'],
     PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME:['/purchase/supplier/listSupplierByName','BASE_HCJ','UPURCHASE_URL'],
-    INQUIERY_LIST:['/inquiry/list','BASE_HCJ','UPURCHASE_URL']
+    INQUIERY_LIST:['/inquiry/list','BASE_HCJ','UPURCHASE_URL'],
+    ORDER_SKUS:['/order/skus','BASE_HCJ','UPURCHASE_URL'],
+    ORDER_SKUHISTORY:['/order/skuHistory','BASE_HCJ','UPURCHASE_URL'],
+
 }

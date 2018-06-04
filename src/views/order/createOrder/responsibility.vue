@@ -85,8 +85,6 @@
             return {
                 tableData: [{
                     type: '0',
-                    id: '',
-                    orderId: '',
                     customer: '',
                     supplier: '',
                     remark: '',

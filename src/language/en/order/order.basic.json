@@ -14,5 +14,9 @@
   "quickCreate":"Quick Create",
   "shipped":"Shipped",
   "exchangeRate":"Exchange Rate",
-  "responsibility":"Responsibility"
+  "responsibility":"Responsibility",
+  "productInfoBig":"Product Info",
+  "addProduct":"Add Product",
+  "remove":"Remove",
+  "remarks":"Remark"
 }

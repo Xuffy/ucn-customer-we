@@ -109,15 +109,112 @@
         <div class="title">
             {{$i.order.responsibility}}
         </div>
+        <el-table
+                :data="orderForm.responsibilityList"
+                style="width: 100%">
+            <el-table-column
+                    prop="type"
+                    label="Type">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.type==='0'">{{$i.order.needLabelDesignInfoDate}}</span>
+                    <span v-if="scope.row.type==='1'">{{$i.order.labelDesignDate}}</span>
+                    <span v-if="scope.row.type==='2'">{{$i.order.designNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type==='3'">{{$i.order.receiveSampleDate}}</span>
+                    <span v-if="scope.row.type==='4'">{{$i.order.sampleNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type==='5'">{{$i.order.otherResponsibility}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="customer"
+                    align="center"
+                    label="Me">
+                <template slot-scope="scope">
+                    <el-date-picker
+                            v-model="scope.row.customer"
+                            align="right"
+                            type="date"
+                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :placeholder="$i.order.pleaseChoose"
+                            :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="supplier"
+                    align="center"
+                    label="Supplier">
+                <template slot-scope="scope">
+                    <el-date-picker
+                            v-model="scope.row.supplier"
+                            align="right"
+                            type="date"
+                            :disabled="true"
+                            :placeholder="$i.order.pleaseChoose"
+                            :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="Remark"
+                    align="center"
+                    label="Remark">
+                <template slot-scope="scope">
+                    <el-input
+                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :placeholder="$i.order.pleaseInput"
+                            v-model="scope.row.remark"
+                            clearable>
+                    </el-input>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="actualDate"
+                    align="center"
+                    label="Actual Date">
+                <template slot-scope="scope">
+                    <el-date-picker
+                            v-model="scope.row.actualDt"
+                            align="right"
+                            type="date"
+                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :placeholder="$i.order.pleaseChoose"
+                            :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </template>
+            </el-table-column>
+        </el-table>
 
-
+        <div class="title">
+            {{$i.order.productInfoBig}}
+        </div>
+        <v-table
+                :height="500"
+                :data.sync="productTableData"
+                :buttons="productInfoBtn"
+                @action="productInfoAction"
+                :loading='loadingProductTable'
+                @change-checked="changeProductChecked"
+                :rowspan="2"
+                :total-row="tableTotal">
+            <template slot="header">
+                <div class="btns">
+                    <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
+                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
+                    <selectSearch
+                            class="speSearch"
+                            :options=options
+                            v-model='selectSearch'
+                            @inputEnter="inputEnter">
+                    </selectSearch>
+                </div>
+            </template>
+        </v-table>
 
         <div class="footBtn">
             <el-button @click="send" type="primary">{{$i.order.send}}</el-button>
             <el-button type="primary">{{$i.order.saveAsDraft}}</el-button>
             <el-button type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
-
 
         <el-dialog
             title=""
@@ -148,13 +245,74 @@
                     :page-data="pageData"></page>
         </el-dialog>
 
+        <el-dialog
+                :title="$i.order.addProduct"
+                :visible.sync="productTableDialogVisible"
+                width="70%">
+            <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
+                <el-tab-pane :label="$i.order.fromNewSearch" name="product">
+                    <v-product
+                            :forceUpdateNumber="updateProduct"
+                            :hideBtn="true"
+                            :type="type1"
+                            @handleOK="handleProductOk"></v-product>
+                </el-tab-pane>
+                <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
+                    <v-product :forceUpdateNumber="updateBookmark" :hideBtn="true" :type="type2"></v-product>
+                </el-tab-pane>
+            </el-tabs>
+
+
+
+
+        </el-dialog>
+
+        <v-history-modify
+                @save="saveNegotiate"
+                ref="HM">
+            <div slot="skuPic" slot-scope="{data}">
+                <v-upload :limit="20"></v-upload>
+            </div>
+
+            <el-select
+                    slot="skuFobCurrency"
+                    slot-scope="{data}"
+                    v-model="data.value"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in currencyOption"
+                        :key="item.id"
+                        :label="item.code"
+                        :value="item.code">
+                </el-option>
+            </el-select>
+
+
+            <!--<el-select-->
+                    <!--value-key="id"-->
+                    <!--size="mini"-->
+                    <!--style="width:100%;"-->
+                    <!--slot="transportationWay"-->
+                    <!--slot-scope="{data}"-->
+                    <!--v-model="data.dataBase">-->
+                <!--<el-option-->
+                        <!--v-for="items in selectAll[data.transForm]"-->
+                        <!--:key="items.id"-->
+                        <!--:label="items.name"-->
+                        <!--:value="items.code"-->
+                        <!--:id="items.id"-->
+                <!--/>-->
+            <!--</el-select>-->
+        </v-history-modify>
 
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
+    import VProduct from '@/views/product/addProduct';
 
     export default {
         name: "createOrder",
@@ -162,12 +320,20 @@
             VTable,
             page:VPagination,
             selectSearch,
-            VUpload
+            VUpload,
+            VProduct,
+            VHistoryModify
         },
         data(){
             return{
-                value:'',
                 options:[],
+                /**
+                 * 字典配置
+                 * */
+                currencyOption:[],
+
+
+
                 /**
                  * 页面基础配置
                  * */
@@ -198,6 +364,23 @@
                     }]
                 },
                 quickCreateDialogVisible:false,
+                tableData:[],
+                selectSearch:'',
+                productInfoBtn:[
+                    {
+                        label: 'Negotiate',
+                        type: 'negotiate'
+                    },
+                    {
+                        label: 'Detail',
+                        type: 'detail'
+                    }
+                ],
+                loadingProductTable:false,
+                tableTotal:[],
+                activeTab:'product',
+                selectProductInfoTable:[],
+
 
                 /**
                  * 弹出框data配置
@@ -219,6 +402,17 @@
                     ps: 50,
                     sorts: [],
                 },
+
+                /**
+                 * 选择产品弹出框data
+                 * */
+                productTableDialogVisible:false,
+                type1:'product',
+                type2:'bookmark',
+                updateProduct:0,
+                updateBookmark:0,
+                productTableData:[],
+
 
                 /**
                  * 字典配置
@@ -311,28 +505,53 @@
                     remind: true,
                     responsibilityList: [
                         {
-                            actualDt: "2018-06-01T01:37:58.742Z",
-                            companyId: 0,
-                            customer: "string",
-                            entryDt: "2018-06-01T01:37:58.742Z",
-                            entryId: 0,
-                            entryName: "string",
-                            fieldsRemark: "string",
-                            fieldsUpdate: "string",
-                            id: 0,
-                            orderId: 0,
-                            orderNo: "string",
-                            ownerId: 0,
-                            remark: "string",
-                            supplier: "string",
-                            tenantId: 0,
-                            timeZone: "string",
-                            type: 0,
-                            updateDt: "2018-06-01T01:37:58.742Z",
-                            updateId: 0,
-                            updateName: "string",
-                            version: 0
-                        }
+                            type: '0',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
+                        {
+                            type: '1',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
+                        {
+                            type: '2',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
+                        {
+                            type: '3',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
+                        {
+                            type: '4',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
+                        {
+                            type: '5',
+                            customer: '',
+                            supplier: '',
+                            remark: '',
+                            actualDt: '',
+                            orderNo:''
+                        },
                     ],
                     skuBarCode: "string",
                     skuCode: "string",
@@ -595,6 +814,67 @@
                 });
             },
 
+            /**
+             * product info事件
+             * */
+            productInfoAction(e,type){
+                if(type==='negotiate'){
+                    // console.log(e.skuId.value)
+                    // console.log(this.productTableData,'productTableData')
+                    let arr=[];
+                    _.map(this.productTableData,v=>{
+                        if(v.skuId.value===e.skuId.value){
+                            arr.push(v);
+                        }
+                    });
+                    this.$refs.HM.init(arr,[]);
+                }else if(type==='detail'){
+                    console.log(e)
+                    alert('判断是否是bookmark')
+                    // this.$windowOpen({
+                    //     url:''
+                    // })
+                }
+            },
+            changeProductChecked(e){
+                this.selectProductInfoTable=e;
+            },
+            addProduct(){
+                this.productTableDialogVisible=true;
+                this.activeTab='product';
+                this.updateProduct=Math.random();
+            },
+            removeProduct(){
+                console.log(this.productTableData,'productTableData')
+            },
+            handleClick(tab){
+                if(tab.index==='0'){
+                    this.updateProduct=Math.random();
+                }else if(tab.index==='1'){
+                    this.updateBookmark=Math.random();
+                }
+            },
+            handleProductOk(e){
+                this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
+                    this.productTableData=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuId'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks
+                        }
+                    });
+                }).catch(err=>{
+
+                });
+            },
+            saveNegotiate(e){
+                _.map(this.productTableData,(v,k)=>{
+                    _.map(e,m=>{
+                        if(m.skuId.value===v.skuId.value && m.label.value===v.label.value){
+                            this.productTableData.splice(k,1,m)
+                        }
+                    })
+                })
+            },
+
 
             /**
              * quick create弹出框事件
@@ -615,10 +895,27 @@
                 console.log(e)
             },
 
+
+
             getUnit(){
                 // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
                 //     console.log(res)
                 // });
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{_cache:true})
+                    .then(res=>{
+                        this.currencyOption=res;
+                    }).finally(err=>{
+
+                    }
+                );
+            },
+
+
+            /**
+             * 搜索框事件
+             * */
+            inputEnter(e){
+                console.log(e)
             },
 
 
@@ -636,7 +933,60 @@
         },
         created(){
             this.getOrderNo();
-
+            // this.a={
+            //     "201804":{
+            //         "0401":[
+            //             {
+            //                 desc:'1',
+            //                 num:10,
+            //             },
+            //             {
+            //                 desc:'2',
+            //                 num:20
+            //             }
+            //         ],
+            //         "0402":[
+            //             {
+            //                 desc:'1',
+            //                 num:10,
+            //             },
+            //             {
+            //                 desc:'2',
+            //                 num:20
+            //             }
+            //         ],
+            //     },
+            //     "201805":{
+            //         "0501":[
+            //             {
+            //                 desc:'1',
+            //                 num:10,
+            //             },
+            //             {
+            //                 desc:'2',
+            //                 num:20
+            //             }
+            //         ],
+            //         "0502":[
+            //             {
+            //                 desc:'1',
+            //                 num:10,
+            //             },
+            //             {
+            //                 desc:'2',
+            //                 num:20
+            //             }
+            //         ]
+            //     },
+            // };
+            // console.log(a)
+            // for(let key in a){
+            //     for(let inKey in a[key]){
+            //         a[key][inKey].forEach(v=>{
+            //             console.log(v)
+            //         })
+            //     }
+            // }
         },
     }
 </script>
@@ -648,12 +998,17 @@
         height: 32px;
         line-height: 32px;
         color:#666666;
+        margin-top: 10px;
     }
     .speInput{
         width: 80%;
     }
     .speNumber >>> input{
         text-align: left;
+    }
+    .speSearch{
+        float: right;
+        margin-right: 70px;
     }
 
     .footBtn{
