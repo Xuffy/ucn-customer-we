@@ -43,18 +43,18 @@
                             align="right"
                             :type="cItem.operator === 'between' ? 'daterange' : 'date'"
                             :editable="false"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            placeholder="选择日期">
+                            :start-placeholder="$i.element.startDate"
+                            :end-placeholder="$i.element.endDate"
+                            :placeholder="$i.element.selectionDate">
             </el-date-picker>
             <el-date-picker v-if="cItem.dataType === 5"
                             v-model="cItem.value"
                             align="right"
                             :type="cItem.operator === 'between' ? 'datetimerange' : 'datetime'"
                             :editable="false"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            placeholder="选择日期">
+                            :start-placeholder="$i.element.startDate"
+                            :end-placeholder="$i.element.endDate"
+                            :placeholder="$i.element.selectionDate">
             </el-date-picker>
 
           </div>
@@ -73,6 +73,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="visible = false">{{$i.common.cancel}}</el-button>
+        <el-button @click="submitFilter(true)">{{$i.table.reset}}</el-button>
         <el-button type="primary" @click="submitFilter">{{$i.common.confirm}}</el-button>
       </div>
     </el-dialog>
@@ -82,15 +83,16 @@
 <script>
 
   import VFilterColumn from './filterColumn'
+  import lang from '../../../language/index';
 
   const operators = [
-    {value: '=', label: '等于'},
-    {value: '>', label: '大于'},
-    {value: '>=', label: '大于等于'},
-    {value: '<', label: '大于'},
-    {value: '<=', label: '小于等于'},
-    {value: 'like', label: '包含'},
-    {value: 'between', label: '区间'}
+    {value: '=', label: lang.table.equal},
+    {value: '>', label: lang.table.greater},
+    {value: '>=', label: lang.table.greaterAndEqual},
+    {value: '<', label: lang.table.less},
+    {value: '<=', label: lang.table.lessAndEqual},
+    {value: 'like', label: lang.table.like},
+    {value: 'between', label: lang.table.between}
   ];
 
   export default {
@@ -189,22 +191,27 @@
         });*/
         this.$emit('filter-column', val);
       },
-      submitFilter() {
+      submitFilter(type) {
         let operatorFilters = []
           , sorts = [];
-        for (let i = 0; i < this.conditionList.length; i++) {
-          let val = this.conditionList[i]
-            , {operator, property, value, sort} = val;
 
-          if ((!operator || !property || !value) && !sort) {
-            this.$message({
-              message: this.$i.table.checkData,
-              type: 'warning'
-            });
-            return false;
+        if (!type){
+          for (let i = 0; i < this.conditionList.length; i++) {
+            let val = this.conditionList[i]
+              , {operator, property, value, sort} = val;
+
+            if ((!operator || !property || !value) && !sort) {
+              this.$message({
+                message: this.$i.table.checkData,
+                type: 'warning'
+              });
+              return false;
+            }
+            sort && sorts.push({orderBy: property, orderType: sort});
+            operator && operatorFilters.push({property, operator, value});
           }
-          sort && sorts.push({orderBy: property, orderType: sort});
-          operator && operatorFilters.push({property, operator, value});
+        }else {
+          this.conditionList = this.$options.data().conditionList;
         }
         this.visible = false;
         this.$emit('filter-value', {operatorFilters, sorts});
