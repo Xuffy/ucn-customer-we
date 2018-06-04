@@ -1,6 +1,6 @@
 <template>
   <div class="create-inquiry">
-    <h3 class="hd">{{ $route.query.id?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
+    <h3 class="hd">{{ $route.query.id && $route.query.from !== 'copy'?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
     <div class="select-wrap">
       <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
       <el-form ref="ruleform" :model="fromArg">
