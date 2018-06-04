@@ -149,7 +149,7 @@
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture,VImage},
+    components: {VTableFilter, VViewPicture, VImage},
     props: {
       data: {
         type: Array,
@@ -551,5 +551,12 @@
     right: 0;
     top: 50%;
     margin-top: -10px;
+  }
+  .ucn-table /deep/ .ucn-image .image,
+  .ucn-table /deep/ .ucn-image {
+    position: initial;
+  }
+  .ucn-table /deep/ .ucn-image > i{
+    display: none;
   }
 </style>
