@@ -19,7 +19,7 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button> -->
+          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
           <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
           <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
