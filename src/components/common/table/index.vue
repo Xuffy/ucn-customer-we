@@ -225,6 +225,7 @@
       },
     },
     mounted() {
+
       this.setDataList(this.data, true);
       // this.dataList = this.data;
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
@@ -552,11 +553,13 @@
     top: 50%;
     margin-top: -10px;
   }
+
   .ucn-table /deep/ .ucn-image .image,
   .ucn-table /deep/ .ucn-image {
     position: initial;
   }
-  .ucn-table /deep/ .ucn-image > i{
+
+  .ucn-table /deep/ .ucn-image > i {
     display: none;
   }
 </style>
