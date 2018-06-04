@@ -27,13 +27,11 @@
             @action="action"
             @change-checked="changeChecked"
             :height="450"
-            :page-total="pageTotal"
-        />
+            :page-total="pageTotal"/>
         <v-pagination
             :page-data.sync="bodyData"
             @change="handleSizeChange"
-            @size-change="pageSizeChange"
-        />
+            @size-change="pageSizeChange"/>
     </div>
 </template>
 <script>
@@ -65,7 +63,7 @@
                     //     resultMapId: '',
                     //     value: {}
                     // },
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     tc: 0,
                     draft: 1,

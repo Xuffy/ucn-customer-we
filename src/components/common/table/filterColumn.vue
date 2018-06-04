@@ -91,14 +91,17 @@
         this.loading = true;
 
         _.map(selected, value => {
-          let {bizCode, id} = value;
-          params.push({bizCode, gridFieldId: id});
+          let {bizCode, id, seqNum} = value;
+          params.push({bizCode, seqNum, gridFieldId: id});
         });
 
 
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
 
+          })
+          .finally(() => {
+            this.loading = false;
           });
         /*setTimeout(() => {
           this.loading = false;

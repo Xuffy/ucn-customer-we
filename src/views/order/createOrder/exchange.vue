@@ -21,7 +21,8 @@
         name: 'exchange',
         data() {
             return {
-                exchangeRateList: [{
+                exchangeRateList: [
+                    {
                         currency: "CNY|USD",
                         exchangeRate: ''
                     },

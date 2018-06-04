@@ -26,7 +26,7 @@
             <div class="btn-wrap">
                 <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
                 <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.finish}}</el-button>
+                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.shipped}}</el-button>
                 <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
             </div>
             <div class="viewBy">
@@ -79,7 +79,7 @@
             dropDown,
             VTable,
             selectSearch,
-            page: VPagination
+            page: VPagination,
         },
         data() {
             return {
@@ -147,15 +147,15 @@
             changeStatus() {
                 console.log(this.params)
                 if (this.params.view === '1') {
-                    this.getData(this.$db.order.overview);
+                    this.getData(this.$db.order.overviewByOrder);
                 } else {
                     this.getData(this.$db.order.overviewBysku);
                 }
             },
             changeView() {
-                console.log(this.params)
+                this.disableFinish=true;
                 if (this.params.view === '1') {
-                    this.getData(this.$db.order.overview)
+                    this.getData(this.$db.order.overviewByOrder)
                 } else {
                     this.getData(this.$db.order.overviewBysku)
                 }
@@ -166,7 +166,7 @@
                     this.params.orderNo = val.key;
                     this.params.skuCode = '';
                     if (this.params.view === '1') {
-                        this.getData(this.$db.order.overview)
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
                         this.getData(this.$db.order.overviewBysku)
                     }
@@ -174,15 +174,23 @@
                     this.params.orderNo = '';
                     this.params.skuCode = val.key;
                     if (this.params.view === '1') {
-                        this.getData(this.$db.order.overview)
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
                         this.getData(this.$db.order.overviewBysku)
                     }
                 }
             },
             finish() {
-                this.$ajax.post(this.$apis.post_finishPost, {
-                    ids: this.selectedNumber
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.ORDER_FINISH, {
+                    draftCustomer: false,
+                    draftSupplier: false,
+                    ids:ids,
+                    recycleCustomer: false,
+                    recycleSupplier: false,
                 })
                     .then((res) => {
                         console.log(res)
@@ -208,7 +216,7 @@
                 })
                     .then((res) => {
                         if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overview)
+                            this.getdata(this.$db.order.overviewByOrder)
                         } else {
                             this.getdata(this.$db.order.overviewBysku)
                         }
@@ -243,7 +251,7 @@
                             this.orderStatusOption = v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overview);
+                    this.getData(this.$db.order.overviewByOrder);
                 })
             },
 
@@ -275,8 +283,19 @@
         },
         watch: {
             selectedList(n){
-                if(n.length>0 && this.params.status==='3' && this.params.view==='1'){
-                    this.disableFinish=false;
+                if(this.params.view==='1'){
+                    if(n.length>0){
+                        console.log(n)
+                        let allow=true;
+                        _.map(n,v=>{
+                            if(v.status.value!=='3'){
+                                allow=false;
+                            }
+                        });
+                        this.disableFinish=(allow?false:true);
+                    }else{
+                        this.disableFinish=true;
+                    }
                 }else{
                     this.disableFinish=true;
                 }

@@ -45,7 +45,7 @@
                     //     resultMapId: '',
                     //     value: {}
                     // },
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     // sorts: [
                     //     {

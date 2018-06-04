@@ -378,7 +378,21 @@ export const routerMap = [
             name: $i.router.orderCreate
           },
           component: () => import('../views/order/createOrder/createOrder.vue')
-        }, {
+        },
+          //测试页面
+        {
+          path: 'creates',
+          name: 'orderCreates',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: $i.router.orderCreate
+          },
+          component: () => import('../views/order/createOrder/index.vue')
+        },
+
+          {
           path: 'detail',
           name: 'Order Detail',
           meta: {

@@ -1,4 +1,7 @@
 export default {
+    /**
+     * basic info
+     * */
     orderNo:{
         type:'input',
         belong:'basicInfo',
@@ -32,14 +35,15 @@ export default {
         belong:'basicInfo',
         isSupplier:true
     },
-    supplierCode:{  //供应商编号
-        type:'select',
-        belong:'basicInfo',
-    },
+    // supplierCode:{  //供应商编号
+    //     type:'select',
+    //     belong:'basicInfo',
+    // },
     quotationNo:{
         type:'input',
         belong:'basicInfo',
-        disabled:true
+        disabled:true,
+        isQuotationNo:true
     },
     status:{
         type:'select',
@@ -110,7 +114,26 @@ export default {
         belong:'basicInfo',
         fullLine:true
     },
+    attachment:{
+        type:'attachment',
+        belong:'basicInfo',
+        fullLine:true
+    },
 
-
+    /**
+     * exchange Rate
+     * */
+    cnyToUsd:{
+        key:'CNY|USD',
+        belong:'exchangeRate'
+    },
+    cnyToEur:{
+        key:'CNY|EUR',
+        belong:'exchangeRate'
+    },
+    usdToEur:{
+        key:'USD|EUR',
+        belong:'exchangeRate'
+    },
 
 }
