@@ -544,8 +544,12 @@
               res.suppliers = [];
             }
             if(this.$route.query.from === 'copy') {
-              delete res.companyId;
               delete res.id;
+              delete res.orderNo;
+              delete res.tenantId;
+              delete res.companyId;
+              delete res.inquiryNo;
+              delete res.quotationNo;
             }
             this.fromArg = res;
             this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
