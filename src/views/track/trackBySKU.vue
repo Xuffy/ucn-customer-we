@@ -19,7 +19,7 @@
             :data="dataList" 
             :height="500"
             :loading='loading'></v-table>
-             <page
+            <page
               :page-data="pageData"
               @change="handleSizeChange"
               @size-change="pageSizeChange"></page>

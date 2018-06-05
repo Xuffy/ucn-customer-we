@@ -96,6 +96,18 @@
     "totalSkuRoughWeight": "total sku rough weight",
     "totalSkuVolume": "total sku volume",
     "loadingDate": "loading date",
-    "dateOfBL": "date of BL"
+    "dateOfBL": "date of BL",
+
+    "address": "address",
+    "contactInfo": "contact info",
+    "province": "province",
+    "receiveCountry": "receiver country",
+    "receiveProvince": "receiver province",
+    "receiveCity": "receiver city",
+    "addRemark": "add remark",
+    "orderHistory": "Order history",
+    "time":"time",
+    "version": "version",
+    "id": "id"
  
 }
