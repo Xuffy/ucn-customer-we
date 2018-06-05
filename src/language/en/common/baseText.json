@@ -3,8 +3,6 @@
     "save": "Save",
     "delete": "Delete",
     "ok": "OK",
-    "yes": "YES",
-    "no": "No",
     "state": "State",
     "cancel": "Cancel",
     "viewBy": "View by",
@@ -83,6 +81,8 @@
     "downloadBig":"Download",
     "negotiate": "Negotiate",
     "detail": "Detail",
-    "histoty": "History"
+    "histoty": "History",
+    "yes": "YES",
+    "no": "No"
 }
 
