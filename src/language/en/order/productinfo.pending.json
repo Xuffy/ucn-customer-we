@@ -103,7 +103,6 @@
     "skuSampleQty": "Sample Quantity",
     "skuSamplePrice": "Sample Price",
     "skuDeliveredQty": "Delivered Quantity",
-    "skuDeliveredDate": "Delivery Date",
     "skuUndeliveredQty": "Undelivered Quantity",
     "skuQuotationNo": "Quotation No.",
     "skuRemarkOne": "Remark 1",
@@ -114,6 +113,7 @@
     "skuAdditionalThree": "Additional Pic 3",
     "skuAdditionalFour": "Additional Pic 4",
     "skuUntestedQty": "Qualified products total QTYS",
-    "skuQualifiedQty": "Uninspected QC SKU Quantity"
+    "skuQualifiedQty": "Uninspected QC SKU Quantity",
+    "skuDeliveredDate": "Delivery Date"
 
 }

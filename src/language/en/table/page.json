@@ -11,6 +11,7 @@
   "desc": "Desc",
   "tableFilter": "Table filter",
   "selectTheColumn": "select the column",
-  "selectionOperation": "selection operation"
+  "selectionOperation": "selection operation",
+  "action": "Action"
 }
 

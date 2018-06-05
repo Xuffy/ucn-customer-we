@@ -18,11 +18,11 @@
     "skuQty": "数量",
     "skuPrice": "产品总金额",
     "skuRateValueAddedTax": "增值税率%",
-
+    
     "skuTaxRefundRate": "退税率%",
-
-
-
+   
+    
+    
     "skuColourEn": "英文颜色",
     "skuColourCn": "中文颜色",
     "skuMinOrderQty": "起订量",
@@ -102,7 +102,6 @@
     "skuSampleQty": "样品数量",
     "skuSamplePrice": "样品价格",
     "skuDeliveredQty": "发运数量",
-    "skuDeliveredQty": "订单交货日期",
     "skuUndeliveredQty": "未发运数",
     "skuQuotationNo": "询价单号",
     "skuRemarkOne": "备注",
@@ -113,6 +112,7 @@
     "skuAdditionalThree": "附图3",
     "skuAdditionalFour": "附图4",
     "skuUntestedQty": "合格产品数",
-    "skuQualifiedQty": "未验货数量"
+    "skuQualifiedQty": "未验货数量",
+    "skuDeliveredDate": "Delivery Date"
 
 }
