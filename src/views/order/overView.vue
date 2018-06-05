@@ -44,7 +44,7 @@
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
-                        <el-radio-group style="margin-left: 10px" v-model="params.view" size="mini" @change='changeView'>
+                        <el-radio-group style="margin-left: 10px" v-model="view" size="mini" @change='changeView'>
                             <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
                             <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
                         </el-radio-group>
@@ -89,6 +89,7 @@
                 /**
                  * 页面基本data
                  * */
+                view:'1',
                 pageData: {},
                 value: '',
                 keyWord: '',
@@ -111,7 +112,7 @@
                     orderNo: '',
                     skuCode: '',
                     status: '',
-                    view: '1', //view by的按钮组
+                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
                 },
@@ -157,7 +158,7 @@
             },
             changeView() {
                 this.disableFinish=true;
-                if (this.params.view === '1') {
+                if (this.view === '1') {
                     this.getData(this.$db.order.overviewByOrder)
                 } else {
                     this.getData(this.$db.order.overviewBysku)
@@ -230,8 +231,10 @@
             },
             //get_orderlist数据
             getData(query) {
-                this.loading = true
-                this.$ajax.post(this.$apis.get_orderList, this.params)
+                this.loading = true;
+                let url='';
+                url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
+                this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas);

@@ -11,10 +11,14 @@ export default {
     },
     skuPic:{
         _slot:'skuPic',
-
+        type:'pic'
+        // disabled:true
     },
     skuNameEn:{},
-    skuNameCn:{},
+    skuNameCn:{
+        _slot:'skuNameCn',
+        _disabled:true
+    },
     skuDescCn:{},
     skuDescEn:{},
     skuDescCustomer:{},
@@ -72,7 +76,7 @@ export default {
     skuWidth:{},
     skuHeight:{},
     skuNetWeight:{},
-    skuGrossWeight:{},
+    // skuGrossWeight:{},
     skuVolume:{},
     skuMethodPkgEn:{},
     skuMethodPkgCn:{},
