@@ -193,6 +193,8 @@
   "totalExportPrice": "Total Price Of Export",
   "skuNameCustomer": "Product Description", 
   "ExchangeRateInfoTitle": "Exchange RateInfo",
+  "skuSupplierCompanyId":"SKU Supplier CompanyId",
+  "skuSupplierTenantId":"SKU Supplier TenantId",
   "CNYUSD":"CNY-USD",
   "USDCNY":"USD-CNY",
   "CNYEUR":"CNY-EUR",
