@@ -22,21 +22,7 @@
                 </selectSearch>
             </div>
         </div>
-        <div class="fn">
-            <div class="btn-wrap">
-                <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
-                <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                <el-button :disabled='disableFinish' @click='finish'>{{$i.order.shipped}}</el-button>
-                <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
-            </div>
-            <div class="viewBy">
-                <span>{{$i.order.viewBy}}</span>
-                <el-radio-group style="margin-left: 10px" v-model="params.view" size="mini" @change='changeView'>
-                    <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
-                    <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
-                </el-radio-group>
-            </div>
-        </div>
+
         <!--form-->
         <v-table
                 ref='vtable'
@@ -48,6 +34,23 @@
                 @change-checked='checked'
                 :height="500"
                 style='marginTop:10px'>
+            <template slot="header">
+                <div class="fn">
+                    <div class="btn-wrap">
+                        <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
+                        <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
+                        <el-button :disabled='disableFinish' @click='finish'>{{$i.order.shipped}}</el-button>
+                        <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
+                    </div>
+                    <div class="viewBy">
+                        <span>{{$i.order.viewBy}}</span>
+                        <el-radio-group style="margin-left: 10px" v-model="params.view" size="mini" @change='changeView'>
+                            <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
+                            <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
+                        </el-radio-group>
+                    </div>
+                </div>
+            </template>
         </v-table>
         <page
                 @size-change="changeSize"
@@ -363,11 +366,12 @@
         .fn {
             display: flex;
             justify-content: space-between;
-            padding: 10px 15px;
+            padding: 5px 0;
             box-sizing: border-box;
             .viewBy {
                 display: flex;
                 align-items: center;
+                margin-right: 70px;
                 span {
                     font-size: 14px;
                     color: #666;

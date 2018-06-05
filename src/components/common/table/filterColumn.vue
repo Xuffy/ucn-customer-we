@@ -6,7 +6,7 @@
       @hide="defaultChecked"
       placement="bottom-end"
       trigger="click">
-      <i slot="reference" class="el-icon-setting"></i>
+      <i slot="reference" class="iconfont icon-shezhi"></i>
       <div v-loading="loading">
         <el-input v-model="filterText" placeholder="请输入内容" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
@@ -133,7 +133,7 @@
     display: inline-block;
   }
 
-  .filter-column .el-icon-setting {
+  .filter-column .icon-shezhi {
     font-size: 20px;
     color: #666666;
     cursor: pointer;
