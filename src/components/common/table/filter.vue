@@ -1,12 +1,13 @@
 <template>
   <div class="filter-value">
-    <i class="el-icon-search" @click="visible = !visible" v-if="!hideFilterValue"></i>
+    <i class="iconfont icon-shaixuan" @click="visible = !visible" v-if="!hideFilterValue"></i>
 
     <v-filter-column :data="setFiledData" @filter-column="onFilterColumn"
                      v-if="!hideFilterColumn">
     </v-filter-column>
 
-    <el-dialog :title="$i.table.tableFilter" :visible.sync="visible" width="1000px">
+    <el-dialog :title="$i.table.tableFilter"
+               :visible.sync="visible" width="1000px">
       <ul>
 
         <li class="filter-item" v-for="(cItem,index) in conditionList">
@@ -195,7 +196,7 @@
         let operatorFilters = []
           , sorts = [];
 
-        if (!type){
+        if (!type) {
           for (let i = 0; i < this.conditionList.length; i++) {
             let val = this.conditionList[i]
               , {operator, property, value, sort} = val;
@@ -210,7 +211,7 @@
             sort && sorts.push({orderBy: property, orderType: sort});
             operator && operatorFilters.push({property, operator, value});
           }
-        }else {
+        } else {
           this.conditionList = this.$options.data().conditionList;
         }
         this.visible = false;
@@ -238,7 +239,7 @@
     margin-left: 10px;
   }
 
-  .filter-value .el-icon-search {
+  .filter-value .icon-shaixuan {
     font-size: 20px;
     color: #666666;
     cursor: pointer;

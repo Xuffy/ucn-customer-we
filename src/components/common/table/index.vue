@@ -21,7 +21,7 @@
       </div>
       <div class="fixed-right" v-if="buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
-        action
+        {{$i.table.action}}
       </div>
 
       <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
@@ -41,7 +41,7 @@
               </div>
             </td>
             <td v-if="buttons" ref="tableAction">
-              <div>action</div>
+              <div>{{$i.table.action}}</div>
             </td>
           </tr>
           </thead>
