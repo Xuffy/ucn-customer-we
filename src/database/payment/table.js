@@ -58,5 +58,13 @@ export default {
     _totalRow:{
         _important:true,
         _hide:true
-    }
+    },
+    paymentId: {
+      _important:true,
+      key: 'paymentId'
+    },
+    version: {
+      _important:true,
+      key: 'version'
+    },
   }

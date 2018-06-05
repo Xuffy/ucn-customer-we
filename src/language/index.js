@@ -110,6 +110,9 @@ const json = {
   hintMessage: _.extend({},
     require(`./${lang}/hintMessage/index`)
   ),
+  element: _.extend({},
+    require(`./${lang}/element/date`)
+  ),
 }
 
 export default json;
