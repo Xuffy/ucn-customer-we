@@ -4,8 +4,8 @@
       Department Setting
     </div>
     <div class="body">
-      <el-row>
-        <el-col :span="8">
+      <el-row :gutter="15">
+        <el-col :span="12">
           <div class="card department">
             <div class="title">Department</div>
             <div class="handler">
@@ -60,7 +60,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <div class="card role">
             <div class="title">Role</div>
             <div class="handler">
@@ -117,7 +117,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="8">
+        <!--<el-col :span="8">
           <div class="card">
             <div class="title">Privs</div>
             <div class="handler">
@@ -143,7 +143,7 @@
 
             </div>
           </div>
-        </el-col>
+        </el-col>-->
       </el-row>
     </div>
     <div class="footer">

@@ -1,0 +1,22 @@
+{
+  "orderOverview":"Order Overview",
+  "status":"Status",
+  "all":"All",
+  "order":"Order",
+  "sku":"SKU",
+  "viewBy":"View By",
+  "createOrder":"Create Order",
+  "finish":"Finish",
+  "basicInfo":"Basic Info",
+  "orderNo":"Order No",
+  "send":"Send",
+  "saveAsDraft":"Save As Draft",
+  "quickCreate":"Quick Create",
+  "shipped":"Shipped",
+  "exchangeRate":"Exchange Rate",
+  "responsibility":"Responsibility",
+  "productInfoBig":"Product Info",
+  "addProduct":"Add Product",
+  "remove":"Remove",
+  "remarks":"Remark"
+}
