@@ -61,7 +61,7 @@
                         ref="tree1"
                         highlight-current
                         :filter-node-method="filterNode"
-                        :props="defaultProps" 
+                        :props="defaultProps"
                         @check-change="generalCategoryChange"
                     />
                     <div class="btn-wrap">
@@ -190,7 +190,7 @@
                 if(data.children && data.children.length) return  this.$message({
                     type: 'info',
                     message: this.$i.myCategorycommonDelete
-                }); 
+                });
                 this.$confirm(this.$i.myCategorycommonDeleteTitle, this.$i.myCategorycommonTitle, {
                     confirmButtonText: this.$i.common.ok,
                     cancelButtonText: this.$i.common.cancel,
@@ -212,7 +212,7 @@
                     this.$message({
                         type: 'info',
                         message: this.$i.undelete
-                    });          
+                    });
                 });
             },
             add(data, type) {
@@ -259,7 +259,7 @@
                     if(data.name === value) return this.$message({
                         type: 'info',
                         message: this.$i.common.canTBeEmptys
-                    });  
+                    });
                     this.$ajax.post(`${this.$apis.POST_PURCHASE_UPDATE_CATEGORY}/?name=${value}`, {
                         id: data.id
                     })
@@ -269,7 +269,7 @@
                         // this.mappingRelationDataForEach(this.mappingRelationData, data.id, 'edit', value);
                     });
                 }).catch(() => {
-                           
+
                 });
             },
             genCheckBox(id, list) {
@@ -358,7 +358,7 @@
         display:none;
         margin-right:5px;
     }
-    
+
      >>> .custom-tree-node .icon-wrap {
         width: 100px;
         text-align:right;
@@ -383,7 +383,7 @@
         .mappingRelation {
             font-size:16px;
             color:#666;
-            text-align: center; 
+            text-align: center;
             line-height:50px;
         }
         .category-wrap {
@@ -474,7 +474,7 @@
                 min-width:260px;
                 background:#fff;
                 border:1px solid #e0e0e0;
-                box-shadow: 0 0 30px #e0e0e0;
+                /*box-shadow: 0 0 30px #e0e0e0;*/
                 border-radius: 5px;
                 .category {
                     .input-hd {
@@ -483,7 +483,7 @@
                         padding:10px 15px;
                         border-bottom:1px solid #e0e0e0;
                     }
-                    .el-tree {  
+                    .el-tree {
                         overflow: auto;
                         height: 50vh;
                     }
