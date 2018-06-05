@@ -75,7 +75,7 @@ export default {
     },
     transportationWay: {
         type: "text",
-        disabled: true
+    disabled: true
     },
     loadingType: {
         type: 'text',

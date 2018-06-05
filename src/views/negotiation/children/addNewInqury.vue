@@ -59,7 +59,7 @@
         data() {
             return {
                 checkedData:[],
-                pazeSize: [10, 20, 30, 40, 50, 100],
+                pazeSize: [30, 40, 50, 100],
                 searchLoad: false,
                 options: [{
                     id: 'INQUIRY_NO',
@@ -84,7 +84,7 @@
                     status: null,
                     keyType: '',
                     key: '',
-                    ps: 10,
+                    ps: 50,
                     pn: 1,
                     recycleCustomer: 0,
                     compareInquiryIds: [],

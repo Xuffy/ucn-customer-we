@@ -425,7 +425,6 @@
                     }
                     this.loadingTable=true;
                     this.productForm.recycle=false;
-                    console.log(this.selectCountry,'????')
                     this.$ajax.post(url,this.productForm).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             let noneSellCountry='';
@@ -447,7 +446,6 @@
                             e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
                             return e;
                         });
-                        console.log(this.tableDataList)
                         this.pageData=res;
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{

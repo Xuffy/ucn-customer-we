@@ -24,7 +24,7 @@ export default {
     _hide: true
   },
   tenantId: {
-    _hide: true   
+    _hide: true
   },
   skuId: {
     _hide: true
@@ -577,5 +577,8 @@ export default {
     type: 'Select',
     _slot: 'adjustSkuAndPackageOrNot',
     transForm: 'SKU_PG_IS'
+  },
+  fieldDisplay: {
+    _hide: true
   }
-}
+};

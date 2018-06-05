@@ -21,7 +21,7 @@
       </div>
       <div class="fixed-right" v-if="buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
-        action
+        {{$i.table.action}}
       </div>
 
       <div class="table-box" id="table-box" ref="tableBox" :style="{'max-height':height + 'px'}">
@@ -41,7 +41,7 @@
               </div>
             </td>
             <td v-if="buttons" ref="tableAction">
-              <div>action</div>
+              <div>{{$i.table.action}}</div>
             </td>
           </tr>
           </thead>
@@ -149,7 +149,7 @@
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture,VImage},
+    components: {VTableFilter, VViewPicture, VImage},
     props: {
       data: {
         type: Array,
@@ -225,6 +225,7 @@
       },
     },
     mounted() {
+
       this.setDataList(this.data, true);
       // this.dataList = this.data;
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
@@ -551,5 +552,14 @@
     right: 0;
     top: 50%;
     margin-top: -10px;
+  }
+
+  .ucn-table /deep/ .ucn-image .image,
+  .ucn-table /deep/ .ucn-image {
+    position: initial;
+  }
+
+  .ucn-table /deep/ .ucn-image > i {
+    display: none;
   }
 </style>

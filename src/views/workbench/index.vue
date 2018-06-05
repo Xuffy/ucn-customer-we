@@ -1,5 +1,9 @@
 <template>
   <div class="workbench">
+    <div>
+
+    </div>
+
     <div class="quickLink">
       <h3 class="ucn-content-title inline" @click="$refs.importFile.show()" v-text="$i.workbench.quickLink"></h3>
       <el-button size="mini" type="primary" icon="el-icon-plus"
@@ -7,7 +11,7 @@
                  @click="$store.state.quickLink.show = true"></el-button>
       <br/>
       <el-button size="mini" v-for="item in $store.state.quickLink.list" :key="item.id">
-        <router-link :to="item.link">
+        <router-link :to="item.link || '/'">
           {{item.label}}
         </router-link>
       </el-button>
@@ -57,11 +61,6 @@
     data() {
       return {
         visible: false,
-        pengdingTask: [],
-        futureTask: [],
-        fyiTask: [],
-        pushTask: [],
-        timeZone: '1', // todo 测试
       }
     },
     created() {
@@ -73,7 +72,7 @@
     },
     methods: {
       save(data) {
-        console.log(data)
+        // console.log(data)
       }
     }
   }

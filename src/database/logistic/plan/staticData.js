@@ -65,7 +65,7 @@ export const basicInfoObj = {
   logisticsStatus: {
     type: 'selector',
     value: 2,
-    defaultval: 2,
+    defaultVal: 2,
     disabled:true 
   },
   estContainerStuffingDate: {
@@ -150,7 +150,7 @@ export const basicInfoObj = {
     type: 'selector',
     value: null
   },
-  paymentTerms: {
+  paymentTerm: {
     type: 'input',
     value: null
   },

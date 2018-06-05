@@ -111,7 +111,6 @@
         this.$ajax.post(this.$apis.IMPORTFILE_GETIMPORTTASK, this.paging)
           .then(res => {
             this.resData = res;
-            console.log(res)
           })
           .finally(() => {
             this.loading = false;

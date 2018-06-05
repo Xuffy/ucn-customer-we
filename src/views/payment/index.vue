@@ -39,9 +39,9 @@
                                 type="daterange"
                                 align="right"
                                 unlink-panels
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
+                                :range-separator="$i.element.to"
+                                :start-placeholder="$i.element.startDate"
+                                :end-placeholder="$i.element.endDate"
                                 value-format="timestamp"
                                 :picker-options="dateOptions">
                         </el-date-picker>

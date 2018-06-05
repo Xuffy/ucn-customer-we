@@ -51,13 +51,13 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product :tableData="orderList" ref="addProduct"/>
+      <add-product :tableData="orderList" ref="addProduct"/>  <!-- 详情下好像不用调用 ！！！！！！-->
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @sendData="sendData" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -152,7 +152,8 @@ export default {
           saveAsDraft: this.$apis.save_draft_logistic_plan,
           send: this.$apis.send_draft_logistic_plan
         }
-      }
+      },
+      pageName:'',
     }
   },
   components: {
@@ -171,12 +172,13 @@ export default {
     planId () {
       return this.$route.query.id
     },
-    pageName () {
-      const arr = this.$route.fullPath.split('/')
-      return arr[arr.length - 1].split('?')[0]
+    isCopy () {
+      return this.$route.query.copy
     }
   },
   mounted () {
+    const arr = this.$route.fullPath.split('/')
+    this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
     this.getDictionary()
     this.getOrderList()
@@ -189,9 +191,12 @@ export default {
     this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
       return value;
     })
-    this.getRate();
     if (this.planId) {
       this.getDetails()
+      if(this.isCopy){
+        this.edit = true;
+        this.getNewLogisticsNo();
+      }
     } else {
       this.edit = true
       this.basicInfoArr.forEach((item)=>{
@@ -201,20 +206,25 @@ export default {
         this.$set(item,'value',item.defaultVal);
       })
       this.getNewLogisticsNo()
+      this.getRate();
     }
   },
   methods: {
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
-        this.ExchangeRateInfoArr.forEach((item)=>{
-          res.forEach((_item)=>{
-            if(item.key == _item.symbol){
-              _.map(_item,(v,k)=>{
-                this.$set(item,k=='price' ? 'value' : k,v)
-              })
-            }
-          })
+        this.matchRate(res);
+      })
+    },
+    //汇率与后台传入做 对应匹配
+    matchRate(res){
+      this.ExchangeRateInfoArr.forEach((item)=>{
+        res.forEach((_item)=>{
+          if(item.key == _item.symbol){
+            _.map(_item,(v,k)=>{
+              this.$set(item,k=='price' ? 'value' : k,v)
+            })
+          }
         })
       })
     },
@@ -231,6 +241,7 @@ export default {
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.createdPlanData(res)
+        this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
@@ -259,7 +270,14 @@ export default {
       this.remark = res.remark
       this.logisticsNo = res.logisticsNo
       this.containerInfo = res.containerDetail || []
-      this.feeList = res.fee ? [res.fee] : null
+      let feeListb = false;
+      _.mapObject(res.fee,(v,k)=>{
+        if(v!=null){
+          feeListb = true;
+          return;
+        }
+      })
+      this.feeList = feeListb ? [res.fee] : null;
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
     createdPaymentData (res = this.oldPaymentObject) {
@@ -279,7 +297,7 @@ export default {
       })
       this.$ajax.get(this.$apis.get_container_type).then(res => {
         this.$set(this.selectArr, 'containerType', res)
-      })
+      }) 
       this.getDictionaryPart()
     },
     getDictionaryPart () {
@@ -430,11 +448,56 @@ export default {
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
       index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
-    switchEdit () {
-      this.edit = !this.edit
+    switchEdit (arg) {     
+      switch(arg){
+        case 'edit':
+            this.edit = !this.edit;
+            this.pageName = 'planDetail';
+          break; 
+        case 'confirm':
+            this.conformPlan();
+          break; 
+        case 'cancel':
+            this.cancelPlan();
+          break; 
+        case 'copy':
+            this.copyPlan();
+          break; 
+        default:
+          break; 
+      }
+    },
+    conformPlan(){
+      this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
+         this.$message({
+          message: '发送成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic');
+          }
+        })
+      })
+    },
+    cancelPlan(){
+      this.$ajax.post(this.$apis.logistics_plan_cancel,{id:this.planId}).then(res => {
+        this.$message({
+          message: '取消成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic');
+          }
+        })
+      })
+    },
+    copyPlan(){
+      window.open(`${window.location.origin}#/logistic/placeLogisticPlan?id=${this.planId}&copy=copy`);
     },
     toExit () {
-      if (!this.planId) return this.$router.go(-1)
+      if ((this.isCopy&&this.planId)||(!this.isCopy&&!this.planId)) {
+        return this.$router.go(-1)
+      }
       this.edit = !this.edit
       this.createdPlanData()
       this.createdPaymentData()
@@ -453,7 +516,7 @@ export default {
       })
     },
     sendData (keyString) {
-      const url = this.configUrl[this.pageName][keyString]
+      let url = this.configUrl[this.pageName][keyString];
       this.basicInfoArr.forEach(a => { 
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
@@ -464,7 +527,7 @@ export default {
       })
 
       this.basicInfoObj.remark = this.remark
-      if (!this.basicInfoObj.payment) return this.$message({
+      if (!this.basicInfoObj.payment) return this.$message({ 
         type: 'error',
         message: '付款方式为必填!'
       })
@@ -476,7 +539,7 @@ export default {
         this.oldPlanObject[key] = value
       })
       this.oldPlanObject.containerDetail = this.containerInfo
-      this.fee = this.feeList
+      this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList : null;
       this.oldPlanObject.product = this.modifyProductArray;
       this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr),(item)=>{
         item['price'] = item['value'];
@@ -493,15 +556,46 @@ export default {
       //   return obj
       // })
       this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+      if(this.isCopy){
+        this.restIdNull(this.oldPlanObject,['id','unId']);
+      }
       this.$ajax.post(url, this.oldPlanObject).then(res => {
         this.$message({
-          message: '发送成功',
-          type: 'success'
+          message: '发送成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic');
+          }
         })
-        this.edit = false
       })
-    }
-  }
+    },
+    //递归重置 copy id 字段 null
+    //arg 传入的对象 
+    //restArr 要重置的为null字段集合数组
+    restIdNull(arg,restArr){
+      restArr = restArr || [];    
+      let args =  _.omit(arg,...restArr);
+      return _.mapObject(args,(v,k)=>{
+        if(Array.isArray(v)){
+          return _.map(v,(val,key)=>{
+            return _.omit(val,...restArr);
+          })
+          // args[k].forEach((item)=>{
+          //   return _.omit(arg,...restArr);
+          //   // this.restIdNull(item,restArr);
+          // })
+        }
+        // else{
+        //   let args =  _.omit(arg,'length');
+        //   if(restArr.includes(k)){
+        //     this.$set(arg,k,null);
+        //   }
+        // }
+      })
+      // return args;
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
