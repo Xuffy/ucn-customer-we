@@ -124,20 +124,19 @@
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
-                                    :placeholder="$i.order.pleaseInput"
                                     :disabled="v.disabled"
                                     class="speInput"
                                     type="textarea"
                                     :autosize="{ minRows: 2}"
-                                    placeholder="请输入内容"
+                                    :placeholder="$i.order.pleaseInput"
                                     v-model="orderForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.type==='attachment'">
                             <v-upload
-                                    :list="orderForm.attachment"
-                                    :limit="20"
-                                    ref="upload"></v-upload>
+                                    ref="upload"
+                                    :list="orderForm.attachments"
+                                    :limit="20"></v-upload>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -257,12 +256,6 @@
                 <div class="btns">
                     <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
                     <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
-                    <selectSearch
-                            class="speSearch"
-                            :options=options
-                            v-model='selectSearch'
-                            @inputEnter="inputEnter">
-                    </selectSearch>
                 </div>
             </template>
         </v-table>
@@ -309,8 +302,10 @@
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
                     <v-product
+                            :disabledLine="disabledProductLine"
                             :forceUpdateNumber="updateProduct"
                             :hideBtn="true"
+                            :isInModify="true"
                             :type="type1"
                             @handleOK="handleProductOk"></v-product>
                 </el-tab-pane>
@@ -318,10 +313,6 @@
                     <v-product :forceUpdateNumber="updateBookmark" :hideBtn="true" :type="type2"></v-product>
                 </el-tab-pane>
             </el-tabs>
-
-
-
-
         </el-dialog>
 
         <v-history-modify
@@ -461,7 +452,7 @@
                 tableTotal:[],
                 activeTab:'product',
                 selectProductInfoTable:[],
-
+                disabledProductLine:[],
 
                 /**
                  * 弹出框data配置
@@ -501,7 +492,7 @@
                 orderForm:{
                     actDeliveryDt: "",
                     archive: true,
-                    attachment: [],
+                    attachments: [],
                     basicFlag:false,     //basicInfo是否修改
                     currency: "",
                     customerAgreementDt: "",
@@ -644,12 +635,13 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                params.attachments=this.$refs.upload[0].getFiles();
                 console.log(params,'params')
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    console.log(res)
-                }).finally(err=>{
-
-                });
+                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                //     console.log(res)
+                // }).finally(err=>{
+                //
+                // });
             },
 
             //获取订单号(先手动生成一个)
@@ -716,21 +708,36 @@
                 this.selectProductInfoTable=e;
             },
             addProduct(){
+                this.disabledProductLine=this.$copyArr(this.productTableData);
+                // this.disabledProductLine=_.uniq(_.pluck(_.pluck(this.productTableData, 'skuId'), 'value'));
                 this.productTableDialogVisible=true;
                 this.activeTab='product';
                 this.updateProduct=Math.random();
             },
             removeProduct(){
-                let skuIds=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuId'), 'value'));
-                let arr=[];
-                _.map(this.productTableData,v=>{
-                    _.map(skuIds,m=>{
-                        if(v.skuId.value===m){
-                            arr.push(v);
-                        }
+                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let skuIds=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuId'), 'value'));
+                    let arr=[];
+                    _.map(this.productTableData,v=>{
+                        _.map(skuIds,m=>{
+                            if(v.skuId.value===m){
+                                arr.push(v);
+                            }
+                        });
                     });
+                    this.productTableData=_.difference(this.productTableData, arr);
+                    this.selectProductInfoTable=[];
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.order.deleteSuccess
+                    });
+                }).catch(() => {
+
                 });
-                this.productTableData=_.difference(this.productTableData, arr);
             },
             handleClick(tab){
                 if(tab.index==='0'){
@@ -740,14 +747,19 @@
                 }
             },
             handleProductOk(e){
+                this.loadingProductTable=true;
+                this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
-                    this.productTableData=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuId'),item=>{
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuId'),item=>{
                         if(item._remark){
-                            item.label.value=this.$i.order.remarks
+                            item.label.value=this.$i.order.remarks;
                         }
                     });
-                }).catch(err=>{
-
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    })
+                }).finally(err=>{
+                    this.loadingProductTable=false;
                 });
             },
             saveNegotiate(e){
@@ -805,7 +817,23 @@
                 this.$ajax.get(this.$apis.INQUIRY_ID,{
                     id:e.id.value
                 }).then(res=>{
-                    console.log(res)
+                    console.log(res.details)
+                    let arr=[];
+                    _.map(res.details,v=>{
+                        arr.push(v);
+                        v.fieldRemark._remark=true;
+                        arr.push(v.fieldRemark);
+                    })
+
+                    let data=this.$getDB(this.$db.order.productInfoTable,arr,item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    })
+
                 }).finally(err=>{
 
                 });
@@ -814,9 +842,9 @@
 
 
             getUnit(){
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{_cache:true})
                     .then(res=>{
