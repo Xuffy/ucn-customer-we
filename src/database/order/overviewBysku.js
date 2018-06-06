@@ -25,5 +25,5 @@ export default {
     currency:{},
     incotermArea:{},
     updateDt:{},
-    remark:{},
+    // remark:{},
 }

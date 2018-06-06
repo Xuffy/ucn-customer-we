@@ -11,6 +11,8 @@
                         :hide-filter-value="hideFilterValue"
                         @filter-column="onFilterColumn"
                         @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
+
+        <v-table-filter-column></v-table-filter-column>
       </div>
     </div>
 
@@ -144,12 +146,13 @@
 
 
   import VTableFilter from './filter'
+  import VTableFilterColumn from './filterColumn'
   import VViewPicture from '../viewPicture/index'
   import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture, VImage},
+    components: {VTableFilter, VViewPicture, VImage, VTableFilterColumn},
     props: {
       data: {
         type: Array,

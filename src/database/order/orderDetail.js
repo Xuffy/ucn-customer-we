@@ -48,26 +48,30 @@ export default {
     status:{
         type:'select',
         belong:'basicInfo',
+        createHide:true,
     },
     deliveryDt:{
         type:'date',
         belong:'basicInfo',
     },
     incoterm:{
-        type:'input',
+        type:'select',
         belong:'basicInfo',
+        isIncoterm:true
     },
     currency:{
         type:'select',
         belong:'basicInfo',
+        isCurrency:true
     },
-    incotermArea:{
-        type:'input',
-        belong:'basicInfo',
-    },
+    // incotermArea:{
+    //     type:'input',
+    //     belong:'basicInfo',
+    // },
     payment:{
         type:'select',
         belong:'basicInfo',
+        isPayment:true
     },
     lcNo:{
         type:'input',
@@ -77,29 +81,32 @@ export default {
         type:'number',
         belong:'basicInfo',
     },
-    paymentStatus:{
-        type:'select',
-        belong:'basicInfo',
-    },
+    // paymentStatus:{
+    //     type:'select',
+    //     belong:'basicInfo',
+    //     isPaymentStatus:true
+    // },
     departureCountry:{
-        type:'select',
+        type:'input',
         belong:'basicInfo',
     },
     departurePort:{
-        type:'select',       //??????
+        type:'input',       //??????
         belong:'basicInfo',
     },
     destCountry:{
-        type:'select',
+        type:'input',
         belong:'basicInfo',
     },
     destPort:{
-        type:'select',       //??????
+        type:'input',       //??????
         belong:'basicInfo',
     },
     transport:{
-        type:'input',
+        type:'select',
         belong:'basicInfo',
+        disabled:true,
+        isTransport:true
     },
     customerAgreementNo:{
         type:'input',

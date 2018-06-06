@@ -237,7 +237,10 @@
         });
         this.$ajax.post(url, arr)
           .then(res => {
-             this.$message('系统将消息置为已读');
+            this.$message({
+              type: 'success',
+              message: '系统将消息置为已读!'
+            });
           })
           .catch(() => {
 

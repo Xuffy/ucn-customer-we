@@ -230,10 +230,16 @@ export default {
   contactPersonOfBuyer: {
     key: 'customerCompanyId'
   },
-  email: {
+  emailOfBuyer: {
     key: ''
   },
-  phone: {
+  phoneOfBuyer: {
+    key: ''
+  },
+  emailOfSeller: {
+    key: ''
+  },
+  phoneOfSeller: {
     key: ''
   },
   contactPersonOfSeller: {
@@ -257,17 +263,26 @@ export default {
   logisticsNo: {
     key: 'logisticsNo'
   },
-  category: {
-    key: ''
+  categoryLevel1: {
+    key: 'skuCategoryOneFour'
+  },
+  categoryLevel2: {
+    key: 'skuCategoryTwoFour'
+  },
+  categoryLevel3: {
+    key: 'skuCategoryOneFour'
+  },
+  categoryLevel4: {
+    key: 'skuCategoryOneFour'
   },
   itemOrderDelayed: {
-    key: ''
+    key: 'isOrderDelay'
   },
   comment: {
     key: 'remark'
   },
   FLCorLCL: {
-    key: ''
+    key: 'isFullContainerLoad'
   },
   truck: {
     key: 'truck'

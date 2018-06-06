@@ -1,7 +1,7 @@
 'use strict';
 export default {
     //order
-    get_orderList: ['/order/overview/page', 'BASE_HCJ', 'UPURCHASE_URL'],
+    get_orderList: ['/order/overview/orderPage', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_draft_orderlist: ['/order/draft/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_recycle_orderlist: ['/order/recycle/page', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_recover_order: ['/order/recover', 'BASE_HCJ', 'UPURCHASE_URL'],
@@ -69,7 +69,7 @@ export default {
      post_logisticsport:['/logisticsport/query','UMETA_URL'],
      get_currency:['/currency/all','UMETA_URL'],
      CURRENCY_ALL:['/currency/all','UMETA_URL'],
-
+    CUSTOMERCURRENCYEXCHANGERATE_QUERY:['/customcurrencyexchangerate/query','UMETA_URL'],
 
 
 
@@ -86,5 +86,9 @@ export default {
     INQUIERY_LIST:['/inquiry/list','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SKUS:['/order/skus','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SKUHISTORY:['/order/skuHistory','BASE_HCJ','UPURCHASE_URL'],
+    INQUIRY_ID:['/inquiry/{id}','BASE_HCJ','UPURCHASE_URL'],
+    OVERVIEW_ORDERPAGE:['/overview/orderPage','BASE_HCJ','UPURCHASE_URL'],
+    OVERVIEW_SKUPAGE:['/overview//skuPage','BASE_HCJ','UPURCHASE_URL'],
+    ORDER_SAVE:['/order/save','BASE_HCJ','UPURCHASE_URL']
 
 }

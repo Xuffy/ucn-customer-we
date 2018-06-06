@@ -396,6 +396,7 @@
                     importantSupplier: this.markAsImportant,
                 }
                 var basic = this.$refs.basicInfo.formItem
+                console.log(basic,'basic')
                 _.extend(params, basic)
                 var caculate = this.$refs.caculate.caculateForm
                 _.extend(params, caculate)
@@ -539,7 +540,6 @@
 
                         this.tabData = this.tabData.concat(this.$getDB(this.$db.order.productInfo, this.$refs.HM.getFilterData(res, 'skuId')));
                         console.log(this.tabData,'this.tabData')
-
                     });
             },
             dataFilter(data) {
@@ -622,14 +622,12 @@
                 });
             },
             removeList() {
-                console.log(this.checkedAll,'???')
-                console.log(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'))
-                // let arr = [];
-                // _.map(this.tabData, (item, index) => {
-                //     if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
-                // });
-                // this.tabData = _.difference(this.tabData, arr);
-                // this.checkedAll = [];
+                let arr = [];
+                _.map(this.tabData, (item, index) => {
+                    if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
+                });
+                this.tabData = _.difference(this.tabData, arr);
+                this.checkedAll = [];
             },
             productCancel() { //  取消 product 编辑
                 this.tabData.forEach((item, index) => {
