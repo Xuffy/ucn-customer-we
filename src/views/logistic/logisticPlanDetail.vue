@@ -57,7 +57,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -78,6 +78,7 @@ export default {
   data() {
     return {
       modefiyProductIndex: 0,
+      logisticsStatus:null,
       logisticsNo: '',
       remark: '',
       showProductDialog: false,
@@ -241,6 +242,7 @@ export default {
     getDetails () {
       this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
         this.createdPlanData(res)
+        this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
@@ -261,14 +263,20 @@ export default {
         'blType'
       ]
       this.basicInfoArr.forEach(a => {
-        a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
+        if(this.isCopy&&a.key=='logisticsNo'){
+          a.value = this.logisticsNo;
+        }else{
+          a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
+        }
       })
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
       })
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
-      this.logisticsNo = res.logisticsNo
+      if(!this.isCopy){
+        this.logisticsNo = res.logisticsNo
+      }
       this.containerInfo = res.containerDetail || []
       let feeListb = false;
       _.mapObject(res.fee,(v,k)=>{
@@ -288,6 +296,9 @@ export default {
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
+        if(this.isCopy){
+          this.logisticsNo = res;
+        }
         this.getSupplier(res)
       })
     },
@@ -463,6 +474,9 @@ export default {
         case 'copy':
             this.copyPlan();
           break; 
+        case 'placeLogisticsPlan':
+            this.$router.push('/logistic/placeLogisticPlan');
+          break; 
         default:
           break; 
       }
@@ -555,11 +569,22 @@ export default {
       //   })
       //   return obj
       // })
-      this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+      // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+      this.oldPlanObject.product = this.productList.map((item,i)=>{        
+        return _.mapObject(item,(v,k)=>{
+          if(v.type=='text'){
+            return v.value;
+          }else{
+             return null;
+          }
+        })
+      });
+      let obj = null;
       if(this.isCopy){
-        this.restIdNull(this.oldPlanObject,['id','unId']);
+        this.oldPlanObject.planNo = this.logisticsNo;
+        obj = this.restIdNull(this.oldPlanObject,['id','unId']);
       }
-      this.$ajax.post(url, this.oldPlanObject).then(res => {
+      this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
           type: 'success',
@@ -570,9 +595,9 @@ export default {
         })
       })
     },
-    //递归重置 copy id 字段 null
+    //递归重置 copy
     //arg 传入的对象 
-    //restArr 要重置的为null字段集合数组
+    //restArr 要重置字段集合数组
     restIdNull(arg,restArr){
       restArr = restArr || [];    
       let args =  _.omit(arg,...restArr);
@@ -581,19 +606,10 @@ export default {
           return _.map(v,(val,key)=>{
             return _.omit(val,...restArr);
           })
-          // args[k].forEach((item)=>{
-          //   return _.omit(arg,...restArr);
-          //   // this.restIdNull(item,restArr);
-          // })
+        }else{
+          return v;
         }
-        // else{
-        //   let args =  _.omit(arg,'length');
-        //   if(restArr.includes(k)){
-        //     this.$set(arg,k,null);
-        //   }
-        // }
       })
-      // return args;
     },
   },
 }

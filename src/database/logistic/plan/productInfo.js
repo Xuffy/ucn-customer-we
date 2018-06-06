@@ -7,12 +7,21 @@ export default {
     type: 'text',
     _hide: true
   },
-  "supplierId": {
+  "skuSupplierId": {
     type: 'text',
     _hide: true
   },
   "orderNo": {
-    type: 'text'
+    type: 'text',
+    _hide: true
+  },
+  "orderId": {
+    type: 'text',
+    _hide: true
+  },
+  "skuId": {
+    type: 'text',
+    _hide: true
   },
   "toShipCartonQty": {
     type: 'text'
@@ -99,6 +108,12 @@ export default {
     type: 'text'
   },
   "skuOuterCartonCode": {
+    type: 'text'
+  },
+  "skuSupplierCompanyId": {
+    type: 'text'
+  },
+  "skuSupplierTenantId": {
     type: 'text'
   }
 }

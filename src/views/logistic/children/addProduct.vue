@@ -45,7 +45,7 @@
           <span>{{ scope.row.skuCustomsCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.reportElements" width="120" align="center">
+      <el-table-column :label="$i.logistic.reportElement" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.skuDeclareElement }}</span>
         </template>

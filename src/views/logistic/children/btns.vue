@@ -1,11 +1,11 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
     <div v-if="!edit">
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
-      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
+      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
+      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
+      <el-button size="mini" type="primary" :disabled="isLogistics" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
       <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','copy')">{{ $i.logistic.copy }}</el-button>
-      <el-button size="mini" type="primary">{{ $i.logistic.placeLogisticsPlan }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
       <el-button size="mini" type="primary">{{ $i.logistic.download }}</el-button>
       <!-- <el-button size="mini" type="danger">{{ $i.logistic.delete }}</el-button> -->
     </div>
@@ -21,6 +21,7 @@ export default {
   props: {
     planId: [String, Number],
     isCopy: [String, Number],
+    logisticsStatus: [String, Number],
     edit: {
       type: Boolean,
       default: false
@@ -35,6 +36,17 @@ export default {
   computed: {
     hideMune () {
       return this.$store.state.layout.hideMenu
+    },
+    isLogistics(){    
+      switch(Number(this.logisticsStatus)){
+        case 1:
+        case 4:
+          return true;
+        break;
+        default:
+          return false;
+        break;
+      }
     }
   }
 }
