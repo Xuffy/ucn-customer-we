@@ -6,7 +6,7 @@
     <br>
     <el-table
       :data="resData.datas"
-      :height="500"
+      :max-height="500"
       border
       v-loading="loading"
       style="width: 100%">
