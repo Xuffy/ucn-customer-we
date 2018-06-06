@@ -42,7 +42,7 @@ export default {
   GET_DEPARTMENT:['/department','UUSER_URL','UUSER_URL'],
 
   //track
-  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','WORKBENCH_URL','WORKBENCH_URL'],
+  get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','UWORKBENCH_URL','UWORKBENCH_URL'],
 
   //companyInfo
   get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL_CS','BASE_URL'],

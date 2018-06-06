@@ -3,8 +3,7 @@
         <el-dialog
             :title="$i.common.prompt"
             :visible.sync="dialogVisible"
-            width="80%"
-            >
+            width="80%">
                 <div class="status">
                     <div class="state">
                         <span>{{ $i.common.Status }}</span>
@@ -13,33 +12,29 @@
                             <el-radio-button
                                 v-for="item in $db.inquiry.overoiewState"
                                 :label="item.id"
-                                :key="item.id"
-                            >
+                                :key="item.id">
                             {{ item.text }}
                             </el-radio-button>
                         </el-radio-group>
                     </div>
-                    <select-search 
-                        :options="options" 
+                    <select-search
+                        :options="options"
                         @inputChange="inputEnter"
-                        :searchLoad="searchLoad"
-                    />
+                        :searchLoad="searchLoad"/>
                 </div>
-                <v-table 
-                    :data="tabData" 
+                <v-table
+                    :data="tabData"
                     @change-checked="changeChecked"
-                    :loading="tabLoad" 
+                    :loading="tabLoad"
                     :selection-radio="selectionRadio"
-                    ref="tab"
-                />
+                    ref="tab"/>
                 <el-pagination
                     @size-change="handleSizeChange"
                     :currentPage.sync="params.pn"
                     :page-sizes="pazeSize"
                     :page-size="params.ps"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="pageTotal"
-                />
+                    :total="pageTotal"/>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">{{ $i.common.cancel }}</el-button>
                 <el-button type="primary" @click="addCompare">{{ $i.common.ok }}</el-button>
@@ -48,195 +43,200 @@
     </div>
 </template>
 <script>
-    /**
-     * @param selectChange 下拉框 值发生变更触发
-     * @param options 下拉框 原始数据 
-    */
-    import selectSearch from '@/components/common/fnCompon/selectSearch';
-    import VTable from '@/components/common/table/index';
-    export default {
-        name:'',
-        data() {
-            return {
-                checkedData:[],
-                pazeSize: [30, 40, 50, 100],
-                searchLoad: false,
-                options: [{
-                    id: 'INQUIRY_NO',
-                    label: '询价单号'
-                }, {
-                    id: 'QUOTATION_NO',
-                    label: '询价单号（供应商自有）'
-                }, {
-                    id: 'SUPPLIER_NAME',
-                    label: '供应商名称'
-                }, {
-                    id: 'SUPPLIER_TYPE',
-                    label: '供应商类型'
-                }, {
-                    id: 'PAYMENT_METHOD',
-                    label: '支付方式'
-                }],
+/**
+ * @param selectChange 下拉框 值发生变更触发
+ * @param options 下拉框 原始数据
+*/
+import selectSearch from '@/components/common/fnCompon/selectSearch';
+import VTable from '@/components/common/table/index';
+export default {
+  name: '',
+  data() {
+    return {
+      checkedData: [],
+      pazeSize: [30, 40, 50, 100],
+      searchLoad: false,
+      options: [{
+        id: 'INQUIRY_NO',
+        label: '询价单号'
+      }, {
+        id: 'QUOTATION_NO',
+        label: '询价单号（供应商自有）'
+      }, {
+        id: 'SUPPLIER_NAME',
+        label: '供应商名称'
+      }, {
+        id: 'SUPPLIER_TYPE',
+        label: '供应商类型'
+      }, {
+        id: 'PAYMENT_METHOD',
+        label: '支付方式'
+      }],
 
-                tabData: [],
-                viewByStatus: '',
-                params: {
-                    status: null,
-                    keyType: '',
-                    key: '',
-                    ps: 50,
-                    pn: 1,
-                    recycleCustomer: 0,
-                    compareInquiryIds: [],
-                    compareInquiryDelIds: [],
-                    compareId: null
-                },
-                tabLoad:false,
-                pageTotal: 0
-            }
-        },
-        components: {
-            'select-search': selectSearch,
-            'v-table': VTable
-        },
-        props: {
-            value: {
-                type: Boolean,
-                default: false
-            },
-            selectionRadio: {
-                type: Boolean,
-                default: false
-            },
-            argDisabled: {
-                type: Array,
-                default: () => {
-                    return [];
-                }
-            },
-            compareId: {
-                default: null
-            },
-            disableds: {
-                type: Array,
-                default: () => {
-                    return [];
-                }
-            }
-        },
-        computed: {
-            dialogVisible : {
-                get() {
-                    return this.value;
-                },
-                set(val) {
-                    this.$emit('input', val);
-                }
-            }
-        },
-        watch: {
-            params: {
-                handler(val, oldVal) {
-                    this.gettabData();
-                },
-                deep: true
-            },
-            value() {
-                this.params.compareInquiryIds = this.argDisabled;
-                this.params.compareId = this.compareId;
-                this.params.compareInquiryDelIds = this.disableds;
-            }
-        },
-        methods: {
-            addCompare() {
-                let arg = this.$copyArr(this.checkedData);
-                let arr = [];
-                if(_.isObject(arg) && this.selectionRadio) {
-                    this.$emit('addInquiry', arg);
-                } else {
-                    _.map(arg, item => {
-                        _.mapObject(item, (val, key) => {
-                            if(key === '_disabled' && val === false){
-                                arr.push(item.id.value);
-                            }
-                        });
-                    });
-                    this.$emit('addInquiry', arr);
-                }
-            },
-            inputEnter(val) {
-                if(!val.keyType) return this.$message(this.$i.common.pleaseSelectTheSearchType);
-                if(!val.key) return this.$message(this.$i.common.canTBeEmpty);
-                this.params.keyType = val.keyType;
-                this.params.key = val.key;
-                this.searchLoad = true;
-            },
-            gettabData() {
-                let url, column;
-                this.tabLoad = true;
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params)
-                .then(res => {
-                    this.pageTotal = res.tc;
-                    this.tabLoad = false;   
-                    this.searchLoad = false;
-                    let arr = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
-                    _.map(this.argDisabled, id => {
-                        _.map(arr, items => {
-                            if(_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
-                                items._disabled = true;
-                                items._checked = true;
-                            } else {
-                                items._disabled = false;
-                                items._checked = false;
-                            }
-                        });
-                    });
-                    this.tabData = arr;
-                })
-                .catch(() => {
-                    this.searchLoad = false; 
-                    this.tabLoad = false;
-                })
-            },
-            cancelInquiry() { //取消询价单
-                this.ajaxInqueryAction('cancel')
-            },
-            deleteInquiry() { //删除询价单
-                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
-                    confirmButtonText: this.$i.common.confirm,
-                    cancelButtonText: this.$i.common.cancel,
-                    type: 'warning'
-                }).then(() => {
-                    this.ajaxInqueryAction('delete');
-                })
-            },
-            ajaxInqueryAction(type) {
-                const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
-                    action: type,
-                    ids:argId
-                })
-                .then(res => {
-                    this.gettabData();
-                    this.checkedData = [];
-                });
-            },
-            getChildrenId(type) {
-                let arr = [];
-                this.checkedData.forEach(item => {
-                    arr.push(item.id.value)
-                });
-                if(typeof type === 'string') arr.join(',')
-                return arr;
-            },
-            handleSizeChange(val) {
-                this.params.ps = val;
-            },
-            changeChecked(item) { //tab 勾选
-                this.checkedData = item;
-            }
-        }
+      tabData: [],
+      viewByStatus: '',
+      params: {
+        status: null,
+        keyType: '',
+        key: '',
+        ps: 50,
+        pn: 1,
+        recycleCustomer: 0,
+        compareInquiryIds: [],
+        compareInquiryDelIds: [],
+        compareId: null
+      },
+      tabLoad: false,
+      pageTotal: 0
+    };
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable
+  },
+  props: {
+    value: {
+      type: Boolean,
+      default: false
+    },
+    selectionRadio: {
+      type: Boolean,
+      default: false
+    },
+    argDisabled: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    },
+    compareId: {
+      default: null
+    },
+    disableds: {
+      type: Array,
+      default: () => {
+        return [];
+      }
     }
+  },
+  computed: {
+    dialogVisible: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('input', val);
+      }
+    }
+  },
+  watch: {
+    params: {
+      handler(val, oldVal) {
+        this.gettabData();
+      },
+      deep: true
+    },
+    value() {
+      this.params.compareInquiryIds = this.argDisabled;
+      this.params.compareId = this.compareId;
+      this.params.compareInquiryDelIds = this.disableds;
+    }
+  },
+  methods: {
+    addCompare() {
+      let arg = this.$copyArr(this.checkedData);
+      let arr = [];
+      if (_.isObject(arg) && this.selectionRadio) {
+        this.$emit('addInquiry', arg);
+      } else {
+        _.map(arg, item => {
+          _.mapObject(item, (val, key) => {
+            if (key === '_disabled' && val === false) {
+              arr.push(item.id.value);
+            }
+          });
+        });
+        this.$emit('addInquiry', arr);
+      }
+    },
+    inputEnter(val) {
+      if (!val.keyType) {
+        return this.$message(this.$i.common.pleaseSelectTheSearchType);
+      }
+      if (!val.key) {
+        return this.$message(this.$i.common.canTBeEmpty);
+      }
+      this.params.keyType = val.keyType;
+      this.params.key = val.key;
+      this.searchLoad = true;
+    },
+    gettabData() {
+      this.tabLoad = true;
+      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params)
+        .then(res => {
+          this.pageTotal = res.tc;
+          this.tabLoad = false;
+          this.searchLoad = false;
+          let arr = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
+          _.map(this.argDisabled, id => {
+            _.map(arr, items => {
+              if (_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
+                items._disabled = true;
+                items._checked = true;
+              } else {
+                items._disabled = false;
+                items._checked = false;
+              }
+            });
+          });
+          this.tabData = arr;
+        })
+        ['catch'](() => {
+          this.searchLoad = false;
+          this.tabLoad = false;
+        });
+    },
+    cancelInquiry() { // 取消询价单
+      this.ajaxInqueryAction('cancel');
+    },
+    deleteInquiry() { // 删除询价单
+      this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+        confirmButtonText: this.$i.common.confirm,
+        cancelButtonText: this.$i.common.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.ajaxInqueryAction('delete');
+      });
+    },
+    ajaxInqueryAction(type) {
+      const argId = this.getChildrenId();
+      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+        action: type,
+        ids: argId
+      })
+        .then(res => {
+          this.gettabData();
+          this.checkedData = [];
+        });
+    },
+    getChildrenId(type) {
+      let arr = [];
+      this.checkedData.forEach(item => {
+        arr.push(item.id.value);
+      });
+      if (typeof type === 'string') {
+        arr.join(',');
+      }
+      return arr;
+    },
+    handleSizeChange(val) {
+      this.params.ps = val;
+    },
+    changeChecked(item) { // tab 勾选
+      this.checkedData = item;
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
     .inquiry {
