@@ -8,7 +8,7 @@
 
     <el-dialog :title="$i.table.tableFilter"
                :visible.sync="visible" width="1000px">
-      <ul>
+      <ul v-loading="loading">
 
         <li class="filter-item" v-for="(cItem,index) in conditionList">
 
@@ -118,6 +118,7 @@
     data() {
       return {
         visible: false,
+        loading: false,
         dataList: [],
         setFiledData: [],
         conditionList: [
@@ -125,9 +126,16 @@
         ],
       }
     },
-    watch: {},
     created() {
-      this.getConfig();
+      // this.getConfig();
+    },
+    watch: {
+      visible(val) {
+        // console.log('visible', val)
+        if (val) {
+          this.getConfig();
+        }
+      }
     },
     methods: {
       change(e) {
@@ -146,22 +154,31 @@
         }
       },
       getConfig() {
-        this.$ajax.all([
-          this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['Product_Sourcing_sku'], {_cache: true}),
-          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: 'Product_Sourcing_sku'}, {
-            _cache: true,
+        this.loading = true;
+        this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['udata_purchase_sku_overview'], {_cache: true})
+          .then(res => {
+            this.dataList = res;
+            console.log(res, '++++++')
+          })
+          .finally(() => {
+            this.loading = false;
+          })
+        /*this.$ajax.all([
+          this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, ['udata_purchase_sku_overview'], {_cache: true}),
+          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: 'udata_purchase_sku_overview'}, {
+            // _cache: true,
             _contentType: 'F'
           }),
         ]).then(data => {
           this.dataList = data[0];
           this.setFiledData = data[1];
-          /*this.setFiledData = _.map(data[0], val => {
+          /!*this.setFiledData = _.map(data[0], val => {
             if (!_.isEmpty(_.findWhere(data[1], {gridFieldId: val.name}))) {
               val._checked = true;
             }
             return val;
-          });*/
-        });
+          });*!/
+        });*/
       },
       selectCondition(item) {
         let data = _.findWhere(this.dataList, {property: item.property})

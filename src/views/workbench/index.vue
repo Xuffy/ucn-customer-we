@@ -34,7 +34,7 @@
       </el-col>
     </el-row>
 
-    <v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>
+    <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
