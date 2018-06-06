@@ -2,6 +2,9 @@ export default {
     skuId:{
         _hide:true
     },
+    canCreateQc:{
+        _hide:true
+    },
     id:{
         _hide:true
     },

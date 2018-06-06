@@ -447,7 +447,6 @@
                             return e;
                         });
                         this.pageData=res;
-                        console.log(this.disabledLine,'this.disabledLine')
                         if(this.disabledLine.length>0){
                             this.disabledLine.forEach(v=>{
                                 let id;

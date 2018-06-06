@@ -238,6 +238,7 @@
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas);
+                        console.log(res.datas)
                         this.pageData = res;
                     })
                     .catch((res) => {
