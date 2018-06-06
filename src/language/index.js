@@ -54,6 +54,7 @@ const json = {
     require(`./${lang}/order/order.overviewTable`),
     require(`./${lang}/order/order.orderDetail`),
     require(`./${lang}/order/order.inquiryOverview`),
+    require(`./${lang}/order/order.orderDetail`),
   ),
   payment: _.extend({},
     require(`./${lang}/payment/payment`),

@@ -5,7 +5,7 @@
     </div>
     <div class="body">
       <el-row :gutter="15">
-        <el-col :span="12">
+        <el-col :span="8">
           <div class="card department">
             <div class="title">Department</div>
             <div class="handler">
@@ -60,7 +60,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <div class="card role">
             <div class="title">Role</div>
             <div class="handler">
