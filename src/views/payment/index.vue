@@ -223,34 +223,31 @@
             detail(item) {
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
                 if(item.orderType.value == 10){
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: _.findWhere(item, {'key': 'orderNo'}).value
-                        }
-                    });
-                }else if(item.orderType.value == 20){
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: item.orderNo
-                        }
-                    });
-                }else{
-                    this.$router.push({
-                        path: '/',
-                        query: {
-                            // orderNo: item.orderNo
-                        }
-                    });
-                }
+                  this.$windowOpen({
+                    url: '/product/sourcingDetail',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }else if(item.orderType.value == 20){
+                  this.$windowOpen({
+                    url: '/',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }else{
+                  this.$windowOpen({
+                    url: '/logisticPlanDetail',
+                    params: {
+                      number:item.orderNo.value
+                    }
+                  });
+              }
             },
             urgingPayment(item) {
               // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
-              // const parmes = {
-              //   version :item.version.value
-              // }
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
                 console.log(res);
