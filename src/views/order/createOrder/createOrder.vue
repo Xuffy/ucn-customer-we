@@ -152,6 +152,7 @@
                 <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                     <el-form-item :label="$i.order[v.currency]">
                         <el-input-number
+                                :disabled="true"
                                 :placeholder="$i.order.pleaseInput"
                                 class="speInput speNumber"
                                 v-model="v.exchangeRate"
@@ -501,7 +502,7 @@
                     actDeliveryDt: "",
                     archive: true,
                     attachment: [],
-                    basicFlag:true,
+                    basicFlag:false,     //basicInfo是否修改
                     currency: "",
                     customerAgreementDt: "",
                     customerAgreementNo: "",
@@ -519,39 +520,39 @@
                     // entryDt: "2018-06-01T01:37:58.742Z",
                     exchangeRateList: [
                         {
-                            currency: "CNY|USD",
-                            exchangeRate: '124'
+                            currency: "CNYUSD",
+                            // exchangeRate: '124'
                         },
                         {
-                            currency: "CNY|EUR",
-                            exchangeRate: ''
+                            currency: "CNYEUR",
+                            // exchangeRate: ''
                         },
                         {
-                            currency: "USD|EUR",
-                            exchangeRate: ''
+                            currency: "USDEUR",
+                            // exchangeRate: ''
                         },
                         {
-                            currency: "USD|CNY",
-                            exchangeRate: ''
+                            currency: "USDCNY",
+                            // exchangeRate: ''
                         },
                         {
-                            currency: "EUR|CNY",
-                            exchangeRate: ''
+                            currency: "EURCNY",
+                            // exchangeRate: ''
                         },
                         {
-                            currency: "EUR|USD",
-                            exchangeRate: ''
+                            currency: "EURUSD",
+                            // exchangeRate: ''
                         }
                     ],
                     fieldRemark: {
-                        additionalProp1: "string",
-                        additionalProp2: "string",
-                        additionalProp3: "string"
+                        // additionalProp1: "string",
+                        // additionalProp2: "string",
+                        // additionalProp3: "string"
                     },
                     fieldUpdate: {
-                        additionalProp1: "string",
-                        additionalProp2: "string",
-                        additionalProp3: "string"
+                        // additionalProp1: "string",
+                        // additionalProp2: "string",
+                        // additionalProp3: "string"
                     },
                     // importantCustomer: true,
                     // importantSupplier: true,
@@ -561,11 +562,13 @@
                     orderNo: "",
                     payment: "",
                     paymentDays: 0,
+                    productFlag:false,
                     // paymentRemark: "",
                     // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
                     remind: true,
+                    responsibilityFlag:false,
                     responsibilityList: [
                         {
                             type: '0',
@@ -642,6 +645,11 @@
                 });
                 params.skuList=this.dataFilter(this.productTableData);
                 console.log(params,'params')
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
+                });
             },
 
             //获取订单号(先手动生成一个)
@@ -820,14 +828,18 @@
 
                 //获取汇率
                 this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{_cache:true}).then(res=>{
-                    console.log(res)
-                    console.log(this.orderForm.exchangeRateList,'exchangeRateList')
+                    _.map(this.orderForm.exchangeRateList,v=>{
+                        _.map(res,m=>{
+                            if(v.currency===m.symbol){
+                                v.exchangeRate=m.price;
+                            }
+                        })
+                    })
                 }).finally(err=>{
 
                 });
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN'],{_cache:true}).then(res=>{
-                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;

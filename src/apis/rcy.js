@@ -89,5 +89,6 @@ export default {
     INQUIRY_ID:['/inquiry/{id}','BASE_HCJ','UPURCHASE_URL'],
     OVERVIEW_ORDERPAGE:['/overview/orderPage','BASE_HCJ','UPURCHASE_URL'],
     OVERVIEW_SKUPAGE:['/overview//skuPage','BASE_HCJ','UPURCHASE_URL'],
+    ORDER_SAVE:['/order/save','BASE_HCJ','UPURCHASE_URL']
 
 }

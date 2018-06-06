@@ -137,5 +137,11 @@
   "skuAdditionalOne":"Additional Pic 1",
   "skuAdditionalTwo":"Additional Pic 2",
   "skuAdditionalThree":"Additional Pic 3",
-  "skuAdditionalFour":"Additional Pic 4"
+  "skuAdditionalFour":"Additional Pic 4",
+  "CNYUSD":"exchange rate(￥--$)",
+  "CNYEUR":"exchange rate(￥--€)",
+  "USDEUR":"exchange rate($--€)",
+  "USDCNY":"exchange rate($--￥)",
+  "EURCNY":"exchange rate(€--￥)",
+  "EURUSD":"exchange rate(€--$)"
 }
