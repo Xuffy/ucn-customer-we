@@ -3,7 +3,7 @@ export default {
   post_ledgerPage:['/ledger/page','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_list:['/payment/list/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
   post_payment_accept:['/payment/accept/{id}','UPURCHASE_URL','UPURCHASE_URL'],
-  post_payment_dunning:['/payment/dunning/{orderNo}/{orderType}','UPURCHASE_URL','UPURCHASE_URL'],
+  post_payment_dunning:['/payment/dunning','UPURCHASE_URL','UPURCHASE_URL'],
   //message
   post_companymessage_query:['/companymessage/query','UMESSAGE_URL','UMESSAGE_URL'],
   post_systemmessage_query:['/systemmessage/query','UMESSAGE_URL','UMESSAGE_URL'],

@@ -36,7 +36,64 @@
                                             v-for="item in supplierOption"
                                             :key="item.id"
                                             :label="item.name"
-                                            :value="item.id">
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isIncoterm">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in incotermOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isCurrency">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in currencyOption"
+                                            :key="item.id"
+                                            :label="item.code"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isPayment">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in paymentOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isTransport">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :disabled="v.disabled"
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in transportOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -61,8 +118,7 @@
                                     :disabled="v.disabled"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
-                                    :controls="false"
-                                    :min="1">
+                                    :controls="false">
 
                             </el-input-number>
                         </div>
@@ -96,6 +152,7 @@
                 <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                     <el-form-item :label="$i.order[v.currency]">
                         <el-input-number
+                                :disabled="true"
                                 :placeholder="$i.order.pleaseInput"
                                 class="speInput speNumber"
                                 v-model="v.exchangeRate"
@@ -270,23 +327,43 @@
         <v-history-modify
                 @save="saveNegotiate"
                 ref="HM">
-            <div slot="skuPic" slot-scope="{data}">
-                <v-upload :limit="20"></v-upload>
-            </div>
+            <!--<div slot="skuPic" slot-scope="{data}">-->
+                <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--</div>-->
 
-            <el-select
-                    slot="skuFobCurrency"
-                    slot-scope="{data}"
-                    v-model="data.value"
-                    clearable
-                    :placeholder="$i.order.pleaseChoose">
-                <el-option
-                        v-for="item in currencyOption"
-                        :key="item.id"
-                        :label="item.code"
-                        :value="item.code">
-                </el-option>
-            </el-select>
+            <!--<div-->
+                    <!--v-for="v in $db.order.productInfoTable"-->
+                    <!--v-if="v.disabled"-->
+                    <!--:key="v.key"-->
+                    <!--:slot="v._slot"-->
+                    <!--slot-scope="{data}">-->
+                <!--<div v-if="v.type==='pic'">-->
+                    <!--<v-upload :limit="20"></v-upload>-->
+                <!--</div>-->
+                <!--<div v-else>-->
+                    <!--{{data.value}}-->
+                <!--</div>-->
+            <!--</div>-->
+
+
+
+
+
+            <!--<div slot="skuNameCn" slot-scope="{data}">{{data.value}}</div>-->
+
+            <!--<el-select-->
+                    <!--slot="skuFobCurrency"-->
+                    <!--slot-scope="{data}"-->
+                    <!--v-model="data.value"-->
+                    <!--clearable-->
+                    <!--:placeholder="$i.order.pleaseChoose">-->
+                <!--<el-option-->
+                        <!--v-for="item in currencyOption"-->
+                        <!--:key="item.id"-->
+                        <!--:label="item.code"-->
+                        <!--:value="item.code">-->
+                <!--</el-option>-->
+            <!--</el-select>-->
 
 
             <!--<el-select-->
@@ -331,7 +408,11 @@
                  * 字典配置
                  * */
                 currencyOption:[],
-
+                supplierOption:[],
+                incotermOption:[],
+                paymentOption:[],
+                paymentStatusOption:[],
+                transportOption:[],
 
 
                 /**
@@ -415,94 +496,79 @@
 
 
                 /**
-                 * 字典配置
-                 * */
-                supplierOption:[
-
-                ],
-
-                /**
                  * 提交的数据
                  * */
                 orderForm:{
-                    acceptOperationId: 0,
-                    actDeliveryDt: "2018-06-01T01:37:58.741Z",
+                    actDeliveryDt: "",
                     archive: true,
                     attachment: [],
-                    companyId: 0,
-                    confirmDt: "2018-06-01T01:37:58.741Z",
-                    currency: "string",
-                    customerAgreementDt: "2018-06-01T01:37:58.741Z",
-                    customerAgreementNo: "string",
+                    basicFlag:false,     //basicInfo是否修改
+                    currency: "",
+                    customerAgreementDt: "",
+                    customerAgreementNo: "",
                     // customerName: "string",
                     // customerNo: "string",
                     customerOrderNo: "",
                     deliveredQty: 0,
-                    deliveryDt: "2018-06-01T01:37:58.742Z",
-                    departureCountry: "string",
-                    departurePort: "string",
-                    destCountry: "string",
-                    destPort: "string",
-                    draftCustomer: true,
-                    draftSupplier: true,
+                    deliveryDt: "",
+                    departureCountry: "",
+                    departurePort: "",
+                    destCountry: "",
+                    destPort: "",
+                    // draftCustomer: true,
+                    // draftSupplier: true,
                     // entryDt: "2018-06-01T01:37:58.742Z",
-                    entryName: "string",
                     exchangeRateList: [
                         {
-                            currency: "CNY|USD",
+                            currency: "CNYUSD",
+                            // exchangeRate: '124'
+                        },
+                        {
+                            currency: "CNYEUR",
                             // exchangeRate: ''
                         },
                         {
-                            currency: "CNY|EUR",
+                            currency: "USDEUR",
                             // exchangeRate: ''
                         },
                         {
-                            currency: "USD|EUR",
+                            currency: "USDCNY",
                             // exchangeRate: ''
                         },
                         {
-                            currency: "USD|CNY",
+                            currency: "EURCNY",
                             // exchangeRate: ''
                         },
                         {
-                            currency: "EUR|CNY",
-                            // exchangeRate: ''
-                        },
-                        {
-                            currency: "EUR|USD",
+                            currency: "EURUSD",
                             // exchangeRate: ''
                         }
                     ],
                     fieldRemark: {
-                        additionalProp1: "string",
-                        additionalProp2: "string",
-                        additionalProp3: "string"
+                        // additionalProp1: "string",
+                        // additionalProp2: "string",
+                        // additionalProp3: "string"
                     },
                     fieldUpdate: {
-                        additionalProp1: "string",
-                        additionalProp2: "string",
-                        additionalProp3: "string"
+                        // additionalProp1: "string",
+                        // additionalProp2: "string",
+                        // additionalProp3: "string"
                     },
-                    fieldsRemark: "string",
-                    fieldsUpdate: "string",
-                    importantCustomer: true,
-                    importantSupplier: true,
-                    inboundQty: 0,
-                    incoterm: "",
+                    // importantCustomer: true,
+                    // importantSupplier: true,
+                    incoterm: '',
                     incotermArea: "",
                     lcNo: "",
                     orderNo: "",
-                    ownerId: 0,
-                    paidAmount: 0,
                     payment: "",
                     paymentDays: 0,
-                    paymentRemark: "",
-                    paymentStatus: "string",
+                    productFlag:false,
+                    // paymentRemark: "",
+                    // paymentStatus: "",
                     quotationNo: "",
-                    recycleCustomer: true,
-                    recycleSupplier: true,
-                    remark: "string",
+                    remark: "",
                     remind: true,
+                    responsibilityFlag:false,
                     responsibilityList: [
                         {
                             type: '0',
@@ -553,212 +619,16 @@
                             orderNo:''
                         },
                     ],
-                    skuBarCode: "string",
-                    skuCode: "string",
-                    skuCustomerSkuCode: "string",
-                    skuDescEn: "string",
-                    skuList: [
-                        {
-                            companyId: 0,
-                            entryDt: "2018-06-01T01:37:58.742Z",
-                            entryId: 0,
-                            entryName: "string",
-                            fieldsRemark: "string",
-                            fieldsUpdate: "string",
-                            id: 0,
-                            incoterm: "string",
-                            orderId: 0,
-                            orderNo: "string",
-                            ownerId: 0,
-                            skuAdditionalFour: "string",
-                            skuAdditionalOne: "string",
-                            skuAdditionalThree: "string",
-                            skuAdditionalTwo: "string",
-                            skuAdjustPackage: true,
-                            skuApplicableAge: 0,
-                            skuAvailableQty: 0,
-                            skuBarCode: "string",
-                            skuBrand: "string",
-                            skuBrandRelated: "string",
-                            skuBrandRemark: "string",
-                            skuCategoryFour: "string",
-                            skuCategoryId: 0,
-                            skuCategoryOne: "string",
-                            skuCategoryThree: "string",
-                            skuCategoryTwo: "string",
-                            skuCertificat: "string",
-                            skuCifCurrency: "string",
-                            skuCifPort: "string",
-                            skuCifPrice: 0,
-                            skuCode: "string",
-                            skuColourCn: "string",
-                            skuColourEn: "string",
-                            skuComments: "string",
-                            skuCommodityInspectionCn: "string",
-                            skuCommodityInspectionEn: "string",
-                            skuCustomerCreate: true,
-                            skuCustomerSkuCode: "string",
-                            skuCustomsCode: "string",
-                            skuCustomsNameCn: "string",
-                            skuCustomsNameEn: "string",
-                            skuDduCurrency: "string",
-                            skuDduPort: "string",
-                            skuDduPrice: 0,
-                            skuDeclareElement: "string",
-                            skuDeliveredQty: 0,
-                            skuDeliveryDates: 0,
-                            skuDepartureDt: 0,
-                            skuDescCn: "string",
-                            skuDescCustomer: "string",
-                            skuDescEn: "string",
-                            skuDesign: "string",
-                            skuDisplayBoxQty: 0,
-                            skuExpireDates: 0,
-                            skuExpireUnit: 0,
-                            skuExwCurrency: "string",
-                            skuExwPrice: 0,
-                            skuFobCurrency: "string",
-                            skuFobPort: "string",
-                            skuFobPrice: 0,
-                            skuFormation: "string",
-                            skuGp20SkuQty: 0,
-                            skuGp40SkuQty: 0,
-                            skuGrossWeight: 0,
-                            skuHeight: 0,
-                            skuHq40SkuQty: 0,
-                            skuId: 0,
-                            skuInboundQty: 0,
-                            skuInnerCartonDesc: "string",
-                            skuInnerCartonHeight: 0,
-                            skuInnerCartonLength: 0,
-                            skuInnerCartonMethodCn: "string",
-                            skuInnerCartonMethodEn: "string",
-                            skuInnerCartonOuterNum: 0,
-                            skuInnerCartonPic: "string",
-                            skuInnerCartonQty: 0,
-                            skuInnerCartonRoughWeight: 0,
-                            skuInnerCartonUnit: "string",
-                            skuInnerCartonVolume: 0,
-                            skuInnerCartonWeightNet: 0,
-                            skuInnerCartonWidth: 0,
-                            skuInnerPackBarCode: "string",
-                            skuInnerPackCode: "string",
-                            skuInnerPackLabel: "string",
-                            skuInspectQuarantineCategory: "string",
-                            skuInventory: 0,
-                            skuInventoryCostMethod: "string",
-                            skuLabel: "string",
-                            skuLabelDesc: "string",
-                            skuLabelPic: "string",
-                            skuLength: 0,
-                            skuLengthWidthHeight: "string",
-                            skuMainSaleArea: "string",
-                            skuMainSaleCountry: "string",
-                            skuMaterialCn: "string",
-                            skuMaterialEn: "string",
-                            skuMethodPkgCn: "string",
-                            skuMethodPkgEn: "string",
-                            skuMinInventory: 0,
-                            skuMinOrderQty: 0,
-                            skuModifyStatus: 0,
-                            skuNameCn: "string",
-                            skuNameCustomer: "string",
-                            skuNameEn: "string",
-                            skuNetWeight: 0,
-                            skuNoneSellCountry: "string",
-                            skuOem: true,
-                            skuOrigin: "string",
-                            skuOtherPackInfoCn: "string",
-                            skuOtherPackInfoEn: "string",
-                            skuOuterCartonBarCode: "string",
-                            skuOuterCartonCode: "string",
-                            skuOuterCartonDesc: "string",
-                            skuOuterCartonHeight: 0,
-                            skuOuterCartonLength: 0,
-                            skuOuterCartonMethodCn: "string",
-                            skuOuterCartonMethodEn: "string",
-                            skuOuterCartonNetWeight: 0,
-                            skuOuterCartonPic: "string",
-                            skuOuterCartonQty: 0,
-                            skuOuterCartonRoughWeight: 0,
-                            skuOuterCartonUnit: "string",
-                            skuOuterCartonVolume: 0,
-                            skuOuterCartonWidth: 0,
-                            skuPic: "string",
-                            skuPkgMethodPic: "string",
-                            skuPrice: 0,
-                            skuProductionDates: 0,
-                            skuQty: 0,
-                            skuQtyPerTray: 0,
-                            skuQualifiedQty: 0,
-                            skuQualityStander: "string",
-                            skuQuotationNo: "string",
-                            skuRateValueAddedTax: 0,
-                            skuReadilyAvailable: true,
-                            skuRecycle: true,
-                            skuRemarkOne: "string",
-                            skuRemarkThree: "string",
-                            skuRemarkTwo: "string",
-                            skuSafeInventory: 0,
-                            skuSaleStatus: 0,
-                            skuSample: true,
-                            skuSamplePrice: 0,
-                            skuSampleQty: 0,
-                            skuShippingMarks: "string",
-                            skuSpecialTransportRequire: "string",
-                            skuStatus: "string",
-                            skuSupplierCode: "string",
-                            skuSupplierCompanyId: 0,
-                            skuSupplierId: 0,
-                            skuSupplierName: "string",
-                            skuSupplierTenantId: 0,
-                            skuSysCode: "string",
-                            skuTaxRefundRate: 0,
-                            skuTradeMarkCn: "string",
-                            skuTradeMarkEn: "string",
-                            skuTryDimension: 0,
-                            skuUndeliveredQty: 0,
-                            skuUnit: 0,
-                            skuUnitLength: 0,
-                            skuUnitVolume: 0,
-                            skuUnitWeight: 0,
-                            skuUntestedQty: 0,
-                            skuUseDisplayBox: true,
-                            skuVolume: 0,
-                            skuWarehourceDefault: "string",
-                            skuWidth: 0,
-                            skuYearListed: "2018-06-01T01:37:58.742Z",
-                            tenantId: 0,
-                            timeZone: "string",
-                            updateDt: "2018-06-01T01:37:58.742Z",
-                            updateId: 0,
-                            updateName: "string",
-                            version: 0
-                        }
-                    ],
-                    skuNameCustomer: "string",
-                    skuNameEn: "string",
-                    skuQty: 0,
-                    skuSupplierName: "string",
-                    status: "string",
-                    supplierCode: "string",
+                    skuList: [],
+                    // skuQty: 0,
+                    // skuSupplierName: "",
+                    // status: "",
+                    supplierCode: "",
                     supplierId: 0,
                     supplierName: "",
                     supplierOrderNo: "",
-                    tenantId: 0,
-                    timeZone: "string",
-                    totalGrossWeight: 0,
-                    totalNetWeight: 0,
-                    totalOuterCartonQty: 0,
-                    totalQty: 0,
-                    totalSkuPrice: 0,
-                    totalVolume: 0,
-                    transport: "string",
-                    unpaidAmount: 0,
-                    updateDt: "2018-06-01T01:37:58.743Z",
-                    updateId: 0,
-                    updateName: "string",
-                    version: 0
+                    // timeZone: "",
+                    transport: '1',
                 },
             }
         },
@@ -773,7 +643,13 @@
                         params.supplierId=v.id;
                     }
                 });
+                params.skuList=this.dataFilter(this.productTableData);
                 console.log(params,'params')
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
+                });
             },
 
             //获取订单号(先手动生成一个)
@@ -845,7 +721,16 @@
                 this.updateProduct=Math.random();
             },
             removeProduct(){
-                console.log(this.productTableData,'productTableData')
+                let skuIds=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuId'), 'value'));
+                let arr=[];
+                _.map(this.productTableData,v=>{
+                    _.map(skuIds,m=>{
+                        if(v.skuId.value===m){
+                            arr.push(v);
+                        }
+                    });
+                });
+                this.productTableData=_.difference(this.productTableData, arr);
             },
             handleClick(tab){
                 if(tab.index==='0'){
@@ -874,6 +759,31 @@
                     })
                 })
             },
+            dataFilter(data) {
+                let arr = [],
+                    jsons = {},
+                    json = {};
+                data.forEach(item => {
+                    jsons = {};
+                    if (item._remark) { //拼装remark 数据
+                        for (let k in item) {
+                            jsons[k] = item[k].value;
+                        }
+                        json.fieldRemark = jsons;
+                    } else {
+                        json = {};
+                        for (let k in item) {
+                            if (json[k] === 'fieldRemark') {
+                                json[k] = jsons;
+                            } else {
+                                json[k] = item[k].value;
+                            }
+                        };
+                        arr.push(json);
+                    }
+                });
+                return arr;
+            },
 
 
             /**
@@ -892,15 +802,22 @@
 
             },
             btnClick(e){
-                console.log(e)
+                this.$ajax.get(this.$apis.INQUIRY_ID,{
+                    id:e.id.value
+                }).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
+                });
             },
 
 
 
             getUnit(){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
+                //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{_cache:true})
                     .then(res=>{
                         this.currencyOption=res;
@@ -908,6 +825,33 @@
 
                     }
                 );
+
+                //获取汇率
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{_cache:true}).then(res=>{
+                    _.map(this.orderForm.exchangeRateList,v=>{
+                        _.map(res,m=>{
+                            if(v.currency===m.symbol){
+                                v.exchangeRate=m.price;
+                            }
+                        })
+                    })
+                }).finally(err=>{
+
+                });
+
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN'],{_cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='ITM'){
+                            this.incotermOption=v.codes;
+                        }else if(v.code==='PMT'){
+                            this.paymentOption=v.codes;
+                        }else if(v.code==='MD_TN'){
+                            this.transportOption=v.codes;
+                        }
+                    })
+                }).finally(err=>{
+
+                })
             },
 
 
