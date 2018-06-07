@@ -18,30 +18,31 @@
                          :prop="item.key"
                          :label="item.label">
 
-          <template slot-scope="scope" v-if="scope.row[item.key] && !scope.row[item.key]._hide">
-            <div v-if="!scope.row[item.key]._edit || scope.row[item.key]._title">
-              {{scope.row[item.key].value}}
-              <p v-if="scope.row[item.key]._title" v-text="scope.row[item.key]._title"></p>
+          <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
+            <div v-if="!row[item.key]._edit || row[item.key]._title">
+              {{row[item.key].value}}
+              <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
             <div v-else>
-              <span v-if="(scope.row[item.key]._disabled && !scope.row._remark) || !isModify"
-                    v-text="scope.row[item.key].value"></span>
-              <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
-                <slot :name="item._slot" :data="scope.row[item.key]"></slot>
+              <span v-if="(row[item.key]._disabled && !row._remark) || !isModify"
+                    v-text="row[item.key].value"></span>
+
+              <div v-else-if="row[item.key]._slot && !row._remark">
+                <slot :name="item._slot" :data="row[item.key]"></slot>
               </div>
 
               <div v-else>
                 <!--文本输入-->
-                <el-input v-if="scope.row[item.key].type === 'String' || scope.row._remark" clearable
-                          v-model="scope.row[item.key].value" size="mini"></el-input>
+                <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
+                          v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
                 <el-input-number
-                  v-else-if="scope.row[item.key].type === 'Number'"
-                  v-model="scope.row[item.key].value"
-                  :min="scope.row[item.key].min || 0"
-                  :max="scope.row[item.key].max || 99999999"
+                  v-else-if="row[item.key].type === 'Number'"
+                  v-model="row[item.key].value"
+                  :min="row[item.key].min || 0"
+                  :max="row[item.key].max || 99999999"
                   controls-position="right"
                   size="mini"
                   :controls="false"
@@ -49,15 +50,16 @@
 
                 <!--下拉选项-->
                 <el-select
-                  v-else-if="scope.row[item.key].type === 'Select' && item in scope.row[item.key]._option"
-                  v-model="scope.row[item.key].value"
+                  v-else-if="row[item.key].type === 'Select' && row[item.key]._option"
                   clearable
+                  v-model="row[item.key].value"
+                  @change="val => {changeSelect(val,row[item.key])}"
                   :placeholder="$i.order.pleaseChoose">
                   <el-option
-                    v-for="(item,index) in scope.row[item.key]._option"
+                    v-for="(optionItem,index) in row[item.key]._option"
                     :key="index"
-                    :label="item[scope.row[item.key]._optionLabel || 'name']"
-                    :value="item[scope.row[item.key]._optionValue || 'code']">
+                    :label="optionItem[row[item.key]._optionLabel || 'name']"
+                    :value="optionItem[row[item.key]._optionValue || 'code']">
                   </el-option>
                 </el-select>
 
@@ -101,15 +103,12 @@
     },
     watch: {
       data(val) {
-        // this.dataList = this.getEditData(val);
       },
       visible(val) {
         this.showDialog = val;
       }
     },
     mounted() {
-      // this.dataList = this.getEditData(this.data);
-      // console.log(this.dataList)
     },
     methods: {
       submit() {
@@ -131,7 +130,6 @@
             return val;
           });
         });
-        // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
 
         this.defaultData = this.$depthClone(ed.concat(history));
@@ -139,6 +137,12 @@
         this.showDialog = true;
         this.isModify = isModify;
 
+      },
+      changeSelect(val, item) {
+        let param = {}, obj;
+        param[item._optionValue || 'code'] = val;
+        obj = _.findWhere(item._option, param);
+        item._value = obj ? obj[item._optionLabel || 'name'] : '';
       },
       getFilterData(data, k = 'id') {
         let list = [];

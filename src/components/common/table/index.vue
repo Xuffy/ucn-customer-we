@@ -66,7 +66,7 @@
               <!-- 是否为图片显示 -->
               <div v-if="!cItem._image"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
-                   v-text="cItem.value"></div>
+                   v-text="cItem._value || cItem.value"></div>
 
               <v-image class="img" v-else
                        :src="getImage(cItem.value)"
