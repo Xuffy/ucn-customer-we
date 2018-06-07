@@ -83,6 +83,7 @@
         </div>
         <div class="footer">
             <v-table
+                    code="udata_purchase_sku_overview"
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -280,14 +281,9 @@
         },
         methods:{
             tableFilterValue(val){
-                this.productForm.operatorFilters=[];
-                this.productForm.sorts=[];
-                val.operatorFilters.forEach(v=>{
-                    this.productForm.operatorFilters.push(v);
-                });
-                val.sorts.forEach(v=>{
-                    this.productForm.sorts.push(v);
-                });
+              let {operatorFilters,sorts}=val;
+                this.productForm.operatorFilters=operatorFilters||[];
+                this.productForm.sorts=sorts||[];
                 this.getData();
             },
             //切换body的收缩展开状态
@@ -629,7 +625,7 @@
 
         },
         created(){
-            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
@@ -647,7 +643,7 @@
                 });
 
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
                     this.countryOption=res;
                     this.getData();
                     this.getCategoryId();

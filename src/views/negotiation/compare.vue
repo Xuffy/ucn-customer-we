@@ -212,7 +212,7 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(column, res.datas, (item) => {
@@ -236,7 +236,7 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     this.pageTotal = res.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(column, res.datas, (item) => {
@@ -319,7 +319,7 @@
                 })
                 .then(res => {
                     let datas;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
                     .then(data => {
                         this.setDic(data);
                         datas = this.$getDB(column, res.datas, (item) => {

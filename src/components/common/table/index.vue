@@ -1,18 +1,16 @@
 <template>
   <div class="ucn-table" v-loading="loading"
        :class="{'fixed-left-box':selection,'fixed-right-box':buttons}">
-    <div class="header-content" v-if="!hideFilterColumn && !hideFilterValue">
+    <div class="header-content" v-if="!hideFilterColumn || !hideFilterValue">
       <div>
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-table-filter ref="tableFilter"
-                        :hide-filter-column="hideFilterColumn"
-                        :hide-filter-value="hideFilterValue"
-                        @filter-column="onFilterColumn"
-                        @filter-value="val => {$emit('filter-value',val)}"></v-table-filter>
+        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code"
+                        @change="val => {$emit('filter-value',val)}"></v-filter-value>
 
-        <v-table-filter-column></v-table-filter-column>
+        <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
+                         @change="changeFilterColumn"></v-filter-column>
       </div>
     </div>
 
@@ -145,14 +143,14 @@
    */
 
 
-  import VTableFilter from './filter'
-  import VTableFilterColumn from './filterColumn'
+  import VFilterValue from './filterValue'
+  import VFilterColumn from './filterColumn'
   import VViewPicture from '../viewPicture/index'
   import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VTableFilter, VViewPicture, VImage, VTableFilterColumn},
+    components: {VFilterValue, VViewPicture, VImage, VFilterColumn},
     props: {
       data: {
         type: Array,
@@ -198,6 +196,10 @@
       totalRow: {
         type: [Boolean, Array],
         default: false,
+      },
+      code: {
+        type: String,
+        default: '',
       }
     },
     data() {
@@ -223,14 +225,12 @@
           }
           return val;
         }));
-        // this.dataList = ;
         this.changeCheck(this.dataList, value);
       },
     },
     mounted() {
 
       this.setDataList(this.data, true);
-      // this.dataList = this.data;
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
       this.interval = setInterval(() => {
@@ -314,11 +314,25 @@
         if (this.dataList.length !== val.length) {
           this.$refs.tableBox.scrollTop = 0;
         }
-        let to = setTimeout(() => {
-          clearTimeout(to);
-          this.dataList = val;
-          type && this.filterColumn();
-        }, 50);
+
+        if (!this.hideFilterColumn && this.code){
+          this.$refs.filterColumn.getConfig().then(res => {
+            let to = setTimeout(() => {
+              clearTimeout(to);
+              this.dataList = this.$refs.filterColumn.getFilterData(val, res);
+              type && this.filterColumn();
+            }, 50);
+          })
+        }else {
+          let to = setTimeout(() => {
+            clearTimeout(to);
+            this.dataList = val;
+            type && this.filterColumn();
+          }, 50);
+        }
+      },
+      changeFilterColumn(data) {
+        this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);
       }
     },
     beforeDestroy() {

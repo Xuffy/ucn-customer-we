@@ -63,6 +63,7 @@
     },
     watch: {},
     mounted() {
+      this.getQuickLink();
     },
     methods: {
       getQuickLink() {
