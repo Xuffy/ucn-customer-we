@@ -9,17 +9,18 @@
     "exportLicense": "Export License",
     "businessScope": "Business Scope",
     "currency": "Currency",
-    "paymentterm": "Payment Term",
-    "Suppliershortname": "Supplier Abbreviation",
+    "payment": "Payment",
+    "supplierShortName": "Supplier Abbreviation",
     "description": "Description",
     "factoryName": "Factory Name",
     "factoryAddress": "Factory Address",
     "exportPort": "Export Port",
     "contacctPerson1": "Contacct person1",
-    "contactPhoneNo.": "Contact phone No.",
+    "contactPhoneNo1": "Contact phone No.",
     "contacctPerson2": "Contacct person2",
-    "contactPhoneNo  ": "Contact phone No",
+    "contactPhoneNo2": "Contact phone No",
     "beneficiaryName": "Beneficiary Name",
+    "beneficiaryAccount": "Beneficiary account",
     "beneficiaryAddress": "Beneficiary Address",
     "beneficiaryBankName": "Beneficiary Bank Name",
     "beneficiaryBankSWIFT": "Beneficiary bank SWIFT",
@@ -54,6 +55,9 @@
     "date": "Date",
     "operater": "Operator",
     "action": "action",
+    "accountInfo": "Account Info",
+    "tradeHistory": "Trade History",
+     "inquiryHistory": "Inquiry History",
 
     "customerNO": "customer NO",
     "customerName": "customer name",
@@ -71,10 +75,9 @@
     "contactName": "contact name",
     "tel": "notify",
     "mobileNo": "mobile No",
-    "faxNumber": "fax number",
     "email": "email",
 
-   
+
     "documentRequired": "document required",
     "factoryInspectionReport": "factory inspection report",
     "invoice": "invoice",
@@ -109,5 +112,5 @@
     "time":"time",
     "version": "version",
     "id": "id"
- 
+
 }

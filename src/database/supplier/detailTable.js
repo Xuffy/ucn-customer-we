@@ -12,129 +12,193 @@ export default {
         key: "exportPort",
         belong: "address"
     },
-    contactPerson1: {
+   contacctPerson1: {
         key: "contactPerson1",
         belong: "address"
     },
-    concatPhone1: {
+  contactPhoneNo1: {
         key: "concatPhone1",
         belong: "address"
     },
-    contactPerson2: {
+  contacctPerson2: {
         key: "contactPerson2",
         belong: "address"
     },
-    contactPhone2: {
+  contactPhoneNo2: {
         key: "contactPhone2",
         belong: "address"
     },
 
-    id: {
-        _hide: true,
-        key: "id",
-
-    },
-    supplierId: {
-        _hide: true,
-        key: "supplierId",
-
-    },
-    unifyUser: {
-        _hide: true,
-        key: "unifyUser",
-
-    },
-    version: {
-        _hide: true,
-        key: "version",
-
-    },
-
     //...........account info
-    beneficiaryName: {
-        key: "accountType"
+   beneficiaryName: {
+        key: "beneficiaryName",
+        belong: "accountInfo"
     },
-    beneficiaryAccount: {
-        key: "beneficiaryAccount"
+   beneficiaryAccount: {
+        key: "beneficiaryAccount",
+        belong: "accountInfo"
     },
     beneficiaryAddress: {
-        key: "beneficiaryAddress"
+        key: "beneficiaryAddress",
+        belong: "accountInfo"
     },
-    beneficiaryBankName: {
-        key: "beneficiaryBankName"
+   beneficiaryBankName: {
+        key: "beneficiaryBankName",
+        belong: "accountInfo"
     },
-    beneficiaryBankSwift: {
-        key: "beneficiaryBankSwift"
+   beneficiaryBankSWIFT: {
+        key: "beneficiaryBankSwift",
+        belong: "accountInfo"
     },
-    accountType: {
-        key: "accountType"
+   accountType: {
+        key: "accountType",
+        belong: "accountInfo"
     },
     currency: {
-        key: "currency"
+        key: "currency",
+        belong: "accountInfo"
     },
     companyId: {
         _hide: true,
         key: "accountType"
     },
 
-    id: {
-        _hide: true,
-        key: "accountType"
-    },
-    ownerId: {
-        _hide: true,
-        key: "accountType"
-    },
-    status: {
-        _hide: true,
-        key: "accountType"
-    },
-    supplierId: {
-        _hide: true,
-        key: "accountType"
-    },
-    tenantId: {
-        _hide: true,
-        key: "accountType"
-    },
-    unifyUser: {
-        _hide: true,
-        key: "accountType"
-    },
-    version: {
-        _hide: true,
-        key: "accountType"
-    },
-
     //.............concats
     name: {
-        key: 'name'
+      key: 'name',
+      belong: "concats"
     },
     department: {
-        key: 'deptName'
+      key: 'deptName',
+      belong: "concats"
     },
     gender: {
-        key: 'gender'
+      key: 'gender',
+      belong: "concats"
     },
     position: {
-        key: 'position'
+      key: 'position',
+      belong: "concats"
     },
     mobileNumber: {
-        key: 'cellphone'
+      key: 'cellphone',
+      belong: "concats"
     },
     telNumber: {
-        key: 'telphone'
+      key: 'telphone',
+      belong: "concats"
     },
     faxNumber: {
-        key: 'fax'
+      key: 'fax',
+      belong: "concats"
     },
     emailAddress: {
-        key: 'email'
+      key: 'email',
+      belong: "concats"
     },
     skype: {
-        key: 'skype'
+      key: 'skype',
+      belong: "concats"
     },
-    QQ: {
-        key: 'qq'
+    qq: {
+      key: 'qq',
+      belong: "concats"
     },
+  //tradeHistory
+  orderNo: {
+    key: 'orderNo',
+    belong: "tradeHistory"
+  },
+  orderStatus: {
+    key: 'status',
+    belong: "tradeHistory"
+  },
+  orderDate: {
+    key: 'entryDt',
+    belong: "tradeHistory"
+  },
+  currency: {
+    key: 'currency',
+    belong: "tradeHistory"
+  },
+  purchasingPerson: {
+    key: 'entryId',
+    belong: "tradeHistory"
+  },
+  skuCode: {
+    key: 'skuCode',
+    belong: "tradeHistory"
+  },
+  orderPrice: {
+    key: 'totalSkuPrice',
+    belong: "tradeHistory"
+  },
+  orderQuantity: {
+    key: 'skuQty',
+    belong: "tradeHistory"
+  },
+  amount: {
+    key: 'totalQty',
+    belong: "tradeHistory"
+  },
+  totalNetWeight: {
+    key: 'totalNetWeight',
+    belong: "tradeHistory"
+  },
+  totalGrossWeight: {
+    key: 'totalGrossWeight',
+    belong: "tradeHistory"
+  },
+  totalVolume: {
+    key: 'totalVolume',
+    belong: "tradeHistory"
+  },
+   //inquireHistory
+  inquiryNumber: {
+    key: 'inquiryNo',
+    belong: "inquireHistory"
+  },
+  inquiryDate: {
+    key: 'entryDt',
+    belong: "inquireHistory"
+  },
+  payment: {
+    key: 'paymentTerm',
+    belong: "inquireHistory"
+  },
+  departurePort: {
+    key: 'departurePort',
+    belong: "inquireHistory"
+  },
+  destinationPort: {
+    key: 'destinationPort',
+    belong: "inquireHistory"
+  },
+  quantity: {
+    key: 'skuQty',
+    belong: "inquireHistory"
+  },
+  //remark
+  date: {
+    key: 'entryDt',
+    belong: "remark"
+  },
+  remark: {
+    key: 'remark',
+    belong: "remark"
+  },
+  operater: {
+    key: 'entryName',
+    belong: "remark"
+  },
+  version: {
+    key: 'version',
+    belong: "remark",
+    _hide: true,
+  },
+  id:{
+    key: 'id',
+    belong: "remark",
+    _hide: true,
+  }
 }

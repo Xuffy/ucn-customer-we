@@ -1,43 +1,41 @@
 <template>
     <div class="SupplierSourcing">
             <div class="title">
-             {{$i.supplier.supplierBookmark}}            
+             {{$i.supplier.supplierBookmark}}
         </div>
 <!--        搜索条件-->
             <div style='marginTop:20px;'>
-                <el-form ref="params" :model="params" label-width="200px" size="mini">
-                    <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8" 
-                           v-for='(item,index) in $db.supplier.overview'
-                           :key="index"                   
-                           >
-                            <el-form-item class="form-list" 
-                             v-if="item.showType==='text'"
-                            :label="item.label" 
-                            :prop="item.key"                    
-                            >
-                                <el-input v-model="params[item.key]" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                            <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label" 
-                            :prop="item.key" >
-                                <el-select v-model="params[item.key]"></el-select>
-                               </el-form-item>
-                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label" 
-                                :prop="item.key">
-                                 <div class="speDropdown">
-                                     <drop-down ref="dropDown"  v-model="params[item.key]" :list="dropData"
-                                     :defaultProps="defaultProps"
-                                     ></drop-down>
-                                </div>
-                            </el-form-item>
-                         </el-col>
-
-                        </el-row>
-    </el-form>
+              <el-form ref="params" :model="params" label-width="200px" size="mini">
+                <el-row>
+                  <el-col :xs="24" :sm="12" :md="8" :lg="8"
+                          v-for='(v,index) in $db.supplier.overview'
+                          :key="index+'j'">
+                    <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                      <div v-if="v.type==='input'">
+                        <el-input
+                          size="mini"
+                          placeholder="请输入内容"
+                          v-model="params[v.key]">
+                        </el-input>
+                      </div>
+                      <div v-if="v.type==='select'">
+                        {{params[v.country]}}
+                        <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                          <el-option
+                            size="mini"
+                            v-for="item in options[v.key]"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                          </el-option>
+                        </el-select>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
             </div>
-           
+
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
@@ -52,25 +50,24 @@
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
 <!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
 
-              </div>  
+              </div>
               <div>
-                 
-              </div>          
+
+              </div>
         </div>
 <!--        表格-->
-             <v-table 
+             <v-table
                    :height=360
-                    :data="tabData" 
+                    :data="tabData"
                     :buttons="[{label: 'detail', type: 1}]"
-                    @action="detail" 
+                    @action="detail"
                     @change-checked='checked'
                     :loading='loading'
                     style='marginTop:10px'/>
-              <v-pagination
-                :page-data.sync="params"
-                 @change="handleSizeChange"
-                @size-change="pageSizeChange"
-            /> 
+            <page
+              :page-data="pageData"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"></page>
     </div>
 </template>
 
@@ -88,7 +85,7 @@
         components: {
             dropDown,
             VTable,
-            VPagination
+            page:VPagination
         },
         props: {
 
@@ -120,12 +117,30 @@
                     label: 'name',
                     children: 'children'
                 },
+                options:[],
+                pageData:[]
             }
         },
         methods: {
               ...mapActions([
                 'setRecycleBin'
             ]),
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE"]).then(res=>{
+                this.options.type = _.findWhere(res, {'code': 'SR_TYPE'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            handleSizeChange(val) {
+              this.params.pn = val;
+              this.get_data();
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
+              this.get_data();
+            },
             //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
@@ -181,7 +196,8 @@
                 this.$windowOpen({
                     url: '/supplier/bookmarkDetail',
                     params: {
-                        id: item.id.value
+                        id: item.id.value,
+                        supplierId: item.supplierId.value
                     }
                 });
             },
@@ -199,7 +215,7 @@
                 this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
                     .then(res => {
                         //分页组件的参数
-                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+                        this.pageData=res;
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         this.loading = false
 

@@ -1,53 +1,24 @@
 export default {
     //overview
-    supplierName: {
+   supplierName: {
         key: 'name',
-        type: 'String',
-        showType: 'text',
-        isbasic: true,
-        rule: []
+        type: 'input'
     },
-//    businessScope: {
-//        key: 'mainBusiness',
-//        type: 'String',
-//        showType: 'dropdown',
-//        isbasic: true,
-//        rule: []
-//    },
-    //    categoryId: {
-    //        key: 'categoryId',
-    //        type: 'String',
-    //        showType: 'dropdown',
-    //        isbasic: true,
-    //        rule: []
-    //    },
-    supplierType: {
+   supplierType: {
         key: 'type',
-        type: 'String',
-        showType: 'select',
-        isbasic: false,
-        rule: []
+        type: 'select'
     },
-    SKUnameEN: {
+  skuNameEN: {
         key: 'skuNameEn',
-        type: 'String',
-        showType: 'text',
-        isbasic: false,
-        rule: []
+        type: 'input'
     },
-    SKUcode: {
+  skuCode: {
         key: 'skuCode',
-        type: 'String',
-        showType: 'text',
-        isbasic: false,
-        rule: []
+        type: 'input'
     },
-    description: {
+  description: {
         key: 'description',
-        type: 'String',
-        showType: 'text',
-        isbasic: false,
-        rule: []
+        type: 'input'
     },
 
 }

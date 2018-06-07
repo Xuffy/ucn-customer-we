@@ -1,12 +1,12 @@
 export default {
     //.......................表格
-    supplierNO: {
+  supplierNO: {
         key: 'code'
     },
-    suppliername: {
+   supplierName: {
         key: 'name'
     },
-    suppliertype: {
+   supplierType: {
         key: 'type'
     },
     country: {
@@ -16,16 +16,13 @@ export default {
         _hide: true,
         key: 'companyId'
     },
-    //    category: {
-    //        key: "category"
-    //    },
     mainbusinessscope: {
         key: 'mainBuiness'
     },
     provideincoterm: {
         key: 'incoterm'
     },
-    exportlicense: {
+   exportLicense: {
         key: 'exportLicense'
     },
     description: {
@@ -35,12 +32,15 @@ export default {
     id: {
         _hide: true,
         key: 'id',
-
+    },
+    supplierId:{
+      _hide: true,
+      key: 'supplierId',
     },
     logo: {
         _hide: true,
     },
-    payment: {
+   provideIncoterm: {
         _hide: true,
     },
 
