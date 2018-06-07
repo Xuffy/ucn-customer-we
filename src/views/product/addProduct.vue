@@ -379,6 +379,7 @@
             },
             //获取table数据
             getData(e) {
+                console.log(123)
                 if(this.type==='recycle'){
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
@@ -526,7 +527,7 @@
             createOrder(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                     })
                 }else{
                     let ids='';
@@ -534,7 +535,7 @@
                         ids+=(v.id.value+',');
                     });
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                         params:{
                             type:'product',
                             ids:ids,
