@@ -25,37 +25,40 @@
             </div>
 
             <div v-else>
-              <span v-if="scope.row[item.key]._disabled || !isModify || scope.row[item.key].type === 'manySelect'" v-text="scope.row[item.key].value"></span>
+              <span v-if="(scope.row[item.key]._disabled && !scope.row._remark) || !isModify"
+                    v-text="scope.row[item.key].value"></span>
               <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
                 <slot :name="item._slot" :data="scope.row[item.key]"></slot>
               </div>
-              
+
               <div v-else>
                 <el-input v-if="scope.row[item.key].type === 'String' || scope.row._remark" clearable
                           v-model="scope.row[item.key].value" size="mini"></el-input>
-                
-                <span v-else-if="scope.row[item.key].type === 'Number' && scope.row[item.key].state === 'rate' && !scope.row._remark" style="position:relative;">
+
+                <span
+                  v-else-if="scope.row[item.key].type === 'Number' && scope.row[item.key].state === 'rate' && !scope.row._remark"
+                  style="position:relative;">
                   <el-input-number
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
+                    v-model="scope.row[item.key].value"
+                    :min="scope.row[item.key].min || 0"
+                    :max="scope.row[item.key].max || 99999999"
+                    controls-position="right"
+                    size="mini"
+                    :controls="false"
+                    style="width:100%;"
                   />
                   <i style="position:absolute;top:0;right:5px;transform:translate(-50%, 0)">%</i>
                 </span>
                 <el-input-number
-                      v-else
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
-                  />
+                  v-else
+                  v-model="scope.row[item.key].value"
+                  :min="scope.row[item.key].min || 0"
+                  :max="scope.row[item.key].max || 99999999"
+                  controls-position="right"
+                  size="mini"
+                  :controls="false"
+                  style="width:100%;"
+                />
                 <!--<span v-if="scope.row[item.key].unit"></span>-->
               </div>
             </div>
@@ -129,14 +132,14 @@
         });
         // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
-        
+
         this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
       },
-      getFilterData(data,k = 'id') {
+      getFilterData(data, k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);
