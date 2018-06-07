@@ -9,27 +9,50 @@ export default {
     skuId:{
         _hide:true
     },
+    skuSupplierCode:{
+        _hide:true
+    },
     skuPic:{
         _slot:'skuPic',
-        type:'pic'
+        type:'pic',
+        _image:true
         // disabled:true
     },
-    skuNameEn:{},
+    skuNameEn:{
+        _disabled:true
+    },
     skuNameCn:{
         _slot:'skuNameCn',
         _disabled:true
     },
-    skuDescCn:{},
-    skuDescEn:{},
-    skuDescCustomer:{},
-    skuNameCustomer:{},
-    skuCustomerSkuCode:{},
-    skuCode:{},
-    skuSupplierName:{},
-    skuFobCurrency:{
-        _slot:'skuFobCurrency'
+    skuDescCn:{
+        _disabled:true
     },
-    skuFobPrice:{},
+    skuDescEn:{
+        _disabled:true
+    },
+    skuDescCustomer:{
+        _disabled:true
+    },
+    skuNameCustomer:{
+        _disabled:true
+    },
+    skuCustomerSkuCode:{
+        _disabled:true
+    },
+    skuCode:{
+        _disabled:true
+    },
+    skuSupplierName:{
+        _disabled:true
+    },
+    skuFobCurrency:{
+        _slot:'skuFobCurrency',
+        type:'currency'
+    },
+    skuFobPrice:{
+
+    },
     skuFobPort:{},
     skuExwCurrency:{},
     skuExwPrice:{},
@@ -56,9 +79,9 @@ export default {
     skuDeliveryDates:{},
     skuDesign:{},
     skuCategoryOne:{},
-    skuCategoryTwo:{},
-    skuCategoryThree:{},
-    skuCategoryFour:{},
+    // skuCategoryTwo:{},
+    // skuCategoryThree:{},
+    // skuCategoryFour:{},
     skuCustomsCode:{},
     skuCustomsNameCn:{},
     skuCustomsNameEn:{},

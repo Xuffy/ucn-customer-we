@@ -18,6 +18,7 @@
                             <el-date-picker
                                     :disabled="v.disabled"
                                     v-model="orderForm[v.key]"
+                                    :editable="false"
                                     :placeholder="$i.order.pleaseChoose"
                                     class="speInput"
                                     align="right"
@@ -124,20 +125,19 @@
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
-                                    :placeholder="$i.order.pleaseInput"
                                     :disabled="v.disabled"
                                     class="speInput"
                                     type="textarea"
                                     :autosize="{ minRows: 2}"
-                                    placeholder="请输入内容"
+                                    :placeholder="$i.order.pleaseInput"
                                     v-model="orderForm[v.key]">
                             </el-input>
                         </div>
                         <div v-else-if="v.type==='attachment'">
                             <v-upload
-                                    :list="orderForm.attachment"
-                                    :limit="20"
-                                    ref="upload"></v-upload>
+                                    ref="upload"
+                                    :list="orderForm.attachments"
+                                    :limit="20"></v-upload>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -188,6 +188,7 @@
                 <template slot-scope="scope">
                     <el-date-picker
                             v-model="scope.row.customer"
+                            :editable="false"
                             align="right"
                             type="date"
                             :disabled="scope.row.type==='1' || scope.row.type==='3'"
@@ -204,6 +205,7 @@
                     <el-date-picker
                             v-model="scope.row.supplier"
                             align="right"
+                            :editable="false"
                             type="date"
                             :disabled="true"
                             :placeholder="$i.order.pleaseChoose"
@@ -233,6 +235,7 @@
                             v-model="scope.row.actualDt"
                             align="right"
                             type="date"
+                            :editable="false"
                             :disabled="scope.row.type==='1' || scope.row.type==='3'"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
@@ -257,19 +260,13 @@
                 <div class="btns">
                     <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
                     <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
-                    <selectSearch
-                            class="speSearch"
-                            :options=options
-                            v-model='selectSearch'
-                            @inputEnter="inputEnter">
-                    </selectSearch>
                 </div>
             </template>
         </v-table>
 
         <div class="footBtn">
             <el-button @click="send" type="primary">{{$i.order.send}}</el-button>
-            <el-button type="primary">{{$i.order.saveAsDraft}}</el-button>
+            <el-button @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
             <el-button type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
 
@@ -309,8 +306,10 @@
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
                     <v-product
+                            :disabledLine="disabledProductLine"
                             :forceUpdateNumber="updateProduct"
                             :hideBtn="true"
+                            :isInModify="true"
                             :type="type1"
                             @handleOK="handleProductOk"></v-product>
                 </el-tab-pane>
@@ -318,10 +317,6 @@
                     <v-product :forceUpdateNumber="updateBookmark" :hideBtn="true" :type="type2"></v-product>
                 </el-tab-pane>
             </el-tabs>
-
-
-
-
         </el-dialog>
 
         <v-history-modify
@@ -345,25 +340,27 @@
                 <!--</div>-->
             <!--</div>-->
 
+            <div v-for="v in $db.order.productInfoTable"></div>
+
 
 
 
 
             <!--<div slot="skuNameCn" slot-scope="{data}">{{data.value}}</div>-->
 
-            <!--<el-select-->
-                    <!--slot="skuFobCurrency"-->
-                    <!--slot-scope="{data}"-->
-                    <!--v-model="data.value"-->
-                    <!--clearable-->
-                    <!--:placeholder="$i.order.pleaseChoose">-->
-                <!--<el-option-->
-                        <!--v-for="item in currencyOption"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.code"-->
-                        <!--:value="item.code">-->
-                <!--</el-option>-->
-            <!--</el-select>-->
+            <el-select
+                    slot="skuFobCurrency"
+                    slot-scope="{data}"
+                    v-model="data.value"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in currencyOption"
+                        :key="item.id"
+                        :label="item.code"
+                        :value="item.code">
+                </el-option>
+            </el-select>
 
 
             <!--<el-select-->
@@ -461,7 +458,7 @@
                 tableTotal:[],
                 activeTab:'product',
                 selectProductInfoTable:[],
-
+                disabledProductLine:[],
 
                 /**
                  * 弹出框data配置
@@ -501,7 +498,7 @@
                 orderForm:{
                     actDeliveryDt: "",
                     archive: true,
-                    attachment: [],
+                    attachments: [],
                     basicFlag:false,     //basicInfo是否修改
                     currency: "",
                     customerAgreementDt: "",
@@ -515,7 +512,7 @@
                     departurePort: "",
                     destCountry: "",
                     destPort: "",
-                    // draftCustomer: true,
+                    draftCustomer: false,       //saveAsDraft的时候为true
                     // draftSupplier: true,
                     // entryDt: "2018-06-01T01:37:58.742Z",
                     exchangeRateList: [
@@ -637,19 +634,24 @@
             send(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
-                    if(params.supplierName===v.id){
+                    if(params.supplierName===v.code){
                         params.supplierName=v.name;
                         params.supplierCode=v.code;
                         params.supplierId=v.id;
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                params.attachments=this.$refs.upload[0].getFiles();
                 console.log(params,'params')
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    console.log(res)
-                }).finally(err=>{
+                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                //     console.log(res)
+                // }).finally(err=>{
+                //
+                // });
+            },
 
-                });
+            saveAsDraft(){
+                console.log(this.productTableData,'???')
             },
 
             //获取订单号(先手动生成一个)
@@ -674,12 +676,10 @@
 
                     })
             },
-
             quickCreate(){
                 this.quickCreateDialogVisible=true;
                 this.getInquiryData();
             },
-
             getInquiryData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
@@ -695,11 +695,11 @@
              * */
             productInfoAction(e,type){
                 if(type==='negotiate'){
-                    // console.log(e.skuId.value)
-                    // console.log(this.productTableData,'productTableData')
+                    console.log(e,'???')
+                    console.log(this.productTableData)
                     let arr=[];
                     _.map(this.productTableData,v=>{
-                        if(v.skuId.value===e.skuId.value){
+                        if(Number(v.skuId.value)===Number(e.skuId.value)){
                             arr.push(v);
                         }
                     });
@@ -716,21 +716,36 @@
                 this.selectProductInfoTable=e;
             },
             addProduct(){
+                this.disabledProductLine=this.$copyArr(this.productTableData);
+                // this.disabledProductLine=_.uniq(_.pluck(_.pluck(this.productTableData, 'skuId'), 'value'));
                 this.productTableDialogVisible=true;
                 this.activeTab='product';
                 this.updateProduct=Math.random();
             },
             removeProduct(){
-                let skuIds=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuId'), 'value'));
-                let arr=[];
-                _.map(this.productTableData,v=>{
-                    _.map(skuIds,m=>{
-                        if(v.skuId.value===m){
-                            arr.push(v);
-                        }
+                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let skuIds=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuId'), 'value'));
+                    let arr=[];
+                    _.map(this.productTableData,v=>{
+                        _.map(skuIds,m=>{
+                            if(v.skuId.value===m){
+                                arr.push(v);
+                            }
+                        });
                     });
+                    this.productTableData=_.difference(this.productTableData, arr);
+                    this.selectProductInfoTable=[];
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.order.deleteSuccess
+                    });
+                }).catch(() => {
+
                 });
-                this.productTableData=_.difference(this.productTableData, arr);
             },
             handleClick(tab){
                 if(tab.index==='0'){
@@ -740,14 +755,20 @@
                 }
             },
             handleProductOk(e){
+                this.loadingProductTable=true;
+                this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
-                    this.productTableData=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuId'),item=>{
+                    console.log(res)
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuId'),item=>{
                         if(item._remark){
-                            item.label.value=this.$i.order.remarks
+                            item.label.value=this.$i.order.remarks;
                         }
                     });
-                }).catch(err=>{
-
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    })
+                }).finally(err=>{
+                    this.loadingProductTable=false;
                 });
             },
             saveNegotiate(e){
@@ -760,6 +781,7 @@
                 })
             },
             dataFilter(data) {
+                console.log(data,'????')
                 let arr = [],
                     jsons = {},
                     json = {};
@@ -785,7 +807,6 @@
                 return arr;
             },
 
-
             /**
              * quick create弹出框事件
              * */
@@ -805,18 +826,297 @@
                 this.$ajax.get(this.$apis.INQUIRY_ID,{
                     id:e.id.value
                 }).then(res=>{
-                    console.log(res)
+
+                    this.orderForm.quotationNo=res.quotationNo;
+
+                    let obj={
+                        bookmarkId: null,
+                        companyId: null,
+                        entryDt: '',
+                        entryId: null,
+                        entryName: '',
+                        fieldRemark: {},
+                        fieldUpdate: {},
+                        fieldsRemark: '',
+                        fieldsUpdate: '',
+                        id: null,
+                        orderId: null,
+                        orderNo: '',
+                        ownerId: null,
+                        skuAdditionalFour: '',
+                        skuAdditionalOne: '',
+                        skuAdditionalThree: '',
+                        skuAdditionalTwo: '',
+                        skuAdjustPackage: true,
+                        skuApplicableAge: null,
+                        skuAvailableQty: null,
+                        skuBarCode: '',
+                        skuBrand: '',
+                        skuBrandRelated: '',
+                        skuBrandRemark: '',
+                        skuCategoryFour: '',
+                        skuCategoryId: null,
+                        skuCategoryOne: '',
+                        skuCategoryThree: '',
+                        skuCategoryTwo: '',
+                        skuCertificat: '',
+                        skuCifCurrency: '',
+                        skuCifPort: '',
+                        skuCifPrice: null,
+                        skuCode: '',
+                        skuColourCn: '',
+                        skuColourEn: '',
+                        skuComments: '',
+                        skuCommodityInspectionCn: '',
+                        skuCommodityInspectionEn: '',
+                        skuCustomerCreate: true,
+                        skuCustomerSkuCode: '',
+                        skuCustomsCode: '',
+                        skuCustomsNameCn: '',
+                        skuCustomsNameEn: '',
+                        skuDduCurrency: '',
+                        skuDduPort: '',
+                        skuDduPrice: null,
+                        skuDeclareElement: '',
+                        skuDeliveredQty: null,
+                        skuDeliveryDates: null,
+                        skuDepartureDt: null,
+                        skuDescCn: '',
+                        skuDescCustomer: '',
+                        skuDescEn: '',
+                        skuDesign: '',
+                        skuDisplayBoxQty: null,
+                        skuExpireDates: null,
+                        skuExpireUnit: null,
+                        skuExwCurrency: '',
+                        skuExwPrice: null,
+                        skuFobCurrency: '',
+                        skuFobPort: '',
+                        skuFobPrice: null,
+                        skuFormation: '',
+                        skuGp20SkuQty: null,
+                        skuGp40SkuQty: null,
+                        skuGrossWeight: null,
+                        skuHeight: null,
+                        skuHq40SkuQty: null,
+                        skuId: null,
+                        skuInboundQty: null,
+                        skuIncoterm: '',
+                        skuIncotermArea: '',
+                        skuInnerCartonDesc: '',
+                        skuInnerCartonHeight: null,
+                        skuInnerCartonLength: null,
+                        skuInnerCartonMethodCn: '',
+                        skuInnerCartonMethodEn: '',
+                        skuInnerCartonOuterNum: null,
+                        skuInnerCartonPic: '',
+                        skuInnerCartonQty: null,
+                        skuInnerCartonRoughWeight: null,
+                        skuInnerCartonUnit: '',
+                        skuInnerCartonVolume: null,
+                        skuInnerCartonWeightNet: null,
+                        skuInnerCartonWidth: null,
+                        skuInnerPackBarCode: '',
+                        skuInnerPackCode: '',
+                        skuInnerPackLabel: '',
+                        skuInspectQuarantineCategory: '',
+                        skuInventory: null,
+                        skuInventoryCostMethod: '',
+                        skuLabel: '',
+                        skuLabelDesc: '',
+                        skuLabelPic: '',
+                        skuLength: null,
+                        skuLengthWidthHeight: '',
+                        skuMainSaleArea: '',
+                        skuMainSaleCountry: '',
+                        skuMaterialCn: '',
+                        skuMaterialEn: '',
+                        skuMethodPkgCn: '',
+                        skuMethodPkgEn: '',
+                        skuMinInventory: null,
+                        skuMinOrderQty: null,
+                        skuModifyStatus: null,
+                        skuNameCn: '',
+                        skuNameCustomer: '',
+                        skuNameEn: '',
+                        skuNetWeight: null,
+                        skuNoneSellCountry: '',
+                        skuOem: true,
+                        skuOrigin: '',
+                        skuOtherPackInfoCn: '',
+                        skuOtherPackInfoEn: '',
+                        skuOuterCartonBarCode: '',
+                        skuOuterCartonCode: '',
+                        skuOuterCartonDesc: '',
+                        skuOuterCartonHeight: null,
+                        skuOuterCartonLength: null,
+                        skuOuterCartonMethodCn: '',
+                        skuOuterCartonMethodEn: '',
+                        skuOuterCartonNetWeight: null,
+                        skuOuterCartonPic: '',
+                        skuOuterCartonQty: null,
+                        skuOuterCartonRoughWeight: null,
+                        skuOuterCartonUnit: '',
+                        skuOuterCartonVolume: null,
+                        skuOuterCartonWidth: null,
+                        skuPic: '',
+                        skuPkgMethodPic: '',
+                        skuPrice: null,
+                        skuProductionDates: null,
+                        skuQty: null,
+                        skuQtyPerTray: null,
+                        skuQualifiedQty: null,
+                        skuQualityStander: '',
+                        skuQuotationNo: '',
+                        skuRateValueAddedTax: null,
+                        skuReadilyAvailable: true,
+                        skuRecycle: true,
+                        skuRefunQty: null,
+                        skuRemarkOne: '',
+                        skuRemarkThree: '',
+                        skuRemarkTwo: '',
+                        skuSafeInventory: null,
+                        skuSaleStatus: null,
+                        skuSample: true,
+                        skuSamplePrice: null,
+                        skuSampleQty: null,
+                        skuShippingMarks: '',
+                        skuSpecialTransportRequire: '',
+                        skuStatus: '',
+                        skuSupplierCode: '',
+                        skuSupplierCompanyId: null,
+                        skuSupplierId: null,
+                        skuSupplierName: '',
+                        skuSupplierTenantId: null,
+                        skuSysCode: '',
+                        skuTaxRefundRate: null,
+                        skuTradeMarkCn: '',
+                        skuTradeMarkEn: '',
+                        skuTryDimension: null,
+                        skuUndeliveredQty: null,
+                        skuUnit: null,
+                        skuUnitLength: null,
+                        skuUnitVolume: null,
+                        skuUnitWeight: null,
+                        skuUntestedQty: null,
+                        skuUseDisplayBox: true,
+                        skuVolume: null,
+                        skuWarehourceDefault: '',
+                        skuWidth: null,
+                        skuYearListed: '',
+                        tenantId: null,
+                        timeZone: '',
+                        updateDt: '',
+                        updateId: null,
+                        updateName: '',
+                        version: null
+                    };
+                    let arr=[];
+                    _.map(res.details,v=>{
+                        obj.skuId=v.skuId;
+                        obj.skuPic=v.skuPic;
+                        obj.skuNameEn=v.skuNameEn;
+                        obj.skuNameCn=v.skuNameCn;
+                        obj.skuDescCn =v.skuDescCn;
+                        obj.skuDescEn=v.skuDescEn;
+                        obj.skuDescCustomer=v.skuDescCustomer;
+                        obj.skuNameCustomer=v.skuNameCustomer;
+                        obj.skuCustomerSkuCode=v.skuCustomerSkuCode;
+                        obj.skuCode=v.skuCode;
+                        obj.skuSupplierName=v.skuSupplierName;
+                        obj.skuFobCurrency=v.skuFobCurrency;
+                        obj.skuFobPrice=v.skuFobPrice;
+                        obj.skuFobPort=v.skuFobPort;
+                        obj.skuExwCurrency=v.skuExwCurrency;
+                        obj.skuExwPrice=v.skuExwPrice;
+                        obj.skuCifCurrency=v.skuCifCurrency;
+                        obj.skuCifPrice=v.skuCifPrice;
+                        obj.skuCifPort=v.skuCifArea;
+                        obj.skuDduCurrency=v.skuDduCurrency;
+                        obj.skuDduPrice=v.skuDduPrice;
+                        obj.skuDduPort=v.skuDduArea;
+                        obj.skuUnit=v.skuUnit;
+                        obj.skuMaterialCn=v.skuMaterialCn;
+                        obj.skuMaterialEn=v.skuMaterialEn;
+                        obj.skuRateValueAddedTax=v.skuRateValueAddedTax;
+                        obj.skuTaxRefundRate=v.skuTaxRefundRate;
+                        obj.skuColourCn=v.skuColourCn;
+                        obj.skuColourEn=v.skuColourEn;
+                        obj.skuMinOrderQty=v.skuMinOrderQty;
+                        obj.skuDeliveryDates=v.skuDeliveryDates;
+                        obj.skuDesign=v.skuDesign;
+                        obj.skuCategoryId=v.skuCategoryId;
+                        obj.skuCustomsCode=v.skuCustomsCode;
+                        obj.skuCustomsNameCn=v.skuCustomsNameCn;
+                        obj.skuCustomsNameEn=v.skuCustomsNameEn;
+                        obj.skuTradeMarkCn=v.skuTradeMarkCn;
+                        obj.skuTradeMarkEn=v.skuTradeMarkEn;
+                        obj.skuCommodityInspectionCn=v.skuCommodityInspectionCn;
+                        obj.skuCommodityInspectionEn=v.skuCommodityInspectionEn;
+                        obj.skuDeclareElement=v.skuDeclareElement;
+                        obj.skuOrigin=v.skuOrigin;
+                        obj.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory;
+                        obj.skuUnitLength=v.skuUnitLength;
+                        obj.skuUnitWidth=v.skuUnitWidth;
+                        obj.skuUnitVolumn=v.skuUnitVolumn;
+                        obj.skuLength=v.skuLength;
+                        obj.skuWidth=v.skuWidth;
+                        obj.skuHeight=v.skuHeight;
+                        obj.skuNetWeight=v.skuNetWeight;
+                        obj.skuGrossWeight=v.skuGrossWeight;
+                        obj.skuVolume=v.skuVolume;
+                        obj.skuMethodPkgCn=v.skuMethodPkgCn;
+                        obj.skuMethodPkgEn=v.skuMethodPkgEn;
+                        obj.skuInnerCartonUnit=v.skuInnerCartonUnit;
+                        obj.skuInnerCartonQty=v.skuInnerCartonQty;
+                        obj.skuInnerCartonLength=v.skuInnerCartonLength;
+                        obj.skuInnerCartonWidth=v.skuInnerCartonWidth;
+                        obj.skuInnerCartonHeight=v.skuInnerCartonHeight;
+                        obj.skuInnerCartonWeightNet=v.skuInnerCartonWeightNet;
+                        obj.skuInnerCartonRoughWeight=v.skuInnerCartonRoughWeight;
+                        obj.skuInnerCartonVolume=v.skuInnerCartonVolume;
+                        obj.skuInnerCartonDesc=v.skuInnerCartonDesc;
+                        obj.skuInnerCartonMethodCn=v.skuInnerCartonMethodCn;
+                        obj.skuInnerCartonMethodEn=v.skuInnerCartonMethodEn;
+                        obj.skuOuterCartonUnit=v.skuOuterCartonUnit;
+                        obj.skuOuterCartonDesc=v.skuOuterCartonDesc;
+                        obj.skuOuterCartonQty=v.skuOuterCartonQty;
+                        obj.skuOuterCartonLength=v.skuOuterCartonLength;
+                        obj.skuOuterCartonWidth=v.skuOuterCartonWidth;
+                        obj.skuOuterCartonHeight=v.skuOuterCartonHeight;
+                        obj.skuInnerCartonOuterNum=v.skuInnerCartonOuterNum;
+                        obj.skuOuterCartonNetWeight=v.skuOuterCartonNetWeight;
+                        obj.skuOuterCartonRoughWeight=v.skuOuterCartonRoughWeight;
+                        obj.skuOuterCartonVolume=v.skuOuterCartonVolume;
+                        obj.skuOuterCartonMethodCn=v.skuOuterCartonMethodCn;
+                        obj.skuOuterCartonMethodEn=v.skuOuterCartonMethodEn;
+                        obj.skuBrand=v.skuBrand;
+                        obj.skuApplicableAge=v.skuApplicableAge;
+                        obj.skuExpireDates=v.skuExpireDates;
+                        obj.skuExpireUnit=v.skuExpireUnit;
+                        obj.skuComments=v.skuComments;
+                        obj.skuBarCode=v.skuBarcode;
+                        obj.skuSaleStatus=v.skuStatus;
+                        obj.skuQuotationNo=v.quotationNo;
+                        arr.push(obj);
+                    });
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(arr, 'skuId'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    })
                 }).finally(err=>{
 
                 });
             },
 
-
-
             getUnit(){
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true})
                     .then(res=>{
@@ -854,14 +1154,12 @@
                 })
             },
 
-
             /**
              * 搜索框事件
              * */
             inputEnter(e){
                 console.log(e)
             },
-
 
             /**
              * 分页操作

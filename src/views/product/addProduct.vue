@@ -687,7 +687,12 @@
             disabledLine(n){
                 if(n.length>0){
                     n.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
+                        let id;
+                        if(v.id){
+                            id=_.findWhere(v,{key:'id'}).value;
+                        }else{
+                            id=_.findWhere(v,{key:'skuId'}).value;
+                        }
                         this.tableDataList.forEach(m=>{
                             let newId=_.findWhere(m,{key:'id'}).value;
                             if(id===newId){

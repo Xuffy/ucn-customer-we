@@ -87,8 +87,8 @@ export default {
     ORDER_SKUS:['/order/skus','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SKUHISTORY:['/order/skuHistory','BASE_HCJ','UPURCHASE_URL'],
     INQUIRY_ID:['/inquiry/{id}','BASE_HCJ','UPURCHASE_URL'],
-    OVERVIEW_ORDERPAGE:['/overview/orderPage','BASE_HCJ','UPURCHASE_URL'],
-    OVERVIEW_SKUPAGE:['/overview//skuPage','BASE_HCJ','UPURCHASE_URL'],
+    OVERVIEW_ORDERPAGE:['/order/overview/orderPage','BASE_HCJ','UPURCHASE_URL'],
+    OVERVIEW_SKUPAGE:['/order/overview/skuPage','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SAVE:['/order/save','BASE_HCJ','UPURCHASE_URL']
 
 }

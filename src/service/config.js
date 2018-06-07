@@ -15,6 +15,7 @@ export default {
       BASE_API: '',
       BASE_CS_cgs: '//192.168.51.33:11007',
       BASE_HCJ: '//192.168.51.208:11001',
+      BASE_HCJTEST: '//192.168.51.173:12009',
       BASE_JY: '//192.168.51.199:18002',
       BASE_DHC: '//dev.upurchase-facade.ucnholding.com',
       BASE_LYF: '//dev.uuser-facade.ucnholding.com',

@@ -11,12 +11,6 @@ export default {
     key: 'skuSysCode',
     _hide: true
   },
-  skuMethodPkgEn: {
-    _hide: true
-  },
-  skuWarehourceDefault: {
-    _hide: true
-  },
   skuWarehourceDefault: {
     _hide: true
   },
@@ -30,7 +24,7 @@ export default {
     _hide: true
   },
   _remark: {
-    _hide: true,
+    _hide: true
   },
   id: {
     key: 'id',
@@ -148,7 +142,7 @@ export default {
     state: 'category'
   },
   barcode: {
-    key: "skuBarcode",
+    key: 'skuBarcode',
     type: 'String'
   },
   readilyAvailable: {

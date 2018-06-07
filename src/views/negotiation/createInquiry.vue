@@ -454,303 +454,303 @@
   </div>
 </template>
 <script>
-  import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
-  import product from '@/views/product/addProduct';
-  import {mapActions} from 'vuex'
+import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
+import product from '@/views/product/addProduct';
+import {mapActions} from 'vuex'
 
-  export default {
-    name: 'createInquiry',
-    data() {
-      return {
-        disabledLine: [],
-        checkedAll: [],
-        trig: 0,
-        tableLoad: false,
-        selectAll: {
-          paymentMethod: [],
-          transport: [],
-          incoterm: [],
-          currency: [],
-          supplierName: [],
-          exportLicense: [],
-          destinationCountry: [],
-          departureCountry: []
-        },
-        loading: false,
-        fromArg: {
-          paymentTerm: 0,
-          timeZone: 1,
-          inquiryAmount: 1,
-          skuQty: 1
-        },
-        radio: 'product',   //Add Product status
-        dialogTableVisible: false, //Add Product switch
+export default {
+  name: 'createInquiry',
+  data() {
+    return {
+      disabledLine: [],
+      checkedAll: [],
+      trig: 0,
+      tableLoad: false,
+      selectAll: {
+        paymentMethod: [],
+        transport: [],
+        incoterm: [],
+        currency: [],
+        supplierName: [],
+        exportLicense: [],
+        destinationCountry: [],
+        departureCountry: []
+      },
+      loading: false,
+      fromArg: {
+        paymentTerm: 0,
+        timeZone: 1,
+        inquiryAmount: 1,
+        skuQty: 1
+      },
+      radio: 'product',   //Add Product status
+      dialogTableVisible: false, //Add Product switch
 
-        tabColumn: '', //tab top
-        tabData: [], //tab Data
-        textarea: ''
-      }
-    },
-    components: {
-      'select-search': selectSearch,
-      'v-table': VTable,
-      'v-product': product,
-      VUpload,
-      VHistoryModify
-    },
-    created() {
-      this.getDictionaries();
-      this.remoteMethod('');
-      if (this.$route.query.id) this.getFefault();
+      tabColumn: '', //tab top
+      tabData: [], //tab Data
+      textarea: ''
+    }
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable,
+    'v-product': product,
+    VUpload,
+    VHistoryModify
+  },
+  created() {
+    this.getDictionaries();
+    this.remoteMethod('');
+    if (this.$route.query.id) this.getFefault();
 
-      this.setDraft({
-        name: 'negotiationDraft',
-        params: {
-          type: 'inquiry'
-        },
-        show: true
-      });
-      this.setRecycleBin({
-        name: 'negotiationRecycleBin',
-        params: {
-          type: 'inquiry'
-        },
-        show: true
-      });
-    },
-    computed: {},
-    methods: {
-      ...mapActions([
-        'setDraft',
-        'setRecycleBin'
-      ]),
-      getFefault() {
-        this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
-          id: this.$route.query.id
-        })
-          .then(res => {
-            if (res.exportLicense) {
-              res.exportLicense = 1;
-            } else {
-              res.exportLicense = 0;
-            }
-            if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
-              res.suppliers.forEach(items => {
-                _.mapObject(items, (val, k) => {
-                  if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
-                });
-              });
-            } else {
-              res.suppliers = [];
-            }
-            if(this.$route.query.from === 'copy') {
-              delete res.id;
-              delete res.orderNo;
-              delete res.tenantId;
-              delete res.companyId;
-              delete res.inquiryNo;
-              delete res.quotationNo;
-            }
-            this.fromArg = res;
-            this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
-          });
+    this.setDraft({
+      name: 'negotiationDraft',
+      params: {
+        type: 'inquiry'
       },
-      handleCancel() {
-        this.dialogTableVisible = false;
+      show: true
+    });
+    this.setRecycleBin({
+      name: 'negotiationRecycleBin',
+      params: {
+        type: 'inquiry'
       },
-      addProduct() {
-        let arr = [];
-        _.map(this.tabData, item => {
-          if (!item._disabled) arr.push(item);
-        });
-        this.disabledLine = arr;
-        this.trig = new Date().getTime();
-        this.dialogTableVisible = true;
-      },
-      removeList() {
-        let arr = [];
-        _.map(this.tabData, (item, index) => {
-          if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
-        });
-        this.tabData = _.difference(this.tabData, arr);
-        this.checkedAll = [];
-      },
-      inputEnter(val) {
-
-      },
-      save(data) { //modify 编辑完成反填数据
-        let json = this.$filterName(data[0]), styleJson = {};
-        this.tabData = _.map(this.tabData, val => {
-          if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
-            val = json;
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6')
-              }
-              ;
-            });
-          } else if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
-            val = data[1];
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6')
-              }
-              ;
-            });
-          }
-          return val;
-        });
-      },
-      getDictionaries() {
-        this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], 'cache')
-          .then(res => {
-            this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
-            this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
-            this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-            this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
-              item.code = Number(item.code);
-              return item;
-            });
-          });
-        this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
-          .then(res => {
-            this.selectAll.currency = res;
-          });
-
-        this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', 'cache')
-          .then(res => {
-            this.selectAll.destinationCountry = res;
-            this.selectAll.departureCountry = res;
-          });
-
-      },
-      getProduct() {
-
-      },
-      fromChange(val) {
-        this.trig = new Date().getTime();
-      },
-      submitForm(type) { //提交
-        if (type === 'draft') { //是否保存为草稿
-          this.fromArg.draft = 1;
-        } else {
-          this.fromArg.draft = 0;
-        }
-        this.$refs.ruleform.validate((valid) => {
-          if (!valid) return this.$message({
-            message: this.$i.common.pleaseCompleteTheCompletion,
-            type: 'warning'
-          });
-        });
-        let arr = [];
-        _.map(this.fromArg.suppliers, item => {
-          let json = {};
-          _.mapObject(item, (val, k) => {
-            if (!/^supplier/.test(k)) json[`supplier${k.substring(0, 1).toUpperCase()}${k.substring(1, k.length)}`] = val;
-          });
-          arr.push(json);
-        });
-        let upData = _.clone(this.fromArg);
-        if (arr.length) upData.suppliers = arr;
-        upData.details = this.dataFilter(this.tabData);
-        this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData))
-          .then(res => {
-            if (!this.fromArg.draft) return this.$router.push('/negotiation/inquiry');
-            this.$router.push({
-              name: 'negotiationDraft',
-              params: {
-                type: 'inquiry'
-              }
-            });
-          });
-      },
-      dataFilter(data) {
-        let arr = [], jsons = {}, json = {};
-        data.forEach(item => {
-          jsons = {};
-          if (item._remark) { //拼装remark 数据
-            for (let k in item) {
-              jsons[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
-            }
-            json.fieldRemark = jsons;
+      show: true
+    });
+  },
+  computed: {},
+  methods: {
+    ...mapActions([
+      'setDraft',
+      'setRecycleBin'
+    ]),
+    getFefault() {
+      this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
+        id: this.$route.query.id
+      })
+        .then(res => {
+          if (res.exportLicense) {
+            res.exportLicense = 1;
           } else {
-            json = {};
-            for (let k in item) {
-              if (json[k] === 'fieldRemark') {
-                json[k] = jsons;
-              } else {
-                json[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
-              }
+            res.exportLicense = 0;
+          }
+          if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
+            res.suppliers.forEach(items => {
+              _.mapObject(items, (val, k) => {
+                if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
+              });
+            });
+          } else {
+            res.suppliers = [];
+          }
+          if(this.$route.query.from === 'copy') {
+            delete res.id;
+            delete res.orderNo;
+            delete res.tenantId;
+            delete res.companyId;
+            delete res.inquiryNo;
+            delete res.quotationNo;
+          }
+          this.fromArg = res;
+          this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
+        });
+    },
+    handleCancel() {
+      this.dialogTableVisible = false;
+    },
+    addProduct() {
+      let arr = [];
+      _.map(this.tabData, item => {
+        if (!item._disabled) arr.push(item);
+      });
+      this.disabledLine = arr;
+      this.trig = new Date().getTime();
+      this.dialogTableVisible = true;
+    },
+    removeList() {
+      let arr = [];
+      _.map(this.tabData, (item, index) => {
+        if (_.indexOf(_.pluck(_.pluck(this.checkedAll, 'skuId'), 'value'), Number(item.skuId.value)) !== -1) arr.push(item);
+      });
+      this.tabData = _.difference(this.tabData, arr);
+      this.checkedAll = [];
+    },
+    inputEnter(val) {
+
+    },
+    save(data) { //modify 编辑完成反填数据
+      let json = this.$filterName(data[0]), styleJson = {};
+      this.tabData = _.map(this.tabData, val => {
+        if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
+          val = json;
+          val._modify = true;
+          _.map(val, (item, k) => {
+            if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
+              this.$set(item, '_style', 'color:#27b7b6')
             }
             ;
-            arr.push(json);
-          }
-        });
-        return arr;
-      },
-      changeChecked(item) {
-        this.checkedAll = item;
-      },
-      getList(ids) {
-        this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
-          .then(res => {
-            let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
-              this.$filterDic(item);
-            });
-            this.tabData = arr.concat(this.tabData);
-            this.dialogTableVisible = false;
           });
-      },
-      productInfoBtn(item) { //Product info 按钮创建
-        return [{label: this.$i.common.negotiate, type: 'modify'}, {label: this.$i.common.detail, type: 'detail'}];
-      },
-      fnBasicInfoHistoty(item, type, config) { //查看历史记录
-        let column;
-        this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-          id: item.skuId.value
-        })
-          .then(res => {
-            let arr = [];
-            _.map(this.tabData, items => {
-              if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '' && !items._disabled) arr.push(items)
-            });
-            if (config.type === 'histoty') {
-              this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
-            } else {
-              this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+        } else if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
+          val = data[1];
+          val._modify = true;
+          _.map(val, (item, k) => {
+            if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
+              this.$set(item, '_style', 'color:#27b7b6')
+            }
+            ;
+          });
+        }
+        return val;
+      });
+    },
+    getDictionaries() {
+      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
+        .then(res => {
+          this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
+          this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
+          this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+          this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
+            item.code = Number(item.code);
+            return item;
+          });
+        });
+      this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
+        .then(res => {
+          this.selectAll.currency = res;
+        });
+
+      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
+        .then(res => {
+          this.selectAll.destinationCountry = res;
+          this.selectAll.departureCountry = res;
+        });
+
+    },
+    getProduct() {
+
+    },
+    fromChange(val) {
+      this.trig = new Date().getTime();
+    },
+    submitForm(type) { //提交
+      if (type === 'draft') { //是否保存为草稿
+        this.fromArg.draft = 1;
+      } else {
+        this.fromArg.draft = 0;
+      }
+      this.$refs.ruleform.validate((valid) => {
+        if (!valid) return this.$message({
+          message: this.$i.common.pleaseCompleteTheCompletion,
+          type: 'warning'
+        });
+      });
+      let arr = [];
+      _.map(this.fromArg.suppliers, item => {
+        let json = {};
+        _.mapObject(item, (val, k) => {
+          if (!/^supplier/.test(k)) json[`supplier${k.substring(0, 1).toUpperCase()}${k.substring(1, k.length)}`] = val;
+        });
+        arr.push(json);
+      });
+      let upData = _.clone(this.fromArg);
+      if (arr.length) upData.suppliers = arr;
+      upData.details = this.dataFilter(this.tabData);
+      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData))
+        .then(res => {
+          if (!this.fromArg.draft) return this.$router.push('/negotiation/inquiry');
+          this.$router.push({
+            name: 'negotiationDraft',
+            params: {
+              type: 'inquiry'
             }
           });
-      },
-      producInfoAction(data, type) { //Produc info 按钮操作
-        this.id_type = 'producInfo';
-        switch (type) {
-          case 'histoty':
-            this.fnBasicInfoHistoty(data, 'productInfo', {type: 'histoty', data: data.skuId.value});
-            break;
-          case 'modify':
-            this.oSwitch = true;
-            this.fnBasicInfoHistoty(data, 'productInfo', {type: 'modify', data: data.skuId.value});
-            break;
-          case 'detail':
-            this.$router.push({
-              path: '/product/sourcingDetail',
-              query: {
-                id: data.skuId.value
-              }
-            });
-            break;
+        });
+    },
+    dataFilter(data) {
+      let arr = [], jsons = {}, json = {};
+      data.forEach(item => {
+        jsons = {};
+        if (item._remark) { //拼装remark 数据
+          for (let k in item) {
+            jsons[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
+          }
+          json.fieldRemark = jsons;
+        } else {
+          json = {};
+          for (let k in item) {
+            if (json[k] === 'fieldRemark') {
+              json[k] = jsons;
+            } else {
+              json[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
+            }
+          }
+          ;
+          arr.push(json);
         }
-      },
-      remoteMethod(keyWord) {
-        this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
-          .then(res => {
-            this.selectAll.supplierName = res;
-          })
+      });
+      return arr;
+    },
+    changeChecked(item) {
+      this.checkedAll = item;
+    },
+    getList(ids) {
+      this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
+        .then(res => {
+          let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
+            this.$filterDic(item);
+          });
+          this.tabData = arr.concat(this.tabData);
+          this.dialogTableVisible = false;
+        });
+    },
+    productInfoBtn(item) { //Product info 按钮创建
+      return [{label: this.$i.common.negotiate, type: 'modify'}, {label: this.$i.common.detail, type: 'detail'}];
+    },
+    fnBasicInfoHistoty(item, type, config) { //查看历史记录
+      let column;
+      this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
+        id: item.skuId.value
+      })
+        .then(res => {
+          let arr = [];
+          _.map(this.tabData, items => {
+            if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '' && !items._disabled) arr.push(items)
+          });
+          if (config.type === 'histoty') {
+            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
+          } else {
+            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
+          }
+        });
+    },
+    producInfoAction(data, type) { //Produc info 按钮操作
+      this.id_type = 'producInfo';
+      switch (type) {
+        case 'histoty':
+          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'histoty', data: data.skuId.value});
+          break;
+        case 'modify':
+          this.oSwitch = true;
+          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'modify', data: data.skuId.value});
+          break;
+        case 'detail':
+          this.$router.push({
+            path: '/product/sourcingDetail',
+            query: {
+              id: data.skuId.value
+            }
+          });
+          break;
       }
+    },
+    remoteMethod(keyWord) {
+      this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
+        .then(res => {
+          this.selectAll.supplierName = res;
+        })
     }
   }
+}
 </script>
 <style lang="less" scoped>
   .create-inquiry {

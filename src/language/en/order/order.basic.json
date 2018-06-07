@@ -18,5 +18,8 @@
   "productInfoBig":"Product Info",
   "addProduct":"Add Product",
   "remove":"Remove",
-  "remarks":"Remark"
+  "remarks":"Remark",
+  "prompt":"Prompt",
+  "sure":"Sure",
+  "cancel":"Cancel"
 }
