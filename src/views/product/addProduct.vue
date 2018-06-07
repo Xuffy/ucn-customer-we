@@ -530,18 +530,19 @@
                         url:'/order/create',
                     })
                 }else{
-                    console.log(this.selectList,'??')
-                    // let ids='';
-                    // this.selectList.forEach(v=>{
-                    //     ids+=(v.id.value+',');
-                    // });
-                    // this.$windowOpen({
-                    //     url:'/order/create',
-                    //     params:{
-                    //         type:'product',
-                    //         ids:ids,
-                    //     },
-                    // })
+                    let supplierCode=this.selectList[0].supplierCode.value;
+                    let ids='';
+                    this.selectList.forEach(v=>{
+                        ids+=(v.id.value+',');
+                    });
+                    this.$windowOpen({
+                        url:'/order/create',
+                        params:{
+                            type:'product',
+                            ids:ids,
+                            supplierCode:supplierCode
+                        },
+                    })
                 }
             },
 

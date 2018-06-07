@@ -1056,7 +1056,6 @@
                 this.loadingPage=true;
                 this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME}?name=`).then(res=>{
                     this.supplierOption=res;
-                    console.log(res)
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
                             if(v.code===this.$route.query.supplierCode){
@@ -1521,6 +1520,51 @@
                 // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
                 //     console.log(res)
                 // });
+
+                // this.$ajax.all(
+                //     this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}),
+                //     this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}),
+                //     this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true})).then(res=>{
+                //     console.log(res)
+                //     console.log(123)
+                //     this.currencyOption=res[0];
+                //     _.map(this.orderForm.exchangeRateList,v=>{
+                //         _.map(res[1],m=>{
+                //             if(v.currency===m.symbol){
+                //                 v.exchangeRate=m.price;
+                //             }
+                //         })
+                //     });
+                //     res[2].forEach(v=>{
+                //         if(v.code==='ITM'){
+                //             this.incotermOption=v.codes;
+                //         }else if(v.code==='PMT'){
+                //             this.paymentOption=v.codes;
+                //         }else if(v.code==='MD_TN'){
+                //             this.transportOption=v.codes;
+                //         }else if(v.code==='SKU_UNIT'){
+                //             this.skuUnitOption=v.codes;
+                //         }else if(v.code==='LH_UNIT'){
+                //             this.lengthOption=v.codes;
+                //         }else if(v.code==='WT_UNIT'){
+                //             this.weightOption=v.codes;
+                //         }else if(v.code==='VE_UNIT'){
+                //             this.volumeOption=v.codes;
+                //         }else if(v.code==='ED_UNIT'){
+                //             this.expirationDateOption=v.codes;
+                //         }else if(v.code==='NS_IS'){
+                //             this.isNeedSampleOption=v.codes;
+                //         }
+                //     })
+                //
+                //
+                //
+                //
+                // }).catch(err=>{
+                //     console.log(213124124)
+                //     this.loadingPage=false;
+                // })
+
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                         this.currencyOption=res;})
@@ -1567,7 +1611,24 @@
                     })
                 }).finally(err=>{
                     this.loadingPage=false;
-                })
+                });
+                let ids=this.$route.query.ids;
+                ids=ids.slice(0,ids.length-1);
+                this.loadingProductTable=true;
+                this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                            item.skuPic._image=false;
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    })
+                    console.log(this.productTableData,'this.productTableData')
+                }).finally(err=>{
+                    this.loadingProductTable=false;
+                });
             },
 
             /**
