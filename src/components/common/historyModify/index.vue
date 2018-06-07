@@ -25,38 +25,42 @@
             </div>
 
             <div v-else>
-              <span v-if="scope.row[item.key]._disabled || !isModify || scope.row[item.key].type === 'manySelect'" v-text="scope.row[item.key].value"></span>
+              <span v-if="(scope.row[item.key]._disabled && !scope.row._remark) || !isModify"
+                    v-text="scope.row[item.key].value"></span>
               <div v-else-if="scope.row[item.key]._slot && !scope.row._remark">
                 <slot :name="item._slot" :data="scope.row[item.key]"></slot>
               </div>
-              
+
               <div v-else>
+                <!--文本输入-->
                 <el-input v-if="scope.row[item.key].type === 'String' || scope.row._remark" clearable
                           v-model="scope.row[item.key].value" size="mini"></el-input>
-                
-                <span v-else-if="scope.row[item.key].type === 'Number' && scope.row[item.key].state === 'rate' && !scope.row._remark" style="position:relative;">
-                  <el-input-number
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
-                  />
-                  <i style="position:absolute;top:0;right:5px;transform:translate(-50%, 0)">%</i>
-                </span>
+
+                <!--数字输入-->
                 <el-input-number
-                      v-else
-                      v-model="scope.row[item.key].value"
-                      :min="scope.row[item.key].min || 0"
-                      :max="scope.row[item.key].max || 99999999"
-                      controls-position="right" 
-                      size="mini"
-                      :controls="false" 
-                      style="width:100%;"
-                  />
-                <!--<span v-if="scope.row[item.key].unit"></span>-->
+                  v-else-if="scope.row[item.key].type === 'Number'"
+                  v-model="scope.row[item.key].value"
+                  :min="scope.row[item.key].min || 0"
+                  :max="scope.row[item.key].max || 99999999"
+                  controls-position="right"
+                  size="mini"
+                  :controls="false"
+                  style="width:100%;"></el-input-number>
+
+                <!--下拉选项-->
+                <el-select
+                  v-else-if="scope.row[item.key].type === 'Select' && item in scope.row[item.key]._option"
+                  v-model="scope.row[item.key].value"
+                  clearable
+                  :placeholder="$i.order.pleaseChoose">
+                  <el-option
+                    v-for="(item,index) in scope.row[item.key]._option"
+                    :key="index"
+                    :label="item[scope.row[item.key]._optionLabel || 'name']"
+                    :value="item[scope.row[item.key]._optionValue || 'code']">
+                  </el-option>
+                </el-select>
+
               </div>
             </div>
           </template>
@@ -64,8 +68,8 @@
       </el-table>
 
       <div slot="footer">
-        <el-button @click="showDialog = false">取 消</el-button>
-        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="showDialog = false">{{$i.common.cancel}}</el-button>
+        <el-button type="primary" @click="submit">{{$i.common.confirm}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -129,14 +133,14 @@
         });
         // this.dataList = ed.concat(history);
         this.dataList = this.$depthClone(ed.concat(history));
-        
+
         this.defaultData = this.$depthClone(ed.concat(history));
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
 
       },
-      getFilterData(data,k = 'id') {
+      getFilterData(data, k = 'id') {
         let list = [];
         _.map(data, value => {
           list.push(value);

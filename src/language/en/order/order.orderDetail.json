@@ -144,5 +144,7 @@
   "USDEUR":"exchange rate($--€)",
   "USDCNY":"exchange rate($--￥)",
   "EURCNY":"exchange rate(€--￥)",
-  "EURUSD":"exchange rate(€--$)"
+  "EURUSD":"exchange rate(€--$)",
+
+  "skuCategoryId":"CategoryId"
 }
