@@ -98,6 +98,7 @@
         },
         data(){
             return{
+                pageData:[],
                 forceUpdateNumber:1,
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
@@ -133,7 +134,6 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
-
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
                         console.log(this.tableDataList)
                         this.disabledLine=this.tableDataList;

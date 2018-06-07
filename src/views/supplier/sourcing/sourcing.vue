@@ -65,10 +65,10 @@
                     @action="detail"
                     @change-checked='checked'
                     style='marginTop:10px'/>
-            <page
-              :page-data="pageData"
-              @change="handleSizeChange"
-              @size-change="pageSizeChange"></page>
+            <!--<page-->
+              <!--:page-data="pageData"-->
+              <!--@change="handleSizeChange"-->
+              <!--@size-change="pageSizeChange"></page>-->
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
@@ -184,7 +184,7 @@
                         // type: 'supplier',
                         // supplierName: this.selectedData[0].name.value,
                         // supplierNo: this.selectedData[0].code.value,
-                        supplierId: this.selectedData[0].id.value
+                      supplierCode: this.selectedData[0].code.value
                     }
                 });
             },
@@ -244,7 +244,7 @@
                 this.$ajax.post(this.$apis.get_listSupplier, this.params)
                     .then(res => {
                         //分页组件的参数
-                        this.pageData=res;
+                        // this.pageData=res;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         if (this.disabledLine.length > 0) {
