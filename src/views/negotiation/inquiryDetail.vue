@@ -203,7 +203,7 @@ export default {
     }
     this.getDictionaries();
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: true});
+    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
   },
   watch: {
     ChildrenCheckList(val, oldVal) {
