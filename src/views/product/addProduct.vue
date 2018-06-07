@@ -527,7 +527,7 @@
             createOrder(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                     })
                 }else{
                     let ids='';
@@ -535,7 +535,7 @@
                         ids+=(v.id.value+',');
                     });
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                         params:{
                             type:'product',
                             ids:ids,

@@ -569,7 +569,7 @@
 
             createOrder(){
                 this.$windowOpen({
-                    url:'/order/creat',
+                    url:'/order/create',
                     params:{
                         type:'product',
                         ids:this.$route.query.id+',',

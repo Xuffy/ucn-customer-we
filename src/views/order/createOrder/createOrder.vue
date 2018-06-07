@@ -1077,6 +1077,8 @@
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     let arr=[];
+                    console.log(e,'e????')
+                    console.log(this.productTableData)
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             arr.push(v);
@@ -1214,10 +1216,11 @@
                 this.$ajax.get(this.$apis.INQUIRY_ID,{
                     id:e.id.value
                 }).then(res=>{
+                    console.log(res.details)
                     this.orderForm.quotationNo=res.quotationNo;
                     this.productTableData=[];
                     let obj={
-                        bookmarkId: null,
+                        bookmarkId: '',
                         companyId: null,
                         entryDt: '',
                         entryId: null,
@@ -1489,7 +1492,7 @@
                         obj.skuSysCode=v.skuSysCode;
                         arr.push(obj);
                     });
-                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(arr, 'skuId'),item=>{
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
