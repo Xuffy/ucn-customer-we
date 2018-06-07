@@ -251,7 +251,7 @@
                 //     console.log(res)
                 // });
 
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {_cache: true}).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
                             this.orderStatusOption = v.codes;

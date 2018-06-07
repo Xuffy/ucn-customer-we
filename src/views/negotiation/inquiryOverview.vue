@@ -159,7 +159,7 @@
                 this.$ajax.post(url, this.params)
                 .then(res => {
                     res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], 'cache')
                     .then(data => {
                         this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
                         .then(datas => {

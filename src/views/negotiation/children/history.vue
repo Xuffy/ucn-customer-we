@@ -60,7 +60,6 @@
 </template>
 <script>
     import VTable from '@/components/common/table/index';
-    import VSimpleTable from '@/components/common/table/simple';
     import Upload from '@/components/common/upload/upload';
     export default {
         data() {

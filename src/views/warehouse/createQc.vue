@@ -776,14 +776,14 @@
              * */
             getUnit(){
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{cache:true}).then(res=>{
                     this.qcStatusOption=res[0].codes;
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
                 });
 
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
                     this.currencyOptions=res;
                     this.loadingData=false;
                 }).catch(err=>{

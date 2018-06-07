@@ -14,10 +14,10 @@
                         </el-checkbox-group> -->
                     </div>
                     <div class="tab-msg-wrap">
-                        <v-table 
+                        <v-table
                             :height="450"
-                            :data.sync="newTabData" 
-                            :selection="false" 
+                            :data.sync="newTabData"
+                            :selection="false"
                             :buttons="basicInfoBtn"
                             :loading="tableLoad"
                             :rowspan="2"
@@ -34,7 +34,7 @@
                         </div>
                         <select-search :options="options" v-model="id" v-show="!statusModify" />
                     </div>
-                    <v-table 
+                    <v-table
                         :data.sync="newProductTabData"
                         :buttons="productInfoBtn"
                         :loading="tableLoad"
@@ -73,19 +73,19 @@
                 <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
                 <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
             </el-radio-group>
-            <v-product 
+            <v-product
                 :hideBtns="true"
                 :hideBtn="true"
                 :disabledLine="disabledLine"
                 @handleOK="getList"
-                :forceUpdateNumber="trig" 
+                :forceUpdateNumber="trig"
                 :type="radio"
                 :isInquiry="true">
             </v-product>
         </el-dialog>
         <v-history-modify
             @save="save"
-            ref="HM">  
+            ref="HM">
             <el-select
                 value-key="id"
                 size="mini"
@@ -588,18 +588,18 @@ export default {
             "UDB_IS",
             "SKU_PG_IS"
           ],
-          { _cache: true }
+          { cache: true }
         );
       };
       const getCurrencyAll = () => {
         // todo 币种 CY_UNIT
         return this.$ajax.get(this.$apis.GET_CURRENCY_ALL, "", {
-          _cache: true
+          cache: true
         });
       };
       const getCountryAll = () => {
         // todo 国家 COUNTRY
-        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, "", { _cache: true });
+        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, "", { cache: true });
       };
       await this.$ajax
         .all([postCodePart(), getCurrencyAll(), getCountryAll()])

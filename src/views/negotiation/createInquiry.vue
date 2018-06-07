@@ -604,7 +604,7 @@
         });
       },
       getDictionaries() {
-        this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
+        this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], 'cache')
           .then(res => {
             this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
             this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
@@ -619,7 +619,7 @@
             this.selectAll.currency = res;
           });
 
-        this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
+        this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', 'cache')
           .then(res => {
             this.selectAll.destinationCountry = res;
             this.selectAll.departureCountry = res;
