@@ -334,7 +334,7 @@
             ]),
             //获取字典表
             getDictionaries() {
-                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
+                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], 'cache')
                     .then(res => {
                         this.selectAll.payment = _.findWhere(res, {
                             'code': 'PMT'
@@ -357,12 +357,12 @@
                         //                    });
                     });
 
-                this.$ajax.get(this.$apis.post_country, '', '_cache')
+                this.$ajax.get(this.$apis.post_country, '', 'cache')
                     .then(res => {
                         this.selectAll.destinationCountry = res;
                         this.selectAll.departureCountry = res;
                     });
-                this.$ajax.get(this.$apis.post_logisticsport, '', '_cache')
+                this.$ajax.get(this.$apis.post_logisticsport, '', 'cache')
                     .then(res => {
                         this.selectAll.destPort = res;
                         this.selectAll.departurePort = res;

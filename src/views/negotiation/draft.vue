@@ -10,7 +10,7 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                
+
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -20,10 +20,10 @@
                 </el-radio-group>
             </div>
         </div>
-        <v-table 
-            :data="tabData" 
+        <v-table
+            :data="tabData"
             :loading="tabLoad"
-            :buttons="[{label: 'Detail', type: 'detail'}]" 
+            :buttons="[{label: 'Detail', type: 'detail'}]"
             @action="action"
             @change-checked="changeChecked"
             :height="450"
@@ -110,7 +110,7 @@
                 this.$ajax.post(url, this.bodyData)
                 .then(res => {
                     res.tc ? this.bodyData.tc = res.tc : this.bodyData.tc = this.bodyData.tc;
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(column, res.datas, (item) => {

@@ -577,18 +577,18 @@ export default {
             'UDB_IS',
             'SKU_PG_IS'
           ],
-          { _cache: true }
+          { cache: true }
         );
       };
       const getCurrencyAll = () => {
         // todo 币种 CY_UNIT
         return this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {
-          _cache: true
+          cache: true
         });
       };
       const getCountryAll = () => {
         // todo 国家 COUNTRY
-        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', { _cache: true });
+        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', { cache: true });
       };
       await this.$ajax
         .all([postCodePart(), getCurrencyAll(), getCountryAll()])

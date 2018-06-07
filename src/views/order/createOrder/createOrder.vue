@@ -1118,7 +1118,7 @@
                 //     console.log(res)
                 // });
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{_cache:true})
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true})
                     .then(res=>{
                         this.currencyOption=res;
                     }).finally(err=>{
@@ -1127,7 +1127,7 @@
                 );
 
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
                             if(v.currency===m.symbol){
@@ -1139,7 +1139,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;

@@ -24,6 +24,7 @@
         <v-table ref="pendingTable"
                  :data="item.data"
                  :selection="false"
+                 hideFilterColumn
                  :height="220">
         </v-table>
         <v-pagination :page-data="item.page" @size-change="pageSizeChange"
@@ -36,14 +37,12 @@
 </template>
 
 <script>
-  import {VSimpleTable, VTable, VTableFilter, VViewPicture, VPagination} from '@/components/index';
+  import {VTable,  VViewPicture, VPagination} from '@/components/index';
 
   export default {
     name: 'VTableData',
     components: {
-      VSimpleTable,
       VTable,
-      VTableFilter,
       VViewPicture,
       VPagination,
     },

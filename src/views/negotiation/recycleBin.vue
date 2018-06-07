@@ -8,8 +8,8 @@
             </div>
             <select-search :options="options" @inputChange="searchEnter" />
         </div>
-        <v-table 
-            :data="tabData" 
+        <v-table
+            :data="tabData"
             :loading="tabLoad"
             @change-checked="changeChecked"
             :height="350"
@@ -75,7 +75,7 @@
                 .then(res => {
                     this.pageTotal = res.tc;
 
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], '_cache')
+                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
                     .then(data => {
                         this.setDic(data);
                         this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
@@ -84,10 +84,10 @@
                         this.tabLoad = false;
                         this.searchLoad = false;
                     });
-                     
+
                 })
                 .catch(() => {
-                    this.searchLoad = false; 
+                    this.searchLoad = false;
                     this.tabLoad = false;
                 });
             },
@@ -212,7 +212,7 @@
                     //recycleSupplier
                     break;
             };
-            this.getList();            
+            this.getList();
         }
     }
 </script>
