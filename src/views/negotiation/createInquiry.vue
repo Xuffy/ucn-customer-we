@@ -501,22 +501,9 @@ export default {
   created() {
     this.getDictionaries();
     this.remoteMethod('');
-    if (this.$route.query.id) this.getFefault();
-
-    this.setDraft({
-      name: 'negotiationDraft',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
+    if(this.$route.query.id) this.getFefault();
+    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
+    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
   },
   computed: {},
   methods: {
