@@ -95,7 +95,9 @@
       getFilterData(data, checkList) {
         return _.map(data, val => {
           return _.mapObject(val, v => {
-            v._hide = checkList.indexOf(v.key) === -1;
+            if (_.isObject(v)){
+              v._hide = checkList.indexOf(v.key) === -1;
+            }
             return v;
           });
         });
