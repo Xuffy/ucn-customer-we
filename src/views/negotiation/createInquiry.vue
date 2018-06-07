@@ -501,22 +501,9 @@ export default {
   created() {
     this.getDictionaries();
     this.remoteMethod('');
-    if (this.$route.query.id) this.getFefault();
-
-    this.setDraft({
-      name: 'negotiationDraft',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
+    if(this.$route.query.id) this.getFefault();
+    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
+    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
   },
   computed: {},
   methods: {
@@ -604,7 +591,7 @@ export default {
       });
     },
     getDictionaries() {
-      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], '_cache')
+      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache:true})
         .then(res => {
           this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
           this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
@@ -619,7 +606,7 @@ export default {
           this.selectAll.currency = res;
         });
 
-      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', '_cache')
+      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache:true})
         .then(res => {
           this.selectAll.destinationCountry = res;
           this.selectAll.departureCountry = res;

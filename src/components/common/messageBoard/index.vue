@@ -1,7 +1,7 @@
 <template>
   <div class="ucn-message-board" :class="{show:$store.state.layout.paddingRight}">
     <div class="title-box">
-      <h3 class="ucn-content-title inline">Message Board</h3>
+      <h3 class="ucn-content-title inline">{{$i.common.messageBoard}}</h3>
       <i class="el-icon-d-arrow-right"
          @click="$store.state.layout.paddingRight = $store.state.layout.paddingRight ? 0 : '375px'"></i>
     </div>
@@ -25,7 +25,7 @@
 
         </div>
         <div class="btn-box">
-          <el-button type="primary" @click='sendMessage' :loading="submitLoading">submit</el-button>
+          <el-button type="primary" @click='sendMessage' :loading="submitLoading">{{$i.common.submit}}</el-button>
         </div>
       </div>
     </div>
@@ -77,7 +77,7 @@
     },
     methods: {
       sendMessage() {
-        if (!this.messageContent) return this.$message('请输入内容');
+        if (!this.messageContent) return this.$message.warning(this.$i.common.content);
 
         this.submitLoading = true;
 
@@ -105,30 +105,6 @@
           .finally(() => {
             this.contentLoading = false;
           });
-      },
-      //移除文件的钩子函数
-      handleRemove(file, fileList) {
-        //               console.log(file, fileList);
-      },
-      //上传文件之前的校验文件类型
-      beforeAvatarUpload(file) {
-        const isType = this.accept.indexOf(file.type) != -1;
-        const isSize = file.size / 1024 / 1024 < this.maxsize;
-        if (!isType) {
-          this.$message.error('上传格式不对!');
-        }
-        if (!isSize) {
-          this.$message.error('上传头像图片大小不能超过 !' + this.maxsize);
-        }
-        return isType && isSize;
-      },
-      //上传成功的钩子函数
-      handleSuccess(response, file, fileList) {
-        //                console.log(response)
-      },
-      //点击已上传的文件链接时的钩子, 可以通过 file.response 拿到服务端返回数据
-      handlePictureCardPreview(file) {
-
       }
     }
   }

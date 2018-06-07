@@ -50,8 +50,7 @@
 </template>
 <script>
 import VTable from '@/components/common/table/index';
-import VSimpleTable from '@/components/common/table/simple';
-import Upload from '@/components/common/upload/upload';
+// import Upload from '@/components/common/upload/upload';
 export default {
   data() {
     return {
@@ -189,7 +188,7 @@ export default {
   },
   components: {
     VTable,
-    'v-up-load': Upload
+    // 'v-up-load': Upload
   }
 };
 </script>

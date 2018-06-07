@@ -467,7 +467,7 @@
                 }else{
                     if(this.selectList.length===0){
                         this.$windowOpen({
-                            url:'/order/creat',
+                            url:'/order/create',
                         })
                     }else{
                         let ids='';
@@ -475,7 +475,7 @@
                             ids+=(v.skuId.value+',');
                         });
                         this.$windowOpen({
-                            url:'/order/creat',
+                            url:'/order/create',
                             params:{
                                 type:'product',
                                 ids:ids,
@@ -562,7 +562,7 @@
             }
         },
         created(){
-            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
@@ -579,7 +579,7 @@
                     }
                 });
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
                     this.countryOption=res;
                     this.getData();
                     this.getCategoryId();

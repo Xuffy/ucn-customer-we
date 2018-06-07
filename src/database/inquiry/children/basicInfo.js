@@ -71,7 +71,6 @@ export default {
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'transportationWay',
     transForm: 'MD_TN'
   },
   payment: { // 付款方式 下拉选择
@@ -79,7 +78,6 @@ export default {
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'paymentMethod',
     transForm: 'PMT'
   },
   destinationCountry: { // 目的国 下拉选择
@@ -87,28 +85,24 @@ export default {
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'destinationCountry',
     transForm: 'COUNTRY'
   },
   departureCountry: { // 发运国 下拉选择所有选项 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'departureCountry',
     transForm: 'COUNTRY'
   },
   incoterm: { // 价格条款 选择 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'incoterm',
     transForm: 'ITM'
   },
   currency: { // 币种 选择 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'currency',
     transForm: 'CY_UNIT'
   },
   exchangeRate: {
@@ -194,7 +188,6 @@ export default {
     sm: 24,
     md: 24,
     lg: 24,
-    _slot: 'attachment'
   },
   fieldDisplay: {
     _hide: true

@@ -8,10 +8,10 @@
             </div>
             <select-search :options="options" @inputEnter="inputEnter" />
         </div>
-        <v-table 
-            :data="tabData" 
+        <v-table
+            :data="tabData"
             :loading="tabLoad"
-            :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]" 
+            :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]"
             @action="action"
             @change-checked="changeChecked"
             :height="455"
@@ -24,140 +24,140 @@
     </div>
 </template>
 <script>
-    import { VTable, selectSearch, VPagination } from '@/components/index';
-    import { mapActions } from 'vuex'
-    export default {
-        name:'',
-        data() {
-            return {
-                pageTotal:0,
-                checkedArg: [],
-                tabData: [],
-                options:[{
-                    id:'1',
-                    label:'Compare Name'
-                }, {
-                    id: '2',
-                    label: 'Compare Item'
-                }],
-                bodyData: {
-                    key: '',
-                    keyType: '',
-                    // operatorFilters: { //筛选条件
-                    //     columnName: '',
-                    //     operator: '',
-                    //     property: '',
-                    //     resultMapId: '',
-                    //     value: {}
-                    // },
-                    ps: 50,
-                    pn: 1,
-                    tc: 0,
-                    recycle: 0,
-                    // sorts: [
-                    //     {
-                    //         nativeSql: true,
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //         resultMapId: "string"
-                    //     }
-                    // ]
-                },
-                tabLoad: false
-            }
+import { VTable, selectSearch, VPagination } from '@/components/index';
+import { mapActions } from 'vuex';
+export default {
+  name: '',
+  data() {
+    return {
+      pageTotal: 0,
+      checkedArg: [],
+      tabData: [],
+      options: [{
+        id: '1',
+        label: 'Compare Name'
+      }, {
+        id: '2',
+        label: 'Compare Item'
+      }],
+      bodyData: {
+        key: '',
+        keyType: '',
+        // operatorFilters: { //筛选条件
+        //     columnName: '',
+        //     operator: '',
+        //     property: '',
+        //     resultMapId: '',
+        //     value: {}
+        // },
+        ps: 50,
+        pn: 1,
+        tc: 0,
+        recycle: 0
+        // sorts: [
+        //     {
+        //         nativeSql: true,
+        //         orderBy: "string",
+        //         orderType: "string",
+        //         resultMapId: "string"
+        //     }
+        // ]
+      },
+      tabLoad: false
+    };
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable,
+    'v-pagination': VPagination
+  },
+  created() {
+    this.getList();
+    this.setRecycleBin({
+      name: 'negotiationRecycleBin',
+      params: {
+        type: 'compare'
+      },
+      show: false
+    });
+  },
+  methods: {
+    ...mapActions([
+      'setRecycleBin'
+    ]),
+    getList() { // 获取Compare 列表
+      this.tabLoad = true;
+      this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
+        .then(res => {
+          let data = res.datas;
+          this.tabLoad = false;
+          data.forEach(item => {
+            item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
+          });
+          this.bodyData.tc = res.tc;
+          this.tabData = this.$getDB(this.$db.inquiry.compare, data);
+        });
+    },
+    searchEnter(item) { // 搜索框
+      this.bodyData.key = item.key;
+      this.bodyData.keyType = item.keyType;
+    },
+    action(item, type) { // 操作表单 action
+      let types = '';
+      if (type === 'detail') {
+        types = 'only';
+      } else {
+        types = 'modify';
+      }
+      this.$router.push({
+        name: 'negotiationCompareDetail',
+        params: {
+          type: types
         },
-        components: {
-            'select-search':selectSearch,
-            'v-table': VTable,
-            'v-pagination': VPagination
-        },
-        created() {
-            this.getList();
-            this.setRecycleBin({
-                name: 'negotiationRecycleBin',
-                params: {
-                    type: 'compare'
-                },
-                show: true
-            });
-        },
-        methods: {
-            ...mapActions([
-                'setRecycleBin'
-            ]),
-            getList() { //获取Compare 列表
-                this.tabLoad = true;
-                this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
-                .then(res => {
-                    let data = res.datas;
-                    this.tabLoad = false;
-                    data.forEach(item => {
-                        item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
-                    });
-                    this.bodyData.tc = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
-                });
-            },
-            searchEnter(item) { // 搜索框
-                this.bodyData.key = item.key;
-                this.bodyData.keyType = item.keyType;
-            },
-            action(item, type) { //操作表单 action
-                let types = '';
-                if(type === 'detail') {
-                    types = 'only';
-                } else {
-                    types = 'modify';
-                }
-                this.$router.push({
-                    name: 'negotiationCompareDetail',
-                    params: {
-                        type: types
-                    },
-                    query: {
-                        id: _.findWhere(item, { 'key': 'id' }).value
-                    }
-                });
-            },
-            changeChecked(item) { //选中的compare
-                let arr = [];
-                item.forEach(item => {
-                    arr.push(item.id.value);
-                });
-                this.checkedArg = arr;
-            },
-            compareDelete() { //删除compare
-                this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
-                    confirmButtonText: this.$i.common.confirm,
-                    cancelButtonText: this.$i.common.cancel,
-                    type: 'warning'
-                }).then(() => {
-                    this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
-                    .then(res => {
-                        this.getList();
-                        this.checkedArg = [];
-                    });
-                })
-            },
-            inputEnter() {
-                
-            },
-            handleSizeChange(val) {
-                this.bodyData.pn = val;
-            },
-            pageSizeChange(val) {
-                this.bodyData.ps = val;
-            }
-        },
-        watch: {
-            bodyData: {
-                handler(val) {
-                    this.getList();
-                },
-                deep: true
-            }
+        query: {
+          id: _.findWhere(item, { 'key': 'id' }).value
         }
+      });
+    },
+    changeChecked(item) { // 选中的compare
+      let arr = [];
+      item.forEach(item => {
+        arr.push(item.id.value);
+      });
+      this.checkedArg = arr;
+    },
+    compareDelete() { // 删除compare
+      this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+        confirmButtonText: this.$i.common.confirm,
+        cancelButtonText: this.$i.common.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
+          .then(res => {
+            this.getList();
+            this.checkedArg = [];
+          });
+      });
+    },
+    inputEnter() {
+
+    },
+    handleSizeChange(val) {
+      this.bodyData.pn = val;
+    },
+    pageSizeChange(val) {
+      this.bodyData.ps = val;
     }
+  },
+  watch: {
+    bodyData: {
+      handler(val) {
+        this.getList();
+      },
+      deep: true
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
     .compare-overview{
