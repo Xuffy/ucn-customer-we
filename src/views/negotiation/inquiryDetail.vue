@@ -483,7 +483,7 @@ export default {
       submitData: {
         deleteDetailIds: []
       },
-      id_type: ''
+      idType: ''
     };
   },
   components: {
@@ -502,11 +502,7 @@ export default {
       let json = {};
       _.mapObject(this.$db.inquiry.basicInfo, (val, k) => {
         if (val.transForm && val.transForm !== 'time') {
-          json[val.transForm] = _.findWhere(this.primeList, {
-            code: val.transForm
-          })
-            ? _.findWhere(this.primeList, { code: val.transForm }).codes
-            : '';
+          json[val.transForm] = _.findWhere(this.primeList, {code: val.transForm}) ? _.findWhere(this.primeList, { code: val.transForm }).codes : '';
         }
       });
       return json;
@@ -679,6 +675,15 @@ export default {
       this.compareConfig.push(config);
       this.$localStore.set('$in_quiryCompare', this.compareConfig);
     },
+    markFieldHighlight(item, color, fieldDisplay) {
+      let fd = fieldDisplay || 'fieldDisplay';
+      let c = color || 'yellow';
+      typeof item === 'object' && item[fd].value && _.mapObject(item[fd].value, (val, key) => {
+        if (val === '1' && item[key]) {
+          item[key]._style = 'background-color: ' + c;
+        }
+      });
+    },
     getInquiryDetail() {
       // 获取 Inquiry detail 数据
       if (!this.$route.query.id) {
@@ -696,18 +701,10 @@ export default {
             this.$refs.HM.getFilterData([res]),
             item => {
               this.$filterDic(item);
-              _.map(item, (val, k) => {
-                val.defaultData = _.isUndefined(val.dataBase)
-                  ? val.value
-                  : val.dataBase;
+              this.markFieldHighlight(item);
+              _.map(item, val => {
+                val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
               });
-              item.fieldDisplay.value &&
-                _.mapObject(item.fieldDisplay.value, (val, key) => {
-                  if (item[key]) {
-                    // item[key]._color=val === '1' ? 'yellow' : val;
-                    item[key]._style = val === '1' ? 'background-color: yellow' : '';
-                  }
-                });
             }
           );
           this.newTabData = basicInfoData;
@@ -719,25 +716,16 @@ export default {
             this.$refs.HM.getFilterData(res.details, 'skuId'),
             item => {
               this.$filterDic(item);
-              item.fieldDisplay.value &&
-                _.mapObject(item.fieldDisplay.value, (val, key) => {
-                  if (item[key]) {
-                    // item[key]._color=val === '1' ? 'yellow' : val;
-                    item[key]._style = val === '1' ? 'background-color: yellow' : '';
-                  }
-                });
-              _.map(item, (val, k) => {
-                val.defaultData = _.isUndefined(val.dataBase)
-                  ? val.value
-                  : val.dataBase;
+              this.markFieldHighlight(item);
+              _.map(item, val => {
+                val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
               });
             }
           );
           this.newProductTabData = newProductTabData;
           this.productTabData = newProductTabData;
           this.tableLoad = false;
-        })
-        ['catch'](err => {
+        }).catch(err => {
           this.tableLoad = false;
         });
     },
@@ -809,51 +797,34 @@ export default {
       this.statusModify = true;
     },
     save(data) {
+      console.log(data);
       // modify 编辑完成反填数据
-      let json = this.$filterName(data[0]);
-      if (this.id_type === 'basicInfo') {
-        // 反填 basicInfo
-        this.newTabData = _.map(this.newTabData, val => {
-          if (_.findWhere(val, { key: 'id' }).value === _.findWhere(json, { key: 'id' }).value && !val._remark && !json._remark) {
-            val = json;
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6');
-              }
-            });
-          } else if (_.findWhere(val, { key: 'id' }).value === _.findWhere(data[1], { key: 'id' }).value && val._remark && data[1]._remark) {
-            val = data[1];
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6');
-              }
-            });
+      let items = _.map(data, item => {
+        let changedFields = !item._remark ? {} : false;
+        _.map(item, (o, field) => {
+          if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+            return;
           }
-          return val;
+          if (o.dataBase !== o.defaultData) {
+            o._style = 'color: blue';
+            if (changedFields) {
+              changedFields[field] = '1';
+            }
+          }
         });
-      } else if (this.id_type === 'producInfo') {
-        // 反填 productTabData
-        this.newProductTabData = _.map(this.newProductTabData, val => {
-          if (_.findWhere(val, { key: 'skuId' }).value + '' === _.findWhere(json, { key: 'skuId' }).value + '' && !val._remark && !json._remark) {
-            val = json;
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6');
-              }
-            });
-          } else if (_.findWhere(val, { key: 'skuId' }).value + '' === _.findWhere(data[1], { key: 'skuId' }).value + '' && val._remark && data[1]._remark) {
-            val = data[1];
-            val._modify = true;
-            _.map(val, (item, k) => {
-              if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-                this.$set(item, '_style', 'color:#27b7b6');
-              }
-            });
-          }
-          return val;
+        item._modify = true;
+        if (changedFields) {
+          item.fieldDisplay.value = changedFields;
+        }
+        return item;
+      });
+
+      if (this.idType === 'basicInfo') {
+        this.newTabData = items;
+      } else if (this.idType === 'producInfo') {
+        this.newProductTabData = _.map(this.newProductTabData, oldItem => {
+          let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+          return tmp[0] || oldItem;
         });
       }
     },
@@ -886,7 +857,7 @@ export default {
     },
     basicInfoAction(data, type) {
       // basic info 按钮操作
-      this.id_type = 'basicInfo';
+      this.idType = 'basicInfo';
       this.historyColumn = this.$db.inquiry.basicInfo;
       switch (type) {
         case 'histoty':
@@ -900,7 +871,7 @@ export default {
     },
     producInfoAction(data, type) {
       // Produc info 按钮操作
-      this.id_type = 'producInfo';
+      this.idType = 'producInfo';
       this.historyColumn = this.$db.inquiry.productInfo;
       switch (type) {
         case 'histoty':
