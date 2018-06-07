@@ -266,7 +266,7 @@
 
         <div class="footBtn">
             <el-button :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-            <el-button @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
+            <el-button :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
             <el-button type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
 
@@ -314,7 +314,13 @@
                             @handleOK="handleProductOk"></v-product>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
-                    <v-product :forceUpdateNumber="updateBookmark" :hideBtn="true" :type="type2"></v-product>
+                    <v-product
+                            :disabledLine="disabledProductLine"
+                            :forceUpdateNumber="updateBookmark"
+                            :hideBtn="true"
+                            :isInModify="true"
+                            @handleOK="handleProductOk"
+                            :type="type2"></v-product>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -760,6 +766,7 @@
                  * 页面基础配置
                  * */
                 disableClickSend:false,
+                disableClickSaveDraft:false,
                 labelPosition:'right',
                 pickerOptions1: {
                     disabledDate(time) {
@@ -1002,7 +1009,30 @@
             },
 
             saveAsDraft(){
-                console.log(this.productTableData,'???')
+                let params=Object.assign({},this.orderForm);
+                _.map(this.supplierOption,v=>{
+                    if(params.supplierName===v.code){
+                        params.supplierName=v.name;
+                        params.supplierCode=v.code;
+                        params.supplierId=v.id;
+                    }
+                });
+                params.skuList=this.dataFilter(this.productTableData);
+                _.map(params.skuList,v=>{
+                    if(_.isArray(v.skuLabelPic)){
+                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                    }
+                });
+                params.attachments=this.$refs.upload[0].getFiles();
+                params.draftCustomer=true;
+                this.disableClickSaveDraft=true;
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSaveDraft=false;
+                });
+
+
             },
 
             //获取订单号(先手动生成一个)
@@ -1046,8 +1076,6 @@
              * */
             productInfoAction(e,type){
                 if(type==='negotiate'){
-                    console.log(e,'???')
-                    console.log(this.productTableData)
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
@@ -1056,10 +1084,12 @@
                     });
                     this.$refs.HM.init(arr,[]);
                 }else if(type==='detail'){
-                    console.log(e)
-                    // this.$windowOpen({
-                    //     url:''
-                    // })
+                    this.$windowOpen({
+                        url:'/product/sourcingDetail',
+                        params:{
+                            id:e.skuId.value
+                        }
+                    })
                 }
             },
             changeProductChecked(e){
@@ -1381,6 +1411,7 @@
                         obj.skuCustomerSkuCode=v.skuCustomerSkuCode;
                         obj.skuCode=v.skuCode;
                         obj.skuSupplierName=v.skuSupplierName;
+                        obj.skuSupplierCode=v.skuSupplierCode;
                         obj.skuFobCurrency=v.skuFobCurrency;
                         obj.skuFobPrice=v.skuFobPrice;
                         obj.skuFobPort=v.skuFobPort;

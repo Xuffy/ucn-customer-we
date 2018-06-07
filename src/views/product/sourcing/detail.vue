@@ -7,9 +7,10 @@
             <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
+
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
-                                <img :src="item" style="max-width: 100%;max-height: 100%" alt="">
+                                <v-image :src="item"></v-image>
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -218,7 +219,7 @@
 </template>
 
 <script>
-    import {VTable,VUpload,VPagination} from '@/components/index'
+    import {VTable,VUpload,VPagination,VImage} from '@/components/index'
     import addTable from '../addlineTable'
     import compareList from '../compareList'
 
@@ -229,7 +230,8 @@
             compareList,
             VTable,
             VUpload,
-            page:VPagination
+            page:VPagination,
+            VImage
         },
         data(){
             return{

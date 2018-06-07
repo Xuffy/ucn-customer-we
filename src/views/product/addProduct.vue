@@ -379,6 +379,7 @@
             },
             //获取table数据
             getData(e) {
+                console.log(123)
                 if(this.type==='recycle'){
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
