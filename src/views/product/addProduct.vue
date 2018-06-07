@@ -166,6 +166,10 @@
             isInquiry:{
                 type:Boolean,
                 default:false
+            },
+            disablePostCustomerCreate:{
+                type:Boolean,
+                default:false
             }
         },
         data(){
@@ -350,11 +354,20 @@
                         }
                     });
                 }else if(this.type==='bookmark'){
-                    arr.forEach(v=>{
-                        if(v._checked && !v._disabled){
-                            newArr.push(v.skuId.value);        //只把id带出去
-                        }
-                    });
+                    console.log(arr,'?????')
+                    if(this.disablePostCustomerCreate){
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled && !v.customerCreate.value){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }else{
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }
                 }
 
                 this.$emit('handleOK',newArr);
@@ -379,7 +392,6 @@
             },
             //获取table数据
             getData(e) {
-                console.log(123)
                 if(this.type==='recycle'){
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{

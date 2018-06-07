@@ -271,9 +271,9 @@
         </div>
 
         <el-dialog
-            title=""
-            :visible.sync="quickCreateDialogVisible"
-            width="70%">
+                title=""
+                :visible.sync="quickCreateDialogVisible"
+                width="70%">
             <v-table
                     :height="400"
                     :loading="loadingTable"
@@ -330,7 +330,7 @@
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
-                <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--<v-upload :limit="20" readonly></v-upload>-->
             <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
@@ -986,6 +986,21 @@
             }
         },
         methods:{
+
+            /**
+             * 获取页面数据
+             * */
+            getDetail(){
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:this.$route.query.orderId,
+                }).then(res=>{
+                    console.log(res,'???')
+                }).finally(err=>{
+
+                });
+            },
+
+
             //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
@@ -1066,9 +1081,9 @@
                         });
                     }
                     this.getUnit();
-                    }).catch(err=>{
-                        this.loadingPage=false;
-                    })
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
             },
             quickCreate(){
                 this.quickCreateDialogVisible=true;
@@ -1518,16 +1533,18 @@
 
             getUnit(){
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
                         this.currencyOption=res;
+                        this.allowQuery++;
                     })
                     .finally(err=> {
-                        this.loadingPage=false;
-                    }
-                );
+                            this.loadingPage=false;
+                        }
+                    );
 
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
+                    this.allowQuery++;
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
                             if(v.currency===m.symbol){
@@ -1539,7 +1556,8 @@
                     this.loadingPage=false;
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE']).then(res=>{
+                    this.allowQuery++;
                     console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1577,8 +1595,7 @@
                     });
                     _.map(data,v=>{
                         this.productTableData.push(v);
-                    })
-                    console.log(this.productTableData,'this.productTableData')
+                    });
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1601,10 +1618,17 @@
             changeSize(e){
                 this.inquiryConfig.ps=e;
                 this.getInquiryData();
-            },
+            }
         },
         created(){
             this.getOrderNo();
+        },
+        watch:{
+            allowQuery(n){
+                if(n===3){
+                    this.getDetail();
+                }
+            },
         },
     }
 </script>
