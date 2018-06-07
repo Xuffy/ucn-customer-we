@@ -530,17 +530,18 @@
                         url:'/order/create',
                     })
                 }else{
-                    let ids='';
-                    this.selectList.forEach(v=>{
-                        ids+=(v.id.value+',');
-                    });
-                    this.$windowOpen({
-                        url:'/order/create',
-                        params:{
-                            type:'product',
-                            ids:ids,
-                        },
-                    })
+                    console.log(this.selectList,'??')
+                    // let ids='';
+                    // this.selectList.forEach(v=>{
+                    //     ids+=(v.id.value+',');
+                    // });
+                    // this.$windowOpen({
+                    //     url:'/order/create',
+                    //     params:{
+                    //         type:'product',
+                    //         ids:ids,
+                    //     },
+                    // })
                 }
             },
 
