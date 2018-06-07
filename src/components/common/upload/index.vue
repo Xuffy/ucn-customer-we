@@ -216,11 +216,13 @@
         });
 
       },
-      getFiles() {
-        let files = _.pluck(_.values(this.fileList), 'fileKey');
-        return _.map(files, val => {
+      getFiles(type) {
+        let files = _.pluck(_.values(this.fileList), 'fileKey')
+          , key = _.map(files, val => {
           return `${this.bucket}:${val}`;
         });
+
+        return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       }
     },
   }
