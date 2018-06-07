@@ -11,8 +11,6 @@ import dropDown from './common/fnCompon/dropDown';
 import VFilterColumn from './common/table/filterColumn';
 import VFilterValue from './common/table/filterValue';
 import VUpload from './common/upload/index';
-import UploadDialog from './common/uploadDialog/index';
-import Download from './common/uploadDialog/download';
 import messageBoard from './common/messageBoard/index';
 import VMessageBoard from './common/messageBoard/index';
 import selectSearch from './common/fnCompon/selectSearch';
@@ -40,8 +38,6 @@ export {
   dropDown,
   VFilterColumn,
   VFilterValue,
-  UploadDialog,
-  Download,
   messageBoard,
   selectSearch,
   // product,                      //product页面组件
