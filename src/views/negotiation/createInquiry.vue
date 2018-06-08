@@ -566,7 +566,7 @@ export default {
 
     },
     save(data) { //modify 编辑完成反填数据
-      let json = this.$filterName(data[0]), styleJson = {};
+      let json = this.$filterDic(data[0]);
       this.tabData = _.map(this.tabData, val => {
         if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
           val = json;

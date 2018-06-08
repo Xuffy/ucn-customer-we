@@ -1,91 +1,91 @@
 <template>
-    <div class="inquiryDetail">
-        <div class="hd">
-            <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
-        </div>
-        <div class="container" :class="{'active':switchStatus}">
-            <div class="table-wrap">
-                <div class="basic-info">
-                    <div class="basesic-hd">
-                        <h5>{{ $i.common.basicInfo }}</h5>
-                        <!-- <el-checkbox-group v-model="ChildrenCheckList">
-                            <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
-                            <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-                        </el-checkbox-group> -->
-                    </div>
-                    <div class="tab-msg-wrap">
-                        <v-table
-                            :height="450"
-                            :data.sync="newTabData"
-                            :selection="false"
-                            :buttons="basicInfoBtn"
-                            :loading="tableLoad"
-                            :rowspan="2"
-                            @action="basicInfoAction"
-                            :hideFilterColumn="statusModify"/>
-                    </div>
-                </div>
-                <div class="basic-info">
-                    <h5>{{ $i.common.productInfo }}</h5>
-                    <div class="status">
-                        <div class="btn-wrap">
-                            <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
-                            <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
-                        </div>
-                        <select-search :options="options" v-model="id" v-show="!statusModify" />
-                    </div>
-                    <v-table
-                        :data.sync="newProductTabData"
-                        :buttons="productInfoBtn"
-                        :loading="tableLoad"
-                        :height="450"
-                        @action="producInfoAction"
-                        @change-checked="changeChecked"
-                        :rowspan="2"
-                        :selection="statusModify"
-                        :hideFilterColumn="statusModify"/>
-                    <div class="bom-btn-wrap" v-show="!statusModify">
-                        <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
-                        <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
-                        <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
-                        <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
-                        <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
-                        <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-                        <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
-                        <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
-                        <el-button>{{ $i.common.download }}</el-button>
-                    </div>
-                    <div class="bom-btn-wrap" v-show="statusModify">
-                        <el-button @click="modify">{{ $i.common.send }}</el-button>
-                        <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
-                    </div>
-                    <div class="bom-btn-wrap-box"></div>
-                </div>
-            </div>
-        </div>
-        <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
-        <el-dialog
-                :title="$i.common.addProduct"
-                :visible.sync="newSearchDialogVisible"
-                width="70%"
-                lock-scroll>
-            <el-radio-group v-model="radio" @change="fromChange">
-                <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
-                <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
-            </el-radio-group>
-            <v-product
-                :hideBtns="true"
-                :hideBtn="true"
-                :disabledLine="disabledLine"
-                @handleOK="getList"
-                :forceUpdateNumber="trig"
-                :type="radio"
-                :isInquiry="true">
-            </v-product>
-        </el-dialog>
-        <v-history-modify @save="save" ref="HM"></v-history-modify>
-        <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
+  <div class="inquiryDetail">
+    <div class="hd">
+      <h4 class="title">{{ $i.inquiry.inquiryDetailTitle }} {{ tabData[0] ? tabData[0].inquiryNo.value : '' }}</h4>
     </div>
+    <div class="container" :class="{'active':switchStatus}">
+      <div class="table-wrap">
+        <div class="basic-info">
+          <div class="basesic-hd">
+            <h5>{{ $i.common.basicInfo }}</h5>
+            <!-- <el-checkbox-group v-model="ChildrenCheckList">
+                <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
+                <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
+            </el-checkbox-group> -->
+          </div>
+          <div class="tab-msg-wrap">
+            <v-table
+                :height="450"
+                :data.sync="newTabData"
+                :selection="false"
+                :buttons="basicInfoBtn"
+                :loading="tableLoad"
+                :rowspan="2"
+                @action="basicInfoAction"
+                :hideFilterColumn="statusModify"/>
+          </div>
+        </div>
+        <div class="basic-info">
+          <h5>{{ $i.common.productInfo }}</h5>
+          <div class="status">
+            <div class="btn-wrap">
+              <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
+              <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+            </div>
+            <select-search :options="options" v-model="id" v-show="!statusModify" />
+          </div>
+          <v-table
+              :data.sync="newProductTabData"
+              :buttons="productInfoBtn"
+              :loading="tableLoad"
+              :height="450"
+              @action="producInfoAction"
+              @change-checked="changeChecked"
+              :rowspan="2"
+              :selection="statusModify"
+              :hideFilterColumn="statusModify"/>
+          <div class="bom-btn-wrap" v-show="!statusModify">
+            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+            <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
+            <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
+            <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
+            <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.dataBase + ''!=='99'||tabData[0].status.dataBase+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button>
+            <el-button @click="modifyAction" :disabled="tabData[0].status.dataBase+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
+            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.dataBase+''!== '22'&&tabData[0].status.dataBase+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
+            <el-button>{{ $i.common.download }}</el-button>
+          </div>
+          <div class="bom-btn-wrap" v-show="statusModify">
+            <el-button @click="modify">{{ $i.common.send }}</el-button>
+            <el-button type="info" @click="modifyCancel">{{ $i.common.exit }}</el-button>
+          </div>
+          <div class="bom-btn-wrap-box"></div>
+        </div>
+      </div>
+    </div>
+    <v-compare-list :data="compareConfig" @clearData="clerCompare" @closeTag="handleClose" @goCompare="startCompare" v-if="compareLists" />
+    <el-dialog
+          :title="$i.common.addProduct"
+          :visible.sync="newSearchDialogVisible"
+          width="70%"
+          lock-scroll>
+      <el-radio-group v-model="radio" @change="fromChange">
+        <el-radio-button label="product">{{ $i.common.fromNewSearch }}</el-radio-button>
+        <el-radio-button label="bookmark">{{ $i.common.FromMyBookmark }}</el-radio-button>
+      </el-radio-group>
+      <v-product
+          :hideBtns="true"
+          :hideBtn="true"
+          :disabledLine="disabledLine"
+          @handleOK="queryAndAddProduction"
+          :forceUpdateNumber="trig"
+          :type="radio"
+          :isInquiry="true">
+      </v-product>
+    </el-dialog>
+    <v-history-modify @save="save" ref="HM"></v-history-modify>
+    <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
+  </div>
 </template>
 <script>
 /**
@@ -141,30 +141,12 @@ export default {
       value: '',
       switchStatus: false,
       options: [
-        {
-          id: '1',
-          label: 'SKU code'
-        },
-        {
-          id: '2',
-          label: 'SKU Name'
-        },
-        {
-          id: '3',
-          label: 'SKU description'
-        },
-        {
-          id: '4',
-          label: 'Vendor SKU code'
-        },
-        {
-          id: '5',
-          label: 'Vendor SKU name'
-        },
-        {
-          id: '6',
-          label: 'Vendor SKU description'
-        }
+        {id: '1', label: 'SKU code'},
+        {id: '2', label: 'SKU Name'},
+        {id: '3', label: 'SKU description'},
+        {id: '4', label: 'Vendor SKU code'},
+        {id: '5', label: 'Vendor SKU name'},
+        {id: '6', label: 'Vendor SKU description'}
       ],
       list: [],
       tableColumn: '',
@@ -247,7 +229,7 @@ export default {
     },
     async getDictionaries() {
       const postCodePart = () => {
-        // todo 通用字典
+        // 通用字典
         return this.$ajax.post(
           this.$apis.POST_CODE_PART,
           [
@@ -269,31 +251,27 @@ export default {
         );
       };
       const getCurrencyAll = () => {
-        // todo 币种 CY_UNIT
-        return this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {
-          cache: true
-        });
+        // 币种 CY_UNIT
+        return this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: true});
       };
       const getCountryAll = () => {
-        // todo 国家 COUNTRY
-        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', { cache: true });
+        // 国家 COUNTRY
+        return this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
       };
-      await this.$ajax
-        .all([postCodePart(), getCurrencyAll(), getCountryAll()])
-        .then(res => {
-          let data = res[0];
-          data = res[0].concat({
-            code: 'CY_UNIT',
-            name: 'CY_UNIT(币种)',
-            codes: res[1]
-          });
-          data = data.concat({
-            code: 'COUNTRY',
-            name: 'COUNTRY(国家)',
-            codes: res[2]
-          });
-          this.setDic(data);
+      await this.$ajax.all([postCodePart(), getCurrencyAll(), getCountryAll()]).then(res => {
+        let data = res[0];
+        data = res[0].concat({
+          code: 'CY_UNIT',
+          name: 'CY_UNIT(币种)',
+          codes: res[1]
         });
+        data = data.concat({
+          code: 'COUNTRY',
+          name: 'COUNTRY(国家)',
+          codes: res[2]
+        });
+        this.setDic(data);
+      });
       this.getInquiryDetail();
     },
     addProduct() {
@@ -310,7 +288,8 @@ export default {
     handleOK(item) {
       // 添加 product
       if (item && !item.length) {
-        return this.$message(this.$i.common.pleaseChooseGoods);
+        this.$message(this.$i.common.pleaseChooseGoods);
+        return;
       }
       let ids = [];
       _.map(item, items => {
@@ -413,13 +392,14 @@ export default {
         this.tableLoad = false;
       });
     },
-    getList(ids) {
+    queryAndAddProduction(ids) {
       this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids).then(res => {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res, 'skuId'),
           item => {
             this.$filterDic(item);
+            item.$pageState = 1;
           }
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
@@ -495,9 +475,11 @@ export default {
             }
           }
         });
-        item._modify = true;
+        if (item.id && item.id.value) {
+          item.$pageState = 2;
+        }
         if (changedFields) {
-          item.fieldDisplay.value = changedFields;
+          item.$changedFields = changedFields;
         }
         return item;
       });
@@ -513,21 +495,26 @@ export default {
     },
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
+      let arr = [];
+      if (item.$pageState && item.$pageState === 1) {
+        if (config.type === 'modify') {
+          _.map(this.newProductTabData, items => {
+            if(_.findWhere(items, {'key': 'skuId'}).value === config.data) arr.push(items);
+          });
+          this.$refs.HM.init(arr, [], true);
+        }
+        return;
+      }
       let historyApi = item.skuId ? this.$apis.GET_INQUIRY_DETAIL_HISTORY : this.$apis.GET_INQUIRY_HISTORY;
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
-        let arr = [];
         if (type === 'basicInfo') {
           _.map(this.newTabData, items => {
-            if (_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items)
+            if (_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items);
           });
-          if(config.type === 'histoty') {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), false);
-          } else {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), true);
-          }
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
         } else {
           _.map(this.newProductTabData, items => {
-            if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items)
+            if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items);
           });
           if (config.type === 'histoty') {
             this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
@@ -547,11 +534,6 @@ export default {
           this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'histoty', data: data.id.value});
           break;
         case 'modify':
-          _.map(data, field => {
-            if (field.transForm && !field._option) {
-              field._option = this.selectAll[field.transForm];
-            }
-          });
           this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'modify', data: data.id.value});
           this.oSwitch = true;
           break;
@@ -584,13 +566,9 @@ export default {
     },
     ajaxInqueryAction(type) {
       // 接受单
-      const argId = [];
-      argId.push(this.$route.query.id);
-      this.$ajax
-        .post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: argId})
-        .then(res => {
-          this.$router.push('/negotiation/inquiry');
-        });
+      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(res => {
+        this.$router.push('/negotiation/inquiry');
+      });
     },
     removeProduct() {
       // 删除product 某个单
@@ -612,9 +590,7 @@ export default {
     },
     modify() {
       // 页面编辑提交
-      let parentNode = this.dataFilter(this.newTabData)[0]
-        ? this.dataFilter(this.newTabData)[0]
-        : '';
+      let parentNode = this.dataFilter(this.newTabData)[0] ? this.dataFilter(this.newTabData)[0] : '';
       let arr = [];
       _.map(this.newProductTabData, item => {
         if (!item._disabled) {
@@ -623,38 +599,49 @@ export default {
       });
       parentNode.details = this.dataFilter(arr);
       parentNode.draft = 0;
-      this.$ajax
-        .post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode))
-        .then(res => {
-          this.newTabData[0].status.dataBase = res.status;
-          this.tabData = this.newTabData;
-          this.productTabData = this.newProductTabData;
-          this.productModify();
-          this.statusModify = false;
-        });
+      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode)).then(res => {
+        this.newTabData[0].status.dataBase = res.status;
+        this.tabData = this.newTabData;
+        this.productTabData = this.newProductTabData;
+        this.productModify();
+        this.statusModify = false;
+      });
     },
     dataFilter(data) {
-      let arr = [],
-        jsons = {},
-        json = {};
+      let excludeColumns = '$changedFields,$pageState,entryDt,updateDt,status';
+      let arr = [], remark = {}, json = {};
       data.forEach(item => {
-        jsons = {};
+        remark = {};
         if (item._remark) {
           // 拼装remark 数据
-          for (let k in item) {
-            jsons[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
+          for (let field in item) {
+            let value = item[field].value;
+            if (value && value.length > 0) {
+              remark[field] = value;
+            }
           }
-          json.fieldRemark = jsons;
+          json.fieldRemark = remark;
         } else {
           json = {};
           for (let k in item) {
-            if (json[k] === 'fieldRemark') {
-              json[k] = jsons;
+            if (excludeColumns.indexOf(k) > -1) continue;
+            if (k === 'fieldRemark') {
+              json[k] = remark;
+            } else if (k === 'fieldDisplay') {
+              json[k] = {};
+              if (item.$changedFields) {
+                for (let f in item.$changedFields) {
+                  if (item.$changedFields.hasOwnProperty(f)) {
+                    json[k][f] = item.$changedFields[f];
+                  }
+                }
+              }
             } else {
-              json[k] =
-                item[k].dataBase || item[k].dataBase === 0
-                  ? item[k].dataBase
-                  : item[k].value;
+              if (item[k].dataType && item[k].dataType === 'boolean' && typeof item[k].value === 'string') {
+                json[k] = item[k].value === '1' || item[k].value === 'true';
+              } else {
+                json[k] = item[k].value;
+              }
             }
           }
           arr.push(json);
