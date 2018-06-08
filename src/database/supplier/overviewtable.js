@@ -12,7 +12,7 @@ export default {
     country: {
         key: 'country'
     },
-    companyId: {
+  companyId: {
         _hide: true,
         key: 'companyId'
     },
@@ -32,10 +32,6 @@ export default {
     id: {
         _hide: true,
         key: 'id',
-    },
-    supplierId:{
-      _hide: true,
-      key: 'supplierId',
     },
     logo: {
         _hide: true,

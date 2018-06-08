@@ -144,7 +144,6 @@
                         }
                     ]
                 }
-                console.log(params)
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,params)
                 .then(res => {

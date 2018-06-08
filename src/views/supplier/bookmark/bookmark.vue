@@ -118,7 +118,7 @@
                     children: 'children'
                 },
                 options:[],
-                pageData:[]
+                pageData:{}
             }
         },
         methods: {
@@ -197,7 +197,7 @@
                     url: '/supplier/bookmarkDetail',
                     params: {
                         id: item.id.value,
-                        supplierId: item.supplierId.value
+                        companyId: item.companyId.value
                     }
                 });
             },
