@@ -18,6 +18,6 @@ export default {
   GRIDFAVORITE_LIST: ['/gridfieldsetting/list', 'UMETA_URL'],
   IMPORTFILE_GETIMPORTTASK: ['/importfile/getimporttask', 'UIE_URL'],
   IMPORTTEMPLATE_DOWNLOADURL: ['/importtemplate/downloadurl', 'UIE_URL'],
-  USER_CUSTOMER_ISSETUSERINFO: ['/user/customer/isSetUserInfo?type={type}', 'BASE_CS_set', 'UWORKBENCH_URL'],
+  USER_CUSTOMER_ISSETUSERINFO: ['/user/customer/isSetUserInfo?type={type}', 'UWORKBENCH_URL'],
   // IMPORTTEMPLATE_DOWNLOADURL: ['/customer/isSetCompanyInfo', 'UIE_URL']
 }

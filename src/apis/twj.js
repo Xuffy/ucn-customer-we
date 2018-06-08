@@ -22,7 +22,7 @@ export default {
   put_user_profile:['/user/profile','UUSER_URL','UUSER_URL'],
   put_user_profile_password:['/user/profile/password','UUSER_URL','UUSER_URL'],
   //qc order
-  post_qc_page:['/qc/page','BASE_BUY','UPURCHASE_URL'],
+  post_qc_page:['/qc/page','UPURCHASE_URL'],
   post_qc_detail_page: ['/qc/detail/page','UPURCHASE_URL','UPURCHASE_URL'],
 
   //元数据
@@ -31,7 +31,7 @@ export default {
   get_currency_all: ['/currency/all', 'UMETA_URL','UMETA_URL'],
 
   //warehouse
-  post_warehouse_page: ['/warehouse/overview/page','BASE_HSM_W','UPURCHASE_URL'],
+  post_warehouse_page: ['/warehouse/overview/page','UPURCHASE_URL'],
   // post_warehouse_page: ['/warehouse/overview/page','UWAREHOUSE_URL']
   get_qc_getById: ['/qc/getById','USERVICE_URL','USERVICE_URL'],
   post_qc_result_save: ['/qc/result/save','USERVICE_URL','USERVICE_URL'],
@@ -45,23 +45,23 @@ export default {
   get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage','UWORKBENCH_URL','UWORKBENCH_URL'],
 
   //companyInfo
-  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer: ['/purchase/customer','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_address_id: ['/purchase/customer/address','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_address: ['/purchase/customer/address','BASE_URL_CS','BASE_URL'],
-  get_purchase_customer_getCustomer: ['/purchase/customer/getCustomer','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_deleteAddress: ['/purchase/customer/deleteAddress/{id}','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_concat: ['/purchase/customer/concat','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_concat_id: ['/purchase/customer/concat','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_deleteConcat: ['/purchase/customer/deleteConcat/{id}','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_custom: ['/purchase/customer/custom','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_custom_id: ['/purchase/customer/custom','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_deleteCustom: ['/purchase/customer/deleteCustom/{id}','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_document: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_document_id: ['/purchase/customer/document','BASE_URL_CS','BASE_URL'],
-  post_purchase_customer_deleteDocument: ['/purchase/customer/deleteDocument/{id}','BASE_URL_CS','BASE_URL'],
-  post_oss_company_batchUpload: ['/purchase/oss/company/batchUpload','BASE_URL_CS','BASE_URL'],
-  post_oss_company_upload: ['/purchase/oss/company/upload','BASE_URL_CS','BASE_URL'],
+  get_purchase_supplier: ['/purchase/supplier/{id}','BASE_URL'],
+  post_purchase_customer: ['/purchase/customer','BASE_URL'],
+  post_purchase_customer_address_id: ['/purchase/customer/address','BASE_URL'],
+  post_purchase_customer_address: ['/purchase/customer/address','BASE_URL'],
+  get_purchase_customer_getCustomer: ['/purchase/customer/getCustomer','BASE_URL'],
+  post_purchase_customer_deleteAddress: ['/purchase/customer/deleteAddress/{id}','BASE_URL'],
+  post_purchase_customer_concat: ['/purchase/customer/concat','BASE_URL'],
+  post_purchase_customer_concat_id: ['/purchase/customer/concat','BASE_URL'],
+  post_purchase_customer_deleteConcat: ['/purchase/customer/deleteConcat/{id}','BASE_URL'],
+  post_purchase_customer_custom: ['/purchase/customer/custom','BASE_URL'],
+  post_purchase_customer_custom_id: ['/purchase/customer/custom','BASE_URL'],
+  post_purchase_customer_deleteCustom: ['/purchase/customer/deleteCustom/{id}','BASE_URL'],
+  post_purchase_customer_document: ['/purchase/customer/document','BASE_URL'],
+  post_purchase_customer_document_id: ['/purchase/customer/document','BASE_URL'],
+  post_purchase_customer_deleteDocument: ['/purchase/customer/deleteDocument/{id}','BASE_URL'],
+  post_oss_company_batchUpload: ['/purchase/oss/company/batchUpload','BASE_URL'],
+  post_oss_company_upload: ['/purchase/oss/company/upload','BASE_URL'],
 
   //自定义币种汇率
   get_customcurrencyexchangerate_query: ['/customcurrencyexchangerate/query','UMETA_URL','UMETA_URL'],
