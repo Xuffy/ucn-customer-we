@@ -119,6 +119,8 @@ const $ajax = (config) => {
           return axios.delete(_options.url);
         case 'PUT':
           return axios.put(_options.url, options.data, _options);
+        case 'GET':
+          _options.params = JSON.parse(_options.data);
         default:
           return axios(_options);
       }

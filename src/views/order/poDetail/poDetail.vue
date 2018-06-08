@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -19,13 +19,13 @@
                                 <el-input
                                         :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
                                         class="speInput"
-                                        :disabled="v.disabled"
+                                        :disabled="v.disabled || v.disableDetail"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
-                                    :disabled="v.disabled"
+                                    :disabled="v.disabled || v.disableDetail"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
                                     :placeholder="$i.order.pleaseChoose"
@@ -40,6 +40,8 @@
                                 <el-select
                                         class="speInput"
                                         v-model="orderForm[v.key]"
+                                        filterable
+                                        :disabled="v.disableDetail"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in supplierOption"
@@ -121,6 +123,20 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-else-if="v.isStatus">
+                                <el-select
+                                        class="speInput"
+                                        :disabled="v.disableDetail"
+                                        v-model="orderForm[v.key]"
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in orderStatusOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
                             <div v-else>
                                 <el-select
                                         :placeholder="$i.order.pleaseChoose"
@@ -196,12 +212,12 @@
                     prop="type"
                     label="Type">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.type==='0'">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type==='1'">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type==='2'">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='3'">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type==='4'">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='5'">{{$i.order.otherResponsibility}}</span>
+                    <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
+                    <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
+                    <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
+                    <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -214,7 +230,7 @@
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -242,7 +258,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseInput"
                             v-model="scope.row.remark"
                             clearable>
@@ -259,7 +275,7 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -294,9 +310,9 @@
         </div>
 
         <el-dialog
-            title=""
-            :visible.sync="quickCreateDialogVisible"
-            width="70%">
+                title=""
+                :visible.sync="quickCreateDialogVisible"
+                width="70%">
             <v-table
                     :height="400"
                     :loading="loadingTable"
@@ -353,7 +369,7 @@
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
-                <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--<v-upload :limit="20" readonly></v-upload>-->
             <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
@@ -783,6 +799,7 @@
                 volumeOption:[],
                 expirationDateOption:[],
                 isNeedSampleOption:[],
+                orderStatusOption:[],
                 countryOption:[],
 
 
@@ -871,7 +888,6 @@
                 updateBookmark:0,
                 productTableData:[],
 
-
                 /**
                  * 提交的数据
                  * */
@@ -948,54 +964,54 @@
                     remind: true,
                     responsibilityFlag:false,
                     responsibilityList: [
-                        {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
+                        // {
+                        //     type: '0',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '1',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '2',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '3',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '4',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '5',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
                     ],
                     skuList: [],
                     // skuQty: 0,
@@ -1011,6 +1027,36 @@
             }
         },
         methods:{
+            /**
+             * 获取页面数据
+             * */
+            getDetail(){
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:this.$route.query.orderId,
+                }).then(res=>{
+                    this.orderForm=res;
+                    _.map(this.supplierOption,v=>{
+                        if(v.code===res.supplierCode){
+                            this.orderForm.supplierName=v.id;
+                        }
+                    });
+                    this.changePayment(res.payment);
+                    // console.log(this.$copyArr(res.skuList),'???')
+
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                            item.skuPic._image=false;
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    });
+                }).finally(err=>{
+                    this.loadingPage=false;
+                });
+            },
+
             //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
@@ -1037,7 +1083,6 @@
                     this.disableClickSend=false;
                 });
             },
-
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
@@ -1067,7 +1112,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=Math.ceil(Math.random()*100000000);
+                this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
                 // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
                 //     customerNo:''
@@ -1076,16 +1121,6 @@
                 // }).catch(err=>{
                 //
                 // });
-            },
-
-            changePayment(e){
-                let name=_.findWhere(this.paymentOption,{code:e}).name;
-                if(name!=='L/C'){
-                    this.disabledLcNo=true;
-                    this.orderForm.lcNo='';
-                }else{
-                    this.disabledLcNo=false;
-                }
             },
 
             //获取供应商
@@ -1103,9 +1138,9 @@
                         });
                     }
                     this.getUnit();
-                    }).catch(err=>{
-                        this.loadingPage=false;
-                    })
+                }).catch(err=>{
+                    // this.loadingPage=false;
+                })
             },
             quickCreate(){
                 this.quickCreateDialogVisible=true;
@@ -1119,6 +1154,16 @@
                 }).finally(err=>{
                     this.loadingTable=false;
                 });
+            },
+
+            changePayment(e){
+                let name=_.findWhere(this.paymentOption,{code:e}).name;
+                if(name!=='L/C'){
+                    this.disabledLcNo=true;
+                    this.orderForm.lcNo='';
+                }else{
+                    this.disabledLcNo=false;
+                }
             },
 
             /**
@@ -1554,14 +1599,18 @@
             },
 
             getUnit(){
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
                         this.currencyOption=res;
+                        this.allowQuery++;
                     })
                     .finally(err=> {
-                        this.loadingPage=false;
-                    }
-                );
+
+                        }
+                    );
 
                 //获取国家
                 this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
@@ -1570,8 +1619,10 @@
 
                 });
 
+
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
+                    this.allowQuery++;
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
                             if(v.currency===m.symbol){
@@ -1580,10 +1631,11 @@
                         })
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
+                    this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
@@ -1603,10 +1655,12 @@
                             this.expirationDateOption=v.codes;
                         }else if(v.code==='NS_IS'){
                             this.isNeedSampleOption=v.codes;
+                        }else if(v.code==='ORDER_STATUS'){
+                            this.orderStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
                 let ids=this.$route.query.ids;
                 ids=ids.slice(0,ids.length-1);
@@ -1620,8 +1674,7 @@
                     });
                     _.map(data,v=>{
                         this.productTableData.push(v);
-                    })
-                    console.log(this.productTableData,'this.productTableData')
+                    });
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1644,10 +1697,17 @@
             changeSize(e){
                 this.inquiryConfig.ps=e;
                 this.getInquiryData();
-            },
+            }
         },
         created(){
             this.getOrderNo();
+        },
+        watch:{
+            allowQuery(n){
+                if(n===3){
+                    this.getDetail();
+                }
+            },
         },
     }
 </script>
