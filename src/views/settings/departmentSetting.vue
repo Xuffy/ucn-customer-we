@@ -45,13 +45,13 @@
                                                     class="treeBtn"
                                                     type="text"
                                                     icon="el-icon-edit"
-                                                    @click="modifyDepartment(data,node)">
+                                                    @click.stop="modifyDepartment(data,node,$event)">
                                             </el-button>
                                             <el-button
                                                     class="treeBtn"
                                                     type="text"
                                                     icon="el-icon-delete"
-                                                    @click="deleteDepartment(data,node)">
+                                                    @click.stop="deleteDepartment(data,node)">
                                             </el-button>
                                         </div>
                                     </div>
@@ -94,8 +94,7 @@
                                     default-expand-all
                                     :expand-on-click-node="false"
                                     :filter-node-method="filterRole"
-                                    @check="roleCheckClick"
-                                    @node-click="roleClick">
+                                    @check="roleCheckClick">
                                 <div class="custom-tree-node" slot-scope="{ node, data }">
                                     <div v-if="!data.children">
                                         <span v-text="node.label + '(' + roleUserTotal + '人)'"></span>
@@ -104,13 +103,13 @@
                                                     class="treeBtn"
                                                     type="text"
                                                     icon="el-icon-edit"
-                                                    @click="modifyRole(data,node)">
+                                                    @click.stop="modifyRole(data,node)">
                                             </el-button>
                                             <el-button
                                                     class="treeBtn"
                                                     type="text"
                                                     icon="el-icon-delete"
-                                                    @click="deleteRole(data,node)">
+                                                    @click.stop="deleteRole(data,node)">
                                             </el-button>
                                         </div>
                                     </div>
@@ -150,11 +149,10 @@
             </el-row>
         </div>
         <div class="footer">
-            <div class="title">Belonging Users</div>
+            <div class="title">{{$i.setting.belongingUsers}}</div>
             <div class="btns">
-                <el-button @click="addUsers">Add</el-button>
-                <el-button>Invite</el-button>
-                <el-button>Download (all)</el-button>
+                <el-button :disabled="disableAddUser" type="primary" @click="addUsers">{{$i.setting.add}}</el-button>
+                <el-button :disabled="disableInviteUser" type="primary">{{$i.setting.invite}}</el-button>
             </div>
             <div class="content">
                 <el-form ref="userData" :model="userData" label-width="100px">
@@ -240,12 +238,81 @@
                 class="speDialog"
                 title="Add New User"
                 :visible.sync="addUserVisible"
-                width="60%">
+                width="50%">
             <el-form :model="addUser">
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item label="活动名称" :label-width="formLabelWidth">
-                            <el-input v-model="addUser.name" auto-complete="off"></el-input>
+                        <el-form-item :label="$i.setting.email" :label-width="formLabelWidth">
+                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.userName" :label-width="formLabelWidth">
+                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.lang" :label-width="formLabelWidth">
+                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                                <el-option
+                                        v-for="item in languageOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.tel" :label-width="formLabelWidth">
+                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.gender" :label-width="formLabelWidth">
+                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                                <el-option
+                                        v-for="item in genderOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.birthday" :label-width="formLabelWidth">
+                            <el-date-picker
+                                    class="speInput"
+                                    :editable="false"
+                                    v-model="addUser.name"
+                                    type="date"
+                                    :placeholder="$i.setting.pleaseChoose">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.role" :label-width="formLabelWidth">
+                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                                <el-option
+                                        v-for="item in genderOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
+                        <el-form-item :label="$i.setting.department" :label-width="formLabelWidth">
+                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                                <el-option
+                                        v-for="item in genderOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -288,6 +355,32 @@
                 allowRoleGetData: false,             //是否允许切换role的选中状态来获取数据
                 loadingDepartment:false,
                 loadingRole:false,
+                disableAddUser:true,
+                disableInviteUser:true,
+
+                /**
+                 * 单位字典
+                 * */
+                languageOption:[],
+                genderOption:[
+                    {
+                        id:1,
+                        code:0,
+                        name:'男'
+                    },
+                    {
+                        id:2,
+                        code:1,
+                        name:'女'
+                    },
+                    {
+                        id:3,
+                        code:2,
+                        name:'未知'
+                    },
+                ],
+
+
                 /**
                  * Department data定义
                  * */
@@ -457,7 +550,6 @@
             getDepartmentData() {
                 this.loadingDepartment=true;
                 this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
-                    console.log(res)
                     this.departmentData = res;
                     this.departmentData.forEach(v => {
                         this.departmentUserTotal += v.deptUserCount;
@@ -488,11 +580,53 @@
                     {label: e.tel.value === '13158687582' ? 'Enable' : 'Disabled', type: 2}
                 ]
             },
+            getRoleData(){
+                this.loadingRole=true;
+                this.$ajax.get(this.$apis.get_departmentRole,{
+                    deptId:this.userData.deptId
+                }).then(res=>{
+                    this.roleData[0].children=res;
+                    if(res){
+                        if(res.length===1){
+                            this.disableAddUser=false;
+                        }else{
+                            this.disableAddUser=true;
+                        }
+                        this.$nextTick(()=>{
+                            this.$refs.roleTree.setCheckedNodes(res)
+                        })
+                    }else{
+                        this.disableAddUser=true;
+                    }
+                    // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
+                    //     console.log(res,'???')
+                    //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                    //     this.$nextTick(() => {
+                    //         if(this.roleData[0].children){
+                    //             this.roleData[0].children.forEach(v => {
+                    //                 this.$refs.roleTree.setChecked(v, true, false)
+                    //             });
+                    //         }
+                    //     });
+                    // });
+
+                }).finally(err=>{
+                    this.loadingRole=false;
+                });
+
+
+
+
+
+
+
+
+            },
 
             /**
              * tree节点点击事件
              * */
-            departmentClick(data, node, com) {
+            departmentClick(data) {
                 //选中部门就让他为false，避免触发全选时的多次重复事件
                 this.allowRoleGetData = false;
                 this.userData.deptId = data.deptId;
@@ -514,28 +648,7 @@
                         }
                     }
                 });
-
-                this.loadingRole=true;
-                this.$ajax.get(this.$apis.add_departmentRole,{
-                    deptId:this.userData.deptId
-                }).then(res=>{
-                    this.roleData[0].children=res;
-
-                    // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-                    //     console.log(res,'???')
-                    //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                    //     this.$nextTick(() => {
-                    //         if(this.roleData[0].children){
-                    //             this.roleData[0].children.forEach(v => {
-                    //                 this.$refs.roleTree.setChecked(v, true, false)
-                    //             });
-                    //         }
-                    //     });
-                    // });
-
-                }).finally(err=>{
-                    this.loadingRole=false;
-                });
+                this.getRoleData();
 
             },
             roleCheckClick() {
@@ -546,26 +659,24 @@
                         id.push(v.roleId);
                     }
                 })
-                if (id.length) {
-                    this.userData.roleIds = id;
-                } else {
-                    this.userData.roleIds = [-1];
-                }
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    background: 'rgba(255, 255, 255, 0.7)',
-                    target: '.speTable'
-                });
-                this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-                    this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                    loading.close();
-                }).catch(err => {
-
-                });
-            },
-            roleClick(data, node, com) {
-
+                console.log(id,'???')
+                // if (id.length) {
+                //     this.userData.roleIds = id;
+                // } else {
+                //     this.userData.roleIds = [-1];
+                // }
+                // const loading = this.$loading({
+                //     lock: true,
+                //     text: 'Loading',
+                //     background: 'rgba(255, 255, 255, 0.7)',
+                //     target: '.speTable'
+                // });
+                // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
+                //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
+                //     loading.close();
+                // }).catch(err => {
+                //
+                // });
             },
 
             /**
@@ -643,58 +754,17 @@
                             type: 'warning'
                         });
                     } else {
+                        this.loadingRole=true;
                         this.$ajax.post(this.$apis.add_departmentRole, {
                             deptId: this.userData.deptId,
                             roleName: value
                         }).
                         then(res => {
-                            //新增成功之后重新获取总的数据然后找到该department重新渲染roleList
-                            // this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
-                            //     this.departmentData = res;
-                            //     this.departmentData.forEach(v => {
-                            //         this.departmentUserTotal += v.deptUserCount;
-                            //     });
-                            //     let data;
-                            //     this.departmentData.forEach(v => {
-                            //         if (v.deptId === this.userData.deptId) {
-                            //             data = v;
-                            //         }
-                            //     });
-                            //     this.roleData[0].children = this.$copyArr(data.deptRoles);
-                            //     this.roleUserTotal = 0;
-                            //     data.deptRoles.forEach(v => {
-                            //         this.roleUserTotal += v.roleUserCount;
-                            //     });
-                            //     this.$nextTick(() => {
-                            //         this.roleData[0].children.forEach(v => {
-                            //             this.$refs.roleTree.setChecked(v, true, false)
-                            //         });
-                            //         //处理好role的展示之后要请求底部对应的user数据
-                            //         this.userData.roleIds = null;
-                            //         this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-                            //             this.$message({
-                            //                 message: '新增成功',
-                            //                 type: 'success'
-                            //             });
-                            //             this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                            //
-                            //         }).catch(err => {
-                            //
-                            //         });
-                            //     });
-                            //
-                            // }).catch(err => {
-                            //
-                            // });
+                            this.getRoleData();
                         }).catch(err => {
-
+                            this.loadingRole=false;
                         });
                     }
-
-                    // this.$ajax.post(this.$apis.add_departmentRole,{
-                    //     deptId: this.userData.deptId,
-                    //     roleName: value
-                    // });
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -718,14 +788,13 @@
             /**
              * 编辑事件
              * */
-            modifyDepartment(e, node) {
+            modifyDepartment(e) {
                 this.$prompt(this.$i.setting.pleaseInputDepartment, this.$i.setting.prompt, {
                     confirmButtonText: this.$i.setting.sure,
                     cancelButtonText: this.$i.setting.cancel,
                     inputValue: e.deptName,
                 }).then(({value}) => {
                     let repeat = false;
-                    console.log(this.departmentData,'this.departmentData')
                     this.departmentData.forEach(v => {
                         if (v.deptName === value) {
                             repeat = true;
@@ -733,23 +802,17 @@
                     });
                     if (repeat) {
                         this.$message({
-                            message: '部门名称不能重复',
+                            message: this.$i.setting.canNotRepeatDepartmentName,
                             type: 'warning'
                         });
                     } else {
-                        const loading = this.$loading({
-                            lock: true,
-                            text: 'Loading',
-                            background: 'rgba(255, 255, 255, 0.7)',
-                            target: '.department'
-                        });
-
+                        this.loadingDepartment=true;
                         this.$ajax.put(this.$apis.get_department, {
                             deptId: e.deptId,
                             deptName: value
                         }).then(res => {
                             this.$message({
-                                message: '修改成功',
+                                message: this.$i.setting.modifySuccess,
                                 type: 'success'
                             });
                             this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
@@ -758,23 +821,22 @@
                                 this.departmentData.forEach(v => {
                                     this.departmentUserTotal += v.deptUserCount;
                                 });
-                                loading.close();
-                            }).catch(err => {
-
+                            }).finally(err => {
+                                this.loadingDepartment=false;
                             });
                         }).catch(err => {
-
+                            this.loadingDepartment=false;
                         });
                     }
                 }).catch(() => {
 
                 });
             },
-            modifyRole(e, node) {
-                this.$prompt('请输入Role', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    inputValue: e.label
+            modifyRole(e) {
+                this.$prompt(this.$i.setting.pleaseInputRole, this.$i.setting.prompt, {
+                    confirmButtonText: this.$i.setting.sure,
+                    cancelButtonText: this.$i.setting.cancel,
+                    inputValue: e.roleName
                 }).then(({value}) => {
                     let repeat = false;
                     this.roleData[0].children.forEach(v => {
@@ -784,45 +846,48 @@
                     });
                     if (repeat) {
                         this.$message({
-                            message: 'role名称不能重复',
+                            message: this.$i.setting.canNotRepeatRole,
                             type: 'warning'
                         });
                     } else {
-                        const loading = this.$loading({
-                            lock: true,
-                            text: 'Loading',
-                            background: 'rgba(255, 255, 255, 0.7)',
-                            target: '.role'
-                        });
-
-                        this.$ajax.put(this.$apis.add_departmentRole, {
+                        this.loadingRole=true;
+                        this.$ajax.put(this.$apis.update_departmentRole,{
                             roleId: e.roleId,
                             roleName: value
-                        }).then(res => {
-                            this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
-                                this.departmentUserTotal = 0;
-                                this.departmentData = res;
-                                this.departmentData.forEach(v => {
-                                    this.departmentUserTotal += v.deptUserCount;
-                                });
-
-
-                                this.roleData[0].children.forEach(v => {
-                                    if (v.roleId === e.roleId) {
-                                        v.roleName = value;
-                                    }
-                                });
-                                this.$message({
-                                    message: '修改成功',
-                                    type: 'success'
-                                });
-                                loading.close();
-                            }).catch(err => {
-                                loading.close();
-                            });
-                        }).catch(err => {
-
+                        }).then(res=>{
+                            this.getRoleData();
+                        }).catch(err=>{
+                            this.loadingRole=false;
                         });
+
+
+                        // this.$ajax.put(this.$apis.get_departmentRole, {
+                        //     roleId: e.roleId,
+                        //     roleName: value
+                        // }).then(res => {
+                        //     this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
+                        //         this.departmentUserTotal = 0;
+                        //         this.departmentData = res;
+                        //         this.departmentData.forEach(v => {
+                        //             this.departmentUserTotal += v.deptUserCount;
+                        //         });
+                        //
+                        //
+                        //         this.roleData[0].children.forEach(v => {
+                        //             if (v.roleId === e.roleId) {
+                        //                 v.roleName = value;
+                        //             }
+                        //         });
+                        //         this.$message({
+                        //             message: '修改成功',
+                        //             type: 'success'
+                        //         });
+                        //     }).catch(err => {
+                        //
+                        //     });
+                        // }).catch(err => {
+                        //
+                        // });
                     }
                 }).catch(() => {
 
@@ -832,120 +897,72 @@
             /**
              * 删除事件
              * */
-            deleteDepartment(e, node) {
-                if (e.deptUserCount) {
-                    this.$message({
-                        message: this.$i.setting.pleaseRemoveRoleUser,
-                        type: 'warning'
-                    });
-                } else {
-                    this.$confirm(this.$i.setting.sureDelete, this.$i.setting.prompt, {
-                        confirmButtonText: this.$i.setting.sure,
-                        cancelButtonText: this.$i.setting.cancel,
-                        type: 'warning'
-                    }).then(() => {
-
-                        this.$ajax.delete(this.$apis.delete_department, {
-                            deptId: e.deptId
-                        }).then(res => {
-                            this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
-                                this.departmentUserTotal = 0;
-                                this.departmentData = res;
-                                this.departmentData.forEach(v => {
-                                    this.departmentUserTotal += v.deptUserCount;
-                                });
-                                this.$message({
-                                    type: 'success',
-                                    message: this.$i.setting.deleteSuccess
+            deleteDepartment(e) {
+                this.$confirm(this.$i.setting.sureDelete, this.$i.setting.prompt, {
+                    confirmButtonText: this.$i.setting.sure,
+                    cancelButtonText: this.$i.setting.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.$ajax.get(this.$apis.get_departmentRole,{
+                        deptId:e.deptId
+                    }).then(res=>{
+                        if(res && res.length>0){
+                            this.$message({
+                                message: this.$i.setting.pleaseRemoveRoleUser,
+                                type: 'warning'
+                            });
+                        }else{
+                            this.loadingDepartment=true;
+                            this.$ajax.delete(this.$apis.delete_department, {
+                                deptId: e.deptId
+                            }).then(res => {
+                                this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
+                                    this.departmentUserTotal = 0;
+                                    this.departmentData = res;
+                                    this.departmentData.forEach(v => {
+                                        this.departmentUserTotal += v.deptUserCount;
+                                    });
+                                    this.$message({
+                                        type: 'success',
+                                        message: this.$i.setting.deleteSuccess
+                                    });
+                                }).finally(err => {
+                                    this.loadingDepartment=false;
                                 });
                             }).catch(err => {
 
                             });
-                        }).catch(err => {
+                        }
+                    }).finally(err=>{
 
-                        });
+                    })
 
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });
-                    });
-                }
+                }).catch(() => {
+
+                });
             },
             deleteRole(e, node) {
-                if (e.roleUserCount) {
-                    this.$message({
-                        message: '请先移除本部门下用户',
-                        type: 'warning'
-                    });
-                } else {
-                    this.$confirm('确定删除该Role?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        this.$ajax.delete(this.$apis.delete_departmentRole, {
-                            deptId: this.userData.deptId,
-                            roleId: e.roleId
-                        }).then(res => {
-                            //先从页面上删除该节点
-                            let key;
-                            this.roleData[0].children.forEach((v, k) => {
-                                if (v.roleId === e.roleId) {
-                                    key = k;
-                                }
-                            });
-                            this.roleData[0].children.splice(key, 1);
-
-                            //更新department对应的数据
-                            this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
-                                this.departmentData = res;
-                                this.departmentData.forEach(v => {
-                                    this.departmentUserTotal += v.deptUserCount;
-                                });
-                                //把对应的roleId以及底部userData同步更新
-                                this.$nextTick(() => {
-                                    let checkedNode = this.$refs.roleTree.getCheckedNodes(true);
-                                    let id = [];
-                                    checkedNode.forEach(v => {
-                                        if (!v.children) {
-                                            id.push(v.roleId);
-                                        }
-                                    });
-                                    if (id.length) {
-                                        this.userData.roleIds = id;
-                                    } else {
-                                        this.userData.roleIds = [-1];
-                                    }
-                                    const loading = this.$loading({
-                                        lock: true,
-                                        text: 'Loading',
-                                        background: 'rgba(255, 255, 255, 0.7)',
-                                        target: '.speTable'
-                                    });
-                                    this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-                                        this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                                        this.$message({
-                                            type: 'success',
-                                            message: '删除成功!'
-                                        });
-                                        loading.close();
-                                    }).catch(err => {
-                                        loading.close();
-                                    });
-                                })
-                            }).catch(err => {
-
-                            });
-                        }).catch(err => {
-
+                this.$confirm(this.$i.setting.sureDelete, this.$i.setting.prompt, {
+                    confirmButtonText: this.$i.setting.sure,
+                    cancelButtonText: this.$i.setting.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingRole=true;
+                    this.$ajax.delete(this.$apis.delete_departmentRole,{
+                        deptId:this.userData.deptId,
+                        roleId:e.roleId
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.setting.deleteSuccess
                         });
+                        this.getRoleData();
+                    }).catch(err=>{
+                        this.loadingRole=false;
+                    })
+                }).catch(() => {
 
-                    }).catch(() => {
-
-                    });
-                }
+                });
             },
 
             /**
@@ -983,11 +1000,26 @@
                 }
             },
 
+            getUnit(){
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                })
+                this.$ajax.post(this.$apis.get_partUnit,['LANGUAGE'],{cache:true})
+                    .then(res=>{
+                        this.languageOption=res[0].codes;
+                        console.log(res)
+                    }).finally(err=>{
+
+                    }
+                );
+            },
+
 
         },
         created() {
             this.getDepartmentData();
             this.getDepartmentUser();
+            this.getUnit();
         },
         mounted() {
 
@@ -1103,5 +1135,8 @@
 
     .footer .btns {
         margin-top: 5px;
+    }
+    .speInput{
+        width: 80%;
     }
 </style>

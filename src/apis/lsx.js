@@ -29,8 +29,10 @@ export default {
   get_department: ['/department', 'UUSER_URL'],
   get_departmentUser: ['/user/list', 'UUSER_URL'],
   delete_department: ['/department/{deptId}', 'UUSER_URL'],
-  add_departmentRole: ['/role?deptId={deptId}', 'UUSER_URL'],
+  get_departmentRole: ['/role?deptId={deptId}', 'UUSER_URL'],
+  add_departmentRole:['/role','UUSER_URL'],
   delete_departmentRole: ['/role/{deptId}/{roleId}', 'UUSER_URL'],
+  update_departmentRole:['/role','UUSER_URL'],
 
 
   /**
