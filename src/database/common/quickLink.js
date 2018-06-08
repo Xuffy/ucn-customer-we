@@ -43,7 +43,7 @@ export default {
     icon: 'icon-chukuC',
     link: '',
     customer: false,
-    supplier: false,
+    supplier: true,
     server: false,
     defaultShow: true,
   },

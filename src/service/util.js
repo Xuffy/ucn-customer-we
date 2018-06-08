@@ -194,24 +194,17 @@ export default {
      * 转换表格中需要由字典表数据来转换的数据
      * */
     Vue.prototype.$change = (obj, code, e, isString) => {
-      let data;
-      if (isString) {
-        data = _.findWhere(obj, {code: String(e[code].value)});
-      } else {
-        data = _.findWhere(obj, {code: e[code].value});
-      }
-      if (data) {
-        return data;
-      } else {
-        return '';
-      }
+      let data, value;
+
+      value = e[code].value;
+
+      data = _.findWhere(obj, {code: isString ? String(value) : value});
+
+      return data || '';
     };
 
     Vue.prototype.$depthClone = (data) => {
-      if (!data) {
-        return data;
-      }
-      return JSON.parse(_.clone(JSON.stringify(data)));
+      return data ? JSON.parse(_.clone(JSON.stringify(data))) : data;
     }
 
 

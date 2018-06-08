@@ -5,7 +5,7 @@
                @close="dialogClose">
       <el-checkbox-group v-model="checkedList">
         <el-row>
-          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key" v-if="item.customer">
+          <el-col :span="8" v-for="item in $db.common.quickLink" :key="item.key">
             <el-checkbox :label="item.key">
               {{item.label}}
             </el-checkbox>
@@ -38,6 +38,7 @@
    */
 
   import {mapActions, mapState} from 'vuex';
+  import config from '../../../service/config'
 
   export default {
     name: 'VAddQuickLink',
@@ -70,13 +71,14 @@
         this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK'}, {contentType: 'F'})
           .then((data) => {
             let list = [];
+
             this.checkedList = _.map(data, val => {
               let v = this.$db.common.quickLink[val.itemCode];
-              v.customer && list.push(this.$db.common.quickLink[val.itemCode]);
+              v && list.push(v);
               return val.itemCode;
             });
-            this.quickLink.list = list;
 
+            this.quickLink.list = list;
           });
       },
       updateQuickLink() {
