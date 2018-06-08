@@ -312,11 +312,17 @@
             <!--<el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>-->
             <!--<el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>-->
             <!--<el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>-->
-            <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-            <el-button :disabled="loadingPage" type="primary">{{$i.order.confirm}}</el-button>
-            <el-button :disabled="loadingPage" type="primary">{{$i.order.download}}</el-button>
-            <el-button :disabled="loadingPage" type="primary">{{$i.order.createOrder}}</el-button>
-            <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
+            <div v-if="isModify">
+                <el-button type="primary">{{$i.order.send}}</el-button>
+                <el-button @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
+            </div>
+            <div v-else>
+                <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
+                <el-button :disabled="loadingPage" type="primary">{{$i.order.confirm}}</el-button>
+                <el-button :disabled="loadingPage" type="primary">{{$i.order.download}}</el-button>
+                <el-button :disabled="loadingPage" type="primary">{{$i.order.createOrder}}</el-button>
+                <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
+            </div>
         </div>
 
         <el-dialog
@@ -1141,7 +1147,7 @@
                     this.loadingProductTable=false;
                 });
             },
-            getDetail(){
+            getDetail(e){
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
@@ -1158,16 +1164,22 @@
                             item.skuPic._image=false;
                         }
                     });
+                    this.productTableData=[];
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
 
                     //判断底部按钮能不能点
-                    console.log(res.status)
-                    console.log(this.orderStatusOption,'orderStatusOption')
-
+                    // if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
+                    //     this.disableModify=true;
+                    // }else{
+                    //     this.disableModify=false;
+                    // }
                 }).finally(err=>{
                     this.loadingPage=false;
+                    if(e){
+                        this.isModify=false;
+                    }
                 });
             },
 
@@ -1408,8 +1420,9 @@
             modifyOrder(){
                 this.isModify=true;
             },
-
-
+            cancelModify(){
+                this.getDetail(true);
+            },
 
             /**
              * quick create弹出框事件
