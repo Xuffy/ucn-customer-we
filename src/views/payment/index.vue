@@ -260,7 +260,19 @@
                 //   type: 'waining',
                 //   message: res.errorMsg
                 // });
-              });
+              }); this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
+                .then(res => {
+                  console.log(res);
+                  this.$message({
+                    type: 'success',
+                    message: '催促成功!'
+                  });
+                }).catch((res) => {
+                  // this.$message({
+                  //   type: 'waining',
+                  //   message: res.errorMsg
+                  // });
+                });
             },
             setButtons(item){
                 if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]

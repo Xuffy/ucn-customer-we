@@ -1,45 +1,39 @@
 export default {
-    SupplierCode: {
+    supplierNO: {
         key: 'code'
     },
-    Suppliercompanyname: {
+   supplierName: {
         key: 'name'
     },
-    Suppliertype: {
+   supplierType: {
         key: 'type'
     },
-    country: {
+   country: {
         key: 'country'
     },
     city: {
         key: 'city'
     },
-    Provideincoterm: {
+   provideIncoterm: {
         key: 'incoterm'
     },
-    Exportlicense: {
+   exportLicense: {
         key: 'exportLicense'
     },
-    businessscope: {
+   businessScope: {
         key: 'businessScope'
     },
-    category: {
-        key: 'category'
-    },
-    currency: {
+   currency: {
         key: 'currency'
     },
-    paymentterm: {
+   payment: {
         key: 'payment'
     },
-    Suppliershortname: {
+   supplierShortName: {
         key: 'shortName'
     },
-    description: {
+  description: {
         key: 'description'
     },
-    
-    
-    
-    
+
 }
