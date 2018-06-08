@@ -313,15 +313,15 @@
             <!--<el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>-->
             <!--<el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>-->
             <div v-if="isModify">
-                <el-button type="primary">{{$i.order.send}}</el-button>
+                <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
                 <el-button @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                <el-button :disabled="loadingPage" type="primary">{{$i.order.confirm}}</el-button>
-                <el-button :disabled="loadingPage" type="primary">{{$i.order.download}}</el-button>
-                <el-button :disabled="loadingPage" type="primary">{{$i.order.createOrder}}</el-button>
+                <el-button :disabled="loadingPage" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
+                <el-button :disabled="loadingPage" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
                 <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
+                <el-checkbox :disabled="loadingPage || disableModify" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
         </div>
 
@@ -822,6 +822,7 @@
                  * 底部按钮禁用状态
                  * */
                 disableModify:false,
+                markImportant:false,
 
 
 
@@ -1170,11 +1171,11 @@
                     });
 
                     //判断底部按钮能不能点
-                    // if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
-                    //     this.disableModify=true;
-                    // }else{
-                    //     this.disableModify=false;
-                    // }
+                    if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
+                        this.disableModify=true;
+                    }else{
+                        this.disableModify=false;
+                    }
                 }).finally(err=>{
                     this.loadingPage=false;
                     if(e){
@@ -1201,8 +1202,9 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+
                 this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     console.log(res)
                     this.$router.push('/order/overview');
                 }).finally(err=>{
@@ -1387,7 +1389,6 @@
 
             },
             dataFilter(data) {
-                console.log(data,'????')
                 let arr = [],
                     jsons = {},
                     json = {};
@@ -1413,7 +1414,6 @@
                 return arr;
             },
 
-
             /**
              * 底部按钮事件
              * */
@@ -1422,6 +1422,26 @@
             },
             cancelModify(){
                 this.getDetail(true);
+            },
+            changeMarkImportant(e){
+                this.$ajax.post(this.$apis.ORDER_MARK,{
+                    importantCustomer: e,
+                    orderNos: [this.orderForm.orderNo],
+                });
+            },
+            createOrder(){
+                this.$windowOpen({
+                    url:'/order/create'
+                })
+            },
+            confirmOrder(){
+                this.$ajax.post(this.$apis.ORDER_CONFIRM,{
+                    orderNos: [this.orderForm.orderNo],
+                }).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
+                });
             },
 
             /**

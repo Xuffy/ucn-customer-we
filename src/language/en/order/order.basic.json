@@ -25,5 +25,6 @@
   "draftOverview":"Draft Overview",
   "modify":"Modify",
   "confirm":"Confirm",
-  "download":"Download"
+  "download":"Download",
+  "markAsImportant":"Mark As Important"
 }

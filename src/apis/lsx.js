@@ -29,7 +29,7 @@ export default {
   get_department: ['/department', 'UUSER_URL'],
   get_departmentUser: ['/user/list', 'UUSER_URL'],
   delete_department: ['/department/{deptId}', 'UUSER_URL'],
-  add_departmentRole: ['/role', 'UUSER_URL'],
+  add_departmentRole: ['/role?deptId={deptId}', 'UUSER_URL'],
   delete_departmentRole: ['/role/{deptId}/{roleId}', 'UUSER_URL'],
 
 
@@ -89,7 +89,6 @@ export default {
   accept_qcResult: ['/qc/result/accept', 'USUPPLY_URL'],
   get_outboundDetailProductData: ['/outbound/sku/page', 'USUPPLY_URL'],
 
-
   /**
    * buyer Warehouse
    * */
@@ -123,7 +122,6 @@ export default {
   get_serviceQcOrderProduct: ['/qc/detail/page', 'BASE_SERVICE', 'USERVICE_URL'],
   get_serviceQcSurveyor: ['/user/list', 'UUSER_URL'],
   save_serviceQcOrder: ['/qc/result/save', 'BASE_SERVICE', 'USERVICE_URL'],
-
 
   /**
    * 字典获取
