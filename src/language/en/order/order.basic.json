@@ -22,5 +22,8 @@
   "prompt":"Prompt",
   "sure":"Sure",
   "cancel":"Cancel",
-  "draftOverview":"Draft Overview"
+  "draftOverview":"Draft Overview",
+  "modify":"Modify",
+  "confirm":"Confirm",
+  "download":"Download"
 }

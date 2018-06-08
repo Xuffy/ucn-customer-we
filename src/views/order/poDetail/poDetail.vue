@@ -12,20 +12,20 @@
                                 <el-input
                                         :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
                                         class="speInput"
-                                        :disabled="v.disabled || disabledLcNo"
+                                        :disabled="v.disabled || disabledLcNo || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                             <div v-else>
                                 <el-input
                                         :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
                                         class="speInput"
-                                        :disabled="v.disabled || v.disableDetail"
+                                        :disabled="v.disabled || v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
-                                    :disabled="v.disabled || v.disableDetail"
+                                    :disabled="v.disabled || v.disableDetail || !isModify"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
                                     :placeholder="$i.order.pleaseChoose"
@@ -41,7 +41,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
-                                        :disabled="v.disableDetail"
+                                        :disabled="v.disableDetail || !isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in supplierOption"
@@ -56,6 +56,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
+                                        :disabled="!isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in incotermOption"
@@ -70,6 +71,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
+                                        :disabled="!isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in currencyOption"
@@ -85,6 +87,7 @@
                                         @change="changePayment"
                                         v-model="orderForm[v.key]"
                                         filterable
+                                        :disabled="!isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in paymentOption"
@@ -99,6 +102,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
+                                        :disabled="!isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in countryOption"
@@ -113,7 +117,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
-                                        :disabled="v.disabled"
+                                        :disabled="v.disabled || !isModify"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in transportOption"
@@ -126,7 +130,7 @@
                             <div v-else-if="v.isStatus">
                                 <el-select
                                         class="speInput"
-                                        :disabled="v.disableDetail"
+                                        :disabled="v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
@@ -140,7 +144,7 @@
                             <div v-else>
                                 <el-select
                                         :placeholder="$i.order.pleaseChoose"
-                                        :disabled="v.disabled"
+                                        :disabled="v.disabled || !isModify"
                                         class="speInput"
                                         v-model="orderForm[v.key]">
                                     <el-option
@@ -155,7 +159,7 @@
                         <div v-else-if="v.type==='number'">
                             <el-input-number
                                     :placeholder="$i.order.pleaseInput"
-                                    :disabled="v.disabled"
+                                    :disabled="v.disabled || !isModify"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
                                     :controls="false">
@@ -164,7 +168,7 @@
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
-                                    :disabled="v.disabled"
+                                    :disabled="v.disabled || !isModify"
                                     class="speInput"
                                     type="textarea"
                                     :autosize="{ minRows: 2}"
@@ -175,6 +179,7 @@
                         <div v-else-if="v.type==='attachment'">
                             <v-upload
                                     ref="upload"
+                                    :readonly="!isModify"
                                     :list="orderForm.attachments"
                                     :limit="20"></v-upload>
                         </div>
@@ -230,7 +235,7 @@
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="scope.row.type===1 || scope.row.type===3"
+                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -258,7 +263,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :disabled="scope.row.type===1 || scope.row.type===3"
+                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
                             :placeholder="$i.order.pleaseInput"
                             v-model="scope.row.remark"
                             clearable>
@@ -275,7 +280,7 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type===1 || scope.row.type===3"
+                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -289,7 +294,7 @@
         <v-table
                 :height="500"
                 :data.sync="productTableData"
-                :buttons="productInfoBtn"
+                :buttons="isModify?productInfoBtn:productNotModifyBtn"
                 @action="productInfoAction"
                 :loading='loadingProductTable'
                 @change-checked="changeProductChecked"
@@ -297,16 +302,21 @@
                 :total-row="tableTotal">
             <template slot="header">
                 <div class="btns">
-                    <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
-                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
+                    <el-button :disabled="!isModify" @click="addProduct">{{$i.order.addProduct}}</el-button>
+                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0 || !isModify" type="danger">{{$i.order.remove}}</el-button>
                 </div>
             </template>
         </v-table>
 
         <div class="footBtn">
-            <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-            <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
-            <el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
+            <!--<el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>-->
+            <!--<el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>-->
+            <!--<el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>-->
+            <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
+            <el-button :disabled="loadingPage" type="primary">{{$i.order.confirm}}</el-button>
+            <el-button :disabled="loadingPage" type="primary">{{$i.order.download}}</el-button>
+            <el-button :disabled="loadingPage" type="primary">{{$i.order.createOrder}}</el-button>
+            <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
         </div>
 
         <el-dialog
@@ -802,11 +812,17 @@
                 orderStatusOption:[],
                 countryOption:[],
 
+                /**
+                 * 底部按钮禁用状态
+                 * */
+                disableModify:false,
+
 
 
                 /**
                  * 页面基础配置
                  * */
+                isModify:false,     //是否在modify状态
                 disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
@@ -845,6 +861,20 @@
                     {
                         label: 'Negotiate',
                         type: 'negotiate'
+                    },
+                    {
+                        label: 'History',
+                        type: 'history'
+                    },
+                    {
+                        label: 'Detail',
+                        type: 'detail'
+                    }
+                ],
+                productNotModifyBtn:[
+                    {
+                        label: 'History',
+                        type: 'history'
                     },
                     {
                         label: 'Detail',
@@ -1030,6 +1060,87 @@
             /**
              * 获取页面数据
              * */
+            getUnit(){
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
+                //获取币种
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
+                    this.currencyOption=res;
+                    this.allowQuery++;
+                })
+                    .finally(err=> {
+
+                        }
+                    );
+
+                //获取国家
+                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                }).finally(err=>{
+
+                });
+
+
+                //获取汇率
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
+                    this.allowQuery++;
+                    _.map(this.orderForm.exchangeRateList,v=>{
+                        _.map(res,m=>{
+                            if(v.currency===m.symbol){
+                                v.exchangeRate=m.price;
+                            }
+                        })
+                    })
+                }).finally(err=>{
+
+                });
+
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
+                    this.allowQuery++;
+                    res.forEach(v=>{
+                        if(v.code==='ITM'){
+                            this.incotermOption=v.codes;
+                        }else if(v.code==='PMT'){
+                            this.paymentOption=v.codes;
+                        }else if(v.code==='MD_TN'){
+                            this.transportOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='ED_UNIT'){
+                            this.expirationDateOption=v.codes;
+                        }else if(v.code==='NS_IS'){
+                            this.isNeedSampleOption=v.codes;
+                        }else if(v.code==='ORDER_STATUS'){
+                            this.orderStatusOption=v.codes;
+                        }
+                    })
+                }).finally(err=>{
+
+                });
+                let ids=this.$route.query.ids;
+                ids=ids.slice(0,ids.length-1);
+                this.loadingProductTable=true;
+                this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                            item.skuPic._image=false;
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    });
+                }).finally(err=>{
+                    this.loadingProductTable=false;
+                });
+            },
             getDetail(){
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
@@ -1041,8 +1152,6 @@
                         }
                     });
                     this.changePayment(res.payment);
-                    // console.log(this.$copyArr(res.skuList),'???')
-
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
@@ -1052,6 +1161,11 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
+
+                    //判断底部按钮能不能点
+                    console.log(res.status)
+                    console.log(this.orderStatusOption,'orderStatusOption')
+
                 }).finally(err=>{
                     this.loadingPage=false;
                 });
@@ -1155,7 +1269,6 @@
                     this.loadingTable=false;
                 });
             },
-
             changePayment(e){
                 let name=_.findWhere(this.paymentOption,{code:e}).name;
                 if(name!=='L/C'){
@@ -1287,6 +1400,16 @@
                 });
                 return arr;
             },
+
+
+            /**
+             * 底部按钮事件
+             * */
+            modifyOrder(){
+                this.isModify=true;
+            },
+
+
 
             /**
              * quick create弹出框事件
@@ -1593,88 +1716,6 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     })
-                }).finally(err=>{
-                    this.loadingProductTable=false;
-                });
-            },
-
-            getUnit(){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
-                //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
-                        this.currencyOption=res;
-                        this.allowQuery++;
-                    })
-                    .finally(err=> {
-
-                        }
-                    );
-
-                //获取国家
-                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                }).finally(err=>{
-
-                });
-
-
-                //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
-                    this.allowQuery++;
-                    _.map(this.orderForm.exchangeRateList,v=>{
-                        _.map(res,m=>{
-                            if(v.currency===m.symbol){
-                                v.exchangeRate=m.price;
-                            }
-                        })
-                    })
-                }).finally(err=>{
-
-                });
-
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
-                    this.allowQuery++;
-                    res.forEach(v=>{
-                        if(v.code==='ITM'){
-                            this.incotermOption=v.codes;
-                        }else if(v.code==='PMT'){
-                            this.paymentOption=v.codes;
-                        }else if(v.code==='MD_TN'){
-                            this.transportOption=v.codes;
-                        }else if(v.code==='SKU_UNIT'){
-                            this.skuUnitOption=v.codes;
-                        }else if(v.code==='LH_UNIT'){
-                            this.lengthOption=v.codes;
-                        }else if(v.code==='WT_UNIT'){
-                            this.weightOption=v.codes;
-                        }else if(v.code==='VE_UNIT'){
-                            this.volumeOption=v.codes;
-                        }else if(v.code==='ED_UNIT'){
-                            this.expirationDateOption=v.codes;
-                        }else if(v.code==='NS_IS'){
-                            this.isNeedSampleOption=v.codes;
-                        }else if(v.code==='ORDER_STATUS'){
-                            this.orderStatusOption=v.codes;
-                        }
-                    })
-                }).finally(err=>{
-
-                });
-                let ids=this.$route.query.ids;
-                ids=ids.slice(0,ids.length-1);
-                this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
-                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
-                        }
-                    });
-                    _.map(data,v=>{
-                        this.productTableData.push(v);
-                    });
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });

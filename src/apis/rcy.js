@@ -12,7 +12,6 @@ export default {
     add_order: ['/order/save', 'BASE_HCJ', 'UPURCHASE_URL'],
     detail_order: ['/order/detail/{id}', 'BASE_HCJ', 'UPURCHASE_URL'],
     get_order_history: ['/order/skuHistory', 'BASE_HCJ', 'UPURCHASE_URL'],
-    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_BUYER', 'UPURCHASE_URL'],
     post_order_skus: ['/order/skus', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_cancleOrder: ['/order/cancle', 'BASE_HCJ', 'UPURCHASE_URL'],
     post_updataOrder: ['/order/update', 'BASE_HCJ', 'UPURCHASE_URL'],
