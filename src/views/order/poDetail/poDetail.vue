@@ -8,15 +8,24 @@
                 <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
-                            <el-input
-                                    :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
-                                    class="speInput"
-                                    :disabled="v.disabled"
-                                    v-model="orderForm[v.key]"></el-input>
+                            <div v-if="v.key==='lcNo'">
+                                <el-input
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        class="speInput"
+                                        :disabled="v.disabled || disabledLcNo"
+                                        v-model="orderForm[v.key]"></el-input>
+                            </div>
+                            <div v-else>
+                                <el-input
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        class="speInput"
+                                        :disabled="v.disabled || v.disableDetail"
+                                        v-model="orderForm[v.key]"></el-input>
+                            </div>
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
-                                    :disabled="v.disabled"
+                                    :disabled="v.disabled || v.disableDetail"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
                                     :placeholder="$i.order.pleaseChoose"
@@ -32,6 +41,7 @@
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
+                                        :disabled="v.disableDetail"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in supplierOption"
@@ -72,11 +82,26 @@
                             <div v-else-if="v.isPayment">
                                 <el-select
                                         class="speInput"
+                                        @change="changePayment"
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in paymentOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isCountry">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in countryOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -92,6 +117,20 @@
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in transportOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isStatus">
+                                <el-select
+                                        class="speInput"
+                                        :disabled="v.disableDetail"
+                                        v-model="orderForm[v.key]"
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in orderStatusOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -173,12 +212,12 @@
                     prop="type"
                     label="Type">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.type==='0'">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type==='1'">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type==='2'">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='3'">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type==='4'">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='5'">{{$i.order.otherResponsibility}}</span>
+                    <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
+                    <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
+                    <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
+                    <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -191,7 +230,7 @@
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -219,7 +258,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseInput"
                             v-model="scope.row.remark"
                             clearable>
@@ -236,7 +275,7 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="scope.row.type===1 || scope.row.type===3"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -760,12 +799,15 @@
                 volumeOption:[],
                 expirationDateOption:[],
                 isNeedSampleOption:[],
+                orderStatusOption:[],
+                countryOption:[],
 
 
 
                 /**
                  * 页面基础配置
                  * */
+                disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
                 disableClickSend:false,
@@ -922,54 +964,54 @@
                     remind: true,
                     responsibilityFlag:false,
                     responsibilityList: [
-                        {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
-                        {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
+                        // {
+                        //     type: '0',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '1',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '2',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '3',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '4',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
+                        // {
+                        //     type: '5',
+                        //     customer: '',
+                        //     supplier: '',
+                        //     remark: '',
+                        //     actualDt: '',
+                        //     orderNo:''
+                        // },
                     ],
                     skuList: [],
                     // skuQty: 0,
@@ -985,7 +1027,6 @@
             }
         },
         methods:{
-
             /**
              * 获取页面数据
              * */
@@ -993,10 +1034,26 @@
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
-                    console.log(res,'???')
                     this.orderForm=res;
-                }).finally(err=>{
+                    _.map(this.supplierOption,v=>{
+                        if(v.code===res.supplierCode){
+                            this.orderForm.supplierName=v.id;
+                        }
+                    });
+                    this.changePayment(res.payment);
+                    // console.log(this.$copyArr(res.skuList),'???')
 
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                            item.skuPic._image=false;
+                        }
+                    });
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    });
+                }).finally(err=>{
+                    this.loadingPage=false;
                 });
             },
 
@@ -1026,7 +1083,6 @@
                     this.disableClickSend=false;
                 });
             },
-
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
@@ -1070,7 +1126,9 @@
             //获取供应商
             getSupplier(){
                 this.loadingPage=true;
-                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME}?name=`).then(res=>{
+                this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME,{
+                    name:''
+                }).then(res=>{
                     this.supplierOption=res;
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
@@ -1081,7 +1139,7 @@
                     }
                     this.getUnit();
                 }).catch(err=>{
-                    this.loadingPage=false;
+                    // this.loadingPage=false;
                 })
             },
             quickCreate(){
@@ -1096,6 +1154,16 @@
                 }).finally(err=>{
                     this.loadingTable=false;
                 });
+            },
+
+            changePayment(e){
+                let name=_.findWhere(this.paymentOption,{code:e}).name;
+                if(name!=='L/C'){
+                    this.disabledLcNo=true;
+                    this.orderForm.lcNo='';
+                }else{
+                    this.disabledLcNo=false;
+                }
             },
 
             /**
@@ -1531,15 +1599,26 @@
             },
 
             getUnit(){
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
                         this.currencyOption=res;
                         this.allowQuery++;
                     })
                     .finally(err=> {
-                            this.loadingPage=false;
+
                         }
                     );
+
+                //获取国家
+                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                }).finally(err=>{
+
+                });
+
 
                 //获取汇率
                 this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
@@ -1552,10 +1631,10 @@
                         })
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE']).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1576,10 +1655,12 @@
                             this.expirationDateOption=v.codes;
                         }else if(v.code==='NS_IS'){
                             this.isNeedSampleOption=v.codes;
+                        }else if(v.code==='ORDER_STATUS'){
+                            this.orderStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
                 let ids=this.$route.query.ids;
                 ids=ids.slice(0,ids.length-1);

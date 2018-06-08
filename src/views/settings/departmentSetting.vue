@@ -452,6 +452,7 @@
        * */
       getDepartmentData() {
         this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
+            console.log(res)
           this.departmentData = res;
           this.departmentData.forEach(v => {
             this.departmentUserTotal += v.deptUserCount;
@@ -488,7 +489,7 @@
       departmentClick(data, node, com) {
         console.log(data, node, com)
         //选中部门就让他为false，避免触发全选时的多次重复事件
-        return console.log(this.userData);
+        // return console.log(this.userData);
         this.allowRoleGetData = false;
         this.userData.deptId = data.deptId;
         //清空底部搜索条件
@@ -498,6 +499,7 @@
         this.userData.userName = '';
         this.userData.gender = null;
         this.userData.status = null;
+        console.log(data,'data')
         this.roleData[0].children = this.$depthClone(data.deptRoles);
         this.roleUserTotal = 0;
         this.departmentData.forEach(v => {

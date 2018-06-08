@@ -11,6 +11,7 @@ export default {
         type:'date',
         belong:'basicInfo',
         createHide:true,
+        disableDetail:true
     },
     customerOrderNo:{
         type:'input',
@@ -20,11 +21,13 @@ export default {
         type:'input',
         belong:'basicInfo',
         createHide:true,
+        disableDetail:true
     },
     customerNo:{
         type:'input',
         belong:'basicInfo',
         createHide:true,
+        disableDetail:true
     },
     supplierOrderNo:{
         type:'input',
@@ -33,7 +36,8 @@ export default {
     supplierName:{
         type:'select',
         belong:'basicInfo',
-        isSupplier:true
+        isSupplier:true,
+        disableDetail:true
     },
     // supplierCode:{  //供应商编号
     //     type:'select',
@@ -49,6 +53,8 @@ export default {
         type:'select',
         belong:'basicInfo',
         createHide:true,
+        isStatus:true,
+        disableDetail:true
     },
     deliveryDt:{
         type:'date',
@@ -87,16 +93,18 @@ export default {
     //     isPaymentStatus:true
     // },
     departureCountry:{
-        type:'input',
+        type:'select',
         belong:'basicInfo',
+        isCountry:true
     },
     departurePort:{
         type:'input',       //??????
         belong:'basicInfo',
     },
     destCountry:{
-        type:'input',
+        type:'select',
         belong:'basicInfo',
+        isCountry:true
     },
     destPort:{
         type:'input',       //??????

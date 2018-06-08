@@ -8,11 +8,20 @@
                 <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
-                            <el-input
-                                    :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
-                                    class="speInput"
-                                    :disabled="v.disabled"
-                                    v-model="orderForm[v.key]"></el-input>
+                            <div v-if="v.key==='lcNo'">
+                                <el-input
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        class="speInput"
+                                        :disabled="v.disabled || disabledLcNo"
+                                        v-model="orderForm[v.key]"></el-input>
+                            </div>
+                            <div v-else>
+                                <el-input
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        class="speInput"
+                                        :disabled="v.disabled"
+                                        v-model="orderForm[v.key]"></el-input>
+                            </div>
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
@@ -31,7 +40,6 @@
                                 <el-select
                                         class="speInput"
                                         v-model="orderForm[v.key]"
-                                        filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in supplierOption"
@@ -72,11 +80,26 @@
                             <div v-else-if="v.isPayment">
                                 <el-select
                                         class="speInput"
+                                        @change="changePayment"
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in paymentOption"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div v-else-if="v.isCountry">
+                                <el-select
+                                        class="speInput"
+                                        v-model="orderForm[v.key]"
+                                        filterable
+                                        :placeholder="$i.order.pleaseChoose">
+                                    <el-option
+                                            v-for="item in countryOption"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.code">
@@ -760,12 +783,14 @@
                 volumeOption:[],
                 expirationDateOption:[],
                 isNeedSampleOption:[],
+                countryOption:[],
 
 
 
                 /**
                  * 页面基础配置
                  * */
+                disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
                 disableClickSend:false,
@@ -1053,10 +1078,22 @@
                 // });
             },
 
+            changePayment(e){
+                let name=_.findWhere(this.paymentOption,{code:e}).name;
+                if(name!=='L/C'){
+                    this.disabledLcNo=true;
+                    this.orderForm.lcNo='';
+                }else{
+                    this.disabledLcNo=false;
+                }
+            },
+
             //获取供应商
             getSupplier(){
                 this.loadingPage=true;
-                this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME}?name=`).then(res=>{
+                this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME,{
+                    name:''
+                }).then(res=>{
                     this.supplierOption=res;
                     if(this.$route.query.supplierCode){
                         _.map(this.supplierOption,v=>{
@@ -1526,6 +1563,13 @@
                     }
                 );
 
+                //获取国家
+                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                }).finally(err=>{
+
+                });
+
                 //获取汇率
                 this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
                     _.map(this.orderForm.exchangeRateList,v=>{
@@ -1540,7 +1584,6 @@
                 });
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
-                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;

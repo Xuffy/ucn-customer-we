@@ -70,7 +70,7 @@ export default {
      get_currency:['/currency/all','UMETA_URL'],
      CURRENCY_ALL:['/currency/all','UMETA_URL'],
     CUSTOMERCURRENCYEXCHANGERATE_QUERY:['/customcurrencyexchangerate/query','UMETA_URL'],
-
+    COUNTRY_ALL:['/country/all','UMETA_URL'],
 
 
 
@@ -82,7 +82,7 @@ export default {
      * */
     ORDER_GETORDERNO:['/order/getOrderNo','BASE_HCJ','UPURCHASE_URL'],
     ORDER_FINISH:['/order/finish','BASE_HCJ','UPURCHASE_URL'],
-    PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME:['/purchase/supplier/listSupplierByName','BASE_HCJ','UPURCHASE_URL'],
+    PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME:['/purchase/supplier/listSupplierByName?name={name}','BASE_HCJ','UPURCHASE_URL'],
     INQUIERY_LIST:['/inquiry/list','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SKUS:['/order/skus','BASE_HCJ','UPURCHASE_URL'],
     ORDER_SKUHISTORY:['/order/skuHistory','BASE_HCJ','UPURCHASE_URL'],
@@ -93,4 +93,5 @@ export default {
     ORDER_DRAFT_ORDERPAGE:['/order/draft/orderPage','BASE_HCJ','UPURCHASE_URL'],
     ORDER_DRAFT_SKUPAGE:['/order/draft/skuPage','BASE_HCJ','UPURCHASE_URL'],
     ORDER_DETAIL:['/order/detail','BASE_HCJ','UPURCHASE_URL'],
+
 }
