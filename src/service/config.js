@@ -14,6 +14,7 @@ export default {
       //BASE_CS1: '//192.168.51.33:11007',
       BASE_API: '',
       BASE_CS_cgs: '//192.168.51.33:11007',
+      BASE_CS_set: '//192.168.51.33:11010',
       BASE_HCJ: '//192.168.51.208:11001',
       BASE_HCJTEST: '//192.168.51.173:12009',
       BASE_JY: '//192.168.51.199:18002',
@@ -68,7 +69,6 @@ export default {
       UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
       // UWORKBENCH_URL: '//dev.uworkbench.ucnholding.com:18100',
       BASE_BUYTEST: '//192.168.51.33:11001',
-      WORKBENCH_URL: '//192.168.51.208:11010',//workbench
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
 
@@ -90,7 +90,6 @@ export default {
       UOSS_URL: '//192.168.51.208:', // 对象存储服务
       UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
       UWORKBENCH_URL: '//192.168.51.208:11010',
-      WORKBENCH_URL: '//192.168.51.208:11010', //workbench
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
@@ -117,6 +116,9 @@ export default {
       BASE_API: 'https://store.tailorx.cn/api'
     }
   }[process.env.NODE_ENV],
+
+  // 客户端：采购端 1、供应商端 2、服务端 3
+  CLIENT_TYPE: 1,
 
   // 是否开启token验证
   AUTH: true,

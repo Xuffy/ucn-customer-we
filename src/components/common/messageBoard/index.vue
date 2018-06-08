@@ -1,9 +1,9 @@
 <template>
-  <div class="ucn-message-board" :class="{show:$store.state.layout.paddingRight}">
+  <div class="ucn-message-board ucn-container-right" :class="{show:layout.paddingRight}">
     <div class="title-box">
       <h3 class="ucn-content-title inline">{{$i.common.messageBoard}}</h3>
       <i class="el-icon-d-arrow-right"
-         @click="$store.state.layout.paddingRight = $store.state.layout.paddingRight ? 0 : '375px'"></i>
+         @click="layout.paddingRight = layout.paddingRight ? 0 : '375px'"></i>
     </div>
 
     <div class="content">
@@ -39,6 +39,7 @@
 
 
   import VUpload from '../upload/index'
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VMessageBoard',
@@ -68,9 +69,14 @@
         messageList: [],
       }
     },
+    computed: {
+      ...mapState({
+        layout: state => state.layout
+      }),
+    },
     watch: {},
     created() {
-      this.$store.state.layout.paddingRight = '375px'
+      this.layout.paddingRight = '375px'
     },
     mounted() {
       this.getMessage();
@@ -125,7 +131,6 @@
     background-color: #FFFFFF;
     transition: all .5s;
     transform: translate(120%, 0);
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
     padding: 100px 10px 10px 10px;
 
   }
