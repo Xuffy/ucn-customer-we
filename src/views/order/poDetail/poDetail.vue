@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <el-input
@@ -271,9 +271,9 @@
         </div>
 
         <el-dialog
-            title=""
-            :visible.sync="quickCreateDialogVisible"
-            width="70%">
+                title=""
+                :visible.sync="quickCreateDialogVisible"
+                width="70%">
             <v-table
                     :height="400"
                     :loading="loadingTable"
@@ -330,7 +330,7 @@
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
-                <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--<v-upload :limit="20" readonly></v-upload>-->
             <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
@@ -846,7 +846,6 @@
                 updateBookmark:0,
                 productTableData:[],
 
-
                 /**
                  * 提交的数据
                  * */
@@ -986,6 +985,21 @@
             }
         },
         methods:{
+
+            /**
+             * 获取页面数据
+             * */
+            getDetail(){
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:this.$route.query.orderId,
+                }).then(res=>{
+                    console.log(res,'???')
+                    this.orderForm=res;
+                }).finally(err=>{
+
+                });
+            },
+
             //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
@@ -1042,7 +1056,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=Math.ceil(Math.random()*100000000);
+                this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
                 // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
                 //     customerNo:''
@@ -1066,9 +1080,9 @@
                         });
                     }
                     this.getUnit();
-                    }).catch(err=>{
-                        this.loadingPage=false;
-                    })
+                }).catch(err=>{
+                    this.loadingPage=false;
+                })
             },
             quickCreate(){
                 this.quickCreateDialogVisible=true;
@@ -1518,16 +1532,18 @@
 
             getUnit(){
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
                         this.currencyOption=res;
+                        this.allowQuery++;
                     })
                     .finally(err=> {
-                        this.loadingPage=false;
-                    }
-                );
+                            this.loadingPage=false;
+                        }
+                    );
 
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
+                    this.allowQuery++;
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
                             if(v.currency===m.symbol){
@@ -1539,8 +1555,8 @@
                     this.loadingPage=false;
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
-                    console.log(res)
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE']).then(res=>{
+                    this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
@@ -1577,8 +1593,7 @@
                     });
                     _.map(data,v=>{
                         this.productTableData.push(v);
-                    })
-                    console.log(this.productTableData,'this.productTableData')
+                    });
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1601,10 +1616,17 @@
             changeSize(e){
                 this.inquiryConfig.ps=e;
                 this.getInquiryData();
-            },
+            }
         },
         created(){
             this.getOrderNo();
+        },
+        watch:{
+            allowQuery(n){
+                if(n===3){
+                    this.getDetail();
+                }
+            },
         },
     }
 </script>

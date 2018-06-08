@@ -166,6 +166,10 @@
             isInquiry:{
                 type:Boolean,
                 default:false
+            },
+            disablePostCustomerCreate:{
+                type:Boolean,
+                default:false
             }
         },
         data(){
@@ -350,11 +354,20 @@
                         }
                     });
                 }else if(this.type==='bookmark'){
-                    arr.forEach(v=>{
-                        if(v._checked && !v._disabled){
-                            newArr.push(v.skuId.value);        //只把id带出去
-                        }
-                    });
+                    console.log(arr,'?????')
+                    if(this.disablePostCustomerCreate){
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled && !v.customerCreate.value){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }else{
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }
                 }
 
                 this.$emit('handleOK',newArr);
@@ -379,7 +392,6 @@
             },
             //获取table数据
             getData(e) {
-                console.log(123)
                 if(this.type==='recycle'){
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList,{
@@ -530,18 +542,19 @@
                         url:'/order/create',
                     })
                 }else{
-                    console.log(this.selectList,'??')
-                    // let ids='';
-                    // this.selectList.forEach(v=>{
-                    //     ids+=(v.id.value+',');
-                    // });
-                    // this.$windowOpen({
-                    //     url:'/order/create',
-                    //     params:{
-                    //         type:'product',
-                    //         ids:ids,
-                    //     },
-                    // })
+                    let supplierCode=this.selectList[0].supplierCode.value;
+                    let ids='';
+                    this.selectList.forEach(v=>{
+                        ids+=(v.id.value+',');
+                    });
+                    this.$windowOpen({
+                        url:'/order/create',
+                        params:{
+                            type:'product',
+                            ids:ids,
+                            supplierCode:supplierCode
+                        },
+                    })
                 }
             },
 
