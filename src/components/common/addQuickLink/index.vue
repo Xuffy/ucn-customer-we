@@ -63,6 +63,31 @@
       }),
     },
     watch: {},
+    created() {
+      let ql = {};
+
+      _.map(this.$db.common.quickLink, (val, key) => {
+        switch (config.CLIENT_TYPE) {
+          case 1:
+            if (val.customer) {
+              ql[key] = val;
+            }
+            break;
+          case 2:
+            if (val.supplier) {
+              ql[key] = val;
+            }
+            break;
+          case 3:
+            if (val.server) {
+              ql[key] = val;
+            }
+            break;
+        }
+      });
+      this.$db.common.quickLink = ql;
+
+    },
     mounted() {
       this.getQuickLink();
     },
@@ -84,7 +109,7 @@
       updateQuickLink() {
         let data = [];
 
-        if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
+        // if (_.isEmpty(this.checkedList)) return this.quickLink.show = false;
 
         this.loading = true;
         _.map(this.checkedList, (val, index) => {

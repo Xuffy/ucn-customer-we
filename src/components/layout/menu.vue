@@ -11,7 +11,8 @@
           <i class="el-icon-menu" style="font-size: 16px"></i>
           <span v-text="$i.common.quickLink"></span>
         </div>
-        <el-menu-item v-for="(item,index) in quickLink.list" :index="'1-' + index" :key="index">
+        <el-menu-item v-for="(item,index) in quickLink.list"
+                      :index="'1-' + index" :key="index">
           <router-link :to="item.link || '/'">
             <el-tooltip :disabled="!layout.hideMenu" effect="dark" :content="item.label"
                         placement="right">
