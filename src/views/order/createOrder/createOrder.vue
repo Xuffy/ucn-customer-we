@@ -1042,7 +1042,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
+                this.orderForm.orderNo=Math.ceil(Math.random()*100000000);
                 this.getSupplier();
                 // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
                 //     customerNo:''

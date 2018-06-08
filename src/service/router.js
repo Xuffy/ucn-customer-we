@@ -392,7 +392,7 @@ export const routerMap = [
         },
           {
           path: 'details',
-          name: 'Order Detail',
+          name: 'Order Details',
           meta: {
             draft: true,
             recycleBin: true,

@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <el-input
@@ -846,7 +846,6 @@
                 updateBookmark:0,
                 productTableData:[],
 
-
                 /**
                  * 提交的数据
                  * */
@@ -995,11 +994,11 @@
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
                     console.log(res,'???')
+                    this.orderForm=res;
                 }).finally(err=>{
 
                 });
             },
-
 
             //就是保存
             send(){
@@ -1558,7 +1557,6 @@
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE']).then(res=>{
                     this.allowQuery++;
-                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
