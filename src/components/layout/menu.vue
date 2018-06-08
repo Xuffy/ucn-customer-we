@@ -135,9 +135,8 @@
         return _.indexOf(param, user.userType) !== -1;
       },
       changeHideMenu() {
-        let userAction = this.$sessionStore.get('user_action') || {};
-        this.layout.hideMenu = userAction.hideMenu = !this.layout.hideMenu;
-        this.$sessionStore.set('user_action', userAction);
+        this.layout.hideMenu = !this.layout.hideMenu;
+        this.$userAction.set('hideMenu', this.layout.hideMenu);
       }
     }
   }

@@ -138,7 +138,7 @@ export default {
   supplierType: { // 供应商类型 ok
     rules: [],
     width: '150px',
-    type: 'String',
+    type: 'Select',
     _disabled: true,
     _inquiryHide: true,
     transForm: 'SUPPLIER_TYPE'

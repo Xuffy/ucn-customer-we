@@ -116,7 +116,7 @@ const $ajax = (config) => {
     } else {
       switch (_options.method) {
         case 'DELETE':
-          return axios.delete(_options.url);
+          return axios.delete(_options.url, _options);
         case 'PUT':
           return axios.put(_options.url, options.data, _options);
         case 'GET':
