@@ -35,7 +35,6 @@ const validate_error = (code, msg) => {
   switch (code) {
     case 'AUTH-011': // 登录失效
       return router.push('/login');
-
   }
 
   Message.warning(msg || $i.hintMessage.dataException);
