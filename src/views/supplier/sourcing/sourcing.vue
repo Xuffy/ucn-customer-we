@@ -4,42 +4,37 @@
              {{$i.supplier.supplierSourcing}}
         </div>
 <!--        搜索条件-->
-            <div style='marginTop:20px;'>
-                <el-form ref="params" :model="params" label-width="200px" size="mini">
-                    <el-row>
-                          <el-col :xs="24" :sm="12" :md="8" :lg="8"
-                           v-for='(item,index) in $db.supplier.overview'
-                           :key="index+'j'"
-
-                           >
-                            <el-form-item class="form-list"
-                             v-if="item.showType==='text'"
-                            :label="item.label"
-                            :prop="item.key"
-                            >
-                                <el-input v-model="params[item.key]" placeholder="Enter something..."></el-input>
-                            </el-form-item>
-                            <el-form-item class="form-list"  v-if="item.showType==='select'"
-                            :label="item.label"
-                            :prop="item.key" >
-                                <el-select v-model="params[item.key]"></el-select>
-                               </el-form-item>
-                               <el-form-item class="form-list"  v-if="item.showType==='dropdown'"
-                                :label="item.label"
-                                :prop="item.key">
-                                 <div class="speDropdown">
-                                     <drop-down
-                                      ref="dropDown"
-
-                                       v-model="params[item.key]"
-                                     :defaultProps="defaultProps"
-                                     :list="dropData"></drop-down>
-                                </div>
-                            </el-form-item>
-                         </el-col>
-                        </el-row>
-                </el-form>
-            </div>
+          <div style='marginTop:20px;'>
+            <el-form ref="params" :model="params" label-width="200px" size="mini">
+              <el-row>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8"
+                        v-for='(v,index) in $db.supplier.overview'
+                        :key="index+'j'">
+                  <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                    <div v-if="v.type==='input'">
+                      <el-input
+                        size="mini"
+                        placeholder="请输入内容"
+                        v-model="params[v.key]">
+                      </el-input>
+                    </div>
+                    <div v-if="v.type==='select'">
+                      {{params[v.country]}}
+                      <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                        <el-option
+                          size="mini"
+                          v-for="item in options[v.key]"
+                          :key="item.code"
+                          :label="item.name"
+                          :value="item.code">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
 
             <div class="btn-group">
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
@@ -69,12 +64,11 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
-                    style='marginTop:10px'/>     
-              <v-pagination
-                :page-data.sync="params"
-                 @change="handleSizeChange"
-                @size-change="pageSizeChange"
-            />                         
+                    style='marginTop:10px'/>
+            <page
+              :page-data="pageData"
+              @change="handleSizeChange"
+              @size-change="pageSizeChange"></page>
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary">{{$i.common.cancel}}</el-button>
@@ -97,7 +91,7 @@
         components: {
             dropDown: dropDownSingle,
             VTable,
-            VPagination
+            page:VPagination
         },
         props: {
             isButton: {
@@ -120,20 +114,20 @@
                 pageTotal: "",
                 endpn: "",
                 params: {
-                    //                    conditions: {},
                     description: "",
-                    //                    mainBusiness: [],
                     name: '',
                     pn: 1,
                     ps: 50,
-                    tc: 0,
                     skuCode: "",
                     skuNameEn: "",
-                    type:''
+                    type:'',
+                    // recycle: true,
                 },
                 tabData: [],
                 selectedData: [],
                 selectNumber: [],
+                options:[],
+                pageData:{},
                 //Category下拉组件数据
                 dropData: [],
                 defaultProps: {
@@ -146,6 +140,14 @@
              ...mapActions([
                 'setRecycleBin'
             ]),
+            handleSizeChange(val) {
+              this.params.pn = val;
+              this.get_data();
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
+              this.get_data();
+            },
             //切换body的收缩展开状态
             switchDisplay() {
                 this.hideBody = !this.hideBody;
@@ -154,8 +156,6 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
-                
-                this.params.tc=0
             },
             //当作为主键时
             emitData() {
@@ -167,6 +167,7 @@
             },
             //....跳入createInquiry
             createInquiry() {
+              console.log(this.selectedData)
                 this.$windowOpen({
                     url: '/negotiation/createInquiry',
                     params: {
@@ -177,13 +178,13 @@
             },
             //....跳入createOrder
             createOrder() {
-
                 this.$windowOpen({
                     url: '/order/creat',
                     params: {
-                        type: 'supplier',
-                        supplierName: this.selectedData[0].name.value,
-                        supplierNo: this.selectedData[0].code.value
+                        // type: 'supplier',
+                        // supplierName: this.selectedData[0].name.value,
+                        // supplierNo: this.selectedData[0].code.value,
+                      supplierCode: this.selectedData[0].code.value
                     }
                 });
             },
@@ -229,13 +230,21 @@
                 });
                 this.selectNumber = number
             },
+          //获取字典
+          getCodePart(){
+            this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE"]).then(res=>{
+              this.options.type = _.findWhere(res, {'code': 'SR_TYPE'}).codes;
+            }).catch(err=>{
+              console.log(err)
+            });
+          },
             //.....拿数据
             get_data() {
                 this.loading = true
                 this.$ajax.post(this.$apis.get_listSupplier, this.params)
                     .then(res => {
                         //分页组件的参数
-                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+                        this.pageData=res;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         if (this.disabledLine.length > 0) {
@@ -287,8 +296,9 @@
         },
         created() {
             this.get_data()
-            this.getCategoryId()
-        this.setRecycleBin({
+            this.getCategoryId();
+            this.getCodePart();
+            this.setRecycleBin({
                 name: 'bookmarkRecycleBin',
                 show: true
             });

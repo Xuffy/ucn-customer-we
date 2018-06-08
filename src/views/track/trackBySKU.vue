@@ -15,8 +15,8 @@
             </select-search>
           </div>
         </div>
-            <v-table 
-            :data="dataList" 
+            <v-table
+            :data="dataList"
             :height="500"
             :loading='loading'></v-table>
             <page
@@ -70,8 +70,10 @@
                 this.getList();
             },
             inputEnter(val) {
-              if (!val.keyType) return this.$message('请选中搜索类型');
-              if (!val.key) return this.$message('搜索内容不能为空');
+              if (!val.keyType) return this.$message({
+                message: 'please choose a type',
+                type: 'warning'
+              });
               if (val.keyType == '1') {
                 this.params.skuCode= val.key
               }

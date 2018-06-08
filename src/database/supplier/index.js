@@ -5,6 +5,8 @@ import detailTable from './detailTable';
 import remark from './remark';
 import compareView from './compareView';
 import compareDetail from './compareDetail';
+import sourcingTrade from './sourcingTrade';
+import sourcingInquiry from './sourcingInquiry';
 export default {
     overview,
     overviewtable,
@@ -12,5 +14,7 @@ export default {
     detailTable,
     remark,
     compareView,
-    compareDetail
+    compareDetail,
+    sourcingTrade,
+    sourcingInquiry
 }

@@ -138,8 +138,6 @@
         let userAction = this.$sessionStore.get('user_action') || {};
         this.layout.hideMenu = userAction.hideMenu = !this.layout.hideMenu;
         this.$sessionStore.set('user_action', userAction);
-        // this.$parent.$emit('full-box', !this.hideMenu);
-        // this.hideMenu = !this.hideMenu;
       }
     }
   }
