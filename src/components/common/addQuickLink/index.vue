@@ -67,7 +67,7 @@
     },
     methods: {
       getQuickLink() {
-        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, ['QUICK_LINK'])
+        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK'}, {contentType: 'F'})
           .then((data) => {
             let list = [];
             this.checkedList = _.map(data, val => {
