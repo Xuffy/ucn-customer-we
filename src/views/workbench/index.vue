@@ -1,26 +1,26 @@
 <template>
   <div class="workbench">
-    <ul class="welcome-box ucn-container-right">
-      <li class="title">Welcome! Please set your basic info</li>
+    <ul class="welcome-box ucn-container-right" :class="{show:settingStateShow}">
+      <li class="title" v-text="$i.workbench.settingState"></li>
       <li>
-        <el-checkbox checked disabled>Set Department and User</el-checkbox>
+        <el-checkbox :checked="settingState.departmentInfo" disabled>{{$i.workbench.settingDepartment}}</el-checkbox>
         <br>
         <router-link to="/settings/department">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
       <li>
-        <el-checkbox checked disabled>Set Company Info</el-checkbox>
+        <el-checkbox :checked="settingState.companyInfo" disabled>{{$i.workbench.settingCompany}}</el-checkbox>
         <br>
         <router-link to="/settings/companyInfo">
           <el-button type="text">Go set>></el-button>
         </router-link>
       </li>
       <li>
-        <el-checkbox checked disabled>Set Category</el-checkbox>
+        <el-checkbox :checked="settingState.categoryInfo" disabled>{{$i.workbench.settingCategory}}</el-checkbox>
         <br>
         <router-link to="/settings/category">
-          <el-button type="text">Go set>></el-button>
+          <el-button type="text">{{$i.workbench.goSet}}>></el-button>
         </router-link>
       </li>
     </ul>
@@ -84,15 +84,16 @@
     data() {
       return {
         visible: false,
-        settingState: {}
+        settingState: {},
+        settingStateShow: false,
+        settingStateLoading: false,
       }
     },
     created() {
       this.getBasicInfo();
-      this.layout.paddingRight = '250px'
     },
     mounted() {
-      this.setLog({name:'productSourcingOverview'});
+      // this.setLog({name:'productSourcingOverview'});
     },
     computed: {
       ...mapState({
@@ -101,14 +102,19 @@
       }),
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
       getBasicInfo() {
-        this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
+        this.settingStateLoading = true;
+        this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE}, {cache: true})
           .then(res => {
             if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
-
+              this.settingStateShow = true;
+              this.layout.paddingRight = '250px'
+              this.settingState = res;
             }
-            this.settingState = res;
+          })
+          .finally(() => {
+            this.settingStateLoading = false;
           });
       }
     }
@@ -134,6 +140,12 @@
     background-color: #FFFFFF;
     box-sizing: border-box;
     z-index: 10;;
+    transition: all .5s;
+    transform: translate(120%, 0);
+  }
+
+  .welcome-box.show {
+    transform: translate(0, 0);
   }
 
   .welcome-box li {
