@@ -109,7 +109,6 @@
 
             }
             this.settingState = res;
-            console.log(res)
           });
       }
     }
