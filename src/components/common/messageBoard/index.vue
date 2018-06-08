@@ -76,7 +76,9 @@
     },
     watch: {},
     created() {
-      this.layout.paddingRight = '367px'
+      if(this.$userAction.get('messageBoard')){
+        this.layout.paddingRight = '367px'
+      }
     },
     mounted() {
       this.getMessage();
@@ -113,8 +115,8 @@
           });
       },
       changeShow() {
-        let userAction = this.$sessionStore.get('user_action') || {};
-        this.layout.paddingRight = this.layout.paddingRight ? 0 : '365px'
+        this.layout.paddingRight = this.layout.paddingRight ? 0 : '365px';
+        this.$userAction.set('messageBoard', !!this.layout.paddingRight);
       }
     }
   }

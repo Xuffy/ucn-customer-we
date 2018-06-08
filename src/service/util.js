@@ -178,7 +178,11 @@ export default {
       return new Date(utcTime + 3600000 * i);
     }
 
-
+    /**
+     *
+     * @param arr
+     * @returns {Uint8Array | any[] | Int32Array | Uint16Array | Uint32Array | Float64Array | any}
+     */
     Vue.prototype.$copyArr = (arr) => {
       return arr.map((e) => {
         if (typeof e === 'object') {
@@ -187,6 +191,23 @@ export default {
           return e
         }
       })
+    }
+
+
+    /**
+     * 用户行为缓存
+     * @type {{set(*, *): void, get(*): *}}
+     */
+    Vue.prototype.$userAction = {
+      set(key, value) {
+        let ua = sessionStore.get('user_action') || {};
+        ua[key] = value;
+        sessionStore.set('user_action', ua);
+      },
+      get(key) {
+        let ua = sessionStore.get('user_action') || {};
+        return ua[key];
+      }
     }
 
 
@@ -203,6 +224,11 @@ export default {
       return data || '';
     };
 
+    /**
+     * 深拷贝
+     * @param data
+     * @returns {*}
+     */
     Vue.prototype.$depthClone = (data) => {
       return data ? JSON.parse(_.clone(JSON.stringify(data))) : data;
     };

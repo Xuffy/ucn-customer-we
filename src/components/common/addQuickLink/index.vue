@@ -68,7 +68,7 @@
     },
     methods: {
       getQuickLink() {
-        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK'}, {contentType: 'F'})
+        this.$ajax.post(this.$apis.ITEMFAVORITE_PART, {bizCode: 'QUICK_LINK', type: config.CLIENT_TYPE})
           .then((data) => {
             let list = [];
 
