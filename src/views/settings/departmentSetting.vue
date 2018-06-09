@@ -152,7 +152,7 @@
             <div class="title">{{$i.setting.belongingUsers}}</div>
             <div class="btns">
                 <el-button :disabled="disableAddUser" type="primary" @click="addUsers">{{$i.setting.add}}</el-button>
-                <el-button :disabled="disableInviteUser" type="primary">{{$i.setting.invite}}</el-button>
+                <el-button :disabled="selectList.length===0" type="primary" @click="inviteUser">{{$i.setting.invite}}</el-button>
             </div>
             <div class="content">
                 <el-form ref="userData" :model="userData" label-width="100px">
@@ -243,17 +243,25 @@
                 <el-row>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <el-form-item :label="$i.setting.email" :label-width="formLabelWidth">
-                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                            <el-input
+                                    class="speInput"
+                                    v-model="addUser.email"
+                                    auto-complete="off"
+                                    :placeholder="$i.setting.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <el-form-item :label="$i.setting.userName" :label-width="formLabelWidth">
-                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                            <el-input
+                                    class="speInput"
+                                    v-model="addUser.userName"
+                                    auto-complete="off"
+                                    :placeholder="$i.setting.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <el-form-item :label="$i.setting.lang" :label-width="formLabelWidth">
-                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                            <el-select class="speInput" v-model="addUser.lang" :placeholder="$i.setting.pleaseChoose">
                                 <el-option
                                         v-for="item in languageOption"
                                         :key="item.id"
@@ -265,12 +273,12 @@
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <el-form-item :label="$i.setting.tel" :label-width="formLabelWidth">
-                            <el-input class="speInput" v-model="addUser.name" auto-complete="off"></el-input>
+                            <el-input class="speInput" v-model="addUser.tel" auto-complete="off" :placeholder="$i.setting.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
                         <el-form-item :label="$i.setting.gender" :label-width="formLabelWidth">
-                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                            <el-select class="speInput" v-model="addUser.gender" :placeholder="$i.setting.pleaseChoose">
                                 <el-option
                                         v-for="item in genderOption"
                                         :key="item.id"
@@ -285,34 +293,39 @@
                             <el-date-picker
                                     class="speInput"
                                     :editable="false"
-                                    v-model="addUser.name"
+                                    v-model="addUser.birthday"
                                     type="date"
                                     :placeholder="$i.setting.pleaseChoose">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item :label="$i.setting.role" :label-width="formLabelWidth">
-                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                        <el-form-item :label="$i.setting.department" :label-width="formLabelWidth">
+                            <el-select :disabled="isCreate" class="speInput" v-model="addUser.deptId" :placeholder="$i.setting.pleaseChoose">
                                 <el-option
-                                        v-for="item in genderOption"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.code">
+                                        v-for="item in departmentData"
+                                        :key="item.deptId"
+                                        :label="item.deptName"
+                                        :value="item.deptId">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
-                        <el-form-item :label="$i.setting.department" :label-width="formLabelWidth">
-                            <el-select class="speInput" v-model="addUser.name" placeholder="请选择">
+                        <el-form-item :label="$i.setting.role" :label-width="formLabelWidth">
+                            <el-select :disabled="isCreate" class="speInput" v-model="addUser.roleId" :placeholder="$i.setting.pleaseChoose">
                                 <el-option
-                                        v-for="item in genderOption"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.code">
+                                        v-for="item in roleOption"
+                                        :key="item.roleId"
+                                        :label="item.roleName"
+                                        :value="item.roleId">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                        <el-form-item :label="$i.setting.remark" :label-width="formLabelWidth">
+                            <el-input class="speInput" v-model="addUser.remark" auto-complete="off" :placeholder="$i.setting.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -324,9 +337,9 @@
                 <!--</el-select>-->
                 <!--</el-form-item>-->
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="addUserVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addUserVisible = false">确 定</el-button>
+            <div slot="footer" class="dialog-footer" style="text-align: center">
+                <el-button type="primary" @click="sureAddUser">{{$i.setting.sure}}</el-button>
+                <el-button @click="addUserVisible = false">{{$i.setting.cancel}}</el-button>
             </div>
             <!--<span slot="footer" class="dialog-footer">-->
             <!--<el-button @click="editUserVisible = false">取 消</el-button>-->
@@ -357,6 +370,8 @@
                 loadingRole:false,
                 disableAddUser:true,
                 disableInviteUser:true,
+                isCreate:false,
+                selectList:[],
 
                 /**
                  * 单位字典
@@ -379,6 +394,7 @@
                         name:'未知'
                     },
                 ],
+                roleOption:[],
 
 
                 /**
@@ -441,13 +457,13 @@
                 addUser: {
                     deptId: 0,
                     roleId: 0,
-                    userName: "string",
-                    lang: "string",
-                    email: "string",
-                    tel: "string",
+                    userName: "",
+                    lang: "",
+                    email: "",
+                    tel: "",
                     gender: 0,
-                    birthday: "string",
-                    remark: "string"
+                    birthday: "",
+                    remark: ""
                 },
                 /**
                  * 人造字典表
@@ -613,14 +629,6 @@
                 }).finally(err=>{
                     this.loadingRole=false;
                 });
-
-
-
-
-
-
-
-
             },
 
             /**
@@ -649,7 +657,6 @@
                     }
                 });
                 this.getRoleData();
-
             },
             roleCheckClick() {
                 let checkedNode = this.$refs.roleTree.getCheckedNodes(true);
@@ -659,24 +666,14 @@
                         id.push(v.roleId);
                     }
                 })
-                console.log(id,'???')
-                // if (id.length) {
-                //     this.userData.roleIds = id;
-                // } else {
-                //     this.userData.roleIds = [-1];
-                // }
-                // const loading = this.$loading({
-                //     lock: true,
-                //     text: 'Loading',
-                //     background: 'rgba(255, 255, 255, 0.7)',
-                //     target: '.speTable'
-                // });
-                // this.$ajax.post(this.$apis.get_departmentUser, this.userData).then(res => {
-                //     this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-                //     loading.close();
-                // }).catch(err => {
-                //
-                // });
+                if(id.length===1){
+                    this.disableAddUser=false;
+                }else{
+                    this.disableAddUser=true;
+                }
+
+
+
             },
 
             /**
@@ -969,7 +966,7 @@
              * 底部user部分事件
              * */
             changeChecked(e) {
-                console.log(e)
+                this.selectList=e;
             },
             btnClick(e, type) {
                 if (type === 1) {
@@ -981,7 +978,33 @@
                 }
             },
             addUsers() {
+                //设置基本信息
+                this.roleOption=this.$copyArr(this.roleData[0].children);
+                let roleId=this.$refs.roleTree.getCheckedNodes()[0].roleId;
+                this.addUser.deptId=this.userData.deptId;
+                this.addUser.roleId=roleId;
+                this.isCreate=true;
                 this.addUserVisible = true;
+            },
+            sureAddUser(){
+                this.$ajax.post(this.$apis.add_departmentUser,this.addUser)
+                    .then(res=>{
+                        console.log(res)
+                    }).finally(err=>{
+
+                    }
+                )
+            },
+            inviteUser(){
+                let emails=[];
+                _.map(this.selectList,v=>{
+                    emails.push(v.email.value);
+                });
+                this.$ajax.post(this.$apis.invite_departmentUser,emails).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
+                });
             },
 
             searchUser() {
@@ -1001,9 +1024,9 @@
             },
 
             getUnit(){
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                })
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
                 this.$ajax.post(this.$apis.get_partUnit,['LANGUAGE'],{cache:true})
                     .then(res=>{
                         this.languageOption=res[0].codes;
