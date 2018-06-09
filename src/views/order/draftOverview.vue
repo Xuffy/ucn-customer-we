@@ -1,55 +1,49 @@
 <template>
-    <div class="draftOverview">
-        <h3 class="hd">Draft Overview</h3>
-        <div class="fn">
-            <div class="btn-wrap">
-                <el-button @click='download' v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedDate.length}})</el-button>
-                 <el-button @click='send' v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'">{{($i.common.send)}}</el-button>
-                <el-button type='danger' :disabled='!(selectedDate.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
-            </div>
-             <div class="select-wrap">
-               <selectSearch 
-                    :options=options
-                    @inputEnter="inputEnter"
-                     v-model='selectSearch'
-                 ></selectSearch>
-            </div>         
-        </div>
-        <div style='display:flex;justify-content: flex-end;margin-right:20px;'>
-             <div class="viewBy">
-                <span>View by&nbsp</span>
-                <el-radio-group v-model="params.view" size="mini" @change='changeView'>
-                    <el-radio-button label=1>{{($i.common.order)}}</el-radio-button>
-                    <el-radio-button label=2>{{($i.common.SKU)}}</el-radio-button>
-                </el-radio-group>
-            </div>
-        </div>
-       
+    <div class="orderOverview">
+        <h3 class="hd">{{$i.order.draftOverview}}</h3>
         <!--form-->
-          <v-table  
-           ref='vtable'
-          :data="tabData" 
-          :buttons="[{label: 'detail', type: 1}]" 
-           @action="onAction"
-          :loading='loading'
-          :pageTotal='pageTotal'
-          @change-checked='checked'
-           style='marginTop:10px'/> 
-            <v-pagination
-            :page-data.sync="params"
-             @change="handleSizeChange"
-            @size-change="pageSizeChange"
-        />     
+        <v-table
+                ref='vtable'
+                :data="tabData"
+                :buttons="[{label: 'Detail', type: 1}]"
+                @action="onAction"
+                :loading='loading'
+                :pageTotal='pageTotal'
+                @change-checked='checked'
+                :height="500"
+                style='marginTop:10px'>
+            <template slot="header">
+                <div class="fn">
+                    <selectSearch
+                            :options=options
+                            v-model='selectSearch'
+                            @inputEnter="inputEnter">
+                    </selectSearch>
+                    <div class="viewBy">
+                        <span>{{$i.order.viewBy}}</span>
+                        <el-radio-group style="margin-left: 10px" v-model="view" size="mini" @change='changeView'>
+                            <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
+                            <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
+                        </el-radio-group>
+                    </div>
+                </div>
+            </template>
+        </v-table>
+        <page
+                @size-change="changeSize"
+                @change="changePage"
+                :page-sizes="[50,100,200]"
+                :page-data="pageData"></page>
     </div>
 </template>
 <script>
     /**
      * @param selectChange 下拉框 值发生变更触发
      * @param keyWord search框 值
-     * @param options 下拉框 原始数据 
+     * @param options 下拉框 原始数据
      * @param value 下拉框 选中值
      */
-import { mapActions } from 'vuex'
+    import {mapActions} from 'vuex'
     import {
         dropDown,
         selectSearch,
@@ -58,50 +52,61 @@ import { mapActions } from 'vuex'
     import {
         VTable
     } from '@/components/index';
+
     export default {
-        name: 'draftOverview',
+        name: 'orderOverview',
         components: {
             dropDown,
             VTable,
             selectSearch,
-            VPagination
+            page: VPagination,
         },
         data() {
             return {
+                /**
+                 * 页面基本data
+                 * */
+                view:'1',
+                pageData: {},
                 value: '',
                 keyWord: '',
                 disabled: false, //delete的状态
-                prodisabled: true, // finish的状态
+                disableFinish: true, // finish的状态
                 tabData: [],
                 loading: false,
+                selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
-                selectSearch:'1',
                 options: [{
-                    id: '1',
+                    id: 1,
                     label: 'Order No'
                 }, {
-                    id: '2',
+                    id: 2,
                     label: 'Sku Code'
                 }],
                 keyType: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
-                    view: 1, //view by的按钮组
+                    status: '',
+                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
-                    tc:0
                 },
-                selectedDate: [],
-                selectedNumber: []
+                selectedList: [],
+                selectedNumber: [],
+
+                /**
+                 * 字典
+                 * */
+                orderStatusOption: [],
             }
         },
         methods: {
-               ...mapActions([
-                'setRecycleBin','setDraft'
+            ...mapActions([
+                'setRecycleBin', 'setDraft'
             ]),
-            onAction(item, type) {
+            onAction(item) {
                 this.$windowOpen({
                     url: '/order/detail',
                     params: {
@@ -109,54 +114,65 @@ import { mapActions } from 'vuex'
                     }
                 });
             },
-            pagesizechange() {
-
-            },
-            pagechange() {
-
-            },
-            creat_order() {
-                this.$windowOpen('/order/detail', {
-                    selectedDate: this.selectedDate
+            createOrder() {
+                this.$windowOpen({
+                    url: '/order/create'
                 });
             },
             selectChange(val) {
                 this.keyType = val;
             },
             checked(item) {
-                this.selectedDate = item
-
-                this.selectedDate.forEach(item => {
-                    this.selectedNumber.push(item.id.value);
-                });
+                this.selectedList = item;
+            },
+            changeStatus() {
+                if (this.params.view === '1') {
+                    this.getData(this.$db.order.overviewByOrder);
+                } else {
+                    this.getData(this.$db.order.overviewBysku);
+                }
             },
             changeView() {
-                if (this.params.view == 1) {
-                    this.getdata(this.$db.order.overview)
+                this.disableFinish=true;
+                if (this.view === '1') {
+                    this.getData(this.$db.order.overviewByOrder)
                 } else {
-                    this.getdata(this.$db.order.overviewBysku)
+                    this.getData(this.$db.order.overviewBysku)
                 }
             },
             inputEnter(val) {
-                if (val.keyType == '1') {
-                    this.params.orderNo = val.key
-                    if (this.params.view == 1) {
-                        this.getdata(this.$db.order.overview)
+                if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
+                console.log(val)
+                if (val.keyType === 1) {
+                    this.params.orderNo = val.key;
+                    this.params.skuCode = '';
+                    if (this.view === '1') {
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
-                        this.getdata(this.$db.order.overviewBysku)
+                        this.getData(this.$db.order.overviewBysku)
                     }
                 } else {
-                    this.params.skuCode = val.key
-                    if (this.params.view == 1) {
-                        this.getdata(this.$db.order.overview)
+                    this.params.orderNo = '';
+                    this.params.skuCode = val.key;
+                    if (this.view === '1') {
+                        this.getData(this.$db.order.overviewByOrder)
                     } else {
-                        this.getdata(this.$db.order.overviewBysku)
+                        this.getData(this.$db.order.overviewBysku)
                     }
                 }
-                this.getdata()
             },
-            download() {
-                this.$ajax.post(this.$apis.download_order, this.selectedNumber)
+            finish() {
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.$ajax.post(this.$apis.ORDER_FINISH, {
+                    draftCustomer: false,
+                    draftSupplier: false,
+                    ids:ids,
+                    recycleCustomer: false,
+                    recycleSupplier: false,
+                })
                     .then((res) => {
                         console.log(res)
                     })
@@ -164,10 +180,10 @@ import { mapActions } from 'vuex'
                         console.log(res)
                     });
             },
-            send() {
-                this.$ajax.post(this.$apis.send_order, {
-                        ids: this.selectedNumber
-                    })
+            download() {
+                this.$ajax.post(this.$apis.download_order, {
+                    ids: this.selectedNumber
+                })
                     .then((res) => {
                         console.log(res)
                     })
@@ -177,12 +193,11 @@ import { mapActions } from 'vuex'
             },
             deleteOrder() {
                 this.$ajax.post(this.$apis.delete_order, {
-                        ids: this.selectedNumber
-                    })
+                    ids: this.selectedNumber
+                })
                     .then((res) => {
-                        this.params.orderNo = val.key
                         if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overview)
+                            this.getdata(this.$db.order.overviewByOrder)
                         } else {
                             this.getdata(this.$db.order.overviewBysku)
                         }
@@ -191,39 +206,48 @@ import { mapActions } from 'vuex'
                         console.log(res)
                     });
             },
-            //get_draft_orderlist数据
-            getdata(overview) {
-                this.loading = true
-                this.$ajax.post(this.$apis.get_draft_orderlist, this.params)
+            //get_orderlist数据
+            getData(query) {
+                this.loading = true;
+                let url='';
+                url=(this.view==='1'?this.$apis.ORDER_DRAFT_ORDERPAGE:this.$apis.ORDER_DRAFT_SKUPAGE);
+                this.$ajax.post(url, this.params)
                     .then((res) => {
-                      res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                        this.loading = false
-                        this.tabData = this.$getDB(overview, res.datas);
-                        //                        , item => {
-                        //                            return _.mapObject(item, val => {
-                        //                                val._checked = true
-                        //                            })
-                        //                        }
+                        this.loading = false;
+                        this.tabData = this.$getDB(query, res.datas);
+                        this.pageData = res;
                     })
                     .catch((res) => {
                         this.loading = false
-
                     });
             },
-              handleSizeChange(val) {
-                this.params.pn = val;
-                this.getdata()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.getdata()
-            },
-        },
-        computed: {
 
+            //获取字典
+            getUnit() {
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
+                    res.forEach(v => {
+                        if (v.code === 'ORDER_STATUS') {
+                            this.orderStatusOption = v.codes;
+                        }
+                    });
+                    this.getData(this.$db.order.overviewByOrder);
+                })
+            },
+
+            /**
+             * 分页操作
+             * */
+            changePage(e) {
+                this.params.pn = e;
+                this.getData();
+            },
+            changeSize(e) {
+                this.params.ps = e;
+                this.getData();
+            }
         },
         created() {
-            this.getdata(this.$db.order.overview)
+            this.getUnit();
             this.setRecycleBin({
                 name: 'orderRecycleBin',
                 show: true
@@ -236,36 +260,37 @@ import { mapActions } from 'vuex'
         mounted() {
             this.loading = false
         },
-        updated() {
-
-        },
-        watch: {　
-            params: {　　　　　　　　　　
-                handler(curVal, oldVal) {　　　　　　　　　　　　
-                    if (curVal.view == 1 && curVal.status == 5) {
-                        this.disabled = false
-                    } else if (curVal.status == 3) {
-                        this.prodisabled = false
-                        this.disabled = true
-                    } else {
-                        this.disabled = true
-                        this.prodisabled = true
-                    }　　　　　　　　　　
-                },
-                　deep: true　　　　　　　　
-            }
+        watch: {
+            selectedList(n){
+                if(this.params.view==='1'){
+                    if(n.length>0){
+                        console.log(n)
+                        let allow=true;
+                        _.map(n,v=>{
+                            if(v.status.value!=='3'){
+                                allow=false;
+                            }
+                        });
+                        this.disableFinish=(allow?false:true);
+                    }else{
+                        this.disableFinish=true;
+                    }
+                }else{
+                    this.disableFinish=true;
+                }
+            },
         }
     }
 
 </script>
 <style scoped>
-    >>>.el-input-group__append {
+    >>> .el-input-group__append {
         padding: 0 !important;
     }
 
 </style>
 <style lang="less" scoped>
-    .draftOverview {
+    .orderOverview {
         .hd {
             height: 50px;
             line-height: 50px;
@@ -273,7 +298,6 @@ import { mapActions } from 'vuex'
             border-bottom: 1px solid #ccc;
             font-size: 18px;
             color: #666666;
-
         }
         .status {
             display: flex;
@@ -309,7 +333,8 @@ import { mapActions } from 'vuex'
                 .select {
                     width: 110px;
                     margin-right: 5px;
-                    input {}
+                    input {
+                    }
                 }
             }
 
@@ -317,11 +342,12 @@ import { mapActions } from 'vuex'
         .fn {
             display: flex;
             justify-content: space-between;
-            padding: 10px 15px;
+            padding: 5px 0;
             box-sizing: border-box;
             .viewBy {
                 display: flex;
                 align-items: center;
+                margin-right: 70px;
                 span {
                     font-size: 14px;
                     color: #666;

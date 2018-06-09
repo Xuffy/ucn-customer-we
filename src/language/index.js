@@ -71,7 +71,8 @@ const json = {
     require(`./${lang}/setting/department`),
     require(`./${lang}/setting/personalInfo`),
     require(`./${lang}/setting/setting.basic`),
-    require(`./${lang}/setting/companyInfo`)
+    require(`./${lang}/setting/companyInfo`),
+    require(`./${lang}/setting/setting.prompt`),
   ),
   supplier: _.extend({},
     require(`./${lang}/supplier/detail.pending`),

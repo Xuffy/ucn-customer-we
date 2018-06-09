@@ -238,6 +238,7 @@
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas);
+                        console.log(res.datas)
                         this.pageData = res;
                     })
                     .catch((res) => {
@@ -251,7 +252,7 @@
                 //     console.log(res)
                 // });
 
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {_cache: true}).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
                             this.orderStatusOption = v.codes;

@@ -877,7 +877,7 @@
             },
 
             getCurrency(){
-                this.$ajax.get(this.$apis.get_currency,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_currency,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
                 }).catch(err=>{
 
@@ -887,7 +887,7 @@
         created(){
             this.getCurrency();
             this.loadingData=true;
-            this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD'],{_cache:true})
+            this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD'],{cache:true})
                 .then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_TYPE'){

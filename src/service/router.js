@@ -379,19 +379,6 @@ export const routerMap = [
           },
           component: () => import('../views/order/createOrder/createOrder.vue')
         },
-          //测试页面
-        {
-          path: 'creates',
-          name: 'orderCreates',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: $i.router.orderCreate
-          },
-          component: () => import('../views/order/createOrder/index.vue')
-        },
-
           {
           path: 'detail',
           name: 'Order Detail',
@@ -401,8 +388,20 @@ export const routerMap = [
             log: true,
             name: $i.router.orderDetail
           },
+          component: () => import('../views/order/poDetail/poDetail.vue')
+        },
+          {
+          path: 'details',
+          name: 'Order Details',
+          meta: {
+            draft: true,
+            recycleBin: true,
+            log: true,
+            name: $i.router.orderDetail
+          },
           component: () => import('../views/order/poDetail/index.vue')
-        }, {
+        },
+          {
           path: 'draft',
           name: 'orderDraft',
           meta: {

@@ -519,7 +519,7 @@
                     ids: [],
                     orderNo: "",
                     pn: 1,
-                    ps: 50,
+                    ps: 200,
                     skuBarCode: "",
                     skuCode: "",
                     skuNameEn: "",
@@ -636,7 +636,7 @@
                         this.loadingProductDialogTable=true;
                         this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
                             this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res,e=>{
-                                if(e.skuInventoryStatusDictCode.value==='WAIT_FOR_QC' || e.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN' || e.skuInventoryStatusDictCode.value==='CONFIRMATION_OF_RETURN'){
+                                if(!e.canCreateQc.value){
                                     this.$set(e,'_disabled',true);
                                 }
                             });
@@ -776,14 +776,14 @@
              * */
             getUnit(){
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS'],{cache:true}).then(res=>{
                     this.qcStatusOption=res[0].codes;
                     this.loadingData=false;
                 }).catch(err=>{
                     this.loadingData=false;
                 });
 
-                this.$ajax.get(this.$apis.get_currencyUnit,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
                     this.currencyOptions=res;
                     this.loadingData=false;
                 }).catch(err=>{

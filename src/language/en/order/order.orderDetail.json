@@ -111,7 +111,7 @@
   "skuApplicableAge":"Applicable Age",
   "skuExpireDates":"Expirtion Days",
   "skuExpireUnit":"Unit of expition days",
-  "skuComments":"Comments",
+  "skuComments":"Explain",
   "skuStatus":"SKU Status",
   "skuSaleStatus":"SKU Sales Status",
   "skuLabel":"SKU Label",
@@ -144,5 +144,7 @@
   "USDEUR":"exchange rate($--€)",
   "USDCNY":"exchange rate($--￥)",
   "EURCNY":"exchange rate(€--￥)",
-  "EURUSD":"exchange rate(€--$)"
+  "EURUSD":"exchange rate(€--$)",
+
+  "skuCategoryId":"CategoryId"
 }

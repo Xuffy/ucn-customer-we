@@ -26,14 +26,14 @@ export default {
     _inquiryHide: true,
     _hide: true
   },
-  operater: { //修改人 系统带入
+  operater: { // 修改人 系统带入
     key: 'updateName',
     width: '150px',
     type: 'String',
     _disabled: true,
-    _inquiryHide: true,
+    _inquiryHide: true
   },
-  inquiryNo: { //询价单号 系统带入
+  inquiryNo: { // 询价单号 系统带入
     key: 'inquiryNo',
     rules: [],
     width: '150px',
@@ -41,7 +41,7 @@ export default {
     _disabled: true,
     _inquiryHide: true
   },
-  quotationNo: { //询价子单号 系统带入
+  quotationNo: { // 询价子单号 系统带入
     rules: [],
     width: '150px',
     type: 'String',
@@ -57,7 +57,7 @@ export default {
     _disabled: true,
     transForm: 'time'
   },
-  inquiryStatus: { //询价单状态
+  inquiryStatus: { // 询价单状态
     key: 'status',
     rules: [],
     width: '150px',
@@ -66,56 +66,50 @@ export default {
     _inquiryHide: true,
     transForm: 'INQUIRY_STATUS'
   },
-  transportationWay: { //下拉选择 运输方式
+  transportationWay: { // 下拉选择 运输方式
     key: 'transport',
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'transportationWay',
     transForm: 'MD_TN'
   },
-  payment: { //付款方式 下拉选择
+  payment: { // 付款方式 下拉选择
     key: 'paymentMethod',
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'paymentMethod',
     transForm: 'PMT'
   },
-  destinationCountry: { //目的国 下拉选择
+  destinationCountry: { // 目的国 下拉选择
     key: 'destinationCountry',
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'destinationCountry',
     transForm: 'COUNTRY'
   },
-  departureCountry: { //发运国 下拉选择所有选项 ok
+  departureCountry: { // 发运国 下拉选择所有选项 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'departureCountry',
     transForm: 'COUNTRY'
   },
-  incoterm: { //价格条款 选择 ok
+  incoterm: { // 价格条款 选择 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'incoterm',
     transForm: 'ITM'
   },
-  currency: { //币种 选择 ok
+  currency: { // 币种 选择 ok
     rules: [],
     width: '150px',
     type: 'Select',
-    _slot: 'currency',
     transForm: 'CY_UNIT'
   },
   exchangeRate: {
     _disabled: true,
     _inquiryHide: true
   },
-  discountRate: { //折扣率 限制输入百分比 ok
+  discountRate: { // 折扣率 限制输入百分比 ok
     rules: [],
     width: '150px',
     type: 'Number',
@@ -123,13 +117,13 @@ export default {
     min: 0,
     max: 100
   },
-  departurePort: { //发运港口  ok
+  departurePort: { // 发运港口  ok
     rules: [],
     width: '150px',
     type: 'String',
     transForm: 'SPORT'
   },
-  destinationPort: { //目的港口 ok
+  destinationPort: { // 目的港口 ok
     rules: [],
     width: '150px',
     type: 'String',
@@ -141,15 +135,15 @@ export default {
     type: 'manySelect',
     _disabled: true
   },
-  supplierType: { //供应商类型 ok
+  supplierType: { // 供应商类型 ok
     rules: [],
     width: '150px',
-    type: 'String',
+    type: 'Select',
     _disabled: true,
     _inquiryHide: true,
     transForm: 'SUPPLIER_TYPE'
   },
-  exportLicense: { //出口资质 ok
+  exportLicense: { // 出口资质 ok
     rules: [],
     width: '150px',
     type: 'Select',
@@ -168,14 +162,14 @@ export default {
     _inquiryHide: true,
     _hide: true
   },
-  relatedOrderNO: { //关联订单号
+  relatedOrderNO: { // 关联订单号
     rules: [],
     width: '150px',
     type: 'String',
     _disabled: true,
     _inquiryHide: true
   },
-  inquiryRemark: { //询价备注
+  inquiryRemark: { // 询价备注
     key: 'remark',
     rules: [],
     width: '150px',
@@ -186,7 +180,7 @@ export default {
     md: 24,
     lg: 24
   },
-  attachment: { //上传附件
+  attachment: { // 上传附件
     rules: [],
     width: '150px',
     type: 'attachment',
@@ -194,7 +188,6 @@ export default {
     sm: 24,
     md: 24,
     lg: 24,
-    _slot: 'attachment'
   },
   fieldDisplay: {
     _hide: true

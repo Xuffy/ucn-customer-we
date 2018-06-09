@@ -169,7 +169,7 @@
              * 字典获取
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_INVENTORY_STATUS'],{_cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_INVENTORY_STATUS'],{cache:true}).then(res=>{
                     this.warehouseStatusOption=res[0].codes;
                 }).catch(err=>{
 

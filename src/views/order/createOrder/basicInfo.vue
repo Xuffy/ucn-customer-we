@@ -165,16 +165,16 @@
                     orderNo: '', //必填   系统生成 不可编辑
                     orderDate: '', //必填    系统生成   可编辑    ??????
                     customerOrderNo: '',
-                    customerName: '', //必填 系统生成  
-                    customerNo: '', //必填 系统生成 
+                    customerName: '', //必填 系统生成
+                    customerNo: '', //必填 系统生成
                     supplierOrderNo: '',
                     supplierName: '', //必填 不可编辑 系统生成 弹出框
                     supplierCode: '', //必填 不可编辑 系统生成 弹出框
                     quotationNo: '', // 不可编辑
                     status: '', //必填 orderStatus下拉框值 部分可编辑.........  可手动finished
-                    deliveryDt: '', //必填 
-                    incoterm: '', //必填 
-                    incortermAea: '', //必填 
+                    deliveryDt: '', //必填
+                    incoterm: '', //必填
+                    incortermAea: '', //必填
                     payment: '', //必填  select
                     lcNo: '',
                     paymentDays: '',
@@ -298,7 +298,7 @@
             },
             //获取字典表
             getDictionaries() {
-                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], '_cache')
+                this.$ajax.post(this.$apis.post_codePart, ['PMT', 'ITM', 'CY_UNIT', 'EL_IS', 'MD_TN', 'ORDER_STATUS'], 'cache')
                     .then(res => {
                         this.selectAll.payment = _.findWhere(res, {
                             'code': 'PMT'
@@ -321,17 +321,17 @@
                         //                    });
                     });
 
-                this.$ajax.get(this.$apis.post_country, '', '_cache')
+                this.$ajax.get(this.$apis.post_country, '', 'cache')
                     .then(res => {
                         this.selectAll.destinationCountry = res;
                         this.selectAll.departureCountry = res;
                     });
-                this.$ajax.get(this.$apis.post_logisticsport, '', '_cache')
+                this.$ajax.get(this.$apis.post_logisticsport, '', 'cache')
                     .then(res => {
                         this.selectAll.destPort = res;
                         this.selectAll.departurePort = res;
                     });
-                 this.$ajax.get(this.$apis.get_currency, '', '_cache')
+                 this.$ajax.get(this.$apis.get_currency, '', 'cache')
                     .then(res => {
                         this.selectAll.currency = res;
 //                        console.log(res)

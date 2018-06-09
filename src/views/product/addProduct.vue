@@ -83,6 +83,7 @@
         </div>
         <div class="footer">
             <v-table
+                    code="udata_purchase_sku_overview"
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -163,6 +164,10 @@
                 default:false
             },
             isInquiry:{
+                type:Boolean,
+                default:false
+            },
+            disablePostCustomerCreate:{
                 type:Boolean,
                 default:false
             }
@@ -280,14 +285,9 @@
         },
         methods:{
             tableFilterValue(val){
-                this.productForm.operatorFilters=[];
-                this.productForm.sorts=[];
-                val.operatorFilters.forEach(v=>{
-                    this.productForm.operatorFilters.push(v);
-                });
-                val.sorts.forEach(v=>{
-                    this.productForm.sorts.push(v);
-                });
+              let {operatorFilters,sorts}=val;
+                this.productForm.operatorFilters=operatorFilters||[];
+                this.productForm.sorts=sorts||[];
                 this.getData();
             },
             //切换body的收缩展开状态
@@ -354,11 +354,20 @@
                         }
                     });
                 }else if(this.type==='bookmark'){
-                    arr.forEach(v=>{
-                        if(v._checked && !v._disabled){
-                            newArr.push(v.skuId.value);        //只把id带出去
-                        }
-                    });
+                    console.log(arr,'?????')
+                    if(this.disablePostCustomerCreate){
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled && !v.customerCreate.value){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }else{
+                        arr.forEach(v=>{
+                            if(v._checked && !v._disabled){
+                                newArr.push(v.skuId.value);        //只把id带出去
+                            }
+                        });
+                    }
                 }
 
                 this.$emit('handleOK',newArr);
@@ -530,18 +539,20 @@
             createOrder(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                     })
                 }else{
+                    let supplierCode=this.selectList[0].supplierCode.value;
                     let ids='';
                     this.selectList.forEach(v=>{
                         ids+=(v.id.value+',');
                     });
                     this.$windowOpen({
-                        url:'/order/creat',
+                        url:'/order/create',
                         params:{
                             type:'product',
                             ids:ids,
+                            supplierCode:supplierCode
                         },
                     })
                 }
@@ -629,7 +640,7 @@
 
         },
         created(){
-            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{_cache:true}).then(res=>{
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
                 res.forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
@@ -647,7 +658,7 @@
                 });
 
                 //国家
-                this.$ajax.get(this.$apis.get_country,{},{_cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
                     this.countryOption=res;
                     this.getData();
                     this.getCategoryId();
@@ -691,7 +702,12 @@
             disabledLine(n){
                 if(n.length>0){
                     n.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
+                        let id;
+                        if(v.id){
+                            id=_.findWhere(v,{key:'id'}).value;
+                        }else{
+                            id=_.findWhere(v,{key:'skuId'}).value;
+                        }
                         this.tableDataList.forEach(m=>{
                             let newId=_.findWhere(m,{key:'id'}).value;
                             if(id===newId){
