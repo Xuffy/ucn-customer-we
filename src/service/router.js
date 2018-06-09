@@ -494,7 +494,8 @@ export const routerMap = [
           name: 'overviewPlan',
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticPlanOverview
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -504,7 +505,8 @@ export const routerMap = [
           name: 'overviewLoadingList',
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticLoadingList
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -515,7 +517,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticLoadingDraft
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -526,7 +529,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticLoadingArchive
           },
           component: () => import('../views/logistic/logisticPlanOverview')
@@ -537,7 +541,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticPlaceLogisticPlan
           },
           component: () => import('../views/logistic/logisticPlanDetail')
@@ -548,7 +553,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticPlaceDetail
           },
           component: () => import('../views/logistic/logisticPlanDetail')
@@ -559,7 +565,8 @@ export const routerMap = [
           hidden: true,
           meta: {
             draft: '/logistic/draft',
-            recycleBin: true,
+            recycleBin: false,
+            log: true,
             name: $i.router.logisticPlaceDetail
           },
           component: () => import('../views/logistic/logisticPlanDetail')
@@ -577,7 +584,7 @@ export const routerMap = [
           name: 'settingsDepartment',
           meta: {
             draft: true,
-            recycleBin: true,
+            recycleBin: false,
             log: true,
             name: $i.router.settingsDepartment
           },

@@ -16,9 +16,16 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.payToId" placeholder="请输入内容" :clearable="true" v-if="scope.row.edit">
-            <el-option :label="item.skuSupplierName" :value="item.skuSupplierId" v-for="item of selectArr.supplier" :key="'supplier-arr-' + item.supplierId" v-if="selectArr.supplier"/>
-          </el-select>
+          <el-col v-if="scope.row.edit">
+            <el-select v-model="scope.row.payToCompanyId" filterable placeholder="请选择">
+              <el-option
+                v-for="item in selectArr.supplier"
+                :key="item.value"
+                :label="item.value"
+                :value="item.companyId">
+              </el-option>
+            </el-select>
+          </el-col>
           <span v-else>{{ computedCurrency('supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId) }}</span>
         </template>
       </el-table-column>
@@ -156,10 +163,26 @@ export default {
             picker.$emit('pick', date);
           }
         }]
-      }
+      },
+    }
+  },
+  computed:{
+    restaurants(){
+      return this.selectArr.supplier;
     }
   },
   methods: {
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
     summaryMethod () {
       let SumArr = [this.$i.logistic.sum]
       if (!this.paymentSum) return SumArr

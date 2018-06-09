@@ -199,13 +199,17 @@ export default {
   methods: {
     createModifyData () {
       if (!this.tableData.length) return
+      let flag = false;
       if (this.productInfoModifyStatus === 1) {
-        _.mapObject(this.tableData[0], (value, key) => {
-          key === 'toShipCartonQty' && (value.edit = true)
-          key === 'toShipQty' && (value.edit = true)
-          return value
-        })
+        flag = true;
+      }else{
+        flag = false;
       }
+      _.mapObject(this.tableData[0], (value, key) => {
+        key === 'toShipCartonQty' && (value.edit = flag)
+        key === 'toShipQty' && (value.edit = flag)
+        return value
+      })
     }
   }
   // methods: {

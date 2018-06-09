@@ -1,7 +1,8 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
-    <div class="hd-top" v-else>{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList }}</div>
     <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
@@ -22,7 +23,8 @@
       <container-info :tableData.sync="containerInfo" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
     </div>
 
-    <div v-if="planId && feeList">
+    <!-- <div v-if="planId && feeList"> -->
+    <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
@@ -36,14 +38,15 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct">
+      <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
+      <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <el-dialog :title="$i.logistic.negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
+    <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
       <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
@@ -51,17 +54,18 @@
       </div>
     </el-dialog>
     <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product :tableData="orderList" ref="addProduct"/>  <!-- 详情下好像不用调用 ！！！！！！-->
+      <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
-import { containerInfo, selectSearch, VTable } from '@/components/index';
+
+import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
 import attachment from '@/components/base/attachment'
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
@@ -77,7 +81,9 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      negotiate:'',
       modefiyProductIndex: 0,
+      logisticsStatus:null,
       logisticsNo: '',
       remark: '',
       showProductDialog: false,
@@ -93,20 +99,6 @@ export default {
       transportInfoArr: [],
       basicInfoArr: [],
       modifyProductArray: [],
-      productbButtons: [
-        {
-          label: 'Negociate',
-          type: 1
-        },
-        {
-          label: 'History',
-          type: 2
-        },
-        {
-          label: 'Detail',
-          type: 3
-        }
-      ],
       exchangeRateList: [],
       feeList: [],
       productList: [],
@@ -115,7 +107,6 @@ export default {
       paymentList: [],
       containerInfo: [],
       paymentSum: {},
-      orderList: [],
       selectArr: {
         containerType: [],
         permitedForTransportation: [
@@ -128,10 +119,6 @@ export default {
             name: this.$i.logistic.no
           }
         ]
-      },
-      pageParams: {
-        pn: 1,
-        ps: 10
       },
       dictionaryPart: {
         avl: 'AVL',
@@ -166,7 +153,7 @@ export default {
     payment,
     btns,
     productModify,
-    addProduct
+    addProduct,
   },
   computed: {
     planId () {
@@ -174,14 +161,35 @@ export default {
     },
     isCopy () {
       return this.$route.query.copy
-    }
+    },
+    isLoadingList () {
+      return this.$route.query.loadingList
+    },
+    productbButtons(){
+      let aArr = [
+        {
+          label: 'Negociate',
+          type: 1        
+        },
+        {
+          label: 'Detail',
+          type: 3
+        }
+      ]
+      this.$route.name=='placeLogisticPlan' ?  aArr : aArr.splice(1,0,
+        {
+          label: 'History',         
+          type: 2
+        }
+      )
+      return aArr;
+    } 
   },
   mounted () {
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
     this.getDictionary()
-    this.getOrderList()
     this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
       return value;
     })
@@ -239,8 +247,10 @@ export default {
       })
     },
     getDetails () {
-      this.$ajax.get(`${this.$apis.get_plan_details}${this.planId}`).then(res => {
+      let url = this.$route.query.loadingList ? this.$apis.get_order_details :this.$apis.get_plan_details
+      this.$ajax.get(`${url}${this.planId}`).then(res => {
         this.createdPlanData(res)
+        this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
@@ -249,8 +259,12 @@ export default {
       })
     },
     getSupplier (logisticsNo) {
-      this.$ajax.get(`${this.$apis.get_supplier}?logisticsNo=${logisticsNo}`).then(res => {
-        this.selectArr.supplier = res
+      let url = this.$route.query.loadingList ? this.$apis.get_order_supplier : this.$apis.get_plan_supplier
+      this.$ajax.get(`${url}?logisticsNo=${logisticsNo}`).then(res => {
+        this.selectArr.supplier = res.map((item)=>{
+          item.value = item.skuSupplierName;
+          return item;
+        });
       })
     },
     createdPlanData (res = this.oldPlanObject) {
@@ -261,14 +275,20 @@ export default {
         'blType'
       ]
       this.basicInfoArr.forEach(a => {
-        a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
+        if(this.isCopy&&a.key=='logisticsNo'){
+          a.value = this.logisticsNo;
+        }else{
+          a.value = stringArray.includes(a.key) ? res[a.key] : res[a.key]
+        }
       })
       this.transportInfoArr.forEach(a => {
         a.value = res[a.key]
       })
       this.exchangeRateList = res.currencyExchangeRate || []
       this.remark = res.remark
-      this.logisticsNo = res.logisticsNo
+      if(!this.isCopy){
+        this.logisticsNo = res.logisticsNo
+      }
       this.containerInfo = res.containerDetail || []
       let feeListb = false;
       _.mapObject(res.fee,(v,k)=>{
@@ -288,6 +308,9 @@ export default {
     getNewLogisticsNo () {
       this.$ajax.post(this.$apis.get_new_logistics_no).then(res => {
         this.basicInfoArr.find(a => a.key === 'logisticsNo').value = res
+        if(this.isCopy){
+          this.logisticsNo = res;
+        }
         this.getSupplier(res)
       })
     },
@@ -297,7 +320,7 @@ export default {
       })
       this.$ajax.get(this.$apis.get_container_type).then(res => {
         this.$set(this.selectArr, 'containerType', res)
-      })
+      }) 
       this.getDictionaryPart()
     },
     getDictionaryPart () {
@@ -335,11 +358,14 @@ export default {
       array.splice(index, 1);
     },
     action (e, status, i) {
-      if (status === 3) return
+      if (status == 3){
+        return window.open(`${window.location.origin}#/product/sourcingDetail?id=${e.argID ? e.argID.value : e.id.value }`);
+      }
+      this.negotiate = this.productbButtons[status-1].label;
       this.productInfoModifyStatus = status
       this.showProductDialog = true
       this.modefiyProductIndex = i
-      this.getProductHistory(e.id ? e.id.value : null, status, i)
+      this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
     },
     getProductHistory (productId, status, i) {
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
@@ -352,7 +378,6 @@ export default {
     },
     addPayment () {
       const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
-
       this.$ajax.post(this.$apis.get_payment_no).then(res => this.paymentList.push({
         edit: true,
         no: res,
@@ -362,20 +387,18 @@ export default {
     },
     savePayment (i) {
       const currencyCode = this.paymentList[i].currencyCode
-      const payToId = this.paymentList[i].payToId
-      const skuSupplierObj = this.selectArr.supplier.find(a => a.skuSupplierId === payToId)
-
+      const payToCompanyId = this.paymentList[i].payToCompanyId
+      const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
         ...this.paymentList[i],
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
         currencyCode,
         orderNo: this.oldPlanObject.logisticsNo,
         orderType: 30,
-        payToId,
-        payToName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
+        payToCompanyId,
+        payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
         type: 10
       }
-
       const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
@@ -390,24 +413,13 @@ export default {
       }
       this.$set(this.paymentList, i, obj)
     },
-    getOrderList () {
-      this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
-        // this.orderList = res.datas.map(a => {
-        //   let aa = _.mapObject(a, item => {
-        //     item = 1
-        //     return item
-        //   })
-        //   return aa
-        // })
-        this.orderList = res.datas
-      })
-    },
     closeAddProduct (status) {
       this.showAddProductDialog = false
-      const selectArrData = this.$refs.addProduct.selectArrData
+      const selectArrData = this.$depthClone(this.$refs.addProduct.selectArrData);
 
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
+        a.argID = this.$depthClone(a.id);
         a.id = null
         a.vId = +new Date()
         a.blSkuName = ''
@@ -418,7 +430,7 @@ export default {
         a.reportElement = ''
         a.factorySkuCode = ''
         a.unitExportPrice = ''
-        a.totalExportPrice = ''
+        a.totalExportPrice = '';
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
 
@@ -448,23 +460,29 @@ export default {
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
       index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
-    switchEdit (arg) {
+    switchEdit (arg) {     
       switch(arg){
         case 'edit':
             this.edit = !this.edit;
             this.pageName = 'planDetail';
-          break;
+          break; 
         case 'confirm':
             this.conformPlan();
-          break;
+          break; 
         case 'cancel':
             this.cancelPlan();
-          break;
+          break; 
         case 'copy':
             this.copyPlan();
-          break;
+          break; 
+        case 'placeLogisticsPlan':
+            this.$router.push('/logistic/placeLogisticPlan');
+          break; 
+        case 'cancelLoadingList':
+            this.cancelLoadingList();
+          break; 
         default:
-          break;
+          break; 
       }
     },
     conformPlan(){
@@ -494,6 +512,18 @@ export default {
     copyPlan(){
       window.open(`${window.location.origin}#/logistic/placeLogisticPlan?id=${this.planId}&copy=copy`);
     },
+    cancelLoadingList(){
+       this.$ajax.post(this.$apis.logistics_order_cancelByIds,{ids:[this.planId]}).then(res => {
+        this.$message({
+          message: '取消成功，正在跳转...',
+          type: 'success',
+          duration:3000,
+          onClose:()=>{
+            this.$router.push('/logistic');
+          }
+        })
+      })
+    },
     toExit () {
       if ((this.isCopy&&this.planId)||(!this.isCopy&&!this.planId)) {
         return this.$router.go(-1)
@@ -517,7 +547,7 @@ export default {
     },
     sendData (keyString) {
       let url = this.configUrl[this.pageName][keyString];
-      this.basicInfoArr.forEach(a => {
+      this.basicInfoArr.forEach(a => { 
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
       })
@@ -527,7 +557,7 @@ export default {
       })
 
       this.basicInfoObj.remark = this.remark
-      if (!this.basicInfoObj.payment) return this.$message({
+      if (!this.basicInfoObj.payment) return this.$message({ 
         type: 'error',
         message: '付款方式为必填!'
       })
@@ -555,11 +585,22 @@ export default {
       //   })
       //   return obj
       // })
-      this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+      // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
+      this.oldPlanObject.product = this.productList.map((item,i)=>{        
+        return _.mapObject(item,(v,k)=>{
+          if(v.type=='text'){
+            return v.value;
+          }else{
+             return null;
+          }
+        })
+      });
+      let obj = null;
       if(this.isCopy){
-        this.restIdNull(this.oldPlanObject,['id','unId']);
+        this.oldPlanObject.planNo = this.logisticsNo;
+        obj = this.restIdNull(this.oldPlanObject,['id','unId']);
       }
-      this.$ajax.post(url, this.oldPlanObject).then(res => {
+      this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
           type: 'success',
@@ -570,30 +611,21 @@ export default {
         })
       })
     },
-    //递归重置 copy id 字段 null
-    //arg 传入的对象
-    //restArr 要重置的为null字段集合数组
+    //递归重置 copy
+    //arg 传入的对象 
+    //restArr 要重置字段集合数组
     restIdNull(arg,restArr){
-      restArr = restArr || [];
+      restArr = restArr || [];    
       let args =  _.omit(arg,...restArr);
       return _.mapObject(args,(v,k)=>{
         if(Array.isArray(v)){
           return _.map(v,(val,key)=>{
             return _.omit(val,...restArr);
           })
-          // args[k].forEach((item)=>{
-          //   return _.omit(arg,...restArr);
-          //   // this.restIdNull(item,restArr);
-          // })
+        }else{
+          return v;
         }
-        // else{
-        //   let args =  _.omit(arg,'length');
-        //   if(restArr.includes(k)){
-        //     this.$set(arg,k,null);
-        //   }
-        // }
       })
-      // return args;
     },
   },
 }
