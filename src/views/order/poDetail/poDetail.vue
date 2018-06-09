@@ -318,10 +318,10 @@
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                <el-button :disabled="loadingPage" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
+                <el-button :disabled="loadingPage || disableConfirm" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
                 <el-button :disabled="loadingPage" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
                 <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
-                <el-checkbox :disabled="loadingPage || disableModify" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
+                <el-checkbox :disabled="loadingPage" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
         </div>
 
@@ -823,6 +823,7 @@
                  * */
                 disableModify:false,
                 markImportant:false,
+                disableConfirm:false,
 
 
 
@@ -1126,6 +1127,7 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='ORDER_STATUS'){
                             this.orderStatusOption=v.codes;
+                            console.log(this.orderStatusOption,'???')
                         }
                     })
                 }).finally(err=>{
@@ -1170,12 +1172,20 @@
                         this.productTableData.push(v);
                     });
 
+                    this.markImportant=this.orderForm.importantCustomer;
+
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
                         this.disableModify=true;
                     }else{
                         this.disableModify=false;
                     }
+                    if(res.status!=='2'){
+                        this.disableConfirm=true;
+                    }else{
+                        this.disableConfirm=false;
+                    }
+
                 }).finally(err=>{
                     this.loadingPage=false;
                     if(e){
@@ -1234,21 +1244,12 @@
                 }).finally(err=>{
                     this.disableClickSaveDraft=false;
                 });
-
-
             },
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
                 this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
-                // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
-                //     customerNo:''
-                // }).then(res=>{
-                //     console.log(res)
-                // }).catch(err=>{
-                //
-                // });
             },
 
             //获取供应商
@@ -1426,7 +1427,11 @@
             changeMarkImportant(e){
                 this.$ajax.post(this.$apis.ORDER_MARK,{
                     importantCustomer: e,
-                    orderNos: [this.orderForm.orderNo],
+                    ids: [this.orderForm.id],
+                }).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
                 });
             },
             createOrder(){
@@ -1436,7 +1441,7 @@
             },
             confirmOrder(){
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{
-                    orderNos: [this.orderForm.orderNo],
+                    ids: [this.orderForm.id],
                 }).then(res=>{
                     console.log(res)
                 }).finally(err=>{
