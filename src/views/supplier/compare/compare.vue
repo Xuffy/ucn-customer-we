@@ -150,27 +150,14 @@
                     let params={
                         id: Number(this.$route.query.compareId),
                         name:'',
-                        // operatorFilters: [
-                        //     {
-                        //         "columnName": "string",
-                        //         "operator": "string",
-                        //         "property": "string",
-                        //         "resultMapId": "string",
-                        //         "value": {}
-                        //     }
-                        // ],
                         pn: 1,
-                        ps: 100,
+                        ps: 50,
                         recycle: false,
-                        // sorts: [
-                        //     {
-                        //         orderBy: "string",
-                        //         orderType: "string",
-                        //     }
-                        // ]
                     };
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
-                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas);
+                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
+
+                        });
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;

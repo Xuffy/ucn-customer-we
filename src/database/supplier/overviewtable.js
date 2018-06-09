@@ -7,10 +7,12 @@ export default {
         key: 'name'
     },
    supplierType: {
-        key: 'type'
+        key: 'type',
+        transForm: 'SR_TYPE'
     },
     country: {
-        key: 'country'
+        key: 'country',
+        transForm:''
     },
   companyId: {
         _hide: true,

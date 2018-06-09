@@ -34,5 +34,9 @@
 
 
     "provideincoterm": "Provide incoterm",
-    "currency": "currency"
+    "currency": "currency",
+    "compareTime": "compare time",
+    "compareName": "compare name",
+    "compareItem": "compare item",
+    "operater": "operater"
 }

@@ -153,6 +153,7 @@
                 remark: "",
                 version: null
               },
+              countryOption:[],
               addRemarkFormVisible:false,
               disableCreateRemark:false,
               lookRemarkFormVisible:false,
@@ -307,6 +308,7 @@
                     .then(res => {
                         this.code = res.code
                         this.basicDate = res;
+
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
@@ -466,10 +468,18 @@
               })
             }
           },
+          //获取国家
+          getCountryAll(){
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+              this.countryOption = res
+              this.get_data();
+            }).catch(err=>{
+              console.log(err)
+            });
+          },
         },
         created() {
             this.companyId = Number(this.$route.query.companyId)
-            this.get_data()
             this.getCompareList()
         },
     }
