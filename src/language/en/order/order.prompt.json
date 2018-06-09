@@ -4,5 +4,6 @@
   "pleaseChoose":"Please Choose",
   "pleaseCreate":"Please Create",
   "deleteSuccess":"Delete Success",
-  "sureDelete":"Sure Delete?"
+  "sureDelete":"Sure Delete?",
+  "handleSuccess":"Handle Success!"
 }
