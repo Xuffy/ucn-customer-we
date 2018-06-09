@@ -178,7 +178,11 @@ export default {
       return new Date(utcTime + 3600000 * i);
     }
 
-
+    /**
+     *
+     * @param arr
+     * @returns {Uint8Array | any[] | Int32Array | Uint16Array | Uint32Array | Float64Array | any}
+     */
     Vue.prototype.$copyArr = (arr) => {
       return arr.map((e) => {
         if (typeof e === 'object') {
@@ -191,96 +195,76 @@ export default {
 
 
     /**
-     * 转换表格中需要由字典表数据来转换的数据
-     * */
-    Vue.prototype.$change = (obj, code, e, isString) => {
-      let data;
-      if (isString) {
-        data = _.findWhere(obj, {code: String(e[code].value)});
-      } else {
-        data = _.findWhere(obj, {code: e[code].value});
+     * 用户行为缓存
+     * @type {{set(*, *): void, get(*): *}}
+     */
+    Vue.prototype.$userAction = {
+      set(key, value) {
+        let ua = sessionStore.get('user_action') || {};
+        ua[key] = value;
+        sessionStore.set('user_action', ua);
+      },
+      get(key) {
+        let ua = sessionStore.get('user_action') || {};
+        return ua[key];
       }
-      if (data) {
-        return data;
-      } else {
-        return '';
-      }
-    };
-
-    Vue.prototype.$depthClone = (data) => {
-      if (!data) {
-        return data;
-      }
-      return JSON.parse(_.clone(JSON.stringify(data)));
     }
 
 
-    Vue.prototype.$filterDic = (data, transForm, dataBase) => {
-      transForm ? transForm = transForm : transForm = 'transForm';
-      dataBase ? dataBase = dataBase : dataBase = 'dataBase';
+    /**
+     * 转换表格中需要由字典表数据来转换的数据
+     * */
+    Vue.prototype.$change = (obj, code, e, isString) => {
+      let data, value;
+
+      value = e[code].value;
+
+      data = _.findWhere(obj, {code: isString ? String(value) : value});
+
+      return data || '';
+    };
+
+    /**
+     * 深拷贝
+     * @param data
+     * @returns {*}
+     */
+    Vue.prototype.$depthClone = (data) => {
+      return data ? JSON.parse(_.clone(JSON.stringify(data))) : data;
+    };
+
+    Vue.prototype.$filterDic = (data, transForm = 'transForm', dataBase = 'dataBase') => {
       _.mapObject(data, (val, k) => {
+        val.dataType = typeof val.value;
         if (_.isBoolean(val.value)) {
           val.value ? val.value = 1 : val.value = 0;
         }
         val[dataBase] = val.value;
-        if (val[transForm] && !data._remark) {
+        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
-              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm')
+              val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
               break;
             default:
               if (!store.state.dic.length) return;
-              let label = val.name ? val.name : 'name';
-              val.dic = _.findWhere(store.state.dic, {'code': val[transForm]});
-              if (!val.dic || !val.dic) return;
-              if (_.isString(val[dataBase])) {
-                val.value = '';
-                _.map(val[dataBase].split(','), (res, index) => {
-                  val.value += _.findWhere(val.dic.codes, {'code': res + ''}) ? _.findWhere(val.dic.codes, {'code': res + ''})[label] : '';
-                  if ((index + 1) < val[dataBase].split(',').length) val.value += ',';
-                });
-
-              } else {
-                val.value = _.findWhere(val.dic.codes, {'code': val[dataBase] + ''}) ? _.findWhere(val.dic.codes, {'code': val[dataBase] + ''})[label] : '';
+              let dic = _.findWhere(store.state.dic, {'code': val[transForm]});
+              if (!dic || !dic.codes) return;
+              val._option = dic.codes;
+              let code = _.findWhere(val._option, {'code': val[dataBase] + ''});
+              if (code) {
+                val._value = code.name || code[val.name];
+                val.value = code.code;
+                val[dataBase] = val.value;
               }
           }
         }
       });
       return data;
     };
-
-    Vue.prototype.$filterName = (data, transForm, dataBase) => {
-      transForm ? transForm = transForm : transForm = 'transForm';
-      dataBase ? dataBase = dataBase : dataBase = 'dataBase';
-      _.mapObject(data, (val, k) => {
-        if (val[transForm] && !data._remark) {
-          switch (val[transForm]) {
-            case 'time':
-              val.value = val[dataBase];
-              val.value = DateFormat(val[dataBase], val.time ? val.time : 'yyyy-dd-mm')
-              break;
-            default:
-              if (!store.state.dic.length) return;
-              let label = val.name ? val.name : 'name';
-              if (_.isBoolean(val.value)) {
-                val.dataBase ? val.dataBase = 1 : val.dataBase = 0;
-              }
-              val.value = val[dataBase];
-              val.dic = _.findWhere(store.state.dic, {'code': val[transForm]});
-              if (!val.dic || !val.dic) return;
-              val.value = _.findWhere(val.dic.codes, {'code': val[dataBase] + ''}) ? _.findWhere(val.dic.codes, {'code': val[dataBase] + ''})[label] : '';
-
-          }
-        }
-      });
-      return data;
-    };
-
 
     /**
      * $window.open
      */
-
     const serialization = (params) => {
       const result = []
       for (const key in params) {

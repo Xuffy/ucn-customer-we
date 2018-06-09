@@ -166,7 +166,6 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.order.exchangeRate}}
         </div>
@@ -1062,20 +1061,16 @@
                     this.disableClickSaveDraft=false;
                 });
 
-
             },
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=Math.ceil(Math.random()*100000000);
-                this.getSupplier();
-                // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
-                //     customerNo:''
-                // }).then(res=>{
-                //     console.log(res)
-                // }).catch(err=>{
-                //
-                // });
+                this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
+                    this.orderForm.orderNo=res;
+                    this.getSupplier();
+                }).catch(err=>{
+
+                });
             },
 
             changePayment(e){
