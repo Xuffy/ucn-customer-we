@@ -152,29 +152,32 @@
       </el-table-column>
       <el-table-column fixed="right" label="active" width="100">
         <template slot-scope="scope">
-          <el-button type="text" size="small">{{ $i.logistic.detail }}</el-button>
+          <el-button type="text" size="small" @click="productDetail(scope.row.id)">{{ $i.logistic.detail }}</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div style="margin-top:20px;">
+      <v-pagination :page-data="pageParams" @spageParamsize-change="sizeChange" @change="pageChange"/>
+    </div>
   </el-row>
 </template>
 <script>
-import { selectSearch } from '@/components/index'
+import { selectSearch,VPagination } from '@/components/index'
 
 export default {
-  props: {
-    tableData: {
-      type: Array,
-      default () {
-        return []
-      }
-    }
+  props:{
+    basicInfoArr:[String,Number,Array]
   },
   components: {
-    selectSearch
+    selectSearch,VPagination
   },
   data () {
     return {
+      tableData:[],
+      pageParams: {
+        pn: 1,
+        ps: 10
+      },
       selectArrData: [],
       options: [
         {
@@ -192,13 +195,41 @@ export default {
       ]
     }
   },
+  mounted(){
+    if(this.basicInfoArr[0].value){
+      this.getSupplierIds();
+    }
+    this.getOrderList();
+  },
   methods: {
+    sizeChange(e) {
+      this.pageParams.ps = e
+      this.getOrderList();
+    },
+    getSupplierIds(){
+      this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        
+      })
+    },   
+    pageChange(e) {
+      this.pageParams.pn = e
+      this.getOrderList()
+    },
+    getOrderList () {
+      this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
+        this.tableData = res.datas
+        this.pageParams = res;
+      })
+    },
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex
     },
     handleSelectionChange (arr) {
-      arr.forEach(a => (a.id = ''))
+      // arr.forEach(a => (a.id = ''))
       this.selectArrData = arr
+    },
+    productDetail(id){
+      window.open(`${window.location.origin}#/product/sourcingDetail?id=${id}`);
     }
   }
 }

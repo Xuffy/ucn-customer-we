@@ -7,6 +7,10 @@ export default {
     type: 'text',
     _hide: true
   },
+  "argID": {
+    type: 'text',
+    _hide: true
+  },
   "skuSupplierId": {
     type: 'text',
     _hide: true

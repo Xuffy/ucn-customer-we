@@ -238,7 +238,7 @@
             //..................获取数据
             get_data() {
                 this.loading = true
-                this.$ajax.get(this.$apis.get_supplier_id, {
+                this.$ajax.get(this.$apis._id, {
                         id: this.companyId
                     })
                     .then(res => {
