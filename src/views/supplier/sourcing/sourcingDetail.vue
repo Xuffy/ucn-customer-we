@@ -300,15 +300,14 @@
                     });
             },
             //..................获取数据
-            get_data() {
+           getData() {
                 this.loading = true
-                this.$ajax.get(this.$apis._id, {
+                this.$ajax.get(this.$apis.get_supplier_id, {
                         id: this.companyId
                     })
                     .then(res => {
                         this.code = res.code
                         this.basicDate = res;
-
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
@@ -451,7 +450,7 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length === 1){
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                this.get_data();
+                this.getData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -460,7 +459,7 @@
 
             }else{
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                this.get_data();
+                this.getData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -472,15 +471,16 @@
           getCountryAll(){
             this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
               this.countryOption = res
-              this.get_data();
+              this.getData();
             }).catch(err=>{
               console.log(err)
             });
           },
         },
         created() {
-            this.companyId = Number(this.$route.query.companyId)
-            this.getCompareList()
+            this.companyId = Number(this.$route.query.companyId);
+            this.getCompareList();
+            this.getCountryAll();
         },
     }
 

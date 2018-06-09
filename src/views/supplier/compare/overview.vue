@@ -162,21 +162,20 @@
                     });
             },
             remove() {
+              this.$confirm('确定删除?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
                 this.$ajax.post(this.$apis.post_supplier_deleteCompare, this.selectedNumber)
-                    .then(res => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-
+                  .then(res => {
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
                     });
-            },
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.get_data()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.get_data()
+                    this.get_data();
+                  })
+              })
             },
         },
         created() {

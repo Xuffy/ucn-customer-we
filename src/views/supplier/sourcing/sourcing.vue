@@ -180,11 +180,8 @@
             //....跳入createOrder
             createOrder() {
                 this.$windowOpen({
-                    url: '/order/creat',
+                    url: '/order/create',
                     params: {
-                        // type: 'supplier',
-                        // supplierName: this.selectedData[0].name.value,
-                        // supplierNo: this.selectedData[0].code.value,
                       supplierCode: this.selectedData[0].code.value
                     }
                 });
@@ -296,6 +293,10 @@
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, this.selectNumber)
                     .then(res => {
+                      this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                      });
                         console.log(res)
                     })
                     .catch((res) => {
@@ -308,15 +309,6 @@
                 }).catch(err => {
                     console.log(err)
                 });
-            },
-            //分页
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.get_data()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.get_data()
             },
         },
         created() {

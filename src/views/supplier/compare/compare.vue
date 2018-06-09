@@ -99,6 +99,8 @@
         data(){
             return{
                 pageData:[],
+                options:[],
+                countryOption:[],
                 forceUpdateNumber:1,
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
@@ -121,10 +123,26 @@
             }
         },
         methods:{
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE","ITM"]).then(res=>{
+                this.options.type = _.findWhere(res, {'code': 'SR_TYPE'}).codes;
+                this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                this.countryOption = res
+                this.getList();
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             getList() {
-
                 if(this.$route.params.type==='new'){
-
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
@@ -134,8 +152,23 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
-                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res);
-                        console.log(this.tableDataList)
+                        this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
+                          let country='';
+                          e.country.value.split(',').forEach(v=>{
+                            this.countryOption.forEach(m=>{
+                              if(m.code===v){
+                                country+=(m.name+',');
+                              }
+                            })
+                          });
+                          country=country.slice(0,country.length-1);
+
+                          e.country.value=country;
+                          e.type.value=this.$change(this.options.type,'type',e,true).name;
+                          e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
+
+                          return e;
+                        });
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
 
@@ -157,6 +190,21 @@
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
 
+                          // let country='';
+                          // e.country.value.split(',').forEach(v=>{
+                          //   this.countryOption.forEach(m=>{
+                          //     if(m.code===v){
+                          //       country+=(m.name+',');
+                          //     }
+                          //   })
+                          // });
+                          // country=country.slice(0,country.length-1);
+                          // e.country.value=country;
+
+                          e.type.value=this.$change(this.options.type,'type',e,true).name;
+                          e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
+
+                          return e;
                         });
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -372,7 +420,8 @@
 
         },
         created(){
-            this.getList();
+            this.getCodePart();
+            this.getCountryAll();
         },
         watch:{
             selectList(n){

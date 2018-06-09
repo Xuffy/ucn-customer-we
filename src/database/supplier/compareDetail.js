@@ -1,6 +1,6 @@
 export default {
     supplierNO: {
-        key: "supplierId"
+        key: "code"
     },
     supplierName: {
         key: "name"
@@ -19,6 +19,9 @@ export default {
     },
     mainBusinessScope: {
         key: "mainBuiness"
+    },
+    description: {
+      key: 'description'
     },
     category: {
         key: ""

@@ -226,7 +226,6 @@
             },
             //..........remove
             remove() {
-                console.log(this.selectNumber);
                 this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
                     .then(res => {
                         this.get_data()
@@ -252,7 +251,7 @@
             },
         },
         created() {
-            this.get_data()
+            this.get_data();
             this.setRecycleBin({
                 name: 'bookmarkRecycleBin',
                 show: true
