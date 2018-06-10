@@ -5,10 +5,10 @@ export default {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
 
       LOGIN_URL: '//dev.auth.ucnscm.cn',
-      BASE_URL: '//192.168.51.208:11001', // 采购端
+      BASE_URL: '//192.168.51.148:11001', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
       UUSER_URL: '//192.168.51.208:11004', // 用户中心
-      UMETA_URL: '//192.168.51.208:11005', // 元数据
+      UMETA_URL: '//192.168.51.148:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.208:11007', // 消息服务
       ULOG_URL: '//192.168.51.208:11008', // 日志服务
       UPURCHASE_URL: '//192.168.51.208:11001', // 采购端 dev

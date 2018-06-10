@@ -246,6 +246,7 @@
                 </el-table-column>
             </el-table>
         </div>
+
         <div class="second-title">
             {{$i.warehouse.productInfo}}
         </div>

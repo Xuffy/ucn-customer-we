@@ -100,6 +100,8 @@
                  * 字典
                  * */
                 orderStatusOption: [],
+                incotermOption:[],
+                paymentOption:[],
             }
         },
         methods: {
@@ -108,7 +110,7 @@
             ]),
             onAction(item) {
                 this.$windowOpen({
-                    url: '/order/detail',
+                    url: '/order/create',
                     params: {
                         orderId: item.id.value
                     }
@@ -214,7 +216,30 @@
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
-                        this.tabData = this.$getDB(query, res.datas);
+                        this.tabData = this.$getDB(query, res.datas,e=>{
+                            console.log(e,'????')
+                            if(e.entryDt){
+                                e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.deliveryDt){
+                                e.deliveryDt.value=this.$dateFormat(e.deliveryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.customerAgreementDt){
+                                e.customerAgreementDt.value=this.$dateFormat(e.customerAgreementDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.updateDt){
+                                e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.status){
+                                e.status.value=this.$change(this.orderStatusOption,'status',e).name;
+                            }
+                            if(e.incoterm){
+                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e).name;
+                            }
+                            if(e.payment){
+                                e.payment.value=this.$change(this.paymentOption,'payment',e).name;
+                            }
+                        });
                         this.pageData = res;
                     })
                     .catch((res) => {
@@ -224,10 +249,14 @@
 
             //获取字典
             getUnit() {
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
                             this.orderStatusOption = v.codes;
+                        }else if(v.code === 'ITM'){
+                            this.incotermOption=v.codes;
+                        }else if(v.code === 'PMT'){
+                            this.paymentOption=v.codes;
                         }
                     });
                     this.getData(this.$db.order.overviewByOrder);

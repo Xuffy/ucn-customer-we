@@ -58,14 +58,7 @@ export default {
 
 
     //payment
-    paymentGetNo: ['/payment/genNo', 'BASE_URL'],
-    paymentSave: ['/payment/save', 'BASE_URL'],
-    paymentUpdata: ['/payment/update', 'BASE_URL'],
-    paymentRecover: ['/payment/recover', 'BASE_URL'],
-    paymentAbandon: ['/payment/abandon', 'BASE_URL'],
-    paymentAccept: ['/payment/accept/{id}', 'BASE_URL'],
-    paymentDunning: ['/payment/dunning/{orderNo}/{orderType}', 'BASE_URL'],
-    post_order_paymentlist: ['/payment/list/{orderNo}/{orderType}', 'BASE_URL'],
+    PAYMENT_SAVE:['/payment/save','BASE_URL'],
 
 
     //字典表数据
@@ -97,5 +90,6 @@ export default {
     ORDER_MARK: ['/order/mark','BASE_URL'],
     ORDER_UPDATE:['/order/update','BASE_URL'],
     ORDER_CONFIRM:['/order/confirm','BASE_URL'],
+    ORDER_CANCEL:['/order/cancle','BASE_URL']
 
 }
