@@ -153,6 +153,7 @@
                 remark: "",
                 version: null
               },
+              countryOption:[],
               addRemarkFormVisible:false,
               disableCreateRemark:false,
               lookRemarkFormVisible:false,
@@ -299,9 +300,9 @@
                     });
             },
             //..................获取数据
-            get_data() {
+           getData() {
                 this.loading = true
-                this.$ajax.get(this.$apis._id, {
+                this.$ajax.get(this.$apis.get_supplier_id, {
                         id: this.companyId
                     })
                     .then(res => {
@@ -449,7 +450,7 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length === 1){
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                this.get_data();
+                this.getData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -458,7 +459,7 @@
 
             }else{
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                this.get_data();
+                this.getData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
@@ -466,11 +467,20 @@
               })
             }
           },
+          //获取国家
+          getCountryAll(){
+            this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+              this.countryOption = res
+              this.getData();
+            }).catch(err=>{
+              console.log(err)
+            });
+          },
         },
         created() {
-            this.companyId = Number(this.$route.query.companyId)
-            this.get_data()
-            this.getCompareList()
+            this.companyId = Number(this.$route.query.companyId);
+            this.getCompareList();
+            this.getCountryAll();
         },
     }
 

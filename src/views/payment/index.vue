@@ -179,9 +179,6 @@
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    // this.flag = item.waitPayment.value === 0;
-                    // this.$set(this.flag,item.waitPayment.value === 0)
-
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
@@ -193,13 +190,6 @@
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    // if(item.currencyCode.value ==='BTC'){
-                    //   item._totalRow.label = 'BTC';
-                    // }else if(item.currencyCode.value ==='HKD'){
-                    //   item._totalRow.label = 'HKD';
-                    // }else{
-                    //   item._totalRow.label = 'EUR';
-                    // }
                     return item;
                   });
                   this.pageData=res;
@@ -256,23 +246,8 @@
                   message: '催促成功!'
                 });
               }).catch((res) => {
-                // this.$message({
-                //   type: 'waining',
-                //   message: res.errorMsg
-                // });
-              }); this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
-                .then(res => {
-                  console.log(res);
-                  this.$message({
-                    type: 'success',
-                    message: '催促成功!'
-                  });
-                }).catch((res) => {
-                  // this.$message({
-                  //   type: 'waining',
-                  //   message: res.errorMsg
-                  // });
-                });
+
+              });
             },
             setButtons(item){
                 if(_.findWhere(item, {'key': 'waitPayment'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
