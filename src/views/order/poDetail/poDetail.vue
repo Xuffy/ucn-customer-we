@@ -293,9 +293,10 @@
             {{$i.order.payment}}
         </div>
         <div class="payment-table">
-            <el-button :disabled="disableApplyPay || !allowHandlePay" :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}</el-button>
-            <el-button :disabled="!allowHandlePay">{{$i.order.remindSupplierRefund}}</el-button>
+            <el-button :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable" :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}</el-button>
+            <el-button :disabled="!allowHandlePay || loadingPaymentTable">{{$i.order.remindSupplierRefund}}</el-button>
             <el-table
+                    v-loading="loadingPaymentTable"
                     class="payTable"
                     :data="paymentData"
                     border
@@ -320,10 +321,12 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-input
+                                v-if="scope.row.isNew"
                                 :placeholder="$i.order.pleaseInput"
                                 v-model="scope.row.name"
                                 clearable>
                         </el-input>
+                        <span v-else>{{scope.row.name}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -332,11 +335,13 @@
                         width="200">
                     <template slot-scope="scope">
                         <el-date-picker
+                                v-if="scope.row.isNew"
                                 class="speDate"
                                 v-model="scope.row.planPayDt"
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
+                        <span v-else>{{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -345,10 +350,12 @@
                         width="160">
                     <template slot-scope="scope">
                         <el-input-number
+                                v-if="scope.row.isNew"
                                 class="speNumber"
                                 v-model="scope.row.planPayAmount"
                                 :controls="false"
                                 :min="0"></el-input-number>
+                        <span v-else>{{scope.row.planPayAmount}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -358,10 +365,12 @@
                     <template slot-scope="scope">
                         <el-date-picker
                                 class="speDate"
+                                v-if="scope.row.isNew"
                                 v-model="scope.row.actualPayDt"
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
+                        <span v-else>{{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -370,10 +379,12 @@
                         width="160">
                     <template slot-scope="scope">
                         <el-input-number
+                                v-if="scope.row.isNew"
                                 class="speNumber"
                                 v-model="scope.row.actualPayAmount"
                                 :controls="false"
                                 :min="0"></el-input-number>
+                        <span v-else>{{scope.row.actualPayAmount}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -1037,6 +1048,7 @@
                 disableApplyPay:false,
                 disableClickApplyPay:false,
                 allowHandlePay:false,       //是否可以操作payment模块
+                loadingPaymentTable:false,
                 paymentData:[
                     // {
                     //     no:res,
@@ -1350,12 +1362,29 @@
                         this.allowHandlePay=true;
                     }
 
+                    /**
+                     * 获取payment数据
+                     * */
+                    this.getPaymentData();
+
                 }).finally(err=>{
                     this.loadingPage=false;
                     this.disableClickCancelModify=false;
                     if(e){
                         this.isModify=false;
                     }
+                });
+            },
+            getPaymentData(){
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_LIST,{
+                    orderNo:this.orderForm.orderNo,
+                    orderType:10
+                }).then(res=>{
+                    console.log(res.datas)
+                    this.paymentData=res.datas;
+                }).finally(err=>{
+                    this.loadingPaymentTable=false;
                 });
             },
 
@@ -1625,10 +1654,18 @@
                         param.currencyCode=v.code;
                     }
                 });
+                this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.PAYMENT_SAVE,param).then(res=>{
-
+                    this.$message({
+                        message: this.$i.warehouse.saveSuccess,
+                        type: 'success'
+                    });
+                    console.log(res)
+                    // this.$set(data,'isNew',false);
+                    // this.$set(data,'version',res.version);
+                    // this.$set(data,'id',res.id);
                 }).finally(err=>{
-
+                    this.loadingPaymentTable=false;
                 });
             },
 

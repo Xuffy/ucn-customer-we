@@ -59,7 +59,7 @@ export default {
 
     //payment
     PAYMENT_SAVE:['/payment/save','BASE_URL'],
-
+    PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}','BASE_URL'],
 
     //字典表数据
     post_codePart: ['/code/part', 'UMETA_URL'],

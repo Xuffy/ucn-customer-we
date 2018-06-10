@@ -6,5 +6,6 @@
   "deleteSuccess":"Delete Success",
   "sureDelete":"Sure Delete?",
   "handleSuccess":"Handle Success!",
-  "shippedSuccess":"Shipped Success!"
+  "shippedSuccess":"Shipped Success!",
+  "saveSuccess":"Save Success!"
 }
