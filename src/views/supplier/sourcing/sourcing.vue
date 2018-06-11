@@ -292,16 +292,15 @@
             //...........addToBookmark
             addToBookmark() {
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, this.selectNumber)
-                    .then(res => {
-                      this.$message({
-                        message: '添加成功',
-                        type: 'success'
-                      });
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        console.slog(res)
+                  .then(res => {
+                    this.$message({
+                      message: '添加成功',
+                      type: 'success'
                     });
+                  })
+                  .catch((res) => {
+                      console.slog(res)
+                  });
             },
             getCategoryId() {
                 this.$ajax.get(this.$apis.getCategory, {}).then(res => {

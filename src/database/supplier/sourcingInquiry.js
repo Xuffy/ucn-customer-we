@@ -4,7 +4,8 @@ export default {
     key: 'inquiryNo'
   },
   inquiryDate: {
-    key: 'entryDt'
+    key: 'entryDt',
+    type: 'textDate'
   },
   payment: {
     key: 'paymentTerm'

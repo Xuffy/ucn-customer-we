@@ -1026,7 +1026,9 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params)
+                _.map(params.skuList,v=>{
+                    v.skuStatus=1;
+                });
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)

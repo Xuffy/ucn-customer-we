@@ -195,7 +195,7 @@
         };
         this.$ajax.post(url, this.params)
           .then(res => {
-              this.tabData = this.$getDB(column, res.datas,item=>{
+              this.tabData = this.$getDB(column, res.datas, item=> {
                 _.mapObject(item, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
                   return val
@@ -232,6 +232,7 @@
               type: 'success',
               message: '系统将消息置为已读!'
             });
+            this.getDataInfo()
           })
           .catch(() => {
 
