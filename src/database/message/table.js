@@ -10,7 +10,7 @@ export default {
     type: 'textDate'
   },
   read: {
-    key: 'isRead'
+    key: 'read'
   },
   sender: {
     key: 'senderName'

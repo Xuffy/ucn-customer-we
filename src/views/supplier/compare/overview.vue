@@ -31,10 +31,6 @@
                 @action="detail"
                 @change-checked='checked'
                 style='marginTop:10px'/>
-          <page
-            :page-data="pageData"
-            @change="handleSizeChange"
-            @size-change="pageSizeChange"></page>
     </div>
 </template>
 <script>
@@ -64,12 +60,11 @@
                     id: '',
                     name: "",
                     compareName: '',
-                    pn: 1,
-                    ps: 50,
+                    // pn: 1,
+                    // ps: 50,
                     recycle: false,
                 },
                 tabData: [],
-                pageData:{},
                 selectedData: [],
                 selectedNumber: []
             }
@@ -92,14 +87,6 @@
                     params.compareName = keyWord.key
                     this.get_data()
                 }
-            },
-            handleSizeChange(val) {
-              this.params.pn = val;
-              this.get_data();
-            },
-            pageSizeChange(val) {
-              this.params.ps = val;
-              this.get_data();
             },
             checked(item) {
                 this.selectedData = item
@@ -145,7 +132,6 @@
                             val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                             return val
                           })
-                          this.pageData=res;
                         });
                     })
                   .catch((res) => {

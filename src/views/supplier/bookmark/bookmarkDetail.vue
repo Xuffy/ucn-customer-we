@@ -24,7 +24,7 @@
                 <div class="btns" v-if="noEdit">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
-                    <!--<el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>-->
+                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
                 <!--<el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>-->
 
@@ -58,7 +58,7 @@
                   <div class="section-btn" style="margin-bottom:10px;">
                     <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" />
+                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments"/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -130,6 +130,7 @@
                 remarkData: [],
                 inquireData:[],
                 orderData:[],
+                attachments:[],
                 compareConfig: {
                     showCompareList: false, //是否显示比较列表
                 },
@@ -299,6 +300,7 @@
                     })
                     .then(res => {
                         this.basicDate = res;
+                        this.attachments = res.attachments
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);

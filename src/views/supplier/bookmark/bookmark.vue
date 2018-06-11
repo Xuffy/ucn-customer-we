@@ -158,17 +158,31 @@
             },
             //....跳入createInquiry
             createInquiry() {
-
+              let companyId = '';
+              this.selectedData.forEach((v,k)=>{
+                let item = _.findWhere(v, {
+                  key: 'companyId'
+                });
+                if (k === this.selectedData.length - 1) {
+                  companyId += item.value;
+                } else {
+                  companyId += (item.value + ',');
+                }
+              })
+              this.$windowOpen({
+                url: '/negotiation/createInquiry',
+                params: {
+                  supplierCompanies: companyId
+                }
+              });
             },
             //....跳入createOrder
             createOrder() {
                 this.$windowOpen({
-                    url: '/order/create',
-                    params: {
-                        type: 'supplier',
-                        supplierName: this.selectedData[0].name.value,
-                        supplierNo: this.selectedData[0].code.value
-                    }
+                  url: '/order/create',
+                  params: {
+                    supplierCode: this.selectedData[0].code.value
+                  }
                 });
             },
             //........跳入compare

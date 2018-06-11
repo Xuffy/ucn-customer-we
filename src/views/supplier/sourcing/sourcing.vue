@@ -168,13 +168,23 @@
             },
             //....跳入createInquiry
             createInquiry() {
-              console.log(this.selectedData)
-                this.$windowOpen({
-                    url: '/negotiation/createInquiry',
-                    params: {
-                        selectedData: this.selectedData
-                    }
+              let companyId = '';
+              this.selectedData.forEach((v,k)=>{
+                let item = _.findWhere(v, {
+                  key: 'companyId'
                 });
+                if (k === this.selectedData.length - 1) {
+                  companyId += item.value;
+                } else {
+                  companyId += (item.value + ',');
+                }
+              })
+              this.$windowOpen({
+                  url: '/negotiation/createInquiry',
+                  params: {
+                    supplierCompanies: companyId
+                  }
+              });
 
             },
             //....跳入createOrder
@@ -295,7 +305,15 @@
                   .then(res => {
                     this.$message({
                       message: '添加成功',
-                      type: 'success'
+                      type: 'success',
+                      onClose: (() => {
+                        this.$router.push({
+                          path: '/supplier/bookmark',
+                          query: {
+                            id: this.id
+                          }
+                        })
+                      })
                     });
                   })
                   .catch((res) => {

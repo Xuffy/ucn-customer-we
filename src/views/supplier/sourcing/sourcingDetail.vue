@@ -24,9 +24,9 @@
                 <div class="btns" v-if="noEdit">
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
-                    <!--<el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>-->
+                    <el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
-                    <!--<el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>-->
+                    <el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
                 </div>
 
                 <div class="btns" v-else>
@@ -54,9 +54,9 @@
                 </el-tab-pane>
                 <el-tab-pane label="attachment" name="attchment">
                   <div class="section-btn" style="margin-bottom:10px;">
-                    <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    <el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" />
+                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments"/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -153,6 +153,7 @@
                 remark: "",
                 version: null
               },
+              attachments:[],
               countryOption:[],
               addRemarkFormVisible:false,
               disableCreateRemark:false,
@@ -283,7 +284,7 @@
                 this.$ajax.post(this.$apis.post_supplier_addbookmark, [this.id])
                     .then(res => {
                         this.$message({
-                            message: 'success',
+                            message: '添加成功',
                             type: 'success',
                             onClose: (() => {
                                 this.$router.push({
@@ -307,6 +308,7 @@
                     })
                     .then(res => {
                         this.code = res.code
+                        this.attachments = res.attachments
                         this.basicDate = res;
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
