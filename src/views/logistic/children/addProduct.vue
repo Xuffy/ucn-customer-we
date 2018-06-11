@@ -176,7 +176,8 @@ export default {
       tableData:[],
       pageParams: {
         pn: 1,
-        ps: 10
+        ps: 10,
+        skuSupplierIds:[]
       },
       selectArrData: [],
       options: [
@@ -192,14 +193,13 @@ export default {
           id: '3',
           label: 'Order No.'
         }
-      ]
+      ],
     }
   },
   mounted(){
     if(this.basicInfoArr[0].value){
       this.getSupplierIds();
     }
-    this.getOrderList();
   },
   methods: {
     sizeChange(e) {
@@ -208,7 +208,8 @@ export default {
     },
     getSupplierIds(){
       this.$ajax.get(this.$apis.logistics_plan_getSupplierIds,{logisticsNo:this.basicInfoArr[0].value}).then(res => {
-        
+        this.$set(this.pageParams,'skuSupplierIds',res.content);
+        this.getOrderList();
       })
     },   
     pageChange(e) {
