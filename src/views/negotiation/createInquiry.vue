@@ -1,6 +1,6 @@
 <template>
   <div class="create-inquiry">
-    <h3 class="hd">{{ $route.query.id && $route.query.from !== 'copy'?`${$i.inquiry.inquiryNo}${fromArg.inquiryNo}`:$i.common.createInquiry }}</h3>
+    <h3 class="hd">{{ showInquiryNo ? `${$i.inquiry.inquiryNo}${fromArg.inquiryNo}` : $i.common.createInquiry }}</h3>
     <div class="select-wrap">
       <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
       <el-form ref="ruleform" :model="fromArg">
@@ -83,11 +83,11 @@
                 resize="none"
                 :disabled="item.disabled"/>
               <span v-if="item.type === 'Number'" style="display:flxe;">
-                                <el-input-number v-model="fromArg[item.key]" :min="0" :max="100"
-                                                 controls-position="right" size="mini" :controls="false"
-                                                 style="width:100%; padding-right:10px;"/> <i
-                style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
-                            </span>
+                <el-input-number v-model="fromArg[item.key]" :min="0" :max="100"
+                    controls-position="right" size="mini" :controls="false"
+                    style="width:100%; padding-right:10px;"/>
+                <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
+              </span>
               <v-upload v-if="item.type === 'attachment' || item.type === 'upData'"></v-upload>
             </el-form-item>
           </el-col>
@@ -138,330 +138,19 @@
         :type="radio"
         :isInquiry="true"></v-product>
     </el-dialog>
-    <v-history-modify
-      @save="save"
-      ref="HM">
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="transportationWay"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="paymentMethod"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="destinationCountry"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="departureCountry"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="incoterm"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="currency"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <v-up-load slot-scope="attachment"/>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="unit"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="category"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="readilyAvailable"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="expirationDateUnit"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="fobCurrency"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="exwCurrency"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="otherIncotermCurrency"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="dduCurrency"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="unitOfWeight"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="unitOfLength"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="unitOfVolume"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="OEM"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="mainsaleCountry"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="yearOfListed"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="useDisplayBoxOrNot"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-      <el-select
-        value-key="id"
-        size="mini"
-        style="width:100%;"
-        slot="adjustSkuAndPackageOrNot"
-        slot-scope="{data}"
-        v-model="data.dataBase">
-        <el-option
-          v-for="items in selectAll[data.transForm]"
-          :key="items.id"
-          :label="items.name"
-          :value="items.code"
-          :id="items.id"/>
-      </el-select>
-    </v-history-modify>
+    <v-history-modify @save="save" ref="HM"/>
   </div>
 </template>
 <script>
 import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
 import product from '@/views/product/addProduct';
-import {mapActions} from 'vuex'
+import {mapActions} from 'vuex';
 
 export default {
   name: 'createInquiry',
   data() {
     return {
+      showInquiryNo: false,
       disabledLine: [],
       checkedAll: [],
       trig: 0,
@@ -501,46 +190,56 @@ export default {
   created() {
     this.getDictionaries();
     this.remoteMethod('');
-    if(this.$route.query.id) this.getFefault();
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+
+    let query = this.$route.query, regex = (/^\d+(,\d+)?$/);
+    if (query.id && !isNaN(query.id)) {
+      this.getFefault(query.id);
+      if (!query.from || query.from !== 'copy') {
+        this.showInquiryNo = true;
+      }
+    } else if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
+      // TODO: 默认选中供应商
+    } else if (query.skus && regex.test(query.skus)) {
+      // TODO: 默认选中商品
+    }
   },
-  computed: {},
+  computed: {
+  },
   methods: {
     ...mapActions([
       'setDraft',
       'setRecycleBin'
     ]),
-    getFefault() {
-      this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {
-        id: this.$route.query.id
-      })
-        .then(res => {
-          if (res.exportLicense) {
-            res.exportLicense = 1;
-          } else {
-            res.exportLicense = 0;
-          }
-          if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
-            res.suppliers.forEach(items => {
-              _.mapObject(items, (val, k) => {
-                if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
-              });
+    getFefault(id) {
+      this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id}).then(res => {
+        res.exportLicense = res.exportLicense ? 1 : 0;
+        if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
+          res.suppliers.forEach(items => {
+            _.mapObject(items, (val, k) => {
+              if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
             });
-          } else {
-            res.suppliers = [];
-          }
-          if(this.$route.query.from === 'copy') {
-            delete res.id;
-            delete res.orderNo;
-            delete res.tenantId;
-            delete res.companyId;
-            delete res.inquiryNo;
-            delete res.quotationNo;
-          }
-          this.fromArg = res;
-          this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'))
+          });
+        } else {
+          res.suppliers = [];
+        }
+        if (!this.showInquiryNo) {
+          delete res.id;
+          delete res.orderNo;
+          delete res.tenantId;
+          delete res.companyId;
+          delete res.inquiryNo;
+          delete res.quotationNo;
+        }
+        this.fromArg = res;
+        this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
+          this.$filterDic(item);
+          _.map(item, val => {
+            val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
+          });
         });
+      });
     },
     handleCancel() {
       this.dialogTableVisible = false;
@@ -565,35 +264,28 @@ export default {
     inputEnter(val) {
 
     },
-    save(data) { //modify 编辑完成反填数据
-      let json = this.$filterDic(data[0]);
-      this.tabData = _.map(this.tabData, val => {
-        if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(json, {'key': 'skuId'}).value + '' && !val._remark && !json._remark) {
-          val = json;
-          val._modify = true;
-          _.map(val, (item, k) => {
-            if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-              this.$set(item, '_style', 'color:#27b7b6')
-            }
-            ;
-          });
-        } else if (_.findWhere(val, {'key': 'skuId'}).value + '' === _.findWhere(data[1], {'key': 'skuId'}).value + '' && val._remark && data[1]._remark) {
-          val = data[1];
-          val._modify = true;
-          _.map(val, (item, k) => {
-            if (item.dataBase || item.dataBase === 0 ? item.dataBase !== item.defaultData : item.value !== item.defaultData) {
-              this.$set(item, '_style', 'color:#27b7b6')
-            }
-            ;
-          });
-        }
-        return val;
+    save(data) { // modify 编辑完成反填数据
+      console.log(data);
+      let items = _.map(data, item => {
+        _.map(item, (o, field) => {
+          if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+            return;
+          }
+          if (typeof o.defaultData !== 'undefined' && o.value !== o.defaultData) {
+            o._color = 'blue';
+          }
+        });
+        return item;
+      });
+      this.tabData = _.map(this.tabData, oldItem => {
+        let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
+        return tmp[0] || oldItem;
       });
     },
     getDictionaries() {
-      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache:true})
+      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true})
         .then(res => {
-          this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes
+          this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
           this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
           this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
           this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
@@ -606,7 +298,7 @@ export default {
           this.selectAll.currency = res;
         });
 
-      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache:true})
+      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true})
         .then(res => {
           this.selectAll.destinationCountry = res;
           this.selectAll.departureCountry = res;
@@ -619,59 +311,75 @@ export default {
     fromChange(val) {
       this.trig = new Date().getTime();
     },
-    submitForm(type) { //提交
-      if (type === 'draft') { //是否保存为草稿
-        this.fromArg.draft = 1;
-      } else {
-        this.fromArg.draft = 0;
-      }
+    submitForm(type) { // 提交
+      this.fromArg.draft = type && type === 'draft' ? 1 : 0;
       this.$refs.ruleform.validate((valid) => {
-        if (!valid) return this.$message({
-          message: this.$i.common.pleaseCompleteTheCompletion,
-          type: 'warning'
-        });
+        if (!valid) {
+          this.$message({message: this.$i.common.pleaseCompleteTheCompletion, type: 'warning'});
+        }
       });
       let arr = [];
       _.map(this.fromArg.suppliers, item => {
         let json = {};
         _.mapObject(item, (val, k) => {
-          if (!/^supplier/.test(k)) json[`supplier${k.substring(0, 1).toUpperCase()}${k.substring(1, k.length)}`] = val;
+          if (!(/^supplier/).test(k)) json[`supplier${k.substring(0, 1).toUpperCase()}${k.substring(1, k.length)}`] = val;
         });
         arr.push(json);
       });
       let upData = _.clone(this.fromArg);
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
-      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData))
-        .then(res => {
-          if (!this.fromArg.draft) return this.$router.push('/negotiation/inquiry');
+      console.log(this.$filterModify(upData));
+      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
+        if (!this.fromArg.draft) {
+          this.$router.push('/negotiation/inquiry')
+        } else {
           this.$router.push({
             name: 'negotiationDraft',
             params: {
               type: 'inquiry'
             }
           });
-        });
+        }
+      });
     },
     dataFilter(data) {
-      let arr = [], jsons = {}, json = {};
+      let excludeColumns = '$changedFields,$pageState,entryDt,updateDt,status';
+      let arr = [], remark = {}, json = {};
       data.forEach(item => {
-        jsons = {};
-        if (item._remark) { //拼装remark 数据
-          for (let k in item) {
-            jsons[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
+        remark = {};
+        if (item._remark) {
+          // 拼装remark 数据
+          for (let field in item) {
+            let value = item[field].value;
+            if (value && value.length > 0) {
+              remark[field] = value;
+            }
           }
-          json.fieldRemark = jsons;
+          json.fieldRemark = remark;
         } else {
           json = {};
           for (let k in item) {
-            if (json[k] === 'fieldRemark') {
-              json[k] = jsons;
+            if (excludeColumns.indexOf(k) > -1) continue;
+            if (k === 'fieldRemark') {
+              json[k] = remark;
+            } else if (k === 'fieldDisplay') {
+              json[k] = {};
+              if (item.$changedFields) {
+                for (let f in item.$changedFields) {
+                  if (item.$changedFields.hasOwnProperty(f)) {
+                    json[k][f] = item.$changedFields[f];
+                  }
+                }
+              }
             } else {
-              json[k] = item[k].dataBase ? item[k].dataBase : item[k].value;
+              if (item[k].dataType && item[k].dataType === 'boolean' && typeof item[k].value === 'string') {
+                json[k] = item[k].value === '1' || item[k].value === 'true';
+              } else {
+                json[k] = item[k].value;
+              }
             }
           }
-          ;
           arr.push(json);
         }
       });
@@ -690,35 +398,30 @@ export default {
           this.dialogTableVisible = false;
         });
     },
-    productInfoBtn(item) { //Product info 按钮创建
+    productInfoBtn(item) { // Product info 按钮创建
       return [{label: this.$i.common.negotiate, type: 'modify'}, {label: this.$i.common.detail, type: 'detail'}];
     },
-    fnBasicInfoHistoty(item, type, config) { //查看历史记录
-      let column;
-      this.$ajax.get(this.$apis.GET_INQUIRY_HISTORY, {
-        id: item.skuId.value
-      })
-        .then(res => {
-          let arr = [];
-          _.map(this.tabData, items => {
-            if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '' && !items._disabled) arr.push(items)
-          });
-          if (config.type === 'histoty') {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
-          } else {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
-          }
+    fnBasicInfoHistoty(item, type) { // 查看历史记录
+      let arr = [];
+      _.map(this.tabData, o => {
+        if (_.findWhere(o, {'key': 'skuId'}).value.toString() === item.skuId.value.toString() && !o._disabled) arr.push(o);
+      });
+      if (this.fromArg.quotationNo) {
+        this.$ajax.get(this.$apis.GET_INQUIRY_SKU_HISTORY + `?quotationNo=${this.fromArg.quotationNo}&skuCode=${item.skuCode.value}`).then(res => {
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuCode')), type === 'modify');
         });
+      } else if (type === 'modify') {
+        this.$refs.HM.init(arr, [], true);
+      }
     },
-    producInfoAction(data, type) { //Produc info 按钮操作
-      this.id_type = 'producInfo';
+    producInfoAction(data, type) { // Produc info 按钮操作
       switch (type) {
         case 'histoty':
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'histoty', data: data.skuId.value});
+          this.fnBasicInfoHistoty(data, type);
           break;
         case 'modify':
           this.oSwitch = true;
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'modify', data: data.skuId.value});
+          this.fnBasicInfoHistoty(data, type);
           break;
         case 'detail':
           this.$router.push({
@@ -731,10 +434,9 @@ export default {
       }
     },
     remoteMethod(keyWord) {
-      this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`)
-        .then(res => {
-          this.selectAll.supplierName = res;
-        })
+      this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`).then(res => {
+        this.selectAll.supplierName = res;
+      });
     }
   }
 }
