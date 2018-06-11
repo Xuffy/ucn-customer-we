@@ -288,6 +288,152 @@
             </el-table-column>
         </el-table>
 
+
+        <div class="title">
+            {{$i.order.payment}}
+        </div>
+        <div class="payment-table">
+            <el-button :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable" :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}</el-button>
+            <el-button :disabled="!allowHandlePay || loadingPaymentTable">{{$i.order.remindSupplierRefund}}</el-button>
+            <el-table
+                    v-loading="loadingPaymentTable"
+                    class="payTable"
+                    :data="paymentData"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        prop="date"
+                        label="#"
+                        align="center"
+                        width="80">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="no"
+                        :label="$i.order.payNo"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        :label="$i.order.payName"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-input
+                                v-if="scope.row.isNew"
+                                :placeholder="$i.order.pleaseInput"
+                                v-model="scope.row.name"
+                                clearable>
+                        </el-input>
+                        <span v-else>{{scope.row.name}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        :label="$i.order.planPayDt"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-if="scope.row.isNew"
+                                class="speDate"
+                                v-model="scope.row.planPayDt"
+                                type="date"
+                                :placeholder="$i.order.pleaseChoose">
+                        </el-date-picker>
+                        <span v-else>{{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="planPayAmount"
+                        :label="$i.order.planPayAmount"
+                        width="160">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-if="scope.row.isNew"
+                                class="speNumber"
+                                v-model="scope.row.planPayAmount"
+                                :controls="false"
+                                :min="0"></el-input-number>
+                        <span v-else>{{scope.row.planPayAmount}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="actualPayDt"
+                        :label="$i.order.actualPayDt"
+                        width="200">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                class="speDate"
+                                v-if="scope.row.isNew"
+                                v-model="scope.row.actualPayDt"
+                                type="date"
+                                :placeholder="$i.order.pleaseChoose">
+                        </el-date-picker>
+                        <span v-else>{{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="name"
+                        :label="$i.order.actualPayAmount"
+                        width="160">
+                    <template slot-scope="scope">
+                        <el-input-number
+                                v-if="scope.row.isNew"
+                                class="speNumber"
+                                v-model="scope.row.actualPayAmount"
+                                :controls="false"
+                                :min="0"></el-input-number>
+                        <span v-else>{{scope.row.actualPayAmount}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i.order.planRefundDt"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        :label="$i.order.planRefundAmount"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        :label="$i.order.actualRefundDt"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        :label="$i.order.actualRefundAmount"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="currencyCode"
+                        :label="$i.order.payCurrency"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        :label="$i.order.available"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        fixed="right"
+                        :label="$i.order.action"
+                        align="center"
+                        width="125">
+                    <template slot-scope="scope">
+                        <div v-if="scope.row.isNew">
+                            <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                            <el-button :disabled="!allowHandlePay" type="text" size="small">{{$i.order.cancel}}</el-button>
+                        </div>
+                        <div v-else>
+
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+
+
+
+
+
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -314,14 +460,14 @@
             <!--<el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>-->
             <div v-if="isModify">
                 <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-                <el-button @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
+                <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
             </div>
             <div v-else>
-                <el-button :disabled="loadingPage || disableModify" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                <el-button :disabled="loadingPage" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                <el-button :disabled="loadingPage" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
-                <el-button :disabled="loadingPage" type="danger">{{$i.order.cancel}}</el-button>
-                <el-checkbox :disabled="loadingPage || disableModify" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
+                <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
+                <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
+                <el-button :disabled="loadingPage || hasCancelOrder" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
+                <el-button :disabled="loadingPage || hasCancelOrder" :loading="disableCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancel}}</el-button>
+                <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
         </div>
 
@@ -823,8 +969,10 @@
                  * */
                 disableModify:false,
                 markImportant:false,
-
-
+                disableConfirm:false,
+                disableCancelOrder:false,
+                hasCancelOrder:false,
+                disableClickCancelModify:false,
 
                 /**
                  * 页面基础配置
@@ -893,6 +1041,28 @@
                 activeTab:'product',
                 selectProductInfoTable:[],
                 disabledProductLine:[],
+
+                /**
+                 * payment data配置
+                 * */
+                disableApplyPay:false,
+                disableClickApplyPay:false,
+                allowHandlePay:false,       //是否可以操作payment模块
+                loadingPaymentTable:false,
+                paymentData:[
+                    // {
+                    //     no:res,
+                    //     name:'',
+                    //     planPayDt:'',
+                    //     planPayAmount:'',
+                    //     actualPayDt:'',
+                    //     actualPayAmount:'',
+                    //     currencyCode:this.qcDetail.exchangeCurrencyDictCode,
+                    //     status:10,
+                    //     isNew:true
+                    // }
+                ],
+
 
                 /**
                  * 弹出框data配置
@@ -1072,7 +1242,7 @@
                 //     console.log(res)
                 // });
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{}).then(res=>{
+                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
                     this.allowQuery++;
                 })
@@ -1090,7 +1260,7 @@
 
 
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
                     this.allowQuery++;
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
@@ -1103,7 +1273,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS']).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1170,17 +1340,51 @@
                         this.productTableData.push(v);
                     });
 
+                    this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
                         this.disableModify=true;
                     }else{
                         this.disableModify=false;
                     }
+                    if(res.status!=='2'){
+                        this.disableConfirm=true;
+                    }else{
+                        this.disableConfirm=false;
+                    }
+                    if(res.status==='5'){
+                        this.hasCancelOrder=true;
+                    }else{
+                        this.hasCancelOrder=false;
+                    }
+                    //代表已经接单了
+                    if(res.supplierUserId){
+                        this.allowHandlePay=true;
+                    }
+
+                    /**
+                     * 获取payment数据
+                     * */
+                    this.getPaymentData();
+
                 }).finally(err=>{
                     this.loadingPage=false;
+                    this.disableClickCancelModify=false;
                     if(e){
                         this.isModify=false;
                     }
+                });
+            },
+            getPaymentData(){
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_LIST,{
+                    orderNo:this.orderForm.orderNo,
+                    orderType:10
+                }).then(res=>{
+                    console.log(res.datas)
+                    this.paymentData=res.datas;
+                }).finally(err=>{
+                    this.loadingPaymentTable=false;
                 });
             },
 
@@ -1234,21 +1438,12 @@
                 }).finally(err=>{
                     this.disableClickSaveDraft=false;
                 });
-
-
             },
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
                 this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
-                // this.$ajax.post(this.$apis.ORDER_GETORDERNO,{
-                //     customerNo:''
-                // }).then(res=>{
-                //     console.log(res)
-                // }).catch(err=>{
-                //
-                // });
             },
 
             //获取供应商
@@ -1414,6 +1609,67 @@
                 return arr;
             },
 
+
+            /**
+             * payment事件
+             * */
+            applyPay(){
+                this.disableClickApplyPay=true;
+                this.$ajax.post(this.$apis.get_qcPaymentNo).then(res=>{
+                    this.paymentData.push({
+                        no:res,
+                        name:'',
+                        planPayDt:'',
+                        planPayAmount:'',
+                        actualPayDt:'',
+                        actualPayAmount:'',
+                        currencyCode:this.orderForm.currency,
+                        status:20,
+                        isNew:true
+                    });
+                    this.disableApplyPay=true;
+                }).finally(err=>{
+                    this.disableClickApplyPay=false;
+                });
+            },
+            saveNewPay(data){
+                let param={
+                    actualPayAmount: data.actualPayAmount,
+                    actualPayDt: data.actualPayDt,
+                    currency: 0,
+                    currencyCode: "",
+                    name: data.name,
+                    no: data.no,
+                    orderNo: this.orderForm.orderNo,
+                    orderType: 10,
+                    payToCompanyId: this.orderForm.supplierCompanyId,
+                    payToCompanyName: this.orderForm.supplierName,
+                    planPayAmount: data.planPayAmount,
+                    planPayDt: data.planPayDt,
+                    type: 10
+                }
+                _.map(this.currencyOption,v=>{
+                    if(v.code===data.currencyCode){
+                        param.currency=v.id;
+                        param.currencyCode=v.code;
+                    }
+                });
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_SAVE,param).then(res=>{
+                    this.$message({
+                        message: this.$i.warehouse.saveSuccess,
+                        type: 'success'
+                    });
+                    console.log(res)
+                    // this.$set(data,'isNew',false);
+                    // this.$set(data,'version',res.version);
+                    // this.$set(data,'id',res.id);
+                }).finally(err=>{
+                    this.loadingPaymentTable=false;
+                });
+            },
+
+
             /**
              * 底部按钮事件
              * */
@@ -1421,12 +1677,17 @@
                 this.isModify=true;
             },
             cancelModify(){
+                this.disableClickCancelModify=true;
                 this.getDetail(true);
             },
             changeMarkImportant(e){
                 this.$ajax.post(this.$apis.ORDER_MARK,{
                     importantCustomer: e,
-                    orderNos: [this.orderForm.orderNo],
+                    ids: [this.orderForm.id],
+                }).then(res=>{
+                    console.log(res)
+                }).finally(err=>{
+
                 });
             },
             createOrder(){
@@ -1436,12 +1697,26 @@
             },
             confirmOrder(){
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{
-                    orderNos: [this.orderForm.orderNo],
+                    ids: [this.orderForm.id],
                 }).then(res=>{
                     console.log(res)
                 }).finally(err=>{
 
                 });
+            },
+            cancelOrder(){
+                this.disableCancelOrder=true;
+                this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                    ids:[this.orderForm.id]
+                }).then(res=>{
+                    this.$message({
+                        message: this.$i.order.handleSuccess,
+                        type: 'success'
+                    });
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableCancelOrder=false;
+                })
             },
 
             /**
@@ -1807,6 +2082,15 @@
     .speSearch{
         float: right;
         margin-right: 70px;
+    }
+    .payTable{
+        margin-top: 10px;
+    }
+    .speDate{
+        width: 160px;
+    }
+    .speNumber >>> input{
+        text-align: left;
     }
 
     .footBtn{

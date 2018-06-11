@@ -13,8 +13,8 @@
                 >{{$i.common.delete}}({{selectedNumber.length}})</el-button>
             </div>
 
-       <div class="select-wrap">       
-                   <selectSearch :options='options' @inputEnter='inputEnter' 
+       <div class="select-wrap">
+                   <selectSearch :options='options' @inputEnter='inputEnter'
                    v-model='selectSearch'
                      ></selectSearch>
                 <div>
@@ -24,18 +24,17 @@
         </div>
         <!--from-->
           <!--        表格-->
-           <v-table 
+           <v-table
                 :height=360
-                :data="tabData" 
+                :data="tabData"
                 :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
-                @action="detail" 
+                @action="detail"
                 @change-checked='checked'
                 style='marginTop:10px'/>
-           <v-pagination
-                :page-data.sync="params"
-                 @change="handleSizeChange"
-                @size-change="pageSizeChange"
-            /> 
+          <page
+            :page-data="pageData"
+            @change="handleSizeChange"
+            @size-change="pageSizeChange"></page>
     </div>
 </template>
 <script>
@@ -53,6 +52,7 @@
         data() {
             return {
                 selectSearch: '1',
+                loading:false,
                 options: [{
                     id: '1',
                     label: 'compareName'
@@ -64,29 +64,12 @@
                     id: '',
                     name: "",
                     compareName: '',
-                    //                      "operatorFilters": [
-                    //                        {
-                    //                          "columnName": "string",
-                    //                          "operator": "string",
-                    //                          "property": "string",
-                    //                          "resultMapId": "string",
-                    //                          "value": {}
-                    //                        }
-                    //                      ],
                     pn: 1,
                     ps: 50,
-                    tc: 0,
-                   "recycle": false,
-                    //                      "sorts": [
-                    //                        {
-                    //                          "nativeSql": true,
-                    //                          "orderBy": "string",
-                    //                          "orderType": "string",
-                    //                          "resultMapId": "string"
-                    //                        }
-                    //                      ]
+                    recycle: false,
                 },
                 tabData: [],
+                pageData:{},
                 selectedData: [],
                 selectedNumber: []
             }
@@ -95,23 +78,28 @@
             dropDown,
             VTable,
             selectSearch,
-            VPagination
+            page:VPagination
         },
         methods: {
               ...mapActions([
                 'setRecycleBin'
             ]),
             inputEnter(keyWord) {
-                console.log(keyWord.key)
                 if (keyWord.keyType == 1) {
                     params.compareName = keyWord.key
-
                     this.get_data()
                 } else {
                     params.compareName = keyWord.key
                     this.get_data()
-
                 }
+            },
+            handleSizeChange(val) {
+              this.params.pn = val;
+              this.get_data();
+            },
+            pageSizeChange(val) {
+              this.params.ps = val;
+              this.get_data();
             },
             checked(item) {
                 this.selectedData = item
@@ -148,14 +136,21 @@
 
             },
             get_data() {
+                this.loading = true;
                 this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
                     .then(res => {
-                        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-                        this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas);
+                        this.loading = false;
+                        this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas,item=>{
+                          _.mapObject(item, val => {
+                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                            return val
+                          })
+                          this.pageData=res;
+                        });
                     })
-                    .catch((res) => {
-
-                    });
+                  .catch((res) => {
+                    this.loading = false;
+                  })
             },
             downloadSelected() {
                 this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
@@ -167,21 +162,20 @@
                     });
             },
             remove() {
+              this.$confirm('确定删除?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
                 this.$ajax.post(this.$apis.post_supplier_deleteCompare, this.selectedNumber)
-                    .then(res => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-
+                  .then(res => {
+                    this.$message({
+                      type: 'success',
+                      message: '删除成功!'
                     });
-            },
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.get_data()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.get_data()
+                    this.get_data();
+                  })
+              })
             },
         },
         created() {

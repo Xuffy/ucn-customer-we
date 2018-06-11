@@ -7,7 +7,7 @@
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
                 <div style="overflow: hidden">
                   <v-upload ref="uploadFile" onlyImage style="float: left" />
-                  <img :src="companyInfo.logo" class="logo"/>
+                  <!--<img :src="companyInfo.logo" class="logo"/>-->
                 </div>
                 <div class="section-btn" style="padding-top:10px">
                   <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="section">
-            <el-tabs type="border-card">
+            <el-tabs type="border-card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.setting.address">
                     <div class="section-btn">
                         <el-button @click="addAddress" type="primary">{{$i.button.add}}</el-button>
@@ -562,13 +562,40 @@
             }
         },
         methods:{
+            handleClick(tab, event) {
+              switch(Number(tab.index)){
+                case 5:
+                  this.getGridfavoritePartData();
+                  break;
+              }
+            },
             //获取整个页面数据
             getWholeData(){
-                // this.companyInfo.address=[]; 
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
-                    this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address);
+                    this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
+                      let country='';
+                      let receiveCountry = '';
+                      e.country.value.split(',').forEach(v=>{
+                        this.options.country.forEach(m=>{
+                          if(m.code===v){
+                            country+=(m.name+',');
+                          }
+                        })
+                      });
+                      e.receiveCountry.value.split(',').forEach(v=>{
+                        this.options.country.forEach(m=>{
+                          if(m.code===v){
+                            receiveCountry+=(m.name+',');
+                          }
+                        })
+                      });
+                      country=country.slice(0,country.length-1);
+                      receiveCountry=receiveCountry.slice(0,receiveCountry.length-1);
+                      e.country.value=country;
+                      e.receiveCountry.value=receiveCountry;
+                    });
                     this.accountsData = this.$getDB(this.$db.setting.companyContact, res.concats);
                     if(res.custom){
                       this.customData = res.custom
@@ -603,7 +630,8 @@
           getCountryAll(){
             this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
               this.options.country = res
-              this.$sessionStore.set('country', res)
+              this.$sessionStore.set('country', res);
+              this.getWholeData();
             }).catch(err=>{
               console.log(err)
             });
@@ -952,8 +980,6 @@
                this.getCountryAll();
                this.getCodePart();
                this.getDepartment();
-               this.getWholeData();
-               this.getGridfavoritePartData();
         },
         watch:{
             addressDialogVisible(n){
@@ -1016,14 +1042,6 @@
       border: 1px solid #cccccc;
       border-radius: 10%;
     }
-
-    /*表格样式调整*/
-    /*.companyInfo >>> .el-table__header-wrapper>table{*/
-    /*width: 100% !important;*/
-    /*}*/
-    /*.companyInfo >>> .el-table__header-wrapper>table thead tr th{*/
-    /*width: 12.5% !important;*/
-    /*}*/
 
     /*弹出框样式*/
     .dialog-footer{

@@ -8,7 +8,8 @@
           <v-table
             :data="tabData"
             hide-filter-value
-            :height="450"
+            :height="500"
+            :selection="false"
           />
           <page
           :page-data="pageData"
