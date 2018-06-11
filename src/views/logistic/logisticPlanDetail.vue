@@ -12,10 +12,13 @@
           <p v-else>{{ remark }}</p>
         </div>
       <!-- </el-col> -->
-      <attachment accept="all" ref="attachment" :title="$i.logistic.attachment" :edit="edit"/>
+      <div class="input-item">
+        <span>{{ $i.logistic.attachment }}:</span>
+        <attachment accept="all" ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :title="$i.logistic.attachment" :limit="20" :edit="edit"/>
+      </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
+    <form-list ref="ruleForm" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
@@ -65,7 +68,7 @@
 </template>
 <script>
 import { containerInfo, selectSearch, VTable } from '@/components/index';
-import attachment from '@/components/base/attachment'
+import attachment from '@/components/common/upload/index';
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
 import feeInfo from '@/views/logistic/children/feeInfo'
@@ -81,6 +84,7 @@ export default {
   data() {
     return {
       negotiate:'',
+      attachmentList:[],
       modefiyProductIndex: 0,
       logisticsStatus:null,
       logisticsNo: '',
@@ -155,6 +159,9 @@ export default {
     addProduct,
   },
   computed: {
+    attachmentReadonly(){
+      return !this.edit;
+    },
     planId () {
       return this.$route.query.id
     },
@@ -199,7 +206,7 @@ export default {
       return value;
     })
     if (this.planId) {
-      this.getDetails()
+      this.getDetails();
       if(this.isCopy){
         this.edit = true;
         this.getNewLogisticsNo();
@@ -251,6 +258,7 @@ export default {
         this.createdPlanData(res)
         this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
+        this.attachmentList = res.attachment;
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
@@ -546,7 +554,16 @@ export default {
       })
     },
     sendData (keyString) {
-      let url = this.configUrl[this.pageName][keyString];
+      let url = this.configUrl[this.pageName][keyString];    
+      this.$refs['ruleForm'].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+      return
       this.basicInfoArr.forEach(a => {
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
@@ -568,6 +585,7 @@ export default {
       _.mapObject(this.transportInfoObj, (value, key) => {
         this.oldPlanObject[key] = value
       })
+      this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
       this.oldPlanObject.containerDetail = this.containerInfo
       this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList : null;
       this.oldPlanObject.product = this.modifyProductArray;
@@ -620,7 +638,11 @@ export default {
       return _.mapObject(args,(v,k)=>{
         if(Array.isArray(v)){
           return _.map(v,(val,key)=>{
-            return _.omit(val,...restArr);
+            if(typeof val=='object'){
+              return _.omit(val,...restArr);
+            }else{
+              return val
+            }
           })
         }else{
           return v;
