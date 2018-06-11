@@ -1040,12 +1040,14 @@
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
-                    if(params.supplierName===v.code){
+                    if(params.supplierName===v.id){
                         params.supplierName=v.name;
                         params.supplierCode=v.code;
                         params.supplierId=v.id;
+                        params.supplierCompanyId=v.companyId;
                     }
                 });
+                console.log(this.supplierOption,'????')
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
@@ -1060,7 +1062,6 @@
                 }).finally(err=>{
                     this.disableClickSaveDraft=false;
                 });
-
             },
 
             getDetail(e){
