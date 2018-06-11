@@ -38,6 +38,7 @@ export default {
   GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_URL'],
   POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_URL'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_URL'],
+  GET_INQUIRY_SKU_HISTORY: ['/inquiry/detail/history', 'BASE_URL'],
   //供应端
   BUYER_POST_INQIIRY_LIST: ['/inquiry/list', 'USUPPLY_URL', 'USUPPLY_URL'], // inquiry list
   BUYER_POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'USUPPLY_URL', 'USUPPLY_URL'], // inquiry list sku

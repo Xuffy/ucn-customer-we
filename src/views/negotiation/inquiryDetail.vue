@@ -509,18 +509,14 @@ export default {
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         if (type === 'basicInfo') {
           _.map(this.newTabData, items => {
-            if (_.findWhere(items, {'key': 'id'}).value+'' === config.data+'') arr.push(items);
+            if (_.findWhere(items, {'key': 'id'}).value + '' === config.data + '') arr.push(items);
           });
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
         } else {
           _.map(this.newProductTabData, items => {
             if (_.findWhere(items, {'key': 'skuId'}).value + '' === config.data + '') arr.push(items);
           });
-          if (config.type === 'histoty') {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), false);
-          } else {
-            this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), true);
-          }
+          this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId')), config.type === 'modify');
         }
         this.fromArg = arr[0];
       });
