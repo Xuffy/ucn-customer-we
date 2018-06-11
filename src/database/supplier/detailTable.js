@@ -105,10 +105,6 @@ export default {
       belong: "concats"
     },
   //remark
-  date: {
-    key: 'entryDt',
-    belong: "remark"
-  },
   remark: {
     key: 'remark',
     belong: "remark"
@@ -116,6 +112,11 @@ export default {
   operater: {
     key: 'entryName',
     belong: "remark"
+  },
+  date: {
+    key: 'entryDt',
+    belong: "remark",
+    type: 'textDate'
   },
   version: {
     key: 'version',
