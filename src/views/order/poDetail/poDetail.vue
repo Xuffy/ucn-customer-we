@@ -294,18 +294,19 @@
         </div>
         <div class="payment-table">
             <el-button :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable" :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}</el-button>
-            <el-button :disabled="!allowHandlePay || loadingPaymentTable">{{$i.order.remindSupplierRefund}}</el-button>
+            <el-button :disabled="!allowHandlePay || loadingPaymentTable" @click="dunningPay">{{$i.order.remindSupplierRefund}}</el-button>
             <el-table
                     v-loading="loadingPaymentTable"
                     class="payTable"
                     :data="paymentData"
                     border
+                    :row-class-name="tableRowClassName"
                     style="width: 100%">
                 <el-table-column
                         prop="date"
                         label="#"
                         align="center"
-                        width="80">
+                        width="55">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
                     </template>
@@ -321,7 +322,7 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-input
-                                v-if="scope.row.isNew"
+                                v-if="scope.row.isNew || scope.row.isModify"
                                 :placeholder="$i.order.pleaseInput"
                                 v-model="scope.row.name"
                                 clearable>
@@ -335,7 +336,7 @@
                         width="200">
                     <template slot-scope="scope">
                         <el-date-picker
-                                v-if="scope.row.isNew"
+                                v-if="scope.row.isNew || scope.row.isModify"
                                 class="speDate"
                                 v-model="scope.row.planPayDt"
                                 type="date"
@@ -350,7 +351,7 @@
                         width="160">
                     <template slot-scope="scope">
                         <el-input-number
-                                v-if="scope.row.isNew"
+                                v-if="scope.row.isNew || scope.row.isModify"
                                 class="speNumber"
                                 v-model="scope.row.planPayAmount"
                                 :controls="false"
@@ -365,7 +366,7 @@
                     <template slot-scope="scope">
                         <el-date-picker
                                 class="speDate"
-                                v-if="scope.row.isNew"
+                                v-if="scope.row.isNew || scope.row.isModify"
                                 v-model="scope.row.actualPayDt"
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
@@ -379,7 +380,7 @@
                         width="160">
                     <template slot-scope="scope">
                         <el-input-number
-                                v-if="scope.row.isNew"
+                                v-if="scope.row.isNew || scope.row.isModify"
                                 class="speNumber"
                                 v-model="scope.row.actualPayAmount"
                                 :controls="false"
@@ -411,6 +412,13 @@
                 <el-table-column
                         :label="$i.order.available"
                         width="180">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.status===-1">{{$i.order.abandon}}</span>
+                        <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
+                        <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
+                        <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
+                        <span v-if="scope.row.status===40">已确认</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         fixed="right"
@@ -423,7 +431,17 @@
                             <el-button :disabled="!allowHandlePay" type="text" size="small">{{$i.order.cancel}}</el-button>
                         </div>
                         <div v-else>
-
+                            <div v-if="scope.row.status===-1">
+                                <el-button :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
+                            </div>
+                            <div v-else-if="scope.row.isModify">
+                                <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                                <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                            </div>
+                            <div v-else>
+                                <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.modify}}</el-button>
+                                <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.abandon}}</el-button>
+                            </div>
                         </div>
                     </template>
                 </el-table-column>
@@ -455,9 +473,6 @@
         </v-table>
 
         <div class="footBtn">
-            <!--<el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>-->
-            <!--<el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>-->
-            <!--<el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>-->
             <div v-if="isModify">
                 <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
                 <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
@@ -925,12 +940,15 @@
             </div>
 
         </v-history-modify>
+
+        <v-message-board module="order" code="detail" id="7325058450067968"></v-message-board>
+
     </div>
 </template>
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
 
     export default {
@@ -941,7 +959,8 @@
             selectSearch,
             VUpload,
             VProduct,
-            VHistoryModify
+            VHistoryModify,
+            VMessageBoard
         },
         data(){
             return{
@@ -1062,6 +1081,7 @@
                     //     isNew:true
                     // }
                 ],
+                copyList:[],
 
 
                 /**
@@ -1381,7 +1401,6 @@
                     orderNo:this.orderForm.orderNo,
                     orderType:10
                 }).then(res=>{
-                    console.log(res.datas)
                     this.paymentData=res.datas;
                 }).finally(err=>{
                     this.loadingPaymentTable=false;
@@ -1406,14 +1425,14 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                    console.log(res)
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
-                });
+                console.log(params.skuList,'xxxx')
+                // this.disableClickSend=true;
+                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                //     console.log(res)
+                //     this.$router.push('/order/overview');
+                // }).finally(err=>{
+                //     this.disableClickSend=false;
+                // });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1632,6 +1651,21 @@
                     this.disableClickApplyPay=false;
                 });
             },
+            dunningPay(){
+                // let params=[];
+                // _.map(this.selectPayList,v=>{
+                //     params.push({
+                //         id:v.id,
+                //         version:v.version
+                //     })
+                // })
+                // console.log(params)
+                // this.$ajax.post(this.$apis.dunningPay,params).then(res=>{
+                //
+                // }).finally(err=>{
+                //
+                // })
+            },
             saveNewPay(data){
                 let param={
                     actualPayAmount: data.actualPayAmount,
@@ -1657,18 +1691,130 @@
                 this.loadingPaymentTable=true;
                 this.$ajax.post(this.$apis.PAYMENT_SAVE,param).then(res=>{
                     this.$message({
-                        message: this.$i.warehouse.saveSuccess,
+                        message: this.$i.order.saveSuccess,
                         type: 'success'
                     });
-                    console.log(res)
-                    // this.$set(data,'isNew',false);
-                    // this.$set(data,'version',res.version);
-                    // this.$set(data,'id',res.id);
+                    this.$set(data,'isNew',false);
+                    this.$set(data,'version',res.version);
+                    this.$set(data,'id',res.id);
+                    this.disableApplyPay=false;
                 }).finally(err=>{
                     this.loadingPaymentTable=false;
                 });
             },
+            modifyPay(data){
+                this.$set(data,'isModify',true);
+                let has=false;
+                this.copyList.forEach(v=>{
+                    if(v.no===data.no){
+                        has=true;
+                    }
+                });
+                if(!has){
+                    this.copyList.push(Object.assign({},data));
+                }
+            },
+            saveModifyPay(data){
+                console.log(data,'???')
+                let param={
+                    actualPayAmount: data.actualPayAmount,
+                    actualPayDt: data.actualPayDt,
+                    id: data.id,
+                    name: data.name,
+                    planPayAmount: data.planPayAmount,
+                    planPayDt: data.planPayDt,
+                    version:data.version
+                };
+                this.loadingPaymentTable=true;
+                this.$ajax.post(this.$apis.PAYMENT_UPDATE,param).then(res=>{
+                    console.log(res)
+                    this.$message({
+                        message: this.$i.warehouse.changeSuccess,
+                        type: 'success'
+                    });
+                    this.copyList.forEach(v=>{
+                        if(v.no===data.no){
+                            let obj=Object.assign({},data);
+                            this.$set(v,'name',obj.name);
+                            this.$set(v,'planPayDt',obj.planPayDt);
+                            this.$set(v,'planPayAmount',obj.planPayAmount);
+                            this.$set(v,'actualPayDt',obj.actualPayDt);
+                            this.$set(v,'actualPayAmount',obj.actualPayAmount);
+                        }
+                    });
+                    this.$set(data,'isModify',false);
+                    this.$set(data,'version',res.version);
+                }).finally(err=>{
+                    this.loadingPaymentTable=false;
+                })
+            },
+            cancelModifyPay(data){
+                this.copyList.forEach(v=>{
+                    if(v.no===data.no){
+                        let obj=Object.assign({},v);
+                        this.$set(data,'name',obj.name);
+                        this.$set(data,'planPayDt',obj.planPayDt);
+                        this.$set(data,'planPayAmount',obj.planPayAmount);
+                        this.$set(data,'actualPayDt',obj.actualPayDt);
+                        this.$set(data,'actualPayAmount',obj.actualPayAmount);
+                    }
+                });
+                this.$set(data,'isModify',false);
+            },
+            abandonPay(data){
+                this.$confirm(this.$i.order.sureAbandon, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.PAYMENT_ABANDON,{
+                        id:data.id,
+                        version:data.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.order.handleSuccess
+                        });
+                        this.$set(data,'status',-1);
+                        this.$set(data,'version',res.version);
+                    }).finally(err=>{
+                        this.loadingPaymentTable=false;
+                    })
+                }).catch(() => {
 
+                });
+            },
+            restorePay(data){
+                this.$confirm(this.$i.order.sureRestore, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.PAYMENT_RESTORE,{
+                        id:data.id,
+                        version:data.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.order.handleSuccess
+                        });
+                        this.$set(data,'status',20);
+                        this.$set(data,'version',res.version);
+                    }).finally(err=>{
+                        this.loadingPaymentTable=false;
+                    });
+                }).catch(() => {
+
+                });
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (row.status === -1) {
+                    return 'warning-row';
+                }
+                return '';
+            },
 
             /**
              * 底部按钮事件
@@ -1685,7 +1831,10 @@
                     importantCustomer: e,
                     ids: [this.orderForm.id],
                 }).then(res=>{
-                    console.log(res)
+                    this.$message({
+                        message: this.$i.order.handleSuccess,
+                        type: 'success'
+                    });
                 }).finally(err=>{
 
                 });
@@ -1705,18 +1854,26 @@
                 });
             },
             cancelOrder(){
-                this.disableCancelOrder=true;
-                this.$ajax.post(this.$apis.ORDER_CANCEL,{
-                    ids:[this.orderForm.id]
-                }).then(res=>{
-                    this.$message({
-                        message: this.$i.order.handleSuccess,
-                        type: 'success'
-                    });
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableCancelOrder=false;
-                })
+                this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.disableCancelOrder=true;
+                    this.$ajax.post(this.$apis.ORDER_CANCEL,{
+                        ids:[this.orderForm.id]
+                    }).then(res=>{
+                        this.$message({
+                            message: this.$i.order.handleSuccess,
+                            type: 'success'
+                        });
+                        this.$router.push('/order/overview');
+                    }).finally(err=>{
+                        this.disableCancelOrder=false;
+                    })
+                }).catch(() => {
+
+                });
             },
 
             /**
@@ -2086,11 +2243,17 @@
     .payTable{
         margin-top: 10px;
     }
+    .payTable >>> .el-checkbox{
+        margin-right: 0;
+    }
     .speDate{
         width: 160px;
     }
     .speNumber >>> input{
         text-align: left;
+    }
+    .el-table >>> .warning-row {
+        background: #f5f7fa;
     }
 
     .footBtn{
