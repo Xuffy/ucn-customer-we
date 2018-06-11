@@ -1426,13 +1426,13 @@
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 console.log(params.skuList,'xxxx')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                //     console.log(res)
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                    console.log(res)
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);

@@ -131,7 +131,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.attachment">
-                            <v-upload :list="qcDetail.attachments" :limit="20" ref="upload"></v-upload>
+                            <v-upload readonly :list="qcDetail.attachments" :limit="20" ref="upload"></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -489,6 +489,7 @@
                 this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
+                        console.log(this.qcDetail,'?????')
                         this.loadingData=false;
                         this.getProductInfo();
                         this.getPaymentData();
