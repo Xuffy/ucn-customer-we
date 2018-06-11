@@ -555,15 +555,15 @@ export default {
     },
     sendData (keyString) {
       let url = this.configUrl[this.pageName][keyString];    
-      this.$refs['ruleForm'].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-      return
+      // this.$refs['ruleForm'].validate((valid) => {
+      //   if (valid) {
+      //     alert('submit!');
+      //   } else {
+      //     console.log('error submit!!');
+      //     return false;
+      //   }
+      // });
+      // return
       this.basicInfoArr.forEach(a => {
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
