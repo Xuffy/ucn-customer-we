@@ -127,8 +127,9 @@
             ]),
             //获取字典
             getCodePart(){
-              this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE"]).then(res=>{
-                this.options.type = _.findWhere(res, {'code': 'SR_TYPE'}).codes;
+              this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE","ITM"]).then(res=>{
+                this.options.type = _.findWhere(res, {'code': 'SR_TYPE'}).codes
+                this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               }).catch(err=>{
                 console.log(err)
               });
@@ -162,7 +163,7 @@
             //....跳入createOrder
             createOrder() {
                 this.$windowOpen({
-                    url: '/order/creat',
+                    url: '/order/create',
                     params: {
                         type: 'supplier',
                         supplierName: this.selectedData[0].name.value,
@@ -210,15 +211,38 @@
                 });
                 this.selectedNumber = number
             },
+            //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                this.countryOption = res
+                this.get_data();
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             get_data() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
                     .then(res => {
-                        //分页组件的参数
                         this.pageData=res;
-                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas);
                         this.loading = false
+                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas, e => {
+                          // let country='';
+                          // e.country.value.split(',').forEach(v=>{
+                          //   this.countryOption.forEach(m=>{
+                          //     if(m.code===v){
+                          //       country+=(m.name+',');
+                          //     }
+                          //   })
+                          // });
+                          // country = country.slice(0,country.length-1);
+                          // e.country.value=country;
 
+                          e.type.value=this.$change(this.options.type,'type',e,true).name;
+                          e.incoterm.value=this.$change(this.options.incoterm ,'incoterm',e,true).name;
+                          return e;
+
+                        });
                     })
                     .catch((res) => {
                         this.loading = true
@@ -241,17 +265,10 @@
                     console.log(err)
                 });
             },
-            handleSizeChange(val) {
-                this.params.pn = val;
-                this.get_data()
-            },
-            pageSizeChange(val) {
-                this.params.ps = val;
-                this.get_data()
-            },
         },
         created() {
-            this.get_data();
+            this.getCodePart();
+            this.getCountryAll();
             this.setRecycleBin({
                 name: 'bookmarkRecycleBin',
                 show: true

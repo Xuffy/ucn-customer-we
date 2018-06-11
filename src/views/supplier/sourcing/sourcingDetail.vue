@@ -21,19 +21,18 @@
 
                 </el-row>
                   </el-form>
-                <!--<div class="btns" v-if="noEdit">-->
-                    <!--<el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>-->
-                    <!--<el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>-->
+                <div class="btns" v-if="noEdit">
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <!--<el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>-->
-                    <!--<el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>-->
+                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
                     <!--<el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>-->
-                <!--</div>-->
-<!--
+                </div>
+
                 <div class="btns" v-else>
                     <el-button @click="finishEdit" type="primary">{{$i.common.finish}}</el-button>
                     <el-button @click="cancelEdit" type="info">{{$i.common.cancel}}</el-button>
                 </div>
--->
             </div>
         </div>
         <div class="body">
@@ -66,8 +65,9 @@
                  <v-table
                    :data="remarkData"
                    style='marginTop:10px'
-                   :buttons="[{label: 'modify', type: 2},{label: 'delete', type: 3}]"
+                   :buttons="[{label: 'Modify', type: 2},{label: 'Delete', type: 3}]"
                    @action="remarkAction"
+                   :selection="false"
                  />
                 </el-tab-pane>
             </el-tabs>
@@ -170,7 +170,7 @@
                 case 4:
                   this.getInquiryHistoryList();
                   break;
-                case 5:
+                case 6:
                   this.getListRemark();
                   break;
               }
@@ -336,7 +336,12 @@
               this.inquiryHistoryData.supplierCompanyId =  Number(this.$route.query.companyId);
               this.$ajax.post(this.$apis.post_purchase_supplier_getInquiryHistory, this.inquiryHistoryData)
                 .then(res => {
-                  this.inquireData = this.$getDB(this.$db.supplier.sourcingInquiry, res.datas);
+                  this.inquireData = this.$getDB(this.$db.supplier.sourcingInquiry, res.datas, item => {
+                    _.mapObject(item, val => {
+                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                      return val
+                    })
+                  });
                   this.loading = false
                 })
                 .catch((res) => {
@@ -352,7 +357,12 @@
             }
             this.$ajax.post(this.$apis.post_purchase_supplier_listRemarks,remark)
               .then(res => {
-                this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas);
+                this.remarkData = this.$getDB(this.$db.supplier.detailTable, res.datas, item => {
+                  _.mapObject(item, val => {
+                    val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                    return val
+                  })
+                });
               })
               .catch((res) => {
                 console.log(res)
