@@ -123,6 +123,8 @@
                  * 字典
                  * */
                 orderStatusOption: [],
+                incotermOption:[],
+                paymentOption:[],
             }
         },
         methods: {
@@ -149,8 +151,7 @@
                 this.selectedList = item;
             },
             changeStatus() {
-                console.log(this.params)
-                if (this.params.view === '1') {
+                if (this.view === '1') {
                     this.getData(this.$db.order.overviewByOrder);
                 } else {
                     this.getData(this.$db.order.overviewBysku);
@@ -197,7 +198,11 @@
                     recycleSupplier: false,
                 })
                     .then((res) => {
-                        console.log(res)
+                        this.$message({
+                            message: this.$i.order.shippedSuccess,
+                            type: 'success'
+                        });
+                        this.getData(this.$db.order.overviewByOrder);
                     })
                     .catch((res) => {
                         console.log(res)
@@ -237,9 +242,31 @@
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
-                        this.tabData = this.$getDB(query, res.datas);
-                        console.log(res.datas)
+                        this.tabData = this.$getDB(query, res.datas,e=>{
+                            if(e.entryDt){
+                                e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.deliveryDt){
+                                e.deliveryDt.value=this.$dateFormat(e.deliveryDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.customerAgreementDt){
+                                e.customerAgreementDt.value=this.$dateFormat(e.customerAgreementDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.updateDt){
+                                e.updateDt.value=this.$dateFormat(e.updateDt.value,'yyyy-mm-dd');
+                            }
+                            if(e.status){
+                                e.status.value=this.$change(this.orderStatusOption,'status',e).name;
+                            }
+                            if(e.incoterm){
+                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e).name;
+                            }
+                            if(e.payment){
+                                e.payment.value=this.$change(this.paymentOption,'payment',e).name;
+                            }
+                        });
                         this.pageData = res;
+                        this.disableFinish=true;
                     })
                     .catch((res) => {
                         this.loading = false
@@ -248,14 +275,17 @@
 
             //获取字典
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
-
-                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS'], {cache: true}).then(res => {
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
+                this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
                             this.orderStatusOption = v.codes;
+                        }else if(v.code === 'ITM'){
+                            this.incotermOption=v.codes;
+                        }else if(v.code === 'PMT'){
+                            this.paymentOption=v.codes;
                         }
                     });
                     this.getData(this.$db.order.overviewByOrder);
@@ -290,7 +320,7 @@
         },
         watch: {
             selectedList(n){
-                if(this.params.view==='1'){
+                if(this.view==='1'){
                     if(n.length>0){
                         console.log(n)
                         let allow=true;

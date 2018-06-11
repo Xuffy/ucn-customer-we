@@ -64,8 +64,7 @@
   </div>
 </template>
 <script>
-
-import { VSimpleTable, containerInfo, selectSearch, VTable} from '@/components/index';
+import { containerInfo, selectSearch, VTable } from '@/components/index';
 import attachment from '@/components/base/attachment'
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
@@ -123,7 +122,7 @@ export default {
       dictionaryPart: {
         avl: 'AVL',
         blType: 'BL_TYPE',
-        logisticsStatus: 'LS_STATUS',
+        logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
         payment: 'PMT'
       },
@@ -320,10 +319,11 @@ export default {
       })
       this.$ajax.get(this.$apis.get_container_type).then(res => {
         this.$set(this.selectArr, 'containerType', res)
-      }) 
+      })
       this.getDictionaryPart()
     },
     getDictionaryPart () {
+      this.$set(this.dictionaryPart,'logisticsStatus',this.$route.query.loadingList ? 'LS_STATUS' : 'LS_PLAN') 
       const params = _.map(this.dictionaryPart, v => v)
       this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
         _.mapObject(this.dictionaryPart, (v, k) => {
@@ -460,18 +460,18 @@ export default {
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
       index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
-    switchEdit (arg) {     
+    switchEdit (arg) {
       switch(arg){
         case 'edit':
             this.edit = !this.edit;
             this.pageName = 'planDetail';
-          break; 
+          break;
         case 'confirm':
             this.conformPlan();
-          break; 
+          break;
         case 'cancel':
             this.cancelPlan();
-          break; 
+          break;
         case 'copy':
             this.copyPlan();
           break; 
@@ -482,7 +482,7 @@ export default {
             this.cancelLoadingList();
           break; 
         default:
-          break; 
+          break;
       }
     },
     conformPlan(){
@@ -547,7 +547,7 @@ export default {
     },
     sendData (keyString) {
       let url = this.configUrl[this.pageName][keyString];
-      this.basicInfoArr.forEach(a => { 
+      this.basicInfoArr.forEach(a => {
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value)
       })
@@ -557,7 +557,7 @@ export default {
       })
 
       this.basicInfoObj.remark = this.remark
-      if (!this.basicInfoObj.payment) return this.$message({ 
+      if (!this.basicInfoObj.payment) return this.$message({
         type: 'error',
         message: '付款方式为必填!'
       })
@@ -615,7 +615,7 @@ export default {
     //arg 传入的对象 
     //restArr 要重置字段集合数组
     restIdNull(arg,restArr){
-      restArr = restArr || [];    
+      restArr = restArr || [];
       let args =  _.omit(arg,...restArr);
       return _.mapObject(args,(v,k)=>{
         if(Array.isArray(v)){

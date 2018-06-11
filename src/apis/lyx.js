@@ -12,7 +12,7 @@ export default {
   get_order_details: ['/logistics/order/get/', 'a_localtion','BASE_URL'],
   get_payment_list: ['/payment/list/','a_localtion', 'BASE_URL'],
   get_product_history: ['/logistics/plan/getProductHistory','a_localtion', 'BASE_URL'],
-  get_order_list_with_page: ['/order/skuPageNoPermission', 'BASE_URL'],
+  get_order_list_with_page: ['/order/skuAllPage', 'BASE_URL'],
   get_loading_list_plan: ['/logistics/order/pageByPlanNo','a_localtion', 'BASE_URL'],
   get_loading_list_unit: ['/logistics/order/pageByUnit','a_localtion', 'BASE_URL'],
   get_loading_list_sku: ['/logistics/order/pageBySkuCode','a_localtion', 'BASE_URL'],

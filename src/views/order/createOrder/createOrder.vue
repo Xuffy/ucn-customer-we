@@ -195,12 +195,12 @@
                     prop="type"
                     label="Type">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.type==='0'">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type==='1'">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type==='2'">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='3'">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type==='4'">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='5'">{{$i.order.otherResponsibility}}</span>
+                    <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
+                    <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
+                    <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
+                    <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
+                    <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -784,8 +784,6 @@
                 isNeedSampleOption:[],
                 countryOption:[],
 
-
-
                 /**
                  * 页面基础配置
                  * */
@@ -838,6 +836,7 @@
                 activeTab:'product',
                 selectProductInfoTable:[],
                 disabledProductLine:[],
+                queryNo:0,
 
                 /**
                  * 弹出框data配置
@@ -869,7 +868,6 @@
                 updateProduct:0,
                 updateBookmark:0,
                 productTableData:[],
-
 
                 /**
                  * 提交的数据
@@ -1028,6 +1026,7 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
+                console.log(params)
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1036,7 +1035,6 @@
                     this.disableClickSend=false;
                 });
             },
-
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
@@ -1056,23 +1054,79 @@
                 params.draftCustomer=true;
                 this.disableClickSaveDraft=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    this.$router.push('/order/overview');
+                    this.$router.push('/order/draft');
                 }).finally(err=>{
                     this.disableClickSaveDraft=false;
                 });
 
             },
 
-            //获取订单号(先手动生成一个)
-            getOrderNo(){
-                this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
-                    this.orderForm.orderNo=res;
-                    this.getSupplier();
-                }).catch(err=>{
+            getDetail(e){
+                this.loadingPage=true;
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:this.$route.query.orderId,
+                }).then(res=>{
+                    this.orderForm=res;
+                    _.map(this.supplierOption,v=>{
+                        if(v.code===res.supplierCode){
+                            this.orderForm.supplierName=v.id;
+                        }
+                    });
+                    this.changePayment(res.payment);
+                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        if(item._remark){
+                            item.label.value=this.$i.order.remarks;
+                            item.skuPic._image=false;
+                        }
+                    });
+                    this.productTableData=[];
+                    _.map(data,v=>{
+                        this.productTableData.push(v);
+                    });
 
+                    this.markImportant=this.orderForm.importantCustomer;
+                    //判断底部按钮能不能点
+                    if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
+                        this.disableModify=true;
+                    }else{
+                        this.disableModify=false;
+                    }
+                    if(res.status!=='2'){
+                        this.disableConfirm=true;
+                    }else{
+                        this.disableConfirm=false;
+                    }
+                    if(res.status==='5'){
+                        this.hasCancelOrder=true;
+                    }else{
+                        this.hasCancelOrder=false;
+                    }
+
+                }).finally(err=>{
+                    this.loadingPage=false;
+                    this.disableClickCancelModify=false;
+                    if(e){
+                        this.isModify=false;
+                    }
                 });
             },
 
+            //获取订单号(先手动生成一个)
+            getOrderNo(){
+                this.loadingPage=true;
+                //带了id表示是从draft页面过来的
+                if(this.$route.query.orderId){
+                    // this.orderForm.orderNo=this.$route.query.orderId;
+                    this.getSupplier();
+                }else{
+                    this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
+                        this.orderForm.orderNo=res;
+                        this.getSupplier();
+                    }).catch(err=>{
+                        this.loadingPage=false;
+                    });
+                }
+            },
             changePayment(e){
                 let name=_.findWhere(this.paymentOption,{code:e}).name;
                 if(name!=='L/C'){
@@ -1251,7 +1305,7 @@
                 this.getInquiryData();
             },
             changeChecked(){
-
+                console.log(1)
             },
             btnClick(e){
                 this.quickCreateDialogVisible=false;
@@ -1530,6 +1584,7 @@
                         obj.skuComments=v.skuComments;
                         obj.skuBarCode=v.skuBarcode;
                         obj.skuSaleStatus=v.skuStatus;
+                        obj.skuStatus=1;
                         obj.skuQuotationNo=v.quotationNo;
                         obj.skuSysCode=v.skuSysCode;
                         arr.push(obj);
@@ -1547,26 +1602,28 @@
                     this.loadingProductTable=false;
                 });
             },
-
             getUnit(){
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                         this.currencyOption=res;
+                        this.queryNo++;
                     })
                     .finally(err=> {
-                        this.loadingPage=false;
+
                     }
                 );
 
                 //获取国家
                 this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
                     this.countryOption=res;
+                    this.queryNo++;
                 }).finally(err=>{
 
                 });
 
                 //获取汇率
                 this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
+                    this.queryNo++;
                     _.map(this.orderForm.exchangeRateList,v=>{
                         _.map(res,m=>{
                             if(v.currency===m.symbol){
@@ -1575,10 +1632,11 @@
                         })
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                    this.queryNo++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
@@ -1601,7 +1659,7 @@
                         }
                     })
                 }).finally(err=>{
-                    this.loadingPage=false;
+
                 });
                 let ids=this.$route.query.ids;
                 ids=ids.slice(0,ids.length-1);
@@ -1643,6 +1701,13 @@
         },
         created(){
             this.getOrderNo();
+        },
+        watch:{
+            queryNo(n){
+                if(n===4 && this.$route.query.orderId){
+                    this.getDetail();
+                }
+            },
         },
     }
 </script>
