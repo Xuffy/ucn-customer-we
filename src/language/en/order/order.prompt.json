@@ -7,5 +7,9 @@
   "sureDelete":"Sure Delete?",
   "handleSuccess":"Handle Success!",
   "shippedSuccess":"Shipped Success!",
-  "saveSuccess":"Save Success!"
+  "saveSuccess":"Save Success!",
+  "sureAbandon":"Sure Abandon?",
+  "sureRestore":"Sure Restore?",
+  "changeSuccess":"Change Success!",
+  "sureCancel":"Sure Cancel?"
 }
