@@ -11,12 +11,12 @@
                     </el-col> -->
                     <el-col :span="7">
                         <el-form-item :label="$i.logs.description">
-                            <el-input type="text" v-model="search.description" @change="getbizlogs" style="max-width:200px"></el-input>
+                            <el-input type="text" v-model="params.operationContent" @change="getbizlogs" clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
                         <el-form-item :label="$i.logs.operater">
-                            <el-input type="text" v-model="search.operater"  @change="getbizlogs" style="max-width:200px"></el-input>
+                            <el-input type="text" v-model="params.operatorName"  @change="getbizlogs"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -50,7 +50,7 @@
         </div>
 
         <div class="body">
-            v-table :data="logslist" :loading="tabLoad"></v-table>
+            <v-table :data="logslist" :loading="tabLoad" :height="500"></v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
@@ -101,11 +101,6 @@
                 date: '',
                 currentPage:1,
                 logsNumber:'All',           //日志数目
-                search:{
-                    description:'',
-                    operater:'',
-
-                },
                 logslist:[],
                 pageData:{},
                 tabLoad: false,
@@ -125,15 +120,23 @@
             }
         },
         watch: {
-            date(){
-                    this.getbizlogs()
-              }
+          date(){
+               if (this.date != null){
+                 this.params.operationDtStart = this.date[0];
+                 this.params.operationDtEnd = this.date[1];
+                 this.getbizlogs()
+               }else{
+                 this.params.operationDtStart = '';
+                 this.params.operationDtEnd = '';
+                 this.getbizlogs()
+               }
+            },
         },
         methods:{
             formatter(row, column) {
                 return row.remark;
             },
-            //分页caoz
+            //分页
             handleSizeChange(val) {
               this.params.pn = val;
               this.getbizlogs();
@@ -143,12 +146,18 @@
               this.getbizlogs();
             },
             getbizlogs(){
-                // this.moduleCode = this.$route.query
+                this.params.moduleCode = this.$route.query.moduleCode  // BIZ_PURCHASE_SUPPLIER/PRUCHASE_SUPPLIER
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,this.params)
                 .then(res => {
                      this.tabLoad = false;
-                     this.logslist = this.$getDB(this.$db.logs.table, res.datas);
+                     this.pageData = res
+                     this.logslist = this.$getDB(this.$db.logs.table, res.datas,  item => {
+                       _.mapObject(item, val => {
+                         val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                         return val
+                       })
+                     });
                 })
                 .catch((res) => {
                   this.tabLoad = false

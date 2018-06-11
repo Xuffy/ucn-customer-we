@@ -18,9 +18,10 @@ export default {
       USUPPLY_URL: '//192.168.51.148:11002', // 供应商端 dev
       USERVICE_URL: '//192.168.51.148:11003', // 服务商端
       UOSS_URL: '//192.168.51.148:', // 对象存储服务
-      UBIZLOG_URL: '//192.168.51.148:18100', // 业务日志
+      UBIZLOG_URL: '//192.168.51.148:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.148:11010',
       UIE_URL: '//192.168.51.148:13003',
+      BACE_CS:'//192.168.51.33:11001',
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
@@ -38,7 +39,7 @@ export default {
       USUPPLY_URL: '//192.168.51.208:11002', // 供应商端
       USERVICE_URL: '//192.168.51.208:11003', // 服务商端
       UOSS_URL: '//192.168.51.208:', // 对象存储服务
-      UBIZLOG_URL: '//192.168.51.208:18100', // 业务日志
+      UBIZLOG_URL: '//192.168.51.208:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
 

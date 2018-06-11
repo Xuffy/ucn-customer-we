@@ -6,7 +6,7 @@
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
                 <div style="overflow: hidden">
-                  <v-upload ref="uploadFile" onlyImage style="float: left" />
+                  <v-upload ref="uploadFile" onlyImage style="float: left"  :list="companyInfo.logo" />
                   <!--<img :src="companyInfo.logo" class="logo"/>-->
                 </div>
                 <div class="section-btn" style="padding-top:10px">
@@ -114,7 +114,7 @@
                   <div class="section-btn">
                     <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" />
+                  <v-upload ref="uploadAttachment" :limit="20" :list="companyInfo.attachments"/>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.custom">
@@ -464,6 +464,7 @@
                   type: 0,
                   shipAgent:'',
                   version: "",
+                  attachments:[]
                 },
                 cloneData:{},                   //用于克隆存储的对象
                 //验证规则

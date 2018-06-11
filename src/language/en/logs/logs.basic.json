@@ -2,6 +2,7 @@
     "logs": "Log",
     "description": "Description",
     "operater": "Operator",
-    "operationDate": "Operation Date"
+    "operationDate": "Operation Date",
+    "operationType": "Operation Type"
 
 }
