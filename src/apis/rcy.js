@@ -60,6 +60,13 @@ export default {
     //payment
     PAYMENT_SAVE:['/payment/save','BASE_URL'],
     PAYMENT_LIST:['/payment/list/{orderNo}/{orderType}','BASE_URL'],
+    PAYMENT_ABANDON:['/payment/abandon/{id}?version={version}','BASE_URL'],
+    PAYMENT_RESTORE:['/payment/recover/{id}?version={version}','BASE_URL'],
+    PAYMENT_UPDATE:['/payment/update','BASE_URL'],
+    PAYMENT_DUNNING:['/payment/batchDunning','BASE_URL'],
+
+
+
 
     //字典表数据
     post_codePart: ['/code/part', 'UMETA_URL'],

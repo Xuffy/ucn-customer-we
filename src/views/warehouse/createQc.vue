@@ -466,8 +466,6 @@
                 qcStatusCode:'WAITING_QC',
                 qcStatusOption:[],
                 selectProductTableData:[],      //页面上选中的table data
-
-
                 productTableData:[],
                 productConfig:{
                     ids: [],
@@ -480,7 +478,6 @@
                     //     }
                     // ],
                 },
-
                 qcOrderConfig:{
                     attachments:[],
                     exchangeCurrencyDictCode:'CNY',
@@ -571,7 +568,6 @@
                     }
                 });
                 this.qcOrderConfig.attachments=this.$refs.upload.getFiles();
-
                 this.disableClickSubmit=true;
 
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{

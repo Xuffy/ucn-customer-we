@@ -20,7 +20,7 @@
   "remove":"Remove",
   "remarks":"Remark",
   "prompt":"Prompt",
-  "sure":"Sure",
+  "sure":"Confirm",
   "cancel":"Cancel",
   "draftOverview":"Draft Overview",
   "modify":"Modify",
@@ -46,5 +46,12 @@
   "payCurrency":"币种",
   "available":"有效性",
   "action":"操作",
-  "save":"保存"
+  "save":"保存",
+  "abandon":"作废",
+  "waitCustomerConfirm":"待采购商确认",
+  "waitSupplierConfirm":"待供应商确认",
+  "waitServiceConfirm":"待服务商确认",
+  "restore":"恢复",
+  "remindCustomerPay":"提醒采购商付款",
+  "applyRefund":"申请退款"
 }
