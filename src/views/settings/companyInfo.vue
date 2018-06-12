@@ -613,10 +613,7 @@
             postUpdateIsSetting(){
               //6781508832985088
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
-               console.log(res)
-                if(!res){
-                    this.isModify = false;
-                }
+                    this.isModify = res;
               }).catch(err=>{
                 console.log(err)
               });
