@@ -18,7 +18,7 @@
       </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list ref="ruleForm" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
+    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
@@ -554,19 +554,10 @@ export default {
       })
     },
     sendData (keyString) {
-      let url = this.configUrl[this.pageName][keyString];    
-      // this.$refs['ruleForm'].validate((valid) => {
-      //   if (valid) {
-      //     alert('submit!');
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
-      // return
+      let url = this.configUrl[this.pageName][keyString];
       this.basicInfoArr.forEach(a => {
-        // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
-        this.$set(this.basicInfoObj, a.key, a.value)
+        // this.$set(this.basicInfoObj, a.key, a.type=='date' ? ao.value : a.value)
+        this.$set(this.basicInfoObj, a.key, a.value);
       })
 
       this.transportInfoArr.forEach(a => {
