@@ -557,6 +557,8 @@
                 isModifyAddress:false,
                 isModifyAccount:false,
                 isModifyContact:false,
+              //判断是否修改过
+                isModify:true,
                 options:{},
                 department:[],
                 currencyList:[]
@@ -604,8 +606,20 @@
                     if(res.documents[0]){
                       this.documentData = res.documents[0];
                     }
-
+                    this.postUpdateIsSetting();
                 })
+            },
+          //
+            postUpdateIsSetting(){
+              //6781508832985088
+              this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
+               console.log(res)
+                if(!res){
+                    this.isModify = false;
+                }
+              }).catch(err=>{
+                console.log(err)
+              });
             },
           //获取币种
           getCurrency(){
