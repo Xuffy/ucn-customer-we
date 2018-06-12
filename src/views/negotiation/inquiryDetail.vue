@@ -469,12 +469,10 @@ export default {
             return;
           }
           if (o.value !== o.defaultData) {
-            o._style = 'background-color: yellow';
+            o._color = 'blue';
             if (changedFields) {
               changedFields[field] = '1';
             }
-          } else {
-            o._style = '';
           }
         });
         if (item.id && item.id.value) {

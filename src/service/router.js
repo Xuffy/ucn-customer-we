@@ -32,9 +32,9 @@ export const routerMap = [
           path: 'index',
           name: 'workbench',
           meta: {
-            // draft: false,
-            // recycleBin: false,
-            // log: false,
+            draft: false,
+            recycleBin: false,
+            log: false,
           },
           component: () => import('../views/workbench/index.vue')
         }
