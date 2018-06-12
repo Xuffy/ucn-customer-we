@@ -267,7 +267,6 @@
                     </div>
                 </template>
             </v-table>
-
         </div>
 
         <div class="summary">
@@ -393,18 +392,21 @@
         <div class="footBtn">
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
+
+        <v-message-board module="warehouse" code="qc" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>
 
-    import {VTable,VUpload} from '@/components/index';
+    import {VTable,VUpload,VMessageBoard} from '@/components/index';
     import { mapActions } from 'vuex'
 
     export default {
         name:'qc-detail',
         components:{
             VTable,
-            VUpload
+            VUpload,
+            VMessageBoard
         },
         data(){
             return{
@@ -768,14 +770,14 @@
             },
 
             confirm(){
-                this.$confirm('Sure Confirm?', 'Info', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
                     type: 'warning'
                 }).then(() => {
                     let allow=true;
-                    this.selectList.forEach(v=>{
-                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                    _.map(this.selectList,v=>{
+                        if(v.purchaserHandle.value){
                             allow=false;
                         }
                     });
@@ -806,18 +808,38 @@
             },
 
             restartQc(){
+                this.$confirm(this.$i.warehouse.sureRestartQc, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
+                    type: 'warning'
+                }).then(()=>{
+                    let orderNo=this.selectList[0].orderNo.value;
+                    let ids='';
+                    this.selectList.forEach(v=>{
+                        ids+=(v.inboundSkuId.value+',');
+                    });
+                    ids=ids.slice(0,ids.length-1);
+                    this.$windowOpen({
+                        url:'/warehouse/createQc',
+                        params:{
+                            ids:ids,
+                            orderNo:orderNo
+                        },
+                    });
+                }).catch(()=>{
 
+                })
             },
 
             rework(){
-                this.$confirm(this.$i.warehouse.sureRework, '提示', {
+                this.$confirm(this.$i.warehouse.sureRework, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
                     cancelButtonText: this.$i.warehouse.cancel,
                     type: 'warning'
                 }).then(() => {
                     let allow=true;
-                    this.selectList.forEach(v=>{
-                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                    _.map(this.selectList,v=>{
+                        if(v.purchaserHandle.value){
                             allow=false;
                         }
                     });
@@ -848,14 +870,14 @@
             },
 
             returnProduct(){
-                this.$confirm(this.$i.warehouse.sureReturn, '提示', {
+                this.$confirm(this.$i.warehouse.sureReturn, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
                     cancelButtonText: this.$i.warehouse.cancel,
                     type: 'warning'
                 }).then(() => {
                     let allow=true;
-                    this.selectList.forEach(v=>{
-                        if(v.skuInventoryStatusDictCode.value==='CONFIRMED' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_REWORK' || v.skuInventoryStatusDictCode.value==='APPLY_FOR_RETURN'){
+                    _.map(this.selectList,v=>{
+                        if(v.purchaserHandle.value){
                             allow=false;
                         }
                     });
