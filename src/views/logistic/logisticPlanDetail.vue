@@ -63,7 +63,7 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <messageBoard module="logistic" code="planDetail" :id="planId"></messageBoard>
+    <messageBoard v-if="!isCopy&&planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
@@ -196,7 +196,7 @@ export default {
     } 
   },
   mounted () {
-    this.setLog({name:'planDetail'});
+    this.setLog({query:{code:'planDetail'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -234,18 +234,24 @@ export default {
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
         this.matchRate(res);
+      }).catch(err=>{
+        this.matchRate(null);
       })
     },
     //汇率与后台传入做 对应匹配
     matchRate(res){
       this.ExchangeRateInfoArr.forEach((item)=>{
-        res.forEach((_item)=>{
-          if(item.key == _item.symbol){
-            _.map(_item,(v,k)=>{
-              this.$set(item,k=='price' ? 'value' : k,v)
-            })
-          }
-        })
+        if(!res){
+          this.$set(item,'value','')
+        }else{
+          res.forEach((_item)=>{
+            if(item.key == _item.symbol){
+              _.map(_item,(v,k)=>{
+                this.$set(item,k=='price' ? 'value' : k,v)
+              })
+            }
+          })
+        }
       })
     },
     registerRoutes () {
