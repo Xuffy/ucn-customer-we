@@ -82,7 +82,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin'
+                'setRecycleBin','setLog'
             ]),
             selectChange() {
 
@@ -201,10 +201,13 @@
         },
         created(){
             this.getList();
-            this.setRecycleBin({
-                name: 'compareRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'compareRecycleBin',
+            //     show: true
+            // });
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
         watch:{
             selectList(n){

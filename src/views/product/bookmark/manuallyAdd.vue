@@ -787,6 +787,7 @@
 <script>
     import imgHandler from './imgHandler'
     import {dropDownSingle,VUpload} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "manually-add",
@@ -964,6 +965,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
@@ -1118,6 +1120,9 @@
                 this.getCategoryId();
                 this.getUnitCode();
             }
+        },
+        mounted(){
+
         },
     }
 </script>

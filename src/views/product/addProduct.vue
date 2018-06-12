@@ -123,6 +123,7 @@
     import VTable from '@/components/common/table/index'
     import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "overview",
@@ -284,6 +285,9 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
+
+
             tableFilterValue(val){
               let {operatorFilters,sorts}=val;
                 this.productForm.operatorFilters=operatorFilters||[];
@@ -694,6 +698,9 @@
             }).catch(err=>{
 
             })
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
 
         watch:{

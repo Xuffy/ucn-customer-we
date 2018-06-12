@@ -398,6 +398,7 @@
 <script>
 
     import {VTable,VUpload} from '@/components/index';
+    import { mapActions } from 'vuex'
 
     export default {
         name:'qc-detail',
@@ -485,11 +486,11 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getQcOrderDetail(){
                 this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
-                        console.log(this.qcDetail,'?????')
                         this.loadingData=false;
                         this.getProductInfo();
                         this.getPaymentData();
@@ -502,6 +503,7 @@
             getProductInfo(){
                 this.loadingProductInfoTable=true;
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
+                    console.log(res,'data')
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
@@ -913,6 +915,9 @@
                 .catch(err=>{
                     this.loadingData=false;
                 });
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_QC_ORDER'}});
         },
         watch:{
             selectList(n){

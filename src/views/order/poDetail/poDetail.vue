@@ -288,7 +288,6 @@
             </el-table-column>
         </el-table>
 
-
         <div class="title">
             {{$i.order.payment}}
         </div>
@@ -428,7 +427,7 @@
                     <template slot-scope="scope">
                         <div v-if="scope.row.isNew">
                             <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
-                            <el-button :disabled="!allowHandlePay" type="text" size="small">{{$i.order.cancel}}</el-button>
+                            <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
                         </div>
                         <div v-else>
                             <div v-if="scope.row.status===-1">
@@ -940,7 +939,7 @@
 
         </v-history-modify>
 
-        <v-message-board module="order" code="detail" id="7325058450067968"></v-message-board>
+        <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
 
     </div>
 </template>
@@ -949,6 +948,7 @@
 
     import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,VMessageBoard} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
 
     export default {
         name: "createOrder",
@@ -1253,6 +1253,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog','setDraft']),
             /**
              * 获取页面数据
              * */
@@ -1320,7 +1321,11 @@
                 }).finally(err=>{
 
                 });
+
                 let ids=this.$route.query.ids;
+                if(!ids){
+                    return;
+                }
                 ids=ids.slice(0,ids.length-1);
                 this.loadingProductTable=true;
                 this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
@@ -1338,6 +1343,7 @@
                 });
             },
             getDetail(e){
+                this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
                 }).then(res=>{
@@ -1701,6 +1707,9 @@
                     this.loadingPaymentTable=false;
                 });
             },
+            cancelNewPay(data){
+                console.log(data)
+            },
             modifyPay(data){
                 this.$set(data,'isModify',true);
                 let has=false;
@@ -1823,6 +1832,7 @@
             },
             cancelModify(){
                 this.disableClickCancelModify=true;
+                this.disableApplyPay=false;
                 this.getDetail(true);
             },
             changeMarkImportant(e){
@@ -2201,6 +2211,13 @@
         },
         created(){
             this.getOrderNo();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_ORDER'}});
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         watch:{
             allowQuery(n){
