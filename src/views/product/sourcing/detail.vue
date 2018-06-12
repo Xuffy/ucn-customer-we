@@ -573,6 +573,7 @@
                     params:{
                         type:'product',
                         ids:this.$route.query.id+',',
+                        supplierCode:this.productForm.supplierCode
                     },
                 })
             },
