@@ -390,17 +390,7 @@ export const routerMap = [
           },
           component: () => import('../views/order/poDetail/poDetail.vue')
         },
-          {
-          path: 'details',
-          name: 'Order Details',
-          meta: {
-            draft: true,
-            recycleBin: true,
-            log: true,
-            name: $i.router.orderDetail
-          },
-          component: () => import('../views/order/poDetail/index.vue')
-        },
+
           {
           path: 'draft',
           name: 'orderDraft',

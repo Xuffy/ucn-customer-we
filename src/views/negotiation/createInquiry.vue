@@ -271,7 +271,7 @@ export default {
             return;
           }
           if (typeof o.defaultData !== 'undefined' && o.value !== o.defaultData) {
-            o._style = 'background-color: yellow';
+            o._color = 'blue';
           }
         });
         return item;

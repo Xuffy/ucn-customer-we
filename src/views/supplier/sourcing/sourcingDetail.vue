@@ -177,22 +177,20 @@
               }
             },
             createInquiry() {
-                this.$windowOpen({
-                    url: '/negotiation/createInquiry',
-                    params: {
-                        supplierName: this.basicDate.name,
-                        supplierNo: this.basicDate.code
-                    }
-                });
+              console.log(this.basicDate)
+                // this.$windowOpen({
+                //     url: '/negotiation/createInquiry',
+                //     params: {
+                //         supplierName: this.basicDate.name,
+                //         supplierNo: this.basicDate.code
+                //     }
+                // });
             },
             createOrder() {
                 this.$windowOpen({
-                    url: '/order/creat',
+                    url: '/order/create',
                     params: {
-                        type: 'supplier',
-                        // supplierName: this.basicDate.name,
-                        // supplierNo: this.basicDate.code,
-                        supplierId:this.basicDate.id
+                      supplierCode: this.code
                     }
                 });
             },

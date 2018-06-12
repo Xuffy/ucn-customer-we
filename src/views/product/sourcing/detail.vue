@@ -43,7 +43,7 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="notLoadingDone">
-                    <el-button>{{$i.product.createInquiry}}</el-button>
+                    <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                     <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="addToBookmark" :loading="disableClickAddBookmark">{{$i.product.addToBookmark}}</el-button>
@@ -567,12 +567,22 @@
                 });
             },
 
+            createInquiry(){
+                this.$windowOpen({
+                    url:'/negotiation/createInquiry',
+                    params:{
+                        skus:this.$route.query.id
+                    },
+                })
+            },
+
             createOrder(){
                 this.$windowOpen({
                     url:'/order/create',
                     params:{
                         type:'product',
                         ids:this.$route.query.id+',',
+                        supplierCode:this.productForm.supplierCode
                     },
                 })
             },

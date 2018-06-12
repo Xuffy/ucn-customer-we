@@ -534,9 +534,35 @@
             },
 
             createInquiry(){
-                console.log(1234)
+                if(this.selectList.length===0){
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                    })
+                }else{
+                    let skus='';
+                    _.map(this.selectList,v=>{
+                        skus+=(v.id.value+',');
+                    });
+                    skus=skus.slice(0,skus.length-1);
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                        params:{
+                            skus:skus
+                        }
+                    })
+                }
             },
             createOrder(){
+                let supplierList=[];
+                _.map(this.selectList,v=>{
+                    supplierList.push(v.supplierCode.value);
+                });
+                if(_.uniq(supplierList).length>1){
+                    return this.$message({
+                        message: this.$i.product.notAddDifferentSupplierProduct,
+                        type: 'warning'
+                    });
+                }
                 if(this.selectList.length===0){
                     this.$windowOpen({
                         url:'/order/create',
