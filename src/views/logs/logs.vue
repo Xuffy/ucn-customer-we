@@ -146,7 +146,7 @@
               this.getbizlogs();
             },
             getbizlogs(){
-                this.params.moduleCode = this.$route.query.moduleCode  // BIZ_PURCHASE_SUPPLIER/PRUCHASE_SUPPLIER
+                this.params.moduleCode = this.$route.query.code;  // BIZ_PURCHASE_SUPPLIER/PRUCHASE_SUPPLIER
                 this.tabLoad = true;
                 this.$ajax.post(this.$apis.post_bizloQuery,this.params)
                 .then(res => {
