@@ -450,11 +450,37 @@
             },
 
             createInquiry(){
-
+                if(this.selectList.length===0){
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                    })
+                }else{
+                    let skus='';
+                    _.map(this.selectList,v=>{
+                        skus+=(v.id.value+',');
+                    });
+                    skus=skus.slice(0,skus.length-1);
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                        params:{
+                            skus:skus
+                        }
+                    })
+                }
             },
 
             //勾选的商品创建order
             createOrder(){
+                let supplierList=[];
+                _.map(this.selectList,v=>{
+                    supplierList.push(v.supplierCode.value);
+                });
+                if(_.uniq(supplierList).length>1){
+                    return this.$message({
+                        message: this.$i.product.notAddDifferentSupplierProduct,
+                        type: 'warning'
+                    });
+                }
                 this.disabledOrderList=[];
                 this.selectList.forEach(v=>{
                     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
@@ -479,6 +505,7 @@
                             params:{
                                 type:'product',
                                 ids:ids,
+                                supplierCode:this.selectList[0].supplierCode.value
                             },
                         })
                     }

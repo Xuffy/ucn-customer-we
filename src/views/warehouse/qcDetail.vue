@@ -261,7 +261,7 @@
                 <template slot="header">
                     <div class="btn-group">
                         <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
-                        <el-button :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button @click="restartQc" :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
                         <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
                         <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
@@ -754,7 +754,12 @@
              * product info表格事件
              * */
             btnClick(e){
-                console.log(e)
+                this.$windowOpen({
+                    url:'/product/sourcingDetail',
+                    params:{
+                        id:e.skuId.value
+                    },
+                })
             },
             changeChecked(e){
                 this.selectList=e;
@@ -795,6 +800,10 @@
                 }).catch(() => {
 
                 });
+
+            },
+
+            restartQc(){
 
             },
 

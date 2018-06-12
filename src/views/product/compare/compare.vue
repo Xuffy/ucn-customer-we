@@ -15,13 +15,13 @@
         </div>
         <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
-                <el-button>{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                 <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify">{{$i.product.createInquiry}}</el-button>
+                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
@@ -316,8 +316,39 @@
                 });
             },
 
+            createInquiry(){
+                if(this.selectList.length===0){
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                    })
+                }else{
+                    let skus='';
+                    _.map(this.selectList,v=>{
+                        skus+=(v.id.value+',');
+                    });
+                    skus=skus.slice(0,skus.length-1);
+                    this.$windowOpen({
+                        url:'/negotiation/createInquiry',
+                        params:{
+                            skus:skus
+                        }
+                    })
+                }
+            },
+
             //勾选的商品创建order
             createOrder(){
+                let supplierList=[];
+                _.map(this.selectList,v=>{
+                    supplierList.push(v.supplierCode.value);
+                });
+                if(_.uniq(supplierList).length>1){
+                    return this.$message({
+                        message: this.$i.product.notAddDifferentSupplierProduct,
+                        type: 'warning'
+                    });
+                }
+
                 this.disabledOrderList=[];
                 this.selectList.forEach(v=>{
                     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
@@ -330,7 +361,7 @@
                 }else{
                     if(this.selectList.length===0){
                         this.$windowOpen({
-                            url:'/order/creat',
+                            url:'/order/create',
                         })
                     }else{
                         let ids='';
@@ -338,10 +369,11 @@
                             ids+=(v.id.value+',');
                         });
                         this.$windowOpen({
-                            url:'/order/creat',
+                            url:'/order/create',
                             params:{
                                 type:'product',
                                 ids:ids,
+                                supplierCode:this.selectList[0].supplierCode.value
                             },
                         })
                     }

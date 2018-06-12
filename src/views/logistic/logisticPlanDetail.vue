@@ -18,7 +18,7 @@
       </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list ref="ruleForm" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
+    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
     <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
@@ -63,12 +63,15 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
+    <messageBoard module="logistic" code="planDetail" :id="planId"></messageBoard>
     <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
 import { containerInfo, selectSearch, VTable } from '@/components/index';
+import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
+import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
 import oneLine from '@/views/logistic/children/oneLine'
 import feeInfo from '@/views/logistic/children/feeInfo'
@@ -157,6 +160,7 @@ export default {
     btns,
     productModify,
     addProduct,
+    messageBoard
   },
   computed: {
     attachmentReadonly(){
@@ -192,6 +196,7 @@ export default {
     } 
   },
   mounted () {
+    this.setLog({name:'planDetail'});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -224,6 +229,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -554,19 +560,10 @@ export default {
       })
     },
     sendData (keyString) {
-      let url = this.configUrl[this.pageName][keyString];    
-      // this.$refs['ruleForm'].validate((valid) => {
-      //   if (valid) {
-      //     alert('submit!');
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
-      // return
+      let url = this.configUrl[this.pageName][keyString];
       this.basicInfoArr.forEach(a => {
-        // this.$set(this.basicInfoObj, a.key, a.type=='date' ? a.value : a.value)
-        this.$set(this.basicInfoObj, a.key, a.value)
+        // this.$set(this.basicInfoObj, a.key, a.type=='date' ? ao.value : a.value)
+        this.$set(this.basicInfoObj, a.key, a.value);
       })
 
       this.transportInfoArr.forEach(a => {
