@@ -471,6 +471,7 @@
                     ids: [],
                     pn: 1,
                     ps: 50,
+                    orderNo:'',
                     // sorts: [
                     //     {
                     //         orderBy: "",
@@ -684,6 +685,7 @@
                 });
                 this.productDialogVisible=false;
                 if(this.productConfig.ids.length!==0){
+                    this.productConfig.orderNo=this.productDialogTableData[0].orderNo.value;
                     this.loadingProductTable=true;
                     this.$ajax.post(this.$apis.get_qcProductData,this.productConfig).then(res=>{
                         this.loadingProductTable=false;
