@@ -178,13 +178,12 @@
             },
             createInquiry() {
               console.log(this.basicDate)
-                // this.$windowOpen({
-                //     url: '/negotiation/createInquiry',
-                //     params: {
-                //         supplierName: this.basicDate.name,
-                //         supplierNo: this.basicDate.code
-                //     }
-                // });
+                this.$windowOpen({
+                    url: '/negotiation/createInquiry',
+                    params: {
+                      supplierCompanies: this.basicDate.companyId
+                    }
+                });
             },
             createOrder() {
                 this.$windowOpen({

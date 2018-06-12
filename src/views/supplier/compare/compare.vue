@@ -16,7 +16,7 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'" @click="createOrder">{{$i.product.createOrder}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
@@ -238,9 +238,28 @@
             cancelModify(){
                 this.isModify=false;
             },
-
+            createInquiry() {
+              let companyId = '';
+              this.selectList.forEach((v,k)=>{
+                let item = _.findWhere(v, {
+                  key: 'companyId'
+                });
+                if (k === this.selectList.length - 1) {
+                  companyId += item.value;
+                } else {
+                  companyId += (item.value + ',');
+                }
+              })
+              this.$windowOpen({
+                url: '/negotiation/createInquiry',
+                params: {
+                  supplierCompanies: companyId
+                }
+              })
+            },
             //勾选的商品创建order
             createOrder(){
+              console.log(this.selectList)
                 let arr=[];
                 this.selectList.forEach(v=>{
                     if(v.customerCreate.value){
@@ -248,7 +267,6 @@
                     }
                 });
                 if(arr.length>0){
-                    console.log(arr)
                     this.dialogFormVisible=true;
                 }else{
                     this.dialogFormVisible=true;

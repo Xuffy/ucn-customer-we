@@ -558,7 +558,7 @@
                 isModifyAccount:false,
                 isModifyContact:false,
               //判断是否修改过
-                isModify:true,
+                isModify:false,
                 options:{},
                 department:[],
                 currencyList:[]
@@ -606,13 +606,11 @@
                     if(res.documents[0]){
                       this.documentData = res.documents[0];
                     }
-                    this.postUpdateIsSetting();
                 })
             },
-          //
             postUpdateIsSetting(){
-              //6781508832985088
               this.$ajax.post(this.$apis.post_purchase_customer_updateIsSetting,{id:this.companyInfo.id}).then(res=>{
+                console.log(res)
                     this.isModify = res;
               }).catch(err=>{
                 console.log(err)
@@ -693,6 +691,9 @@
                     this.getWholeData();
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
+                    if (!this.companyInfo.setting){
+                      this.postUpdateIsSetting();
+                    }
                 }).catch(err=>{
                     this.getWholeData();
                     this.allowModifySummary=false;
@@ -730,6 +731,9 @@
                             message: '修改成功',
                             type: 'success'
                         });
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.getWholeData();
                         this.addressDialogVisible=false;
                     }).catch(err=>{
@@ -812,6 +816,9 @@
                             message: '修改成功',
                             type: 'success'
                         });
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.getWholeData();
                         this.contactDialogVisible=false;
                     }).catch(err=>{
@@ -882,6 +889,9 @@
                 message: '修改成功',
                 type: 'success'
               });
+              if (!this.companyInfo.setting){
+                this.postUpdateIsSetting();
+              }
               this.getWholeData();
               this.documentDialogVisible = false;
             }).catch(err=>{
@@ -904,6 +914,9 @@
                 message: '修改成功',
                 type: 'success'
               });
+              if (!this.companyInfo.setting){
+                this.postUpdateIsSetting();
+              }
               this.getWholeData();
               this.customDialogVisible = false;
             }).catch(err=>{
