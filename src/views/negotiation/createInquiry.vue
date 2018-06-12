@@ -199,10 +199,8 @@ export default {
       if (!query.from || query.from !== 'copy') {
         this.showInquiryNo = true;
       }
-    } else if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
-      // TODO: 默认选中供应商
     } else if (query.skus && regex.test(query.skus)) {
-      // TODO: 默认选中商品
+      this.getList(query.skus.split(','));
     }
   },
   computed: {
@@ -437,6 +435,24 @@ export default {
     remoteMethod(keyWord) {
       this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`).then(res => {
         this.selectAll.supplierName = res;
+
+        let suppliers = [];
+        let query = this.$route.query, regex = (/^\d+(,\d+)?$/);
+        if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
+          let supplierCompanies = query.supplierCompanies.split(',');
+          if (supplierCompanies.length > 0) {
+            _.map(res, item => {
+              for (let companyId of supplierCompanies) {
+                if (companyId === item.companyId.toString()) {
+                  suppliers.push(item);
+                }
+              }
+            });
+          }
+        }
+        if (suppliers.length > 0) {
+          this.fromArg.suppliers = suppliers;
+        }
       });
     }
   }
