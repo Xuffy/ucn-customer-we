@@ -88,7 +88,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'"></v-upload>
+              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'" :list="fromArg[item.key]" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -265,7 +265,6 @@ export default {
 
     },
     save(data) { // modify 编辑完成反填数据
-      console.log(data);
       let items = _.map(data, item => {
         _.map(item, (o, field) => {
           if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
@@ -312,6 +311,7 @@ export default {
       this.trig = new Date().getTime();
     },
     submitForm(type) { // 提交
+      let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
       this.$refs.ruleform.validate((valid) => {
         if (!valid) {
@@ -329,7 +329,8 @@ export default {
       let upData = _.clone(this.fromArg);
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
-      console.log(this.$filterModify(upData));
+      upData.attachment = files && files.length > 0 ? files.join(',') : null;
+
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
         if (!this.fromArg.draft) {
           this.$router.push('/negotiation/inquiry')
