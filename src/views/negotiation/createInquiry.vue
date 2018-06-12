@@ -272,7 +272,7 @@ export default {
             return;
           }
           if (typeof o.defaultData !== 'undefined' && o.value !== o.defaultData) {
-            o._color = 'blue';
+            o._style = 'background-color: yellow';
           }
         });
         return item;
