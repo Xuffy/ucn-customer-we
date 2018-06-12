@@ -93,7 +93,7 @@
       this.getBasicInfo();
     },
     mounted() {
-      // this.setLog({name:'productSourcingOverview'});
+      this.setLog({query:{code:'productSourcingOverview'}});
     },
     computed: {
       ...mapState({
@@ -102,7 +102,7 @@
       }),
     },
     methods: {
-      // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
       getBasicInfo() {
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE}, {cache: true})
