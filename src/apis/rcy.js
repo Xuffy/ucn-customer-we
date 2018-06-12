@@ -97,6 +97,7 @@ export default {
     ORDER_MARK: ['/order/mark','BASE_URL'],
     ORDER_UPDATE:['/order/update','BASE_URL'],
     ORDER_CONFIRM:['/order/confirm','BASE_URL'],
-    ORDER_CANCEL:['/order/cancle','BASE_URL']
+    ORDER_CANCEL:['/order/cancle','BASE_URL'],
+    ORDER_SAVE_DRAFT:['/order/saveDraft','BASE_URL']
 
 }

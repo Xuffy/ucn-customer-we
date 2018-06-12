@@ -1037,7 +1037,7 @@
                 params.attachments=this.$refs.upload[0].getFiles();
                 params.draftCustomer=true;
                 this.disableClickSaveDraft=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT,params).then(res=>{
                     this.$router.push('/order/draft');
                 }).finally(err=>{
                     this.disableClickSaveDraft=false;
@@ -1683,8 +1683,7 @@
                 if(n===4){
                     if(this.$route.query.orderId){
                         this.getDetail();
-                    }
-                    if(this.$route.query.ids.length>0){
+                    }else if(this.$route.query.ids && this.$route.query.ids.length>0){
                         let ids=this.$route.query.ids;
                         ids=ids.slice(0,ids.length-1);
                         this.loadingProductTable=true;
@@ -1702,6 +1701,8 @@
                             this.loadingProductTable=false;
                             this.loadingPage=false;
                         });
+                    }else{
+                        this.loadingPage=false;
                     }
                 }
             },
