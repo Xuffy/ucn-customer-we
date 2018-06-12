@@ -196,7 +196,7 @@ export default {
     } 
   },
   mounted () {
-    this.setLog({name:'planDetail'});
+    this.setLog({query:{code:'planDetail'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
