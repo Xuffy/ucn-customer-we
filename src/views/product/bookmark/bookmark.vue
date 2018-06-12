@@ -474,13 +474,14 @@
                         this.selectList.forEach(v=>{
                             ids+=(v.skuId.value+',');
                         });
-                        this.$windowOpen({
-                            url:'/order/create',
-                            params:{
-                                type:'product',
-                                ids:ids,
-                            },
-                        })
+                        console.log()
+                        // this.$windowOpen({
+                        //     url:'/order/create',
+                        //     params:{
+                        //         type:'product',
+                        //         ids:ids,
+                        //     },
+                        // })
                     }
                 }
             },

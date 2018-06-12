@@ -797,26 +797,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
                 },
                 quickCreateDialogVisible:false,
                 tableData:[],
@@ -1116,7 +1096,6 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.loadingPage=true;
                 //带了id表示是从draft页面过来的
                 if(this.$route.query.orderId){
                     // this.orderForm.orderNo=this.$route.query.orderId;
@@ -1316,7 +1295,18 @@
                 this.$ajax.get(this.$apis.INQUIRY_ID,{
                     id:e.id.value
                 }).then(res=>{
+                    //带入inquiry信息
                     this.orderForm.quotationNo=res.quotationNo;
+                    this.orderForm.supplierName=res.supplierName;
+                    this.orderForm.incoterm=res.incoterm;
+                    this.orderForm.payment=res.paymentMethod;
+                    this.changePayment(this.orderForm.payment);
+                    this.orderForm.departureCountry=res.departureCountry;
+                    this.orderForm.departurePort=res.departurePort;
+                    this.orderForm.destinationCountry=res.destinationCountry;
+                    this.orderForm.destinationPort=res.destinationPort;
+                    this.orderForm.remark=res.remark;
+
                     this.productTableData=[];
                     let arr=[];
                     _.map(res.details,v=>{
@@ -1610,8 +1600,7 @@
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                         this.currencyOption=res;
                         this.queryNo++;
-                    })
-                    .finally(err=> {
+                    }).finally(err=> {
 
                     }
                 );
@@ -1664,23 +1653,7 @@
                 }).finally(err=>{
 
                 });
-                let ids=this.$route.query.ids;
-                ids=ids.slice(0,ids.length-1);
-                this.loadingProductTable=true;
-                this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
-                    let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
-                        }
-                    });
-                    _.map(data,v=>{
-                        this.productTableData.push(v);
-                    })
-                    console.log(this.productTableData,'this.productTableData')
-                }).finally(err=>{
-                    this.loadingProductTable=false;
-                });
+
             },
 
             /**
@@ -1707,8 +1680,29 @@
         },
         watch:{
             queryNo(n){
-                if(n===4 && this.$route.query.orderId){
-                    this.getDetail();
+                if(n===4){
+                    if(this.$route.query.orderId){
+                        this.getDetail();
+                    }
+                    if(this.$route.query.ids.length>0){
+                        let ids=this.$route.query.ids;
+                        ids=ids.slice(0,ids.length-1);
+                        this.loadingProductTable=true;
+                        this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
+                            let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                                if(item._remark){
+                                    item.label.value=this.$i.order.remarks;
+                                    item.skuPic._image=false;
+                                }
+                            });
+                            _.map(data,v=>{
+                                this.productTableData.push(v);
+                            });
+                        }).finally(err=>{
+                            this.loadingProductTable=false;
+                            this.loadingPage=false;
+                        });
+                    }
                 }
             },
         },
