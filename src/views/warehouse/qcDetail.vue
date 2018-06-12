@@ -131,7 +131,7 @@
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.attachment">
-                            <v-upload :list="qcDetail.attachments" :limit="20" ref="upload"></v-upload>
+                            <v-upload readonly :list="qcDetail.attachments" :limit="20" ref="upload"></v-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -261,7 +261,7 @@
                 <template slot="header">
                     <div class="btn-group">
                         <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
-                        <el-button :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button @click="restartQc" :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
                         <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
                         <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
@@ -489,6 +489,7 @@
                 this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
                     .then(res=>{
                         this.qcDetail=res;
+                        console.log(this.qcDetail,'?????')
                         this.loadingData=false;
                         this.getProductInfo();
                         this.getPaymentData();
@@ -753,7 +754,12 @@
              * product info表格事件
              * */
             btnClick(e){
-                console.log(e)
+                this.$windowOpen({
+                    url:'/product/sourcingDetail',
+                    params:{
+                        id:e.skuId.value
+                    },
+                })
             },
             changeChecked(e){
                 this.selectList=e;
@@ -794,6 +800,10 @@
                 }).catch(() => {
 
                 });
+
+            },
+
+            restartQc(){
 
             },
 

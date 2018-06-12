@@ -84,10 +84,10 @@
                 this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-                    // _.mapObject(item, val => {
-                    //   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                    //   return val
-                    // })
+                    _.mapObject(item, val => {
+                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                      return val
+                    })
 
                     return item;
                 });

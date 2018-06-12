@@ -117,6 +117,7 @@ export default {
   update_qcPayment: ['/payment/update', 'BASE_URL'],
   abandon_qcPayment: ['/payment/abandon/{id}?version={version}', 'BASE_URL'],
   recover_qcPayment: ['/payment/recover/{id}?version={version}', 'BASE_URL'],
+  RESTART_QC:['/qc/rework','BASE_URL'],
 
   /**
    * service warehouse
@@ -126,6 +127,7 @@ export default {
   get_serviceQcOrderProduct: ['/qc/detail/page', 'BASE_SERVICE', 'USERVICE_URL'],
   get_serviceQcSurveyor: ['/user/list', 'UUSER_URL'],
   save_serviceQcOrder: ['/qc/result/save', 'BASE_SERVICE', 'USERVICE_URL'],
+
 
   /**
    * 字典获取

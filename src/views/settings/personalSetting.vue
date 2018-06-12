@@ -70,8 +70,17 @@
         </el-row>
     </el-form>
     <div class="button_div">
-        <el-button @click="putUserProfile">{{$i.common.modify}}</el-button>
-        <el-button  type="danger">{{$i.common.cancel}}</el-button>
+      <div class="summary-btn">
+        <div v-if="summaryDisabled">
+          <el-button @click="modifySummary">{{$i.common.modify}}</el-button>
+        </div>
+        <div v-else>
+          <el-button :loading="allowModifySummary" @click="putUserProfile" type="primary">保存</el-button>
+          <el-button @click="cancelModifySummary">取消</el-button>
+        </div>
+      </div>
+        <!--<el-button @click="putUserProfile">{{$i.common.modify}}</el-button>-->
+        <!--<el-button  type="danger">{{$i.common.cancel}}</el-button>-->
     </div>
     <el-dialog
         class="speDialog"
@@ -120,6 +129,8 @@ export default {
             }
         };
       return {
+          summaryDisabled:true,
+          allowModifySummary:false,
            form: {
               email:'',
               userName:'',
@@ -188,7 +199,12 @@ export default {
           this.$ajax.get(this.$apis.get_user_privilege)
             .then(res => {
               //用户类型：0 管理员，1 普通用户
-              res.userType === this.isVisible
+              if (res.userType === 1 ){
+                this.isVisible = true;
+              }else{
+                this.isVisible = false;
+              }
+              console.log()
             })
         },
         postLanguage(){
@@ -203,6 +219,12 @@ export default {
                 this.form = res
             })
         },
+        modifySummary(){
+          this.summaryDisabled=false;
+        },
+        cancelModifySummary(){
+          this.summaryDisabled=true;
+        },
         putUserProfile(){
             const params = {
                 userName: this.form.userName,
@@ -211,13 +233,19 @@ export default {
                 birthday: this.form.birthday,
                 lang: this.form.lang
             }
+          this.allowModifySummary=true;
             this.$ajax.put(this.$apis.put_user_profile,params)
             .then(res => {
                 this.$message({
                     type: 'success',
                     message: '修改成功!'
                 });
+              this.summaryDisabled=true;
+              this.allowModifySummary=false;
               this.getUserProfile()
+            }).catch(err=>{
+              this.allowModifySummary=false;
+              this.summaryDisabled=true;
             });
         },
         putUserPassword(){

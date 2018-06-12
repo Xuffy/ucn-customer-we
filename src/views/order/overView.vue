@@ -325,7 +325,7 @@
                         console.log(n)
                         let allow=true;
                         _.map(n,v=>{
-                            if(v.status.value!=='3'){
+                            if(v.status.value!=='PROCESS'){
                                 allow=false;
                             }
                         });

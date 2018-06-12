@@ -480,7 +480,6 @@
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                 <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
-                <el-button :disabled="loadingPage || hasCancelOrder" @click="createOrder" type="primary">{{$i.order.createOrder}}</el-button>
                 <el-button :disabled="loadingPage || hasCancelOrder" :loading="disableCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancel}}</el-button>
                 <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
@@ -1426,13 +1425,13 @@
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 console.log(params.skuList,'xxxx')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                //     console.log(res)
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                    console.log(res)
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1838,11 +1837,6 @@
                 }).finally(err=>{
 
                 });
-            },
-            createOrder(){
-                this.$windowOpen({
-                    url:'/order/create'
-                })
             },
             confirmOrder(){
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{

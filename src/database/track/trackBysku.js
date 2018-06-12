@@ -138,73 +138,95 @@ export default {
     key: 'skuStatus'
   },
   sampleProvideDate: {
-    key: 'sampleReceiveDt'
+    key: 'sampleReceiveDt',
+    type: 'textDate'
   },
   sampleNeedConfirmDate: {
-    key: 'sampleComfirmDt'
+    key: 'sampleComfirmDt',
+    type: 'textDate'
   },
   needLabel: {
-    key: 'needLableDt'
+    key: 'needLableDt',
+    type: 'textDate'
   },
   lableOrDesignDate: {
-    key: 'lableDt'
+    key: 'lableDt',
+    type: 'textDate'
   },
   designNeedConfirmDate: {
-    key: 'designConfirmDt'
+    key: 'designConfirmDt',
+    type: 'textDate'
   },
   qCDateA: {
-    key: 'firstQcDt'
+    key: 'firstQcDt',
+    type: 'textDate'
   },
   qCDateB: {
-    key: 'secondQcDt'
+    key: 'secondQcDt',
+    type: 'textDate'
   },
   qCDateC: {
-    key: 'lastQcDt'
+    key: 'lastQcDt',
+    type: 'textDate'
   },
   confirmQcDate: {
-    key: 'confirmQcDt'
+    key: 'confirmQcDt',
+    type: 'textDate'
   },
   estDeliveryDate: {
-    key: 'estDeliveryDt'
+    key: 'estDeliveryDt',
+    type: 'textDate'
   },
   actDeliveryDate: {
-    key: 'actDeliveryDt'
+    key: 'actDeliveryDt',
+    type: 'textDate'
   },
   estDepartureDate: {
     key: ''
   },
   actDepartureDate: {
-    key: 'actDepartureDt'
+    key: 'actDepartureDt',
+    type: 'textDate'
   },
   bookingDate: {
-    key: 'bookingDt'
+    key: 'bookingDt',
+    type: 'textDate'
   },
   shippingSpaceReleaseDate: {
-    key: 'shippingSpaceReleaseDt'
+    key: 'shippingSpaceReleaseDt',
+    type: 'textDate'
   },
   estContainerStuffingDate: {
-    key: 'estContainerStuffingDt'
+    key: 'estContainerStuffingDt',
+    type: 'textDate'
   },
   actContainerStuffingDate: {
-    key: 'actContainerStuffingDt'
+    key: 'actContainerStuffingDt',
+    type: 'textDate'
   },
   declareDate: {
-    key: 'declareDt'
+    key: 'declareDt',
+    type: 'textDate'
   },
   estCustomsCleanceDate: {
-    key: 'estCustomsCleanceDt'
+    key: 'estCustomsCleanceDt',
+    type: 'textDate'
   },
   actCustomsCleanceDate: {
-    key: 'actCustomsCleanceDt'
+    key: 'actCustomsCleanceDt',
+    type: 'textDate'
   },
   estArrivalDate: {
-    key: 'estArrivalDt'
+    key: 'estArrivalDt',
+    type: 'textDate'
   },
   actArrivalDate: {
-    key: 'actArrivalDt'
+    key: 'actArrivalDt',
+    type: 'textDate'
   },
   estReleaseDate: {
-    key: 'estReleaseDt'
+    key: 'estReleaseDt',
+    type: 'textDate'
   },
   actReleaseDate: {
     key: 'actReleaseDt'
@@ -294,13 +316,16 @@ export default {
     key: 'commercialInvoiceNo'
   },
   invoiceDate: {
-    key: 'invoiceDt'
+    key: 'invoiceDt',
+    type: 'textDate'
   },
   orderReceivedDate: {
-    key: 'orderReceivedDt'
+    key: 'orderReceivedDt',
+    type: 'textDate'
   },
   orderAcceptedDate: {
-    key: 'orderAcceptedDt'
+    key: 'orderAcceptedDt',
+    type: 'textDate'
   },
   freightToCountryUah: {
     key: 'freightToCountryUah'
