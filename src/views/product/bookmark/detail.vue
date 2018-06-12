@@ -43,8 +43,8 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
-                    <el-button>{{$i.product.createInquiry}}</el-button>
-                    <el-button>{{$i.product.createOrder}}</el-button>
+                    <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
+                    <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
                     <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
@@ -733,6 +733,26 @@
                 }).catch(() => {
 
                 });
+            },
+
+            createInquiry(){
+                this.$windowOpen({
+                    url:'/negotiation/createInquiry',
+                    params:{
+                        skus:this.$route.query.id
+                    },
+                })
+            },
+
+            createOrder(){
+                this.$windowOpen({
+                    url:'/order/create',
+                    params:{
+                        type:'product',
+                        ids:this.productForm.id+',',
+                        supplierCode:this.productForm.supplierCode
+                    },
+                })
             },
 
             //添加比较
