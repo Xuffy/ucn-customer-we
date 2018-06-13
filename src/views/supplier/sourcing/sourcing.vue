@@ -255,49 +255,49 @@
               console.log(err)
             });
           },
-            //.....拿数据
-            get_data() {
-                this.loading = true
-                this.$ajax.post(this.$apis.get_listSupplier, this.params)
-                    .then(res => {
-                        this.pageData=res;
-                        this.loading = false;
-                        this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas,e=>{
-                          let country='';
-                          e.country.value.split(',').forEach(v=>{
-                            this.countryOption.forEach(m=>{
-                              if(m.code===v){
-                                country+=(m.name+',');
-                              }
+          //.....拿数据
+          get_data() {
+              this.loading = true
+              this.$ajax.post(this.$apis.get_listSupplier, this.params)
+                  .then(res => {
+                      this.pageData=res;
+                      this.loading = false;
+                      this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas,e=>{
+                        let country='';
+                        e.country.value.split(',').forEach(v=>{
+                          this.countryOption.forEach(m=>{
+                            if(m.code===v){
+                              country+=(m.name+',');
+                            }
+                          })
+                        });
+                        country=country.slice(0,country.length-1);
+                        e.country.value=country;
+
+                        e.type.value=this.$change(this.options.type,'type',e,true).name;
+                        e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
+                        return e;
+                        if (this.disabledLine.length > 0) {
+                            this.disabledLine.forEach(v => {
+                                let id = _.findWhere(v, {
+                                    key: 'id'
+                                }).value;
+                                this.tabData.forEach(m => {
+                                    let newId = _.findWhere(m, {
+                                        key: 'id'
+                                    }).value;
+                                    if (id === newId) {
+                                        m._disabled = true;
+                                    }
+                                })
                             })
-                          });
-                          country=country.slice(0,country.length-1);
-                          e.country.value=country;
+                        }
 
-                          e.type.value=this.$change(this.options.type,'type',e,true).name;
-                          e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
-                          return e;
-                          if (this.disabledLine.length > 0) {
-                              this.disabledLine.forEach(v => {
-                                  let id = _.findWhere(v, {
-                                      key: 'id'
-                                  }).value;
-                                  this.tabData.forEach(m => {
-                                      let newId = _.findWhere(m, {
-                                          key: 'id'
-                                      }).value;
-                                      if (id === newId) {
-                                          m._disabled = true;
-                                      }
-                                  })
-                              })
-                          }
-
-                        })
-                    })
-                    .catch((res) => {
-                        this.loading = false
-                    });
+                      })
+                  })
+                  .catch((res) => {
+                      this.loading = false
+                  });
             },
             //...........addToBookmark
             addToBookmark() {
@@ -321,21 +321,21 @@
                   });
             },
             getCategoryId() {
-                this.$ajax.get(this.$apis.getCategory, {}).then(res => {
-                    this.dropData = res;
-                }).catch(err => {
-                    console.log(err)
-                });
+                // this.$ajax.get(this.$apis.getCategory, {}).then(res => {
+                //     this.dropData = res;
+                // }).catch(err => {
+                //     console.log(err)
+                // });
             },
         },
         created() {
             this.getCodePart();
             this.getCountryAll();
             this.getCategoryId();
-            this.setRecycleBin({
-                name: 'bookmarkRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'bookmarkRecycleBin',
+            //     show: true
+            // });
         },
         watch: {}
     }

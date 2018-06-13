@@ -37,13 +37,13 @@
         </div>
         <div class="body">
             <el-tabs v-model="tabName" type="card"  @tab-click="handleClick">
-                <el-tab-pane :label="$i.supplier.address" name="address">
+                <el-tab-pane :label="$i.supplier.factoryInfo" name="address">
                     <v-table  :data="address"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.accountInfo"  name="accountInfo">
                     <v-table  :data="accounts"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane :label="$i.supplier.contactInfo" name="contactInfo">
+                <el-tab-pane :label="$i.supplier.contactInfo" >
                     <v-table  :data="concats"   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.tradeHistory"  name="tradeHistory">
@@ -309,7 +309,7 @@
                         this.basicDate = res;
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats);
                         this.loading = false
                     })
                     .catch((res) => {
