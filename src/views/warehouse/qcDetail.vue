@@ -505,7 +505,6 @@
             getProductInfo(){
                 this.loadingProductInfoTable=true;
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
-                    console.log(res,'data')
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
@@ -541,6 +540,7 @@
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                     }
                     this.loadingProductInfoTable=false;
+                    this.selectList=[];
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
                 });
@@ -798,6 +798,7 @@
                             message: this.$i.warehouse.confirmSuccess
                         });
                         this.getProductInfo();
+
                     }).catch(err=>{
                         this.loadingProductInfoTable=false;
                     });
