@@ -110,6 +110,7 @@
             <page
                     @change="changePage"
                     @size-change="changeSize"
+                    :page-sizes="[50,100,200,500]"
                     :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
@@ -123,6 +124,7 @@
     import VTable from '@/components/common/table/index'
     import {dropDownSingle,VPagination} from '@/components/index'
     import sectionNumber from '../product/sectionNumber'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "overview",
@@ -284,6 +286,9 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
+
+
             tableFilterValue(val){
               let {operatorFilters,sorts}=val;
                 this.productForm.operatorFilters=operatorFilters||[];
@@ -694,6 +699,9 @@
             }).catch(err=>{
 
             })
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
 
         watch:{

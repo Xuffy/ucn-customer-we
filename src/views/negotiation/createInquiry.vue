@@ -88,7 +88,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'"></v-upload>
+              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'" :list="fromArg[item.key]" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -199,10 +199,8 @@ export default {
       if (!query.from || query.from !== 'copy') {
         this.showInquiryNo = true;
       }
-    } else if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
-      // TODO: 默认选中供应商
     } else if (query.skus && regex.test(query.skus)) {
-      // TODO: 默认选中商品
+      this.getList(query.skus.split(','));
     }
   },
   computed: {
@@ -265,7 +263,6 @@ export default {
 
     },
     save(data) { // modify 编辑完成反填数据
-      console.log(data);
       let items = _.map(data, item => {
         _.map(item, (o, field) => {
           if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
@@ -312,6 +309,7 @@ export default {
       this.trig = new Date().getTime();
     },
     submitForm(type) { // 提交
+      let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
       this.$refs.ruleform.validate((valid) => {
         if (!valid) {
@@ -329,7 +327,8 @@ export default {
       let upData = _.clone(this.fromArg);
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
-      console.log(this.$filterModify(upData));
+      upData.attachment = files && files.length > 0 ? files.join(',') : null;
+
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
         if (!this.fromArg.draft) {
           this.$router.push('/negotiation/inquiry')
@@ -436,6 +435,36 @@ export default {
     remoteMethod(keyWord) {
       this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`).then(res => {
         this.selectAll.supplierName = res;
+
+        let suppliers = [];
+        let query = this.$route.query, regex = (/^\d+(,\d+)?$/);
+        if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
+          let supplierCompanies = query.supplierCompanies.split(',');
+          if (supplierCompanies.length > 0) {
+            _.map(res, item => {
+              for (let companyId of supplierCompanies) {
+                if (companyId === item.companyId.toString()) {
+                  suppliers.push(item);
+                }
+              }
+            });
+          }
+        }
+        if (query.supplierCodes && (/^\w+(,\w+)?$/).test(query.supplierCodes)) {
+          let supplierCodes = query.supplierCodes.split(',');
+          if (supplierCodes.length > 0) {
+            _.map(res, item => {
+              for (let code of supplierCodes) {
+                if (code === item.code.toString()) {
+                  suppliers.push(item);
+                }
+              }
+            });
+          }
+        }
+        if (suppliers.length > 0) {
+          this.fromArg.suppliers = suppliers;
+        }
       });
     }
   }

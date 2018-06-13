@@ -89,6 +89,7 @@
             <page
                     @size-change="changeSize"
                     @change="changePage"
+                    :page-sizes="[50,100,200,500]"
                     :page-data="pageData"></page>
         </div>
 
@@ -260,7 +261,7 @@
         },
         methods:{
             ...mapActions([
-                'setRecycleBin'
+                'setRecycleBin','setLog'
             ]),
             //切换body的收缩展开状态
             switchDisplay(){
@@ -616,10 +617,13 @@
             }).catch(err=>{
 
             });
-            this.setRecycleBin({
-                name: 'productBookmarkRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'productBookmarkRecycleBin',
+            //     show: true
+            // });
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
 
         watch:{

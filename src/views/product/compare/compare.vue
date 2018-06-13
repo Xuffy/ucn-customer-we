@@ -41,7 +41,6 @@
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
-
         <div class="footBtn">
             <div v-if="$route.params.type==='new'">
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
@@ -120,6 +119,7 @@
 <script>
     import VTable from '@/components/common/table/index'
     import product from '../addProduct'
+    import { mapActions } from 'vuex'
 
 
     export default {
@@ -158,6 +158,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getList() {
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
@@ -641,6 +642,9 @@
         },
         created(){
             this.getList();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
         watch:{
             selectList(n){

@@ -106,7 +106,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft'
+                'setRecycleBin', 'setDraft','setLog'
             ]),
             onAction(item) {
                 this.$windowOpen({
@@ -277,17 +277,19 @@
         },
         created() {
             this.getUnit();
-            this.setRecycleBin({
-                name: 'orderRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'orderRecycleBin',
+            //     show: true
+            // });
+
+        },
+        mounted() {
+            this.loading = false;
+            this.setLog({query:{code:'BIZ_ORDER'}});
             this.setDraft({
                 name: 'orderDraft',
                 show: true
             });
-        },
-        mounted() {
-            this.loading = false
         },
         watch: {
             selectedList(n){

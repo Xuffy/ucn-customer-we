@@ -8,6 +8,12 @@ export default{
     orderNo:{
         _hide:true
     },
+    purchaserHandle:{
+        _hide:true
+    },
+    inboundSkuId:{
+        _hide:true
+    },
     SKUQCResult: {
         key: 'skuQcResultDictCode',
         type: 'String'

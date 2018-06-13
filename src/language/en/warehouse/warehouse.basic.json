@@ -47,7 +47,10 @@
   "acceptReturn":"接受退货",
   "qcOrderDetail":"货单详情",
   "detail":"详情",
-  "pressMoney":"催款"
+  "pressMoney":"催款",
+  "prompt":"提示",
+  "sureConfirm":"Sure Confirm",
+  "sureRestartQc":"Sure Restart QC?"
 
 
 }

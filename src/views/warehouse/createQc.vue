@@ -793,6 +793,21 @@
         created(){
             this.getService();
             this.getUnit();
+            if(this.$route.query.ids){
+                this.productConfig.orderNo=this.$route.query.orderNo;
+                this.productConfig.ids=this.$route.query.ids.split(',');
+                this.loadingProductTable=true;
+                this.$ajax.post(this.$apis.get_qcProductData,this.productConfig).then(res=>{
+                    console.log(res)
+                    res.forEach(v=>{
+                        if(v.id!==0){
+                            this.productTableData.push(v);
+                        }
+                    });
+                }).finally(err=>{
+                    this.loadingProductTable=false;
+                })
+            }
         },
         mounted(){
             this.loadingData=true;

@@ -222,6 +222,7 @@
     import {VTable,VUpload,VPagination,VImage} from '@/components/index'
     import addTable from '../addlineTable'
     import compareList from '../compareList'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "detail",
@@ -430,7 +431,7 @@
             }
         },
         methods:{
-
+            ...mapActions(['setLog']),
             handleClick(){
                 //切换tab页
             },
@@ -679,6 +680,9 @@
             this.getTableData();
             this.getRemarkData();
             this.getCompareList();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
     }
 </script>

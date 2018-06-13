@@ -20,11 +20,17 @@
                 :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
+        <page
+                @size-change="changeSize"
+                @change="changePage"
+                :page-sizes="[50,100,200,500]"
+                :page-data="pageData"></page>
+
 
     </div>
 </template>
 <script>
-    import {dropDown} from '@/components/index'
+    import {dropDown,VPagination} from '@/components/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
     import VTable from '@/components/common/table/index'
     import { mapActions } from 'vuex'
@@ -34,7 +40,8 @@
         components: {
             dropDown,
             selectSearch,
-            VTable
+            VTable,
+            page:VPagination
         },
         data() {
             return {
@@ -77,12 +84,13 @@
                     //         orderType: "",
                     //     }
                     // ]
-                }
+                },
+                pageData:{}
             }
         },
         methods: {
             ...mapActions([
-                'setRecycleBin'
+                'setRecycleBin','setLog'
             ]),
             selectChange() {
 
@@ -102,6 +110,7 @@
                     this.selectList=[];
                     this.loadingTable=false;
                     this.loadingTable=false;
+                    this.pageData=res;
                 }).catch(err=>{
                     this.loadingTable=false;
                     this.loadingTable=false;
@@ -198,13 +207,29 @@
                 });
             },
 
+
+            /**
+             * 分页操作
+             * */
+            changePage(e){
+                this.queryParam.pn=e;
+                this.getList();
+            },
+            changeSize(e){
+                this.queryParam.ps=e;
+                this.getList();
+            }
+
         },
         created(){
             this.getList();
-            this.setRecycleBin({
-                name: 'compareRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'compareRecycleBin',
+            //     show: true
+            // });
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
         watch:{
             selectList(n){
