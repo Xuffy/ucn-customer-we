@@ -36,6 +36,7 @@
         </div>
 
         <v-table
+                :height="500"
                 v-loading="loadingTable"
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"

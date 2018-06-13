@@ -91,6 +91,90 @@ export default {
       return (val / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
     }
 
+
+    /**
+     *
+     * @param data
+     * @param db
+     * {
+     *   type:'Number', // 数据类型：Number、Regexp、Email
+     *   required:true, // 必填项
+     *   max:10, // 最大值
+     *   min:0, // 最小值
+     *   length:20, // 最大长度
+     *   minLength:20, // 最小长度
+     * }
+     * @returns {boolean}
+     */
+    Vue.prototype.$validateForm = (data, db) => {
+
+      for (let k in data) {
+        let val = (data[k])
+          , item = _.findWhere(db, {key: k}) || {}
+          , key = item.key || true
+          , validate;
+
+        if (_.isEmpty(item) || !_.isObject(item._rules)) continue;
+
+        validate = item._rules;
+
+        if (validate.required && !val && validate.type !== 'Number' && val !== 0) {
+          Message.warning(`请必须填写 ${item.label}`);
+          return key;
+        }
+
+        switch (validate.type) {
+          case 'Number':
+            if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
+              Message.warning(`请填正确的 ${item.label}`);
+              return key;
+            }
+            if (!Number(val) || !_.isNumber(Number(val))) {
+              Message.warning(`请填正确的 ${item.label}`);
+              return key;
+            }
+            if (validate.max && validate.max < val) {
+              Message.warning(`${item.label} 值不能大于${validate.max}`);
+              return key;
+            }
+            if (validate.min && validate.min > val) {
+              Message.warning(`${item.label} 值不能小于${validate.max}`);
+              return key;
+            }
+            break;
+          case 'Email':
+            if (!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val)) {
+              Message.warning(`请填正确的 ${item.label}`);
+              return key;
+            }
+            break;
+          case 'Regexp':
+            if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
+              Message.warning(item.label || `请填正确的 ${item.label}`);
+              return key;
+            }
+            break;
+        }
+
+        if (val) {
+          if (validate.length && validate.length < val.length) {
+            Message.warning(`${item.label} 长度不能大于${validate.length}位`);
+            return key;
+          }
+
+          if (validate.minLength && validate.minLength > val.length) {
+            Message.warning(`${item.label} 长度不能小于${validate.length}位`);
+            return key;
+          }
+        }
+
+      }
+
+      return false;
+
+    }
+
+
     /**
      * table 数据过滤
      * @type {{contrast(*=, *=): *, setHighlight(*=): *, setHideSame(*=): *}}
@@ -141,6 +225,7 @@ export default {
         });
       }
     };
+
     /**
      * 删除带有前缀下划线数据
      */
@@ -166,6 +251,7 @@ export default {
       if (_.isArray(list)) _.map(list, fieldRemark, details);
       return list;
     };
+
     /**
      * 时区转换 传入时区 如 0 8 -1
      */

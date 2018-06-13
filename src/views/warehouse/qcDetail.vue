@@ -505,7 +505,6 @@
             getProductInfo(){
                 this.loadingProductInfoTable=true;
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
-                    console.log(res,'data')
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
                             e._disabled=true;
@@ -541,6 +540,7 @@
                         this.summaryData.skuQuantity=_.uniq(diffData).length;
                     }
                     this.loadingProductInfoTable=false;
+                    this.selectList=[];
                 }).catch(err=>{
                     this.loadingProductInfoTable=false;
                 });
@@ -604,8 +604,8 @@
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
                     type: 10,       //10代表付款
-                    payToId: this.qcDetail.serviceOwnerId,
-                    payToName: this.qcDetail.serviceName,
+                    payToCompanyId: this.qcDetail.serviceProviderId,
+                    payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
                 };
@@ -639,7 +639,7 @@
 
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.warehouse.deleteSuccess
                     });
                 }).catch(() => {
 
@@ -798,6 +798,7 @@
                             message: this.$i.warehouse.confirmSuccess
                         });
                         this.getProductInfo();
+
                     }).catch(err=>{
                         this.loadingProductInfoTable=false;
                     });
