@@ -25,7 +25,7 @@
         </div>
         <div v-if="pageType === 'draft'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
           <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
           <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
           <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
@@ -294,6 +294,15 @@
       getContainerType() {
         this.$ajax.get(this.$apis.get_container_type).then(res => {
           this.containerType = res
+        })
+      },
+      batchSendDraft(){
+        let ids = this.selectCount.map(item=>{
+          return item.id.value;
+        })
+        this.$ajax.post(this.$apis.logistics_plan_batchSendDraft,{ids:ids}).then(res => {
+          this.selectCount = [];
+          this.fetchData();
         })
       }
     }

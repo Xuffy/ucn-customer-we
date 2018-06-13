@@ -3,7 +3,7 @@
     <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList }}</div>
-    <form-list :showHd="false" :edit="edit" :listData="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list :showHd="false" @selectChange="formListSelectChange" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -36,7 +36,7 @@
     <div v-if="planId">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment :tableData.sync="paymentList" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
+      <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
     </div>
     <div>
       <div class="hd"></div>
@@ -107,6 +107,7 @@ export default {
       modifyProductArray: [],
       exchangeRateList: [],
       feeList: [],
+      sendfee: {},
       productList: [],
       removeProductList: [],
       productModifyList: [],
@@ -139,6 +140,7 @@ export default {
           send: this.$apis.send_logistic_plan
         },
         planDetail: {
+          saveAsDraft: this.$apis.save_draft_logistic_plan,
           send: this.$apis.update_logistic_plan
         },
         planDraftDetail: {
@@ -317,6 +319,7 @@ export default {
         }
       })
       this.feeList = feeListb ? [res.fee] : null;
+      this.sendfee = feeListb ? res.fee : null;
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
     },
     createdPaymentData (res = this.oldPaymentObject) {
@@ -379,7 +382,7 @@ export default {
     },
     action (e, status, i) {
       if (status == 3){
-        return window.open(`${window.location.origin}#/product/sourcingDetail?id=${e.argID ? e.argID.value : e.id.value }`);
+        return window.open(`${window.location.origin}#/product/sourcingDetail?id=${ e.skuId.value }`);
       }
       this.negotiate = this.productbButtons[status-1].label;
       this.productInfoModifyStatus = status
@@ -484,7 +487,7 @@ export default {
       switch(arg){
         case 'edit':
             this.edit = !this.edit;
-            this.pageName = 'planDetail';
+            // this.pageName = 'planDetail';
           break;
         case 'confirm':
             this.conformPlan();
@@ -590,7 +593,7 @@ export default {
       })
       this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
       this.oldPlanObject.containerDetail = this.containerInfo
-      this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.feeList : null;
+      this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.sendfee : null;
       this.oldPlanObject.product = this.modifyProductArray;
       this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr),(item)=>{
         item['price'] = item['value'];
@@ -652,7 +655,10 @@ export default {
         }
       })
     },
-  },
+    formListSelectChange(v){
+      this.$set(this.oldPlanObject,'currency',v);
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

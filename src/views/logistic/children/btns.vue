@@ -1,6 +1,6 @@
 <template>
   <el-row class="btns" :style="{ width: '100%', paddingLeft: hideMune ? '65px' : '195px' }">
-    <div v-if="!edit">
+    <!-- <div v-if="!edit">
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'"  @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'"  @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'"  @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
@@ -8,8 +8,8 @@
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'">{{ $i.logistic.download }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'"  @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
-    </div>
-    <!-- <div v-if="!edit">
+    </div> -->
+    <div v-if="!edit">
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" :disabled="logisticsStatus==1||logisticsStatus==4" @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" :disabled="logisticsStatus==1||logisticsStatus==4" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" :disabled="logisticsStatus==1||logisticsStatus==4" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
@@ -17,11 +17,11 @@
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'">{{ $i.logistic.download }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'" :disabled="logisticsStatus==4 || logisticsStatus==5" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
-    </div> -->
+    </div>
     <div v-else>
-      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'saveAsDraft')" v-if="(isCopy&&planId)||(!isCopy&&!planId)">{{ $i.logistic.saveAsDraft }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'saveAsDraft')">{{ $i.logistic.saveAsDraft }}</el-button>
       <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.send }}</el-button>
-      <el-button size="mini" type="danger" @click.stop="$emit('toExit')" v-if="!(isCopy&&planId)">{{ $i.logistic.exit }}</el-button>
+      <el-button size="mini" type="danger" @click.stop="$emit('toExit')">{{ $i.logistic.exit }}</el-button>
     </div>
   </el-row>
 </template>

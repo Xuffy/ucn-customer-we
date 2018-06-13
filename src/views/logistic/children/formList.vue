@@ -15,7 +15,7 @@
             </el-form-item>
 
             <el-form-item :label="a.label+'：'" v-if="a.type === 'selector'" prop="value">
-              <el-select v-model="a.value" placeholder="请输入内容" :clearable="true" :disabled="a.disabled">
+              <el-select v-model="a.value" placeholder="请输入内容" :clearable="true" :disabled="a.disabled" @change="selectChange">
                 <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
@@ -93,6 +93,9 @@
           
       //   })
       // },
+      selectChange(v){
+        this.$emit('selectChange',v);
+      },
       textFilter(a) {
         if (a.type === 'input' || a.type === 'text') return a.value
         if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
@@ -101,7 +104,7 @@
           return obj ? obj.name : null
         }
       }
-    }
+    },
   }
 
 </script>
