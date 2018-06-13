@@ -239,38 +239,73 @@
                 this.isModify=false;
             },
             createInquiry() {
-              let companyId = '';
-              this.selectList.forEach((v,k)=>{
-                let item = _.findWhere(v, {
-                  key: 'companyId'
-                });
-                if (k === this.selectList.length - 1) {
-                  companyId += item.value;
-                } else {
-                  companyId += (item.value + ',');
-                }
-              })
-              this.$windowOpen({
-                url: '/negotiation/createInquiry',
-                params: {
-                  supplierCompanies: companyId
-                }
-              })
+              if(this.selectList.length===0){
+                this.$windowOpen({
+                  url:'/negotiation/createInquiry',
+                })
+              }else{
+                let companyId = '';
+                this.selectList.forEach((v,k)=>{
+                  let item = _.findWhere(v, {
+                    key: 'companyId'
+                  });
+                  if (k === this.selectList.length - 1) {
+                    companyId += item.value;
+                  } else {
+                    companyId += (item.value + ',');
+                  }
+                })
+                this.$windowOpen({
+                  url: '/negotiation/createInquiry',
+                  params: {
+                    supplierCompanies: companyId
+                  }
+                })
+              }
+
             },
             //勾选的商品创建order
             createOrder(){
-              console.log(this.selectList)
-                let arr=[];
-                this.selectList.forEach(v=>{
-                    if(v.customerCreate.value){
-                        arr.push(v);
-                    }
+              let supplierList=[];
+              _.map(this.selectList,v=>{
+                supplierList.push(v.supplierCode.value);
+              });
+              if(_.uniq(supplierList).length>1){
+                return this.$message({
+                  message: this.$i.product.notAddDifferentSupplierProduct,
+                  type: 'warning'
                 });
-                if(arr.length>0){
-                    this.dialogFormVisible=true;
-                }else{
-                    this.dialogFormVisible=true;
+              }
+
+              this.disabledOrderList=[];
+              this.selectList.forEach(v=>{
+                //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                if(v.customerCreate.value){
+                  this.disabledOrderList.push(v);
                 }
+              });
+              if(this.disabledOrderList.length>0){
+                this.dialogFormVisible=true;
+              }else{
+                if(this.selectList.length===0){
+                  this.$windowOpen({
+                    url:'/order/create',
+                  })
+                }else{
+                  let ids='';
+                  this.selectList.forEach(v=>{
+                    ids+=(v.id.value+',');
+                  });
+                  this.$windowOpen({
+                    url:'/order/create',
+                    params:{
+                      type:'product',
+                      ids:ids,
+                      supplierCode:this.selectList[0].supplierCode.value
+                    },
+                  })
+                }
+              }
             },
 
             //新增product
