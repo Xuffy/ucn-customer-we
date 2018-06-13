@@ -16,7 +16,7 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'" @click="createOrder">{{$i.product.createOrder}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
@@ -238,21 +238,74 @@
             cancelModify(){
                 this.isModify=false;
             },
+            createInquiry() {
+              if(this.selectList.length===0){
+                this.$windowOpen({
+                  url:'/negotiation/createInquiry',
+                })
+              }else{
+                let companyId = '';
+                this.selectList.forEach((v,k)=>{
+                  let item = _.findWhere(v, {
+                    key: 'companyId'
+                  });
+                  if (k === this.selectList.length - 1) {
+                    companyId += item.value;
+                  } else {
+                    companyId += (item.value + ',');
+                  }
+                })
+                this.$windowOpen({
+                  url: '/negotiation/createInquiry',
+                  params: {
+                    supplierCompanies: companyId
+                  }
+                })
+              }
 
+            },
             //勾选的商品创建order
             createOrder(){
-                let arr=[];
-                this.selectList.forEach(v=>{
-                    if(v.customerCreate.value){
-                        arr.push(v);
-                    }
+              let supplierList=[];
+              _.map(this.selectList,v=>{
+                supplierList.push(v.code.value);
+              });
+              if(_.uniq(supplierList).length>1){
+                return this.$message({
+                  message: this.$i.product.notAddDifferentSupplierProduct,
+                  type: 'warning'
                 });
-                if(arr.length>0){
-                    console.log(arr)
-                    this.dialogFormVisible=true;
-                }else{
-                    this.dialogFormVisible=true;
+              }
+
+              this.disabledOrderList=[];
+              this.selectList.forEach(v=>{
+                //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                if(v.customerCreate.value){
+                  this.disabledOrderList.push(v);
                 }
+              });
+              if(this.disabledOrderList.length>0){
+                 this.dialogFormVisible=true;
+              }else{
+                if(this.selectList.length===0){
+                  this.$windowOpen({
+                    url:'/order/create',
+                  })
+                }else{
+                  let ids='';
+                  this.selectList.forEach(v=>{
+                    ids+=(v.id.value+',');
+                  });
+                  this.$windowOpen({
+                    url:'/order/create',
+                    params:{
+                      type:'supplier',
+                      ids:ids,
+                      supplierCode:this.selectList[0].code.value
+                    },
+                  })
+                }
+              }
             },
 
             //新增product
