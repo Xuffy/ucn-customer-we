@@ -1082,7 +1082,6 @@
                 ],
                 copyList:[],
 
-
                 /**
                  * 弹出框data配置
                  * */
@@ -1433,7 +1432,6 @@
                 console.log(params.skuList,'xxxx')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                    console.log(res)
                     this.$router.push('/order/overview');
                 }).finally(err=>{
                     this.disableClickSend=false;
@@ -1518,8 +1516,6 @@
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     let arr=[];
-                    console.log(e.skuSysCode.value,'e????')
-                    console.log(this.productTableData)
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             arr.push(v);
@@ -1532,6 +1528,20 @@
                         params:{
                             id:e.skuId.value
                         }
+                    })
+                }else if(type==='history'){
+                    let param={
+                        operatorFilters: [],
+                        orderId: this.$route.query.orderId,
+                        pn: 1,
+                        ps: 50,
+                        skuId: e.skuId.value,
+                        sorts: [],
+                    };
+                    this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
+                        this.$refs.HM.init(res.datas,[]);
+                    }).finally(()=>{
+
                     })
                 }
             },

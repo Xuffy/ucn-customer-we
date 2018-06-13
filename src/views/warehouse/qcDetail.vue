@@ -604,8 +604,8 @@
                     planPayAmount: e.planPayAmount,
                     planPayDt: e.planPayDt,
                     type: 10,       //10代表付款
-                    payToId: this.qcDetail.serviceOwnerId,
-                    payToName: this.qcDetail.serviceName,
+                    payToCompanyId: this.qcDetail.serviceProviderId,
+                    payToCompanyName: this.qcDetail.serviceName,
                     currency: 0,
                     currencyCode: '',
                 };
@@ -639,7 +639,7 @@
 
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.warehouse.deleteSuccess
                     });
                 }).catch(() => {
 

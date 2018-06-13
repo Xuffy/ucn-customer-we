@@ -129,7 +129,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft','setLog'
+                'setDraft','setLog'
             ]),
             onAction(item) {
                 this.$windowOpen({
@@ -322,7 +322,6 @@
             selectedList(n){
                 if(this.view==='1'){
                     if(n.length>0){
-                        console.log(n)
                         let allow=true;
                         _.map(n,v=>{
                             if(v.status.value!=='PROCESS'){

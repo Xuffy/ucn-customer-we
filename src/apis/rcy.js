@@ -8,7 +8,6 @@ export default {
     post_finishPost: ['/order/finish', 'BASE_URL'],
     delete_order: ['/order/delete', 'BASE_URL'],
     download_order: ['/order/download', 'BASE_URL'],
-    send_order: ['/order/send', 'BASE_URL'],
     add_order: ['/order/save', 'BASE_URL'],
     detail_order: ['/order/detail/{id}', 'BASE_URL'],
     get_order_history: ['/order/skuHistory', 'BASE_URL'],
@@ -98,6 +97,8 @@ export default {
     ORDER_UPDATE:['/order/update','BASE_URL'],
     ORDER_CONFIRM:['/order/confirm','BASE_URL'],
     ORDER_CANCEL:['/order/cancle','BASE_URL'],
-    ORDER_SAVE_DRAFT:['/order/saveDraft','BASE_URL']
+    ORDER_SAVE_DRAFT:['/order/saveDraft','BASE_URL'],
+    ORDER_SEND:['/order/send','BASE_URL'],
+    ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
 
 }
