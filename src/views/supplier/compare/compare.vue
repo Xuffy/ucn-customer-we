@@ -17,7 +17,7 @@
         <div class="btns">
             <span v-if="$route.params.type==='new'">
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'" @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder">{{$i.product.createOrder}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
@@ -266,41 +266,26 @@
             },
             //勾选的商品创建order
             createOrder(){
+              console.log(this.selectList)
               let supplierList=[];
               _.map(this.selectList,v=>{
                 supplierList.push(v.code.value);
               });
               if(_.uniq(supplierList).length>1){
                 return this.$message({
-                  message: this.$i.product.notAddDifferentSupplierProduct,
+                  message: '不能增加不同的供应商产品',
                   type: 'warning'
                 });
-              }
-
-              this.disabledOrderList=[];
-              this.selectList.forEach(v=>{
-                //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
-                if(v.customerCreate.value){
-                  this.disabledOrderList.push(v);
-                }
-              });
-              if(this.disabledOrderList.length>0){
-                 this.dialogFormVisible=true;
               }else{
                 if(this.selectList.length===0){
                   this.$windowOpen({
                     url:'/order/create',
                   })
                 }else{
-                  let ids='';
-                  this.selectList.forEach(v=>{
-                    ids+=(v.id.value+',');
-                  });
                   this.$windowOpen({
                     url:'/order/create',
                     params:{
                       type:'supplier',
-                      ids:ids,
                       supplierCode:this.selectList[0].code.value
                     },
                   })
