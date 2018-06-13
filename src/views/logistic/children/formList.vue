@@ -9,7 +9,8 @@
             <p class="textFilter">{{ textFilter(a) }}</p>
           </el-form-item>
           <div v-else>
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'input'" prop="value">
+            <!-- <el-form-item :label="validator(a.label)" v-if="a.type === 'input'" prop="value"> -->
+            <el-form-item :label="a.label" v-if="a.type === 'input'" prop="value">
               <el-input placeholder="请输入内容" v-model="a.value" :disabled="a.disabled" />
             </el-form-item>
 
@@ -87,6 +88,11 @@
       }
     },
     methods: {
+      // validator(val){
+      //   return this.component('span', {
+          
+      //   })
+      // },
       textFilter(a) {
         if (a.type === 'input' || a.type === 'text') return a.value
         if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
