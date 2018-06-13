@@ -43,6 +43,7 @@
     import VTable from '@/components/common/table/index'
     import selectSearch from '@/components/common/fnCompon/selectSearch'
     import {VPagination} from '@/components/index'
+    import { mapActions } from 'vuex'
 
     export default {
         name: "warehouseOverview",
@@ -107,6 +108,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             changeStatus(){
                 this.warehouseConfig.pn=1;
                 this.getWarehouseData();
@@ -191,6 +193,9 @@
         created(){
             this.getWarehouseData();
             this.getUnit();
+        },
+        mounted(){
+
         },
         watch:{
 

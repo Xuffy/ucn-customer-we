@@ -129,7 +129,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft'
+                'setRecycleBin', 'setDraft','setLog'
             ]),
             onAction(item) {
                 this.$windowOpen({
@@ -272,12 +272,11 @@
                         this.loading = false
                     });
             },
-
             //获取字典
             getUnit() {
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {
@@ -306,17 +305,18 @@
         },
         created() {
             this.getUnit();
-            this.setRecycleBin({
-                name: 'orderRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'orderRecycleBin',
+            //     show: true
+            // });
             this.setDraft({
                 name: 'orderDraft',
                 show: true
             });
         },
         mounted() {
-            this.loading = false
+            this.loading = false;
+            this.setLog({query:{code:'BIZ_ORDER'}});
         },
         watch: {
             selectedList(n){
