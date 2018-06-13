@@ -741,7 +741,8 @@
                 this.$windowOpen({
                     url:'/negotiation/createInquiry',
                     params:{
-                        skus:this.$route.query.id
+                        skus:this.$route.query.id,
+                        supplierCodes:this.productForm.supplierCode
                     },
                 })
             },

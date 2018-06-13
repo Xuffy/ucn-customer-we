@@ -22,6 +22,7 @@
       </div>
     </div>
       <v-table
+              :height="500"
               :data="tabData"
               :loading='loading'
               :buttons="[{label: 'Detail', type: 1}]"
@@ -39,6 +40,7 @@
       </v-table>
       <page
               :page-data="pageData"
+              :page-sizes="[50,100,200,500]"
               @change="handleSizeChange"
               @size-change="pageSizeChange"></page>
 
@@ -71,10 +73,9 @@
                 searchLoad:false,
                 loading: false,
                 pageTotal: 0,
-                pazeSize: [10, 20, 30, 40, 50, 100],
                 params: {
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     qcOrderNo: "",
                     qcStatusDictCode: "",
 

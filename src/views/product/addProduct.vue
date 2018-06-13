@@ -231,7 +231,7 @@
                     descCnLike: "",
 
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
 
                     recycle: false,         //是否是在recycle bin里请求
                     operatorFilters: [
@@ -544,15 +544,25 @@
                         url:'/negotiation/createInquiry',
                     })
                 }else{
-                    let skus='';
+                    let skus='',codes=[],supplierCodes='';
                     _.map(this.selectList,v=>{
-                        skus+=(v.id.value+',');
+                        if(v.id.value){
+                            skus+=(v.id.value+',');
+                        }
+                        if(v.supplierCode.value){
+                            codes.push(v.supplierCode.value)
+                        }
                     });
                     skus=skus.slice(0,skus.length-1);
+                    _.map(_.uniq(codes),v=>{
+                        supplierCodes+=(v+',');
+                    });
+                    supplierCodes=supplierCodes.slice(0,supplierCodes.length-1);
                     this.$windowOpen({
                         url:'/negotiation/createInquiry',
                         params:{
-                            skus:skus
+                            skus:skus,
+                            supplierCodes:supplierCodes
                         }
                     })
                 }

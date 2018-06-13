@@ -32,7 +32,7 @@
                 v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
                 style="width:100%;">
                 <el-option
-                  v-for="items in selectAll[item.key]"
+                  v-for="items in optionData[item.key]"
                   :key="items.id"
                   :label="items.name"
                   :value="items.code"
@@ -47,7 +47,7 @@
                 v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
                 style="width:100%;">
                 <el-option
-                  v-for="items in selectAll[item.key]"
+                  v-for="items in optionData[item.key]"
                   :key="items.id"
                   :label="items.name"
                   :value="items.code"
@@ -64,10 +64,10 @@
                 value-key="id"
                 :size="item.size || 'mini'"
                 :placeholder="$i.common.pleaseEnterTheKeyWords"
-                :remote-method="remoteMethod"
+                :remote-method="getSuppliers"
                 :loading="loading">
                 <el-option
-                  v-for="items in selectAll[item.key]"
+                  v-for="items in optionData[item.key]"
                   :key="items.id"
                   :label="items.name"
                   :value="items"
@@ -88,7 +88,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'" :list="fromArg[item.key]" ref="UPLOAD"></v-upload>
+              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="fromArg[item.key]" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -155,7 +155,7 @@ export default {
       checkedAll: [],
       trig: 0,
       tableLoad: false,
-      selectAll: {
+      optionData: {
         paymentMethod: [],
         transport: [],
         incoterm: [],
@@ -172,11 +172,11 @@ export default {
         inquiryAmount: 1,
         skuQty: 1
       },
-      radio: 'product',   //Add Product status
-      dialogTableVisible: false, //Add Product switch
+      radio: 'product', // Add Product status
+      dialogTableVisible: false, // Add Product switch
 
-      tabColumn: '', //tab top
-      tabData: [], //tab Data
+      tabColumn: '', // tab top
+      tabData: [], // tab Data
       textarea: ''
     }
   },
@@ -188,28 +188,71 @@ export default {
     VHistoryModify
   },
   created() {
-    this.getDictionaries();
-    this.remoteMethod('');
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-
-    let query = this.$route.query, regex = (/^\d+(,\d+)?$/);
-    if (query.id && !isNaN(query.id)) {
-      this.getFefault(query.id);
-      if (!query.from || query.from !== 'copy') {
-        this.showInquiryNo = true;
-      }
-    } else if (query.skus && regex.test(query.skus)) {
-      this.getList(query.skus.split(','));
-    }
-  },
-  computed: {
+    this.getBaseData();
+    this.getSuppliers('').then(this.initFromParams);
   },
   methods: {
     ...mapActions([
       'setDraft',
       'setRecycleBin'
     ]),
+    getBaseData() {
+      let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true});
+      let getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL);
+      let getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
+
+      Promise.all([getCodes, getCurrencies, getCountries]).then(res => {
+        this.optionData.paymentMethod = _.findWhere(res[0], {'code': 'PMT'}).codes;
+        this.optionData.transport = _.findWhere(res[0], {'code': 'MD_TN'}).codes;
+        this.optionData.incoterm = _.findWhere(res[0], {'code': 'ITM'}).codes;
+        this.optionData.exportLicense = _.map(_.findWhere(res[0], {'code': 'EL_IS'}).codes, item => {
+          item.code = Number(item.code);
+          return item;
+        });
+
+        this.optionData.currency = res[1];
+
+        this.optionData.destinationCountry = res[2];
+        this.optionData.departureCountry = res[2];
+      });
+    },
+    getSuppliers(name) {
+      return this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME + '?name=' + name).then(res => {
+        this.optionData.supplierName = res;
+        return Promise.resolve(res);
+      });
+    },
+    initFromParams(res) {
+      let query = this.$route.query, regex = (/^\d+(,\d+)*$/);
+      if (query.id && !isNaN(query.id)) {
+        this.getFefault(query.id);
+        if (!query.from || query.from !== 'copy') {
+          this.showInquiryNo = true;
+        }
+        return;
+      }
+      if (query.skus && regex.test(query.skus)) {
+        this.getList(query.skus.split(','));
+      }
+      let suppliers = [];
+      if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
+        let supplierCompanies = query.supplierCompanies.split(',');
+        if (supplierCompanies.length > 0) {
+          suppliers.push.apply(suppliers, res.filter(c => supplierCompanies.indexOf(c.companyId.toString()) > -1));
+        }
+      }
+      if (query.supplierCodes && (/^\w+(,\w+)*$/).test(query.supplierCodes)) {
+        let supplierCodes = query.supplierCodes.split(',');
+        if (supplierCodes.length > 0) {
+          suppliers.push.apply(suppliers, res.filter(c => supplierCodes.indexOf(c.code.toString()) > -1));
+        }
+      }
+      if (suppliers.length > 0) {
+        this.fromArg.suppliers = suppliers;
+      }
+    },
     getFefault(id) {
       this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id}).then(res => {
         res.exportLicense = res.exportLicense ? 1 : 0;
@@ -278,29 +321,6 @@ export default {
         let tmp = _.filter(items, item => _.findWhere(oldItem, {'key': 'skuId'}).value === _.findWhere(item, {'key': 'skuId'}).value && !!oldItem._remark === !!item._remark);
         return tmp[0] || oldItem;
       });
-    },
-    getDictionaries() {
-      this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true})
-        .then(res => {
-          this.selectAll.paymentMethod = _.findWhere(res, {'code': 'PMT'}).codes;
-          this.selectAll.transport = _.findWhere(res, {'code': 'MD_TN'}).codes;
-          this.selectAll.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
-          this.selectAll.exportLicense = _.map(_.findWhere(res, {'code': 'EL_IS'}).codes, item => {
-            item.code = Number(item.code);
-            return item;
-          });
-        });
-      this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
-        .then(res => {
-          this.selectAll.currency = res;
-        });
-
-      this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true})
-        .then(res => {
-          this.selectAll.destinationCountry = res;
-          this.selectAll.departureCountry = res;
-        });
-
     },
     getProduct() {
 
@@ -431,44 +451,9 @@ export default {
           });
           break;
       }
-    },
-    remoteMethod(keyWord) {
-      this.$ajax.get(`${this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME}?name=${keyWord}`).then(res => {
-        this.selectAll.supplierName = res;
-
-        let suppliers = [];
-        let query = this.$route.query, regex = (/^\d+(,\d+)?$/);
-        if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
-          let supplierCompanies = query.supplierCompanies.split(',');
-          if (supplierCompanies.length > 0) {
-            _.map(res, item => {
-              for (let companyId of supplierCompanies) {
-                if (companyId === item.companyId.toString()) {
-                  suppliers.push(item);
-                }
-              }
-            });
-          }
-        }
-        if (query.supplierCodes && (/^\w+(,\w+)?$/).test(query.supplierCodes)) {
-          let supplierCodes = query.supplierCodes.split(',');
-          if (supplierCodes.length > 0) {
-            _.map(res, item => {
-              for (let code of supplierCodes) {
-                if (code === item.code.toString()) {
-                  suppliers.push(item);
-                }
-              }
-            });
-          }
-        }
-        if (suppliers.length > 0) {
-          this.fromArg.suppliers = suppliers;
-        }
-      });
     }
   }
-}
+};
 </script>
 <style lang="less" scoped>
   .create-inquiry {

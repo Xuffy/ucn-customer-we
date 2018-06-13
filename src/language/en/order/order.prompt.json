@@ -11,5 +11,7 @@
   "sureAbandon":"Sure Abandon?",
   "sureRestore":"Sure Restore?",
   "changeSuccess":"Change Success!",
-  "sureCancel":"Sure Cancel?"
+  "sureCancel":"Sure Cancel?",
+  "sendSuccess":"Send Success!",
+  "sureRefuse":"Sure Refuse?"
 }

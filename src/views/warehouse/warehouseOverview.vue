@@ -19,6 +19,7 @@
             </div>
             <div class="section">
                 <v-table
+                        :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: 'Detail', type: 1}]"
@@ -33,6 +34,7 @@
                 <page
                         @size-change="changeSize"
                         @change="changePage"
+                        :page-sizes="[50,100,200,500]"
                         :page-data="pageData"></page>
             </div>
         </div>

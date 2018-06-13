@@ -1,6 +1,8 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">{{$i.order.draftOverview}}</h3>
+        <div class="title">
+            {{$i.order.draftOverview}}
+        </div>
         <!--form-->
         <v-table
                 ref='vtable'
@@ -13,12 +15,14 @@
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
-                <div class="fn">
-                    <selectSearch
-                            :options=options
-                            v-model='selectSearch'
-                            @inputEnter="inputEnter">
-                    </selectSearch>
+                <selectSearch
+                        style="width: auto"
+                        :options=options
+                        v-model='selectSearch'
+                        @inputEnter="inputEnter">
+                </selectSearch>
+                <div style="padding: 10px 0">
+                    <el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
                         <el-radio-group style="margin-left: 10px" v-model="view" size="mini" @change='changeView'>
@@ -95,6 +99,7 @@
                 },
                 selectedList: [],
                 selectedNumber: [],
+                disableClickSend:false,
 
                 /**
                  * 字典
@@ -108,6 +113,25 @@
             ...mapActions([
                 'setRecycleBin', 'setDraft','setLog'
             ]),
+            send(){
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_SEND,{
+                    draftCustomer:false,
+                    ids:ids
+                }).then(res=>{
+                    this.getData();
+                    this.$message({
+                        message: this.$i.order.sendSuccess,
+                        type: 'success'
+                    });
+                }).finally(()=>{
+                    this.disableClickSend=false;
+                })
+            },
             onAction(item) {
                 this.$windowOpen({
                     url: '/order/create',
@@ -209,10 +233,11 @@
                     });
             },
             //get_orderlist数据
-            getData(query) {
+            getData() {
                 this.loading = true;
-                let url='';
+                let url='',query='';
                 url=(this.view==='1'?this.$apis.ORDER_DRAFT_ORDERPAGE:this.$apis.ORDER_DRAFT_SKUPAGE);
+                query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
@@ -321,94 +346,16 @@
 
 </style>
 <style lang="less" scoped>
-    .orderOverview {
-        .hd {
-            height: 50px;
-            line-height: 50px;
-            color: #666;
-            border-bottom: 1px solid #ccc;
-            font-size: 18px;
-            color: #666666;
-        }
-        .status {
-            display: flex;
-            height: 60px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            box-sizing: border-box;
-            .btn-wrap {
-                display: flex;
-                align-items: center;
-                span {
-                    font-size: 14px;
-                }
-                button {
-                    padding: 2px 5px;
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
-            }
-            .select-wrap {
-                display: flex;
-                align-items: center;
-                .select {
-                    width: 110px;
-                    margin-right: 5px;
-                    input {
-                    }
-                }
-            }
-
-        }
-        .fn {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            box-sizing: border-box;
-            .viewBy {
-                display: flex;
-                align-items: center;
-                margin-right: 70px;
-                span {
-                    font-size: 14px;
-                    color: #666;
-                }
-
-                .set {
-                    cursor: pointer;
-                    padding-left: 40px;
-                    /*                    color: #999;*/
-                    i {
-                        font-size: 25px;
-                    }
-                    .speDropdown {
-                        position: absolute;
-                        right: 40px;
-                        background-color: #ffffff;
-                        z-index: 2000;
-                        display: none
-                    }
-                    .speDropdownshow {
-                        position: absolute;
-                        right: 40px;
-                        background-color: #ffffff;
-                        z-index: 2000;
-
-                    }
-                }
-            }
-        }
-
+    .title{
+        font-weight: bold;
+        font-size: 18px;
+        height: 32px;
+        line-height: 32px;
+        color:#666666;
+        margin-top: 10px;
+    }
+    .viewBy{
+        float: right;
     }
 
 </style>

@@ -1029,7 +1029,6 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
-                console.log(this.supplierOption,'????')
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
