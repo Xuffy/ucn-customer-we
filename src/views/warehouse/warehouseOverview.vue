@@ -19,6 +19,7 @@
             </div>
             <div class="section">
                 <v-table
+                        :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: 'Detail', type: 1}]"
