@@ -3,8 +3,14 @@ export default {
   ENV: {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
+<<<<<<< HEAD
+      LOGIN_URL: 'http://192.168.51.138:8070',
+      LJ_URL: 'http://192.168.51.219:11005',
+      // LOGIN_URL: '//dev.auth.ucnscm.cn',
+=======
       // LOGIN_URL: 'http://192.168.51.138:8070',
       LOGIN_URL: '//dev.auth.ucnscm.cn',
+>>>>>>> 9f123b1ac7f74ebcf66dd1723a2dbe9f3c4d6099
       BASE_URL: '//192.168.51.148:11001', // 采购端
       USSO_URL: '//192.168.51.148:11006', // sso 服务
       // UUSER_URL: '//192.168.51.198:11004', // 用户中心
