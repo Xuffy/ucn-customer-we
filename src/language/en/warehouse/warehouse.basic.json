@@ -18,7 +18,6 @@
   "modify":"Modify",
   "invalid":"Invalid",
   "restore":"Restore",
-
   "inboundOverview":"入库总览",
   "outboundOverview":"出库总览",
   "inboundType":"入库类型",
@@ -50,7 +49,15 @@
   "pressMoney":"催款",
   "prompt":"提示",
   "sureConfirm":"Sure Confirm",
-  "sureRestartQc":"Sure Restart QC?"
-
-
+  "sureRestartQc":"Sure Restart QC?",
+  "deleteSuccess":"删除成功!",
+  "paymentNumber":"Payment Number",
+  "paymentName":"Payment Name",
+  "estPayDate":"Est. Pay Date",
+  "actPayDate":"Act. Pay Date",
+  "estAmount":"Est. Amount",
+  "actAmount":"Act. Amount",
+  "currency":"Currency",
+  "available":"Available",
+  "confirm":"Confirm"
 }

@@ -3,6 +3,12 @@ export default {
   ENV: {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
+<<<<<<< HEAD
+=======
+      // LOGIN_URL: 'http://192.168.51.138:8070',
+      LJ_URL: 'http://192.168.51.219:11005',
+      // LOGIN_URL: '//dev.auth.ucnscm.cn',
+>>>>>>> 5f81c43098482223f345607ff3017ab979837baa
       // LOGIN_URL: 'http://192.168.51.138:8070',
       LJ: 'http://192.168.51.219:11001',
       // LJ: '//192.168.51.148:11001',

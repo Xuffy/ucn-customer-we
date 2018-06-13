@@ -36,12 +36,12 @@
         </div>
 
         <v-table
+                :height="500"
                 v-loading="loadingTable"
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
                 @change-checked="changeChecked"></v-table>
-
         <div class="footBtn">
             <div v-if="$route.params.type==='new'">
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
