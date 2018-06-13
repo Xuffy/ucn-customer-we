@@ -546,8 +546,12 @@
                 }else{
                     let skus='',codes=[],supplierCodes='';
                     _.map(this.selectList,v=>{
-                        skus+=(v.id.value+',');
-                        codes.push(v.supplierCode.value)
+                        if(v.id.value){
+                            skus+=(v.id.value+',');
+                        }
+                        if(v.supplierCode.value){
+                            codes.push(v.supplierCode.value)
+                        }
                     });
                     skus=skus.slice(0,skus.length-1);
                     _.map(_.uniq(codes),v=>{
