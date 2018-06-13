@@ -89,6 +89,7 @@
             <page
                     @size-change="changeSize"
                     @change="changePage"
+                    :page-sizes="[50,100,200,500]"
                     :page-data="pageData"></page>
         </div>
 

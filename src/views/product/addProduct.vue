@@ -110,6 +110,7 @@
             <page
                     @change="changePage"
                     @size-change="changeSize"
+                    :page-sizes="[50,100,200,500]"
                     :page-data="pageData"></page>
             <div class="footer-btn" v-if="hideBtn && type!=='recycle'">
                 <el-button :loading="disabledOkBtn" type="primary" @click="postData">OK</el-button>
