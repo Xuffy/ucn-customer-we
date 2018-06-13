@@ -450,6 +450,18 @@ export default {
             });
           }
         }
+        if (query.supplierCodes && (/^\w+(,\w+)?$/).test(query.supplierCodes)) {
+          let supplierCodes = query.supplierCodes.split(',');
+          if (supplierCodes.length > 0) {
+            _.map(res, item => {
+              for (let code of supplierCodes) {
+                if (code === item.code.toString()) {
+                  suppliers.push(item);
+                }
+              }
+            });
+          }
+        }
         if (suppliers.length > 0) {
           this.fromArg.suppliers = suppliers;
         }
