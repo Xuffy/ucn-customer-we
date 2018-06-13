@@ -268,7 +268,7 @@
             createOrder(){
               let supplierList=[];
               _.map(this.selectList,v=>{
-                supplierList.push(v.supplierCode.value);
+                supplierList.push(v.code.value);
               });
               if(_.uniq(supplierList).length>1){
                 return this.$message({
@@ -285,7 +285,7 @@
                 }
               });
               if(this.disabledOrderList.length>0){
-                this.dialogFormVisible=true;
+                 this.dialogFormVisible=true;
               }else{
                 if(this.selectList.length===0){
                   this.$windowOpen({
@@ -299,9 +299,9 @@
                   this.$windowOpen({
                     url:'/order/create',
                     params:{
-                      type:'product',
+                      type:'supplier',
                       ids:ids,
-                      supplierCode:this.selectList[0].supplierCode.value
+                      supplierCode:this.selectList[0].code.value
                     },
                   })
                 }
