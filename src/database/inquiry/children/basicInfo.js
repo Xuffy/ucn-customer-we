@@ -187,7 +187,7 @@ export default {
     xs: 24,
     sm: 24,
     md: 24,
-    lg: 24,
+    lg: 24
   },
   fieldDisplay: {
     _hide: true
