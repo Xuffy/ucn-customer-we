@@ -18,9 +18,9 @@
     },
     watch: {
       $route(val) {
-        this.quickLink.draft.show = {show: false};
-        this.quickLink.recycleBin.show = {show: false};
-        this.quickLink.log.show = {show: false};
+        this.quickLink.draft = {show: false};
+        this.quickLink.recycleBin = {show: false};
+        this.quickLink.log = {show: false};
 
         this.layout.paddingRight = 0;
       }

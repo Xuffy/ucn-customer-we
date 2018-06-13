@@ -97,8 +97,10 @@ export default {
      * @param data
      * @param db
      * {
-     *   type:'Number', // 数据类型：
+     *   type:'Number', // 数据类型：Number、Regexp、Email
      *   required:true, // 必填项
+     *   max:10, // 最大值
+     *   min:0, // 最小值
      *   length:20, // 最大长度
      *   minLength:20, // 最小长度
      * }
@@ -108,7 +110,7 @@ export default {
 
       for (let k in data) {
         let val = (data[k])
-          , item = db[k]
+          , item = _.findWhere(db, {key: k}) || {}
           , key = item.key || true
           , validate;
 
@@ -116,45 +118,45 @@ export default {
 
         validate = item._rules;
 
-        if (validate.required && !val) {
-          Message.warning(`请填写 ${item.label}`);
+        if (validate.required && !val && validate.type !== 'Number' && val !== 0) {
+          Message.warning(`请必须填写 ${item.label}`);
           return key;
         }
 
         switch (validate.type) {
           case 'Number':
             if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-              Message.warning(`${item.label} 格式不正确`);
+              Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
             if (!Number(val) || !_.isNumber(Number(val))) {
-              Message.warning(`${item.label} 请填写数字`);
+              Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if(validate.max && validate.max < val){
+            if (validate.max && validate.max < val) {
               Message.warning(`${item.label} 值不能大于${validate.max}`);
               return key;
             }
-            if(validate.min && validate.min > val){
+            if (validate.min && validate.min > val) {
               Message.warning(`${item.label} 值不能小于${validate.max}`);
               return key;
             }
             break;
           case 'Email':
             if (!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val)) {
-              Message.warning(`${item.label} 请填写邮箱`);
+              Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
             break;
           case 'Regexp':
             if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-              Message.warning(item.label || `${item.label} 格式不正确`);
+              Message.warning(item.label || `请填正确的 ${item.label}`);
               return key;
             }
             break;
         }
 
-        if (val){
+        if (val) {
           if (validate.length && validate.length < val.length) {
             Message.warning(`${item.label} 长度不能大于${validate.length}位`);
             return key;
