@@ -213,7 +213,7 @@
                             :editable="false"
                             align="right"
                             type="date"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="true"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -241,7 +241,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="true"
                             :placeholder="$i.order.pleaseInput"
                             v-model="scope.row.remark"
                             clearable>
@@ -258,7 +258,7 @@
                             align="right"
                             type="date"
                             :editable="false"
-                            :disabled="scope.row.type==='1' || scope.row.type==='3'"
+                            :disabled="true"
                             :placeholder="$i.order.pleaseChoose"
                             :picker-options="pickerOptions1">
                     </el-date-picker>
@@ -753,6 +753,7 @@
 
     import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
     import VProduct from '@/views/product/addProduct';
+    import { mapActions } from 'vuex'
 
     export default {
         name: "createOrder",
@@ -988,6 +989,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
@@ -1677,6 +1679,13 @@
         },
         created(){
             this.getOrderNo();
+        },
+        mounted(){
+            // this.setLog({query:{code:'BIZ_ORDER'}});
+            this.setDraft({
+                name: 'orderDraft',
+                show: true
+            });
         },
         watch:{
             queryNo(n){

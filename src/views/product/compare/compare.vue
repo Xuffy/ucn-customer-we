@@ -120,6 +120,7 @@
 <script>
     import VTable from '@/components/common/table/index'
     import product from '../addProduct'
+    import { mapActions } from 'vuex'
 
 
     export default {
@@ -158,6 +159,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getList() {
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
@@ -641,6 +643,9 @@
         },
         created(){
             this.getList();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
         watch:{
             selectList(n){

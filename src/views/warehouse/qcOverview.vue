@@ -46,6 +46,7 @@
 </template>
 <script>
     import { selectSearch, VTable ,VPagination} from '@/components/index';
+    import { mapActions } from 'vuex'
 
     export default {
         name: "qc-overview",
@@ -91,6 +92,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             getSort(val, key) {
                 console.log(val, key)
             },
@@ -178,7 +180,10 @@
 
         },
         created(){
-        this.getUnit();
+            this.getUnit();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_QC_ORDER'}});
         },
     }
 </script>

@@ -259,6 +259,7 @@
     import compareList from '../compareList'
     import product from '../addProduct'
     import {VTable,VUpload,VPagination} from '@/components/index'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "detail",
@@ -475,6 +476,7 @@
             }
         },
         methods:{
+            ...mapActions(['setLog']),
             /**
              * 中间按钮组事件
              * */
@@ -854,6 +856,9 @@
             this.getTableData();
             this.getRemarkData();
             this.getCompareList();
+        },
+        mounted(){
+            this.setLog({query:{code:'BIZ_SKU'}});
         },
     }
 </script>

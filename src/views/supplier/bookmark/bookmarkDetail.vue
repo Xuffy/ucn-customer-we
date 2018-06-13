@@ -175,17 +175,18 @@
               }
             },
             createInquiry() {
-                this.windowOpen('/negotiation/createInquiry', {
-                    supplierId: this.id //供应商信息将被带入
-                });
+              this.$windowOpen({
+                url: '/negotiation/createInquiry',
+                  params: {
+                    supplierCompanies: Number(this.$route.query.companyId)
+                  }
+                })
             },
             createOrder() {
                 this.$windowOpen({
                     url: '/order/create',
                     params: {
-                        type: 'supplier',
-                        supplierName: this.basicDate.name,
-                        supplierNo: this.basicDate.code
+                      supplierCode: this.basicDate.code
                     }
                 });
             },
