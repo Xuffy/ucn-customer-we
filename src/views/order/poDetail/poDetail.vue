@@ -390,54 +390,28 @@
                         :label="$i.order.planRefundDt"
                         width="180">
                     <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.planRefundDt"
-                                type="date"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,'yyyy-mm-dd'):''}}</span>
+                        <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.planRefundAmount"
                         width="180">
                     <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.planRefundAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.planRefundAmount}}</span>
+                        <span>{{scope.row.planRefundAmount}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.actualRefundDt"
                         width="180">
                     <template slot-scope="scope">
-                        <el-date-picker
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speDate"
-                                v-model="scope.row.actualRefundDt"
-                                type="date"
-                                :placeholder="$i.order.pleaseChoose">
-                        </el-date-picker>
-                        <span v-else>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,'yyyy-mm-dd'):''}}</span>
+                        <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.actualRefundAmount"
                         width="180">
                     <template slot-scope="scope">
-                        <el-input-number
-                                v-if="scope.row.isNew || scope.row.isModify"
-                                class="speNumber"
-                                v-model="scope.row.actualRefundAmount"
-                                :controls="false"
-                                :min="0"></el-input-number>
-                        <span v-else>{{scope.row.actualRefundAmount}}</span>
+                        <span>{{scope.row.actualRefundAmount}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -475,7 +449,7 @@
                             </div>
                             <div v-else>
                                 <div v-if="scope.row.status===-1">
-                                    <el-button :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
+                                    <el-button v-if="scope.row.planPayDt" :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
                                 </div>
                                 <div v-else-if="scope.row.isModify">
                                     <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
@@ -1802,7 +1776,6 @@
                 }
             },
             saveModifyPay(data){
-                console.log(data,'???')
                 let param={
                     actualPayAmount: data.actualPayAmount,
                     actualPayDt: data.actualPayDt,
