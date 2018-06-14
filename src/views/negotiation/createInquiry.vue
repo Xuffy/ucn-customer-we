@@ -227,7 +227,7 @@ export default {
     initFromParams(res) {
       let query = this.$route.query, regex = (/^\d+(,\d+)*$/);
       if (query.id && !isNaN(query.id)) {
-        this.getFefault(query.id);
+        this.getInquiryInfo(query.id);
         if (!query.from || query.from !== 'copy') {
           this.showInquiryNo = true;
         }
@@ -253,7 +253,7 @@ export default {
         this.fromArg.suppliers = suppliers;
       }
     },
-    getFefault(id) {
+    getInquiryInfo(id) {
       this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id}).then(res => {
         res.exportLicense = res.exportLicense ? 1 : 0;
         if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
@@ -278,6 +278,9 @@ export default {
           this.$filterDic(item);
           _.map(item, val => {
             val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
+            if (val.type === 'attachment' && val.value) {
+              val.value = val.value.split(',');
+            }
           });
         });
       });
