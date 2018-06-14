@@ -5,7 +5,7 @@ export default {
     orderNo:{
         type:'input',
         belong:'basicInfo',
-        disabled:true
+        disabled:true,
     },
     entryDt:{
         type:'date',
@@ -15,7 +15,7 @@ export default {
     },
     customerOrderNo:{
         type:'input',
-        belong:'basicInfo'
+        belong:'basicInfo',
     },
     customerName:{
         type:'input',
@@ -31,13 +31,16 @@ export default {
     },
     supplierOrderNo:{
         type:'input',
-        belong:'basicInfo'
+        belong:'basicInfo',
     },
     supplierName:{
         type:'select',
         belong:'basicInfo',
         isSupplier:true,
-        disableDetail:true
+        disableDetail:true,
+        _rules:{
+            required:true
+        }
     },
     // supplierCode:{  //供应商编号
     //     type:'select',
@@ -59,16 +62,25 @@ export default {
     deliveryDt:{
         type:'date',
         belong:'basicInfo',
+        _rules:{
+            required:true
+        }
     },
     incoterm:{
         type:'select',
         belong:'basicInfo',
-        isIncoterm:true
+        isIncoterm:true,
+        _rules:{
+            required:true
+        }
     },
     currency:{
         type:'select',
         belong:'basicInfo',
-        isCurrency:true
+        isCurrency:true,
+        _rules:{
+            required:true
+        }
     },
     // incotermArea:{
     //     type:'input',
@@ -77,7 +89,10 @@ export default {
     payment:{
         type:'select',
         belong:'basicInfo',
-        isPayment:true
+        isPayment:true,
+        _rules:{
+            required:true
+        }
     },
     lcNo:{
         type:'input',
@@ -86,6 +101,9 @@ export default {
     paymentDays:{
         type:'number',
         belong:'basicInfo',
+        _rules:{
+            type:'Number'
+        }
     },
     // paymentStatus:{
     //     type:'select',
@@ -100,6 +118,9 @@ export default {
     departurePort:{
         type:'input',       //??????
         belong:'basicInfo',
+        _rules:{
+            required:true
+        }
     },
     destCountry:{
         type:'select',
@@ -109,6 +130,9 @@ export default {
     destPort:{
         type:'input',       //??????
         belong:'basicInfo',
+        _rules:{
+            required:true
+        }
     },
     transport:{
         type:'select',
