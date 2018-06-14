@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <!--<v-table-filter :hideFilterValue="true" class="filter"/>-->
-    <el-table :data="tableData" style="width: 100%" class="table">
+    <el-table :data="tableData" style="width: 100%" class="table" max-height="400">
       <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') : null }}</span>
@@ -14,13 +14,13 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.toShipCartonQty" width="300" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" v-if="scope.row.toShipCartonQty.edit"></el-input>
+          <el-input placeholder="请输入内容" v-model="scope.row.toShipCartonQty.value" @change="currentChange(scope.row.toShipCartonQty.key,scope.row.toShipCartonQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipCartonQty.value }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.toShipQty" width="160" align="center" sortable>
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" v-if="scope.row.toShipQty.edit"></el-input>
+          <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipQty.value }}</span>
         </template>
       </el-table-column>
@@ -197,6 +197,9 @@ export default {
     }
   },
   methods: {
+    currentChange(col,i){
+      console.log(col)
+    },
     createModifyData () {
       if (!this.tableData.length) return
       let flag = false;

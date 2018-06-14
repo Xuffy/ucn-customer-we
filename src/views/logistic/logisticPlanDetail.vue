@@ -3,7 +3,7 @@
     <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList }}</div>
-    <form-list :showHd="false" @selectChange="formListSelectChange" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -19,7 +19,7 @@
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
     <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
-    <form-list :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
+    <form-list name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -87,6 +87,8 @@ export default {
   data() {
     return {
       negotiate:'',
+      fieldDisplay:{},
+      hightLightObj:{},
       attachmentList:[],
       modefiyProductIndex: 0,
       logisticsStatus:null,
@@ -273,6 +275,7 @@ export default {
         this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
         this.attachmentList = res.attachment;
+        this.fieldDisplay = res.fieldDisplay;
         this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
           this.createdPaymentData(res)
         })
@@ -463,7 +466,6 @@ export default {
     },
 
     selectProduct (arr) {
-      // console.log(arr)
       this.selectProductArr = arr
     },
     removeProduct () {
@@ -479,7 +481,7 @@ export default {
       const currrentProduct = this.productModifyList[0]
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
       const id = currrentProduct.id.value
-      const vId = currrentProduct.vId.value
+      const vId = +new Date();
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
       index === -1 ? this.modifyProductArray.push(this.restoreObj(currrentProduct)) : (this.modifyProductArray[index] = this.restoreObj(currrentProduct))
     },
@@ -567,6 +569,14 @@ export default {
         // })
         // return obj
       })
+    },
+    hightLightModifyFun(v,name){
+      this.hightLightObj[name] = v ;
+      let obj = {};
+      _.mapObject(this.hightLightObj,(v,k)=>{
+        Object.assign(obj,v);
+      })
+      this.oldPlanObject.fieldDisplay = obj;
     },
     sendData (keyString) {
       let url = this.configUrl[this.pageName][keyString];
