@@ -1,6 +1,6 @@
 export default {
     //ADRESS
-    factoryName: {
+  factoryName: {
         key: "name",
         belong: "address"
     },
@@ -63,47 +63,6 @@ export default {
         key: "accountType"
     },
 
-    //.............concats
-    name: {
-      key: 'name',
-      belong: "concats"
-    },
-    department: {
-      key: 'deptName',
-      belong: "concats"
-    },
-    gender: {
-      key: 'gender',
-      belong: "concats"
-    },
-    position: {
-      key: 'position',
-      belong: "concats"
-    },
-    mobileNumber: {
-      key: 'cellphone',
-      belong: "concats"
-    },
-    telNumber: {
-      key: 'telphone',
-      belong: "concats"
-    },
-    faxNumber: {
-      key: 'fax',
-      belong: "concats"
-    },
-    emailAddress: {
-      key: 'email',
-      belong: "concats"
-    },
-    skype: {
-      key: 'skype',
-      belong: "concats"
-    },
-    qq: {
-      key: 'qq',
-      belong: "concats"
-    },
   //remark
   remark: {
     key: 'remark',

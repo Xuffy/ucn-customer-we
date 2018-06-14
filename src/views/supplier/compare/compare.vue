@@ -54,23 +54,11 @@
         </div>
 
         <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
-<!--
-            <product
-                    :isInModify="$route.params.type==='modify'?true:false"
-                    :title="addProductTitle"
-                    :disabledOkBtn="false"
-                    :hideBtn="true"
-                    :disabledLine="disabledLine"
-                    :forceUpdateNumber="forceUpdateNumber"
-                    @handleOK="handleOkClick"
-                    @handleCancel="handleCancel"></product>
--->
             <VSupplier
                 @handleOkClick='handleOkClick'
                 :isButton=false
-                 :disabledLine="disabledLine"
+                :disabledLine="disabledLine"
                 >
-
             </VSupplier>
         </el-dialog>
 
@@ -295,6 +283,7 @@
 
             //新增product
             addNewProduct(){
+              console.log(111)
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
             },
@@ -335,7 +324,6 @@
             },
 
             handleOkClick(e){
-
                 //如果总条数>100，则进行提示
                 let totalLen=0;
                 this.tableDataList.forEach(v=>{
@@ -380,7 +368,6 @@
 
             //保存该compare list
             saveCompare(){
-
                 if(!this.compareName){
                     this.$message({
                         message: 'Please Input Compare Name',

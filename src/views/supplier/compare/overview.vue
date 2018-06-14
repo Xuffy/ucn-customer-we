@@ -59,9 +59,7 @@
                 params: {
                     id: '',
                     name: "",
-                    compareName: '',
-                    // pn: 1,
-                    // ps: 50,
+                    productName: '',  //sku name EN
                     recycle: false,
                 },
                 tabData: [],
@@ -80,11 +78,15 @@
                 'setRecycleBin'
             ]),
             inputEnter(keyWord) {
+                if (!keyWord.keyType) return this.$message({
+                  message: 'please choose a type',
+                  type: 'warning'
+                });
                 if (keyWord.keyType == 1) {
-                    params.compareName = keyWord.key
+                    this.params.name = keyWord.key
                     this.get_data()
                 } else {
-                    params.compareName = keyWord.key
+                  this.params.productName = keyWord.key
                     this.get_data()
                 }
             },
@@ -124,15 +126,20 @@
             },
             get_data() {
                 this.loading = true;
+                console.log(this.params)
                 this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
                     .then(res => {
                         this.loading = false;
                         this.tabData = this.$getDB(this.$db.supplier.compareView, res.datas,item=>{
                           _.mapObject(item, val => {
-                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                            val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'));
+                            if(item.productName.value.length >= 1000){
+                              item.productName.value.substring(0,1000)+'...'
+                            }
                             return val
                           })
                         });
+                        console.log(this.tabData)
                     })
                   .catch((res) => {
                     this.loading = false;
