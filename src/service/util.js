@@ -96,7 +96,7 @@ export default {
      * 表单验证
      * @param data
      * @param db
-     * {
+     * _rules:{
      *   type:'Number', // 数据类型：Number、Regexp、Email
      *   required:true, // 必填项
      *   max:10, // 最大值

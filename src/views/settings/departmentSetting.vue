@@ -560,7 +560,7 @@
         }
         return btns;
       },
-      getRoleData() {
+      /*getRoleData() {
         this.loadingRole = true;
         this.$ajax.get(this.$apis.get_departmentRole, {
           deptId: this.userData.deptId
@@ -583,7 +583,7 @@
         }).finally(err => {
           this.loadingRole = false;
         });
-      },
+      },*/
 
       changeUserDep(val) {
         let deps = _.findWhere(this.departmentData, {deptId: val});
@@ -824,11 +824,9 @@
               message: this.$i.setting.deleteSuccess
             });
             this.getDepartmentData(true);
-          }).catch(err => {
+          }).finally(() => {
             this.loadingRole = false;
-          })
-        }).catch(() => {
-
+          });
         });
       },
 

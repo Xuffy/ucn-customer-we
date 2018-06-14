@@ -95,7 +95,7 @@
       getFilterData(data, checkList) {
         return _.map(data, val => {
           return _.mapObject(val, v => {
-            if (_.isObject(v)){
+            if (_.isObject(v)) {
               v._hide = checkList.indexOf(v.key) === -1;
             }
             return v;
@@ -114,14 +114,15 @@
       },
       submitFilter() {
         let selected = this.$refs.columnTree.getCheckedNodes()
-          , params = [];
+          , params = {bizCode: this.code, userGridFavoriteList: []};
         this.loading = true;
 
         _.map(selected, value => {
-          let {bizCode, id, seqNum} = value;
-          params.push({bizCode, seqNum, gridFieldId: id});
+          let {id, seqNum} = value;
+          params.userGridFavoriteList.push({seqNum, gridFieldId: id});
         });
 
+        console.log(params)
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
             this.visible = false;

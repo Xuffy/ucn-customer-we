@@ -107,7 +107,7 @@
           .then(data => {
             data = data || [];
             this.messageList = data.reverse();
-            this.$nextTick(() => {
+            this.$refs.messageBox && this.$nextTick(() => {
               this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
             })
           })
