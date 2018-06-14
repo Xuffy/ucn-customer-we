@@ -508,13 +508,18 @@
         this.userListPage.pn = val;
         this.getDepartmentUser();
       },
-      getDepartmentData() {
+      getDepartmentData(type) {
         this.loadingDepartment = true;
         return this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
           this.departmentData = res;
           this.departmentData.forEach(v => {
             this.departmentUserTotal += v.deptUserCount;
           });
+
+          if (type) {
+            let roles = _.findWhere(res, {deptId: this.userData.deptId});
+            roles && this.departmentClick(roles);
+          }
           return res;
         }).finally(err => {
           this.loadingDepartment = false;
@@ -680,10 +685,7 @@
             deptId: this.userData.deptId,
             roleName: value
           }).then(res => {
-            this.getDepartmentData().then(depRes => {
-              let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
-              roles && this.departmentClick(roles);
-            });
+            this.getDepartmentData(true);
           }).finally(() => {
             this.loadingRole = false;
           });
@@ -821,7 +823,7 @@
               type: 'success',
               message: this.$i.setting.deleteSuccess
             });
-            this.getRoleData();
+            this.getDepartmentData(true);
           }).catch(err => {
             this.loadingRole = false;
           })
@@ -897,10 +899,7 @@
         }).then(() => {
           this.$ajax.put(type ? this.$apis.USER_DISABLE : this.$apis.USER_ENABLE, {userId})
             .then(res => {
-              this.getDepartmentData().then(depRes => {
-                let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
-                roles && this.departmentClick(roles);
-              });
+              this.getDepartmentData(true);
               this.$message.success('操作成功');
             });
         });
