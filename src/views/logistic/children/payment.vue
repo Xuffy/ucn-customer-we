@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="payment">
     <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button>
-    <el-table ref="table" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
+    <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
       <el-table-column type="index" width="50" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
@@ -126,14 +126,17 @@ export default {
         },
         {
           code: 10,
+          hightLight:true,
           name: this.$i.logistic.tbcc
         },
         {
           code: 20,
+          hightLight:true,
           name: this.$i.logistic.tbcs
         },
         {
           code: 30,
+          hightLight:true,
           name: this.$i.logistic.tbcsp
         },
         {
@@ -223,13 +226,18 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[index] += '元';
+            sums[index] += '';
           } else {
             sums[index] = '--';
           }
         });
 
         return sums;
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (this.paymentDec.find(a => a.code == row.status).hightLight) {
+        return 'warning-row';
+      }
     },
     computedCurrency (key, findKey, returnKey,currencyCode) {
       // 'supplier', 'skuSupplierId', 'skuSupplierName', scope.row.payToId 接手注释
@@ -262,3 +270,17 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="less">
+  .payment/deep/.el-table .warning-row {
+    background: #f56c6c;
+    td,th{
+      color:#fff;
+    }
+    &:hover{
+      td,th{
+        color:#1d1007;
+      }
+    }
+  }
+</style>
