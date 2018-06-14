@@ -328,8 +328,9 @@ export default {
         if (_.isBoolean(val.value)) {
           val.value ? val.value = 1 : val.value = 0;
         }
+        val.defaultData = val.value;
         val[dataBase] = val.value;
-        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay'].indexOf(k) < 0) {
+        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
               val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
