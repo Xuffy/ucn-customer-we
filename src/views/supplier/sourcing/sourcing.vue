@@ -139,7 +139,8 @@
         },
         methods: {
              ...mapActions([
-                'setRecycleBin'
+               'setRecycleBin',
+               'setLog'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -336,6 +337,9 @@
             //     name: 'bookmarkRecycleBin',
             //     show: true
             // });
+        },
+        mounted(){
+          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
         },
         watch: {}
     }
