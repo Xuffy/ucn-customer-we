@@ -201,14 +201,17 @@ export default {
           , len = _.values(keyData).length
           , i = 0;
         keyData = _.mapObject(keyData, (val) => {
-          let z = 200 - ((255 / len) * i);
-          val = `rgba(${z},255,255,1)`;
-          i++;
+          // let z = 200 - ((255 / len) * i);
+          // val = `rgba(${z},255,255,1)`;
+          val = `#f3510a`;
+          // i++;
           return val;
         });
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            val._highlight = keyData[key] || '';
+            if (_.isObject(val)){
+              val._color = keyData[key] || '';
+            }
             return val;
           });
         });
@@ -217,7 +220,7 @@ export default {
         let keyData = this.contrast(data, 'same');
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            if (keyData[key]) {
+            if (keyData[key] && _.isObject(val)) {
               val._hide = keyData[key];
             }
             return val;
