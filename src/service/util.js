@@ -131,7 +131,7 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!Number(val) || !_.isNumber(Number(val))) {
+            if (!_.isNumber(Number(val))) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
