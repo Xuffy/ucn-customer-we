@@ -93,10 +93,10 @@ export default {
 
 
     /**
-     *
+     * 表单验证
      * @param data
      * @param db
-     * {
+     * _rules:{
      *   type:'Number', // 数据类型：Number、Regexp、Email
      *   required:true, // 必填项
      *   max:10, // 最大值
@@ -118,10 +118,12 @@ export default {
 
         validate = item._rules;
 
-        if (validate.required && !val && validate.type !== 'Number' && val !== 0) {
+        if (validate.required && !/\S/.test(val)) {
           Message.warning(`请必须填写 ${item.label}`);
           return key;
         }
+
+        if (!/\S/.test(val)) continue;
 
         switch (validate.type) {
           case 'Number':
@@ -129,7 +131,7 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!Number(val) || !_.isNumber(Number(val))) {
+            if (!_.isNumber(Number(val))) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
@@ -156,16 +158,14 @@ export default {
             break;
         }
 
-        if (val) {
-          if (validate.length && validate.length < val.length) {
-            Message.warning(`${item.label} 长度不能大于${validate.length}位`);
-            return key;
-          }
+        if (validate.length && validate.length < val.length) {
+          Message.warning(`${item.label} 长度不能大于${validate.length}位`);
+          return key;
+        }
 
-          if (validate.minLength && validate.minLength > val.length) {
-            Message.warning(`${item.label} 长度不能小于${validate.length}位`);
-            return key;
-          }
+        if (validate.minLength && validate.minLength > val.length) {
+          Message.warning(`${item.label} 长度不能小于${validate.length}位`);
+          return key;
         }
 
       }
@@ -201,14 +201,17 @@ export default {
           , len = _.values(keyData).length
           , i = 0;
         keyData = _.mapObject(keyData, (val) => {
-          let z = 200 - ((255 / len) * i);
-          val = `rgba(${z},255,255,1)`;
-          i++;
+          // let z = 200 - ((255 / len) * i);
+          // val = `rgba(${z},255,255,1)`;
+          val = `#f3510a`;
+          // i++;
           return val;
         });
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            val._highlight = keyData[key] || '';
+            if (_.isObject(val)){
+              val._color = keyData[key] || '';
+            }
             return val;
           });
         });
@@ -217,7 +220,7 @@ export default {
         let keyData = this.contrast(data, 'same');
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            if (keyData[key]) {
+            if (keyData[key] && _.isObject(val)) {
               val._hide = keyData[key];
             }
             return val;
@@ -325,8 +328,9 @@ export default {
         if (_.isBoolean(val.value)) {
           val.value ? val.value = 1 : val.value = 0;
         }
+        val.defaultData = val.value;
         val[dataBase] = val.value;
-        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay'].indexOf(k) < 0) {
+        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
               val.value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
@@ -376,44 +380,52 @@ export default {
     };
 
 
-    Vue.prototype.$mul = function(){ 
+    Vue.prototype.$mul = function () {
       //解决JS 精度问题 乘法
-      let m = 0, 
-          s2 = '',
-          strArr = 1
-          
-      for (let i = 0; i < arguments.length; i++) {
-          if (arguments[i].toString().indexOf('.') > 0) {
-              m += arguments[i].toString().split(".")[1].length;
-              arguments[i] = Number(arguments[i].toString().replace(".", ""));
-          }
+      let m = 0,
+        s2 = '',
+        strArr = 1
 
-          strArr *= Number(arguments[i]);
+      for (let i = 0; i < arguments.length; i++) {
+        if (arguments[i].toString().indexOf('.') > 0) {
+          m += arguments[i].toString().split(".")[1].length;
+          arguments[i] = Number(arguments[i].toString().replace(".", ""));
+        }
+
+        strArr *= Number(arguments[i]);
       }
 
       return strArr / Math.pow(10, m);
     },
+<<<<<<< HEAD
     Vue.prototype.$sub = (num1, num2) =>{  
       //解决JS 精度问题(减法)
       let baseNum, 
           baseNum1, 
+=======
+      Vue.prototype.$sub = (num1, num2) => {
+        //解决JS 精度问题(减法)
+        let baseNum,
+          baseNum1,
+>>>>>>> 0db57eacf63028cbadebca6fd0b208ebdf3ab56e
           baseNum2,
           precision // 精度
 
-      try {
+        try {
           baseNum1 = num1.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum1 = 0;
-      }
+        }
 
-      try {
+        try {
           baseNum2 = num2.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum2 = 0;
-      }
+        }
 
+<<<<<<< HEAD
       baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
       precision = (baseNum1 >= baseNum2) ? baseNum1 : baseNum2;
 
@@ -441,24 +453,54 @@ export default {
       // 加法
       var baseNum, 
           baseNum1, 
+=======
+        baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+        precision = (baseNum1 >= baseNum2) ? baseNum1 : baseNum2;
+
+        return ((num1 * baseNum - num2 * baseNum) / baseNum).toFixed(precision);
+      },
+      Vue.prototype.$numDiv = (num1, num2) => {
+        //除法
+        var baseNum1 = 0, baseNum2 = 0;
+        var baseNum3, baseNum4;
+        try {
+          baseNum1 = num1.toString().split(".")[1].length;
+        } catch (e) {
+          baseNum1 = 0;
+        }
+        try {
+          baseNum2 = num2.toString().split(".")[1].length;
+        } catch (e) {
+          baseNum2 = 0;
+        }
+        baseNum3 = Number(num1.toString().replace(".", ""));
+        baseNum4 = Number(num2.toString().replace(".", ""));
+        return (baseNum3 / baseNum4) * Math.pow(10, baseNum2 - baseNum1);
+      },
+      Vue.prototype.$numAdd = (num1, num2) => {
+        // 加法
+        var baseNum,
+          baseNum1,
+>>>>>>> 0db57eacf63028cbadebca6fd0b208ebdf3ab56e
           baseNum2;
 
-      try {
+        try {
           baseNum1 = num1.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum1 = 0;
-      }
+        }
 
-      try {
+        try {
           baseNum2 = num2.toString().split(".")[1].length;
-      } 
-      catch (e) {
+        }
+        catch (e) {
           baseNum2 = 0;
-      }
+        }
 
-      baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
+        baseNum = Math.pow(10, Math.max(baseNum1, baseNum2));
 
+<<<<<<< HEAD
       return (num1 * baseNum + num2 * baseNum) / baseNum;
     },
     // createRandom(10,0,50) //生成10个从0-50之间不重复的随机数
@@ -473,8 +515,24 @@ export default {
         json[ranNum] = 1;
         arr.push(ranNum);
         }
+=======
+        return (num1 * baseNum + num2 * baseNum) / baseNum;
+      },
+      // createRandom(10,0,50) //生成10个从0-50之间不重复的随机数
+      Vue.prototype.$createRandom = (num, from, to) => {
+        var arr = [];
+        var json = {};
+        while (arr.length < num) {
+          //产生单个随机数
+          var ranNum = Math.floor(Math.random() * (to - from)) + from;
+          //通过判断json对象的索引值是否存在 来标记 是否重复
+          if (!json[ranNum]) {
+            json[ranNum] = 1;
+            arr.push(ranNum);
+          }
+        }
+        return arr;
+>>>>>>> 0db57eacf63028cbadebca6fd0b208ebdf3ab56e
       }
-      return arr;
-    }
   }
 }

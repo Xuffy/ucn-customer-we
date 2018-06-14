@@ -330,7 +330,6 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
                         :label="$i.order.planPayDt"
                         width="200">
                     <template slot-scope="scope">
@@ -341,7 +340,7 @@
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
-                        <span v-else>{{$dateFormat(scope.row.planPayDt,'yyyy-mm-dd')}}</span>
+                        <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -370,7 +369,7 @@
                                 type="date"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
-                        <span v-else>{{$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd')}}</span>
+                        <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd'):''}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -390,18 +389,30 @@
                 <el-table-column
                         :label="$i.order.planRefundDt"
                         width="180">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.planRefundDt?$dateFormat(scope.row.planRefundDt,'yyyy-mm-dd'):''}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.planRefundAmount"
                         width="180">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.planRefundAmount}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.actualRefundDt"
                         width="180">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.actualRefundDt?$dateFormat(scope.row.actualRefundDt,'yyyy-mm-dd'):''}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         :label="$i.order.actualRefundAmount"
                         width="180">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.actualRefundAmount}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                         prop="currencyCode"
@@ -409,6 +420,8 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
+                        fixed="right"
+                        align="center"
                         :label="$i.order.available"
                         width="180">
                     <template slot-scope="scope">
@@ -425,21 +438,29 @@
                         align="center"
                         width="125">
                     <template slot-scope="scope">
-                        <div v-if="scope.row.isNew">
-                            <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
-                            <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                        <div v-if="scope.row.status===10">
+                            <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
+                        </div>
+                        <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
+
                         </div>
                         <div v-else>
-                            <div v-if="scope.row.status===-1">
-                                <el-button :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
-                            </div>
-                            <div v-else-if="scope.row.isModify">
-                                <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
-                                <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                            <div v-if="scope.row.isNew">
+                                <el-button :disabled="!allowHandlePay" @click="saveNewPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                                <el-button :disabled="!allowHandlePay" @click="cancelNewPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
                             </div>
                             <div v-else>
-                                <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.modify}}</el-button>
-                                <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.abandon}}</el-button>
+                                <div v-if="scope.row.status===-1">
+                                    <el-button v-if="scope.row.planPayDt" :disabled="!allowHandlePay" @click="restorePay(scope.row)" type="text">{{$i.order.restore}}</el-button>
+                                </div>
+                                <div v-else-if="scope.row.isModify">
+                                    <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text" size="small">{{$i.order.save}}</el-button>
+                                    <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)" type="text" size="small">{{$i.order.cancel}}</el-button>
+                                </div>
+                                <div v-else>
+                                    <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.modify}}</el-button>
+                                    <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">{{$i.order.abandon}}</el-button>
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -1538,8 +1559,29 @@
                         skuId: e.skuId.value,
                         sorts: [],
                     };
+                    let data=_.filter(this.productTableData, (m) => {
+                        return m.skuSysCode.value = e.skuSysCode.value;
+                    });
                     this.$ajax.post(this.$apis.ORDER_HISTORY,param).then(res=>{
-                        this.$refs.HM.init(res.datas,[]);
+                        console.log(JSON.parse(res.datas[0].history),'history')
+                        let arr=[];
+                        _.map(res.datas,v=>{
+                            arr=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData([JSON.parse(v.history)], 'skuSysCode'),item=>{
+                                // if(item._remark){
+                                //     item.label.value=this.$i.order.remarks;
+                                //     item.skuPic._image=false;
+                                // }
+                            });
+                            // arr.push();
+                        });
+
+                        // let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                        //     if(item._remark){
+                        //         item.label.value=this.$i.order.remarks;
+                        //         item.skuPic._image=false;
+                        //     }
+                        // });
+                        this.$refs.HM.init(data,arr,false);
                     }).finally(()=>{
 
                     })
@@ -1643,7 +1685,6 @@
                 return arr;
             },
 
-
             /**
              * payment事件
              * */
@@ -1661,7 +1702,7 @@
                         status:20,
                         isNew:true
                     });
-                    this.disableApplyPay=true;
+                    // this.disableApplyPay=true;
                 }).finally(err=>{
                     this.disableClickApplyPay=false;
                 });
@@ -1718,7 +1759,11 @@
                 });
             },
             cancelNewPay(data){
-                console.log(data)
+                this.paymentData=_.difference(this.paymentData,[data]);
+                this.$message({
+                    type: 'success',
+                    message: this.$i.order.deleteSuccess
+                });
             },
             modifyPay(data){
                 this.$set(data,'isModify',true);
@@ -1733,7 +1778,6 @@
                 }
             },
             saveModifyPay(data){
-                console.log(data,'???')
                 let param={
                     actualPayAmount: data.actualPayAmount,
                     actualPayDt: data.actualPayDt,
@@ -1762,6 +1806,7 @@
                     });
                     this.$set(data,'isModify',false);
                     this.$set(data,'version',res.version);
+                    this.$set(data,'status',res.status);
                 }).finally(err=>{
                     this.loadingPaymentTable=false;
                 })
@@ -1832,6 +1877,30 @@
                     return 'warning-row';
                 }
                 return '';
+            },
+            confirmPay(data){
+                this.$confirm(this.$i.order.sureConfirm, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingPaymentTable=true;
+                    this.$ajax.post(this.$apis.PAYMENT_ACCEPT,{
+                        id:data.id,
+                        version:data.version
+                    }).then(res=>{
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.order.handleSuccess
+                        });
+                        this.$set(data,'status',40);
+                        this.$set(data,'version',res.version);
+                    }).finally(()=>{
+                        this.loadingPaymentTable=false;
+                    });
+                }).catch(() => {
+
+                });
             },
 
             /**
