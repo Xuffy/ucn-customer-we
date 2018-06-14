@@ -96,7 +96,7 @@ export default {
      * 表单验证
      * @param data
      * @param db
-     * {
+     * _rules:{
      *   type:'Number', // 数据类型：Number、Regexp、Email
      *   required:true, // 必填项
      *   max:10, // 最大值
@@ -118,11 +118,12 @@ export default {
 
         validate = item._rules;
 
-        if (validate.required && !val.toString()) {
+        if (validate.required && !/\S/.test(val)) {
           Message.warning(`请必须填写 ${item.label}`);
           return key;
         }
-        if (!val.toString()) continue;
+
+        if (!/\S/.test(val)) continue;
 
         switch (validate.type) {
           case 'Number':
@@ -130,7 +131,7 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!Number(val) || !_.isNumber(Number(val))) {
+            if (!_.isNumber(Number(val))) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
@@ -200,14 +201,17 @@ export default {
           , len = _.values(keyData).length
           , i = 0;
         keyData = _.mapObject(keyData, (val) => {
-          let z = 200 - ((255 / len) * i);
-          val = `rgba(${z},255,255,1)`;
-          i++;
+          // let z = 200 - ((255 / len) * i);
+          // val = `rgba(${z},255,255,1)`;
+          val = `#f3510a`;
+          // i++;
           return val;
         });
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            val._highlight = keyData[key] || '';
+            if (_.isObject(val)){
+              val._color = keyData[key] || '';
+            }
             return val;
           });
         });
@@ -216,7 +220,7 @@ export default {
         let keyData = this.contrast(data, 'same');
         return _.map(data, value => {
           return _.mapObject(value, (val, key) => {
-            if (keyData[key]) {
+            if (keyData[key] && _.isObject(val)) {
               val._hide = keyData[key];
             }
             return val;

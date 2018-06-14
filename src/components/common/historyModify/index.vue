@@ -130,6 +130,7 @@
             return val;
           });
         });
+          console.log(ed.concat(history),'ed')
         this.dataList = this.$depthClone(ed.concat(history));
 
         this.defaultData = this.$depthClone(ed.concat(history));

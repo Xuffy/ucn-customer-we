@@ -11,7 +11,7 @@
             <div class="handler">
               <el-row>
                 <el-col :span="8">
-                  <el-button @click="addDepartment" size="small" type="primary">{{$i.setting.add}}
+                  <el-button @click="addDepartment()" size="small" type="primary">{{$i.setting.add}}
                   </el-button>
                 </el-col>
                 <el-col :span="16">
@@ -46,7 +46,7 @@
                         class="treeBtn"
                         type="text"
                         icon="el-icon-edit"
-                        @click.stop="modifyDepartment(data,node,$event)">
+                        @click.stop="addDepartment(data,node,$event)">
                       </el-button>
                       <el-button
                         class="treeBtn"
@@ -68,7 +68,7 @@
             <div class="handler">
               <el-row>
                 <el-col :span="8">
-                  <el-button :disabled="!userData.deptId" @click="addRole" size="small"
+                  <el-button :disabled="!userData.deptId" @click="addRole()" size="small"
                              type="primary">{{$i.setting.add}}
                   </el-button>
                 </el-col>
@@ -104,7 +104,7 @@
                         class="treeBtn"
                         type="text"
                         icon="el-icon-edit"
-                        @click.stop="modifyRole(data,node)">
+                        @click.stop="addRole(data,node)">
                       </el-button>
                       <el-button
                         class="treeBtn"
@@ -159,30 +159,47 @@
         </el-button>
       </div>
       <div class="content">
-        <!--<el-form :inline="true">
-          <el-form-item label="审批人">
-            <el-input placeholder="审批人"></el-input>
+        <el-form :inline="true">
+          <el-form-item :label="$i.setting.email">
+            <el-input :placeholder="$i.setting.pleaseInput" clearable v-model="searchUser.email"></el-input>
           </el-form-item>
-          <el-form-item label="活动区域">
-            <el-select placeholder="活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+          <el-form-item :label="$i.setting.userName">
+            <el-input :placeholder="$i.setting.pleaseInput" clearable v-model="searchUser.userName"></el-input>
+          </el-form-item>
+          <el-form-item :label="$i.setting.gender">
+            <el-select :placeholder="$i.setting.pleaseChoose" clearable v-model="searchUser.gender">
+              <el-option
+                v-for="item in genderOption"
+                :key="item.id"
+                :label="$i.setting[item.name]"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$i.setting.status">
+            <el-select :placeholder="$i.setting.pleaseChoose" clearable v-model="searchUser.status">
+              <el-option
+                v-for="(item,index) in actionOption"
+                :key="index"
+                :label="$i.setting[item.name]"
+                :value="item.code">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="">查询</el-button>
+            <el-button type="primary" @click="getDepartmentUser">{{$i.setting.search}}</el-button>
           </el-form-item>
-        </el-form>-->
+        </el-form>
 
-        <v-table
-          class="speTable"
-          ref="vTable"
-          :data="tableDataList"
-          :buttons="setButton"
-          hide-filter-value
-          hide-filter-column
-          @change-checked="changeChecked"
-          @action="btnClick"></v-table>
+        <v-table v-loading="userListLoading"
+                 class="speTable"
+                 ref="vTable"
+                 :data="tableDataList"
+                 :buttons="setButton"
+                 hide-filter-value
+                 hide-filter-column
+                 @change-checked="changeChecked"
+                 @action="btnClick"></v-table>
         <v-pagination :page-data="userListPage" @size-change="pageSizeChange"
                       @change="pageChange"></v-pagination>
       </div>
@@ -239,7 +256,7 @@
                 <el-option
                   v-for="item in genderOption"
                   :key="item.id"
-                  :label="item.name"
+                  :label="$i.setting[item.name]"
                   :value="item.code">
                 </el-option>
               </el-select>
@@ -307,12 +324,6 @@
   import Qs from 'qs';
   import {mapActions} from 'vuex'
 
-  const ACTIVE_TYPE = [
-    {name: '未激活', code: 0},
-    {name: '已激活', code: 1},
-    {name: '禁用', code: 2}
-  ];
-
   export default {
     name: "department-setting",
     components: {
@@ -322,12 +333,24 @@
     data() {
       return {
         //基础配置
+        searchUser: {
+          email: '',
+          userName: '',
+          gender: '',
+          status: '',
+        },
+        actionOption: [
+          {name: 'notActive', code: 0},
+          {name: 'activated', code: 1},
+          {name: 'disable', code: 2}
+        ],
         editUserdialog: {
           show: false,
           type: 0, // 0、添加  1、编辑
           title: ['Add New User', 'Edit User']
         },
         disabledSearch: false,
+        userListLoading: false,
         formLabelWidth: '120px',
         loadingDepartment: false,
         loadingRole: false,
@@ -340,17 +363,17 @@
           {
             id: 1,
             code: 0,
-            name: '男'
+            name: 'man'
           },
           {
             id: 2,
             code: 1,
-            name: '女'
+            name: 'woman'
           },
           {
             id: 3,
             code: 2,
-            name: '未知'
+            name: 'unknown'
           },
         ],
         roleOption: [],
@@ -510,6 +533,7 @@
       },
       getDepartmentData(type) {
         this.loadingDepartment = true;
+        this.userListLoading = true;
         return this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
           this.departmentData = res;
           this.departmentData.forEach(v => {
@@ -523,6 +547,7 @@
           return res;
         }).finally(err => {
           this.loadingDepartment = false;
+          this.userListLoading = false;
         });
       },
       getDepartmentUser() {
@@ -537,15 +562,21 @@
         }
 
         params.roleIds = roleIds;
+
+        params = _.extend(params, this.searchUser)
+
         this.$ajax.post(this.$apis.get_departmentUser, params).then(res => {
           let {end, pn, ps, tc, start} = res;
           this.userListPage = {end, pn, ps, tc, start};
           this.tableDataList = this.$getDB(this.$db.setting.department, res.datas, item => {
+            let gender, status;
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            item.gender._value = _.findWhere(this.genderOption, {code: item.gender.value}).name;
-            item.status._value = _.findWhere(ACTIVE_TYPE, {code: item.status.value}).name;
+            gender = _.findWhere(this.genderOption, {code: item.gender.value});
+            status = _.findWhere(this.actionOption, {code: item.status.value});
+            item.gender._value = this.$i.setting[gender.name];
+            item.status._value = this.$i.setting[status.name];
             item.lang._value = _.findWhere(this.languageOption, {code: item.lang.value}).name;
             return item;
           });
@@ -560,31 +591,6 @@
         }
         return btns;
       },
-      getRoleData() {
-        this.loadingRole = true;
-        this.$ajax.get(this.$apis.get_departmentRole, {
-          deptId: this.userData.deptId
-        }).then(res => {
-          this.roleData[0].children = res;
-          if (res) {
-            if (res.length === 1) {
-              this.disableAddUser = false;
-            } else {
-              this.disableAddUser = true;
-            }
-            this.$nextTick(() => {
-              this.$refs.roleTree.setCheckedNodes(res);
-              this.getDepartmentUser();
-            })
-          } else {
-            this.disableAddUser = true;
-            this.getDepartmentUser();
-          }
-        }).finally(err => {
-          this.loadingRole = false;
-        });
-      },
-
       changeUserDep(val) {
         let deps = _.findWhere(this.departmentData, {deptId: val});
         this.roleOption = _.isEmpty(deps) ? [] : deps.deptRoles;
@@ -621,70 +627,65 @@
       /**
        * add事件
        * */
-      addDepartment() {
-        this.$prompt(this.$i.setting.pleaseInputDepartment, this.$i.setting.addDepartment, {
-          confirmButtonText: this.$i.setting.sure,
-          cancelButtonText: this.$i.setting.cancel,
-          closeOnHashChange: false,
-          inputValidator: (data) => {
-            if (!data || data === '') {
-              return this.$i.setting.pleaseInput;
+      addDepartment(item) {
+        this.$prompt(this.$i.setting.pleaseInputDepartment,
+          this.$i.setting[item ? 'prompt' : 'addDepartment'], {
+            confirmButtonText: this.$i.setting.sure,
+            cancelButtonText: this.$i.setting.cancel,
+            inputValue: ' ' + (item ? item.deptName : ''),
+            closeOnHashChange: false,
+            inputValidator: (value) => {
+              if (!value || value === '') {
+                return this.$i.setting.pleaseInput;
+              } else if (_.findWhere(this.departmentData, {deptName: value.trim()})) {
+                return this.$i.setting.canNotRepeatDepartmentName;
+              }
             }
-          }
-        }).then(({value}) => {
-          if (_.findWhere(this.departmentData, {deptName: value})) {
-            this.$message({
-              message: this.$i.setting.canNotRepeatDepartmentName,
-              type: 'warning'
-            });
-            return false;
-          }
-          return value;
-        }).then(value => {
-          if (!value) {
-            return false;
-          }
+          }).then(data => {
+          let params = {deptName: data.value.trim()}, http;
           this.loadingDepartment = true;
-          this.$ajax.post(this.$apis.get_department, {
-            deptName: value
-          }).then(res => {
-            this.$message({
-              message: this.$i.setting.createSuccess,
-              type: 'success'
-            });
+
+          if (item) {
+            params.deptId = item.deptId;
+          }
+
+          http = () => item ? this.$ajax.put : this.$ajax.post;
+
+          http()(this.$apis.get_department, params).then(res => {
+            this.$message.success(this.$i.setting.createSuccess);
             this.getDepartmentData();
           }).finally(() => {
             this.loadingDepartment = false;
           });
         });
       },
-      addRole() {
-        this.$prompt(this.$i.setting.pleaseInputRole, this.$i.setting.addRole, {
-          confirmButtonText: this.$i.setting.sure,
-          cancelButtonText: this.$i.setting.cancel,
-          inputValidator: (data) => {
-            if (!data || data === '') {
-              return this.$i.setting.pleaseInput;
+      addRole(item) {
+        this.$prompt(this.$i.setting.pleaseInputRole,
+          this.$i.setting[item ? 'prompt' : 'addRole'], {
+            confirmButtonText: this.$i.setting.sure,
+            cancelButtonText: this.$i.setting.cancel,
+            inputValue: ' ' + (item ? item.roleName : ''),
+            inputValidator: (value) => {
+              if (!value || value === '') {
+                return this.$i.setting.pleaseInput;
+              } else if (_.findWhere(this.roleData[0].children, {roleName: value.trim()})) {
+                return 'role名称不能重复';
+              }
             }
-          }
-        }).then(({value}) => {
-          if (_.findWhere(this.roleData[0].children, {roleName: value})) {
-            this.$message({
-              message: 'role名称不能重复',
-              type: 'warning'
-            });
-            return false;
-          }
-          return value;
-        }).then(value => {
-          if (!value) {
-            return false;
-          }
+
+          }).then(data => {
+          let params = {roleName: data.value.trim()}, http;
           this.loadingRole = true;
-          this.$ajax.post(this.$apis.add_departmentRole, {
-            deptId: this.userData.deptId,
-            roleName: value
-          }).then(res => {
+
+          http = () => item ? this.$ajax.put : this.$ajax.post;
+
+          if (item) {
+            params.roleId = item.roleId;
+          } else {
+            params.deptId = this.userData.deptId;
+          }
+
+          http()(this.$apis.add_departmentRole, params).then(res => {
             this.getDepartmentData(true);
           }).finally(() => {
             this.loadingRole = false;
@@ -702,79 +703,6 @@
       filterRole(value, data) {
         if (!value) return true;
         return data.roleName.indexOf(value) !== -1;
-      },
-
-      /**
-       * 编辑事件
-       * */
-      modifyDepartment(e) {
-        this.$prompt(this.$i.setting.pleaseInputDepartment, this.$i.setting.prompt, {
-          confirmButtonText: this.$i.setting.sure,
-          cancelButtonText: this.$i.setting.cancel,
-          inputValue: e.deptName,
-        }).then(({value}) => {
-          let repeat = false;
-          this.departmentData.forEach(v => {
-            if (v.deptName === value) {
-              repeat = true;
-            }
-          });
-          if (repeat) {
-            this.$message({
-              message: this.$i.setting.canNotRepeatDepartmentName,
-              type: 'warning'
-            });
-          } else {
-            this.loadingDepartment = true;
-            this.$ajax.put(this.$apis.get_department, {
-              deptId: e.deptId,
-              deptName: value
-            }).then(res => {
-              this.$message({
-                message: this.$i.setting.modifySuccess,
-                type: 'success'
-              });
-              this.getDepartmentData();
-            }).catch(() => {
-              this.loadingDepartment = false;
-            });
-          }
-        }).catch(() => {
-
-        });
-      },
-      modifyRole(e) {
-        this.$prompt(this.$i.setting.pleaseInputRole, this.$i.setting.prompt, {
-          confirmButtonText: this.$i.setting.sure,
-          cancelButtonText: this.$i.setting.cancel,
-          inputValue: e.roleName
-        }).then(({value}) => {
-          let repeat = false;
-          this.roleData[0].children.forEach(v => {
-            if (v.roleName === value) {
-              repeat = true;
-            }
-          });
-          if (repeat) {
-            this.$message({
-              message: this.$i.setting.canNotRepeatRole,
-              type: 'warning'
-            });
-          } else {
-            this.loadingRole = true;
-            this.$ajax.put(this.$apis.update_departmentRole, {
-              roleId: e.roleId,
-              roleName: value
-            }).then(res => {
-              this.getRoleData();
-            }).catch(err => {
-              this.loadingRole = false;
-            });
-
-          }
-        }).catch(() => {
-
-        });
       },
 
       /**
@@ -824,11 +752,9 @@
               message: this.$i.setting.deleteSuccess
             });
             this.getDepartmentData(true);
-          }).catch(err => {
+          }).finally(() => {
             this.loadingRole = false;
-          })
-        }).catch(() => {
-
+          });
         });
       },
 
@@ -923,26 +849,6 @@
           }).finally(err => {
           this.inviteUserLoading = false;
         });
-      },
-      searchUser(roleIds) {
-        // let checkedNode = this.$refs.roleTree.getCheckedNodes(true);
-        let params = this.$depthClone(this.userData);
-
-        console.log(roleIds)
-        this.tableDataList = [];
-
-        if (_.isEmpty(roleIds)) {
-          return false;
-        }
-        params.roleIds = roleIds;
-        this.disabledSearch = true;
-        this.$ajax.post(this.$apis.get_departmentUser, params).then(res => {
-          this.tableDataList = this.$getDB(this.$db.setting.department, res.datas);
-          this.disabledSearch = false;
-        }).catch(err => {
-          this.disabledSearch = false;
-        });
-
       },
       getUnit() {
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
