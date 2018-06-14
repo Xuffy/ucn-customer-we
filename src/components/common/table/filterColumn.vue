@@ -106,7 +106,7 @@
         return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
           {contentType: 'F', cache: true, updateCache: isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: '1'}), 'property');
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property');
             this.dataList = res;
             this.$refs.columnTree.setCheckedKeys(list);
             return list;
@@ -122,7 +122,6 @@
           params.userGridFavoriteList.push({seqNum, gridFieldId: id});
         });
 
-        console.log(params)
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
             this.visible = false;
@@ -137,7 +136,7 @@
       defaultChecked() {
         let list = [];
         _.map(this.dataList, val => {
-          if (val.isChecked === '1') {
+          if (val.isChecked === 1) {
             list.push(val.property);
           }
         });
