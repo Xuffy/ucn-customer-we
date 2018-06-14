@@ -574,5 +574,8 @@ export default {
   },
   fieldDisplay: {
     _hide: true
+  },
+  fieldRemarkDisplay: {
+    _hide: true
   }
 };
