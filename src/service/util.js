@@ -118,11 +118,12 @@ export default {
 
         validate = item._rules;
 
-        if (validate.required && !val.toString()) {
+        if (validate.required && !/\S/.test(val)) {
           Message.warning(`请必须填写 ${item.label}`);
           return key;
         }
-        if (!val.toString()) continue;
+
+        if (!/\S/.test(val)) continue;
 
         switch (validate.type) {
           case 'Number':

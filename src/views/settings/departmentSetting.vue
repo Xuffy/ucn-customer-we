@@ -766,7 +766,7 @@
               roleId: e.roleId,
               roleName: value
             }).then(res => {
-              this.getRoleData();
+              this.getDepartmentData(true);
             }).catch(err => {
               this.loadingRole = false;
             });
