@@ -331,7 +331,6 @@ export default {
         let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
         if (typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
-            console.log(k);
             if (fieldRemarkDisplay[k] === '1' && remark[k]) {
               remark[k]._style = 'background-color: ' + c;
             }
@@ -350,26 +349,16 @@ export default {
         this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
           this.$refs.HM.getFilterData([res]),
-          item => {
-            this.$filterDic(item);
-            _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
-            });
-          }
+          item => this.$filterDic(item)
         );
-        this.markFieldHighlight(this.newTabData);
         // SKU_UNIT
         // Product Info
         this.productTabData = this.newProductTabData = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res.details, 'skuId'),
-          item => {
-            this.$filterDic(item);
-            _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
-            });
-          }
+          item => this.$filterDic(item)
         );
+        this.markFieldHighlight(this.newTabData);
         this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
       }).catch(() => {
@@ -383,7 +372,6 @@ export default {
           this.$refs.HM.getFilterData(res, 'skuId'),
           item => {
             this.$filterDic(item);
-            item.$pageState = 1;
           }
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
@@ -428,9 +416,6 @@ export default {
             o._style = '';
           }
         });
-        if (item.id && item.id.value) {
-          item.$pageState = 2;
-        }
         item.$changedFields = changedFields;
         return item;
       });
@@ -447,7 +432,7 @@ export default {
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
       let arr;
-      if (item.$pageState && item.$pageState === 1) {
+      if (!item.id.value) {
         if (config.type === 'modify') {
           arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
@@ -545,7 +530,7 @@ export default {
       return o;
     },
     dataFilter(data) {
-      let excludeColumns = '$changedFields,$pageState,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
+      let excludeColumns = '$changedFields,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
       let datas = data.filter(item => !item._remark);
       let remarks = data.filter(item => item._remark);
 
