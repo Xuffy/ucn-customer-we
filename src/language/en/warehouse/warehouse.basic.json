@@ -59,5 +59,7 @@
   "actAmount":"Act. Amount",
   "currency":"Currency",
   "available":"Available",
-  "confirm":"Confirm"
+  "confirm":"Confirm",
+  "pleaseChoose":"Please Choose",
+  "attachments":"附件"
 }

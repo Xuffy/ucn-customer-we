@@ -393,7 +393,7 @@
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-        <v-message-board module="warehouse" code="qc" :id="$route.query.id"></v-message-board>
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>

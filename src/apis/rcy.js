@@ -68,6 +68,7 @@ export default {
 
 
 
+
     //字典表数据
     post_codePart: ['/code/part', 'UMETA_URL'],
     post_country: ['/country/all', 'UMETA_URL'],

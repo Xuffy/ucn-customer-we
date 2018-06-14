@@ -293,7 +293,7 @@
         </div>
         <div class="payment-table">
             <el-button :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable" :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}</el-button>
-            <el-button :disabled="!allowHandlePay || loadingPaymentTable" @click="dunningPay">{{$i.order.remindSupplierRefund}}</el-button>
+            <el-button :loading="disableClickDunning" :disabled="!allowHandlePay || loadingPaymentTable" @click="dunningPay">{{$i.order.remindSupplierRefund}}</el-button>
             <el-table
                     v-loading="loadingPaymentTable"
                     class="payTable"
@@ -338,6 +338,7 @@
                                 class="speDate"
                                 v-model="scope.row.planPayDt"
                                 type="date"
+                                :picker-options="datePickOption"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
                         <span v-else>{{scope.row.planPayDt?$dateFormat(scope.row.planPayDt,'yyyy-mm-dd'):''}}</span>
@@ -367,6 +368,7 @@
                                 v-if="scope.row.isNew || scope.row.isModify"
                                 v-model="scope.row.actualPayDt"
                                 type="date"
+                                :picker-options="datePickOption1"
                                 :placeholder="$i.order.pleaseChoose">
                         </el-date-picker>
                         <span v-else>{{scope.row.actualPayDt?$dateFormat(scope.row.actualPayDt,'yyyy-mm-dd'):''}}</span>
@@ -1080,6 +1082,16 @@
                 activeTab:'product',
                 selectProductInfoTable:[],
                 disabledProductLine:[],
+                datePickOption:{
+                    disabledDate(time) {
+                        return time.getTime() < Date.now();
+                    },
+                },
+                datePickOption1:{
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                },
 
                 /**
                  * payment data配置
@@ -1102,6 +1114,7 @@
                     // }
                 ],
                 copyList:[],
+                disableClickDunning:false,
 
                 /**
                  * 弹出框data配置
@@ -1708,19 +1721,20 @@
                 });
             },
             dunningPay(){
-                // let params=[];
-                // _.map(this.selectPayList,v=>{
-                //     params.push({
-                //         id:v.id,
-                //         version:v.version
-                //     })
-                // })
-                // console.log(params)
-                // this.$ajax.post(this.$apis.dunningPay,params).then(res=>{
-                //
-                // }).finally(err=>{
-                //
-                // })
+                let params=[];
+                _.map(this.paymentData,v=>{
+                    if(v.status===40 && v.planRefundDt && v.planRefundAmount>v.actualRefundAmount){
+                        params.push({
+                            id:v.id
+                        });
+                    }
+                });
+                this.disableClickDunning=true;
+                this.$ajax.post(this.$apis.PAYMENT_DUNNING,params).then(res=>{
+                    console.log(res)
+                }).finally(()=>{
+                    this.disableClickDunning=false;
+                })
             },
             saveNewPay(data){
                 let param={
