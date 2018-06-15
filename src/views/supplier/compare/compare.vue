@@ -87,6 +87,8 @@
     import product from '../../product/addProduct'
     import VSupplier from '../sourcing/sourcing'
 
+    let copy_data=[];
+
     export default {
         name: "compare",
         components:{
@@ -168,6 +170,7 @@
                           return e;
                         });
                         this.disabledLine=this.tableDataList;
+                        copy_data = this.tableDataList;
                     }).catch(err=>{
 
                     })
@@ -371,10 +374,11 @@
                     this.disabledLine=[];
                     this.tableDataList.forEach(v=>{
                         if(!v._disabled){
-                            this.disabledLine.push(v);
+                          this.disabledLine.push(v);
+                          copy_data = this.tableDataList
                         }
                     });
-                    console.log(this.tableDataList)
+
                 }
                 this.addProductDialogVisible=false;
             },
@@ -407,7 +411,6 @@
                     });
                 });
                 this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
-                    console.log(res)
                     let compareId=res;
                     this.$router.push({
                         name:'supplierCompareDetail',
@@ -455,7 +458,7 @@
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
                     if(v.isActive){
-                        this.selectList.push(v);
+                      this.selectList.push(v);
                     }
                 });
             },
@@ -489,6 +492,21 @@
                     this.tableDataList = this.$table.setHighlight(this.tableDataList)
                   }
                })
+             }else{
+               this.tableDataList.forEach( v => {
+                if(v.id._color){
+                  _.mapObject(v, val => {
+                    val._color = ''
+                  })
+                }else{
+                  _.mapObject(v, val => {
+                    val._hide = ''
+                    v.id._hide = true;
+                    v.companyId._hide = true;
+                  })
+                }
+               })
+               // this.tableDataList = copy_data
              }
           },
         },

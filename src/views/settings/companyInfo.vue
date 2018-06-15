@@ -5,13 +5,12 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-                <div style="overflow: hidden">
-                  <v-upload ref="uploadFile" onlyImage style="float: left"  :list="companyInfo.logo" />
-                  <!--<img :src="companyInfo.logo" class="logo"/>-->
-                </div>
-                <div class="section-btn" style="padding-top:10px">
-                  <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
-                </div>
+              <div style="overflow: hidden">
+                <v-upload ref="uploadFile" onlyImage   :list="companyInfo.logo" />
+              </div>
+              <div class="section-btn" style="padding-top:10px">
+                <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
+              </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth" :prop="v.key" :label="v.label">
@@ -577,6 +576,7 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
+                    // this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address)
                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
                       let country='';
                       let receiveCountry = '';
@@ -588,12 +588,13 @@
                         })
                       });
                       e.receiveCountry.value.split(',').forEach(v=>{
-                        this.options.country.forEach(m=>{
-                          if(m.code===v){
-                            receiveCountry+=(m.name+',');
+                        this.options.country.forEach(n=>{
+                          if(n.code===v){
+                            receiveCountry+=(n.name+',');
                           }
                         })
                       });
+
                       country=country.slice(0,country.length-1);
                       receiveCountry=receiveCountry.slice(0,receiveCountry.length-1);
                       e.country.value=country;
@@ -884,20 +885,34 @@
           modifyDocument(){
             this.documentDialogVisible = false;
             this.documentData.customerId=this.companyInfo.id;
-            this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
-              this.$message({
-                message: '修改成功',
-                type: 'success'
+            if (!this.documentData.id){
+              this.$ajax.post(this.$apis.post_purchase_customer_document,this.documentData).then(res=>{
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.getWholeData();
+                this.documentDialogVisible = false;
+              }).catch(err=>{
+                this.getWholeData();
+                this.documentDialogVisible=false;
               });
-              if (!this.companyInfo.setting){
-                this.postUpdateIsSetting();
-              }
-              this.getWholeData();
-              this.documentDialogVisible = false;
-            }).catch(err=>{
-              this.getWholeData();
-              this.documentDialogVisible=false;
-            });
+            }else{
+              this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
+                this.$message({
+                  message: '修改成功',
+                  type: 'success'
+                });
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
+                this.getWholeData();
+                this.documentDialogVisible = false;
+              }).catch(err=>{
+                this.getWholeData();
+                this.documentDialogVisible=false;
+              });
+            }
           },
           /**
            * custom操作
@@ -909,20 +924,34 @@
           modifyCustom(){
             this.customDialogVisible = false;
             this.customData.customerId=this.companyInfo.id;
-            this.$ajax.post(`${this.$apis.post_purchase_customer_custom_id}/${this.customData.id}`,this.customData).then(res=>{
-              this.$message({
-                message: '修改成功',
-                type: 'success'
+            if (!this.customData.id){
+              this.$ajax.post(this.$apis.post_purchase_customer_custom,this.customData).then(res=>{
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.getWholeData();
+                this.customDialogVisible = false;
+              }).catch(err=>{
+                this.getWholeData();
+                this.customDialogVisible=false;
               });
-              if (!this.companyInfo.setting){
-                this.postUpdateIsSetting();
-              }
-              this.getWholeData();
-              this.customDialogVisible = false;
-            }).catch(err=>{
-              this.getWholeData();
-              this.customDialogVisible=false;
-            });
+            }else{
+              this.$ajax.post(`${this.$apis.post_purchase_customer_custom_id}/${this.customData.id}`,this.customData).then(res=>{
+                this.$message({
+                  message: '修改成功',
+                  type: 'success'
+                });
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
+                this.getWholeData();
+                this.customDialogVisible = false;
+              }).catch(err=>{
+                this.getWholeData();
+                this.customDialogVisible=false;
+              });
+            }
           },
 
           /**
@@ -953,7 +982,6 @@
            * Attachment操作
            * */
           upload(){
-            console.log(this.$refs.uploadAttachment.getFiles())
               //ATTACHMENT,文件 PICTURE 图片
             const uploadParams = {
               id: this.companyInfo.id,
@@ -967,20 +995,20 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length === 1){
               this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
-                this.getWholeData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
                 });
+                this.getWholeData();
               })
 
             }else{
               this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
-                this.getWholeData();
                 this.$message({
                   message: '上传成功',
                   type: 'success'
                 });
+                this.getWholeData();
               })
             }
           },
@@ -991,20 +1019,20 @@
             this.logoParmas.id = this.companyInfo.id;
             this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
             this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
-              this.getWholeData();
               this.$message({
                 message: '上传成功',
                 type: 'success'
               });
+              this.getWholeData();
             })
 
           }
         },
         created(){
-               this.getCurrency();
-               this.getCountryAll();
-               this.getCodePart();
-               this.getDepartment();
+             this.getCodePart();
+             this.getCurrency();
+             this.getCountryAll();
+             this.getDepartment();
         },
         watch:{
             addressDialogVisible(n){
