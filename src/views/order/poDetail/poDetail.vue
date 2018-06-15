@@ -431,7 +431,7 @@
                         <span v-if="scope.row.status===10">{{$i.order.waitCustomerConfirm}}</span>
                         <span v-if="scope.row.status===20">{{$i.order.waitSupplierConfirm}}</span>
                         <span v-if="scope.row.status===30">{{$i.order.waitServiceConfirm}}</span>
-                        <span v-if="scope.row.status===40">已确认</span>
+                        <span v-if="scope.row.status===40">{{$i.order.confirm}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -469,9 +469,6 @@
                 </el-table-column>
             </el-table>
         </div>
-
-
-
 
 
         <div class="title">

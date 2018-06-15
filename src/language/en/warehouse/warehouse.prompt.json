@@ -14,5 +14,8 @@
   "sureRestore":"Sure Restore?",
   "restoreSuccess":"Restore Success!",
   "sureConfirm":"Sure Confirm?",
-  "pleaseAddProduct":"Please Add Product!"
+  "pleaseAddProduct":"Please Add Product!",
+  "sureDunning":"Sure Dunning?",
+  "dunningSuccess":"Dunning Success!",
+  "nothingDunning":"Nothing to dunning"
 }
