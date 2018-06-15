@@ -22,13 +22,19 @@
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
 
                 <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
+            </span>
+           <span v-if="$route.params.type==='read'">
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
+                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
+                <el-button  @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
+                <!--<el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>-->
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
                 <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
@@ -51,6 +57,10 @@
                 <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                 <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
+          <div v-if="$route.params.type==='read'">
+            <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">OK</el-button>
+            <el-button :disabled="allowBottomClick" @click="cancelModify">Cancel</el-button>
+          </div>
         </div>
 
         <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
@@ -76,6 +86,8 @@
     import VTable from '@/components/common/table/index'
     import product from '../../product/addProduct'
     import VSupplier from '../sourcing/sourcing'
+
+    let copy_data=[];
 
     export default {
         name: "compare",
@@ -158,6 +170,7 @@
                           return e;
                         });
                         this.disabledLine=this.tableDataList;
+                        copy_data = this.tableDataList;
                     }).catch(err=>{
 
                     })
@@ -177,18 +190,6 @@
                     };
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
-
-                          // let country='';
-                          // e.country.value.split(',').forEach(v=>{
-                          //   this.countryOption.forEach(m=>{
-                          //     if(m.code===v){
-                          //       country+=(m.name+',');
-                          //     }
-                          //   })
-                          // });
-                          // country=country.slice(0,country.length-1);
-                          // e.country.value=country;
-
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
@@ -197,9 +198,30 @@
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
-                    }).catch(err=>{
+                    })
+                }else{
+                  this.compareName=this.$route.query.compareName;
+                  if(this.$route.query.isModify){
+                    this.isModify=true;
+                  }
+                  let params={
+                    id: Number(this.$route.query.compareId),
+                    name:'',
+                    pn: 1,
+                    ps: 50,
+                    recycle: false,
+                  };
+                  this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
+                      e.type.value=this.$change(this.options.type,'type',e,true).name;
+                      e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
+                      return e;
                     });
+                    this.disabledLine=this.tableDataList;
+                    this.allowDeleteCompare=false;
+                    this.allowBottomClick=false;
+                  })
                 }
             },
 
@@ -254,7 +276,6 @@
             },
             //勾选的商品创建order
             createOrder(){
-              console.log(this.selectList)
               let supplierList=[];
               _.map(this.selectList,v=>{
                 supplierList.push(v.code.value);
@@ -283,7 +304,6 @@
 
             //新增product
             addNewProduct(){
-              console.log(111)
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
             },
@@ -354,10 +374,11 @@
                     this.disabledLine=[];
                     this.tableDataList.forEach(v=>{
                         if(!v._disabled){
-                            this.disabledLine.push(v);
+                          this.disabledLine.push(v);
+                          copy_data = this.tableDataList
                         }
                     });
-                    console.log(this.tableDataList)
+
                 }
                 this.addProductDialogVisible=false;
             },
@@ -390,7 +411,6 @@
                     });
                 });
                 this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
-                    console.log(res)
                     let compareId=res;
                     this.$router.push({
                         name:'supplierCompareDetail',
@@ -438,7 +458,7 @@
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
                     if(v.isActive){
-                        this.selectList.push(v);
+                      this.selectList.push(v);
                     }
                 });
             },
@@ -449,20 +469,46 @@
             this.getCountryAll();
         },
         watch:{
-            selectList(n){
-                let len=0;
-                this.tableDataList.forEach(v=>{
-                    if(!v._disabled){
-                        len++;
-                    }
-                });
+          selectList(n){
+              let len=0;
+              this.tableDataList.forEach(v=>{
+                  if(!v._disabled){
+                      len++;
+                  }
+              });
 
-                if(n.length>0 && (len-n.length)>=2){
-                    this.disableDelete=false;
+              if(n.length>0 && (len-n.length)>=2){
+                  this.disableDelete=false;
+              }else{
+                  this.disableDelete=true;
+              }
+          },
+          screenTableStatus(){
+             if (this.screenTableStatus.length != 0){
+               this.screenTableStatus.forEach(v => {
+                  if (v == 1){
+                    this.tableDataList = this.$table.setHideSame(this.tableDataList)
+                  }else{
+                    this.tableDataList = this.$table.setHighlight(this.tableDataList)
+                  }
+               })
+             }else{
+               this.tableDataList.forEach( v => {
+                if(v.id._color){
+                  _.mapObject(v, val => {
+                    val._color = ''
+                  })
                 }else{
-                    this.disableDelete=true;
+                  _.mapObject(v, val => {
+                    val._hide = ''
+                    v.id._hide = true;
+                    v.companyId._hide = true;
+                  })
                 }
-            }
+               })
+               // this.tableDataList = copy_data
+             }
+          },
         },
     }
 </script>

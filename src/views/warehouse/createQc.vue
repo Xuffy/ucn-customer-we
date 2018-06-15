@@ -357,8 +357,6 @@
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-
-
         <el-dialog width="70%" title="Add Product" :visible.sync="productDialogVisible">
             <el-form ref="qcOrder" :model="productDialogConfig" :rules="dialogRules" label-width="120px">
                 <el-row class="speZone">
@@ -570,7 +568,6 @@
                 });
                 this.qcOrderConfig.attachments=this.$refs.upload.getFiles();
                 this.disableClickSubmit=true;
-
                 this.$ajax.post(this.$apis.add_buyerQcOrder,this.qcOrderConfig).then(res=>{
                     this.$message({
                         message: this.$i.warehouse.createSuccess,

@@ -53,10 +53,10 @@
                   <v-table  :data="inquireData"   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane label="attachment" name="attchment">
-                  <div class="section-btn" style="margin-bottom:10px;">
-                    <el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>
-                  </div>
-                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments"/>
+                  <!--<div class="section-btn" style="margin-bottom:10px;">-->
+                    <!--<el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>-->
+                  <!--</div>-->
+                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -137,7 +137,7 @@
               loading: false,
               compareData: [],
               orderHistoryData:{
-                supplierCode: null,
+                supplierCompanyId: null,
                 pn: 1,
                 ps: 50,
               },
@@ -319,7 +319,7 @@
           //tradeHistory
             getTradeHistoryList(){
               this.loading = true
-              this.orderHistoryData.supplierCode = this.basicDate.code;
+              this.orderHistoryData.supplierCompanyId = Number(this.$route.query.companyId);
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
                   this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas);
@@ -491,6 +491,7 @@
             this.getCompareList();
             this.getCountryAll();
         },
+
     }
 
 </script>
