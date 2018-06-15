@@ -590,11 +590,6 @@ export default {
       })
 
       this.basicInfoObj.remark = this.remark
-      if (!this.basicInfoObj.payment) return this.$message({
-        type: 'error',
-        message: '付款方式为必填!'
-      })
-
       _.mapObject(this.basicInfoObj, (value, key) => {
         this.oldPlanObject[key] = value
       })
@@ -633,6 +628,12 @@ export default {
       if(this.isCopy){
         this.oldPlanObject.planNo = this.logisticsNo;
         obj = this.restIdNull(this.oldPlanObject,['id','unId']);
+      }
+      if(!this.planId){
+        this.oldPlanObject.fieldDisplay = null;
+      }
+      if(!this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+        return;
       }
       this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
         this.$message({
