@@ -1,5 +1,5 @@
 <template>
-  <el-table v-if="tableData.length>0" :data="tableData" border style="width: 100%; margin-top: 20px" tooltip-effect="dark">
+  <el-table :data="tableData" border style="width: 100%; margin-top: 20px" tooltip-effect="dark">
     <el-table-column :label="$i.logistic.fclTransportCharge" align="center" width="180">
       <template slot-scope="scope">
         <!-- <el-input placeholder="请输入内容" v-model="scope.row.fclTransportCharge" v-if="edit"></el-input> -->
