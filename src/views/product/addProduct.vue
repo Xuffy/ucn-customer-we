@@ -697,7 +697,9 @@
                         this.skuUnitOption=v.codes;
                     }
                 });
-
+                if(this.$route.query.supplierName){
+                    this.productForm.supplierNameLike=this.$route.query.supplierName;
+                }
                 //国家
                 this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
                     this.countryOption=res;
@@ -708,7 +710,8 @@
                 });
             }).catch(err=>{
 
-            })
+            });
+
         },
         mounted(){
             this.setLog({query:{code:'BIZ_SKU'}});

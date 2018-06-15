@@ -3,10 +3,10 @@
         <div class="title">
             {{$i.order.basicInfo}}
         </div>
-        <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
+        <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
@@ -788,6 +788,9 @@
                 /**
                  * 页面基础配置
                  * */
+                rules:{
+
+                },
                 disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
@@ -992,6 +995,9 @@
             ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
+                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                    return;
+                }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){

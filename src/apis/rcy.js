@@ -63,6 +63,8 @@ export default {
     PAYMENT_RESTORE:['/payment/recover/{id}?version={version}','BASE_URL'],
     PAYMENT_UPDATE:['/payment/update','BASE_URL'],
     PAYMENT_DUNNING:['/payment/batchDunning','BASE_URL'],
+    PAYMENT_ACCEPT:['/payment/accept/{id}?version={version}','USUPPLY_URL'],
+
 
 
 

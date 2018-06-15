@@ -312,14 +312,31 @@ export default {
       this.compareConfig.push(config);
       this.$localStore.set('$in_quiryCompare', this.compareConfig);
     },
-    markFieldHighlight(item, color, fieldDisplay) {
-      let fd = fieldDisplay || 'fieldDisplay';
+    markFieldHighlight(items, color) {
       let c = color || 'yellow';
-      typeof item === 'object' && item[fd].value && _.mapObject(item[fd].value, (val, key) => {
-        if (val === '1' && item[key]) {
-          item[key]._style = 'background-color: ' + c;
+      let remarks = items.filter(i => i._remark);
+      let lines = items.filter(i => !i._remark);
+      for (let line of lines) {
+        let fieldDisplay = line.fieldDisplay.value;
+        if (typeof fieldDisplay === 'object') {
+          Object.keys(fieldDisplay).forEach(k => {
+            if (fieldDisplay[k] === '1' && line[k]) {
+              line[k]._style = 'background-color: ' + c;
+            }
+          });
         }
-      });
+
+        let key = line.hasOwnProperty('skuId') ? 'skuId' : 'id';
+        let remark = remarks.find(i => i[key].value.toString() === line[key].value.toString());
+        let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
+        if (typeof fieldRemarkDisplay === 'object') {
+          Object.keys(fieldRemarkDisplay).forEach(k => {
+            if (fieldRemarkDisplay[k] === '1' && remark[k]) {
+              remark[k]._style = 'background-color: ' + c;
+            }
+          });
+        }
+      }
     },
     getInquiryDetail() {
       // 获取 Inquiry detail 数据
@@ -328,36 +345,21 @@ export default {
         return;
       }
       this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id: this.$route.query.id}).then(res => {
-        let basicInfoData, newProductTabData;
         // Basic Info
-        basicInfoData = this.$getDB(
+        this.tabData = this.newTabData = this.$getDB(
           this.$db.inquiry.basicInfo,
           this.$refs.HM.getFilterData([res]),
-          item => {
-            this.$filterDic(item);
-            this.markFieldHighlight(item);
-            _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
-            });
-          }
+          item => this.$filterDic(item)
         );
-        this.newTabData = basicInfoData;
-        this.tabData = basicInfoData;
         // SKU_UNIT
         // Product Info
-        newProductTabData = this.$getDB(
+        this.productTabData = this.newProductTabData = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res.details, 'skuId'),
-          item => {
-            this.$filterDic(item);
-            this.markFieldHighlight(item);
-            _.map(item, val => {
-              val.defaultData = _.isUndefined(val.dataBase) ? val.value : val.dataBase;
-            });
-          }
+          item => this.$filterDic(item)
         );
-        this.newProductTabData = newProductTabData;
-        this.productTabData = newProductTabData;
+        this.markFieldHighlight(this.newTabData);
+        this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
       }).catch(() => {
         this.tableLoad = false;
@@ -370,7 +372,6 @@ export default {
           this.$refs.HM.getFilterData(res, 'skuId'),
           item => {
             this.$filterDic(item);
-            item.$pageState = 1;
           }
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
@@ -403,23 +404,19 @@ export default {
     save(data) {
       // modify 编辑完成反填数据
       let items = _.map(data, item => {
-        let changedFields = !item._remark ? {} : false;
+        let changedFields = {};
         _.map(item, (o, field) => {
-          if (['fieldDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
+          if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
           if (o.value !== o.defaultData) {
-            if (changedFields) {
-              changedFields[field] = '1';
-            }
+            o._style = 'background-color:yellow';
+            changedFields[field] = '1';
+          } else {
+            o._style = '';
           }
         });
-        if (item.id && item.id.value) {
-          item.$pageState = 2;
-        }
-        if (changedFields) {
-          item.$changedFields = changedFields;
-        }
+        item.$changedFields = changedFields;
         return item;
       });
 
@@ -435,7 +432,7 @@ export default {
     fnBasicInfoHistoty(item, type, config) {
       // 查看历史记录
       let arr;
-      if (item.$pageState && item.$pageState === 1) {
+      if (!item.id.value) {
         if (config.type === 'modify') {
           arr = this.newProductTabData.filter(i => i.skuId.value === config.data);
           this.$refs.HM.init(arr, [], true);
@@ -519,53 +516,46 @@ export default {
       parentNode.draft = 0;
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode)).then(res => {
         this.newTabData[0].status.dataBase = res.status;
-        this.tabData = this.newTabData;
-        this.productTabData = this.newProductTabData;
-        this.productModify();
         this.statusModify = false;
+        this.getInquiryDetail();
       });
     },
-    dataFilter(data) {
-      let excludeColumns = '$changedFields,$pageState,entryDt,updateDt,status';
-      let arr = [], remark = {}, json = {};
-      data.forEach(item => {
-        remark = {};
-        if (item._remark) {
-          // 拼装remark 数据
-          for (let field in item) {
-            let value = item[field].value;
-            if (value && value.length > 0) {
-              remark[field] = value;
-            }
-          }
-          json.fieldRemark = remark;
-        } else {
-          json = {};
-          for (let k in item) {
-            if (excludeColumns.indexOf(k) > -1) continue;
-            if (k === 'fieldRemark') {
-              json[k] = remark;
-            } else if (k === 'fieldDisplay') {
-              json[k] = {};
-              if (item.$changedFields) {
-                for (let f in item.$changedFields) {
-                  if (item.$changedFields.hasOwnProperty(f)) {
-                    json[k][f] = item.$changedFields[f];
-                  }
-                }
-              }
-            } else {
-              if (item[k].dataType && item[k].dataType === 'boolean' && typeof item[k].value === 'string') {
-                json[k] = item[k].value === '1' || item[k].value === 'true';
-              } else {
-                json[k] = item[k].value;
-              }
-            }
-          }
-          arr.push(json);
+    getRemarkObject(remark) {
+      let o = {};
+      Object.keys(remark).forEach(field => {
+        if (!(/^[_$]/).test(field) && remark[field].value) {
+          o[field] = remark[field].value;
         }
       });
-      return arr;
+      return o;
+    },
+    dataFilter(data) {
+      let excludeColumns = '$changedFields,fieldDisplay,fieldRemarkDisplay,entryDt,updateDt,status';
+      let datas = data.filter(item => !item._remark);
+      let remarks = data.filter(item => item._remark);
+
+      let list = [];
+      for (let item of datas) {
+        let o = {};
+        let key = item.hasOwnProperty('skuId') ? 'skuId' : 'id';
+        let remark = remarks.find(i => i[key].value.toString() === item[key].value.toString());
+        o.fieldDisplay = item.$changedFields;
+        if (remark) {
+          o.fieldRemark = this.getRemarkObject(remark);
+          o.fieldRemarkDisplay = remark.$changedFields;
+        }
+        Object.keys(item).forEach(field => {
+          let val = item[field];
+          if (excludeColumns.indexOf(field) > -1) return;
+          if (val.dataType && val.dataType === 'boolean' && typeof val.value === 'string') {
+            o[field] = val.value === '1' || val.value === 'true';
+          } else {
+            o[field] = val.value;
+          }
+        });
+        list.push(o);
+      }
+      return list;
     },
     productCancel() {
       //  取消 product 编辑
