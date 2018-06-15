@@ -53,10 +53,10 @@
                   <v-table  :data="inquireData"   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane label="attachment" name="attchment">
-                  <div class="section-btn" style="margin-bottom:10px;">
-                    <el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>
-                  </div>
-                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments"/>
+                  <!--<div class="section-btn" style="margin-bottom:10px;">-->
+                    <!--<el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>-->
+                  <!--</div>-->
+                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -491,6 +491,7 @@
             this.getCompareList();
             this.getCountryAll();
         },
+
     }
 
 </script>

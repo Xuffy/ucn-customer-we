@@ -55,10 +55,10 @@
                   <v-table  :data="inquireData"   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane label="attachment" name="attchment">
-                  <div class="section-btn" style="margin-bottom:10px;">
-                    <el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>
-                  </div>
-                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments"/>
+                  <!--<div class="section-btn" style="margin-bottom:10px;">-->
+                    <!--<el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>-->
+                  <!--</div>-->
+                  <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -304,7 +304,7 @@
                         this.attachments = res.attachments
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.detailTable, res.concats);
+                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats);
                     })
                     .catch((res) => {
 
