@@ -135,7 +135,7 @@
                     showCompareList: false, //是否显示比较列表
                 },
                 orderHistoryData:{
-                  supplierCode: null,
+                  supplierCompanyId: null,
                   pn: 1,
                   ps: 50,
                 },
@@ -313,7 +313,7 @@
             //tradeHistory
             getTradeHistoryList(){
               this.loading = true
-              this.orderHistoryData.supplierCode = this.basicDate.code;
+              this.orderHistoryData.supplierCompanyId =  Number(this.$route.query.companyId);
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
                   this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas);
