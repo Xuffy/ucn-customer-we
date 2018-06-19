@@ -1,6 +1,9 @@
 export default {
     name: {
       key: 'name',
+      _rules:{
+        required:true,
+      }
     },
     department: {
       key: 'deptName',
@@ -10,6 +13,9 @@ export default {
     },
     mobileNumber: {
       key: 'cellphone',
+      _rules:{
+        required:true,
+      }
     },
     telNumber: {
       key: 'telphone',
@@ -29,6 +35,5 @@ export default {
     id:{
       key: 'id',
       _hide:true,
-    } 
+    }
   }
-  

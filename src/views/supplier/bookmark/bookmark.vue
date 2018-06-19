@@ -47,6 +47,7 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
+               <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
 <!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
 
@@ -68,11 +69,24 @@
               :page-data="pageData"
               @change="handleSizeChange"
               @size-change="pageSizeChange"></page>
+
+      <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
+        <VSupplier
+          @handleOkClick='handleOkClick'
+          :isButton=false
+          :disabledLine="disabledLine"
+          @handleCancel="handleCancel"
+        >
+        </VSupplier>
+      </el-dialog>
+
     </div>
+
 </template>
 
 <script>
     import { mapActions } from 'vuex'
+    import VSupplier from '../sourcing/sourcing'
     import {
         dropDown,
         VPagination
@@ -83,9 +97,10 @@
     export default {
         name: "SupplierBookMark",
         components: {
-            dropDown,
-            VTable,
-            page:VPagination
+          dropDown,
+          VTable,
+          page:VPagination,
+          VSupplier
         },
         props: {
 
@@ -118,7 +133,9 @@
                     children: 'children'
                 },
                 options:[],
-                pageData:{}
+                pageData:{},
+                addProductDialogVisible:false,
+                disabledLine:[],        //在弹出框中默认置灰不能操作的条目
             }
         },
         methods: {
@@ -258,6 +275,7 @@
                           return e;
 
                         });
+                      this.disabledLine=this.tabData;
                     })
                     .catch((res) => {
                         this.loading = true
@@ -280,14 +298,44 @@
                     console.log(err)
                 });
             },
+          //新增product
+          addNewProduct(){
+            this.addProductDialogVisible=true;
+            this.forceUpdateNumber=Math.random();
+          },
+          handleOkClick(e){
+            let params = []
+            e.forEach(v=>{
+              let id
+              id=_.findWhere(v,{key:'id'}).value;
+              params.push(id);
+            });
+            if (params.length != []){
+              this.$ajax.post(this.$apis.post_supplier_addbookmark,params).then(res=>{
+                this.$message({
+                  message: '添加成功',
+                  type: 'success',
+                })
+                this.get_data();
+              }).catch(err=>{
+
+              });
+            }
+
+            this.addProductDialogVisible=false;
+          },
+          handleCancel(){
+            this.addProductDialogVisible=false;
+          },
+
         },
         created() {
             this.getCodePart();
             this.getCountryAll();
-            this.setRecycleBin({
-                name: 'bookmarkRecycleBin',
-                show: true
-            });
+            // this.setRecycleBin({
+            //     name: 'bookmarkRecycleBin',
+            //     show: true
+            // });
         },
         mounted(){
           this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});

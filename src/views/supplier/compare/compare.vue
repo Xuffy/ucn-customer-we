@@ -68,6 +68,7 @@
                 @handleOkClick='handleOkClick'
                 :isButton=false
                 :disabledLine="disabledLine"
+                @handleCancel="handleCancel"
                 >
             </VSupplier>
         </el-dialog>

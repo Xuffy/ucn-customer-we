@@ -4,15 +4,27 @@ export default {
   },
   country: {
     key: 'country',
+    _rules:{
+      required:true,
+    }
   },
   province: {
     key: 'province',
+    _rules:{
+      required:true,
+    }
   },
   city: {
     key: 'city',
+    _rules:{
+      required:true,
+    }
   },
   address: {
     key: 'address',
+    _rules:{
+      required:true,
+    }
   },
   receiveCountry: {
     key: 'receiveCountry',
@@ -29,5 +41,5 @@ export default {
   id:{
     key: 'id',
     _hide:true,
-  } 
+  }
 }
