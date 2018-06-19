@@ -134,7 +134,9 @@ export default {
     skuCommodityInspectionEn:{},
     skuDeclareElement:{},
     skuOrigin:{},
-    skuInspectQuarantineCategory:{},
+    skuInspectQuarantineCategory:{
+        _slot:'skuInspectQuarantineCategory'
+    },
     skuUnitWeight:{
         _slot:'skuUnitWeight',
     },
@@ -226,7 +228,9 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{},
+    skuStatus:{
+        _slot:'skuStatus'
+    },
     skuSaleStatus:{
         _disabled:true
     },
