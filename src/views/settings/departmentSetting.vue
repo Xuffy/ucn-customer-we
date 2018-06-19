@@ -490,6 +490,8 @@
     },
     mounted() {
       this.setLog({query: {code: 'departmentSetting'}});
+      this.$ajax.get(this.$apis.PRIVILEGE_DATA_BIZDOMAIN)
+      this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE)
     },
     watch: {
       searchDepartment(val) {
