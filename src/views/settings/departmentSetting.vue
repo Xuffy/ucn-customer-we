@@ -180,7 +180,7 @@
               <el-option
                 v-for="item in genderOption"
                 :key="item.id"
-                :label="$i.setting[item.name]"
+                :label="item.name"
                 :value="item.code">
               </el-option>
             </el-select>
@@ -190,7 +190,7 @@
               <el-option
                 v-for="(item,index) in actionOption"
                 :key="index"
-                :label="$i.setting[item.name]"
+                :label="item.name"
                 :value="item.code">
               </el-option>
             </el-select>
@@ -266,7 +266,7 @@
                 <el-option
                   v-for="item in genderOption"
                   :key="item.id"
-                  :label="$i.setting[item.name]"
+                  :label="item.name"
                   :value="item.code">
                 </el-option>
               </el-select>
@@ -358,7 +358,7 @@
         editUserdialog: {
           show: false,
           type: 0, // 0、添加  1、编辑
-          title: ['Add New User', 'Edit User']
+          title: [$i.setting.addUser, $i.setting.editUser]
         },
         disabledSearch: false,
         userListLoading: false,
@@ -544,12 +544,12 @@
                 return this.$i.setting.canNotRepeatDepartmentName;
               }
             },
-            callback(action, instance) {
+            callback: (action, vm) => {
               if (action !== 'confirm') {
                 return false;
               }
 
-              let params = {deptName: data.value.trim()}, http;
+              let params = {deptName: vm.inputValue.trim()}, http;
               this.loadingDepartment = true;
 
               if (item) {
@@ -583,12 +583,12 @@
                 return this.$i.setting.roleExisted;
               }
             },
-            callback(action, instance) {
+            callback: (action, vm) => {
               if (action !== 'confirm') {
                 return false;
               }
 
-              let params = {roleName: instance.inputValue.trim()}, http;
+              let params = {roleName: vm.inputValue.trim()}, http;
               this.loadingRole = true;
 
               http = () => item ? this.$ajax.put : this.$ajax.post;
