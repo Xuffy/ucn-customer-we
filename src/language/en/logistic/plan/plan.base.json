@@ -118,7 +118,6 @@
   "estAmount": "Est. Amount",
   "actPayDate": "Actual Pay Date",
   "actAmount": "Actual Amount",
-  "currency": "Currency",
   "avilable": "Available",
   "operation": "Operation",
   "productInfoTitle": "Product Info",
@@ -182,11 +181,6 @@
   "skuShippingMarks": "Shipping Marks",
   "skuOuterCartonBarCode": "Outer Carton Barcode",
   "skuOuterCartonCode": "Outer Carton SKU Code",
-  "actPayDate": "Act. Pay Date",
-  "actAmount": "Act. Amount",
-  "avilable": "Avilable",
-  "paymentTerm": "Payment Term",
-  "transportationWay": "Transportation Way",
   "skuSupplierCode": "Supplier Serial Number",
   "skuDescCn": "SKU Descriptioin (CN)",
   "skuDescEn": "SKU Descriptioin (EN)",
@@ -208,5 +202,10 @@
   "USDEUR":"USD-EUR",
   "EURUSD":"EUR-USD",
   "transportationWayVal" : "海运",
-  "loadingTypeVal" : "集装箱"
+  "loadingTypeVal" : "集装箱",
+  "confirmModify": "确认修改",
+  "generateList": "生成装货清单",
+  "cancelModify": "取消修改",
+  "receive":"接受",
+  "refuse":"拒绝"
 }

@@ -71,7 +71,7 @@
               @size-change="pageSizeChange"></page>
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
-                <el-button type="primary">{{$i.common.cancel}}</el-button>
+                <el-button type="primary" @click="cancelData">{{$i.common.cancel}}</el-button>
             </div>
 
     </div>
@@ -139,7 +139,6 @@
         },
         methods: {
              ...mapActions([
-               'setRecycleBin',
                'setLog'
             ]),
             handleSizeChange(val) {
@@ -328,6 +327,9 @@
                 //     console.log(err)
                 // });
             },
+            cancelData(){
+              this.$emit('handleCancel');
+            }
         },
         created() {
             this.getCodePart();

@@ -19,12 +19,18 @@ export default {
   customerName:{
         key: 'name',
         type: 'input',
-        belong:'summary'
+        belong:'summary',
+        _rules:{
+          required:true,
+        }
     },
   customerType:{
         key: 'type',
         type: 'select',
-        belong:'summary'
+        belong:'summary',
+        _rules:{
+          required:true,
+        }
     },
    country:{
         key: 'country',
@@ -60,5 +66,7 @@ export default {
     key: 'shipAgent',
     type: 'input',
     belong:'summary'
-  }
+  },
+
+
 }
