@@ -50,7 +50,7 @@
       </v-table>
     </div>
     <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
+      <product-modify ref="productModifyComponents" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
@@ -91,6 +91,7 @@ export default {
       hightLightObj:{},
       attachmentList:[],
       modefiyProductIndex: 0,
+      modefiyProductIndexArr: [],
       logisticsStatus:null,
       logisticsNo: '',
       remark: '',
@@ -151,6 +152,7 @@ export default {
         }
       },
       pageName:'',
+      prodFieldDisplay:{}
     }
   },
   components: {
@@ -276,10 +278,13 @@ export default {
         this.matchRate(res.currencyExchangeRate);
         this.attachmentList = res.attachment;
         this.fieldDisplay = res.fieldDisplay;
-        this.$ajax.post(`${this.$apis.get_payment_list}${res.logisticsNo}/30`).then(res => {
-          this.createdPaymentData(res)
-        })
+        this.getPaymentList(res.logisticsNo);
         this.getSupplier(res.logisticsNo)
+      })
+    },
+    getPaymentList(logisticsNo){
+      this.$ajax.post(`${this.$apis.get_payment_list}${logisticsNo}/30`).then(res => {
+        this.createdPaymentData(res)
       })
     },
     getSupplier (logisticsNo) {
@@ -324,6 +329,13 @@ export default {
       this.feeList = feeListb ? [res.fee] : null;
       this.sendfee = feeListb ? res.fee : null;
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+      this.productList.forEach((item)=>{
+        if(item.fieldDisplay.value){
+          _.mapObject(item.fieldDisplay.value,(v,k)=>{
+            this.$set(item[k],'_color','red')
+          })
+        }
+      })  
     },
     createdPaymentData (res = this.oldPaymentObject) {
       this.oldPaymentObject = JSON.parse(JSON.stringify(res))
@@ -391,6 +403,7 @@ export default {
       this.productInfoModifyStatus = status
       this.showProductDialog = true
       this.modefiyProductIndex = i
+      this.modefiyProductIndexArr.push(i);
       this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
     },
     getProductHistory (productId, status, i) {
@@ -416,7 +429,14 @@ export default {
       const payToCompanyId = this.paymentList[i].payToCompanyId
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
-        ...this.paymentList[i],
+        ...Object.assign({
+          name:null,
+          actualPayAmount:null,
+          planPayAmount:null,
+          actualPayDt:null,
+          planPayDt:null,
+        },this.paymentList[i]),
+        // ...this.paymentList[i],
         currency: this.selectArr.exchangeCurrency.find(a => a.code === currencyCode).id,
         currencyCode,
         orderNo: this.oldPlanObject.logisticsNo,
@@ -425,19 +445,25 @@ export default {
         payToCompanyName: skuSupplierObj ? skuSupplierObj.skuSupplierName : null,
         type: 10
       }
-      const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment
+      const url = paymentData.id ? this.$apis.update_plan_payment : this.$apis.save_plan_payment;
+      if(this.$validateForm(paymentData,this.$db.logistic.payMentInfo)){
+        return;
+      }
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
-        this.updatePaymentWithView({i, edit: false})
+        this.updatePaymentWithView({i, edit: false,res})
       })
     },
-    updatePaymentWithView ({ i, edit, status }) {
+    updatePaymentWithView ({ i, edit, status,res}) {
       const obj = {
         ...this.paymentList[i],
         edit,
         status: status || this.paymentList[i].status
       }
-      this.$set(this.paymentList, i, obj)
+      this.$set(this.paymentList, i, obj);
+      if(res){
+        this.getPaymentList(res.orderNo);
+      }
     },
     closeAddProduct (status) {
       this.showAddProductDialog = false
@@ -475,11 +501,22 @@ export default {
         this.$delete(this.productList, index)
       })
     },
+    productModifyfun(obj){
+      if(this.planId){
+        this.prodFieldDisplay = obj;
+      }
+    },
     closeModify (status) {
       this.showProductDialog = false
       if (!status) return this.productModifyList = []
       const currrentProduct = this.productModifyList[0]
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
+      this.productList.forEach(item=>{
+        this.$set(item.fieldDisplay, 'value', null);
+      })
+      this.modefiyProductIndexArr.forEach((item)=>{
+        this.$set(this.productList[item].fieldDisplay, 'value', this.prodFieldDisplay)
+      })
       const id = currrentProduct.id.value
       const vId = +new Date();
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
@@ -599,7 +636,7 @@ export default {
       this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
       this.oldPlanObject.containerDetail = this.containerInfo
       this.oldPlanObject.fee = this.feeList && this.feeList.length>0 ? this.sendfee : null;
-      this.oldPlanObject.product = this.modifyProductArray;
+      // this.oldPlanObject.product = this.modifyProductArray 原版;
       this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr),(item)=>{
         item['price'] = item['value'];
         delete item['value'];
@@ -620,7 +657,7 @@ export default {
           if(v.type=='text'){
             return v.value;
           }else{
-             return null;
+            return null;
           }
         })
       });
@@ -632,7 +669,7 @@ export default {
       if(!this.planId){
         this.oldPlanObject.fieldDisplay = null;
       }
-      if(!this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+      if(this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
         return;
       }
       this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
@@ -669,7 +706,7 @@ export default {
     formListSelectChange(v){
       this.$set(this.oldPlanObject,'currency',v);
     }
-  }
+  },
 }
 </script>
 <style lang="less" scoped>

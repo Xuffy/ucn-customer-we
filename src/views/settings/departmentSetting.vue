@@ -6,7 +6,7 @@
     <div class="body">
       <el-row :gutter="15">
         <el-col :span="8">
-          <div class="card department">
+          <div class="card department" v-loading="loadingDepartment">
             <div class="title">{{$i.setting.department}}</div>
             <div class="handler">
               <el-row>
@@ -25,22 +25,22 @@
                 </el-col>
               </el-row>
             </div>
-            <div class="list" v-loading="loadingDepartment">
-              <div class="list-title">{{$i.setting.all}} <span>({{departmentUserTotal}}人)</span></div>
-              <el-tree
-                class="departmentTree"
-                ref="departmentTree"
-                :data="departmentData"
-                :props="departmentProps"
-                node-key="deptId"
-                default-expand-all
-                :expand-on-click-node="false"
-                :filter-node-method="filterDepartment"
-                @node-click="departmentClick">
+            <div class="list">
+              <div class="list-title">{{$i.setting.all}} <span>({{$i.setting.activated}} {{departmentUserTotal}})</span>
+              </div>
+              <el-tree class="departmentTree"
+                       ref="departmentTree"
+                       :data="departmentData"
+                       :props="{label: 'deptName'}"
+                       node-key="deptId"
+                       default-expand-all
+                       :expand-on-click-node="false"
+                       :filter-node-method="filterDepartment"
+                       @node-click="departmentClick">
                 <div class="custom-tree-node" slot-scope="{ node, data }"
                      :class="{isAction:node.data.deptId === userData.deptId}">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + node.data.deptUserCount + '人)'"></span>
+                    <span v-text="node.label + '(' + node.data.deptUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -63,7 +63,7 @@
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="card role">
+          <div class="card role" v-loading="loadingRole">
             <div class="title">{{$i.setting.role}}</div>
             <div class="handler">
               <el-row>
@@ -83,8 +83,8 @@
                 </el-col>
               </el-row>
             </div>
-            <div class="list" v-loading="loadingRole">
-              <div class="list-title">{{$i.setting.all}} <span>({{roleUserTotal}}人)</span></div>
+            <div class="list">
+              <div class="list-title">{{$i.setting.all}} <span>({{$i.setting.activated}} {{roleUserTotal}})</span></div>
               <el-tree
                 class="speTree"
                 ref="roleTree"
@@ -98,7 +98,7 @@
                 @check="roleCheckClick">
                 <div class="custom-tree-node" slot-scope="{ node, data }">
                   <div v-if="!data.children">
-                    <span v-text="node.label + '(' + data.roleUserCount + '人)'"></span>
+                    <span v-text="node.label + '(' + data.roleUserCount + ')'"></span>
                     <div class="action">
                       <el-button
                         class="treeBtn"
@@ -121,7 +121,7 @@
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="card role">
+          <div class="card role" v-loading="loadingPrivilege">
             <div class="title">{{$i.setting.privilege}}</div>
             <div class="handler">
               <el-row>
@@ -141,8 +141,7 @@
                 </el-col>
               </el-row>
             </div>
-            <div class="list" v-loading="loadingRole">
-              <div class="list-title">{{$i.setting.all}} <span>({{roleUserTotal}}人)</span></div>
+            <div class="list">
               <el-tree
                 class="speTree"
                 ref="privilegeTree"
@@ -150,6 +149,7 @@
                 :props="{label: 'name'}"
                 show-checkbox
                 node-key="code"
+                :default-expanded-keys="['pageAll','dataAll']"
                 :expand-on-click-node="false"
                 :filter-node-method="filterPrivilege">
               </el-tree>
@@ -333,6 +333,7 @@
   import {Base64} from 'js-base64';
   import Qs from 'qs';
   import {mapActions} from 'vuex'
+  import $i from '../../language/index';
 
   export default {
     name: "department-setting",
@@ -350,9 +351,9 @@
           status: '',
         },
         actionOption: [
-          {name: 'notActive', code: 0},
-          {name: 'activated', code: 1},
-          {name: 'disable', code: 2}
+          {name: $i.setting.notActive, code: 0},
+          {name: $i.setting.activated, code: 1},
+          {name: $i.setting.disable, code: 2}
         ],
         editUserdialog: {
           show: false,
@@ -364,36 +365,25 @@
         formLabelWidth: '120px',
         loadingDepartment: false,
         loadingRole: false,
+        loadingPrivilege: false,
         addUserLoading: false,
         inviteUserLoading: false,
         checkedRole: [],
         selectList: [],
         languageOption: [],
         genderOption: [
-          {
-            id: 1,
-            code: 0,
-            name: 'man'
-          },
-          {
-            id: 2,
-            code: 1,
-            name: 'woman'
-          },
-          {
-            id: 3,
-            code: 2,
-            name: 'unknown'
-          },
+          {code: 0, name: $i.setting.man},
+          {code: 1, name: $i.setting.woman},
+          {code: 2, name: $i.setting.unknown},
         ],
         roleOption: [],
         departmentData: [],
-        departmentProps: {
-          label: 'deptName',
-        },
         departmentUserTotal: 0,          //department总人数
-        roleData: [{roleName: '全部', children: []}],
-        privilegeData: [{name: 'Page', children: []}, {name: 'Date', children: []}],
+        roleData: [{roleName: $i.setting.all, children: []}],
+        privilegeData: [
+          {name: $i.setting.privilegePage, children: [], code: 'pageAll'},
+          {name: $i.setting.privilegeData, children: [], code: 'dataAll'}
+        ],
         roleUserTotal: 0,                //role总人数
         searchDepartment: '',            //搜索的部门名称
         searchRole: '',                  //搜索的role名称
@@ -454,6 +444,7 @@
       getDepartmentData(type) {
         this.loadingDepartment = true;
         this.userListLoading = true;
+        this.departmentUserTotal = 0;
         return this.$ajax.get(this.$apis.get_departmentOverview).then(res => {
           this.departmentData = res;
           this.departmentData.forEach(v => {
@@ -496,8 +487,8 @@
             gender = _.findWhere(this.genderOption, {code: item.gender.value});
             status = _.findWhere(this.actionOption, {code: item.status.value});
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
-            item.gender._value = this.$i.setting[gender.name];
-            item.status._value = this.$i.setting[status.name];
+            // item.gender._value = this.$i.setting[gender.name];
+            // item.status._value = this.$i.setting[status.name];
             item.lang._value = lang.name || '';
             return item;
           });
@@ -521,14 +512,14 @@
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
         this.roleData[0].children = this.$depthClone(data.deptRoles || []);
+        this.searchRole = '';
         this.$nextTick(() => {
           this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
           this.roleCheckClick();
         });
-        console.log(this.userData)
       },
       roleCheckClick() {
-        this.checkedRole = this.$refs.roleTree.getCheckedKeys(true);
+        this.checkedRole = _.compact(this.$refs.roleTree.getCheckedKeys(true));
         // 更新部门信息
         this.getDepartmentUser();
         // 显示权限列表
@@ -542,29 +533,37 @@
             inputValue: ' ' + (item ? item.deptName : ''),
             closeOnHashChange: false,
             inputValidator: (value) => {
+              let depItem;
               if (!value || value === '') {
                 return this.$i.setting.pleaseInput;
-              } else if (_.findWhere(this.departmentData, {deptName: value.trim()})) {
+              }
+
+              depItem = _.findWhere(this.departmentData, {deptName: value.trim()});
+
+              if (depItem && (!item || depItem.deptId !== item.deptId)) {
                 return this.$i.setting.canNotRepeatDepartmentName;
               }
+            },
+            callback(action, instance) {
+              if (action !== 'confirm') {
+                return false;
+              }
+
+              let params = {deptName: data.value.trim()}, http;
+              this.loadingDepartment = true;
+
+              if (item) {
+                params.deptId = item.deptId;
+              }
+
+              http = () => item ? this.$ajax.put : this.$ajax.post;
+
+              http()(this.$apis.get_department, params).then(res => {
+                this.$message.success(this.$i.setting.createSuccess);
+                this.getDepartmentData();
+              }).finally(() => this.loadingDepartment = false);
             }
-          }).then(data => {
-          let params = {deptName: data.value.trim()}, http;
-          this.loadingDepartment = true;
-
-          if (item) {
-            params.deptId = item.deptId;
-          }
-
-          http = () => item ? this.$ajax.put : this.$ajax.post;
-
-          http()(this.$apis.get_department, params).then(res => {
-            this.$message.success(this.$i.setting.createSuccess);
-            this.getDepartmentData();
-          }).finally(() => {
-            this.loadingDepartment = false;
           });
-        });
       },
       addRole(item) {
         this.$prompt(this.$i.setting.pleaseInputRole,
@@ -573,31 +572,39 @@
             cancelButtonText: this.$i.setting.cancel,
             inputValue: ' ' + (item ? item.roleName : ''),
             inputValidator: (value) => {
+              let roleItem;
               if (!value || value === '') {
                 return this.$i.setting.pleaseInput;
-              } else if (_.findWhere(this.roleData[0].children, {roleName: value.trim()})) {
-                return 'role名称不能重复';
               }
+
+              roleItem = _.findWhere(this.roleData[0].children, {roleName: value.trim()});
+
+              if (roleItem && (!item || roleItem.roleId !== item.roleId)) {
+                return this.$i.setting.roleExisted;
+              }
+            },
+            callback(action, instance) {
+              if (action !== 'confirm') {
+                return false;
+              }
+
+              let params = {roleName: instance.inputValue.trim()}, http;
+              this.loadingRole = true;
+
+              http = () => item ? this.$ajax.put : this.$ajax.post;
+
+              if (item) {
+                params.roleId = item.roleId;
+              } else {
+                params.deptId = this.userData.deptId;
+              }
+
+              http()(this.$apis.add_departmentRole, params).then(res => {
+                this.getDepartmentData(true);
+              }).finally(() => this.loadingRole = false);
             }
 
-          }).then(data => {
-          let params = {roleName: data.value.trim()}, http;
-          this.loadingRole = true;
-
-          http = () => item ? this.$ajax.put : this.$ajax.post;
-
-          if (item) {
-            params.roleId = item.roleId;
-          } else {
-            params.deptId = this.userData.deptId;
-          }
-
-          http()(this.$apis.add_departmentRole, params).then(res => {
-            this.getDepartmentData(true);
-          }).finally(() => {
-            this.loadingRole = false;
           });
-        });
       },
       filterDepartment(value, data) {
         if (!value) return true;
@@ -756,15 +763,37 @@
         );
       },
       savePrivilege() {
-        let nodes = [], params = {};
+        let nodes = [], dataNodes
+          , params = {resourceCodes: [], domainCodes: []};
 
         nodes = this.$refs.privilegeTree.getCheckedNodes(true);
+        dataNodes = this.$refs.privilegeTree.getNode('dataAll');
+        this.loadingPrivilege = true;
 
         _.map(nodes, val => {
-
+          val.parentCode && params.resourceCodes.push(val.code);
         });
 
-        console.log(this.$refs.privilegeTree.getCheckedNodes(true))
+        _.map(dataNodes.childNodes, value => {
+          let checked = _.where(value.childNodes, {checked: true})
+            , userIds = [];
+
+          if (!_.isEmpty(checked)) {
+            userIds = _.map(checked, val => {
+              return val.data.code;
+            });
+            params.domainCodes.push({bizDomainCode: value.data.code, userIds});
+          }
+        });
+
+        params.deptId = this.userData.deptId;
+        params.roleId = this.checkedRole[0];
+
+        this.$ajax.post(this.$apis.ROLE_PRIVILEGE, {datas: [params]})
+          .then(res => {
+            this.$message.success(this.$i.setting.privilegeSetSuccess);
+          })
+          .finally(() => this.loadingPrivilege = false);
       },
       getPrivilege() {
         if (this.checkedRole.length !== 1) {

@@ -30,6 +30,10 @@ export default {
   "toShipCartonQty": {
     type: 'text'
   },
+  "fieldDisplay":{
+    type:'text',
+    _hide: true
+  },
   "toShipQty": {
     type: 'text'
   },
@@ -37,7 +41,7 @@ export default {
     type: 'text'
   },
   "skuNameEn": {
-    type: 'text'
+    type: 'text',
   },
   "skuNameCn": {
     type: 'text'

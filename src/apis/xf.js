@@ -23,5 +23,6 @@ export default {
   USER_ENABLE: ['/user/enable/{userId}', 'UUSER_URL'],
   PRIVILEGE_DATA_BIZDOMAIN: ['/privilege/data/biz-domain', 'UUSER_URL'],
   PRIVILEGE_RESOURCE: ['/privilege/resource', 'UUSER_URL'],
+  ROLE_PRIVILEGE: ['/role/privilege', 'UUSER_URL'],
   // IMPORTTEMPLATE_DOWNLOADURL: ['/customer/isSetCompanyInfo', 'UIE_URL']
 }
