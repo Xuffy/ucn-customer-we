@@ -24,6 +24,7 @@
           @change-checked="changeChecked"
           :height="500"
           hide-filter-value
+          :style="computeStyle"
         />
         <page
           :page-data="pageData"
@@ -95,7 +96,7 @@
         params: {
           mark: 0,
           content: '',
-          ps:10,
+          ps:50,
           pn:1
         },
         checked1:true,
@@ -108,7 +109,7 @@
           subscribeEmail:0,
           subscribePlatform:1,
           messageType:''
-        }
+        },
       }
     },
     methods:{
@@ -184,11 +185,11 @@
           .then(res => {
               this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
                 _.mapObject(e, val => {
-                  val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'))
+                  val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'));
                   return val
                 })
                 if(e.read.value){
-                  e.read.value = '已读'
+                  e.read.value = '已读';
                 }else{
                   e.read.value = '未读'
                 }
@@ -281,6 +282,15 @@
     created(){
       this.getDataInfo()
       this.getMessageQuery()
+    },
+    computed: {
+      computeStyle() {
+        this.tabData.forEach((v, k) => {
+          if (v.read.value = '未读'){
+            return { fontWeight:200 }
+          }
+        });
+      }
     }
   }
 </script>

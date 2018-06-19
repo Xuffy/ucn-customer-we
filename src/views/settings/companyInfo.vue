@@ -182,8 +182,8 @@
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item prop="country" :label="$i.setting.country">
-                    <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;">
+                  <el-form-item prop="country" :label="$i.setting.country" required>
+                    <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;" >
                       <el-option
                         v-for="item in options.country"
                         :key="item.code"
@@ -194,18 +194,18 @@
                   </el-form-item>
                 </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="province" :label="$i.setting.province">
-                      <el-input size="mini" v-model="addressData.province" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="province" :label="$i.setting.province" required>
+                      <el-input size="mini" v-model="addressData.province" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="city" :label="$i.setting.city">
-                      <el-input size="mini" v-model="addressData.city" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="city" :label="$i.setting.city" required>
+                      <el-input size="mini" v-model="addressData.city" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="address" :label="$i.setting.companyAddress">
-                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="address" :label="$i.setting.companyAddress" required>
+                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -722,43 +722,48 @@
                 this.addressDialogVisible=true;
             },
             sureAddAddress(){
-                this.allowAddAddress=true;
-                this.addressData.customerId=this.companyInfo.id;
-                if(this.isModifyAddress){
-                    //表示是在修改地址
-                    this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        if (!this.companyInfo.setting){
-                          this.postUpdateIsSetting();
-                        }
-                        this.getWholeData();
-                        this.addressDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAddress=false;
-                    });
-                }else{
-                    //表示是在新增地址
-                    this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: '添加成功',
-                            type: 'success'
-                        });
-                        this.getWholeData();
-                        this.addressDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: err,
-                            type: 'success'
-                        });
-                        this.addressDialogVisible=false;
-                    });
-                }
+              let params = this.$depthClone(this.addressData);
+              console.log(params)
+              if (this.$validateForm(params, this.$db.setting.companyAddress)) {
+                return false;
+              }
+              // this.allowAddAddress=true;
+              // this.addressData.customerId=this.companyInfo.id;
+              // if(this.isModifyAddress){
+              //   //表示是在修改地址
+              //   this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
+              //     this.allowAddAddress=false;
+              //     this.$message({
+              //       message: '修改成功',
+              //       type: 'success'
+              //     });
+              //     if (!this.companyInfo.setting){
+              //       this.postUpdateIsSetting();
+              //     }
+              //     this.getWholeData();
+              //     this.addressDialogVisible=false;
+              //   }).catch(err=>{
+              //     this.allowAddAddress=false;
+              //   });
+              // }else{
+              //   //表示是在新增地址
+              //   this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
+              //     this.allowAddAddress=false;
+              //     this.$message({
+              //       message: '添加成功',
+              //       type: 'success'
+              //     });
+              //     this.getWholeData();
+              //     this.addressDialogVisible=false;
+              //   }).catch(err=>{
+              //     this.allowAddAddress=false;
+              //     this.$message({
+              //       message: err,
+              //       type: 'success'
+              //     });
+              //     this.addressDialogVisible=false;
+              //   });
+              // }
             },
             modifyAddress(e){
                var result = {}
