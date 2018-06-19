@@ -254,8 +254,8 @@ export default {
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
     switchStatus (i, url) {
-      this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status }) => {
-        this.$emit('updatePaymentWithView', { i, edit: false, status })
+      this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status,orderNo }) => {
+        this.$emit('updatePaymentWithView', { i, edit: false, status,res:{'orderNo':orderNo}})
       })
     },
   },

@@ -188,7 +188,8 @@ export default {
   data () {
     return {
       modify: true,
-      modifyArray: []
+      modifyArray: [],
+      productModifyObj:{}
     }
   },
   watch: {
@@ -197,8 +198,9 @@ export default {
     }
   },
   methods: {
-    currentChange(col,i){
-      console.log(col)
+    currentChange(key,v){
+      this.productModifyObj[key] = v;
+      this.$emit('productModifyfun',this.productModifyObj);
     },
     createModifyData () {
       if (!this.tableData.length) return

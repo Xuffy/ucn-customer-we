@@ -29,7 +29,7 @@
                 value-key="id"
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
-                v-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
+                v-else-if="item.key === 'destinationCountry' || item.key === 'departureCountry'"
                 style="width:100%;">
                 <el-option
                   v-for="items in optionData[item.key]"
@@ -38,13 +38,26 @@
                   :value="items.code"
                   :id="items.id"/>
               </el-select>
-
               <el-select
                 v-model="fromArg[item.key]"
                 value-key="id"
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
-                v-if="item.type === 'Select' && item.key !== 'destinationCountry' && item.key != 'departureCountry'"
+                v-else-if="item.key === 'currency'"
+                style="width:100%;">
+                <el-option
+                  v-for="items in optionData[item.key]"
+                  :key="items.id"
+                  :label="items.code"
+                  :value="items.code"
+                  :id="items.id"/>
+              </el-select>
+              <el-select
+                v-model="fromArg[item.key]"
+                value-key="id"
+                :size="item.size || 'mini'"
+                :placeholder="item.placeholder"
+                v-else-if="item.type === 'Select'"
                 style="width:100%;">
                 <el-option
                   v-for="items in optionData[item.key]"
@@ -55,7 +68,7 @@
               </el-select>
               <el-select
                 style="width:100%;"
-                v-if="item.type === 'manySelect'"
+                v-else-if="item.type === 'manySelect'"
                 v-model="fromArg.suppliers"
                 multiple
                 filterable
@@ -79,16 +92,16 @@
                 :rows="item.rows || 4"
                 :size="item.size || 'mini'"
                 :placeholder="item.placeholder"
-                v-if="item.types === 'textarea'"
+                v-else-if="item.types === 'textarea'"
                 resize="none"
                 :disabled="item.disabled"/>
-              <span v-if="item.type === 'Number'" style="display:flxe;">
+              <span v-else-if="item.type === 'Number'" style="display:flxe;">
                 <el-input-number v-model="fromArg[item.key]" :min="0" :max="100"
                     controls-position="right" size="mini" :controls="false"
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="fromArg[item.key]" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="fromArg[item.key] ? fromArg[item.key].split(',') : ''" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>

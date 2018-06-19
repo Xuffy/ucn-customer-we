@@ -90,7 +90,6 @@
 <script>
 /**
  * @param ChildrenCheckList Basic Info 多选框选中值
- * @param ProductCheckList Product Info 多选框选中值
  * @param keyWord search框 值
  * @param value 下拉框选中的值
  * @param options 下拉框原始数据
@@ -136,7 +135,6 @@ export default {
       newSearchDialogVisible: false,
       compareConfig: [],
       ChildrenCheckList: [],
-      ProductCheckList: [],
       keyWord: '',
       value: '',
       switchStatus: false,
@@ -200,14 +198,6 @@ export default {
         }
       });
       this.newTabData = data;
-    },
-    ProductCheckList(val, oldVal) {
-      if (val[0] + '' === 0) {
-        this.newProductTabData = this.$table.setHighlight(
-          this.newProductTabData
-        );
-      }
-      this.newProductTabData = arr;
     }
   },
   methods: {
@@ -246,14 +236,17 @@ export default {
         ],
         { cache: true }
       );
-      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: true});
+      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
       const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
       return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
         let data = res[0];
         data.push({
           code: 'CY_UNIT',
           name: 'CY_UNIT(币种)',
-          codes: res[1]
+          codes: (() => {
+            res[1].forEach(item => item.name = item.code);
+            return res[1];
+          })()
         });
         data.push({
           code: 'COUNTRY',
@@ -370,9 +363,7 @@ export default {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res, 'skuId'),
-          item => {
-            this.$filterDic(item);
-          }
+          item => this.$filterDic(item)
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
         this.newSearchDialogVisible = false;
@@ -440,7 +431,30 @@ export default {
         return;
       }
       let historyApi = item.skuId ? this.$apis.GET_INQUIRY_DETAIL_HISTORY : this.$apis.GET_INQUIRY_HISTORY;
+      // 历史中始终要显示的列
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'entryDt', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
+        // 处理只显示修改列
+        res.forEach(i => {
+          if (i.fieldDisplay) {
+            let fs = Object.keys(i.fieldDisplay);
+            if(fs.length === 0) return;
+            Object.keys(i).forEach(field => {
+              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+                i[field] = null;
+              }
+            });
+          }
+          if (i.fieldRemarkDisplay) {
+            let fs = Object.keys(i.fieldRemarkDisplay);
+            if(fs.length === 0) return;
+            Object.keys(i.fieldRemark).forEach(field => {
+              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+                i.fieldRemark[field] = null;
+              }
+            });
+          }
+        });
         if (type === 'basicInfo') {
           arr = this.newTabData.filter(i => i.id.value.toString() === config.data.toString());
           this.$refs.HM.init(arr, this.$getDB(this.$db.inquiry.basicInfo, this.$refs.HM.getFilterData(res)), config.type === 'modify');
@@ -452,39 +466,28 @@ export default {
       });
     },
     basicInfoAction(data, type) {
+      if (['histoty', 'modify'].indexOf(type) === -1) return;
       // basic info 按钮操作
       this.idType = 'basicInfo';
       this.historyColumn = this.$db.inquiry.basicInfo;
-      switch (type) {
-        case 'histoty':
-          this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'histoty', data: data.id.value});
-          break;
-        case 'modify':
-          this.fnBasicInfoHistoty(data, 'basicInfo', {type: 'modify', data: data.id.value});
-          this.oSwitch = true;
-          break;
-      }
+      this.fnBasicInfoHistoty(data, 'basicInfo', {type, data: data.id.value});
+      if (type === 'modify') this.onSwitch = true;
     },
     producInfoAction(data, type) {
+      if (type === 'detail') {
+        this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
+        return;
+      }
+      if (['histoty', 'modify'].indexOf(type) === -1) return;
       // Produc info 按钮操作
       this.idType = 'producInfo';
       this.historyColumn = this.$db.inquiry.productInfo;
-      switch (type) {
-        case 'histoty':
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'histoty', data: data.skuId.value});
-          break;
-        case 'modify':
-          this.oSwitch = true;
-          this.fnBasicInfoHistoty(data, 'productInfo', {type: 'modify', data: data.skuId.value});
-          break;
-        case 'detail':
-          this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
-          break;
-      }
+      this.fnBasicInfoHistoty(data, 'productInfo', {type, data: data.skuId.value});
+      if (type === 'modify') this.onSwitch = true;
     },
     // 获取选中的单 集合
     changeChecked(item) {
-      this.checkedAll = item;
+      this.checkedAll = item.filter(i => !i._remark);
     },
     // 创建单
     toCreateInquire() {
@@ -514,7 +517,9 @@ export default {
       let arr = this.newProductTabData.filter(i => !i._disabled);
       parentNode.details = this.dataFilter(arr);
       parentNode.draft = 0;
-      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(parentNode)).then(res => {
+      let saveData = this.$filterModify(parentNode);
+      saveData.attachment = null;
+      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.dataBase = res.status;
         this.statusModify = false;
         this.getInquiryDetail();
