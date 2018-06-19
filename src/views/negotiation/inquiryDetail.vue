@@ -246,14 +246,17 @@ export default {
         ],
         { cache: true }
       );
-      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: true});
+      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
       const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
       return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
         let data = res[0];
         data.push({
           code: 'CY_UNIT',
           name: 'CY_UNIT(币种)',
-          codes: res[1]
+          codes: (() => {
+            res[1].forEach(item => item.name = item.code);
+            return res[1];
+          })()
         });
         data.push({
           code: 'COUNTRY',
@@ -370,9 +373,7 @@ export default {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,
           this.$refs.HM.getFilterData(res, 'skuId'),
-          item => {
-            this.$filterDic(item);
-          }
+          item => this.$filterDic(item)
         );
         this.newProductTabData = arr.concat(this.newProductTabData);
         this.newSearchDialogVisible = false;
