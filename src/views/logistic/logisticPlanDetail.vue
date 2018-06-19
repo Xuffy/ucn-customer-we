@@ -480,6 +480,9 @@ export default {
       if (!status) return this.productModifyList = []
       const currrentProduct = this.productModifyList[0]
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
+      // if(!this.planId){
+      //   this.oldPlanObject.fieldDisplay = null;
+      // }
       const id = currrentProduct.id.value
       const vId = +new Date();
       const index = this.modifyProductArray.indexOf(this.modifyProductArray.find(a => a.id === (id || vId)))
@@ -632,9 +635,9 @@ export default {
       if(!this.planId){
         this.oldPlanObject.fieldDisplay = null;
       }
-      if(!this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
-        return;
-      }
+      // if(!this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+      //   return;
+      // }
       this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
@@ -669,7 +672,7 @@ export default {
     formListSelectChange(v){
       this.$set(this.oldPlanObject,'currency',v);
     }
-  }
+  },
 }
 </script>
 <style lang="less" scoped>
