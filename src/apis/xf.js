@@ -21,5 +21,7 @@ export default {
   USER_CUSTOMER_ISSETUSERINFO: ['/user/customer/isSetUserInfo?type={type}', 'UWORKBENCH_URL'],
   USER_DISABLE: ['/user/disable/{userId}', 'UUSER_URL'],
   USER_ENABLE: ['/user/enable/{userId}', 'UUSER_URL'],
+  PRIVILEGE_DATA_BIZDOMAIN: ['/privilege/data/biz-domain', 'UUSER_URL'],
+  PRIVILEGE_RESOURCE: ['/privilege/resource', 'UUSER_URL'],
   // IMPORTTEMPLATE_DOWNLOADURL: ['/customer/isSetCompanyInfo', 'UIE_URL']
 }
