@@ -1,76 +1,77 @@
 <template>
-  <div class="inquiry">
-      <div class="title">
-          <span>{{$i.warehouse.qcOverview}}</span>
-      </div>
-    <div class="status">
-      <div class="state">
-        <span>{{ $i.common.qcStatus }}</span>
+    <div class="inquiry">
+        <div class="title">
+            <span>{{$i.warehouse.qcOverview}}</span>
+        </div>
+        <div class="status">
+            <div class="state">
+                <span>{{ $i.common.qcStatus }}</span>
+                <el-radio-group class="radios" @change="getQcOrderList(true)" v-model="params.qcStatusDictCode"
+                                size="mini">
+                    <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
+                    <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}
+                    </el-radio-button>
+                </el-radio-group>
+            </div>
+            <div style="float: right">
+                <select-search
+                        :options="options"
+                        v-model="searchValue"
+                        @inputEnter="inputEnter"
+                        :searchLoad="searchLoad"
+                />
+            </div>
+        </div>
+        <v-table
+                :height="500"
+                :data="tabData"
+                :loading='loading'
+                :buttons="[{label: 'Detail', type: 1}]"
+                @action="onAction"
+                @change-checked='checked'
+        >
+            <template slot="header">
+                <div class="fn">
+                    <div class="btn-wrap">
+                        <!--<el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>-->
+                        <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
+                    </div>
+                </div>
+            </template>
+        </v-table>
+        <page
+                :page-data="pageData"
+                :page-sizes="[50,100,200,500]"
+                @change="handleSizeChange"
+                @size-change="pageSizeChange"></page>
 
-          <el-radio-group class="radios" @change="getQcOrderList(true)" v-model="params.qcStatusDictCode" size="mini">
-              <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
-              <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
-          </el-radio-group>
-      </div>
-      <div style="float: right">
-        <select-search
-          :options="options"
-          v-model="searchValue"
-          @inputEnter="inputEnter"
-          :searchLoad="searchLoad"
-        />
-      </div>
     </div>
-      <v-table
-              :height="500"
-              :data="tabData"
-              :loading='loading'
-              :buttons="[{label: 'Detail', type: 1}]"
-              @action="onAction"
-              @change-checked='checked'
-      >
-          <template slot="header">
-              <div class="fn">
-                  <div class="btn-wrap">
-                      <!--<el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                      <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
-                  </div>
-              </div>
-          </template>
-      </v-table>
-      <page
-              :page-data="pageData"
-              :page-sizes="[50,100,200,500]"
-              @change="handleSizeChange"
-              @size-change="pageSizeChange"></page>
-
-  </div>
 </template>
 <script>
-    import { selectSearch, VTable ,VPagination} from '@/components/index';
-    import { mapActions } from 'vuex'
+    import {selectSearch, VTable, VPagination} from '@/components/index';
+    import {mapActions} from 'vuex'
 
     export default {
         name: "qc-overview",
-        components:{
+        components: {
             VTable,
             selectSearch,
-            page:VPagination
+            page: VPagination
         },
-        data(){
-            return{
-                name:'',
-                value:'',
-                qcStatusOption:[],
-                qcMethodsOption:[],
+        data() {
+            return {
+                name: '',
+                value: '',
+                qcStatusOption: [],
+                qcMethodsOption: [],
                 options: [
                     {
                         id: 1,
                         label: 'QC Order No'
                     }
                 ],
-                pageData:{},
-                searchLoad:false,
+                pageData: {},
+                searchLoad: false,
                 loading: false,
                 pageTotal: 0,
                 params: {
@@ -86,13 +87,13 @@
                     //     }
                     // ],
                 },
-                tabData:[],
+                tabData: [],
                 selectList: [],
                 selectedNumber: [],
-                searchValue:1
+                searchValue: 1
             }
         },
-        methods:{
+        methods: {
             ...mapActions(['setLog']),
             getSort(val, key) {
                 console.log(val, key)
@@ -120,9 +121,9 @@
             },
             onAction(item, type) {
                 this.$windowOpen({
-                    url:'/warehouse/qcDetail',
-                    params:{
-                        id:item.id.value
+                    url: '/warehouse/qcDetail',
+                    params: {
+                        id: item.id.value
                     }
                 })
             },
@@ -137,128 +138,143 @@
                 //   });
             },
             //获取表格data
-            getQcOrderList(e){
-                if(e){
-                    this.params.pn=1;
+            getQcOrderList(e) {
+                if (e) {
+                    this.params.pn = 1;
                 }
                 this.loading = true;
-                this.$ajax.post(this.$apis.post_qc_page,this.params)
-                .then(res => {
-                    this.loading = false;
-                    this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas,e=>{
-                        e.qcMethodDictCode.value=this.$change(this.qcMethodsOption,'qcMethodDictCode',e).name;
-                        return e;
+                this.$ajax.post(this.$apis.post_qc_page, this.params)
+                    .then(res => {
+                        this.loading = false;
+                        this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas, e => {
+                            e.qcMethodDictCode.value = this.$change(this.qcMethodsOption, 'qcMethodDictCode', e).name;
+                            return e;
+                        });
+                        this.pageData = res;
+                    })
+                    .catch((res) => {
+                        this.loading = false;
                     });
-                    this.pageData=res;
-                })
-                .catch((res) => {
-                    this.loading = false;
-                });
             },
-            createQcOrder(){
+            createQcOrder() {
                 this.$windowOpen({
-                    url:'/warehouse/createQc'
+                    url: '/warehouse/createQc'
                 })
             },
 
             /**
-            * 获取单位
-            * */
-            getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['QC_STATUS','QC_MD'],{cache:true}).then(res=>{
-                    res.forEach(v=>{
-                        if(v.code==='QC_STATUS'){
-                            this.qcStatusOption=v.codes;
-                        }else if(v.code==='QC_MD'){
-                            this.qcMethodsOption=v.codes;
+             * 获取单位
+             * */
+            getUnit() {
+                this.$ajax.post(this.$apis.get_partUnit, ['QC_STATUS', 'QC_MD'], {cache: true}).then(res => {
+                    res.forEach(v => {
+                        if (v.code === 'QC_STATUS') {
+                            this.qcStatusOption = v.codes;
+                        } else if (v.code === 'QC_MD') {
+                            this.qcMethodsOption = v.codes;
                         }
                     });
                     this.getQcOrderList();
-                }).catch(err=>{
+                }).catch(err => {
 
                 });
             },
 
         },
-        created(){
+        created() {
             this.getUnit();
         },
-        mounted(){
-            this.setLog({query:{code:'BIZ_QC_ORDER'}});
+        mounted() {
+            this.setLog({query: {code: 'BIZ_QC_ORDER'}});
         },
     }
 </script>
 
 <style scoped>
-    .title{
+    .title {
         font-weight: bold;
         font-size: 18px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
         margin-bottom: 5px;
     }
-    .radios{
+
+    .radios {
         margin-left: 10px;
     }
-  .head-list{
-    margin-bottom: 10px;
-  }
-  .head-list label{
-    width: 190px;
-    display: inline-block;
-    height: 32px;
-    line-height: 32px;
-    text-align: right;
-    font-size: 14px;
-    color:#606266;
-    padding: 0 12px 0 0;
-    box-sizing: border-box;
-    float: left;
-  }
-  .head-list .content{
-    margin-left: 190px;
-    height: 32px;
-  }
-  .head-list .content >>> input{
-    height: 32px;
-  }
-  .state{
-    float: left;
-  }
-  .status{
-    overflow: hidden;
-  }
-  .fn {
-    display:flex;
-    justify-content:space-between;
-    padding:10px 0;
-    box-sizing: border-box;
-  .viewBy {
-    display:flex;
-    align-items: center;
-  span {
-    font-size:14px;
-    color:#666;
-  }
-  button {
-    cursor: pointer;
-    padding:2px 5px;
-  }
-  .set {
-    cursor: pointer;
-    padding-left:18px;
-    color:#999;
-  i {
-    font-size:25px;
-  }
-  }
-  }
-  }
-  .btns{
-    text-align: center;
-  }
-  .btn-group{
-    margin-bottom: 10px;
-  }
+
+    .head-list {
+        margin-bottom: 10px;
+    }
+
+    .head-list label {
+        width: 190px;
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+        text-align: right;
+        font-size: 14px;
+        color: #606266;
+        padding: 0 12px 0 0;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    .head-list .content {
+        margin-left: 190px;
+        height: 32px;
+    }
+
+    .head-list .content >>> input {
+        height: 32px;
+    }
+
+    .state {
+        float: left;
+    }
+
+    .status {
+        overflow: hidden;
+    }
+
+    .fn {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        box-sizing: border-box;
+
+    .viewBy {
+        display: flex;
+        align-items: center;
+
+    span {
+        font-size: 14px;
+        color: #666;
+    }
+
+    button {
+        cursor: pointer;
+        padding: 2px 5px;
+    }
+
+    .set {
+        cursor: pointer;
+        padding-left: 18px;
+        color: #999;
+
+    i {
+        font-size: 25px;
+    }
+
+    }
+    }
+    }
+    .btns {
+        text-align: center;
+    }
+
+    .btn-group {
+        margin-bottom: 10px;
+    }
 </style>

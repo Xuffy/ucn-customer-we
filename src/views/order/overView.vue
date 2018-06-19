@@ -235,10 +235,11 @@
                     });
             },
             //get_orderlist数据
-            getData(query) {
+            getData() {
                 this.loading = true;
-                let url='';
+                let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
+                query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;
