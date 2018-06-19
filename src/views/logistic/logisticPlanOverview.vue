@@ -76,7 +76,7 @@
         options: [
           {
             id: 'logisticsNo',
-            label: this.$i.logistic.logisticPlanNo
+            label: this.$i.logistic.logisticNo
           },
           {
             id: 'skuCode',
@@ -266,6 +266,7 @@
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
 
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
+        this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {

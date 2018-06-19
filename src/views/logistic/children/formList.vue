@@ -5,24 +5,23 @@
     <el-row :gutter="10">
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
-          <el-form-item v-if="!edit" :label="a.label+'：'">
-            <p class="textFilter">{{ textFilter(a) }}</p>
+          <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
+            <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
           <div v-else>
-            <!-- <el-form-item :label="validator(a.label)" v-if="a.type === 'input'" prop="value"> -->
-            <el-form-item :label="a.label" v-if="a.type === 'input'" prop="value">
-              <el-input placeholder="请输入内容" v-model="a.value" :disabled="a.disabled" />
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'input'" prop="value">
+              <el-input placeholder="请输入内容" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" v-model="a.value" :disabled="a.disabled" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
 
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'selector'" prop="value">
-              <el-select v-model="a.value" placeholder="请输入内容" :clearable="true" :disabled="a.disabled" @change="selectChange">
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" prop="value">
+              <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
                 <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
             </el-form-item>
 
-            <el-form-item :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
-              <el-date-picker v-model="a.value" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" />
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'date'" prop="value">
+              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
             </el-form-item>
           </div>
         </el-col>
@@ -33,6 +32,17 @@
 <script>
   export default {
     props: {
+      name:String,
+      definedStyle:{
+        type:Object,
+        default (){
+          return {
+            color: '#f56c6c',
+            'text-shadow': '2px 1px 2px'
+          }
+        }
+      },
+      fieldDisplay:Object,
       title: String,
       showHd: {
         type: Boolean,
@@ -60,6 +70,7 @@
     data() {
       return {
         paymentList: [],
+        hightLightModify:{},
         pickerOptions: {
           // disabledDate(time) {
           //   return time.getTime() > Date.now();
@@ -88,13 +99,12 @@
       }
     },
     methods: {
-      // validator(val){
-      //   return this.component('span', {
-          
-      //   })
-      // },
-      selectChange(v){
-        this.$emit('selectChange',v);
+      selectChange(value,key){
+        if(key=='exchangeCurrency'){
+          this.$emit('selectChange',value); 
+        }
+        this.$set(this.hightLightModify,key,value);
+        this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
       },
       textFilter(a) {
         if (a.type === 'input' || a.type === 'text') return a.value
@@ -140,6 +150,10 @@
     /deep/.el-select{
       width: 100%;
       min-width: 150px;
+    }
+    /deep/.definedStyleClass input{
+      background:#f56c6c;
+      color:#fff;
     }
   }
 

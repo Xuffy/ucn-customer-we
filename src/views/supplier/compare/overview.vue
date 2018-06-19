@@ -75,7 +75,8 @@
         },
         methods: {
               ...mapActions([
-                'setRecycleBin'
+                // 'setRecycleBin'
+                'setLog'
             ]),
             inputEnter(keyWord) {
                 if (!keyWord.keyType) return this.$message({
@@ -115,7 +116,7 @@
                     this.$windowOpen({
                         url: '/supplier/compareDetail/{type}',
                         params: {
-                            type: 'modify',
+                            type: 'read',
                             compareId: e.id.value,
                             compareName: e.name.value
                         },
@@ -126,7 +127,6 @@
             },
             get_data() {
                 this.loading = true;
-                console.log(this.params)
                 this.$ajax.post(this.$apis.post_supplier_listCompare, this.params)
                     .then(res => {
                         this.loading = false;
@@ -139,7 +139,6 @@
                             return val
                           })
                         });
-                        console.log(this.tabData)
                     })
                   .catch((res) => {
                     this.loading = false;
@@ -177,6 +176,9 @@
                 name: 'compareRecycleBin',
                 show: true
             });
+        },
+        mounted(){
+          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
         },
     }
 

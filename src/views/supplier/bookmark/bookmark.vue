@@ -123,7 +123,8 @@
         },
         methods: {
               ...mapActions([
-                'setRecycleBin'
+                // 'setRecycleBin',
+                'setLog'
             ]),
             //获取字典
             getCodePart(){
@@ -287,6 +288,9 @@
                 name: 'bookmarkRecycleBin',
                 show: true
             });
+        },
+        mounted(){
+          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
         },
         watch: {
             hideBody(n) {

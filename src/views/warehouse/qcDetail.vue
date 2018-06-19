@@ -149,7 +149,7 @@
                     border
                     style="width: 100%">
                 <el-table-column
-                    label="No"
+                    label="#"
                     align="center"
                     width="60">
                     <template slot-scope="scope">
@@ -161,6 +161,7 @@
                         :label="$i.warehouse[v.key]"
                         :key="v.key"
                         align="center"
+                        :fixed="v.isStatus?'right':null"
                         width="200">
                     <template slot-scope="scope">
                         <div v-if="scope.row.isNew || scope.row.isModify">
@@ -179,15 +180,15 @@
                                         type="date"
                                         :editable="false"
                                         :placeholder="$i.warehouse.pleaseChoose"
-                                        :picker-options="pickerOptions1">
+                                        :picker-options="v.key==='planPayDt'?pickerOptions1:pickerOptions">
                                 </el-date-picker>
                             </div>
                             <div v-else-if="v.type==='number'">
                                 <el-input-number
+                                        class="speNumber"
                                         v-model="scope.row[v.realKey]"
                                         :min="0"
-                                        :controls="false"
-                                        label="描述文字"></el-input-number>
+                                        :controls="false"></el-input-number>
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select :disabled="true" v-model="scope.row[v.realKey]" :placeholder="$i.warehouse.pleaseChoose">
@@ -200,7 +201,11 @@
                                 </el-select>
                             </div>
                             <div v-else-if="v.isStatus">
-                                {{scope.row[v.realKey]===-1?'Invalid':(scope.row[v.realKey]===10 || 20 || 30?'Waite Service Confirm':'Confirm')}}
+                                <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
+                                <span v-if="scope.row.status===10">{{$i.warehouse.waitCustomerConfirm}}</span>
+                                <span v-if="scope.row.status===20">{{$i.warehouse.waitSupplierConfirm}}</span>
+                                <span v-if="scope.row.status===30">{{$i.warehouse.waitServiceConfirm}}</span>
+                                <span v-if="scope.row.status===40">{{$i.warehouse.hasConfirm}}</span>
                             </div>
                             <div v-else>
                                 {{scope.row[v.realKey]}}
@@ -211,7 +216,11 @@
                                 {{$dateFormat(scope.row[v.realKey],'yyyy-mm-dd')}}
                             </div>
                             <div v-else-if="v.isStatus">
-                                {{scope.row[v.realKey]===-1?'Invalid':(scope.row[v.realKey]===10 || 20 || 30?'Waite Service Confirm':'Confirm')}}
+                                <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
+                                <span v-if="scope.row.status===10">{{$i.warehouse.waitCustomerConfirm}}</span>
+                                <span v-if="scope.row.status===20">{{$i.warehouse.waitSupplierConfirm}}</span>
+                                <span v-if="scope.row.status===30">{{$i.warehouse.waitServiceConfirm}}</span>
+                                <span v-if="scope.row.status===40">{{$i.warehouse.hasConfirm}}</span>
                             </div>
                             <div v-else>
                                 {{scope.row[v.realKey]}}
@@ -393,7 +402,7 @@
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-        <v-message-board module="warehouse" code="qc" :id="$route.query.id"></v-message-board>
+        <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>
 <script>
@@ -422,30 +431,15 @@
                 loadingPaymentTable:false,
                 paymentTableData: [],
                 disableClickAdd:false,
-                pickerOptions1: {
+                pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
+                },
+                pickerOptions1: {
+                    disabledDate(time) {
+                        return time.getTime()+3600 * 1000 * 24 < Date.now();
+                    },
                 },
                 currencyOption:[],
 
@@ -576,7 +570,6 @@
             addPayment(){
                 this.disableClickAdd=true;
                 this.$ajax.post(this.$apis.get_qcPaymentNo).then(res=>{
-                    this.disableClickAdd=false;
                     this.paymentTableData.push({
                         no:res,
                         name:'',
@@ -585,13 +578,12 @@
                         actualPayDt:'',
                         actualPayAmount:'',
                         currencyCode:this.qcDetail.exchangeCurrencyDictCode,
-                        status:10,
+                        status:30,
                         isNew:true
                     });
-                }).catch(err=>{
+                }).finally(()=>{
                     this.disableClickAdd=false;
                 });
-                console.log(2134)
             },
             sureAdd(e){
                 let param={
@@ -658,7 +650,7 @@
                 }
             },
             invalid(e){
-                this.$confirm(this.$i.warehouse.sureInvalid, 'Info', {
+                this.$confirm(this.$i.warehouse.sureInvalid, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
                     cancelButtonText: this.$i.warehouse.cancel,
                     type: 'warning'
@@ -697,7 +689,7 @@
                             type: 'success',
                             message: this.$i.warehouse.restoreSuccess
                         });
-                        this.$set(e,'status',30);
+                        this.$set(e,'status',res.status);
                         this.$set(e,'version',res.version);
                         this.loadingPaymentTable=false;
                     }).catch(err=>{
@@ -768,7 +760,6 @@
             changeChecked(e){
                 this.selectList=e;
             },
-
             confirm(){
                 this.$confirm(this.$i.warehouse.sureConfirm, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
@@ -807,7 +798,6 @@
                 });
 
             },
-
             restartQc(){
                 this.$confirm(this.$i.warehouse.sureRestartQc, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
@@ -831,7 +821,6 @@
 
                 })
             },
-
             rework(){
                 this.$confirm(this.$i.warehouse.sureRework, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
@@ -869,7 +858,6 @@
 
                 });
             },
-
             returnProduct(){
                 this.$confirm(this.$i.warehouse.sureReturn, this.$i.warehouse.prompt, {
                     confirmButtonText: this.$i.warehouse.sure,
@@ -907,11 +895,9 @@
 
                 });
             },
-
             cancel(){
                 window.close();
             },
-
             getCurrency(){
                 this.$ajax.get(this.$apis.get_currency,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
@@ -993,6 +979,9 @@
     }
     .speInput{
         width: 80%;
+    }
+    .speNumber >>> input{
+        text-align: left;
     }
     .summary{
         margin-top: 50px;
