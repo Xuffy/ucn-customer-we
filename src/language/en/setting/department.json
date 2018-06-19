@@ -9,5 +9,7 @@
   "unknown":"Unknown",
   "notActive":"Not active",
   "activated":"Activated",
-  "disable":"Disable"
+  "disable":"Disable",
+  "privilege":"Privilege",
+  "save":"Save"
 }
