@@ -633,7 +633,7 @@
             </el-select>
             <el-select
                     slot="skuUnitWeight"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -641,7 +641,7 @@
                         v-for="item in weightOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1413,7 +1413,11 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        console.log(item)
                         item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
