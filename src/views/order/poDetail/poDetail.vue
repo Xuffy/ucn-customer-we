@@ -620,7 +620,7 @@
             </el-select>
             <el-select
                     slot="skuUnit"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -628,7 +628,7 @@
                         v-for="item in skuUnitOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -691,6 +691,19 @@
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in isNeedSampleOption"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                </el-option>
+            </el-select>
+            <el-select
+                    slot="skuInspectQuarantineCategory"
+                    v-model="data.value"
+                    slot-scope="{data}"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in quarantineTypeOption"
                         :key="item.id"
                         :label="item.name"
                         :value="item.code">
@@ -918,18 +931,25 @@
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
-
-            <el-date-picker
-                    class="spx"
+            <el-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"
-                    align="right"
-                    type="date"
-                    :placeholder="$i.order.pleaseChoose"
-                    :picker-options="pickerOptions1">
-            </el-date-picker>
+                    v-model="data.value"></el-input-number>
+
+
+            <!--<el-date-picker-->
+                    <!--class="spx"-->
+                    <!--slot="skuDeliveryDates"-->
+                    <!--slot-scope="{data}"-->
+                    <!--v-model="data.value"-->
+                    <!--align="right"-->
+                    <!--type="date"-->
+                    <!--:placeholder="$i.order.pleaseChoose"-->
+                    <!--:picker-options="pickerOptions1">-->
+            <!--</el-date-picker>-->
 
 
             <div slot="skuLabelPic" slot-scope="{data}">
@@ -1001,6 +1021,7 @@
                 isNeedSampleOption:[],
                 orderStatusOption:[],
                 countryOption:[],
+                quarantineTypeOption:[],
 
                 /**
                  * 底部按钮禁用状态
@@ -1323,6 +1344,10 @@
 
                 });
 
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // })
+
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
@@ -1346,6 +1371,9 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='ORDER_STATUS'){
                             this.orderStatusOption=v.codes;
+                        }else if(v.code==='QUARANTINE_TYPE'){
+                            this.quarantineTypeOption=v.codes;
+                            console.log(this.quarantineTypeOption)
                         }
                     })
                 }).finally(err=>{
@@ -1385,6 +1413,7 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
+                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1460,13 +1489,13 @@
                     }
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params.skuList,'xxxx')
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
-                });
+                console.log(params,'xxxx')
+                // this.disableClickSend=true;
+                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                //     this.$router.push('/order/overview');
+                // }).finally(err=>{
+                //     this.disableClickSend=false;
+                // });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1552,6 +1581,7 @@
                             arr.push(v);
                         }
                     });
+                    console.log(arr,'?????XXXX')
                     this.$refs.HM.init(arr,[]);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1686,7 +1716,15 @@
                             if (json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                if(item[k]._value){
+                                    if(item[k].key==='skuUnit'){
+                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                    }
+                                }else{
+                                    json[k] = item[k].value;
+                                }
+
+
                             }
                         };
                         arr.push(json);
