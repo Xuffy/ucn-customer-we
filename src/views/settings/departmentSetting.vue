@@ -120,39 +120,48 @@
             </div>
           </div>
         </el-col>
-        <!--<el-col :span="8">
-          <div class="card">
-            <div class="title">Privs</div>
+        <el-col :span="8">
+          <div class="card role">
+            <div class="title">{{$i.setting.privilege}}</div>
             <div class="handler">
               <el-row>
-                <el-col :span="24">
+                <el-col :span="8">
+                  <el-button :disabled="checkedRole.length !== 1" @click="savePrivilege" size="small"
+                             type="primary">{{$i.setting.save}}
+                  </el-button>
+                </el-col>
+                <el-col :span="16">
                   <el-input
                     size="small"
-                    placeholder="请输入"
-                    v-model="searchPrivs">
+                    :placeholder="$i.setting.pleaseInput"
+                    v-model="searchPrivilege"
+                    clearable>
                     <i slot="suffix" class="el-input__icon el-icon-search"></i>
                   </el-input>
                 </el-col>
               </el-row>
             </div>
-            <div class="list">
+            <div class="list" v-loading="loadingRole">
+              <div class="list-title">{{$i.setting.all}} <span>({{roleUserTotal}}人)</span></div>
               <el-tree
-                :data="data2"
+                class="speTree"
+                ref="privilegeTree"
+                :data="privilegeData"
+                :props="{label: 'name'}"
                 show-checkbox
-                node-key="id"
-                :default-expand-all="true"
-                :props="defaultProps">
+                node-key="code"
+                :expand-on-click-node="false"
+                :filter-node-method="filterPrivilege">
               </el-tree>
-
             </div>
           </div>
-        </el-col>-->
+        </el-col>
       </el-row>
     </div>
     <div class="footer">
       <div class="title">{{$i.setting.belongingUsers}}</div>
       <div class="btns">
-        <el-button :disabled="disableAddUser" type="primary" @click="addUsers">{{$i.setting.add}}</el-button>
+        <el-button :disabled="checkedRole.length !== 1" type="primary" @click="addUsers">{{$i.setting.add}}</el-button>
         <el-button :disabled="selectList.length===0" :loading="inviteUserLoading" type="primary"
                    @click="inviteUser">
           {{$i.setting.invite}}
@@ -198,13 +207,14 @@
                  :buttons="setButton"
                  hide-filter-value
                  hide-filter-column
-                 @change-checked="changeChecked"
+                 @change-checked="item => { selectList = item }"
                  @action="btnClick"></v-table>
         <v-pagination :page-data="userListPage" @size-change="pageSizeChange"
                       @change="pageChange"></v-pagination>
       </div>
     </div>
 
+    <!--修改/添加 用户信息-->
     <el-dialog
       class="speDialog"
       :title="editUserdialog.title[editUserdialog.type]"
@@ -356,7 +366,7 @@
         loadingRole: false,
         addUserLoading: false,
         inviteUserLoading: false,
-        disableAddUser: true,
+        checkedRole: [],
         selectList: [],
         languageOption: [],
         genderOption: [
@@ -382,17 +392,12 @@
           label: 'deptName',
         },
         departmentUserTotal: 0,          //department总人数
-        roleData: [
-          {
-            id: 1,
-            roleName: '全部',
-            children: []
-          }
-        ],
+        roleData: [{roleName: '全部', children: []}],
+        privilegeData: [{name: 'Page', children: []}, {name: 'Date', children: []}],
         roleUserTotal: 0,                //role总人数
         searchDepartment: '',            //搜索的部门名称
         searchRole: '',                  //搜索的role名称
-        searchPrivs: '',                //搜索的priv的名称
+        searchPrivilege: '',                //搜索的priv的名称
         userData: {
           email: '',
           userName: '',
@@ -404,18 +409,6 @@
           roleIds: null
         },
         tableDataList: [],
-        editUser: {
-          id: 0,
-          deptId: 0,
-          roleIds: 0,
-          userName: 'string',
-          lang: 'string',
-          email: 'string',
-          tel: 'string',
-          gender: 0,
-          birthday: 'string',
-          remark: 'string'
-        },
         addUser: {
           email: '',
           deptId: 0,
@@ -428,60 +421,6 @@
           remark: ''
         },
         userListPage: {},
-        statusOptions: [
-          {
-            label: '未激活',
-            value: 0,
-          },
-          {
-            label: '已激活',
-            value: 1,
-          },
-          {
-            label: '禁用',
-            value: 2,
-          },
-        ],
-        data2: [
-          {
-            id: 1,
-            label: '一级 1',
-            children: [{
-              id: 4,
-              label: '二级 1-1',
-              children: [{
-                id: 9,
-                label: '三级 1-1-1'
-              }, {
-                id: 10,
-                label: '三级 1-1-2'
-              }]
-            }]
-          }, {
-            id: 2,
-            label: '一级 2',
-            children: [{
-              id: 5,
-              label: '二级 2-1'
-            }, {
-              id: 6,
-              label: '二级 2-2'
-            }]
-          }, {
-            id: 3,
-            label: '一级 3',
-            children: [{
-              id: 7,
-              label: '二级 3-1'
-            }, {
-              id: 8,
-              label: '二级 3-2'
-            }]
-          }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        },
       }
     },
     created() {
@@ -498,31 +437,12 @@
       searchRole(val) {
         this.$refs.roleTree.filter(val);
       },
+      searchPrivilege(val) {
+        this.$refs.privilegeTree.filter(val);
+      },
     },
     methods: {
       ...mapActions(['setLog']),
-      /**
-       * render按钮生成
-       * */
-      renderDepartment(h, {node, data, store}) {
-        console.log(data)
-        if (!data.children) {
-          return
-        } else {
-          return
-        }
-      },
-      renderRole(h, {node, data, store}) {
-        if (!data.children) {
-          return
-        } else {
-          return
-        }
-      },
-
-      /**
-       * 获取页面数据
-       * */
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
@@ -569,15 +489,16 @@
           let {end, pn, ps, tc, start} = res;
           this.userListPage = {end, pn, ps, tc, start};
           this.tableDataList = this.$getDB(this.$db.setting.department, res.datas, item => {
-            let gender, status;
+            let gender, status, lang;
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
             gender = _.findWhere(this.genderOption, {code: item.gender.value});
             status = _.findWhere(this.actionOption, {code: item.status.value});
+            lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
             item.gender._value = this.$i.setting[gender.name];
             item.status._value = this.$i.setting[status.name];
-            item.lang._value = _.findWhere(this.languageOption, {code: item.lang.value}).name;
+            item.lang._value = lang.name || '';
             return item;
           });
         });
@@ -596,37 +517,23 @@
         this.roleOption = _.isEmpty(deps) ? [] : deps.deptRoles;
         this.addUser.roleId = '';
       },
-      /**
-       * tree节点点击事件
-       * */
       departmentClick(data) {
-        //选中部门就让他为false，避免触发全选时的多次重复事件
         this.userData = this.$options.data().userData;
         this.userData.deptId = data.deptId;
         this.roleData[0].children = this.$depthClone(data.deptRoles || []);
         this.$nextTick(() => {
           this.$refs.roleTree.setCheckedNodes(this.roleData[0].children);
           this.roleCheckClick();
-        })
+        });
+        console.log(this.userData)
       },
       roleCheckClick() {
-        let checkedNode = this.$refs.roleTree.getCheckedNodes(true);
-        let id = _.pluck(checkedNode, 'roleId');
-
+        this.checkedRole = this.$refs.roleTree.getCheckedKeys(true);
+        // 更新部门信息
         this.getDepartmentUser();
-
-        if (_.compact(id).length === 1) {
-          this.disableAddUser = false;
-        } else {
-          this.disableAddUser = true;
-        }
-
-
+        // 显示权限列表
+        this.getPrivilege();
       },
-
-      /**
-       * add事件
-       * */
       addDepartment(item) {
         this.$prompt(this.$i.setting.pleaseInputDepartment,
           this.$i.setting[item ? 'prompt' : 'addDepartment'], {
@@ -692,10 +599,6 @@
           });
         });
       },
-
-      /**
-       * 筛选事件
-       * */
       filterDepartment(value, data) {
         if (!value) return true;
         return data.deptName.indexOf(value) !== -1;
@@ -704,10 +607,10 @@
         if (!value) return true;
         return data.roleName.indexOf(value) !== -1;
       },
-
-      /**
-       * 删除事件
-       * */
+      filterPrivilege(value, data) {
+        if (!value) return true;
+        return data.name.indexOf(value) !== -1;
+      },
       deleteDepartment(e) {
         this.$confirm(this.$i.setting.sureDelete, this.$i.setting.prompt, {
           confirmButtonText: this.$i.setting.sure,
@@ -756,13 +659,6 @@
             this.loadingRole = false;
           });
         });
-      },
-
-      /**
-       * 底部user部分事件
-       * */
-      changeChecked(e) {
-        this.selectList = e;
       },
       btnClick(item, type) {
         if (type === 1) {
@@ -859,8 +755,49 @@
           }
         );
       },
+      savePrivilege() {
+        let nodes = [], params = {};
 
+        nodes = this.$refs.privilegeTree.getCheckedNodes(true);
 
+        _.map(nodes, val => {
+
+        });
+
+        console.log(this.$refs.privilegeTree.getCheckedNodes(true))
+      },
+      getPrivilege() {
+        if (this.checkedRole.length !== 1) {
+          this.privilegeData = this.$options.data().privilegeData;
+          return false;
+        }
+        this.getPrivilegeResource();
+        this.getPrivilegeData();
+      },
+      getPrivilegeResource() {
+        this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE, {}, {cache: true})
+          .then(res => {
+            this.privilegeData[0].children = res;
+          });
+      },
+      getPrivilegeData() {
+        this.$ajax.all([
+          this.$ajax.get(this.$apis.PRIVILEGE_DATA_BIZDOMAIN, {}, {cache: true}),
+          this.$ajax.get(this.$apis.get_departmentUser)
+        ]).then(res => {
+          let list = [], users = [];
+
+          users = _.map(res[1], val => {
+            return {name: val.userName, code: val.userId};
+          });
+
+          list = _.map(res[0], val => {
+            return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
+          });
+
+          this.privilegeData[1].children = list;
+        });
+      }
     },
   }
 </script>

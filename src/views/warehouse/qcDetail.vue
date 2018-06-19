@@ -147,6 +147,8 @@
                     :data="paymentTableData"
                     :row-class-name="tableRowClassName"
                     border
+                    show-summary
+                    :summary-method="getSummaries"
                     style="width: 100%">
                 <el-table-column
                     label="#"
@@ -160,6 +162,7 @@
                         v-for="v in $db.warehouse.qcPaymentTable"
                         :label="$i.warehouse[v.key]"
                         :key="v.key"
+                        :prop="v.key"
                         align="center"
                         :fixed="v.isStatus?'right':null"
                         width="200">
@@ -745,6 +748,37 @@
                 });
                 this.$set(e,'isModify',false);
             },
+            getSummaries(param) {
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.totalMoney;
+                        return;
+                    }else if(index===4 || index===6){
+                        const values = data.map(item => {
+                            if(item.status===40){
+                                return Number(item[column.property])
+                            }
+                        });
+
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        }else{
+                            sums[index]=0;
+                        }
+                    }
+                });
+
+                return sums;
+            },
 
             /**
              * product info表格事件
@@ -990,6 +1024,6 @@
         width: 80%;
     }
     .summaryInput >>> input{
-        text-align: center;
+        text-align: left;
     }
 </style>
