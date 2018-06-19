@@ -75,7 +75,8 @@
         },
         methods: {
               ...mapActions([
-                'setRecycleBin'
+                // 'setRecycleBin'
+                'setLog'
             ]),
             inputEnter(keyWord) {
                 if (!keyWord.keyType) return this.$message({
@@ -175,6 +176,9 @@
                 name: 'compareRecycleBin',
                 show: true
             });
+        },
+        mounted(){
+          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
         },
     }
 
