@@ -491,6 +491,8 @@
             </template>
         </v-table>
 
+
+
         <div class="footBtn">
             <div v-if="isModify">
                 <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
@@ -952,7 +954,6 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
-
             <!--<el-date-picker-->
                     <!--class="spx"-->
                     <!--slot="skuDeliveryDates"-->
@@ -964,9 +965,8 @@
                     <!--:picker-options="pickerOptions1">-->
             <!--</el-date-picker>-->
 
-
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
@@ -1036,6 +1036,13 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+
+                /**
+                 * Negotiate 插槽变量
+                 * */
+                skuLabelPic:'',
+
+
 
                 /**
                  * 底部按钮禁用状态
@@ -1519,15 +1526,16 @@
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
+                    v.skuSample=v.skuSample==='1'?true:false;
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params,'xxxx')
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
-                });
+                console.log(params,'params')
+                // this.disableClickSend=true;
+                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                //     this.$router.push('/order/overview');
+                // }).finally(err=>{
+                //     this.disableClickSend=false;
+                // });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1610,11 +1618,24 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
+                            if(!v._remark && !v.skuLabelPic.value){
+                                v.skuLabelPic.value=[];
+                            }
                             arr.push(v);
                         }
                     });
-                    console.log(arr,'?????XXXX')
+                    console.log(arr,'arr')
                     this.$refs.HM.init(arr,[]);
+                    this.$nextTick(()=>{
+                        // console.log(e,'eee')
+                        // if(e.skuLabelPic.value.length>0){
+                        //     this.skuLabelPic=e.skuLabelPic.value;
+                        //     console.log(this.skuLabelPic,'this.skuLabelPic')
+                        // }else{
+                        //     console.log(1111)
+                        //     this.skuLabelPic='';
+                        // }
+                    })
                 }else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/sourcingDetail',
@@ -1714,9 +1735,7 @@
                         }
                     })
                 });
-                this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-                console.log(this.$refs.uploadSkuLabelPic.getFiles())
-
+                e[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
             },
             dataFilter(data) {
                 let arr = [],

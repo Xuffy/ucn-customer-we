@@ -28,8 +28,7 @@
                 :loading='loading'
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="onAction"
-                @change-checked='checked'
-        >
+                @change-checked='checked'>
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
