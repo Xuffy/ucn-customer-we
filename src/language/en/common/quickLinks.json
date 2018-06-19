@@ -23,5 +23,6 @@
   "track": "Track",
   "compareSupplierOverview": "Compare Supplier Overview",
   "productOverview": "Product Overview",
-  "customerOverview": "Customer Overview"
+  "customerOverview": "Customer Overview",
+  "addSupplier": "Add Supplier"
 }
