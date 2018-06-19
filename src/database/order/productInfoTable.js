@@ -228,7 +228,9 @@ export default {
         _slot:'skuExpireUnit',
     },
     skuComments:{},
-    skuStatus:{},
+    skuStatus:{
+        _slot:'skuStatus'
+    },
     skuSaleStatus:{
         _disabled:true
     },
