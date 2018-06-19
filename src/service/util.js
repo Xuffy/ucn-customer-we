@@ -131,15 +131,15 @@ export default {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (!_.isNumber(Number(val))) {
+            if (!/^([1-9]+(\.\d+)?|0\.\d+)$/.test(val)) {
               Message.warning(`请填正确的 ${item.label}`);
               return key;
             }
-            if (validate.max && validate.max < val) {
+            if (validate.max && validate.max < Number(val)) {
               Message.warning(`${item.label} 值不能大于${validate.max}`);
               return key;
             }
-            if (validate.min && validate.min > val) {
+            if (validate.min && validate.min > Number(val)) {
               Message.warning(`${item.label} 值不能小于${validate.max}`);
               return key;
             }
@@ -397,10 +397,10 @@ export default {
 
       return strArr / Math.pow(10, m);
     },
-    Vue.prototype.$sub = (num1, num2) =>{  
+    Vue.prototype.$sub = (num1, num2) =>{
       //解决JS 精度问题(减法)
-      let baseNum, 
-          baseNum1, 
+      let baseNum,
+          baseNum1,
           baseNum2,
           precision // 精度
 
@@ -443,8 +443,8 @@ export default {
     },
     Vue.prototype.$numAdd = (num1, num2)=>{
       // 加法
-      var baseNum, 
-          baseNum1, 
+      var baseNum,
+          baseNum1,
           baseNum2;
 
         try {
@@ -478,6 +478,6 @@ export default {
         arr.push(ranNum);
         }
       }
-    }  
+    }
   }
 }

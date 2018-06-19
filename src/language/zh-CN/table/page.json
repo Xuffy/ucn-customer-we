@@ -1,17 +1,18 @@
 {
-  "equal": "µÈÓÚ",
-  "greater": "´óÓÚ",
-  "greaterAndEqual": "´óÓÚµÈÓÚ",
-  "less": "Ğ¡ÓÚ",
-  "lessAndEqual": "Ğ¡ÓÚµÈÓÚ",
-  "like": "°üº¬",
-  "between": "Çø¼ä",
+  "equal": "ç­‰äº",
+  "greater": "å¤§äº",
+  "greaterAndEqual": "å¤§äºç­‰äº",
+  "less": "å°äº",
+  "lessAndEqual": "å°äºç­‰äº",
+  "like": "åŒ…å«",
+  "between": "åŒºé—´",
   "reset": "Reset",
   "asc": "Asc",
   "desc": "Desc",
   "tableFilter": "Table filter",
   "selectTheColumn": "select the column",
   "selectionOperation": "selection operation",
-  "action": "Action"
+  "action": "Action",
+  "checkAll": "å…¨é€‰"
 }
 
