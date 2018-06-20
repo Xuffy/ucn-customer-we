@@ -54,7 +54,6 @@
         <v-table-data :type="4"></v-table-data>
       </el-col>
     </el-row>
-    <v-upload :list="[]"></v-upload>
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
     <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
