@@ -28,14 +28,16 @@ export default {
     _hide: true
   },
   "toShipCartonQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "fieldDisplay":{
     type:'text',
     _hide: true
   },
   "toShipQty": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "skuCode": {
     type: 'text'

@@ -15,5 +15,7 @@
   "privilegeSetSuccess": "权限设置成功",
   "privilegePage": "功能权限",
   "privilegeData": "数据权限",
-  "roleExisted": "The role name has already existed"
+  "roleExisted": "The role name has already existed",
+  "addUser": "Add New User",
+  "editUse": "Edit Use"
 }

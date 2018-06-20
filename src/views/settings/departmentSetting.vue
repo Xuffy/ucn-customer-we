@@ -166,6 +166,7 @@
                    @click="inviteUser">
           {{$i.setting.invite}}
         </el-button>
+        <el-button type="primary" @click="()=>$refs.importUser.show()">Upload</el-button>
       </div>
       <div class="content">
         <el-form :inline="true">
@@ -180,7 +181,7 @@
               <el-option
                 v-for="item in genderOption"
                 :key="item.id"
-                :label="$i.setting[item.name]"
+                :label="item.name"
                 :value="item.code">
               </el-option>
             </el-select>
@@ -190,7 +191,7 @@
               <el-option
                 v-for="(item,index) in actionOption"
                 :key="index"
-                :label="$i.setting[item.name]"
+                :label="item.name"
                 :value="item.code">
               </el-option>
             </el-select>
@@ -266,7 +267,7 @@
                 <el-option
                   v-for="item in genderOption"
                   :key="item.id"
-                  :label="$i.setting[item.name]"
+                  :label="item.name"
                   :value="item.code">
                 </el-option>
               </el-select>
@@ -323,12 +324,14 @@
         <el-button @click="editUserdialog.show = false">{{$i.setting.cancel}}</el-button>
       </div>
     </el-dialog>
+
+    <v-import-template ref="importUser" code="USER_IMPORT" biz-code="BIZ_USER"></v-import-template>
   </div>
 </template>
 
 <script>
 
-  import {VTable, VPagination} from '@/components/index'
+  import {VTable, VPagination, VImportTemplate} from '@/components/index'
   import config from 'service/config'
   import {Base64} from 'js-base64';
   import Qs from 'qs';
@@ -339,7 +342,8 @@
     name: "department-setting",
     components: {
       VTable,
-      VPagination
+      VPagination,
+      VImportTemplate
     },
     data() {
       return {
@@ -358,7 +362,7 @@
         editUserdialog: {
           show: false,
           type: 0, // 0、添加  1、编辑
-          title: ['Add New User', 'Edit User']
+          title: [$i.setting.addUser, $i.setting.editUser]
         },
         disabledSearch: false,
         userListLoading: false,
@@ -484,11 +488,12 @@
             if (item.status.value !== 0) {
               item._disabledCheckbox = true;
             }
-            gender = _.findWhere(this.genderOption, {code: item.gender.value});
-            status = _.findWhere(this.actionOption, {code: item.status.value});
+            item.birthday.value = this.$dateFormat(item.birthday.value, 'yyyy-mm-dd');
+            gender = _.findWhere(this.genderOption, {code: item.gender.value}) || {};
+            status = _.findWhere(this.actionOption, {code: item.status.value}) || {};
             lang = _.findWhere(this.languageOption, {code: item.lang.value}) || {};
-            // item.gender._value = this.$i.setting[gender.name];
-            // item.status._value = this.$i.setting[status.name];
+            item.gender._value = gender.name || '';
+            item.status._value = status.name || '';
             item.lang._value = lang.name || '';
             return item;
           });
@@ -544,12 +549,12 @@
                 return this.$i.setting.canNotRepeatDepartmentName;
               }
             },
-            callback(action, instance) {
+            callback: (action, vm) => {
               if (action !== 'confirm') {
                 return false;
               }
 
-              let params = {deptName: data.value.trim()}, http;
+              let params = {deptName: vm.inputValue.trim()}, http;
               this.loadingDepartment = true;
 
               if (item) {
@@ -583,12 +588,12 @@
                 return this.$i.setting.roleExisted;
               }
             },
-            callback(action, instance) {
+            callback: (action, vm) => {
               if (action !== 'confirm') {
                 return false;
               }
 
-              let params = {roleName: instance.inputValue.trim()}, http;
+              let params = {roleName: vm.inputValue.trim()}, http;
               this.loadingRole = true;
 
               http = () => item ? this.$ajax.put : this.$ajax.post;
