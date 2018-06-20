@@ -461,7 +461,7 @@ export default {
     },
     savePayment (i) {
       const currencyCode = this.paymentList[i].currencyCode
-      const payToCompanyId = this.paymentList[i].payToCompanyId
+      const payToCompanyId = this.paymentList[i].payToCompanyId;
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
         ..._.extend({
