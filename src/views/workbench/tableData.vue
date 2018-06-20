@@ -3,16 +3,23 @@
     <h3 class="ucn-content-title" v-text="typeLabel[type - 1]"></h3>
 
     <div style="position: absolute;right: 0;top: -5px">
-      <el-select v-model="search.type" placeholder="请选择"
-                 style="width: 100px;display: inline-block;vertical-align: middle">
+      <el-select v-model="search.type" style="width: 100px;display: inline-block;vertical-align: middle">
         <el-option v-for="item in searchOptions" :key="item.id" :label="item.label" :value="item.id"></el-option>
       </el-select>
       <el-input :placeholder="$i.hintMessage.pleaseEnter" class="input-with-select" clearable
+                v-show="search.type !== 'submittedTimeStart'"
                 style="width: 200px;vertical-align: middle"
                 v-model="search.value">
         <el-button slot="append" icon="el-icon-search"
                    @click="submitSearch"></el-button>
       </el-input>
+      <el-date-picker
+        v-show="search.type === 'submittedTimeStart'"
+        v-model="search.value"
+        type="date"
+        style="width: 150px;vertical-align: middle">
+      </el-date-picker>
+      <el-button icon="el-icon-search" @click="submitSearch"></el-button>
     </div>
     <br/>
 
@@ -37,7 +44,7 @@
 </template>
 
 <script>
-  import {VTable,  VViewPicture, VPagination} from '@/components/index';
+  import {VTable, VViewPicture, VPagination} from '@/components/index';
 
   export default {
     name: 'VTableData',
@@ -55,11 +62,11 @@
     data() {
       return {
         pictureVisible: true,
-        searchOptions:[
-          {label:'Number',id:'bizNo'},
-          {label:'Description',id:'content'},
-          {label:'Time',id:'submittedTimeStart'},
-          {label:'Submiter',id:'submittedByUserName'}
+        searchOptions: [
+          {label: 'Number', id: 'bizNo'},
+          {label: 'Description', id: 'content'},
+          {label: 'Time', id: 'submittedTimeStart'},
+          {label: 'Submiter', id: 'submittedByUserName'}
         ],
         typeLabel: [
           this.$i.workbench.pendingTask, this.$i.workbench.futureTask, this.$i.workbench.fyiTask, this.$i.workbench.pushTask
@@ -104,7 +111,7 @@
       }
     },
     mounted() {
-      if (this.type === 2){
+      if (this.type === 2) {
         this.dataList[0] = null;
         this.dataList[3] = null;
         this.dataList = _.compact(this.dataList);
@@ -131,7 +138,7 @@
       changeTab(tab) {
         this.tabIndex = tab.index;
         let item = this.dataList[this.tabIndex];
-        this.search = _.isEmpty(item.search) ? {type: '1', value: ''} : item.search;
+        this.search = _.isEmpty(item.search) ? {type: 'bizNo', value: ''} : item.search;
         this.getData();
       },
       getData() {

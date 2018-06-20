@@ -209,7 +209,7 @@
         }
 
         _.map(list, value => {
-          let param = this.filterType(value);
+          let param = this.filterType(decodeURIComponent(value));
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
