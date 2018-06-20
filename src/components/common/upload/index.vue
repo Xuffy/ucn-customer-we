@@ -177,10 +177,8 @@
           , ns = rs.pop().split('.')
           , param = {};
 
-        if (name.indexOf('?') > -1) {
-          param.url = name;
-          param.id = rs[rs.length - 1];
-        }
+        param.url = name;
+        param.id = rs[rs.length - 1];
 
         if (ns.length > 1) {
           let k = name.split('?')[0].match(/.com\/(\S*)/);
