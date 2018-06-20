@@ -2,11 +2,10 @@
   <div class="tableData">
     <h3 class="ucn-content-title" v-text="typeLabel[type - 1]"></h3>
 
-    <!--<div style="position: absolute;right: 0;top: -5px">
+    <div style="position: absolute;right: 0;top: -5px">
       <el-select v-model="search.type" placeholder="请选择"
                  style="width: 100px;display: inline-block;vertical-align: middle">
-        <el-option :label="$i.workbench.number" value="1"></el-option>
-        <el-option :label="$i.workbench.content" value="2"></el-option>
+        <el-option v-for="item in searchOptions" :key="item.id" :label="item.label" :value="item.id"></el-option>
       </el-select>
       <el-input :placeholder="$i.hintMessage.pleaseEnter" class="input-with-select" clearable
                 style="width: 200px;vertical-align: middle"
@@ -14,7 +13,7 @@
         <el-button slot="append" icon="el-icon-search"
                    @click="submitSearch"></el-button>
       </el-input>
-    </div>-->
+    </div>
     <br/>
 
     <el-tabs type="border-card" @tab-click="changeTab">
@@ -25,7 +24,8 @@
                  :data="item.data"
                  :selection="false"
                  hideFilterColumn
-                 :height="220">
+                 hideFilterValue
+                 :height="250">
         </v-table>
         <v-pagination :page-data="item.page" @size-change="pageSizeChange"
                       @change="pageChange"></v-pagination>
@@ -55,6 +55,12 @@
     data() {
       return {
         pictureVisible: true,
+        searchOptions:[
+          {label:'Number',id:'bizNo'},
+          {label:'Description',id:'content'},
+          {label:'Time',id:'submittedTimeStart'},
+          {label:'Submiter',id:'submittedByUserName'}
+        ],
         typeLabel: [
           this.$i.workbench.pendingTask, this.$i.workbench.futureTask, this.$i.workbench.fyiTask, this.$i.workbench.pushTask
         ],
@@ -93,7 +99,7 @@
             type: 'PAYMENT'
           }
         ],
-        search: {type: '1', value: ''},
+        search: {type: 'bizNo', value: ''},
         tabIndex: 0,
       }
     },
