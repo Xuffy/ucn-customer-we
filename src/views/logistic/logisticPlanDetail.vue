@@ -42,7 +42,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-      <v-table :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
+      <v-table :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
@@ -169,6 +169,13 @@ export default {
     messageBoard
   },
   computed: {
+    productListTotal(){
+      let total = [];
+      this.productList.forEach((item,i)=>{
+        total[i] = item.toShipQty;
+      });
+      console.log(total)
+    },
     attachmentReadonly(){
       return !this.edit;
     },
@@ -428,8 +435,15 @@ export default {
       const currencyCode = this.paymentList[i].currencyCode
       const payToCompanyId = this.paymentList[i].payToCompanyId
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
+      console.log(_.extend({
+          name:null,
+          actualPayAmount:null,
+          planPayAmount:null,
+          actualPayDt:null,
+          planPayDt:null,
+        },this.paymentList[i]))
       const paymentData = {
-        ...Object.assign({
+        ..._.extend({
           name:null,
           actualPayAmount:null,
           planPayAmount:null,
@@ -665,6 +679,9 @@ export default {
       if(this.isCopy){
         this.oldPlanObject.planNo = this.logisticsNo;
         obj = this.restIdNull(this.oldPlanObject,['id','unId']);
+        obj.product.forEach(item=>{
+          this.$set(item,'fieldDisplay',null);
+        })
       }
       if(!this.planId){
         this.oldPlanObject.fieldDisplay = null;
