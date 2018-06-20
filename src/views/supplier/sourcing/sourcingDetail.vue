@@ -283,14 +283,6 @@
                         this.$message({
                             message: '添加成功',
                             type: 'success',
-                            onClose: (() => {
-                                this.$router.push({
-                                    path: '/supplier/bookmark',
-                                    query: {
-                                        id: this.id
-                                    }
-                                })
-                            })
                         });
                     })
                     .catch((res) => {

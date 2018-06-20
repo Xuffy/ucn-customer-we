@@ -144,7 +144,7 @@
                   <v-table
                     :data="currencyList"
                     :height="500"
-                    :buttons="[{label: 'modify', type: 1}]"
+                    :buttons="[{label: 'Modify', type: 1}]"
                     :selection="false"
                     @action="rateAction"
                   ></v-table>
@@ -156,61 +156,63 @@
             <el-form label-width="150px" :model="addressData">
                 <el-row>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="orderNo" :label="$i.setting.orderNumber">
+                    <el-form-item :label="$i.setting.orderNumber">
                       <el-input size="mini" v-model="addressData.orderNo" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item prop="country" :label="$i.setting.country" required>
+                  <el-form-item  :label="$i.setting.country" required>
                     <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;" >
                       <el-option
                         v-for="item in options.country"
                         :key="item.code"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.code"
+                        style="width: 285px;">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="province" :label="$i.setting.province" required>
+                    <el-form-item  :label="$i.setting.province" required>
                       <el-input size="mini" v-model="addressData.province" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="city" :label="$i.setting.city" required>
+                    <el-form-item  :label="$i.setting.city" required>
                       <el-input size="mini" v-model="addressData.city" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="address" :label="$i.setting.companyAddress" required>
+                    <el-form-item  :label="$i.setting.companyAddress" required>
                       <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveCountry" :label="$i.setting.receiveCountry">
+                    <el-form-item  :label="$i.setting.receiveCountry">
                         <el-select  v-model="addressData.receiveCountry" placeholder="请选择"  style="width: 285px;">
                           <el-option
                             v-for="item in options.country"
                             :key="item.code"
                             :label="item.name"
-                            :value="item.code">
+                            :value="item.code"
+                            style="width: 285px;">
                           </el-option>
                         </el-select>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveProvince" :label="$i.setting.receiveProvince">
+                    <el-form-item  :label="$i.setting.receiveProvince">
                       <el-input size="mini" v-model="addressData.receiveProvince" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveCity" :label="$i.setting.receiveCity">
+                    <el-form-item  :label="$i.setting.receiveCity">
                       <el-input size="mini" v-model="addressData.receiveCity" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="receiveAddress" :label="$i.setting.receiverAddress">
+                    <el-form-item  :label="$i.setting.receiverAddress">
                       <el-input size="mini" v-model="addressData.receiveAddress" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
@@ -226,12 +228,12 @@
             <el-form label-width="150px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$i.setting.name" required>
+                        <el-form-item  :label="$i.setting.name" required>
                             <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                      <el-form-item prop="deptId" :label="$i.setting.department">
+                      <el-form-item :label="$i.setting.department">
                         <el-select  v-model="contactData.deptId" placeholder="请选择"  style="width: 285px;">
                           <el-option
                             v-for="item in department"
@@ -258,27 +260,27 @@
                       </el-col>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="cellphone" :label="$i.setting.mobileNumber" required>
+                        <el-form-item  :label="$i.setting.mobileNumber" required>
                             <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="telphone" :label="$i.setting.telNumber">
+                        <el-form-item  :label="$i.setting.telNumber">
                             <el-input size="mini" v-model="contactData.telphone" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="fax" :label="$i.setting.faxNumber">
+                        <el-form-item  :label="$i.setting.faxNumber">
                             <el-input size="mini" v-model="contactData.fax" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="email" :label="$i.setting.emailAddress">
+                        <el-form-item  :label="$i.setting.emailAddress">
                             <el-input size="mini" v-model="contactData.email" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="skype" :label="$i.setting.skype">
+                    <el-form-item  :label="$i.setting.skype">
                       <el-input size="mini" v-model="contactData.skype" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
@@ -363,20 +365,20 @@
       </el-dialog>
 
       <el-dialog width="70%" :title="$i.setting.tradeExchangeRate" :visible.sync="exchangerateDialogVisible">
-        <el-form label-width="200px" :model="exchangerateData">
+        <el-form label-width="200px" >
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.from" required>
+              <el-form-item :label="$i.setting.from" required>
                 <el-input size="mini" v-model="exchangerateData.fromCurrency" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.to" required>
+              <el-form-item  :label="$i.setting.to" required>
                 <el-input size="mini" v-model="exchangerateData.toCurrency" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.tradeExchangeRate" required>
+              <el-form-item  :label="$i.setting.tradeExchangeRate" required>
                 <el-input size="mini" v-model="exchangerateData.price" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -969,6 +971,8 @@
             this.exchangerateData=Object.assign({}, result);
           },
           modifyExchangerate(){
+            console.log(this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate))
+
             if (this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate)) {
               return false;
             }

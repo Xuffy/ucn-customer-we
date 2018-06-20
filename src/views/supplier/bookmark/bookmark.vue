@@ -45,7 +45,7 @@
              <div class="btnline">
 
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
                <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
@@ -68,6 +68,7 @@
             <page
               :page-data="pageData"
               @change="handleSizeChange"
+              :page-sizes="[50,100,200,500]"
               @size-change="pageSizeChange"></page>
 
       <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
@@ -176,32 +177,50 @@
             },
             //....跳入createInquiry
             createInquiry() {
-              let companyId = '';
-              this.selectedData.forEach((v,k)=>{
-                let item = _.findWhere(v, {
-                  key: 'companyId'
+              if(this.selectedData.length===0){
+                this.$windowOpen({
+                  url:'/negotiation/createInquiry',
+                })
+              }else{
+                let companyId = '';
+                this.selectedData.forEach((v,k)=>{
+                  let item = _.findWhere(v, {
+                    key: 'companyId'
+                  });
+                  if (k === this.selectedData.length - 1) {
+                    companyId += item.value;
+                  } else {
+                    companyId += (item.value + ',');
+                  }
+                })
+                this.$windowOpen({
+                  url: '/negotiation/createInquiry',
+                  params: {
+                    supplierCompanies: companyId
+                  }
                 });
-                if (k === this.selectedData.length - 1) {
-                  companyId += item.value;
-                } else {
-                  companyId += (item.value + ',');
-                }
-              })
-              this.$windowOpen({
-                url: '/negotiation/createInquiry',
-                params: {
-                  supplierCompanies: companyId
-                }
-              });
+              }
             },
             //....跳入createOrder
             createOrder() {
+              if(this.selectedData.length===0){
+                this.$windowOpen({
+                  url:'/order/create',
+                })
+              }else if (this.selectedData.length===1){
                 this.$windowOpen({
                   url: '/order/create',
                   params: {
                     supplierCode: this.selectedData[0].code.value
                   }
                 });
+              }else{
+                this.$message({
+                  message: '供应商只能单选!',
+                  type: 'warning',
+                });
+                return false;
+              }
             },
             //........跳入compare
             compare() {
@@ -440,5 +459,12 @@
         margin-top: 20px;
     }
 */
+    .disabledBtn{
+      color: #c0c4cc;
+      cursor: not-allowed;
+      background-image: none;
+      background-color: #fff;
+      border-color: #ebeef5;
+    }
 
 </style>
