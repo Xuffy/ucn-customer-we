@@ -122,7 +122,7 @@ export default {
       paymentDec: [
         {
           code: -1,
-          name: this.$i.logistic.confirmed
+          name: this.$i.logistic.invalid
         },
         {
           code: 10,
