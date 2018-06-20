@@ -269,7 +269,7 @@
                     :buttons="[{'label': 'Detail', type: 1}]"
                     @action="btnClick"
                     @change-checked="changeChecked"
-                    :totalRow="true">
+                    :totalRow="totalRow">
                 <template slot="header">
                     <div class="btn-group">
                         <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
@@ -465,6 +465,7 @@
                 productInfoData:[],
                 selectList:[],
                 loadingData:false,
+                totalRow:[],
 
                 /**
                  * summary Data
@@ -483,7 +484,6 @@
                         this.loadingData=false;
                         this.getProductInfo();
                         this.getPaymentData();
-                        console.log(this.qcDetail)
                     }).catch(err=>{
                         this.loadingData=false;
                     }
@@ -499,11 +499,37 @@
                         return e;
                     });
                     let diffData=[];
-
                     this.productInfoData.forEach(v=>{
                         diffData.push(v.skuId.value+v.orderNo.value);
                     });
                     this.summaryData.skuQuantity=_.uniq(diffData).length;
+
+                    if(res.datas.length>0){
+                        let obj=Object.assign({},res.datas[0]);
+                        _.map(obj,(v,key)=>{
+                            if(key==='orderSkuQty' || key==='expectQcQty' || key==='outerCartonTotalQty' || key==='actSkuCartonTotalQty' || key==='qualifiedSkuCartonTotalQty' || key==='unqualifiedSkuCartonTotalQty' || key==='actSkuQty' || key==='qualifiedSkuQty' || key==='unqualifiedSkuQty' || key==='qualifiedSkuNetWeight' || key==='unqualifiedSkuNetWeight' || key==='qualifiedSkuVolume' || key==='unqualifiedSkuVolume' || key==='qualifiedSkuGrossWeight' || key==='unqualifiedSkuGrossWeight' || key==='checkOuterCartonQty'){
+                                obj[key]=0;
+                            }else{
+                                obj[key]=null;
+                            }
+                        })
+
+                        _.map(res.datas,data=>{
+                            _.map(data,(v,key)=>{
+                                if(key==='orderSkuQty' || key==='expectQcQty' || key==='outerCartonTotalQty' || key==='actSkuCartonTotalQty' || key==='qualifiedSkuCartonTotalQty' || key==='unqualifiedSkuCartonTotalQty' || key==='actSkuQty' || key==='qualifiedSkuQty' || key==='unqualifiedSkuQty' || key==='qualifiedSkuNetWeight' || key==='unqualifiedSkuNetWeight' || key==='qualifiedSkuVolume' || key==='unqualifiedSkuVolume' || key==='qualifiedSkuGrossWeight' || key==='unqualifiedSkuGrossWeight' || key==='checkOuterCartonQty'){
+                                    obj[key]+=Number(data[key]);
+                                }
+
+                            })
+                        })
+                        this.totalRow = this.$getDB(this.$db.warehouse.qcDetailProductInfo, [obj],item=>{
+
+                        });
+                    }
+
+
+
+
 
                     this.loadingProductInfoTable=false;
                     this.selectList=[];
