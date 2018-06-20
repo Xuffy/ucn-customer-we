@@ -63,6 +63,7 @@
                <page
                 :page-data="pageData"
                 @change="handleSizeChange"
+                :page-sizes="[50,100,200,500]"
                 @size-change="pageSizeChange"></page>
             </div>
         </div>
@@ -179,6 +180,7 @@
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
