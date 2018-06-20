@@ -14,7 +14,7 @@
       <!-- </el-col> -->
       <div class="input-item">
         <span>{{ $i.logistic.attachment }}:</span>
-        <attachment accept="all" ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :title="$i.logistic.attachment" :limit="20" :edit="edit"/>
+        <attachment ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :limit="20"/>
       </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
@@ -42,7 +42,7 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-      <v-table :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
+      <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
@@ -139,16 +139,34 @@ export default {
       },
       configUrl: {
         placeLogisticPlan: {
-          saveAsDraft: this.$apis.save_draft_logistic_plan,
-          send: this.$apis.send_logistic_plan
+          saveAsDraft:{
+            api:this.$apis.save_draft_logistic_plan,
+            path:'/draft'
+          }, 
+          send:{
+            api:this.$apis.send_logistic_plan,
+            path:'/plan'
+          }
         },
         planDetail: {
-          saveAsDraft: this.$apis.save_draft_logistic_plan,
-          send: this.$apis.update_logistic_plan
+          saveAsDraft:{
+            api:this.$apis.save_draft_logistic_plan,
+            path:'/draft'
+          },
+          send:{
+            api:this.$apis.update_logistic_plan,
+            path:'/plan'
+          }
         },
         planDraftDetail: {
-          saveAsDraft: this.$apis.save_draft_logistic_plan,
-          send: this.$apis.send_draft_logistic_plan
+          saveAsDraft:{
+            api:this.$apis.save_draft_logistic_plan,
+            path:'/draft'
+          },
+          send:{
+            api:this.$apis.send_draft_logistic_plan,
+            path:'/plan'
+          }
         }
       },
       pageName:'',
@@ -170,11 +188,21 @@ export default {
   },
   computed: {
     productListTotal(){
-      let total = [];
+      let obj = {};
       this.productList.forEach((item,i)=>{
-        total[i] = item.toShipQty;
+        _.mapObject(item,(v,k)=>{
+          if(v._important){
+            obj[k] = {
+              value: Number(v.value)+Number(obj[k] ? obj[k].value : 0)
+            };
+          }else{
+            obj[k] = {
+              value: '--'
+            };
+          }
+        })
       });
-      console.log(total)
+      return [obj];
     },
     attachmentReadonly(){
       return !this.edit;
@@ -435,13 +463,6 @@ export default {
       const currencyCode = this.paymentList[i].currencyCode
       const payToCompanyId = this.paymentList[i].payToCompanyId
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
-      console.log(_.extend({
-          name:null,
-          actualPayAmount:null,
-          planPayAmount:null,
-          actualPayDt:null,
-          planPayDt:null,
-        },this.paymentList[i]))
       const paymentData = {
         ..._.extend({
           name:null,
@@ -630,7 +651,7 @@ export default {
       this.oldPlanObject.fieldDisplay = obj;
     },
     sendData (keyString) {
-      let url = this.configUrl[this.pageName][keyString];
+      let url = this.configUrl[this.pageName][keyString].api;
       this.basicInfoArr.forEach(a => {
         // this.$set(this.basicInfoObj, a.key, a.type=='date' ? ao.value : a.value)
         this.$set(this.basicInfoObj, a.key, a.value);
@@ -695,7 +716,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic');
+            this.$router.push('/logistic'+this.configUrl[this.pageName][keyString].path);
           }
         })
       })
