@@ -352,7 +352,7 @@
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
-                <!--<v-upload :limit="20" readonly></v-upload>-->
+            <!--<v-upload :limit="20" readonly></v-upload>-->
             <!--</div>-->
             <el-select
                     slot="skuFobCurrency"
@@ -408,7 +408,7 @@
             </el-select>
             <el-select
                     slot="skuUnit"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -416,12 +416,12 @@
                         v-for="item in skuUnitOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitWeight"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -429,12 +429,12 @@
                         v-for="item in weightOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitLength"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -442,12 +442,12 @@
                         v-for="item in lengthOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuUnitVolume"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -455,12 +455,12 @@
                         v-for="item in volumeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuExpireUnit"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -468,7 +468,7 @@
                         v-for="item in expirationDateOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -484,7 +484,33 @@
                         :value="item.code">
                 </el-option>
             </el-select>
-
+            <el-select
+                    slot="skuInspectQuarantineCategory"
+                    v-model="data.value"
+                    slot-scope="{data}"
+                    clearable
+                    :placeholder="$i.order.pleaseChoose">
+                <el-option
+                        v-for="item in quarantineTypeOption"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.code">
+                </el-option>
+            </el-select>
+            <!--<el-select-->
+                    <!--slot="skuStatus"-->
+                    <!--v-model="data._value"-->
+                    <!--slot-scope="{data}"-->
+                    <!--clearable-->
+                    <!--:placeholder="$i.order.pleaseChoose">-->
+                <!--<el-option-->
+                        <!--v-for="item in skuStatusOption"-->
+                        <!--:key="item.id"-->
+                        <!--:label="item.name"-->
+                        <!--:value="item.name">-->
+                <!--</el-option>-->
+            <!--</el-select>-->
+、
 
             <el-input-number
                     class="speNumber spx"
@@ -706,22 +732,27 @@
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
-
-            <el-date-picker
-                    class="spx"
+            <el-input-number
+                    :min="0"
+                    class="speNumber spx"
+                    :controls="false"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
-                    v-model="data.value"
-                    align="right"
-                    type="date"
-                    :placeholder="$i.order.pleaseChoose"
-                    :picker-options="pickerOptions1">
-            </el-date-picker>
+                    v-model="data.value"></el-input-number>
 
+            <!--<el-date-picker-->
+            <!--class="spx"-->
+            <!--slot="skuDeliveryDates"-->
+            <!--slot-scope="{data}"-->
+            <!--v-model="data.value"-->
+            <!--align="right"-->
+            <!--type="date"-->
+            <!--:placeholder="$i.order.pleaseChoose"-->
+            <!--:picker-options="pickerOptions1">-->
+            <!--</el-date-picker>-->
 
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
@@ -784,6 +815,8 @@
                 expirationDateOption:[],
                 isNeedSampleOption:[],
                 countryOption:[],
+                quarantineTypeOption:[],
+                skuStatusOption:[],
 
                 /**
                  * 页面基础配置
@@ -1009,6 +1042,13 @@
                 });
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
+                    console.log(v,'vvvvvvvvv')
+                    if(v.skuSample==='1'){
+                        v.skuSample=true;
+                    }else if(v.skuSample==='0'){
+                        v.skuSample=false;
+                    }
+
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
@@ -1017,6 +1057,7 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
+                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1108,12 +1149,16 @@
                     // this.orderForm.orderNo=this.$route.query.orderId;
                     this.getSupplier();
                 }else{
-                    this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
-                        this.orderForm.orderNo=res;
-                        this.getSupplier();
-                    }).catch(err=>{
-                        this.loadingPage=false;
-                    });
+
+                    this.orderForm.orderNo='124124124124';
+                    this.getSupplier();
+
+                    // this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
+                    //     this.orderForm.orderNo=res;
+                    //     this.getSupplier();
+                    // }).catch(err=>{
+                    //     this.loadingPage=false;
+                    // });
                 }
             },
             changePayment(e){
@@ -1230,6 +1275,19 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+
+                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+
+                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+
+                        item.skuSample._value=item.skuSample.value?'yes':'false';
+                        item.skuSample.value=item.skuSample.value?'1':'0';
+
+
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1238,7 +1296,6 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    console.log(this.productTableData,'this.productTableData')
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1655,6 +1712,8 @@
                             this.expirationDateOption=v.codes;
                         }else if(v.code==='NS_IS'){
                             this.isNeedSampleOption=v.codes;
+                        }else if(v.code==='QUARANTINE_TYPE'){
+                            this.quarantineTypeOption=v.codes;
                         }
                     })
                 }).finally(err=>{

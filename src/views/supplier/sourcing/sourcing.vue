@@ -46,7 +46,7 @@
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
 
                   <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :disabled='!(selectedData.length==1)'>{{$i.common.creatOrder}}</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
@@ -68,7 +68,8 @@
             <page
               :page-data="pageData"
               @change="handleSizeChange"
-              @size-change="pageSizeChange"></page>
+              @size-change="pageSizeChange"
+              :page-sizes="[50,100,200,500]"></page>
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
                 <el-button @click='emitData'>{{$i.common.ok}}</el-button>
                 <el-button type="primary" @click="cancelData">{{$i.common.cancel}}</el-button>
@@ -168,33 +169,50 @@
             },
             //....跳入createInquiry
             createInquiry() {
-              let companyId = '';
-              this.selectedData.forEach((v,k)=>{
-                let item = _.findWhere(v, {
-                  key: 'companyId'
-                });
-                if (k === this.selectedData.length - 1) {
-                  companyId += item.value;
-                } else {
-                  companyId += (item.value + ',');
-                }
-              })
-              this.$windowOpen({
+              if(this.selectedData.length===0){
+                this.$windowOpen({
+                  url:'/negotiation/createInquiry',
+                })
+              }else{
+                let companyId = '';
+                this.selectedData.forEach((v,k)=>{
+                  let item = _.findWhere(v, {
+                    key: 'companyId'
+                  });
+                  if (k === this.selectedData.length - 1) {
+                    companyId += item.value;
+                  } else {
+                    companyId += (item.value + ',');
+                  }
+                })
+                this.$windowOpen({
                   url: '/negotiation/createInquiry',
                   params: {
                     supplierCompanies: companyId
                   }
-              });
-
+                });
+              }
             },
             //....跳入createOrder
             createOrder() {
+              if(this.selectedData.length===0){
                 this.$windowOpen({
-                    url: '/order/create',
-                    params: {
-                      supplierCode: this.selectedData[0].code.value
-                    }
+                  url:'/order/create',
+                })
+              }else if (this.selectedData.length===1){
+                this.$windowOpen({
+                  url: '/order/create',
+                  params: {
+                    supplierCode: this.selectedData[0].code.value
+                  }
                 });
+              }else{
+                this.$message({
+                  message: '供应商只能单选!',
+                  type: 'warning',
+                });
+                return false;
+              }
             },
             //........compare
             compare() {
@@ -306,14 +324,6 @@
                     this.$message({
                       message: '添加成功',
                       type: 'success',
-                      onClose: (() => {
-                        this.$router.push({
-                          path: '/supplier/bookmark',
-                          query: {
-                            id: this.id
-                          }
-                        })
-                      })
                     });
                   })
                   .catch((res) => {
@@ -436,5 +446,12 @@
         margin-top: 20px;
     }
 */
+  .disabledBtn{
+    color: #c0c4cc;
+    cursor: not-allowed;
+    background-image: none;
+    background-color: #fff;
+    border-color: #ebeef5;
+  }
 
 </style>
