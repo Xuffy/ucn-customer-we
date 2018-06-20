@@ -1068,26 +1068,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
                 },
                 quickCreateDialogVisible:false,
                 tableData:[],
@@ -1390,6 +1370,7 @@
                             this.expirationDateOption=v.codes;
                         }else if(v.code==='NS_IS'){
                             this.isNeedSampleOption=v.codes;
+                            console.log(this.isNeedSampleOption,'this.isNeedSampleOption')
                         }else if(v.code==='ORDER_STATUS'){
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
@@ -1452,6 +1433,11 @@
                         item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
                         item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
                         item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+
+                        item.skuSample._value=item.skuSample.value?'yes':'false';
+                        item.skuSample.value=item.skuSample.value?'1':'0';
+
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1530,12 +1516,12 @@
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 console.log(params,'params')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1767,6 +1753,8 @@
                                         json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
                                     }else if(item[k].key==='skuStatus'){
                                         json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                    }else if(item[k].key==='skuSample'){
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
                                     }
                                 }else{
                                     json[k] = item[k].value;

@@ -22,6 +22,7 @@
             <page
               :page-data="pageData"
               @change="handleSizeChange"
+              :page-sizes="[50,100,200,500]"
               @size-change="pageSizeChange"></page>
     </div>
 </template>
@@ -45,7 +46,7 @@
                 pageData:{},
                 params:{
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     skuCode:'',
                 },
               options: [{
@@ -89,7 +90,6 @@
                       return val
                     })
 
-                    return item;
                 });
                 this.pageData=res;
               }).catch(err=>{
