@@ -81,14 +81,14 @@
       }
     },
     created() {
-      this.tenantId = (this.$localStore.get('user') || {}).tenantId;
+      let {tenantId} = this.$localStore.get('user') || {};
+      this.tenantId = tenantId;
     },
     mounted() {
       this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
     },
     watch: {
       fileList() {
-        // console.log(this.fileList)
       },
       list(val) {
         this.setList(val);
@@ -200,7 +200,7 @@
       },
       setList(list) {
         if (_.isEmpty(list)) {
-          this.fileList = [];
+          this.fileList = {};
           return false;
         }
 
@@ -209,7 +209,7 @@
         }
 
         _.map(list, value => {
-          let param = this.filterType(value);
+          let param = this.filterType(decodeURIComponent(value));
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
