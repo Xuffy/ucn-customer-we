@@ -13,7 +13,7 @@
               </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
-                        <el-form-item class="speWidth" :prop="v.key" :label="v.label">
+                        <el-form-item class="speWidth" :prop="v.key" :label="v.label" :required="v._rules?v._rules.required:false">
                             <div v-if="v.type==='input'">
                                 <el-input
                                         :disabled="v.key==='code'?true:summaryDisabled"
@@ -141,34 +141,13 @@
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.tradeExchangeRate">
-                  <el-table
-                    v-if="currencyList.length"
+                  <v-table
                     :data="currencyList"
-                    border
-                    style="width: 100%">
-                    <el-table-column
-                      prop="fromCurrency"
-                      align="center"
-                      :label="$i.setting.from">
-                    </el-table-column>
-                    <el-table-column
-                      prop="toCurrency"
-                      align="center"
-                      :label="$i.setting.to">
-                    </el-table-column>
-                    <el-table-column
-                      prop="price"
-                      align="center"
-                      :label="$i.setting.tradeExchangeRate">
-                    </el-table-column>
-                    <el-table-column
-                      align="center"
-                      :label="$i.setting.action">
-                      <template slot-scope="scope">
-                        <el-button @click="updateExchangerate(scope.row)" type="text">{{$i.button.modify}}</el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
+                    :height="500"
+                    :buttons="[{label: 'modify', type: 1}]"
+                    :selection="false"
+                    @action="rateAction"
+                  ></v-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -182,8 +161,8 @@
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                  <el-form-item prop="country" :label="$i.setting.country">
-                    <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;">
+                  <el-form-item prop="country" :label="$i.setting.country" required>
+                    <el-select  v-model="addressData.country" placeholder="请选择"  style="width: 285px;" >
                       <el-option
                         v-for="item in options.country"
                         :key="item.code"
@@ -194,18 +173,18 @@
                   </el-form-item>
                 </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="province" :label="$i.setting.province">
-                      <el-input size="mini" v-model="addressData.province" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="province" :label="$i.setting.province" required>
+                      <el-input size="mini" v-model="addressData.province" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="city" :label="$i.setting.city">
-                      <el-input size="mini" v-model="addressData.city" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="city" :label="$i.setting.city" required>
+                      <el-input size="mini" v-model="addressData.city" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                    <el-form-item prop="address" :label="$i.setting.companyAddress">
-                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容"></el-input>
+                    <el-form-item prop="address" :label="$i.setting.companyAddress" required>
+                      <el-input size="mini" v-model="addressData.address" placeholder="请输入内容" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -247,7 +226,7 @@
             <el-form label-width="150px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="name" :label="$i.setting.name">
+                        <el-form-item prop="name" :label="$i.setting.name" required>
                             <el-input size="mini" v-model="contactData.name" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
@@ -279,7 +258,7 @@
                       </el-col>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-                        <el-form-item prop="cellphone" :label="$i.setting.mobileNumber">
+                        <el-form-item prop="cellphone" :label="$i.setting.mobileNumber" required>
                             <el-input size="mini" v-model="contactData.cellphone" placeholder="请输入内容"></el-input>
                         </el-form-item>
                     </el-col>
@@ -316,11 +295,11 @@
             </div>
         </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="documentDialogVisible">
+      <el-dialog width="70%" :title="$i.setting.documentRequired" :visible.sync="documentDialogVisible">
         <el-form label-width="200px" :model="documentData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item  :label="$i.setting.documentRequired">
+              <el-form-item  :label="$i.setting.documentRequired" required>
                 <el-input size="mini" v-model="documentData.document" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -352,7 +331,7 @@
         </div>
       </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="customDialogVisible">
+      <el-dialog width="70%" :title="$i.setting.custom" :visible.sync="customDialogVisible">
         <el-form label-width="300px" :model="customData">
           <el-row>
             <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
@@ -383,21 +362,21 @@
         </div>
       </el-dialog>
 
-      <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="exchangerateDialogVisible">
+      <el-dialog width="70%" :title="$i.setting.tradeExchangeRate" :visible.sync="exchangerateDialogVisible">
         <el-form label-width="200px" :model="exchangerateData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.from">
+              <el-form-item prop="name" :label="$i.setting.from" required>
                 <el-input size="mini" v-model="exchangerateData.fromCurrency" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.to">
+              <el-form-item prop="name" :label="$i.setting.to" required>
                 <el-input size="mini" v-model="exchangerateData.toCurrency" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
-              <el-form-item prop="name" :label="$i.setting.tradeExchangeRate">
+              <el-form-item prop="name" :label="$i.setting.tradeExchangeRate" required>
                 <el-input size="mini" v-model="exchangerateData.price" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -662,6 +641,9 @@
                 this.cloneData=Object.assign({},this.companyInfo);
             },
             saveModifySummary(){
+                if (this.$validateForm(this.companyInfo, this.$db.setting.companyInfo)) {
+                  return false;
+                }
                 let params={
                     city: this.companyInfo.city,
                     code: this.companyInfo.code,
@@ -722,43 +704,46 @@
                 this.addressDialogVisible=true;
             },
             sureAddAddress(){
-                this.allowAddAddress=true;
-                this.addressData.customerId=this.companyInfo.id;
-                if(this.isModifyAddress){
-                    //表示是在修改地址
-                    this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: '修改成功',
-                            type: 'success'
-                        });
-                        if (!this.companyInfo.setting){
-                          this.postUpdateIsSetting();
-                        }
-                        this.getWholeData();
-                        this.addressDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAddress=false;
-                    });
-                }else{
-                    //表示是在新增地址
-                    this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: '添加成功',
-                            type: 'success'
-                        });
-                        this.getWholeData();
-                        this.addressDialogVisible=false;
-                    }).catch(err=>{
-                        this.allowAddAddress=false;
-                        this.$message({
-                            message: err,
-                            type: 'success'
-                        });
-                        this.addressDialogVisible=false;
-                    });
-                }
+              if (this.$validateForm(this.addressData, this.$db.setting.companyAddress)) {
+                return false;
+              }
+              this.allowAddAddress=true;
+              this.addressData.customerId=this.companyInfo.id;
+              if(this.isModifyAddress){
+                //表示是在修改地址
+                this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
+                  this.allowAddAddress=false;
+                  this.$message({
+                    message: '修改成功',
+                    type: 'success'
+                  });
+                  if (!this.companyInfo.setting){
+                    this.postUpdateIsSetting();
+                  }
+                  this.getWholeData();
+                  this.addressDialogVisible=false;
+                }).catch(err=>{
+                  this.allowAddAddress=false;
+                });
+              }else{
+                //表示是在新增地址
+                this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
+                  this.allowAddAddress=false;
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  this.getWholeData();
+                  this.addressDialogVisible=false;
+                }).catch(err=>{
+                  this.allowAddAddress=false;
+                  this.$message({
+                    message: err,
+                    type: 'success'
+                  });
+                  this.addressDialogVisible=false;
+                });
+              }
             },
             modifyAddress(e){
                var result = {}
@@ -806,6 +791,9 @@
               }
             },
             sureAddContact(){
+                if (this.$validateForm(this.contactData, this.$db.setting.companyContact)) {
+                  return false;
+                }
                 this.allowAddContact=true;
                 this.contactData.customerId=this.companyInfo.id;
 
@@ -883,6 +871,9 @@
               this.documentDialogVisible = true;
           },
           modifyDocument(){
+            if (this.$validateForm(this.documentData, this.$db.setting.documentRequired)) {
+              return false;
+            }
             this.documentDialogVisible = false;
             this.documentData.customerId=this.companyInfo.id;
             if (!this.documentData.id){
@@ -959,14 +950,28 @@
            * */
           getGridfavoritePartData(){
             this.$ajax.get(this.$apis.get_customcurrencyexchangerate_query).then(res=>{
-                this.currencyList = res;
+                this.currencyList = this.$getDB(this.$db.setting.exchangeRate, res)
             })
           },
+          rateAction(item,type){
+            switch(type) {
+              case 1:
+                this.updateExchangerate(item);
+                break;
+            }
+          },
           updateExchangerate(e){
+            var result = {}
+            for(const i in e){
+              result[e[i].key]= e[i].value
+            }
             this.exchangerateDialogVisible = true;
-            this.exchangerateData=Object.assign({}, e);
+            this.exchangerateData=Object.assign({}, result);
           },
           modifyExchangerate(){
+            if (this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate)) {
+              return false;
+            }
             this.$ajax.post(this.$apis.post_exchangerate_update,this.exchangerateData).then(res=>{
               this.$message({
                 message: '修改成功',

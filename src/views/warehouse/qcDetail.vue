@@ -292,7 +292,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.cartonOfQualifiedProducts"
+                                    v-model="qcDetail.qualifiedSkuCartonTotalQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -302,7 +302,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.quantityOfQualifiedProducts"
+                                    v-model="qcDetail.qualifiedSkuQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -312,7 +312,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.volumeOfQualifiedProducts"
+                                    v-model="qcDetail.qualifiedSkuVolume"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -322,7 +322,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.netWeightOfQualifiedProducts"
+                                    v-model="qcDetail.qualifiedSkuNetWeight"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -332,7 +332,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.grossWeightOfQualifiedProducts"
+                                    v-model="qcDetail.qualifiedSkuGrossWeight"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -342,7 +342,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.quantityOfSubQualityProducts"
+                                    v-model="qcDetail.unqualifiedSkuQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -352,7 +352,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.cartonOfSubQualityProducts"
+                                    v-model="qcDetail.unqualifiedSkuCartonTotalQty"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -362,7 +362,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.netWeightOfSubQualityProducts"
+                                    v-model="qcDetail.unqualifiedSkuNetWeight"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -372,7 +372,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.volumeOfSubQualityProducts"
+                                    v-model="qcDetail.unqualifiedSkuVolume"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -382,7 +382,7 @@
                             <el-input
                                     class="summaryInput"
                                     size="mini"
-                                    v-model="summaryData.grossWeightOfSubQualityProducts"
+                                    v-model="qcDetail.unqualifiedSkuGrossWeight"
                                     :disabled="true">
                             </el-input>
                         </el-form-item>
@@ -470,17 +470,7 @@
                  * summary Data
                  * */
                 summaryData:{
-                    cartonOfQualifiedProducts:'',
-                    quantityOfQualifiedProducts:'',
-                    volumeOfQualifiedProducts:'',
-                    netWeightOfQualifiedProducts:'',
-                    grossWeightOfQualifiedProducts:'',
-                    quantityOfSubQualityProducts:'',
-                    cartonOfSubQualityProducts:'',
-                    netWeightOfSubQualityProducts:'',
-                    volumeOfSubQualityProducts:'',
-                    grossWeightOfSubQualityProducts:'',
-                    skuQuantity:''
+                    skuQuantity:0
                 },
             }
         },
@@ -509,33 +499,12 @@
                         return e;
                     });
                     let diffData=[];
-                    if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
-                        //如果是等待QC，只统计SKU QTY
-                        this.productInfoData.forEach(v=>{
-                            diffData.push(v.skuId.value+v.orderNo.value);
-                            this.summaryData.skuQuantity=_.uniq(diffData).length;
-                        })
-                    }
-                    else{
-                        //否则，统计全部summary
-                        _.mapObject(this.summaryData,(v,index)=>{
-                            this.summaryData[index]=0;
-                        });
-                        this.productInfoData.forEach(v=>{
-                            this.summaryData.cartonOfQualifiedProducts+=v.qualifiedSkuCartonTotalQty.value;
-                            this.summaryData.quantityOfQualifiedProducts+=v.qualifiedSkuQty.value;
-                            this.summaryData.volumeOfQualifiedProducts+=v.qualifiedSkuVolume.value;
-                            this.summaryData.netWeightOfQualifiedProducts+=v.qualifiedSkuNetWeight.value;
-                            this.summaryData.grossWeightOfQualifiedProducts+=v.qualifiedSkuGrossWeight.value;
-                            this.summaryData.quantityOfSubQualityProducts+=v.unqualifiedSkuQty.value;
-                            this.summaryData.cartonOfSubQualityProducts+=v.unqualifiedSkuCartonTotalQty.value;
-                            this.summaryData.netWeightOfSubQualityProducts+=v.unqualifiedSkuNetWeight.value;
-                            this.summaryData.volumeOfSubQualityProducts+=v.unqualifiedSkuVolume.value;
-                            this.summaryData.grossWeightOfSubQualityProducts+=v.unqualifiedSkuGrossWeight.value;
-                            diffData.push(v.skuId.value+v.orderNo.value);
-                        });
-                        this.summaryData.skuQuantity=_.uniq(diffData).length;
-                    }
+
+                    this.productInfoData.forEach(v=>{
+                        diffData.push(v.skuId.value+v.orderNo.value);
+                    });
+                    this.summaryData.skuQuantity=_.uniq(diffData).length;
+
                     this.loadingProductInfoTable=false;
                     this.selectList=[];
                 }).catch(err=>{
