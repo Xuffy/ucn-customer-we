@@ -402,10 +402,7 @@ export default {
             return;
           }
           if (o.value !== o.originValue) {
-            o._style = 'background-color:yellow';
             changedFields[field] = '1';
-          } else {
-            o._style = '';
           }
         });
         item.$changedFields = changedFields;
