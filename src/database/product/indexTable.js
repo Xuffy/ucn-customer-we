@@ -108,6 +108,7 @@ export default {
     fobPrice:{
         
     },
+    refFobPrice:{},
     fobPort:{
         
     },
@@ -117,20 +118,14 @@ export default {
     exwCurrency:{
         
     },
-    otherIncoterm:{
-        
-    },
-    otherIncotermPrice:{
-        
-    },
-    otherIncotermArea:{
-        
-    },
-    otherIncotermCurrency:{
-        
-    },
-
-
+    cifPrice:{},
+    refCifPrice:{},
+    cifCurrency:{},
+    cifArea:{},
+    dduPrice:{},
+    refDduPrice:{},
+    dduCurrency:{},
+    dduArea:{},
 
     rateValueAddedTax:{
         

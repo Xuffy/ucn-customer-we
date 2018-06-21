@@ -3,15 +3,7 @@
         <div class="title">
             <span>{{$i.product.compareOverview}}</span>
         </div>
-        <div class="btns">
-            <!--<el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>-->
-            <!--<el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>-->
-            <select-search
-                    v-model="searchValue"
-                    :options="searchOptions"
-                    @inputEnter="searchCompare"
-                    class="search"></select-search>
-        </div>
+
 
         <v-table
                 v-loading="loadingTable"
@@ -19,7 +11,19 @@
                 :data="tableDataList"
                 :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
                 @action="btnClick"
-                @change-checked="changeChecked"></v-table>
+                @change-checked="changeChecked">
+            <template slot="header">
+                <div class="btns">
+                    <!--<el-button>{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>-->
+                    <!--<el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>-->
+                    <select-search
+                            v-model="searchValue"
+                            :options="searchOptions"
+                            @inputEnter="searchCompare"
+                            class="search"></select-search>
+                </div>
+            </template>
+        </v-table>
         <page
                 @size-change="changeSize"
                 @change="changePage"

@@ -47,7 +47,7 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>
+                <!--<el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>-->
                 <el-button @click="saveModify" :loading="disableClickSaveModify" :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
                 <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
@@ -324,15 +324,25 @@
                         url:'/negotiation/createInquiry',
                     })
                 }else{
-                    let skus='';
+                    let skus='',codes=[],supplierCodes='';
                     _.map(this.selectList,v=>{
-                        skus+=(v.id.value+',');
+                        if(v.id.value){
+                            skus+=(v.skuId.value+',');
+                        }
+                        if(v.supplierCode.value){
+                            codes.push(v.supplierCode.value)
+                        }
                     });
                     skus=skus.slice(0,skus.length-1);
+                    _.map(_.uniq(codes),v=>{
+                        supplierCodes+=(v+',');
+                    });
+                    supplierCodes=supplierCodes.slice(0,supplierCodes.length-1);
                     this.$windowOpen({
                         url:'/negotiation/createInquiry',
                         params:{
-                            skus:skus
+                            skus:skus,
+                            supplierCodes:supplierCodes
                         }
                     })
                 }
@@ -516,7 +526,7 @@
             saveCompare(){
                 if(!this.compareName){
                     this.$message({
-                        message: 'Please Input Compare Name',
+                        message: this.$i.product.pleaseInputCompareName,
                         type: 'warning'
                     });
                     return;
@@ -588,6 +598,13 @@
 
             //保存修改
             saveModify(){
+                if(!this.compareName){
+                    this.$message({
+                        message: this.$i.product.pleaseInputCompareName,
+                        type: 'warning'
+                    });
+                    return;
+                }
                 this.disableClickSaveModify=true;
                 let params={
                     compares: [],
