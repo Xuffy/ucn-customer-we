@@ -42,10 +42,10 @@ export default {
             required:true
         }
     },
-    // supplierCode:{  //供应商编号
-    //     type:'select',
-    //     belong:'basicInfo',
-    // },
+    supplierCode:{  //供应商编号
+        type:'supplierNo',
+        belong:'basicInfo',
+    },
     quotationNo:{
         type:'input',
         belong:'basicInfo',

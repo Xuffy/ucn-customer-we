@@ -15,7 +15,7 @@
                 v-model="keyWord" 
                 clearable 
                 placeholder="search" 
-                style="max-width:150px;" 
+                :style="{width:width+'px'}"
                 @keyup.enter.native="inputEnter" 
             />
             <el-button 
@@ -54,6 +54,10 @@
             value: {
                 type: [String, Number],
                 default: ''
+            },
+            width:{
+                type:Number,
+                default:150
             }
         },
         computed: {
