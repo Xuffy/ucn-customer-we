@@ -43,10 +43,12 @@
         </div>
 
         <v-table
-                :data="tableDataList"
-                :buttons="[{label: 'detail', type: 1}]"
-                @action="btnClick"
-                @change-checked="changeChecked"></v-table>
+          code="udata_pruchase_supplier_compare_detail_overview"
+          :data="tableDataList"
+          :buttons="[{label: 'detail', type: 1}]"
+          @action="btnClick"
+          @change-checked="changeChecked"
+          @filter-value="tableFilterValue"></v-table>
 
         <div class="footBtn">
             <div v-if="$route.params.type==='new'">
@@ -120,7 +122,16 @@
                 disabledSaveCompare:false,
                 disableDelete:true,            //是否禁止删除
                 allowDeleteCompare:true,      //是否可以点击delete，在数据还没加载完的时候不能点击
-                allowBottomClick:true,          //是否禁止点击底部操作按钮
+                allowBottomClick:true,          //是否禁止点击底部操作按钮,
+                params:{
+                  id: Number(this.$route.query.compareId),
+                  name:'',
+                  pn: 1,
+                  ps: 50,
+                  recycle: false,
+                  operatorFilters:[],
+                  sorts:[]
+                }
             }
         },
         methods:{
@@ -182,14 +193,7 @@
                     if(this.$route.query.isModify){
                         this.isModify=true;
                     }
-                    let params={
-                        id: Number(this.$route.query.compareId),
-                        name:'',
-                        pn: 1,
-                        ps: 50,
-                        recycle: false,
-                    };
-                    this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
+                    this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
@@ -205,14 +209,7 @@
                   if(this.$route.query.isModify){
                     this.isModify=true;
                   }
-                  let params={
-                    id: Number(this.$route.query.compareId),
-                    name:'',
-                    pn: 1,
-                    ps: 50,
-                    recycle: false,
-                  };
-                  this.$ajax.post(this.$apis.post_supplier_listCompareDetails,params).then(res=>{
+                  this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                       e.type.value=this.$change(this.options.type,'type',e,true).name;
                       e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
@@ -463,6 +460,12 @@
                     }
                 });
             },
+          tableFilterValue(val){
+            let {operatorFilters,sorts}=val;
+            this.params.operatorFilters=operatorFilters||[];
+            this.params.sorts=sorts||[];
+            this.getList();
+          }
 
         },
         created(){
