@@ -5,12 +5,6 @@
         </div>
         <div class="summary">
             <el-form ref="summary" :model="companyInfo" :rules="companyInfoRules" label-width="190px">
-              <div style="overflow: hidden">
-                <v-upload ref="uploadFile" onlyImage   :list="companyInfo.logo" />
-              </div>
-              <div class="section-btn" style="padding-top:10px">
-                <el-button @click="uploadLogo" type="primary">{{$i.button.upload}}</el-button>
-              </div>
                 <el-row class="speZone">
                     <el-col :class="{speCol:v.key!=='description'}" v-if="v.belong==='summary'" v-for="v in $db.setting.companyInfo" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                         <el-form-item class="speWidth" :prop="v.key" :label="v.label" :required="v._rules?v._rules.required:false">
@@ -29,7 +23,7 @@
                                             v-for="item in options[v.key]"
                                             :key="item.code"
                                             :label="item.name"
-                                            :value="item.code">
+                                            :value="Number(item.code) ||  item.code">
                                     </el-option>
                                 </el-select>
                             </div>
@@ -43,6 +37,14 @@
                                         v-model="companyInfo[v.key]">
                                 </el-input>
                             </div>
+                          <div v-if="v.type === 'function' ">
+                            <v-upload
+                              ref="uploadFile"
+                              only-image
+                              oss-private
+                              :list="companyInfo.logo"
+                              :readonly="summaryDisabled"/>
+                          </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -66,7 +68,7 @@
                   <v-table
                     :data="addressDatas"
                     :height="500"
-                    :buttons="[{label: 'modify', type: 1},{label: 'delete', type: 2}]"
+                    :buttons="[{label: 'Modify', type: 1},{label: 'Delete', type: 2}]"
                     @action="addressAction"
                   ></v-table>
                 </el-tab-pane>
@@ -111,9 +113,9 @@
 
                 <el-tab-pane :label="$i.setting.attachment">
                   <div class="section-btn">
-                    <el-button @click="upload" type="primary">{{$i.button.upload}}</el-button>
+                    <el-button @click="upload" type="primary">{{$i.button.save}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" :list="companyInfo.attachments"/>
+                  <v-upload ref="uploadAttachment" :limit="20" :list="companyInfo.attachments" oss-private/>
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.custom">
@@ -368,12 +370,12 @@
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item :label="$i.setting.from" required>
-                <el-input size="mini" v-model="exchangerateData.fromCurrency" placeholder="请输入内容"></el-input>
+                <el-input size="mini" v-model="exchangerateData.fromCurrency" disabled  placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.to" required>
-                <el-input size="mini" v-model="exchangerateData.toCurrency" placeholder="请输入内容"></el-input>
+                <el-input size="mini" v-model="exchangerateData.toCurrency" disabled  placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -556,30 +558,30 @@
                 this.companyInfo.concats=[];
                 this.$ajax.get(this.$apis.get_purchase_customer_getCustomer).then(res=>{
                     this.companyInfo=res;
-                    // this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address)
-                    this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
-                      let country='';
-                      let receiveCountry = '';
-                      e.country.value.split(',').forEach(v=>{
-                        this.options.country.forEach(m=>{
-                          if(m.code===v){
-                            country+=(m.name+',');
-                          }
-                        })
-                      });
-                      e.receiveCountry.value.split(',').forEach(v=>{
-                        this.options.country.forEach(n=>{
-                          if(n.code===v){
-                            receiveCountry+=(n.name+',');
-                          }
-                        })
-                      });
-
-                      country=country.slice(0,country.length-1);
-                      receiveCountry=receiveCountry.slice(0,receiveCountry.length-1);
-                      e.country.value=country;
-                      e.receiveCountry.value=receiveCountry;
-                    });
+                     this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address)
+                    // this.addressDatas = this.$getDB(this.$db.setting.companyAddress, res.address,e=>{
+                    //   let country='';
+                    //   let receiveCountry = '';
+                    //   e.country.value.split(',').forEach(v=>{
+                    //     this.options.country.forEach(m=>{
+                    //       if(m.code===v){
+                    //         country+=(m.name+',');
+                    //       }
+                    //     })
+                    //   });
+                    //   e.receiveCountry.value.split(',').forEach(v=>{
+                    //     this.options.country.forEach(n=>{
+                    //       if(n.code===v){
+                    //         receiveCountry+=(n.name+',');
+                    //       }
+                    //     })
+                    //   });
+                    //
+                    //   country=country.slice(0,country.length-1);
+                    //   receiveCountry=receiveCountry.slice(0,receiveCountry.length-1);
+                    //   e.country.value=country;
+                    //   e.receiveCountry.value=receiveCountry;
+                    // });
                     this.accountsData = this.$getDB(this.$db.setting.companyContact, res.concats);
                     if(res.custom){
                       this.customData = res.custom
@@ -683,6 +685,12 @@
                     this.allowModifySummary=false;
                     this.summaryDisabled=true;
                 });
+
+                this.logoParmas.id = this.companyInfo.id;
+                this.logoParmas.url = this.$refs.uploadFile[0].getFiles()[0];
+                this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+                  this.getWholeData();
+                })
             },
             cancelModifySummary(){
                 this.companyInfo=Object.assign({},this.cloneData);
@@ -970,8 +978,6 @@
             this.exchangerateData=Object.assign({}, result);
           },
           modifyExchangerate(){
-            console.log(this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate))
-
             if (this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate)) {
               return false;
             }
@@ -1020,21 +1026,6 @@
               })
             }
           },
-          /**
-           * logo操作
-           * */
-          uploadLogo(){
-            this.logoParmas.id = this.companyInfo.id;
-            this.logoParmas.url = this.$refs.uploadFile.getFiles()[0];
-            this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
-              this.$message({
-                message: '上传成功',
-                type: 'success'
-              });
-              this.getWholeData();
-            })
-
-          }
         },
         created(){
              this.getCodePart();
@@ -1087,6 +1078,8 @@
     }
     .summary-btn{
         text-align: center;
+        padding-top: 10px;
+
     }
     .section-btn{
         margin-bottom: 10px;

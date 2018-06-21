@@ -4,6 +4,7 @@
       :title="isModify ? 'Modify' : 'History'"
       width="80%"
       @close="closeDialog"
+      :close-on-click-modal="false"
       :visible.sync="showDialog">
 
       <el-table
@@ -70,8 +71,8 @@
       </el-table>
 
       <div slot="footer">
-        <el-button @click="showDialog = false">{{$i.common.cancel}}</el-button>
-        <el-button type="primary" @click="submit">{{$i.common.confirm}}</el-button>
+        <el-button @click="showDialog = false">{{isModify ? $i.common.cancel : $i.common.close}}</el-button>
+        <el-button v-if="isModify" type="primary" @click="submit">{{$i.common.confirm}}</el-button>
       </div>
     </el-dialog>
   </div>

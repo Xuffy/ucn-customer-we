@@ -14,7 +14,8 @@
           <span v-text="item.showName"></span>
         </template>
 
-        <v-image class="img-box" v-else-if="item.url" :src="item.url"></v-image>
+        <v-image class="img-box" v-else-if="item.url && item.url.indexOf('http') > -1"
+                 :src="item.url"></v-image>
         <div :class="{close:!item.progress || item.progress === 1}" class="progress"
              :style="{width: (item.progress * 100) + '%'}">
         </div>
@@ -88,7 +89,7 @@
       this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
     },
     watch: {
-      fileList() {
+      fileList(val) {
       },
       list(val) {
         this.setList(val);
@@ -96,7 +97,7 @@
     },
     methods: {
       uploadFile() {
-        this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+        this.$ajax.get(this.$apis.OSS_TOKEN, {}, {cache: true}).then(data => {
           let client = this.signature(data)
             , files = this.$refs.upload.files
             , fileNames = _.pluck(_.values(this.fileList), 'fileName');
@@ -147,7 +148,7 @@
       },
       deleteFile(item) {
         let list = {};
-        item.temporary && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
+        item.temporary && this.$ajax.get(this.$apis.OSS_TOKEN, {}, {cache: true}).then(data => {
           let client = this.signature(data);
           client.delete(item.fileKey || '');
         });
