@@ -45,9 +45,9 @@
                 searchId:'1',
                 pageData:{},
                 params:{
-                    pn: 1,
-                    ps: 50,
-                    skuCode:'',
+                    "pn": 1,
+                    "ps": 50,
+                    "skuCode":'',
                 },
               options: [{
                 id: '1',
