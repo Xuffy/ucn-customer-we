@@ -1,11 +1,9 @@
 export default {
-  _firstColumn: {
+  updateDt: {
     key: 'updateDt',
-    label: ' ',
     type: 'text',
     _disabled: true,
     _title: 'remark',
-    _inquiryHide: true,
     transForm: 'time'
   },
   id: {
@@ -149,14 +147,6 @@ export default {
     type: 'Select',
     _disabled: true,
     transForm: 'EL_IS'
-  },
-  remarkDate: {
-    transForm: 'time',
-    key: 'updateDt',
-    label: '22',
-    type: 'String',
-    _disabled: true,
-    _inquiryHide: true
   },
   skuQty: {
     _inquiryHide: true,
