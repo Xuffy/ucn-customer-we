@@ -146,5 +146,16 @@
   "EURCNY":"exchange rate(€--￥)",
   "EURUSD":"exchange rate(€--$)",
 
-  "skuCategoryId":"CategoryId"
+  "skuCategoryId":"CategoryId",
+
+
+  "totalQty":"Total Quantity",
+  "skuQtys":"SKU Quantity",
+  "totalSkuPrice":"Total SKU Price",
+  "totalOuterCartonQty":"Total Outer Carton Quantity",
+  "totalGrossWeight":"Total Outer Carton Gross Wet",
+  "totalNetWeight":"Total Outer Carton Net Wet",
+  "totalVolume":"Total Outer Carton Volume",
+  "paidAmount":"Paid Amount",
+  "unpaidAmount":"Unpaid Amount"
 }

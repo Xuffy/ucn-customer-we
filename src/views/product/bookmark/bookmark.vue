@@ -458,7 +458,9 @@
                 }else{
                     let skus='',codes=[],supplierCodes='';
                     _.map(this.selectList,v=>{
-                        skus+=(v.id.value+',');
+                        if(v.id.value){
+                            skus+=(v.skuId.value+',');
+                        }
                         if(v.supplierCode.value){
                             codes.push(v.supplierCode.value)
                         }
