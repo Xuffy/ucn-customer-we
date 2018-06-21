@@ -233,13 +233,10 @@
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
-      this.interval = setInterval(() => {
-        this.updateTable();
-      }, 500);
+      this.interval = setInterval(this.updateTable, 200);
     },
     methods: {
       onFilterColumn(checked) {
-        // todo 需过滤column
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
       },
       filterColumn() {
@@ -315,7 +312,7 @@
           this.$refs.tableBox.scrollTop = 0;
         }
 
-        if (!this.hideFilterColumn && this.code) {
+        if (!this.hideFilterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig().then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);
