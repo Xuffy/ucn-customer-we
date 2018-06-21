@@ -1160,7 +1160,6 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1461,7 +1460,7 @@
                 }).then(res=>{
                     //带入inquiry信息
                     this.orderForm.quotationNo=res.quotationNo;
-                    this.orderForm.supplierName=res.supplierName;
+                    this.orderForm.supplierName=res.supplierId;
                     this.orderForm.incoterm=res.incoterm;
                     this.orderForm.payment=res.paymentMethod;
                     this.changePayment(this.orderForm.payment);
