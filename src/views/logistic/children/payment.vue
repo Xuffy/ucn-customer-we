@@ -196,7 +196,7 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
-          const values = data.map(item => Number(item[column.property]));
+          const values = data.map(item => Number(item[column.property]));  //要给 组件el-table-column 上加上 prop="xxxx" 
           //提取data 拼接成汇率的key 
           const currencyCode = data.map(item => {
             if(item.currencyCode!=this.currencyCode){
@@ -259,15 +259,15 @@ export default {
       })
     },
   },
-  // watch:{
-  //   currencyCode(v){
-  //     let param = {
-  //       columns : this.$refs.table.columns,
-  //       data : this.$refs.table.data
-  //     }
-  //     this.summaryMethod(param)
-  //   }
-  // }
+  watch:{
+    currencyCode(v){
+      let param = {
+        columns : this.$refs.table.columns,
+        data : this.$refs.table.data
+      }
+      this.summaryMethod(param)
+    }
+  }
 }
 </script>
 
