@@ -414,7 +414,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.selectionContainer.forEach(i => this.arraySplite(this.containerInfo, i))
+        this.oldPlanObject.rmContainerDetail = this.selectionContainer.map((item)=>{
+          return item.id;
+        })
+        this.containerInfo = _.difference(this.containerInfo,this.selectionContainer);
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -461,7 +464,7 @@ export default {
     },
     savePayment (i) {
       const currencyCode = this.paymentList[i].currencyCode
-      const payToCompanyId = this.paymentList[i].payToCompanyId
+      const payToCompanyId = this.paymentList[i].payToCompanyId;
       const skuSupplierObj = this.selectArr.supplier.find(a => a.companyId === payToCompanyId)
       const paymentData = {
         ..._.extend({

@@ -470,7 +470,6 @@
             </el-table>
         </div>
 
-
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
@@ -492,6 +491,105 @@
         </v-table>
 
 
+        <div class="summary">
+            <div class="second-title">
+                {{$i.order.summary}}
+            </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.skuQtys">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.skuQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalSkuPrice">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalSkuPrice"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalOuterCartonQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalOuterCartonQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalGrossWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalGrossWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalNetWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalNetWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalVolume">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalVolume"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.paidAmount">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.paidAmount"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.unpaidAmount">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.unpaidAmount"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
 
         <div class="footBtn">
             <div v-if="isModify">
@@ -1017,6 +1115,7 @@
         data(){
             return{
                 options:[],
+                test:1,
                 /**
                  * 字典配置
                  * */
@@ -1370,7 +1469,6 @@
                             this.expirationDateOption=v.codes;
                         }else if(v.code==='NS_IS'){
                             this.isNeedSampleOption=v.codes;
-                            console.log(this.isNeedSampleOption,'this.isNeedSampleOption')
                         }else if(v.code==='ORDER_STATUS'){
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
@@ -1435,13 +1533,13 @@
                         item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                         item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
 
-                        item.skuSample._value=item.skuSample.value?'yes':'false';
-                        item.skuSample.value=item.skuSample.value?'1':'0';
-
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
                             item.skuLabelPic._image=false;
+                        }else{
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
                         }
                     });
                     this.productTableData=[];
@@ -1507,6 +1605,7 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
+
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
@@ -1743,17 +1842,23 @@
                                 if(item[k]._value){
                                     if(item[k].key==='skuUnit'){
                                         json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuUnitWeight'){
+                                    }
+                                    else if(item[k].key==='skuUnitWeight'){
                                         json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuUnitLength'){
+                                    }
+                                    else if(item[k].key==='skuUnitLength'){
                                         json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuUnitVolume'){
+                                    }
+                                    else if(item[k].key==='skuUnitVolume'){
                                         json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuExpireUnit'){
+                                    }
+                                    else if(item[k].key==='skuExpireUnit'){
                                         json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuStatus'){
+                                    }
+                                    else if(item[k].key==='skuStatus'){
                                         json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
-                                    }else if(item[k].key==='skuSample'){
+                                    }
+                                    else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
                                     }
                                 }else{
@@ -2400,6 +2505,13 @@
         color:#666666;
         margin-top: 10px;
     }
+    .second-title{
+        font-weight: bold;
+        font-size: 18px;
+        color:#666666;
+        padding: 10px 0;
+        margin-top: 20px;
+    }
     .speInput{
         width: 80%;
     }
@@ -2427,6 +2539,12 @@
     }
     .el-table >>> .warning-row {
         background: #f5f7fa;
+    }
+    .summaryInput{
+        width: 80%;
+    }
+    .summaryInput >>> input{
+        text-align: left;
     }
 
     .footBtn{
