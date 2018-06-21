@@ -5,7 +5,11 @@
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :data="tableData" border style="width: 100%; margin-top: 20px" show-summary tooltip-effect="dark" :sum-text="$i.logistic.sum" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName">
+      <el-table :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+        show-summary 
+        :summary-method="summaryMethod"
+        @selection-change="handleSelectionChange" 
+        :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
@@ -61,7 +65,8 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalContainerSkuPrice }}</span>
+            <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice"></el-input>
+            <!-- <span>{{ scope.row.totalContainerSkuPrice }}</span> -->
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.exchangeCurrency" width="180" align="center">
@@ -82,6 +87,8 @@ export default {
     }
   },
   props: {
+    currencyCode:[String,Number],
+    ExchangeRateInfoArr:[Array,Object],
     edit: {
       type: Boolean,
       default: false
@@ -105,7 +112,53 @@ export default {
     },
     tableRowClassName({row, rowIndex}) {
       row.index = rowIndex;
-    }
+    },
+    summaryMethod (param) {
+      const {columns,data} = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = this.$i.logistic.sum;
+            return;
+          }
+          const values = data.map(item => Number(item[column.property]));
+          //提取data 拼接成汇率的key 
+          const currencyCode = data.map(item => {
+            if(item.exchangeCurrency!=this.currencyCode){
+              return item.exchangeCurrency+this.currencyCode;
+            }else{
+              return this.exchangeCurrency; 
+            }
+          });
+          let currencyCodeArr = [];
+          //拿到拼接的key 匹配汇率的key 推入数组
+          currencyCode.forEach((item)=>{
+            this.ExchangeRateInfoArr.forEach((findItem)=>{
+              if(findItem.key==item){
+                currencyCodeArr.push(findItem.value)
+              }
+            })
+            if(item == this.currencyCode){
+              currencyCodeArr.push(1)
+            }
+          })
+          if (!values.every(value => isNaN(value))) {
+            sums[index] = values.reduce((prev, curr,i) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[index] += 0;
+          } else {
+            sums[index] = '--';
+          }
+        });
+
+        return sums;
+    },
     // tailBtn(str) {
     //   if(str === 'ok') {
     //     if(!this.containerSelect) return this.$message({
@@ -131,6 +184,15 @@ export default {
     //   if(this.tableData.length <= 1) this.tabAppend();
     //   this.$emit('tabSplite', index)
     // }
+  },
+  watch:{
+    currencyCode(v){
+      let param = {
+        columns : this.$refs.table.columns,
+        data : this.$refs.table.data
+      }
+      this.summaryMethod(param)
+    }
   }
 }
 </script>

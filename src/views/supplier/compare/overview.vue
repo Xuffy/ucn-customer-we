@@ -25,12 +25,12 @@
         <!--from-->
           <!--        表格-->
            <v-table
-                :height=360
-                :data="tabData"
-                :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
-                @action="detail"
-                @change-checked='checked'
-                style='marginTop:10px'/>
+            :height=360
+            :data="tabData"
+            :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
+            @action="detail"
+            @change-checked='checked'
+            style='marginTop:10px'/>
     </div>
 </template>
 <script>
@@ -172,10 +172,10 @@
         },
         created() {
             this.get_data()
-             this.setRecycleBin({
-                name: 'compareRecycleBin',
-                show: true
-            });
+            //  this.setRecycleBin({
+            //     name: 'compareRecycleBin',
+            //     show: true
+            // });
         },
         mounted(){
           this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});

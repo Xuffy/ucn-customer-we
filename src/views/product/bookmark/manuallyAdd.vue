@@ -6,12 +6,12 @@
         <el-form :modal="productForm" ref="basicInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
                 <el-col cass="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-                    <el-form-item label="Pic">
+                    <el-form-item label="Pic:">
                         <v-upload :list="productForm.pictures" :onlyImage="true" :limit="20" ref="upload"></v-upload>
                     </el-form-item>
                 </el-col>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -152,7 +152,7 @@
         <el-form :modal="productForm" ref="customerInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='customerInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -263,7 +263,7 @@
         <el-form :modal="productForm" ref="priceInfo" class="speForm" label-width="290px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='priceInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm.price[0][v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -374,7 +374,7 @@
         <el-form :modal="productForm" ref="packingInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='packingInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -495,7 +495,7 @@
         <el-form :modal="productForm" ref="logisticInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='logisticInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -606,7 +606,7 @@
         <el-form :modal="productForm" ref="otherInfo" class="speForm" label-width="300px" :label-position="labelPosition">
             <el-row>
                 <el-col class="speCol" v-for="v in $db.product.detailTab" v-if="v.belongTab==='otherInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
-                    <el-form-item :prop="v.key" :label="v.label">
+                    <el-form-item :prop="v.key" :label="v.label+':'">
                         <div v-if="v.showType==='input'">
                             <el-input class="speInput" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </div>
@@ -973,16 +973,11 @@
                 }).catch(err=>{
 
                 });
-                // this.$ajax.get(this.$apis.get_my_category,{}).then(res=>{
-                //     this.categoryList[1].children=res;
-                // }).catch(err=>{
-                //
-                // });
-                // this.$ajax.get(this.$apis.get_productCategory,{}).then(res=>{
-                //     this.dropData=res;
-                // }).catch(err=>{
-                //     console.log(err)
-                // });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
+                });
             },
 
             //完成新增
@@ -1055,6 +1050,7 @@
                             this.skuUnitOption=v.codes;
                         }else if(v.code==='SKU_READILY_AVAIALBLE'){
                             this.availableOption=v.codes;
+                            console.log(this.availableOption,'availableOption')
                         }else if(v.code==='OEM_IS'){
                             this.oemOption=v.codes;
                         }else if(v.code==='UDB_IS'){

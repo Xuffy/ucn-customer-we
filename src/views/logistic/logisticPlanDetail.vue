@@ -23,7 +23,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="containerInfo" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
+      <container-info :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
     </div>
 
     <!-- <div v-if="planId && feeList"> -->
@@ -430,7 +430,7 @@ export default {
       return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
     },
     arrayAppend(arrKey) {
-      this[arrKey].push({})
+      this[arrKey].push({exchangeCurrency:this.basicInfoArr.find(a => a.key === 'exchangeCurrency').value})
     },
     arraySplite (array, index) {
       array.splice(index, 1);

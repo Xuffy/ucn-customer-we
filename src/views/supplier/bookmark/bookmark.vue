@@ -58,13 +58,15 @@
         </div>
 <!--        表格-->
              <v-table
-                   :height=360
-                    :data="tabData"
-                    :buttons="[{label: 'detail', type: 1}]"
-                    @action="detail"
-                    @change-checked='checked'
-                    :loading='loading'
-                    style='marginTop:10px'/>
+                code="udata_pruchase_supplier_bookmark_overview"
+                :height=360
+                :data="tabData"
+                :buttons="[{label: 'detail', type: 1}]"
+                @action="detail"
+                @change-checked='checked'
+                :loading='loading'
+                @filter-value="tableFilterValue"
+                style='marginTop:10px'/>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
@@ -112,17 +114,19 @@
                 hideBody: true, //是否显示body
                 btnInfo: 'Show the Advance',
                 params: {
-                    conditions: {},
-                    description: "",
+                  conditions: {},
+                  description: "",
 //                    mainBusiness: [],
-                    name: '',
-                    pn: 1,
-                    ps: 50,
-                    tc: 0,
-                    skuCode: "",
-                    skuNameEn: "",
-                    type: '',
-                    recycle: false,
+                  name: '',
+                  pn: 1,
+                  ps: 50,
+                  tc: 0,
+                  skuCode: "",
+                  skuNameEn: "",
+                  type: '',
+                  recycle: false,
+                  operatorFilters:[],
+                  sorts:[]
                 },
                 tabData: [],
                 selectedData: [],
@@ -346,6 +350,12 @@
           handleCancel(){
             this.addProductDialogVisible=false;
           },
+          tableFilterValue(val){
+            let {operatorFilters,sorts}=val;
+            this.params.operatorFilters=operatorFilters||[];
+            this.params.sorts=sorts||[];
+            this.get_data();
+          }
 
         },
         created() {
