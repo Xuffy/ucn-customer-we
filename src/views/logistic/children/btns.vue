@@ -19,7 +19,7 @@
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'" :disabled="logisticsStatus==4 || logisticsStatus==5" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
     </div>
     <div v-else>
-      <el-button size="mini" type="primary" v-if="$route.query.id&&$route.query.copy" @click.stop="$emit('sendData', 'saveAsDraft')">{{ $i.logistic.saveAsDraft }}</el-button>
+      <el-button size="mini" type="primary" v-if="($route.query.id&&$route.query.copy)||(!$route.query.id&&!$route.query.copy)" @click.stop="$emit('sendData', 'saveAsDraft')">{{ $i.logistic.saveAsDraft }}</el-button>
       <el-button size="mini" type="primary" @click.stop="$emit('sendData', 'send')">{{ $i.logistic.send }}</el-button>
       <el-button size="mini" type="danger" @click.stop="$emit('toExit')">{{ $i.logistic.exit }}</el-button>
     </div>

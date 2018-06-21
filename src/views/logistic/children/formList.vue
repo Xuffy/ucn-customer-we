@@ -15,7 +15,7 @@
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" prop="value">
               <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" placeholder="请输入内容" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
                   v-if="selectArr[a.key]" />
               </el-select>
             </el-form-item>
@@ -111,7 +111,7 @@
         if (a.type === 'date') return a.value ? this.$dateFormat(a.value, 'yyyy-mm-dd') : null
         if (a.type === 'selector' && this.selectArr[a.key]) {
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
-          return obj ? obj.name : null
+          return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null
         }
       }
     },

@@ -5,19 +5,19 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || disabledLcNo || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                             <div v-else>
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:$i.order.pleaseInput"
+                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
@@ -28,7 +28,7 @@
                                     :disabled="v.disabled || v.disableDetail || !isModify"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
-                                    :placeholder="$i.order.pleaseChoose"
+                                    :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
                                     type="date"
@@ -42,7 +42,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="v.disableDetail || !isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in supplierOption"
                                             :key="item.id"
@@ -57,7 +57,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in incotermOption"
                                             :key="item.id"
@@ -72,7 +72,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in currencyOption"
                                             :key="item.id"
@@ -88,7 +88,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in paymentOption"
                                             :key="item.id"
@@ -103,7 +103,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in countryOption"
                                             :key="item.id"
@@ -118,7 +118,7 @@
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="v.disabled || !isModify"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in transportOption"
                                             :key="item.id"
@@ -132,7 +132,7 @@
                                         class="speInput"
                                         :disabled="v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"
-                                        :placeholder="$i.order.pleaseChoose">
+                                        :placeholder="isModify?$i.order.pleaseChoose:''">
                                     <el-option
                                             v-for="item in orderStatusOption"
                                             :key="item.id"
@@ -143,7 +143,7 @@
                             </div>
                             <div v-else>
                                 <el-select
-                                        :placeholder="$i.order.pleaseChoose"
+                                        :placeholder="isModify?$i.order.pleaseChoose:''"
                                         :disabled="v.disabled || !isModify"
                                         class="speInput"
                                         v-model="orderForm[v.key]">
@@ -158,7 +158,7 @@
                         </div>
                         <div v-else-if="v.type==='number'">
                             <el-input-number
-                                    :placeholder="$i.order.pleaseInput"
+                                    :placeholder="isModify?$i.order.pleaseInput:''"
                                     :disabled="v.disabled || !isModify"
                                     class="speInput speNumber"
                                     v-model="orderForm[v.key]"
@@ -172,7 +172,7 @@
                                     class="speInput"
                                     type="textarea"
                                     :autosize="{ minRows: 2}"
-                                    :placeholder="$i.order.pleaseInput"
+                                    :placeholder="isModify?$i.order.pleaseInput:''"
                                     v-model="orderForm[v.key]">
                             </el-input>
                         </div>
@@ -236,8 +236,7 @@
                             align="right"
                             type="date"
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
+                            :placeholder="$i.order.pleaseChoose">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -252,8 +251,7 @@
                             :editable="false"
                             type="date"
                             :disabled="true"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
+                            :placeholder="$i.order.pleaseChoose">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -281,8 +279,7 @@
                             type="date"
                             :editable="false"
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
+                            :placeholder="$i.order.pleaseChoose">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -598,7 +595,7 @@
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
-                <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" type="primary">{{$i.order.confirm}}</el-button>
+                <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
                 <el-button :disabled="loadingPage || hasCancelOrder" :loading="disableCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancel}}</el-button>
                 <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
@@ -645,6 +642,7 @@
                             :hideBtn="true"
                             :isInModify="true"
                             :type="type1"
+                            @handleCancel="handleCancel"
                             @handleOK="handleProductOk"></v-product>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
@@ -654,6 +652,7 @@
                             :forceUpdateNumber="updateBookmark"
                             :hideBtn="true"
                             :isInModify="true"
+                            @handleCancel="handleCancel"
                             @handleOK="handleProductOk"
                             :type="type2"></v-product>
                 </el-tab-pane>
@@ -853,12 +852,14 @@
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
+                    @blur="handleBlurSkuQty(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
                     slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -1152,6 +1153,7 @@
                 disableCancelOrder:false,
                 hasCancelOrder:false,
                 disableClickCancelModify:false,
+                disableClickConfirm:false,
 
                 /**
                  * 页面基础配置
@@ -1210,6 +1212,7 @@
                         return time.getTime() > Date.now();
                     },
                 },
+                copyObj:{},
 
                 /**
                  * payment data配置
@@ -1532,7 +1535,6 @@
                         item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
                         item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                         item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1614,10 +1616,11 @@
                     v.skuSample=v.skuSample==='1'?true:false;
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
-                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
-                    this.$router.push('/order/overview');
+                    this.isModify=false;
+                    this.getDetail();
+                    // this.$router.push('/order/overview');
                 }).finally(err=>{
                     this.disableClickSend=false;
                 });
@@ -1710,6 +1713,8 @@
                         }
                     });
                     console.log(arr,'arr')
+                    this.copyObj=Object.assign({},arr[0]);
+
                     this.$refs.HM.init(arr,[]);
                     this.$nextTick(()=>{
                         // console.log(e,'eee')
@@ -1811,6 +1816,9 @@
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
+            },
+            handleCancel(){
+                this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
                 _.map(this.productTableData,(v,k)=>{
@@ -2092,6 +2100,23 @@
             },
 
             /**
+             * history部分事件
+             * */
+            handleBlurSkuQty(data){
+                console.log(data.value)     //skuQty
+                console.log(this.copyObj,'copyObj')
+                if(this.orderForm.incoterm==='1'){
+                    //FOB
+                }else if(this.orderForm.incoterm==='2'){
+                    //EXW
+                }else if(this.orderForm.incoterm==='3'){
+                    //CIF
+                }
+            },
+
+
+
+            /**
              * 底部按钮事件
              * */
             modifyOrder(){
@@ -2116,12 +2141,13 @@
                 });
             },
             confirmOrder(){
+                this.disableClickConfirm=true;
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{
                     ids: [this.orderForm.id],
                 }).then(res=>{
-                    console.log(res)
+                    this.getDetail();
                 }).finally(err=>{
-
+                    this.disableClickConfirm=false;
                 });
             },
             cancelOrder(){

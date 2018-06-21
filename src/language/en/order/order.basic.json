@@ -56,5 +56,6 @@
   "applyRefund":"申请退款",
   "pleaseChoose":"Please Choose",
   "pleaseInput":"Please Input",
-  "summary":"Summary"
+  "summary":"Summary",
+  "baseSupplierName":"Base Supplier Name"
 }
