@@ -115,6 +115,8 @@
                     // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
+                    operatorFilters: [],
+                    sorts: [],
                 },
                 selectedList: [],
                 selectedNumber: [],

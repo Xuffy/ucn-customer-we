@@ -241,7 +241,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
+        <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
                     :forceUpdateNumber="forceNumber"
                     :title="addProductTitle"
@@ -572,18 +572,14 @@
                 if(e.length===0){
                     //表示一个都没选
                     this.$message({
-                        message: '请选择一条商品',
+                        message: this.$i.product.pleaseChoose,
                         type: 'warning'
                     });
                 }else{
-                    let id=[];
-                    e.forEach(v=>{
-                        id.push(v.id.value);
-                    });
                     this.disabledOkBtn=true;
-                    this.$ajax.post(this.$apis.add_buyerBookmark,id).then(res=>{
+                    this.$ajax.post(this.$apis.add_buyerBookmark,e).then(res=>{
                         this.$message({
-                            message: '添加成功',
+                            message: this.$i.product.successfullyAdd,
                             type: 'success'
                         });
                         this.disabledOkBtn=false;

@@ -41,7 +41,7 @@
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <div v-if="v.showType==='select'">
                                 <div v-if="v.isCountry">
-                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable placeholder="please choose">
+                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable collapse-tags placeholder="please choose">
                                         <el-option
                                                 v-for="item in countryOption"
                                                 :key="item.id"
@@ -234,20 +234,9 @@
                     ps: 50,
 
                     recycle: false,         //是否是在recycle bin里请求
-                    operatorFilters: [
-                    //     {
-                    //         operator: "",
-                    //         property: "",
-                    //         value: {}
-                    //     }
-                    ],
+                    operatorFilters: [],
 
-                    sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    ],
+                    sorts: [],
 
                 },
                 //表格验证参数
@@ -309,6 +298,7 @@
                 this.$set(this.productForm,'maxExwPrice',null);
                 this.$set(this.productForm,'minFobPrice',null);
                 this.$set(this.productForm,'maxFobPrice',null);
+                this.selectCountry=[];
             },
 
             //搜查

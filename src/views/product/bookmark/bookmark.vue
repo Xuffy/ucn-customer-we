@@ -36,12 +36,12 @@
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]">
                                 <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in countryOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
                                 </el-option>
                             </el-select>
                             <div v-if="v.showType==='exwNumber'" class="section-number">

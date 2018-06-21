@@ -18,8 +18,8 @@ export default {
         showType:'text',
         fullLine:false,                      //是否占一行
     },
-    colourCn:{
-        key:'colourCn',
+    colourEn:{
+        key:'colourEn',
         type: 'String',
         showType:'text',
         fullLine:false,                      //是否占一行
