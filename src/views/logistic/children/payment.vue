@@ -59,8 +59,8 @@
       <el-table-column :label="$i.logistic.currency" align="center" width="180">
         <template slot-scope="scope">
           <!-- <el-input placeholder="请输入内容" v-model="scope.row.currencyCode" v-if="scope.row.edit"></el-input> -->
-          <!-- <span v-else>{{ scope.row.currencyCode }}</span> -->
-          <span>{{ computedCurrency('exchangeCurrency', 'code', 'name', scope.row.currencyCode)}}</span>
+          <span>{{ scope.row.currencyCode }}</span>
+          <!-- <span>{{ computedCurrency('exchangeCurrency', 'code', 'name', scope.row.currencyCode)}}</span> -->
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.avilable" align="center" width="200">

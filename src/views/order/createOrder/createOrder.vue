@@ -41,6 +41,7 @@
                                         class="speInput"
                                         filterable
                                         v-model="orderForm[v.key]"
+                                        @change="handleChangeSupplier(orderForm[v.key])"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
                                             v-for="item in supplierOption"
@@ -162,6 +163,13 @@
                                     ref="upload"
                                     :list="orderForm.attachments"
                                     :limit="20"></v-upload>
+                        </div>
+                        <div v-else-if="v.type==='supplierNo'">
+                            <el-input
+                                    :placeholder="$i.order.baseSupplierName"
+                                    class="speInput"
+                                    :disabled="true"
+                                    v-model="supplierNo"></el-input>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -406,6 +414,7 @@
                     @action="btnClick">
                 <template slot="header">
                     <select-search
+                            :width="300"
                             class="search"
                             @inputEnter="searchInquiry"
                             v-model="searchId"
@@ -448,8 +457,6 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
-
-
 
         <v-history-modify
                 @save="saveNegotiate"
@@ -649,6 +656,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
+                    :disabled="true"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -924,6 +932,7 @@
                 /**
                  * 页面基础配置
                  * */
+                supplierNo:'',
                 rules:{
 
                 },
@@ -1144,8 +1153,11 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                let rightCode=true;
                 _.map(params.skuList,v=>{
-                    console.log(v,'vvvvvvvvv')
+                    if(v.skuSupplierCode!==params.supplierCode){
+                        rightCode=false;
+                    }
                     if(v.skuSample==='1'){
                         v.skuSample=true;
                     }else if(v.skuSample==='0'){
@@ -1156,11 +1168,20 @@
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
                 });
+
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
+
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'params')
+
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1180,11 +1201,27 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                let rightCode=true;
                 _.map(params.skuList,v=>{
+                    if(v.skuSample==='1'){
+                        v.skuSample=true;
+                    }else if(v.skuSample==='0'){
+                        v.skuSample=false;
+                    }
+                    if(v.skuSupplierCode!==params.supplierCode){
+                        rightCode=false;
+                    }
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
                 });
+                //如果选的产品和上面选的供应商不一致，要给出提示
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
                 params.attachments=this.$refs.upload[0].getFiles();
                 params.draftCustomer=true;
                 this.disableClickSaveDraft=true;
@@ -1253,6 +1290,9 @@
                     this.getSupplier();
                 }else{
 
+                    // this.orderForm.orderNo='124124125152135';
+                    // this.getSupplier();
+
                     this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
                         this.orderForm.orderNo=res;
                         this.getSupplier();
@@ -1304,14 +1344,16 @@
                 });
             },
 
+            handleChangeSupplier(data){
+                this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
+            },
+
             /**
              * product info事件
              * */
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     let arr=[];
-                    console.log(e.skuSysCode.value,'e????')
-                    console.log(this.productTableData)
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             arr.push(v);
@@ -1396,6 +1438,27 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
+                    this.orderForm.totalQty=0;
+                    this.orderForm.skuQty=0;
+                    this.orderForm.totalSkuPrice=0;
+                    this.orderForm.totalOuterCartonQty=0;
+                    this.orderForm.totalGrossWeight=0;
+                    this.orderForm.totalNetWeight=0;
+                    this.orderForm.totalVolume=0;
+                    _.map(this.productTableData,v=>{
+                        if(!v._remark){
+                            this.orderForm.totalQty+=v.skuQty.value;
+                            this.orderForm.skuQty++;
+                            this.orderForm.totalSkuPrice+=v.skuPrice.value;
+                            if(v.skuOuterCartonQty.value!==null && v.skuQty.value!==null){
+                                this.orderForm.totalOuterCartonQty+=Math.floor(v.skuQty.value/v.skuOuterCartonQty.value);
+                            }
+                            this.orderForm.totalGrossWeight+=v.skuOuterCartonRoughWeight.value;
+                            this.orderForm.totalNetWeight+=v.skuOuterCartonNetWeight.value;
+                            this.orderForm.totalVolume+=v.skuOuterCartonVolume.value;
+                        }
+                    })
+
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1412,7 +1475,6 @@
 
             },
             dataFilter(data) {
-                console.log(data,'????')
                 let arr = [],
                     jsons = {},
                     json = {};
@@ -1456,12 +1518,13 @@
             btnClick(e){
                 this.quickCreateDialogVisible=false;
                 this.loadingProductTable=true;
+                this.loadingPage=true;
                 this.$ajax.get(this.$apis.INQUIRY_ID,{
                     id:e.id.value
                 }).then(res=>{
                     //带入inquiry信息
                     this.orderForm.quotationNo=res.quotationNo;
-                    this.orderForm.supplierName=res.supplierName;
+                    this.orderForm.supplierName=res.supplierId;
                     this.orderForm.incoterm=res.incoterm;
                     this.orderForm.payment=res.paymentMethod;
                     this.changePayment(this.orderForm.payment);
@@ -1470,6 +1533,11 @@
                     this.orderForm.destinationCountry=res.destinationCountry;
                     this.orderForm.destinationPort=res.destinationPort;
                     this.orderForm.remark=res.remark;
+                    this.orderForm.currency=res.currency;
+                    this.orderForm.destCountry=res.destinationCountry;
+                    this.orderForm.destPort=res.destinationPort;
+
+                    this.supplierNo=_.findWhere(this.supplierOption,{id:res.supplierId}).code;
 
                     this.productTableData=[];
                     let arr=[];
@@ -1757,6 +1825,7 @@
                     })
                 }).finally(err=>{
                     this.loadingProductTable=false;
+                    this.loadingPage=false;
                 });
             },
             getUnit(){

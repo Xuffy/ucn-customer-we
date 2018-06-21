@@ -853,12 +853,14 @@
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
+                    @blur="handleBlurSkuQty(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuPrice"
                     slot-scope="{data}"
+                    :disabled="true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -1210,6 +1212,7 @@
                         return time.getTime() > Date.now();
                     },
                 },
+                copyObj:{},
 
                 /**
                  * payment data配置
@@ -1532,7 +1535,6 @@
                         item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
                         item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                         item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1710,6 +1712,8 @@
                         }
                     });
                     console.log(arr,'arr')
+                    this.copyObj=Object.assign({},arr[0]);
+
                     this.$refs.HM.init(arr,[]);
                     this.$nextTick(()=>{
                         // console.log(e,'eee')
@@ -2090,6 +2094,23 @@
 
                 });
             },
+
+            /**
+             * history部分事件
+             * */
+            handleBlurSkuQty(data){
+                console.log(data.value)     //skuQty
+                console.log(this.copyObj,'copyObj')
+                if(this.orderForm.incoterm==='1'){
+                    //FOB
+                }else if(this.orderForm.incoterm==='2'){
+                    //EXW
+                }else if(this.orderForm.incoterm==='3'){
+                    //CIF
+                }
+            },
+
+
 
             /**
              * 底部按钮事件
