@@ -58,6 +58,7 @@
         </div>
 <!--        表格-->
              <v-table
+                    code="udata_pruchase_supplier_overview"
                     :height=360
                     :loading='loading'
                     :data="tabData"
