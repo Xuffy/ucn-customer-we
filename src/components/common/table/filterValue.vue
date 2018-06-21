@@ -4,7 +4,7 @@
 
     <el-dialog :title="$i.table.tableFilter"
                :visible.sync="visible" width="1000px">
-      <ul v-loading="!data.length || loading">
+      <ul v-loading="loading">
 
         <li class="filter-item" v-for="(cItem,index) in conditionList">
 
@@ -28,16 +28,17 @@
           </el-select>
 
           <div v-if="cItem.operator" style="display: inline-block">
-            <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value"></el-input>
+            <el-input class="compute-value" v-if="cItem.dataType === 1" v-model="cItem.value" clearable></el-input>
 
             <el-input-number v-if="cItem.dataType === 2 || cItem.dataType === 3"
                              v-model="cItem.value"
-                             controls-position="right" :min="0">
+                             controls-position="right" :min="0" clearable>
             </el-input-number>
 
             <el-date-picker v-if="cItem.dataType === 4"
                             v-model="cItem.value"
                             align="right"
+                            clearable
                             :type="cItem.operator === 'between' ? 'daterange' : 'date'"
                             :editable="false"
                             :start-placeholder="$i.element.startDate"
@@ -47,6 +48,7 @@
             <el-date-picker v-if="cItem.dataType === 5"
                             v-model="cItem.value"
                             align="right"
+                            clearable
                             :type="cItem.operator === 'between' ? 'datetimerange' : 'datetime'"
                             :editable="false"
                             :start-placeholder="$i.element.startDate"
@@ -113,6 +115,7 @@
         loading: false,
         dataList: [],
         setFiledData: [],
+        columns: [],
         conditionList: [
           {property: '', operator: '', value: '', sort: '', tooltipShow: false}
         ],
@@ -125,6 +128,11 @@
       visible(val) {
         if (val) {
           this.getConfig();
+        }
+      },
+      data(val) {
+        if (!_.isEmpty(val)) {
+          this.columns = val;
         }
       }
     },
@@ -147,7 +155,7 @@
           .then(res => {
             let dataList = [];
 
-            _.map(this.data, val => {
+            _.map(this.columns, val => {
               let item = _.findWhere(res, {property: val.key});
               if (!val._hide && item && item.isChecked === 1) {
                 item._name = val.label;
