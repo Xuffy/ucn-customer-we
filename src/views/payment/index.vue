@@ -216,16 +216,16 @@
                 //点击进入对应po detail 10、lo detail 30、QC order detail 20页面
                 if(item.orderType.value == 10){
                   this.$windowOpen({
-                    url: '/product/sourcingDetail',
+                    url: '/order/detail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else if(item.orderType.value == 20){
                   this.$windowOpen({
-                    url: '/',
+                    url: '/warehouse/qcDetail',
                     params: {
-                      number:item.orderNo.value
+                      orderNo:item.orderNo.value
                     }
                   });
               }else{
