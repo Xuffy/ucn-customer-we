@@ -6,7 +6,7 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code"
+        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
@@ -215,9 +215,6 @@
       data(val) {
         this.setDataList(val, true);
       },
-      column() {
-        this.filterColumn();
-      },
       checkedAll(value) {
         this.setDataList(_.map(this.dataList, val => {
           if (!val._disabled && !val._disabledCheckbox) {
@@ -313,7 +310,7 @@
         }
 
         if (!this.hideFilterColumn && this.code && !_.isEmpty(val)) {
-          this.$refs.filterColumn.getConfig().then(res => {
+          this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);

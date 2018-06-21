@@ -10,14 +10,13 @@
       <div v-loading="loading">
         <el-input v-model="filterText" :placeholder="$i.common.content" prefix-icon="el-icon-search"
                   size="mini" clearable style="margin-bottom: 10px"></el-input>
-        <!--<el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">{{$i.table.checkAll}}</el-checkbox>-->
         <div style="height: 200px;overflow: auto">
           <el-tree
             show-checkbox
             default-expand-all
             node-key="property"
             :data="dataList"
-            :props="{label: 'name'}"
+            :props="{label: '_name'}"
             :indent="5"
             :filter-node-method="filterNode"
             ref="columnTree">
@@ -38,16 +37,11 @@
 </template>
 
 <script>
+  import $i from '../../../language/index';
 
   export default {
     name: 'VFilterColumn',
     props: {
-      data: {
-        type: Array,
-        default() {
-          return [];
-        },
-      },
       code: {
         type: String,
         default: '',
@@ -57,15 +51,14 @@
       return {
         loading: false,
         visible: false,
-        dataList: [{name: '全部', children: []}],
+        dataList: [{_name: $i.table.checkAll, children: []}],
         checkAll: false,
         filterText: '',
         isIndeterminate: true,
+        columns: []
       }
     },
     watch: {
-      data() {
-      },
       filterText(val) {
         this.$refs.columnTree.filter(val);
       }
@@ -89,13 +82,29 @@
           });
         });
       },
-      getConfig(isUpdate = false) {
+      getConfig(isUpdate = false, data = []) {
+
+        if (!_.isEmpty(data)) {
+          this.columns = data[0];
+        }
+
         return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
           {contentType: 'F', cache: true, updateCache: isUpdate})
           .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property');
-            this.dataList[0].children = res;
-            this.$nextTick(()=>{
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+              , dataList = [];
+
+            _.map(this.columns, (val, key) => {
+              let item = _.findWhere(res, {property: key})
+              if (!val._hide && item) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+            });
+
+            this.dataList[0].children = dataList;
+
+            this.$nextTick(() => {
               this.$refs.columnTree.setCheckedKeys(list);
             });
             return list;
