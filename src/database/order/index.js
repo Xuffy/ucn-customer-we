@@ -12,6 +12,7 @@ import orderDetail from './orderDetail';
 import createOrder from './createOrder';
 import inquiryOverview from './inquiryOverview';
 import productInfoTable from './productInfoTable';
+import productInfoTableCreate from './productInfoTableCreate';
 
 export default {
     basicInfo,
@@ -26,5 +27,6 @@ export default {
     orderDetail,
     createOrder,
     inquiryOverview,
-    productInfoTable
+    productInfoTable,
+    productInfoTableCreate
 }

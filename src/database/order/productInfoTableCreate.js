@@ -229,7 +229,7 @@ export default {
     },
     skuComments:{},
     skuStatus:{
-
+        _hide:true
     },
     skuSaleStatus:{
         _disabled:true
