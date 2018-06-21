@@ -65,6 +65,7 @@
                     :buttons="[{label: 'detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
+                    @filter-value="tableFilterValue"
                     style='marginTop:10px'/>
             <page
               :page-data="pageData"
@@ -123,6 +124,8 @@
                     skuCode: "",
                     skuNameEn: "",
                     type:'',
+                    operatorFilters:[],
+                    sorts:[]
                     // recycle: true,
                 },
                 tabData: [],
@@ -340,6 +343,12 @@
             },
             cancelData(){
               this.$emit('handleCancel');
+            },
+            tableFilterValue(val){
+              let {operatorFilters,sorts}=val;
+              this.params.operatorFilters=operatorFilters||[];
+              this.params.sorts=sorts||[];
+              this.get_data();
             }
         },
         created() {
@@ -354,7 +363,9 @@
         mounted(){
           this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
         },
-        watch: {}
+        watch: {
+
+        }
     }
 
 </script>
