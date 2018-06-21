@@ -42,6 +42,9 @@
   import config from '../../../service/config';
 
   const imageType = ['JPG', 'PNG'];
+  const prohibitType = ['EXE'];
+  const maxSize = 128; // MB
+
 
   export default {
     name: 'VUpload',
@@ -97,12 +100,19 @@
     },
     methods: {
       uploadFile() {
-        this.$ajax.get(this.$apis.OSS_TOKEN, {}, {cache: true}).then(data => {
+        this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data)
             , files = this.$refs.upload.files
             , fileNames = _.pluck(_.values(this.fileList), 'fileName');
 
           _.map(files, val => {
+            if (_.indexOf(prohibitType, val.name.split('.').pop().toLocaleUpperCase()) > -1) {
+              return this.$message.warning(`${this.$i.upload.typeLimit}: ${prohibitType.join()} `);
+            }
+
+            if (val.size > 1024 * 1024 * maxSize) {
+              return this.$message.warning(`${this.$i.upload.sizeLimit}: ${maxSize}MB`);
+            }
             _.indexOf(fileNames, val.name) === -1 && this.startUpload(client, val);
           });
 
@@ -116,7 +126,7 @@
           , fileKey = `${this.tenantId}/${uid}/${files.name}`;
 
         if (_.values(_this.fileList).length >= this.limit) {
-          return this.$message.warning(`只能上传${this.limit}个文件`);
+          return this.$message.warning(`${this.$i.upload.numberLimit}: ${this.limit}`);
         }
 
         params = _.extend(this.filterType(files.name), {
@@ -148,7 +158,7 @@
       },
       deleteFile(item) {
         let list = {};
-        item.temporary && this.$ajax.get(this.$apis.OSS_TOKEN, {}, {cache: true}).then(data => {
+        item.temporary && this.$ajax.get(this.$apis.OSS_TOKEN).then(data => {
           let client = this.signature(data);
           client.delete(item.fileKey || '');
         });
@@ -208,7 +218,8 @@
         }
 
         _.map(list, value => {
-          let param = this.filterType(decodeURIComponent(value));
+          let urls = value.split('?')
+            , param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
