@@ -1,4 +1,4 @@
-import DateFormat from 'dateformat';
+import dateFormat from 'dateformat';
 import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import language from '../language/index';
@@ -22,7 +22,7 @@ export default {
     /**
      * 格式化日期
      */
-    Vue.prototype.$dateFormat = DateFormat;
+    Vue.prototype.$dateFormat = dateFormat;
 
     /**
      * 国际化语言配置
@@ -328,10 +328,10 @@ export default {
           val.value = val.value ? 1 : 0;
         }
         val.originValue = val.value;
-        if (val[transForm] && !data._remark && ['entryDt', 'updateDt', 'fieldDisplay', 'fieldRemarkDisplay'].indexOf(k) < 0) {
+        if (val[transForm] && !data._remark && ['fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
-              val._value = DateFormat(val.value, val.time ? val.time : 'yyyy-dd-mm');
+              val._value = dateFormat(val.value, val.time || 'yyyy-mm-dd HH:MM');
               break;
             default:
               if (!store.state.dic.length) return;
@@ -340,7 +340,7 @@ export default {
               val._option = dic.codes;
               let code = _.findWhere(dic.codes, {'value': val.originValue});
               if (code) {
-                val._value = code.name || code[val.name];
+                val._value = code.name || code[val.name] || '';
               }
           }
         }
