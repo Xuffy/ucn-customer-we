@@ -935,9 +935,7 @@
                  * 页面基础配置
                  * */
                 supplierNo:'',
-                rules:{
-
-                },
+                rules:{},
                 disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
@@ -968,6 +966,8 @@
                 selectProductInfoTable:[],
                 disabledProductLine:[],
                 queryNo:0,
+                category:[],
+                inquiryId:'',           //存储选择的入库单id
 
                 /**
                  * 弹出框data配置
@@ -988,7 +988,7 @@
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    status:99
+                    // status:99
                 },
 
                 /**
@@ -1007,7 +1007,6 @@
                 orderForm:{
                     supplierCompanyId:'',
                     actDeliveryDt: "",
-                    archive: true,
                     attachments: [],
                     basicFlag:false,     //basicInfo是否修改
                     currency: "",
@@ -1074,7 +1073,6 @@
                     // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
-                    remind: true,
                     responsibilityFlag:false,
                     responsibilityList: [
                         {
@@ -1179,12 +1177,10 @@
                         type: 'warning'
                     });
                 }
-
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1340,13 +1336,16 @@
             getInquiryData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
+                        if(item.id.value===this.inquiryId){
+                            this.$set(item,'_disabled',true)
+                        }
+                    });
                     this.pageData=res;
                 }).finally(err=>{
                     this.loadingTable=false;
                 });
             },
-
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
             },
@@ -1420,13 +1419,11 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-
                         item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
                         item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
                         item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
                         item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
                         item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-
                         item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
 
                         item.skuSample._value=item.skuSample.value?'yes':'false';
@@ -1436,6 +1433,9 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                        }else{
+                            item.label.value=this.$dateFormat(new Date(),'yyyy-mm-dd');
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1522,6 +1522,7 @@
                 console.log(1)
             },
             btnClick(e){
+                this.inquiryId=e.id.value;
                 this.quickCreateDialogVisible=false;
                 this.loadingProductTable=true;
                 this.loadingPage=true;
@@ -1917,7 +1918,31 @@
             },
         },
         created(){
-            this.getOrderNo();
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    this.getOrderNo();
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
+
+
         },
         mounted(){
             // this.setLog({query:{code:'BIZ_ORDER'}});
