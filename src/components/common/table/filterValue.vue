@@ -2,13 +2,9 @@
   <div class="filter-value">
     <i class="iconfont icon-shaixuan" @click="visible = !visible"></i>
 
-    <!--<v-filter-column :data="setFiledData" @filter-column="onFilterColumn"
-                     v-if="!hideFilterColumn">
-    </v-filter-column>-->
-
     <el-dialog :title="$i.table.tableFilter"
                :visible.sync="visible" width="1000px">
-      <ul v-loading="loading">
+      <ul v-loading="!data.length || loading">
 
         <li class="filter-item" v-for="(cItem,index) in conditionList">
 
@@ -16,8 +12,8 @@
                      @change="selectCondition(cItem)">
             <el-option
               v-for="item in dataList"
-              :key="item.name"
-              :label="item.name"
+              :key="item.id"
+              :label="item._name"
               :value="item.property">
             </el-option>
           </el-select>
@@ -99,7 +95,7 @@
   export default {
     name: 'VFilterValue',
     props: {
-      data: {
+      data: { // columns 数据
         type: Array,
         default() {
           return [];
@@ -133,9 +129,6 @@
       }
     },
     methods: {
-      change(e) {
-        console.log(e)
-      },
       addCompute() {
         this.conditionList.push(this.$options.data().conditionList[0])
       },
@@ -150,13 +143,21 @@
       },
       getConfig() {
         this.loading = true;
-        this.$ajax.post(this.$apis.GRIDFIELDSETTING_PART, [this.code], {cache: true})
+        this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code}, {cache: true, contentType: 'F'})
           .then(res => {
-            this.dataList = res;
+            let dataList = [];
+
+            _.map(this.data, val => {
+              let item = _.findWhere(res, {property: val.key});
+              if (!val._hide && item && item.isChecked === 1) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+            });
+
+            this.dataList = dataList;
           })
-          .finally(() => {
-            this.loading = false;
-          })
+          .finally(() => this.loading = false)
       },
       selectCondition(item) {
         let data = _.findWhere(this.dataList, {property: item.property})
@@ -175,17 +176,6 @@
         item.sortable = data.sortable;
         item.dataType = data.dataType;
 
-      },
-      onFilterColumn(val) {
-        /*this.$ajax.get(this.$apis.get_itemfavoriteList).then(data => {
-          this.setFiledData = _.map(this.dataList, val => {
-            if (!_.isEmpty(_.findWhere(data, {gridFieldId: val.name}))) {
-              val._checked = true;
-            }
-            return val;
-          });
-        });*/
-        this.$emit('filter-column', val);
       },
       submitFilter(type) {
         let operatorFilters = []
