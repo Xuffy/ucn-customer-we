@@ -220,7 +220,8 @@ export default {
       let aArr = [
         {
           label: 'Negociate',
-          type: 1        
+          type: 1,
+          disabled:!this.edit    
         },
         {
           label: 'Detail',
@@ -230,7 +231,8 @@ export default {
       this.$route.name=='placeLogisticPlan' ?  aArr : aArr.splice(1,0,
         {
           label: 'History',         
-          type: 2
+          type: 2,
+          disabled:!this.edit 
         }
       )
       return aArr;
@@ -533,10 +535,17 @@ export default {
       this.selectProductArr = arr
     },
     removeProduct () {
+      console.log(this.productList,'productList')
+      console.log(this.selectProductArr,'selectProductArr')
       this.selectProductArr.forEach(a => {
-        const index = this.productList.indexOf(a)
-        this.removeProductList.push(this.productList[index])
-        this.$delete(this.productList, index)
+        // let index = this.productList.indexOf(a)
+        this.productList.forEach((item,index)=>{
+          if(item.id.value==a.id.value){
+            this.productList.splice(index,1);
+          }
+        })
+        // console.log(index)
+        // this.removeProductList.push(this.productList[index])
       })
     },
     productModifyfun(obj){
