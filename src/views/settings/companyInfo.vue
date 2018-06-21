@@ -370,12 +370,12 @@
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item :label="$i.setting.from" required>
-                <el-input size="mini" v-model="exchangerateData.fromCurrency" placeholder="请输入内容"></el-input>
+                <el-input size="mini" v-model="exchangerateData.fromCurrency" disabled  placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.to" required>
-                <el-input size="mini" v-model="exchangerateData.toCurrency" placeholder="请输入内容"></el-input>
+                <el-input size="mini" v-model="exchangerateData.toCurrency" disabled  placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -978,8 +978,6 @@
             this.exchangerateData=Object.assign({}, result);
           },
           modifyExchangerate(){
-            console.log(this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate))
-
             if (this.$validateForm(this.exchangerateData, this.$db.setting.exchangeRate)) {
               return false;
             }
