@@ -39,6 +39,7 @@
                             <div v-if="v.isSupplier">
                                 <el-select
                                         class="speInput"
+                                        filterable
                                         v-model="orderForm[v.key]"
                                         :placeholder="$i.order.pleaseChoose">
                                     <el-option
@@ -286,6 +287,106 @@
             </template>
         </v-table>
 
+        <div class="summary">
+            <div class="second-title">
+                {{$i.order.summary}}
+            </div>
+            <el-form label-width="280px">
+                <el-row class="speZone">
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.skuQtys">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.skuQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalSkuPrice">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalSkuPrice"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalOuterCartonQty">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalOuterCartonQty"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalGrossWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalGrossWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalNetWeight">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalNetWeight"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.totalVolume">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.totalVolume"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.paidAmount">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.paidAmount"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                        <el-form-item :label="$i.order.unpaidAmount">
+                            <el-input
+                                    class="summaryInput"
+                                    size="mini"
+                                    v-model="orderForm.unpaidAmount"
+                                    :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+
         <div class="footBtn">
             <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
             <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
@@ -347,6 +448,8 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
+
+
 
         <v-history-modify
                 @save="saveNegotiate"
@@ -1057,7 +1160,6 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'params')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     console.log(res)
@@ -1150,15 +1252,12 @@
                     this.getSupplier();
                 }else{
 
-                    this.orderForm.orderNo='124124124124';
-                    this.getSupplier();
-
-                    // this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
-                    //     this.orderForm.orderNo=res;
-                    //     this.getSupplier();
-                    // }).catch(err=>{
-                    //     this.loadingPage=false;
-                    // });
+                    this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
+                        this.orderForm.orderNo=res;
+                        this.getSupplier();
+                    }).catch(err=>{
+                        this.loadingPage=false;
+                    });
                 }
             },
             changePayment(e){
@@ -1361,7 +1460,7 @@
                 }).then(res=>{
                     //带入inquiry信息
                     this.orderForm.quotationNo=res.quotationNo;
-                    this.orderForm.supplierName=res.supplierName;
+                    this.orderForm.supplierName=res.supplierId;
                     this.orderForm.incoterm=res.incoterm;
                     this.orderForm.payment=res.paymentMethod;
                     this.changePayment(this.orderForm.payment);
@@ -1805,7 +1904,19 @@
         float: right;
         margin-right: 70px;
     }
-
+    .summaryInput{
+        width: 80%;
+    }
+    .summaryInput >>> input{
+        text-align: left;
+    }
+    .second-title{
+        font-weight: bold;
+        font-size: 18px;
+        color:#666666;
+        padding: 10px 0;
+        margin-top: 20px;
+    }
     .footBtn{
         border-top: 1px solid #e0e0e0;
         height: 40px;
