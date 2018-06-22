@@ -7,96 +7,147 @@ import _config from "./config";
 import store from '@/store';
 import {Message, MessageBox} from 'element-ui';
 
+
+/**
+ * 删除带有前缀下划线数据
+ */
+const deleteArr = (list, fieldRemark) => {
+  _.map(list, item => {
+    if (item) deleteObject(item);
+    if (item[fieldRemark]) deleteObject(item[fieldRemark]);
+  });
+};
+
+const deleteObject = (list, fieldRemark, details) => {
+  _.mapObject(list, (val, key) => {
+    if (key.substring(0, 1) === '_') delete list[key];
+    if (list[fieldRemark]) deleteObject(list[fieldRemark]);
+    if (key === details) deleteArr(list[details], fieldRemark)
+  });
+};
+
+
+const serialization = (params) => {
+  const result = []
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const element = params[key];
+      result.push(`${key}=${element}`)
+    }
+  }
+  return result.join('&')
+};
+
+
 export default {
-  install(Vue, options) {
-    /**
-     * 本地永久缓存
-     */
-    Vue.prototype.$localStore = localStore;
+  /**
+   * 本地永久缓存
+   */
+  $localStore: localStore,
 
-    /**
-     * 本地会话缓存
-     */
-    Vue.prototype.$sessionStore = sessionStore;
+  /**
+   * 本地会话缓存
+   */
+  $sessionStore: sessionStore,
 
-    /**
-     * 格式化日期
-     */
-    Vue.prototype.$dateFormat = dateFormat;
+  /**
+   * 格式化日期
+   */
+  $dateFormat: dateFormat,
 
-    /**
-     * 国际化语言配置
-     */
-    Vue.prototype.$i = language;
+  /**
+   * 国际化语言配置
+   */
+  $i: language,
 
-    /**
-     * 字段配置
-     */
-    Vue.prototype.$db = database;
+  /**
+   * 字段配置
+   */
+  $db: database,
 
-    /**
-     * 字段配置
-     * @param db
-     * @param data
-     * @param cb
-     * @returns {Array}
-     */
-    Vue.prototype.$getDB = (db, data, cb) => {
 
-      let list = [];
-      db = _.values(db);
-      _.map(data, (value, index) => {
-        let obj = {};
-        _.map(db, val => {
-          let dv = value[val.key]
-            , cd = _.clone(val);
-          if (!_.isUndefined(dv) || val._important) {
-            cd.value = _.isUndefined(dv) ? '' : dv;
-            obj[val.key] = cd;
-          }
-        });
-        if (cb) obj = _.extend(obj, cb(obj, index));
-        list.push(obj);
+  /**
+   * 字段配置
+   * @param db
+   * @param data
+   * @param cb
+   * @returns {Array}
+   */
+  $getDB(db, data, cb) {
+
+    let list = [];
+    db = _.values(db);
+    _.map(data, (value, index) => {
+      let obj = {};
+      _.map(db, val => {
+        let dv = value[val.key]
+          , cd = _.clone(val);
+        if (!_.isUndefined(dv) || val._important) {
+          cd.value = _.isUndefined(dv) ? '' : dv;
+          obj[val.key] = cd;
+        }
       });
-      return list;
-    };
+      if (cb) obj = _.extend(obj, cb(obj, index));
+      list.push(obj);
+    });
+    return list;
+  },
 
-    /**
-     * 生成唯一标识
-     * @returns {string}
-     */
-    Vue.prototype.$getUUID = () => {
-      var d = new Date().getTime();
-      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-      });
-      return uuid;
+  /**
+   * 生成唯一标识
+   * @returns {string}
+   */
+  $getUUID() {
+    let d = new Date().getTime();
+    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      let r = (d + Math.random() + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+  },
+
+  /**
+   * 字节转换
+   * @returns {string}
+   */
+  $bytesConvert(val) {
+    if (val === 0) {
+      return '0 B'
     }
 
-    /**
-     * 字节转换
-     * @returns {string}
-     */
-    Vue.prototype.$bytesConvert = (val) => {
-      if (val === 0) {
-        return '0 B'
-      }
+    let k = 1024
+      , sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      , i = Math.floor(Math.log(val) / Math.log(k));
 
-      let k = 1024
-        , sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        , i = Math.floor(Math.log(val) / Math.log(k));
-
-      return (val / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
-    }
+    return (val / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+  },
 
 
-    /**
-     * 表单验证
-     * @param data
-     * @param db
-     * _rules:{
+  /**
+   * 权限验证
+   * @param value
+   * @returns {boolean}
+   */
+  $auth(value) {
+    let user = localStore.get('user') || {}
+      , auths = (user.userResourceCodes || []).concat(user.userType)
+      , pass = false;
+
+    value = _.isArray(value) ? value : [value];
+
+    _.map(value, val => {
+      pass = _.indexOf(auths, val) > -1;
+    });
+
+    return pass;
+  },
+
+  /**
+   * 表单验证
+   * @param data
+   * @param db
+   * _rules:{
      *   type:'Number', // 数据类型：Number、Regexp、Email
      *   required:true, // 必填项
      *   max:10, // 最大值
@@ -118,54 +169,10 @@ export default {
 
       validate = item._rules;
 
-<<<<<<< HEAD
-        if (validate.required && !/\S/.test(val)) {
-          Message.warning(`请必须填写 ${item.label}`);
-          return key;
-        }
-
-        if (!/\S/.test(val)) continue;
-
-        switch (validate.type) {
-          case 'Number':
-            if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-              Message.warning(`请填正确的 ${item.label}`);
-              console.log(1)
-              return key;
-            }
-            if (!/^[0-9]+\.?[0-9]{0,9}$/.test(val)) {
-              Message.warning(`请填正确的 ${item.label}`);
-              console.log(2)
-              return key;
-            }
-            if (validate.max && validate.max < Number(val)) {
-              Message.warning(`${item.label} 值不能大于${validate.max}`);
-              return key;
-            }
-            if (validate.min && validate.min > Number(val)) {
-              Message.warning(`${item.label} 值不能小于${validate.max}`);
-              return key;
-            }
-            break;
-          case 'Email':
-            if (!/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(val)) {
-              Message.warning(`请填正确的 ${item.label}`);
-              return key;
-            }
-            break;
-          case 'Regexp':
-            if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
-              Message.warning(item.label || `请填正确的 ${item.label}`);
-              return key;
-            }
-            break;
-        }
-=======
       if (validate.required && !/\S/.test(val)) {
         Message.warning(`请必须填写 ${item.label}`);
         return key;
       }
->>>>>>> 7a4622b2cb57ae22966875edb5a5769d7317bee4
 
       if (!/\S/.test(val)) continue;
 
