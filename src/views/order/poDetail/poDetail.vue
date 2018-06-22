@@ -1053,17 +1053,6 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
-            <!--<el-date-picker-->
-                    <!--class="spx"-->
-                    <!--slot="skuDeliveryDates"-->
-                    <!--slot-scope="{data}"-->
-                    <!--v-model="data.value"-->
-                    <!--align="right"-->
-                    <!--type="date"-->
-                    <!--:placeholder="$i.order.pleaseChoose"-->
-                    <!--:picker-options="pickerOptions1">-->
-            <!--</el-date-picker>-->
-
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1088,7 +1077,6 @@
             <div slot="skuAdditionalFour" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
-
         </v-history-modify>
 
         <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1136,6 +1124,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuSaleStatusOption:[],
 
                 /**
                  * Negotiate 插槽变量
@@ -1447,11 +1436,11 @@
 
                 });
 
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1476,6 +1465,8 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1529,12 +1520,6 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1546,10 +1531,19 @@
                             item.skuAdditionalTwo._image=false;
                             item.skuAdditionalThree._image=false;
                             item.skuAdditionalFour._image=false;
-                        }else{
+                        }
+                        else{
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId.value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     this.productTableData=[];
@@ -1804,12 +1798,6 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1821,10 +1809,19 @@
                             item.skuAdditionalTwo._image=false;
                             item.skuAdditionalThree._image=false;
                             item.skuAdditionalFour._image=false;
-                        }else{
+                        }
+                        else{
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -2132,8 +2129,6 @@
                     //CIF
                 }
             },
-
-
 
             /**
              * 底部按钮事件
@@ -2522,7 +2517,29 @@
             }
         },
         created(){
-            this.getOrderNo();
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                    this.getOrderNo();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
         },
         mounted(){
             this.setLog({query:{code:'BIZ_ORDER'}});
