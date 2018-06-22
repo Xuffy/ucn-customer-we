@@ -301,7 +301,7 @@
         </el-dialog>
 
       <el-dialog width="70%" :title="$i.setting.documentRequired +'：'" :visible.sync="documentDialogVisible">
-        <el-form label-width="200px" :model="documentData">
+        <el-form label-width="250px" :model="documentData">
           <el-row>
             <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
               <el-form-item  :label="$i.setting.documentRequired +'：'" required>

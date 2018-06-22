@@ -47,7 +47,7 @@
                 params:{
                     "pn": 1,
                     "ps": 50,
-                    "skuCode":'',
+                    "skuCodeLike":'',
                 },
               options: [{
                 id: '1',
@@ -76,7 +76,7 @@
                 type: 'warning'
               });
               if (val.keyType == '1') {
-                this.params.skuCode= val.key
+                this.params.skuCodeLike= val.key
               }
               this.getList()
             },
