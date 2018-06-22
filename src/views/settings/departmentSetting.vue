@@ -218,6 +218,7 @@
     <!--修改/添加 用户信息-->
     <el-dialog
       class="speDialog"
+      :close-on-click-modal="false"
       :title="editUserdialog.title[editUserdialog.type]"
       :visible.sync="editUserdialog.show"
       width="50%">
