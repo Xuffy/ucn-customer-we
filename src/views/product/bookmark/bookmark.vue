@@ -41,7 +41,7 @@
                                         v-for="item in countryOption"
                                         :key="item.id"
                                         :label="item.name"
-                                        :value="item.id">
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                             <div v-if="v.showType==='exwNumber'" class="section-number">
@@ -203,7 +203,7 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: null,
+                    country: '',
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
@@ -308,8 +308,12 @@
 
                 this.loadingTable=true;
 
-                console.log(this.selectCountry,'selectCountry')
-                console.log(this.productForm,'this.productForm')
+                if(this.selectCountry.length>0){
+                    _.map(this.selectCountry,v=>{
+                        this.productForm.country+=(v+',');
+                    });
+                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
+                }
 
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
