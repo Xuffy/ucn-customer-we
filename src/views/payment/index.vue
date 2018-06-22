@@ -134,7 +134,8 @@
                 },
                 //底部table数据
                 tableDataList:[],
-                totalRow: []
+                totalRow: [],
+                currency:[]
             }
         },
         watch: {
@@ -171,6 +172,15 @@
                 this.params.ps = val;
                 this.getList();
             },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+                console.log(this.currency)
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             getList(){
               this.tabLoad = true;
               this.$ajax.post(this.$apis.post_ledgerPage, this.params)
@@ -178,25 +188,40 @@
                   this.tabLoad = false;
                   this.searchLoad = false;
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
+                    item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
 
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
                     })
 
-                    // let country,orderType,;
-                    // country = _.findWhere(this.options.country, {code: e.country.value}) || {};
-                    // e.country._value = country.name || '';
-                    // return e;
+                    switch (item.orderType.value)
+                    {
+                      case 10:
+                       item.orderType._value = 'Purchase order'
+                        break;
+                      case 20:
+                        item.orderType._value = 'QC order'
+                        break;
+                      case 30:
+                        item.orderType._value = 'Logisttic order'
+                        break;
 
+                    }
                     return item;
                   });
 
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
+                    console.log(item.currencyCode._value)
                     return item;
                   });
                   this.pageData=res;
@@ -268,6 +293,7 @@
         created(){
            this.viewByStatus = '1';
            this.getList();
+           this.getCurrency();
         },
     }
 </script>

@@ -5,15 +5,15 @@ export default {
     orderType: {
         key: 'orderType'
     },
-    orderStatus: {
-        key: 'status'
-    },
+    // orderStatus: {
+    //     key: 'status'
+    // },
     orderCreateDate: {
         key: 'orderEntryDt',
        type: 'textDate',
     },
     currency: {
-      key: 'currency'
+      key: 'currencyCode'
     },
     payable: {
       key: 'planPayAmount' //应付
