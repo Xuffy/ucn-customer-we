@@ -6,7 +6,6 @@
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'&&logisticsStatus!=5" :disabled="logisticsStatus==1||logisticsStatus==4" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" @click.stop="$emit('switchEdit','copy')">{{ $i.logistic.copy }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList!='loadingList'" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
-      <el-button size="mini" type="primary" v-if="logisticsStatus==2" @click.stop="$emit('switchEdit','DeliveredEdit')">{{ $i.logistic.modify }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'">{{ $i.logistic.download }}</el-button>
       <el-button size="mini" type="primary" v-if="$route.query.loadingList=='loadingList'" :disabled="logisticsStatus==4 || logisticsStatus==5" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
     </div>
@@ -24,6 +23,7 @@ export default {
     planId: [String, Number],
     isCopy: [String, Number],
     logisticsStatus: [String, Number],
+    DeliveredEdit:[Boolean],
     edit: {
       type: Boolean,
       default: false
