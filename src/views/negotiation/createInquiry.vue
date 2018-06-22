@@ -378,6 +378,7 @@ export default {
       let upData = _.clone(this.fromArg);
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
+      upData.skuQty = upData.details.length;
       upData.attachment = files && files.length > 0 ? files.join(',') : null;
 
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
