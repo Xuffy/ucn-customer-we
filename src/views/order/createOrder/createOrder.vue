@@ -5,7 +5,7 @@
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -863,6 +863,9 @@
             <!--:picker-options="pickerOptions1">-->
             <!--</el-date-picker>-->
 
+            <div slot="skuPictures" slot-scope="{data}">
+                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+            </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1425,7 +1428,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1446,7 +1449,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1861,7 +1866,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1882,7 +1887,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -2051,6 +2058,9 @@
         line-height: 32px;
         color:#666666;
         margin-top: 10px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;
