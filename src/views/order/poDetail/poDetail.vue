@@ -1559,7 +1559,7 @@
                             item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            if(tem.skuCategoryId.value){
+                            if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
                         }
@@ -1836,7 +1836,7 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            if(tem.skuCategoryId.value){
+                            if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
                         }
