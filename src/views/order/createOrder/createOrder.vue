@@ -5,7 +5,7 @@
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -31,8 +31,7 @@
                                     :placeholder="$i.order.pleaseChoose"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -585,7 +584,7 @@
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -593,7 +592,7 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -931,6 +930,7 @@
                 quarantineTypeOption:[],
                 skuStatusOption:[],
                 skuSaleStatusOption:[],
+                inquiryStatusOption:[],
 
                 /**
                  * 页面基础配置
@@ -989,7 +989,7 @@
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    status:99
+                    // status:99
                 },
 
                 /**
@@ -1142,9 +1142,9 @@
             ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
-                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                //     return;
-                // }
+                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                    return;
+                }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1182,14 +1182,13 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'params')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                //     console.log(res)
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    console.log(res)
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1339,6 +1338,9 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
+
+                        item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
+                        item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
                         if(item.id.value===this.inquiryId){
                             this.$set(item,'_disabled',true)
                         }
@@ -1423,7 +1425,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1444,7 +1446,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1506,7 +1510,33 @@
                             if (json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                if(item[k]._value){
+                                    if(item[k].key==='skuUnit'){
+                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitWeight'){
+                                        json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitLength'){
+                                        json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitVolume'){
+                                        json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuExpireUnit'){
+                                        json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuStatus'){
+                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuSample'){
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
+                                    }
+                                }else{
+                                    json[k] = item[k].value;
+                                }
                             }
                         };
                         arr.push(json);
@@ -1833,7 +1863,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1854,7 +1884,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1897,7 +1929,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS','INQUIRY_STATUS'],{cache:true}).then(res=>{
                     this.queryNo++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1922,6 +1954,8 @@
                             this.quarantineTypeOption=v.codes;
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.skuSaleStatusOption=v.codes;
+                        }else if(v.code==='INQUIRY_STATUS'){
+                            this.inquiryStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -2021,6 +2055,9 @@
         line-height: 32px;
         color:#666666;
         margin-top: 10px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;

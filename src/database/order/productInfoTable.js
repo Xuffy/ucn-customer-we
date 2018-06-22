@@ -19,9 +19,10 @@ export default {
         _hide:true
     },
     skuPic:{
-        _slot:'skuPic',
+        _slot:'skuPictures',
         type:'pic',
-        _image:true
+        _image:true,
+        key:'skuPictures'
         // disabled:true
     },
     skuNameEn:{
@@ -232,7 +233,7 @@ export default {
     },
     skuComments:{},
     skuStatus:{
-
+        _slot:'skuStatus'
     },
     skuSaleStatus:{
         _disabled:true

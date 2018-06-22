@@ -96,19 +96,19 @@ export default {
     type: 'text'
   },
   "totalQuantityInContainer":{
-    key:'totalContainerQty',
+    _filed:'totalContainerQty',
     type: 'text'
   },
   "totalVolumeInContainer":{
-    key:'totalContainerVolume',
+    _filed:'totalContainerVolume',
     type: 'text'
   },
   "totalNetWeightInContainer":{
-    key:'totalContainerNetWeight',
+    _filed:'totalContainerNetWeight',
     type: 'text'
   },
   "totalQuantityOfOuterCartonsInContainer":{ 
-    key:'totalContainerOuterCartonsQty',
+    _filed:'totalContainerOuterCartonsQty',
     type: 'text'
   },
   "shipmentStatus":{

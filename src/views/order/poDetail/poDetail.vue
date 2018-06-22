@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -31,8 +31,7 @@
                                     :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -487,7 +486,6 @@
             </template>
         </v-table>
 
-
         <div class="summary">
             <div class="second-title">
                 {{$i.order.summary}}
@@ -534,56 +532,56 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalGrossWeight">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalGrossWeight"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalNetWeight">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalNetWeight"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalVolume">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalVolume"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.paidAmount">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.paidAmount"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.unpaidAmount">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.unpaidAmount"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalGrossWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalGrossWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalNetWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalNetWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalVolume">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalVolume"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.paidAmount">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.paidAmount"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.unpaidAmount">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.unpaidAmount"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -784,7 +782,7 @@
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -792,7 +790,7 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1053,6 +1051,10 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
+
+            <div slot="skuPictures" slot-scope="{data}">
+                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+            </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1124,6 +1126,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuStatusTotalOption:[],
                 skuSaleStatusOption:[],
 
                 /**
@@ -1436,9 +1439,39 @@
 
                 });
 
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                this.skuStatusTotalOption=[
+                    {
+                        code:'1',
+                        name:'TBCBYSUPPLIER'
+                    },
+                    {
+                        code:'2',
+                        name:'TBCBYCUSTOMER'
+                    },
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'4',
+                        name:'FINISHED'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+                this.skuStatusOption=[
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
@@ -1497,22 +1530,9 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
+                    orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
-                    if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
-                        this.skuStatusOption=[
-                            {
-                                code:'1',
-                                name:'Process'
-                            },
-                            {
-                                code:'0',
-                                name:'Cancel'
-                            }
-                        ];
-                    }else{
-                        this.skuStatusOption=[];
-                    }
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1522,7 +1542,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1540,17 +1560,18 @@
                             item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
                             item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
                             item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId.value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     this.productTableData=[];
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-
                     this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
@@ -1572,7 +1593,6 @@
                     if(res.supplierUserId){
                         this.allowHandlePay=true;
                     }
-
                     /**
                      * 获取payment数据
                      * */
@@ -1609,7 +1629,6 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
-
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
@@ -1654,7 +1673,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
+                // this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
 
@@ -1796,11 +1815,13 @@
             handleProductOk(e){
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
+                console.log()
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                        console.log(item,'item')
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1821,7 +1842,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1836,6 +1859,7 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1880,10 +1904,12 @@
                                         json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuStatus'){
-                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                        json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
                                     }
                                 }else{
                                     json[k] = item[k].value;
@@ -2573,6 +2599,9 @@
         color:#666666;
         padding: 10px 0;
         margin-top: 20px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;
