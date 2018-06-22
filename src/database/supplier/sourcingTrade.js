@@ -6,7 +6,8 @@ export default {
     key: 'status'
   },
   orderDate: {
-    key: 'entryDt'
+    key: 'entryDt',
+    type: "textDate"
   },
   currency: {
     key: 'currency'

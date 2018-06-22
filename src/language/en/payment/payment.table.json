@@ -13,5 +13,6 @@
   "received":"Received",
   "waitReceipt":"Wait Receipt",
   "planDateOfReceipt":"Plan Date of Receipt",
-  "actualDateOfReceipt":"Actual Date of Receipt"
+  "actualDateOfReceipt":"Actual Date of Receipt",
+  "type": "type"
 }

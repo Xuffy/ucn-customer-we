@@ -168,7 +168,6 @@
                 }
             },
             inputEnter(val) {
-                console.log(val,'val')
                 if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
                 if (val.keyType === 1) {
                     this.params.orderNo = val.key;
@@ -256,12 +255,31 @@
                             if(e.status){
                                 e.status.value=this.$change(this.orderStatusOption,'status',e).name;
                             }
+                            if(e.skuStatus){
+                                e.skuStatus.value=this.$change(this.orderStatusOption,'skuStatus',e).name;
+                            }
+                            if(e.skuIncoterm){
+                                e.skuIncoterm.value=this.$change(this.incotermOption,'skuIncoterm',e).name;
+                            }
                             if(e.incoterm){
-                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e).name;
+                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e,true).name;
                             }
                             if(e.payment){
                                 e.payment.value=this.$change(this.paymentOption,'payment',e).name;
                             }
+                            if(e.importantCustomer){
+                                e.importantCustomer.value=(e.importantCustomer.value?'YES':'NO')
+                            }
+                            if(e.attachment){
+                                e.attachment.value=(e.attachment.value?'YES':'NO')
+                            }
+                            if(e.remind){
+                                e.remind.value=(e.remind.value?'YES':'NO')
+                            }
+                            if(e.archive){
+                                e.archive.value=(e.archive.value?'YES':'NO')
+                            }
+
                         });
                         this.pageData = res;
                         this.disableFinish=true;

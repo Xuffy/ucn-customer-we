@@ -172,23 +172,16 @@
             },
             inputEnter(val) {
                 if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
-                console.log(val)
                 if (val.keyType === 1) {
                     this.params.orderNo = val.key;
                     this.params.skuCode = '';
-                    if (this.view === '1') {
-                        this.getData(this.$db.order.overviewByOrder)
-                    } else {
-                        this.getData(this.$db.order.overviewBysku)
-                    }
+                    this.view='1';
+                    this.getData()
                 } else {
                     this.params.orderNo = '';
                     this.params.skuCode = val.key;
-                    if (this.view === '1') {
-                        this.getData(this.$db.order.overviewByOrder)
-                    } else {
-                        this.getData(this.$db.order.overviewBysku)
-                    }
+                    this.view='2';
+                    this.getData()
                 }
             },
             finish() {
