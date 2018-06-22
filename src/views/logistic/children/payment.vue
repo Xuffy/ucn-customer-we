@@ -259,15 +259,6 @@ export default {
       })
     },
   },
-  watch:{
-    currencyCode(v){
-      let param = {
-        columns : this.$refs.table.columns,
-        data : this.$refs.table.data
-      }
-      this.summaryMethod(param)
-    }
-  }
 }
 </script>
 

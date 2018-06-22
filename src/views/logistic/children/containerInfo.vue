@@ -14,20 +14,17 @@
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerNo" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.containerNo }}</span>
+            <span>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.sealNo" prop="sealNo" width="120" align="center">
+        <el-table-column :label="$i.logistic.sealNo" width="120" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.sealNo" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.sealNo }}</span>
+            <span>{{ scope.row.sealNo }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.containerWeight" width="140" prop="containerWeight" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.containerWeight" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.containerWeight }}</span>
+            <span>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.containerType" width="140" align="center">
@@ -65,8 +62,8 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice"></el-input>
-            <!-- <span>{{ scope.row.totalContainerSkuPrice }}</span> -->
+            <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
+            <span v-else>{{ scope.row.totalContainerSkuPrice }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.exchangeCurrency" width="180" align="center">
@@ -121,13 +118,13 @@ export default {
             sums[index] = this.$i.logistic.sum;
             return;
           }
-          const values = data.map(item => Number(item[column.property]));
+          const values = data.map(item => Number(item[column.property]) );
           //提取data 拼接成汇率的key 
           const currencyCode = data.map(item => {
             if(item.exchangeCurrency!=this.currencyCode){
               return item.exchangeCurrency+this.currencyCode;
             }else{
-              return this.exchangeCurrency; 
+              return this.currencyCode; 
             }
           });
           let currencyCodeArr = [];
@@ -145,10 +142,14 @@ export default {
           if (!values.every(value => isNaN(value))) {
             sums[index] = values.reduce((prev, curr,i) => {
               const value = Number(curr);
-              if (!isNaN(value)) {
-                return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
-              } else {
-                return prev;
+              if(column.property=="totalContainerSkuPrice"){
+                if (!isNaN(value)) {
+                  return this.$numAdd(prev , this.$mul(curr,currencyCodeArr[i]));
+                } else {
+                  return prev;
+                }
+              }else{
+                return this.$numAdd(prev , curr || 0);
               }
             }, 0);
             sums[index] += 0;
@@ -185,15 +186,6 @@ export default {
     //   this.$emit('tabSplite', index)
     // }
   },
-  watch:{
-    currencyCode(v){
-      let param = {
-        columns : this.$refs.table.columns,
-        data : this.$refs.table.data
-      }
-      this.summaryMethod(param)
-    }
-  }
 }
 </script>
 <style lang="less" scoped>
