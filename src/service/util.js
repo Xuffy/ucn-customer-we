@@ -129,10 +129,12 @@ export default {
           case 'Number':
             if (_.isRegExp(validate.reg) && !validate.reg.test(val)) {
               Message.warning(`请填正确的 ${item.label}`);
+              console.log(1)
               return key;
             }
             if (!/^[0-9]+\.?[0-9]{0,9}$/.test(val)) {
               Message.warning(`请填正确的 ${item.label}`);
+              console.log(2)
               return key;
             }
             if (validate.max && validate.max < Number(val)) {
