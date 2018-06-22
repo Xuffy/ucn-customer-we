@@ -135,7 +135,8 @@ export default {
         blType: 'BL_TYPE',
         logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
-        payment: 'PMT'
+        payment: 'PMT',
+        skuIncoterm: 'ITM'
       },
       configUrl: {
         placeLogisticPlan: {
@@ -514,9 +515,10 @@ export default {
     closeAddProduct (status) {
       this.showAddProductDialog = false
       const selectArrData = this.$depthClone(this.$refs.addProduct.selectArrData);
-
       if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
       selectArrData.forEach(a => {
+        let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
+        sliceStr = sliceStr.slice(0,1)+sliceStr.slice(1-sliceStr.length).toLowerCase();
         a.argID = this.$depthClone(a.id);
         a.id = null
         a.vId = +new Date()
@@ -527,11 +529,20 @@ export default {
         a.toShipQty = ''
         a.reportElement = ''
         a.factorySkuCode = ''
-        a.unitExportPrice = ''
+        a.unitExportPrice = a['sku'+sliceStr+'Price']
         a.totalExportPrice = '';
+        a.currency = a['sku'+sliceStr+'Currency'];
+        a.containerNo = '';
+        a.containerType = '';
+        a.totalQuantityInContainer = '';
+        a.totalVolumeInContainer = '';
+        a.totalNetWeightInContainer = '';
+        a.totalQuantityOfOuterCartonsInContainer = '';
+        a.shipmentStatus = '';
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
-
+      console.log(selectArrData,'this.selectArrData')
+      console.log(this.productList,'this.productList')
       this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       // console.log(selectArrData)
       // TODO
