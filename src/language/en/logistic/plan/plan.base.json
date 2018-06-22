@@ -90,6 +90,7 @@
   "totalVolumeInContainer": "Total Volume in Container",
   "totalNetWeightInContainer": "Total N.W. in Container",
   "totalQuantityOfOuterCartonsInContainer": "Total Quantity of Outer Cartons in Container",
+  "shipmentStatus": "Shipment Status",
   "totalSkuPriceInContainer": "Total Amount in Container",
   "exchangeCurrency": "Exchange Currency",
   "feeInfoTitle": "Fee Info",
@@ -210,5 +211,8 @@
   "cancelModify": "取消修改",
   "receive":"接受",
   "refuse":"拒绝",
-  "Dept":"催款"
+  "Dept":"催款",
+  "productInfo":{
+
+  }
 }

@@ -31,8 +31,7 @@
                                     :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -784,7 +783,7 @@
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -792,7 +791,7 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1053,17 +1052,6 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
-            <!--<el-date-picker-->
-                    <!--class="spx"-->
-                    <!--slot="skuDeliveryDates"-->
-                    <!--slot-scope="{data}"-->
-                    <!--v-model="data.value"-->
-                    <!--align="right"-->
-                    <!--type="date"-->
-                    <!--:placeholder="$i.order.pleaseChoose"-->
-                    <!--:picker-options="pickerOptions1">-->
-            <!--</el-date-picker>-->
-
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1088,7 +1076,6 @@
             <div slot="skuAdditionalFour" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
-
         </v-history-modify>
 
         <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1136,6 +1123,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuSaleStatusOption:[],
 
                 /**
                  * Negotiate 插槽变量
@@ -1451,7 +1439,7 @@
                 //     console.log(res)
                 // });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1476,6 +1464,8 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1506,6 +1496,7 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
+                    orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
                     if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
@@ -1529,12 +1520,6 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
@@ -1546,17 +1531,25 @@
                             item.skuAdditionalTwo._image=false;
                             item.skuAdditionalThree._image=false;
                             item.skuAdditionalFour._image=false;
-                        }else{
+                        }
+                        else{
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     this.productTableData=[];
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-
                     this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
@@ -1578,7 +1571,6 @@
                     if(res.supplierUserId){
                         this.allowHandlePay=true;
                     }
-
                     /**
                      * 获取payment数据
                      * */
@@ -1615,7 +1607,6 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
-
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
@@ -1660,7 +1651,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
+                // this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
 
@@ -1807,6 +1798,27 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1821,6 +1833,7 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1869,6 +1882,8 @@
                                     }
                                     else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
                                     }
                                 }else{
                                     json[k] = item[k].value;
@@ -2114,8 +2129,6 @@
                     //CIF
                 }
             },
-
-
 
             /**
              * 底部按钮事件
@@ -2504,7 +2517,29 @@
             }
         },
         created(){
-            this.getOrderNo();
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                    this.getOrderNo();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
         },
         mounted(){
             this.setLog({query:{code:'BIZ_ORDER'}});

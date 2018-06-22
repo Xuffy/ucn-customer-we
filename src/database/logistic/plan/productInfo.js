@@ -16,8 +16,7 @@ export default {
     _hide: true
   },
   "orderNo": {
-    type: 'text',
-    _hide: true
+    type: 'text'
   },
   "orderId": {
     type: 'text',
@@ -88,6 +87,31 @@ export default {
     type: 'text'
   },
   "currency": {
+    type: 'text'
+  },
+  "containerNo":{
+    type: 'text'
+  },
+  "containerType":{
+    type: 'text'
+  },
+  "totalQuantityInContainer":{
+    _filed:'totalContainerQty',
+    type: 'text'
+  },
+  "totalVolumeInContainer":{
+    _filed:'totalContainerVolume',
+    type: 'text'
+  },
+  "totalNetWeightInContainer":{
+    _filed:'totalContainerNetWeight',
+    type: 'text'
+  },
+  "totalQuantityOfOuterCartonsInContainer":{ 
+    _filed:'totalContainerOuterCartonsQty',
+    type: 'text'
+  },
+  "shipmentStatus":{
     type: 'text'
   },
   "skuOuterCartonQty": {

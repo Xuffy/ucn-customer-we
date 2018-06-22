@@ -31,8 +31,7 @@
                                     :placeholder="$i.order.pleaseChoose"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -585,7 +584,7 @@
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -593,7 +592,7 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -930,6 +929,8 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuSaleStatusOption:[],
+                inquiryStatusOption:[],
 
                 /**
                  * 页面基础配置
@@ -1289,7 +1290,7 @@
                     this.getSupplier();
                 }else{
 
-                    // this.orderForm.orderNo='124124125152135';
+                    // this.orderForm.orderNo='1241241245125125152135';
                     // this.getSupplier();
 
                     this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
@@ -1337,6 +1338,9 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
+
+                        item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
+                        item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
                         if(item.id.value===this.inquiryId){
                             this.$set(item,'_disabled',true)
                         }
@@ -1419,22 +1423,29 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-
-                        item.skuSample._value=item.skuSample.value?'yes':'false';
-                        item.skuSample.value=item.skuSample.value?'1':'0';
-
-
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
-                        }else{
-                            item.label.value=this.$dateFormat(new Date(),'yyyy-mm-dd');
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
                             item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
@@ -1497,7 +1508,33 @@
                             if (json[k] === 'fieldRemark') {
                                 json[k] = jsons;
                             } else {
-                                json[k] = item[k].value;
+                                if(item[k]._value){
+                                    if(item[k].key==='skuUnit'){
+                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitWeight'){
+                                        json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitLength'){
+                                        json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuUnitVolume'){
+                                        json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuExpireUnit'){
+                                        json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuStatus'){
+                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                    }
+                                    else if(item[k].key==='skuSample'){
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
+                                    }
+                                }else{
+                                    json[k] = item[k].value;
+                                }
                             }
                         };
                         arr.push(json);
@@ -1825,6 +1862,27 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1867,7 +1925,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS','INQUIRY_STATUS'],{cache:true}).then(res=>{
                     this.queryNo++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1890,6 +1948,10 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
+                        }else if(v.code==='INQUIRY_STATUS'){
+                            this.inquiryStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1941,8 +2003,6 @@
             }).catch(err=>{
                 this.loadingPage=false;
             });
-
-
         },
         mounted(){
             // this.setLog({query:{code:'BIZ_ORDER'}});
