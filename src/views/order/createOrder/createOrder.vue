@@ -863,6 +863,9 @@
             <!--:picker-options="pickerOptions1">-->
             <!--</el-date-picker>-->
 
+            <div slot="skuPictures" slot-scope="{data}">
+                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+            </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
