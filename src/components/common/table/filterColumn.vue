@@ -95,7 +95,7 @@
               , dataList = [];
 
             _.map(this.columns, (val, key) => {
-              let item = _.findWhere(res, {property: key})
+              let item = _.findWhere(res, {property: val._filed || key})
               if (!val._hide && item) {
                 item._name = val.label;
                 dataList.push(item);
