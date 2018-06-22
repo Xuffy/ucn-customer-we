@@ -497,7 +497,7 @@ export const routerMap = [
             draft: '/logistic/draft',
             recycleBin: false,
             log: true,
-            name: $i.router.logisticLoadingList
+            name: $i.router.logisticLoadingListOverview
           },
           component: () => import('../views/logistic/logisticPlanOverview')
         },
@@ -546,6 +546,18 @@ export const routerMap = [
             recycleBin: false,
             log: true,
             name: $i.router.logisticPlaceDetail
+          },
+          component: () => import('../views/logistic/logisticPlanDetail')
+        },
+        {
+          path: 'loadingListDetail',
+          name: 'loadingListDetail',
+          hidden: true,
+          meta: {
+            draft: '/logistic/draft',
+            recycleBin: false,
+            log: true,
+            name: $i.router.logisticLoadingList
           },
           component: () => import('../views/logistic/logisticPlanDetail')
         },
@@ -729,11 +741,9 @@ export const routerMap = [
   ]
 ;
 
-
 let router = new Router({
   routes: routerMap
 });
-
 
 router.beforeResolve((to, from, next) => {
   let ts = localStore.get('token')

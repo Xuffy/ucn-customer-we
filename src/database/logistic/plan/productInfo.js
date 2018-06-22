@@ -16,8 +16,7 @@ export default {
     _hide: true
   },
   "orderNo": {
-    type: 'text',
-    _hide: true
+    type: 'text'
   },
   "orderId": {
     type: 'text',
