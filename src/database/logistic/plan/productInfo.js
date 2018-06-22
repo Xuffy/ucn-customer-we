@@ -89,6 +89,31 @@ export default {
   "currency": {
     type: 'text'
   },
+  "containerNo":{
+    type: 'text'
+  },
+  "containerType":{
+    type: 'text'
+  },
+  "totalQuantityInContainer":{
+    _filed:'totalContainerQty',
+    type: 'text'
+  },
+  "totalVolumeInContainer":{
+    _filed:'totalContainerVolume',
+    type: 'text'
+  },
+  "totalNetWeightInContainer":{
+    _filed:'totalContainerNetWeight',
+    type: 'text'
+  },
+  "totalQuantityOfOuterCartonsInContainer":{ 
+    _filed:'totalContainerOuterCartonsQty',
+    type: 'text'
+  },
+  "shipmentStatus":{
+    type: 'text'
+  },
   "skuOuterCartonQty": {
     type: 'text'
   },
