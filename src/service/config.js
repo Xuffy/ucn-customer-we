@@ -19,7 +19,7 @@ export default {
       UBIZLOG_URL: '//192.168.51.208:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
-      BACE_CS:'//192.168.51.33:11001',
+      BASE_CS:'//192.168.51.33:11001',
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'

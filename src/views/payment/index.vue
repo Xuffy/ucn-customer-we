@@ -63,7 +63,7 @@
                <page
                 :page-data="pageData"
                 @change="handleSizeChange"
-                :page-sizes="[50,100,200,500]"
+                :page-sizes="[50,100,200]"
                 @size-change="pageSizeChange"></page>
             </div>
         </div>
@@ -186,6 +186,11 @@
                       return val
                     })
 
+                    // let country,orderType,;
+                    // country = _.findWhere(this.options.country, {code: e.country.value}) || {};
+                    // e.country._value = country.name || '';
+                    // return e;
+
                     return item;
                   });
 
@@ -242,7 +247,7 @@
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
-                console.log(res);
+
                 this.$message({
                   type: 'success',
                   message: '催促成功!'
@@ -252,8 +257,9 @@
               });
             },
             setButtons(item){
-                if(_.findWhere(item, {'key': 'waitReceipt'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
-                return [{label: 'urging payment', type: '1', disabled:false},{label: 'detail', type: '2'}];
+              // disabled:true/false   10 付款 20 退款
+                if(_.findWhere(item, {'key': 'type'}).value === 20) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}]
+                 return [{label: 'Detail', type: '2'}];
             },
             handleSizeChange(val) {
                 this.params.ps = val;

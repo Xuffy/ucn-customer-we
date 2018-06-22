@@ -65,4 +65,8 @@ export default {
       key: 'version',
       _hide:true
     },
+    type: {
+      key: 'type',
+      _hide:true
+    },
   }
