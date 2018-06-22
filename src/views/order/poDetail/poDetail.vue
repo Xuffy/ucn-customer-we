@@ -5,7 +5,7 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -1051,6 +1051,10 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
+
+            <div slot="skuPictures" slot-scope="{data}">
+                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+            </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1400,9 +1404,9 @@
              * 获取页面数据
              * */
             getUnit(){
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
@@ -1811,11 +1815,13 @@
             handleProductOk(e){
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
+                console.log()
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                        console.log(item,'item')
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -2593,6 +2599,9 @@
         color:#666666;
         padding: 10px 0;
         margin-top: 20px;
+    }
+    .speCol{
+        height: 47px;
     }
     .speInput{
         width: 80%;
