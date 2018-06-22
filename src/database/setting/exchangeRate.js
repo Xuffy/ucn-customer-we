@@ -16,6 +16,7 @@ export default{
   key: 'price',
     _rules:{
       required:true,
+      type:'Number'
     }
   },
   id:{

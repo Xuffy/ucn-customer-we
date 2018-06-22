@@ -45,8 +45,8 @@ export default {
   get_track_getTrackInfoByPage: ['/track/getTrackInfoByPage', 'UWORKBENCH_URL', 'UWORKBENCH_URL'],
 
   //companyInfo
-  get_purchase_supplier: ['/purchase/supplier/{id}', 'BASE_URL'],
-  post_purchase_customer: ['/purchase/customer', 'BASE_URL'],
+  get_purchase_supplier: ['/purchase/supplier/{id}', 'BASE_CS'],
+  post_purchase_customer: ['/purchase/customer', 'BASE_CS'],
   post_purchase_customer_address_id: ['/purchase/customer/address', 'BASE_URL'],
   post_purchase_customer_address: ['/purchase/customer/address', 'BASE_URL'],
   get_purchase_customer_getCustomer: ['/purchase/customer/getCustomer', 'BASE_URL'],

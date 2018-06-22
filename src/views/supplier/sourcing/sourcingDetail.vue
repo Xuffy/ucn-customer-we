@@ -38,21 +38,21 @@
         <div class="body">
             <el-tabs v-model="tabName" type="card"  @tab-click="handleClick">
                 <el-tab-pane :label="$i.supplier.factoryInfo" name="address">
-                    <v-table  :data="address"  style='marginTop:10px'/>
+                    <v-table  :data="address" :selection="false" style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.accountInfo"  name="accountInfo">
-                    <v-table  :data="accounts"  style='marginTop:10px'/>
+                    <v-table  :data="accounts" :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.contactInfo" >
-                    <v-table  :data="concats"   style='marginTop:10px'/>
+                    <v-table  :data="concats"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.tradeHistory"  name="tradeHistory">
-                  <v-table  :data="orderData"   style='marginTop:10px'/>
+                  <v-table  :data="orderData"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquireHistory">
-                  <v-table  :data="inquireData"   style='marginTop:10px'/>
+                  <v-table  :data="inquireData"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane label="attachment" name="attchment">
+                <el-tab-pane :label="$i.supplier.attachment" name="attchment">
                   <!--<div class="section-btn" style="margin-bottom:10px;">-->
                     <!--<el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>-->
                   <!--</div>-->
@@ -160,6 +160,20 @@
               lookRemarkFormVisible:false,
               isModifyAddress:false,
               formLabelWidth:'80px',
+              currency:[],
+              genderOptions:[{
+                value: '男',
+                label: 'Male',
+                code: 1
+              }, {
+                value: '女',
+                label: 'Female',
+                code: 0
+              }, {
+                value: '未知',
+                label: 'Unknown',
+                code: 2
+              }],
             }
         },
         methods: {
@@ -289,6 +303,14 @@
                         console.log(res)
                     });
             },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             //..................获取数据
            getData() {
                 this.loading = true
@@ -299,9 +321,19 @@
                         this.code = res.code
                         this.attachments = res.attachments
                         this.basicDate = res;
-                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
+                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts,e => {
+                          let currency;
+                          currency = _.findWhere(this.currency, {code: e.currency.value}) || {};
+                          e.currency._value = currency.name || '';
+                          return e;
+                        });
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats);
+                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
+                          let gender;
+                          gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
+                          e.gender._value = gender.label || '';
+                          return e;
+                        });
                         this.loading = false
                     })
                     .catch((res) => {
@@ -314,7 +346,12 @@
               this.orderHistoryData.supplierCompanyId = Number(this.$route.query.companyId);
               this.$ajax.post(this.$apis.post_purchase_supplier_orderHistory, this.orderHistoryData)
                 .then(res => {
-                  this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas);
+                  this.orderData = this.$getDB(this.$db.supplier.sourcingTrade, res.datas, item =>{
+                    _.mapObject(item, val => {
+                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                      return val
+                    })
+                  } );
                   this.loading = false
                 })
                 .catch((res) => {
@@ -482,6 +519,7 @@
             this.companyId = Number(this.$route.query.companyId);
             this.getCompareList();
             this.getCountryAll();
+            this.getCurrency();
         },
 
     }

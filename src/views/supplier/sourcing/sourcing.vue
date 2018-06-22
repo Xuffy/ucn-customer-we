@@ -62,7 +62,7 @@
                     :height=360
                     :loading='loading'
                     :data="tabData"
-                    :buttons="[{label: 'detail', type: 1}]"
+                    :buttons="[{label: 'Detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
                     @filter-value="tableFilterValue"

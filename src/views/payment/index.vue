@@ -63,7 +63,7 @@
                <page
                 :page-data="pageData"
                 @change="handleSizeChange"
-                :page-sizes="[50,100,200,500]"
+                :page-sizes="[50,100,200]"
                 @size-change="pageSizeChange"></page>
             </div>
         </div>
@@ -134,7 +134,8 @@
                 },
                 //底部table数据
                 tableDataList:[],
-                totalRow: []
+                totalRow: [],
+                currency:[]
             }
         },
         watch: {
@@ -171,6 +172,15 @@
                 this.params.ps = val;
                 this.getList();
             },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+                console.log(this.currency)
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             getList(){
               this.tabLoad = true;
               this.$ajax.post(this.$apis.post_ledgerPage, this.params)
@@ -178,20 +188,40 @@
                   this.tabLoad = false;
                   this.searchLoad = false;
                   this.tableDataList = this.$getDB(this.$db.payment.table, res.datas,item=>{
-                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
+                    item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
 
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
                     })
 
+                    switch (item.orderType.value)
+                    {
+                      case 10:
+                       item.orderType._value = 'Purchase order'
+                        break;
+                      case 20:
+                        item.orderType._value = 'QC order'
+                        break;
+                      case 30:
+                        item.orderType._value = 'Logisttic order'
+                        break;
+
+                    }
                     return item;
                   });
 
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
                     item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
                     item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
+                    let currency;
+                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currency.name || '';
+                    console.log(item.currencyCode._value)
                     return item;
                   });
                   this.pageData=res;
@@ -242,7 +272,7 @@
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
-                console.log(res);
+
                 this.$message({
                   type: 'success',
                   message: '催促成功!'
@@ -252,8 +282,9 @@
               });
             },
             setButtons(item){
-                if(_.findWhere(item, {'key': 'waitReceipt'}).value + '' === '0') return [{label: 'urging payment', type: '1',disabled:true},{label: 'detail', type: '2'}]
-                return [{label: 'urging payment', type: '1', disabled:false},{label: 'detail', type: '2'}];
+              // disabled:true/false   10 付款 20 退款
+                if(_.findWhere(item, {'key': 'type'}).value === 20) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}]
+                 return [{label: 'Detail', type: '2'}];
             },
             handleSizeChange(val) {
                 this.params.ps = val;
@@ -262,6 +293,7 @@
         created(){
            this.viewByStatus = '1';
            this.getList();
+           this.getCurrency();
         },
     }
 </script>
