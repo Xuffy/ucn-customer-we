@@ -10,14 +10,14 @@
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
+                                        :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || disabledLcNo || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
                             </div>
                             <div v-else>
                                 <el-input
-                                        :placeholder="v.isQuotationNo?$i.order.pleaseCreate:(isModify?$i.order.pleaseInput:'')"
+                                        :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"></el-input>
@@ -1053,17 +1053,6 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
-            <!--<el-date-picker-->
-                    <!--class="spx"-->
-                    <!--slot="skuDeliveryDates"-->
-                    <!--slot-scope="{data}"-->
-                    <!--v-model="data.value"-->
-                    <!--align="right"-->
-                    <!--type="date"-->
-                    <!--:placeholder="$i.order.pleaseChoose"-->
-                    <!--:picker-options="pickerOptions1">-->
-            <!--</el-date-picker>-->
-
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1088,7 +1077,6 @@
             <div slot="skuAdditionalFour" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
-
         </v-history-modify>
 
         <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1136,6 +1124,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuSaleStatusOption:[],
 
                 /**
                  * Negotiate 插槽变量
@@ -1447,11 +1436,11 @@
 
                 });
 
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1476,6 +1465,8 @@
                             this.orderStatusOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1529,19 +1520,30 @@
                     });
                     this.changePayment(res.payment);
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
                             item.skuLabelPic._image=false;
-                        }else{
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId.value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     this.productTableData=[];
@@ -1712,28 +1714,20 @@
                             arr.push(v);
                         }
                     });
-                    console.log(arr,'arr')
+                    console.log(arr,'arrrrr')
                     this.copyObj=Object.assign({},arr[0]);
-
                     this.$refs.HM.init(arr,[]);
-                    this.$nextTick(()=>{
-                        // console.log(e,'eee')
-                        // if(e.skuLabelPic.value.length>0){
-                        //     this.skuLabelPic=e.skuLabelPic.value;
-                        //     console.log(this.skuLabelPic,'this.skuLabelPic')
-                        // }else{
-                        //     console.log(1111)
-                        //     this.skuLabelPic='';
-                        // }
-                    })
-                }else if(type==='detail'){
+
+                }
+                else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/sourcingDetail',
                         params:{
                             id:e.skuId.value
                         }
                     })
-                }else if(type==='history'){
+                }
+                else if(type==='history'){
                     let param={
                         operatorFilters: [],
                         orderId: this.$route.query.orderId,
@@ -1807,6 +1801,27 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1828,7 +1843,8 @@
                         }
                     })
                 });
-                e[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                e[0].skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                e[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).key;
             },
             dataFilter(data) {
                 let arr = [],
@@ -2113,8 +2129,6 @@
                     //CIF
                 }
             },
-
-
 
             /**
              * 底部按钮事件
@@ -2503,7 +2517,29 @@
             }
         },
         created(){
-            this.getOrderNo();
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                    this.getOrderNo();
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
         },
         mounted(){
             this.setLog({query:{code:'BIZ_ORDER'}});

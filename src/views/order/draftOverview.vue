@@ -3,6 +3,15 @@
         <div class="title">
             {{$i.order.draftOverview}}
         </div>
+        <div style="height: 28px;">
+            <selectSearch
+                    style="width: auto;float: right;"
+                    :options=options
+                    v-model='selectSearch'
+                    @inputEnter="inputEnter">
+            </selectSearch>
+        </div>
+
         <!--form-->
         <v-table
                 ref='vtable'
@@ -15,12 +24,7 @@
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
-                <selectSearch
-                        style="width: auto"
-                        :options=options
-                        v-model='selectSearch'
-                        @inputEnter="inputEnter">
-                </selectSearch>
+
                 <div style="padding: 10px 0">
                     <el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
                     <div class="viewBy">

@@ -2,7 +2,7 @@
   <div class="place-logistic-plan">
     <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList }}</div>
+    <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
     <form-list name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
@@ -23,7 +23,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="containerInfo" :currencyCode="oldPlanObject.currency" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType"/>
+      <container-info :tableData.sync="containerInfo" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer" @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType" :currencyCode="oldPlanObject.currency"/>
     </div>
 
     <!-- <div v-if="planId && feeList"> -->
@@ -44,7 +44,7 @@
       <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
       <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons" @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
-          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
+          <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
@@ -56,7 +56,7 @@
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$i.logistic.addProductFromOrder" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
+    <el-dialog :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeAddProduct(0)">
       <add-product ref="addProduct" :basicInfoArr="basicInfoArr"/> 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
@@ -297,6 +297,12 @@ export default {
         }
       })
     },
+    getSupplierIds(){
+      this.showAddProductDialog = true;
+      this.$nextTick(()=>{
+        this.$refs.addProduct.getSupplierIds();
+      })
+    }, 
     registerRoutes () {
       this.$store.commit('SETDRAFT', {
         name: 'overviewDraft',
@@ -716,6 +722,9 @@ export default {
         this.oldPlanObject.fieldDisplay = null;
       }
       if(this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
+        return;
+      }
+      if(this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.transportInfoObj)){
         return;
       }
       this.$ajax.post(url, obj || this.oldPlanObject).then(res => {

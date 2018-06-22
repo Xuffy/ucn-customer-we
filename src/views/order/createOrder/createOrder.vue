@@ -930,14 +930,13 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuSaleStatusOption:[],
 
                 /**
                  * 页面基础配置
                  * */
                 supplierNo:'',
-                rules:{
-
-                },
+                rules:{},
                 disabledLcNo:true,
                 allowQuery:0,
                 loadingPage:false,
@@ -968,6 +967,8 @@
                 selectProductInfoTable:[],
                 disabledProductLine:[],
                 queryNo:0,
+                category:[],
+                inquiryId:'',           //存储选择的入库单id
 
                 /**
                  * 弹出框data配置
@@ -1007,7 +1008,6 @@
                 orderForm:{
                     supplierCompanyId:'',
                     actDeliveryDt: "",
-                    archive: true,
                     attachments: [],
                     basicFlag:false,     //basicInfo是否修改
                     currency: "",
@@ -1074,7 +1074,6 @@
                     // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
-                    remind: true,
                     responsibilityFlag:false,
                     responsibilityList: [
                         {
@@ -1143,9 +1142,9 @@
             ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
+                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                //     return;
+                // }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1179,19 +1178,18 @@
                         type: 'warning'
                     });
                 }
-
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    console.log(res)
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
-                });
+                console.log(params,'params')
+                // this.disableClickSend=true;
+                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                //     console.log(res)
+                //     this.$router.push('/order/overview');
+                // }).finally(err=>{
+                //     this.disableClickSend=false;
+                // });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1293,7 +1291,7 @@
                     this.getSupplier();
                 }else{
 
-                    // this.orderForm.orderNo='124124125152135';
+                    // this.orderForm.orderNo='1241241245125125152135';
                     // this.getSupplier();
 
                     this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
@@ -1340,13 +1338,16 @@
             getInquiryData(){
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas);
+                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
+                        if(item.id.value===this.inquiryId){
+                            this.$set(item,'_disabled',true)
+                        }
+                    });
                     this.pageData=res;
                 }).finally(err=>{
                     this.loadingTable=false;
                 });
             },
-
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
             },
@@ -1420,22 +1421,30 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-
-                        item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                        item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                        item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                        item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                        item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-
-                        item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-
-                        item.skuSample._value=item.skuSample.value?'yes':'false';
-                        item.skuSample.value=item.skuSample.value?'1':'0';
-
-
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1522,6 +1531,7 @@
                 console.log(1)
             },
             btnClick(e){
+                this.inquiryId=e.id.value;
                 this.quickCreateDialogVisible=false;
                 this.loadingProductTable=true;
                 this.loadingPage=true;
@@ -1824,6 +1834,27 @@
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             item.skuPic._image=false;
+                            item.skuLabelPic._image=false;
+                            item.skuPkgMethodPic._image=false;
+                            item.skuInnerCartonPic._image=false;
+                            item.skuOuterCartonPic._image=false;
+                            item.skuAdditionalOne._image=false;
+                            item.skuAdditionalTwo._image=false;
+                            item.skuAdditionalThree._image=false;
+                            item.skuAdditionalFour._image=false;
+                        }
+                        else{
+                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                            item.skuSample._value=item.skuSample.value?'YES':'NO';
+                            item.skuSample.value=item.skuSample.value?'1':'0';
+                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     _.map(data,v=>{
@@ -1866,7 +1897,7 @@
 
                 });
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.queryNo++;
                     res.forEach(v=>{
                         if(v.code==='ITM'){
@@ -1889,6 +1920,8 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                        }else if(v.code==='SKU_SALE_STATUS'){
+                            this.skuSaleStatusOption=v.codes;
                         }
                     })
                 }).finally(err=>{
@@ -1917,7 +1950,29 @@
             },
         },
         created(){
-            this.getOrderNo();
+            let category=[];
+            this.category=[];
+            this.loadingPage=true;
+            this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                _.map(res,v=>{
+                    category.push(v);
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                    _.map(data,v=>{
+                        category.push(v);
+                    });
+                    this.getOrderNo();
+                    _.map(category,data=>{
+                        _.map(data.children,ele=>{
+                            this.category.push(ele);
+                        })
+                    });
+                }).catch(err=>{
+                    this.loadingPage=false;
+                });
+            }).catch(err=>{
+                this.loadingPage=false;
+            });
         },
         mounted(){
             // this.setLog({query:{code:'BIZ_ORDER'}});
