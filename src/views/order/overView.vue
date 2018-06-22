@@ -168,7 +168,6 @@
                 }
             },
             inputEnter(val) {
-                console.log(val,'val')
                 if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
                 if (val.keyType === 1) {
                     this.params.orderNo = val.key;
