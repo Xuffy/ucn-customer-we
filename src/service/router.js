@@ -751,7 +751,6 @@ router.beforeResolve((to, from, next) => {
     , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
     , version;
 
-
   if (to.path !== '/login' || from.path === '/login') {
     /*version = localStore.get('version');
 

@@ -101,6 +101,8 @@ const json = {
     require(`./${lang}/warehouse/warehouse.inboundDetail`),
     require(`./${lang}/warehouse/warehouse.inboundOverviewTable`),
     require(`./${lang}/warehouse/warehouse.outboundOverview`),
+    require(`./${lang}/warehouse/warehouse.outboundDetail`),
+    require(`./${lang}/warehouse/warehouse.qcOverview`),
   ),
   workbench: _.extend({},
     require(`./${lang}/workbench/page`),
@@ -118,6 +120,9 @@ const json = {
   element: _.extend({},
     require(`./${lang}/element/date`)
   ),
+  upload: _.extend({},
+    require(`./${lang}/upload/message`)
+  )
 }
 
 export default json;

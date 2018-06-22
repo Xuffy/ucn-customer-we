@@ -58,11 +58,11 @@
 
           </div>
 
-          <el-radio-group style="display: inline-block;vertical-align: top"
+          <!--<el-radio-group style="display: inline-block;vertical-align: top"
                           v-model="cItem.sort" size="mini">
             <el-radio-button label="asc">{{$i.table.asc}}</el-radio-button>
             <el-radio-button label="desc">{{$i.table.desc}}</el-radio-button>
-          </el-radio-group>
+          </el-radio-group>-->
 
           <el-button style="margin-left: 10px!important" icon="el-icon-edit-outline" @click="addCompute"></el-button>
           <el-button icon="el-icon-delete" @click="cutCompute(index)"></el-button>

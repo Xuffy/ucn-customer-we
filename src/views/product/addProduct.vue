@@ -41,12 +41,12 @@
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
                             <div v-if="v.showType==='select'">
                                 <div v-if="v.isCountry">
-                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable placeholder="please choose">
+                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable collapse-tags placeholder="please choose">
                                         <el-option
                                                 v-for="item in countryOption"
                                                 :key="item.id"
                                                 :label="item.name"
-                                                :value="item.id">
+                                                :value="item.code">
                                         </el-option>
                                     </el-select>
                                 </div>
@@ -222,7 +222,7 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: null,
+                    country: '',
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
@@ -234,20 +234,9 @@
                     ps: 50,
 
                     recycle: false,         //是否是在recycle bin里请求
-                    operatorFilters: [
-                    //     {
-                    //         operator: "",
-                    //         property: "",
-                    //         value: {}
-                    //     }
-                    ],
+                    operatorFilters: [],
 
-                    sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    ],
+                    sorts: [],
 
                 },
                 //表格验证参数
@@ -309,6 +298,7 @@
                 this.$set(this.productForm,'maxExwPrice',null);
                 this.$set(this.productForm,'minFobPrice',null);
                 this.$set(this.productForm,'maxFobPrice',null);
+                this.selectCountry=[];
             },
 
             //搜查
@@ -334,6 +324,15 @@
                 }else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
+
+                if(this.selectCountry.length>0){
+                    _.map(this.selectCountry,v=>{
+                        this.productForm.country+=(v+',');
+                    });
+                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
+                }
+                console.log(this.productForm.country,'this.productForm.country')
+
                 this.getData();
             },
 

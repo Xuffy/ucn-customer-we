@@ -36,12 +36,12 @@
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="selectCountry">
                                 <el-option
-                                        v-for="item in v.options"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                        v-for="item in countryOption"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.code">
                                 </el-option>
                             </el-select>
                             <div v-if="v.showType==='exwNumber'" class="section-number">
@@ -189,6 +189,7 @@
                 forceUpdateNumber:11,               //改变数值以驱动内部更新
                 disabledOrderList:[],               //不能添加到order的list
                 dialogFormVisible:false,
+                selectCountry:[],
                 //表格字段绑定
                 productForm: {
                     categoryId: null,
@@ -202,7 +203,7 @@
                     minFobPrice: '',
                     maxFobPrice: '',
                     materialEnLike: "",
-                    country: null,
+                    country: '',
                     supplierNameLike: "",
                     outerCartonMethodEnLike: "",
                     methodPkgEnLike: "",
@@ -277,6 +278,7 @@
                 this.$set(this.productForm,'maxExwPrice','');
                 this.$set(this.productForm,'minFobPrice','');
                 this.$set(this.productForm,'maxFobPrice','');
+                this.selectCountry=[];
             },
 
             //搜查
@@ -305,6 +307,14 @@
                 }
 
                 this.loadingTable=true;
+
+                if(this.selectCountry.length>0){
+                    _.map(this.selectCountry,v=>{
+                        this.productForm.country+=(v+',');
+                    });
+                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
+                }
+
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
 
