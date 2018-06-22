@@ -2,9 +2,10 @@ export default {
   updateDt: {
     key: 'updateDt',
     type: 'text',
+    transForm: 'time',
     _disabled: true,
     _title: 'remark',
-    transForm: 'time'
+    _inquiryHide: true
   },
   id: {
     _hide: true
