@@ -486,7 +486,6 @@
             </template>
         </v-table>
 
-
         <div class="summary">
             <div class="second-title">
                 {{$i.order.summary}}
@@ -533,56 +532,56 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalGrossWeight">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalGrossWeight"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalNetWeight">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalNetWeight"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalVolume">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalVolume"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.paidAmount">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.paidAmount"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.unpaidAmount">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.unpaidAmount"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalGrossWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalGrossWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalNetWeight">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalNetWeight"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.totalVolume">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.totalVolume"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.paidAmount">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.paidAmount"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
+                        <!--<el-form-item :label="$i.order.unpaidAmount">-->
+                            <!--<el-input-->
+                                    <!--class="summaryInput"-->
+                                    <!--size="mini"-->
+                                    <!--v-model="orderForm.unpaidAmount"-->
+                                    <!--:disabled="true">-->
+                            <!--</el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -1123,6 +1122,7 @@
                 countryOption:[],
                 quarantineTypeOption:[],
                 skuStatusOption:[],
+                skuStatusTotalOption:[],
                 skuSaleStatusOption:[],
 
                 /**
@@ -1400,9 +1400,9 @@
              * 获取页面数据
              * */
             getUnit(){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                });
                 //获取币种
                 this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
                     this.currencyOption=res;
@@ -1435,9 +1435,39 @@
 
                 });
 
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
+                this.skuStatusTotalOption=[
+                    {
+                        code:'1',
+                        name:'TBCBYSUPPLIER'
+                    },
+                    {
+                        code:'2',
+                        name:'TBCBYCUSTOMER'
+                    },
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'4',
+                        name:'FINISHED'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+                this.skuStatusOption=[
+                    {
+                        code:'3',
+                        name:'PROCESS'
+                    },
+                    {
+                        code:'5',
+                        name:'CANCLED'
+                    },
+                ];
+
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
@@ -1499,20 +1529,6 @@
                     orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
-                    if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
-                        this.skuStatusOption=[
-                            {
-                                code:'1',
-                                name:'Process'
-                            },
-                            {
-                                code:'0',
-                                name:'Cancel'
-                            }
-                        ];
-                    }else{
-                        this.skuStatusOption=[];
-                    }
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1522,7 +1538,7 @@
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPic._image=false;
+                            item.skuPictures._image=false;
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1540,10 +1556,12 @@
                             item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
                             item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
                             item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
+                            item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     this.productTableData=[];
@@ -1818,7 +1836,9 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            if(item.skuCategoryId.value){
+                                item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            }
                         }
                     });
                     _.map(data,v=>{
@@ -1878,7 +1898,7 @@
                                         json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuStatus'){
-                                        json[k]=_.findWhere(this.skuStatusOption,{name:item[k]._value}).code;
+                                        json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;

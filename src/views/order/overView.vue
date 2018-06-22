@@ -256,8 +256,14 @@
                             if(e.status){
                                 e.status.value=this.$change(this.orderStatusOption,'status',e).name;
                             }
+                            if(e.skuStatus){
+                                e.skuStatus.value=this.$change(this.orderStatusOption,'skuStatus',e).name;
+                            }
+                            if(e.skuIncoterm){
+                                e.skuIncoterm.value=this.$change(this.incotermOption,'skuIncoterm',e).name;
+                            }
                             if(e.incoterm){
-                                e.incoterm.value=this.$change(this.incotermOption,'incoterm',e).name;
+
                             }
                             if(e.payment){
                                 e.payment.value=this.$change(this.paymentOption,'payment',e).name;
