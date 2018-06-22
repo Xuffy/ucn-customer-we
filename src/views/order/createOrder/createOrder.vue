@@ -1289,7 +1289,7 @@
                     this.getSupplier();
                 }else{
 
-                    // this.orderForm.orderNo='124124125152135';
+                    // this.orderForm.orderNo='1241241245125125152135';
                     // this.getSupplier();
 
                     this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{

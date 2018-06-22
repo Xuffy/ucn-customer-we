@@ -36,7 +36,7 @@
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]">
+                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="selectCountry">
                                 <el-option
                                         v-for="item in countryOption"
                                         :key="item.id"
@@ -189,6 +189,7 @@
                 forceUpdateNumber:11,               //改变数值以驱动内部更新
                 disabledOrderList:[],               //不能添加到order的list
                 dialogFormVisible:false,
+                selectCountry:[],
                 //表格字段绑定
                 productForm: {
                     categoryId: null,
@@ -277,6 +278,7 @@
                 this.$set(this.productForm,'maxExwPrice','');
                 this.$set(this.productForm,'minFobPrice','');
                 this.$set(this.productForm,'maxFobPrice','');
+                this.selectCountry=[];
             },
 
             //搜查
@@ -305,6 +307,10 @@
                 }
 
                 this.loadingTable=true;
+
+                console.log(this.selectCountry,'selectCountry')
+                console.log(this.productForm,'this.productForm')
+
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
 
