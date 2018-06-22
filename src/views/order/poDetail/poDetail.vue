@@ -31,8 +31,7 @@
                                     :placeholder="isModify?$i.order.pleaseChoose:''"
                                     class="speInput"
                                     align="right"
-                                    type="date"
-                                    :picker-options="pickerOptions1">
+                                    type="date">
                             </el-date-picker>
                         </div>
                         <div v-else-if="v.type==='select'">
@@ -784,7 +783,7 @@
             </el-select>
             <el-select
                     slot="skuSample"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -792,7 +791,7 @@
                         v-for="item in isNeedSampleOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1436,9 +1435,9 @@
 
                 });
 
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res)
-                });
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res)
+                // });
 
                 this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','ORDER_STATUS','SKU_SALE_STATUS'],{cache:true}).then(res=>{
                     this.allowQuery++;
@@ -1497,6 +1496,7 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
+                    orderNo:this.$route.query.orderNo
                 }).then(res=>{
                     this.orderForm=res;
                     if(this.orderForm.status==='2' || this.orderForm.status==='3' || this.orderForm.status==='5'){
@@ -1543,14 +1543,13 @@
                             item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
                             item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                             item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                            item.skuCategoryId.value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                            item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                         }
                     });
                     this.productTableData=[];
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-
                     this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
@@ -1572,7 +1571,6 @@
                     if(res.supplierUserId){
                         this.allowHandlePay=true;
                     }
-
                     /**
                      * 获取payment数据
                      * */
@@ -1609,7 +1607,6 @@
                         params.supplierCompanyId=v.companyId;
                     }
                 });
-
                 params.skuList=this.dataFilter(this.productTableData);
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
@@ -1654,7 +1651,7 @@
 
             //获取订单号(先手动生成一个)
             getOrderNo(){
-                this.orderForm.orderNo=this.$route.query.orderId;
+                // this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
 
@@ -1836,6 +1833,7 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1884,6 +1882,8 @@
                                     }
                                     else if(item[k].key==='skuSample'){
                                         json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    }else{
+                                        json[k] = item[k].value;
                                     }
                                 }else{
                                     json[k] = item[k].value;
