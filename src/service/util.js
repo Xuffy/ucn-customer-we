@@ -328,7 +328,10 @@ export default {
           val.value = val.value ? 1 : 0;
         }
         val.originValue = val.value;
-        if (val[transForm] && !data._remark && ['fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay'].indexOf(k) < 0) {
+
+        if (val[transForm] && !data._remark &&
+          typeof val.value !== 'undefined' && val.value !== null &&
+          ['fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay'].indexOf(k) < 0) {
           switch (val[transForm]) {
             case 'time':
               val._value = dateFormat(val.value, val.time || 'yyyy-mm-dd HH:MM');

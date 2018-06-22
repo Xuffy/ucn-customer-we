@@ -269,7 +269,7 @@ export default {
     getInquiryInfo(id) {
       this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id}).then(res => {
         res.exportLicense = res.exportLicense ? 1 : 0;
-        if (res.suppliers && res.suppliers.length && _.isObject(res.suppliers)) {
+        if (Array.isArray(res.suppliers)) {
           res.suppliers.forEach(items => {
             _.mapObject(items, (val, k) => {
               if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
@@ -277,6 +277,13 @@ export default {
           });
         } else {
           res.suppliers = [];
+          if (res.supplierId) {
+            res.suppliers.push({
+              id: res.supplierId,
+              name: res.supplierName,
+              type: res.supplierType
+            });
+          }
         }
         if (!this.showInquiryNo) {
           delete res.id;
@@ -285,6 +292,14 @@ export default {
           delete res.companyId;
           delete res.inquiryNo;
           delete res.quotationNo;
+          delete res.status;
+        }
+        if (res.details) {
+          for (let item of res.details) {
+            item.entryDt = null;
+            item.updateDt = null;
+            item.updateName = null;
+          }
         }
         this.fromArg = res;
         this.tabData = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res.details, 'skuId'), item => {
