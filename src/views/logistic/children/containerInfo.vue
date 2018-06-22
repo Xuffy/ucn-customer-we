@@ -62,8 +62,8 @@
         </el-table-column>
         <el-table-column :label="$i.logistic.totalSkuPriceInContainer" width="200" prop="totalContainerSkuPrice" align="center">
           <template slot-scope="scope">
-            <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input>
-            <span v-else>{{ scope.row.totalContainerSkuPrice }}</span>
+            <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerSkuPrice" v-if="edit"></el-input> -->
+            <span>{{ scope.row.totalContainerSkuPrice }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.exchangeCurrency" width="180" align="center">

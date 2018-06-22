@@ -1,6 +1,6 @@
 <template>
   <div class="payment">
-    <el-button type="primary" size="mini" @click.stop="$emit('addPayment')">{{ $i.logistic.applyForPayment }}</el-button>
+    <el-button type="primary" :disabled="addPaymentBtn" size="mini" @click.stop="$emit('addPayment');addPaymentBtn=true;">{{ $i.logistic.applyForPayment }}</el-button>
     <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
       <el-table-column type="index" width="50" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
@@ -75,7 +75,7 @@
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
           </div> -->
           <div v-if="scope.row.status === -1">
-            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment)">{{ $i.logistic.recover }}</el-button>
+            <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment,$i.logistic.recover)">{{ $i.logistic.recover}}</el-button>
           </div>
           <div v-if="scope.row.status === 20 || scope.row.status === 40">
             <div v-if="scope.row.edit">
@@ -84,7 +84,7 @@
             </div>
             <div v-else>
               <el-button size="mini" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
-              <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment)">{{ $i.logistic.invalid }}</el-button>
+              <el-button size="mini" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment,$i.logistic.invalid)">{{ $i.logistic.invalid }}</el-button>
             </div>
           </div>
         </template>
@@ -119,6 +119,7 @@ export default {
   data () {
     return {
       copyPaymentObj: {},
+      addPaymentBtn:false,
       paymentDec: [
         {
           code: -1,
@@ -250,12 +251,20 @@ export default {
       this.$emit('updatePaymentWithView', { i, edit: true })
     },
     cancelPaymentModify (i) {
+      this.addPaymentBtn =false;
       if (!this.tableData[i].id) return this.tableData.splice(i, 1)
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
-    switchStatus (i, url) {
-      this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status,orderNo }) => {
-        this.$emit('updatePaymentWithView', { i, edit: false, status,res:{'orderNo':orderNo}})
+    switchStatus (i, url,title) {
+      this.$confirm('此操作将'+title+'该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.addPaymentBtn = false;
+        this.$ajax.post(`${url}/${this.tableData[i].id}?version=${this.tableData[i].version}`).then(({ status,orderNo }) => {
+          this.$emit('updatePaymentWithView', { i, edit: false, status,res:{'orderNo':orderNo},title})
+        })
       })
     },
   },
@@ -265,9 +274,6 @@ export default {
 <style scoped lang="less">
   .payment/deep/.el-table .warning-row {
     background: #f56c6c;
-    td,th{
-      color:#fff;
-    }
     &:hover{
       td,th{
         color:#1d1007;

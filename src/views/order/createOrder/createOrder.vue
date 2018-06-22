@@ -447,6 +447,7 @@
                 </el-tab-pane>
                 <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
                     <v-product
+                            :disablePostCustomerBookmark="true"
                             :disablePostCustomerCreate="true"
                             :disabledLine="disabledProductLine"
                             :forceUpdateNumber="updateBookmark"
@@ -1204,27 +1205,27 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                let rightCode=true;
-                _.map(params.skuList,v=>{
-                    if(v.skuSample==='1'){
-                        v.skuSample=true;
-                    }else if(v.skuSample==='0'){
-                        v.skuSample=false;
-                    }
-                    if(v.skuSupplierCode!==params.supplierCode){
-                        rightCode=false;
-                    }
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
-                    }
-                });
-                //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
-                    });
-                }
+                // let rightCode=true;
+                // _.map(params.skuList,v=>{
+                //     if(v.skuSample==='1'){
+                //         v.skuSample=true;
+                //     }else if(v.skuSample==='0'){
+                //         v.skuSample=false;
+                //     }
+                //     if(v.skuSupplierCode!==params.supplierCode){
+                //         rightCode=false;
+                //     }
+                //     if(_.isArray(v.skuLabelPic)){
+                //         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                //     }
+                // });
+                // //如果选的产品和上面选的供应商不一致，要给出提示
+                // if(!rightCode){
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: 'warning'
+                //     });
+                // }
                 params.attachments=this.$refs.upload[0].getFiles();
                 params.draftCustomer=true;
                 this.disableClickSaveDraft=true;
