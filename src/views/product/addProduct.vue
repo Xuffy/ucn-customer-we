@@ -172,7 +172,11 @@
             disablePostCustomerCreate:{
                 type:Boolean,
                 default:false
-            }
+            },
+            disablePostCustomerBookmark:{
+                type:Boolean,
+                default:false
+            },
         },
         data(){
             return{
@@ -358,7 +362,6 @@
                         }
                     });
                 }else if(this.type==='bookmark'){
-                    console.log(arr,'?????')
                     if(this.disablePostCustomerCreate){
                         arr.forEach(v=>{
                             if(v._checked && !v._disabled && !v.customerCreate.value){
@@ -373,6 +376,21 @@
                         });
                     }
                 }
+                if(this.disablePostCustomerBookmark){
+                    let allow=true;
+                    _.map(arr,v=>{
+                        if(v.customerCreate.value){
+                            allow=false;
+                        }
+                    });
+                    if(!allow){
+                        return this.$message({
+                            message: this.$i.product.cantAddCustomerProduct,
+                            type: 'warning'
+                        });
+                    }
+                }
+
 
                 this.$emit('handleOK',newArr);
             },
