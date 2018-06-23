@@ -122,9 +122,6 @@
               this.settingState = res;
             }
           })
-          .catch((err) => {
-            console.log(err)
-          })
           .finally(() => this.settingStateLoading = false);
       }
     }

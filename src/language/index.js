@@ -123,6 +123,9 @@ const json = {
   ),
   upload: _.extend({},
     require(`./${lang}/upload/message`)
+  ),
+  util: _.extend({},
+    require(`./${lang}/util/index`)
   )
 }
 
