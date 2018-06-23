@@ -235,7 +235,7 @@ export default {
     getSuppliers(name) {
       return this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME + '?name=' + name).then(res => {
         this.optionData.supplierName = res;
-        return Promise.resolve(res);
+        return res;
       });
     },
     initFromParams(res) {
@@ -276,15 +276,8 @@ export default {
               if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
             });
           });
-        } else {
-          res.suppliers = [];
-          if (res.supplierId) {
-            res.suppliers.push({
-              id: res.supplierId,
-              name: res.supplierName,
-              type: res.supplierType
-            });
-          }
+        } else if (res.supplierId) {
+          res.suppliers = this.optionData.supplierName.filter(c => c.id === res.supplierId);
         }
         if (!this.showInquiryNo) {
           delete res.id;
