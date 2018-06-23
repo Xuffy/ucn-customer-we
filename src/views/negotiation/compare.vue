@@ -13,16 +13,16 @@
                 <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
                 <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
-                <el-checkbox-group v-model="ChildrenCheckList" size="mini">
-                    <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
-                    <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-                </el-checkbox-group>
+                <div style="margin-left: 20px;">
+                  <el-checkbox v-model="hideSame" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
+                  <el-checkbox v-model="highLight" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
+                </div>
             </div>
             <div>
                 <span>{{ $i.common.compareBy }}&nbsp;</span>
-                <el-radio-group v-model="compareBy"  size="mini">
-                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
+                <el-radio-group v-model="compareBy" @change="upData" size="mini">
+                    <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -62,18 +62,16 @@ export default {
   name: 'compareOverview',
   data() {
     return {
+      dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
       pageTotal: 0,
       addNew: false,
       compareName: '',
       tabLoad: false,
       tabData: [],
-      options: [{
-        label: 'wwww.baidu.com',
-        id: '1'
-      }],
       Filed: '',
-      compareBy: '',
-      ChildrenCheckList: '',
+      compareBy: 0,
+      hideSame: false,
+      highLight: false,
       checkedArg: [],
       compareType: '',
       params: {
@@ -92,13 +90,13 @@ export default {
     dropDownSingle
   },
   created() {
-    this.compareBy = 0;
     if (this.$route.query.ids) {
       this.params.ids = this.$route.query.ids.split(',');
     } else if (this.$route.query.id) {
       this.params.id = this.$route.query.id;
     }
     this.compareType = this.$route.params.type ? this.compareType = this.$route.params.type : '';
+    this.getDirData().then(this.upData);
     // this.setRecycleBin({
     //   name: 'negotiationRecycleBin',
     //   params: {
@@ -108,11 +106,8 @@ export default {
     // });
   },
   watch: {
-    compareBy() {
-      this.upData();
-    },
     params: {
-      handler(val) {
+      handler() {
         this.upData();
       },
       deep: true
@@ -123,9 +118,6 @@ export default {
       'setRecycleBin',
       'setDic'
     ]),
-    compareByChange(str) {
-      this.compareBy = str;
-    },
     upData() {
       if (this.$route.query.ids) {
         this.getNewList();
@@ -177,7 +169,8 @@ export default {
           .then(res => {
             if (this.$route.params.type === 'only') {
               this.upData();
-              return this.compareType = 'only';
+              this.compareType = 'only';
+              return;
             }
             this.$router.push({
               name: 'negotiationCompareDetail',
@@ -206,10 +199,13 @@ export default {
         }
       });
     },
+    getDirData() {
+      return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(res));
+    },
     getCompareList() {
       let url, column;
       this.tabLoad = true;
-      if (this.compareBy + '' === '0') {
+      if (!this.compareBy) {
         url = this.$apis.POST_INQUIRY_COMPARE;
         column = this.$db.inquiry.viewByInqury;
       } else {
@@ -217,56 +213,35 @@ export default {
         column = this.$db.inquiry.viewBySKU;
       }
 
-      this.$ajax.post(url, this.params)
-        .then(res => {
-          this.pageTotal = res.tc;
-          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-            .then(data => {
-              this.setDic(data);
-              this.tabData = this.$getDB(column, res.datas, (item) => {
-                this.$filterDic(item);
-              });
-              this.compareName = res.appendant ? res.appendant.compareName : this.compareName;
-              this.tabLoad = false;
-            });
-        });
+      this.$ajax.post(url, this.params).then(res => {
+        this.pageTotal = res.tc;
+        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.compareName = res.appendant ? res.appendant.compareName : this.compareName;
+        this.tabLoad = false;
+      });
     },
     getNewList() {
       let url, column;
       this.tabLoad = true;
-      if (this.compareBy + '' === '0') {
+      if (!this.compareBy) {
         url = this.$apis.POST_INQIIRY_LIST;
         column = this.$db.inquiry.viewByInqury;
       } else {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, this.params)
-        .then(res => {
-          this.pageTotal = res.tc;
-          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-            .then(data => {
-              this.setDic(data);
-              this.tabData = this.$getDB(column, res.datas, (item) => {
-                this.$filterDic(item);
-              });
-              this.tabLoad = false;
-              this.searchLoad = false;
-            });
-        })
-        ['catch'](() => {
-          this.searchLoad = false;
-          this.tabLoad = false;
-        });
+      this.$ajax.post(url, this.params).then(res => {
+        this.pageTotal = res.tc;
+        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.tabLoad = false;
+        this.searchLoad = false;
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
     },
     changeChecked(item) {
-      let arr = [];
-      item.forEach(item => {
-        if (!item._disabled) {
-          this.compareBy + '' === '0' ? arr.push(_.findWhere(item, {'key': 'id'})) : arr.push(_.findWhere(item, {'key': 'inquiryId'}));
-        }
-      });
-      this.checkedArg = arr;
+      this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
     addNewCopare() {
       this.addNew = true;
@@ -280,19 +255,12 @@ export default {
           cancelButtonText: this.$i.common.cancel,
           type: 'warning'
         }).then(() => {
-          this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id])
-            .then(res => {
-              this.$router.push('/negotiation/compare');
-            });
+          this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id]).then(res => {
+            this.$router.push('/negotiation/compare');
+          });
         });
       } else {
-        let arr = [];
-        _.map(this.tabData, (items, index) => {
-          if (items._checked) {
-            arr.push(items);
-          }
-        });
-        this.tabData = _.difference(this.tabData, arr);
+        this.tabData = this.tabData.filter(i => !i._checked);
         this.checkedArg = [];
       }
     },
