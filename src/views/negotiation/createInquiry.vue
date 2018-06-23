@@ -17,7 +17,8 @@
               :label="item.label"
               :prop="item.key"
               :rules="item.rules"
-              :label-width="item.width || '150px'">
+              :label-width="item.width || '150px'"
+              :required="item._rules?item._rules.required:false">
               <el-input
                 v-model="fromArg[item.key]"
                 :size="item.size || 'mini'"
@@ -380,6 +381,21 @@ export default {
       upData.details = this.dataFilter(this.tabData);
       upData.skuQty = upData.details.length;
       upData.attachment = files && files.length > 0 ? files.join(',') : null;
+
+      let postData = this.$filterModify(upData);
+
+      if (typeof postData.incoterm === 'undefined' || postData.incoterm === null) {
+        this.$message.warning(this.$i.inquiry.incotermRequired);
+        return;
+      }
+      if (!postData.suppliers || postData.suppliers.length === 0) {
+        this.$message.warning(this.$i.inquiry.supplierRequired);
+        return;
+      }
+      if (!postData.details || postData.details.length === 0) {
+        this.$message.warning(this.$i.inquiry.skuRequired);
+        return;
+      }
 
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
         if (!this.fromArg.draft) {
