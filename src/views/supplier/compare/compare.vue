@@ -16,14 +16,14 @@
         </div>
         <div class="btns">
             <span v-if="$route.params.type==='new'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
+                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+                <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
 
@@ -31,8 +31,8 @@
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
             </span>
            <span v-if="$route.params.type==='read'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
+                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
                 <el-button  @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
                 <!--<el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>-->
             </span>
@@ -45,7 +45,7 @@
         <v-table
           code="udata_pruchase_supplier_compare_detail_overview"
           :data="tableDataList"
-          :buttons="[{label: 'detail', type: 1}]"
+          :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
           @change-checked="changeChecked"
           @filter-value="tableFilterValue"></v-table>
@@ -131,7 +131,9 @@
                   recycle: false,
                   operatorFilters:[],
                   sorts:[]
-                }
+                },
+                selectedData:[],
+                selectNumber: [],
             }
         },
         methods:{
@@ -233,8 +235,14 @@
                 })
             },
 
-            changeChecked(e){
-                this.selectList=e;
+            changeChecked(item){
+              this.selectList=item;
+              this.selectedData = item
+              let number = []
+              this.selectedData.forEach(item => {
+                number.push(item.id.value);
+              });
+              this.selectNumber = number
             },
 
             //编辑单子
@@ -274,17 +282,15 @@
             },
             //勾选的商品创建order
             createOrder(){
-              let supplierList=[];
-              _.map(this.selectList,v=>{
-                supplierList.push(v.code.value);
-              });
-              if(_.uniq(supplierList).length>1){
-                return this.$message({
-                  message: '不能增加不同的供应商产品',
-                  type: 'warning'
+              console.log(this.selectedData)
+              if(_.uniq(this.selectNumber).length>1){
+                this.$message({
+                  message: '供应商只能单选!',
+                  type: 'warning',
                 });
+                return false;
               }else{
-                if(this.selectList.length===0){
+                if(this.selectNumber.length===0){
                   this.$windowOpen({
                     url:'/order/create',
                   })
@@ -293,7 +299,7 @@
                     url:'/order/create',
                     params:{
                       type:'supplier',
-                      supplierCode:this.selectList[0].code.value
+                      supplierCode:this.selectedData[0].code.value
                     },
                   })
                 }
@@ -552,6 +558,13 @@
         left: 0;
         bottom: 0;
         width: 100%;
+    }
+    .disabledBtn{
+      color: #c0c4cc;
+      cursor: not-allowed;
+      background-image: none;
+      background-color: #fff;
+      border-color: #ebeef5;
     }
 
 </style>

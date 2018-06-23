@@ -10,7 +10,7 @@
                   <el-col :xs="24" :sm="12" :md="8" :lg="8"
                           v-for='(v,index) in $db.supplier.overview'
                           :key="index+'j'">
-                    <el-form-item class="speWidth" :prop="v.key"  :label="v.label">
+                    <el-form-item class="speWidth" :prop="v.key"  :label="v.label  + ':'">
                       <div v-if="v.type==='input'">
                         <el-input
                           size="mini"
@@ -61,7 +61,7 @@
                 code="udata_pruchase_supplier_bookmark_overview"
                 :height=360
                 :data="tabData"
-                :buttons="[{label: 'detail', type: 1}]"
+                :buttons="[{label: 'Detail', type: 1}]"
                 @action="detail"
                 @change-checked='checked'
                 :loading='loading'

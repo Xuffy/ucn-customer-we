@@ -64,7 +64,7 @@
       </div>
     </el-dialog>
     <messageBoard v-if="!isCopy&&planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -598,6 +598,10 @@ export default {
           break;
         case 'DeliveredEdit':
             this.deliveredEdit = true;
+            // this.pageName = 'planDetail';
+          break;
+        case 'DeliveredEditExit':
+            this.deliveredEdit = false;
             // this.pageName = 'planDetail';
           break;
         case 'confirm':

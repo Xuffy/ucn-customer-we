@@ -5,12 +5,7 @@
     <el-row :gutter="10">
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
-          <el-form-item v-if="!DeliveredEdit&&a.key=='actDepartureDate'" :label="a.label+'：'">
-            <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
-          </el-form-item>
-          <el-form-item v-if="DeliveredEdit&&a.key=='actDepartureDate'&&a.type === 'date'" :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" prop="value">
-              <el-date-picker v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" align="right" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="selectChange(a.value,a.key)"/>
-          </el-form-item>
+
           <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
