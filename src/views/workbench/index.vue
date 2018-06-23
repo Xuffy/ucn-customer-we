@@ -114,7 +114,7 @@
       // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
       getBasicInfo() {
         this.settingStateLoading = true;
-        this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE}, {cache: true})
+        this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
           .then(res => {
             if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo || !res.personalInfo) {
               this.settingStateShow = true;
