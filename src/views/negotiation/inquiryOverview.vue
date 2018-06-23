@@ -31,9 +31,9 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus"  size="mini">
-                    <el-radio-button label="0">{{$i.common.inquiry}}</el-radio-button>
-                    <el-radio-button label="1" >{{$i.common.SKU}}</el-radio-button>
+                <el-radio-group v-model="viewByStatus" @change="gettabData"  size="mini">
+                    <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
+                    <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
@@ -68,32 +68,33 @@ export default {
       pazeSize: [30, 40, 50, 100],
       searchLoad: false,
       options: [{
-        id: 'INQUIRY_NO',
-        label: '询价单号'
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
       }, {
-        id: 'QUOTATION_NO',
-        label: '询价单号（供应商自有）'
+        id: 'inquiryNo',
+        label: this.$i.inquiry.InquiryNo,
+        operator: 'like'
       }, {
-        id: 'SUPPLIER_NAME',
-        label: '供应商名称'
+        id: 'quotationNo',
+        label: this.$i.inquiry.quotationNo,
+        operator: 'like'
       }, {
-        id: 'SUPPLIER_TYPE',
-        label: '供应商类型'
-      }, {
-        id: 'PAYMENT_METHOD',
-        label: '支付方式'
+        id: 'updateDt',
+        label: this.$i.inquiry.updateDt,
+        type: 'dateRange',
+        operator: 'between'
       }],
       tabData: [],
-      viewByStatus: '',
+      viewByStatus: 0,
       params: {
         status: 22,
-        keyType: '',
-        key: '',
         ps: 50,
         pn: 1,
         tc: 0,
         draft: 0,
-        recycleCustomer: false
+        recycleCustomer: false,
+        operatorFilters: []
         // recycleSupplier
       },
       tabLoad: false
@@ -105,14 +106,11 @@ export default {
     'v-pagination': VPagination
   },
   created() {
-    this.viewByStatus = 0;
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.gettabData();
   },
   watch: {
-    viewByStatus() {
-      this.gettabData();
-    },
     params: {
       handler(val, oldVal) {
         this.gettabData();
@@ -128,20 +126,18 @@ export default {
       'setDic'
     ]),
     inputEnter(val) {
-      if (!val.keyType) {
-        return this.$message(this.$i.common.pleaseSelectTheSearchType);
+      if (!val.id || !val.value) {
+        this.params.operatorFilters = [];
+      } else {
+        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
+        this.params.operatorFilters = [{property: val.id, value, operator: val.operator}];
       }
-      if (!val.key) {
-        return this.$message(this.$i.common.canTBeEmpty);
-      }
-      this.params.keyType = val.keyType;
-      this.params.key = val.key;
       this.searchLoad = true;
     },
     gettabData() {
       let url, column;
       this.tabLoad = true;
-      if (this.viewByStatus + '' === '0') {
+      if (this.viewByStatus === 0) {
         url = this.$apis.POST_INQIIRY_LIST;
         column = this.$db.inquiry.viewByInqury;
       } else {
