@@ -81,10 +81,12 @@ export default {
     type: 'text'
   },
   "unitExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalExportPrice": {
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "currency": {
     type: 'text'
@@ -96,22 +98,31 @@ export default {
     type: 'text'
   },
   "totalQuantityInContainer":{
+    key:'totalContainerQty',
     _filed:'totalContainerQty',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalVolumeInContainer":{
+    key:'totalContainerVolume',
     _filed:'totalContainerVolume',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalNetWeightInContainer":{
+    key:'totalContainerNetWeight',
     _filed:'totalContainerNetWeight',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "totalQuantityOfOuterCartonsInContainer":{ 
+    key:'totalContainerOuterCartonsQty',
     _filed:'totalContainerOuterCartonsQty',
-    type: 'text'
+    type: 'text',
+    _important:true
   },
   "shipmentStatus":{
+    _hide: true,
     type: 'text'
   },
   "skuOuterCartonQty": {

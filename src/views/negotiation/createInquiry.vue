@@ -17,7 +17,8 @@
               :label="item.label"
               :prop="item.key"
               :rules="item.rules"
-              :label-width="item.width || '150px'">
+              :label-width="item.width || '150px'"
+              :required="item._rules?item._rules.required:false">
               <el-input
                 v-model="fromArg[item.key]"
                 :size="item.size || 'mini'"
@@ -234,7 +235,7 @@ export default {
     getSuppliers(name) {
       return this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LISTSUPPLIERBYNAME + '?name=' + name).then(res => {
         this.optionData.supplierName = res;
-        return Promise.resolve(res);
+        return res;
       });
     },
     initFromParams(res) {
@@ -275,15 +276,8 @@ export default {
               if (/^supplier/.test(k)) items[k.substring(8, k.length).toLowerCase()] = val;
             });
           });
-        } else {
-          res.suppliers = [];
-          if (res.supplierId) {
-            res.suppliers.push({
-              id: res.supplierId,
-              name: res.supplierName,
-              type: res.supplierType
-            });
-          }
+        } else if (res.supplierId) {
+          res.suppliers = this.optionData.supplierName.filter(c => c.id === res.supplierId);
         }
         if (!this.showInquiryNo) {
           delete res.id;
@@ -380,6 +374,21 @@ export default {
       upData.details = this.dataFilter(this.tabData);
       upData.skuQty = upData.details.length;
       upData.attachment = files && files.length > 0 ? files.join(',') : null;
+
+      let postData = this.$filterModify(upData);
+
+      if (typeof postData.incoterm === 'undefined' || postData.incoterm === null) {
+        this.$message.warning(this.$i.inquiry.incotermRequired);
+        return;
+      }
+      if (!postData.suppliers || postData.suppliers.length === 0) {
+        this.$message.warning(this.$i.inquiry.supplierRequired);
+        return;
+      }
+      if (!postData.details || postData.details.length === 0) {
+        this.$message.warning(this.$i.inquiry.skuRequired);
+        return;
+      }
 
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
         if (!this.fromArg.draft) {

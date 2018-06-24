@@ -3,7 +3,7 @@
     <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
     <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
-    <form-list name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
+    <form-list :DeliveredEdit="deliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
@@ -18,8 +18,8 @@
       </div>
       <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
     </el-row>
-    <form-list :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
-    <form-list name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
+    <form-list :DeliveredEdit="deliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"/>
+    <form-list :DeliveredEdit="deliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun" :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle"/>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -50,7 +50,7 @@
       </v-table>
     </div>
     <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false" @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
+      <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun" :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus"/>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
@@ -64,7 +64,7 @@
       </div>
     </el-dialog>
     <messageBoard v-if="!isCopy&&planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -86,6 +86,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      deliveredEdit:false,
       negotiate:'',
       fieldDisplay:{},
       hightLightObj:{},
@@ -190,6 +191,7 @@ export default {
   computed: {
     productListTotal(){
       let obj = {};
+      if(this.productList.length<=0){return}
       this.productList.forEach((item,i)=>{
         _.mapObject(item,(v,k)=>{
           if(v._important){
@@ -372,6 +374,10 @@ export default {
       })
       this.feeList = feeListb ? [res.fee] : null;
       this.sendfee = feeListb ? res.fee : null;
+      res.product = res.product.map((item,i)=>{
+        item.vId = i;
+        return item;
+      });
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
       this.productList.forEach((item)=>{
         if(item.fieldDisplay.value){
@@ -498,6 +504,7 @@ export default {
       }
       this.$ajax.post(url, paymentData).then(res => {
         this.paymentList[i] = res
+        this.$refs.payment.addPaymentBtn = false;
         this.updatePaymentWithView({i, edit: false,res})
       })
     },
@@ -519,7 +526,6 @@ export default {
       selectArrData.forEach(a => {
         let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
         sliceStr = sliceStr.slice(0,1)+sliceStr.slice(1-sliceStr.length).toLowerCase();
-        a.argID = this.$depthClone(a.id);
         a.id = null
         a.vId = +new Date()
         a.blSkuName = ''
@@ -530,19 +536,17 @@ export default {
         a.reportElement = ''
         a.factorySkuCode = ''
         a.unitExportPrice = a['sku'+sliceStr+'Price']
-        a.totalExportPrice = '';
+        a.totalExportPrice = a.skuPrice || 0;
         a.currency = a['sku'+sliceStr+'Currency'];
         a.containerNo = '';
         a.containerType = '';
-        a.totalQuantityInContainer = '';
-        a.totalVolumeInContainer = '';
-        a.totalNetWeightInContainer = '';
-        a.totalQuantityOfOuterCartonsInContainer = '';
+        a.totalContainerQty = '';
+        a.totalContainerVolume = '';
+        a.totalContainerNetWeight = '';
+        a.totalContainerOuterCartonsQty = '';
         a.shipmentStatus = '';
         !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
       })
-      console.log(selectArrData,'this.selectArrData')
-      console.log(this.productList,'this.productList')
       this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
       // console.log(selectArrData)
       // TODO
@@ -554,7 +558,7 @@ export default {
     removeProduct () {
       this.selectProductArr.forEach(a => {
         this.productList.forEach((item,index)=>{
-          if(item.id.value==a.id.value){
+          if(item.vId.value==a.vId.value){
             this.removeProductList.push(this.productList[index])
             this.productList.splice(index,1);
           }
@@ -567,9 +571,13 @@ export default {
       }
     },
     closeModify (status) {
-      this.showProductDialog = false
-      if (!status) return this.productModifyList = []
+      if (!status){ this.productModifyList = [] ;this.showProductDialog = false; return};
       const currrentProduct = this.productModifyList[0]
+      let obj  = _.mapObject(currrentProduct,v => Number(v.value) || v.value)
+      if(this.$validateForm(obj,this.$db.logistic.dbProductInfo)){
+        return;
+      }
+      this.showProductDialog = false
       this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
       this.productList.forEach(item=>{
         this.$set(item.fieldDisplay, 'value', null);
@@ -586,6 +594,14 @@ export default {
       switch(arg){
         case 'edit':
             this.edit = !this.edit;
+            // this.pageName = 'planDetail';
+          break;
+        case 'DeliveredEdit':
+            this.deliveredEdit = true;
+            // this.pageName = 'planDetail';
+          break;
+        case 'DeliveredEditExit':
+            this.deliveredEdit = false;
             // this.pageName = 'planDetail';
           break;
         case 'confirm':

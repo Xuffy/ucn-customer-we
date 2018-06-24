@@ -40,19 +40,19 @@
         <div class="body">
             <el-tabs v-model="tabName" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.supplier.address" name="address">
-                    <v-table  :data="address"  style='marginTop:10px'/>
+                    <v-table  :data="address"  :selection="false" style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.accountInfo"  name="accountInfo">
-                    <v-table  :data="accounts"  style='marginTop:10px'/>
+                    <v-table  :data="accounts" :selection="false" style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.contactInfo" name="contactInfo">
-                    <v-table  :data="concats"   style='marginTop:10px'/>
+                    <v-table  :data="concats" :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.tradeHistory"  name="tradeHistory">
-                  <v-table  :data="orderData"   style='marginTop:10px'/>
+                  <v-table  :data="orderData"  :selection="false"  style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquireHistory">
-                  <v-table  :data="inquireData"   style='marginTop:10px'/>
+                  <v-table  :data="inquireData" :selection="false"   style='marginTop:10px'/>
                 </el-tab-pane>
                 <el-tab-pane label="attachment" name="attchment">
                   <!--<div class="section-btn" style="margin-bottom:10px;">-->
@@ -158,6 +158,19 @@
                 lookRemarkFormVisible:false,
                 isModifyAddress:false,
                 formLabelWidth:'80px',
+                genderOptions:[{
+                  value: '男',
+                  label: 'Male',
+                  code: 1
+                }, {
+                  value: '女',
+                  label: 'Female',
+                  code: 0
+                }, {
+                  value: '未知',
+                  label: 'Unknown',
+                  code: 2
+                }],
             }
         },
         methods: {
@@ -294,6 +307,14 @@
                     console.log(res)
                 })
             },
+            //获取币种
+            getCurrency(){
+              this.$ajax.get(this.$apis.get_currency_all).then(res=>{
+                this.currency = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             //..................获取数据
             get_data() {
                 this.$ajax.get(this.$apis.get_supplier_id, {
@@ -302,9 +323,19 @@
                     .then(res => {
                         this.basicDate = res;
                         this.attachments = res.attachments
-                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts);
+                        this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts,e => {
+                          let currency;
+                          currency = _.findWhere(this.currency, {code: e.currency.value}) || {};
+                          e.currency._value = currency.name || '';
+                          return e;
+                        });
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
-                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats);
+                        this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
+                          let gender;
+                          gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
+                          e.gender._value = gender.label || '';
+                          return e;
+                        });
                     })
                     .catch((res) => {
 
@@ -472,7 +503,8 @@
           },
         },
         created() {
-            this.get_data()
+            this.get_data();
+            this.getCurrency();
         },
     }
 

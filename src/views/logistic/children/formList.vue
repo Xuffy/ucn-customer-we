@@ -5,6 +5,7 @@
     <el-row :gutter="10">
       <el-form label-width="300px" label-position="right" class="form" >
         <el-col :xs="gap" :sm="gap" :md="gap" :lg="gap" :xl="gap" v-for="a of listData" :key="'el-col-' + a.label">
+
           <el-form-item v-if="!edit&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')" :label="a.label+'：'">
             <p class="textFilter" :style="fieldDisplay&&fieldDisplay.hasOwnProperty(a.key) ? definedStyle : ''">{{ textFilter(a) }}</p>
           </el-form-item>
@@ -32,6 +33,7 @@
 <script>
   export default {
     props: {
+      DeliveredEdit:[Boolean,String],
       name:String,
       definedStyle:{
         type:Object,

@@ -18,11 +18,12 @@
             <v-table
             :data="dataList"
             :height="500"
+            :selection="false"
             :loading='loading'></v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
-              :page-sizes="[50,100,200,500]"
+              :page-sizes="[50,100,200]"
               @size-change="pageSizeChange"></page>
     </div>
 </template>
@@ -42,16 +43,20 @@
                 dataList: [],
                 searchLoad: false,
                 loading: false,
-                searchId:'1',
+                searchId:'',
                 pageData:{},
                 params:{
                     "pn": 1,
                     "ps": 50,
                     "skuCodeLike":'',
+                    "orderNoLike":'',
                 },
               options: [{
                 id: '1',
                 label: 'skuCode'
+              },{
+                id: '2',
+                label: 'orderNo'
               }],
             }
         },
@@ -77,6 +82,8 @@
               });
               if (val.keyType == '1') {
                 this.params.skuCodeLike= val.key
+              }else{
+                this.params.orderNoLike= val.key
               }
               this.getList()
             },
@@ -85,11 +92,18 @@
                 this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
-                    _.mapObject(item, val => {
-                      val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                      return val
-                    })
-
+                      const one = item.skuCategoryOne.value || '';
+                      const two = item.skuCategoryTwo.value || '';
+                      const three = item.skuCategoryThree.value || ''
+                      const four = item.skuCategoryFour.value || ''
+                      if (one || two || three || four){
+                        item.category.value = one+','+two+','+three+','+four
+                      }
+                      _.mapObject(item, val => {
+                        val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                        return val
+                      })
+                      return item;
                 });
                 this.pageData=res;
               }).catch(err=>{
