@@ -19,7 +19,8 @@ export default {
       key: 'planPayAmount' //应付
     },
     paid: {
-      key: 'actualPayAmount'
+      key: 'actualPayAmount',
+      _important:true,
     },
     waitPayment: {
       _important:true,

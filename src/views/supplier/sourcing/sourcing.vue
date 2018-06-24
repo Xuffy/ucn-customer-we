@@ -169,7 +169,9 @@
             },
             //搜查
             search() {
-                this.get_data()
+                this.get_data();
+                this.selectNumber = [];
+                this.selectedData = [];
             },
             //....跳入createInquiry
             createInquiry() {

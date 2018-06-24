@@ -177,7 +177,9 @@
 
             //搜查
             search() {
-                this.get_data()
+              this.selectedNumber = [];
+              this.selectedData = [];
+              this.get_data()
             },
             //....跳入createInquiry
             createInquiry() {

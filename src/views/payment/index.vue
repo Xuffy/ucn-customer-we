@@ -52,7 +52,7 @@
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
                 <v-table :data="tableDataList"
-                :total-row="totalRow"
+                :totalRow="totalRow"
                 :loading="tabLoad"
                 :buttons="setButtons"
                 @action="action"
@@ -216,14 +216,15 @@
                   });
 
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                    item.waitPayment.value = Number(item.planPayAmount.value)-Number(item.actualPayAmount.value);
-                    item.waitReceipt.value = Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value);
-                    let currency;
-                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-                    item.currencyCode._value = currency.name || '';
+                     item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
+                     item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
+                    let currencyCode;
+                    // currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    // item.currencyCode._value = currencyCode.name || '';
                     console.log(item.currencyCode._value)
-                    return item;
+                     return item;
                   });
+                  console.log(this.totalRow)
                   this.pageData=res;
                 })
                 .catch((res) => {
