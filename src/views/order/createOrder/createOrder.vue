@@ -865,7 +865,7 @@
             <!--</el-date-picker>-->
 
             <div slot="skuPictures" slot-scope="{data}">
-                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
@@ -1205,29 +1205,17 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                // let rightCode=true;
-                // _.map(params.skuList,v=>{
-                //     if(v.skuSample==='1'){
-                //         v.skuSample=true;
-                //     }else if(v.skuSample==='0'){
-                //         v.skuSample=false;
-                //     }
-                //     if(v.skuSupplierCode!==params.supplierCode){
-                //         rightCode=false;
-                //     }
-                //     if(_.isArray(v.skuLabelPic)){
-                //         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
-                //     }
-                // });
-                // //如果选的产品和上面选的供应商不一致，要给出提示
-                // if(!rightCode){
-                //     return this.$message({
-                //         message: this.$i.order.supplierNotTheSame,
-                //         type: 'warning'
-                //     });
-                // }
                 params.attachments=this.$refs.upload[0].getFiles();
                 params.draftCustomer=true;
+
+                _.map(params.skuList,v=>{
+                    if(v.skuSample==='1'){
+                        v.skuSample=true;
+                    }else if(v.skuSample==='0'){
+                        v.skuSample=false;
+                    }
+                });
+
                 this.disableClickSaveDraft=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT,params).then(res=>{
                     this.$router.push('/order/draft');
@@ -2032,7 +2020,30 @@
                             let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                                 if(item._remark){
                                     item.label.value=this.$i.order.remarks;
-                                    item.skuPic._image=false;
+                                    item.skuPictures._image=false;
+                                    item.skuLabelPic._image=false;
+                                    item.skuPkgMethodPic._image=false;
+                                    item.skuInnerCartonPic._image=false;
+                                    item.skuOuterCartonPic._image=false;
+                                    item.skuAdditionalOne._image=false;
+                                    item.skuAdditionalTwo._image=false;
+                                    item.skuAdditionalThree._image=false;
+                                    item.skuAdditionalFour._image=false;
+                                }
+                                else{
+                                    item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                                    item.skuSample._value=item.skuSample.value?'YES':'NO';
+                                    item.skuSample.value=item.skuSample.value?'1':'0';
+                                    item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
+                                    item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
+                                    item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
+                                    item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
+                                    item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
+                                    item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
+                                    item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                                    if(item.skuCategoryId.value){
+                                        item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
+                                    }
                                 }
                             });
                             _.map(data,v=>{

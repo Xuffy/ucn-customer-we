@@ -234,9 +234,7 @@
                 },
                 //表格验证参数
                 productFormRules:{
-                    nameCn: [
-                        { max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur' }
-                    ],
+
                 },
 
 

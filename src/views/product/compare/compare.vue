@@ -17,7 +17,7 @@
             <span v-if="$route.params.type==='new'">
                 <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
@@ -26,7 +26,7 @@
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
-                <el-button v-if="isModify" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
@@ -34,7 +34,6 @@
                 <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
             </el-checkbox-group>
         </div>
-
         <v-table
                 :height="500"
                 v-loading="loadingTable"
@@ -54,7 +53,6 @@
         </div>
 
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
-
             <el-tabs v-model="addProductTabName" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.product.addFromProduct" name="1">
                     <product
@@ -78,8 +76,6 @@
                             @handleCancel="handleCancel"></product>
                 </el-tab-pane>
             </el-tabs>
-
-
         </el-dialog>
 
         <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
@@ -461,7 +457,7 @@
                     }
                 });
                 if(totalLen+e.length>100){
-                    this.$message({
+                    return this.$message({
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'warning'
                     });

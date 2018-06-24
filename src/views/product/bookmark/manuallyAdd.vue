@@ -775,7 +775,7 @@
             {{$i.product.attachment}}
         </div>
         <div style="margin-bottom: 20px">
-            <v-upload :limit="20" ref="uploadAttachmemt"></v-upload>
+            <v-upload :limit="20" :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
         </div>
 
         <div class="footBtn">
