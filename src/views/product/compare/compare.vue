@@ -325,9 +325,14 @@
                     })
                 }else{
                     let skus='',codes=[],supplierCodes='';
+                    console.log(this.selectList,'this.selectList')
                     _.map(this.selectList,v=>{
                         if(v.id.value){
-                            skus+=(v.skuId.value+',');
+                            if(this.$route.params.type==='modify'){
+                                skus+=(v.skuId.value+',');
+                            }else if(this.$route.params.type==='new'){
+                                skus+=(v.id.value+',');
+                            }
                         }
                         if(v.supplierCode.value){
                             codes.push(v.supplierCode.value)
@@ -351,9 +356,19 @@
             //勾选的商品创建order
             createOrder(){
                 let supplierList=[];
+                let allow=true;
                 _.map(this.selectList,v=>{
+                    if(v.customerCreate.value){
+                        allow=false;
+                    }
                     supplierList.push(v.supplierCode.value);
                 });
+                if(!allow){
+                    return this.$message({
+                        message: this.$i.product.customerProductCanNotAddToOrder,
+                        type: 'warning'
+                    });
+                }
                 if(_.uniq(supplierList).length>1){
                     return this.$message({
                         message: this.$i.product.notAddDifferentSupplierProduct,

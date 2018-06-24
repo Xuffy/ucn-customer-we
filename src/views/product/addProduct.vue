@@ -14,7 +14,7 @@
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
                             ref="dropDown" :expandOnClickNode="false"></drop-down>
-                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="All">
                                 <el-option
                                         v-for="item in v.options"
@@ -38,10 +38,10 @@
                                     :list="dropData"
                                     :expand-on-click-node="false"
                                     ref="dropDown"></drop-down>
-                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                             <div v-if="v.showType==='select'">
                                 <div v-if="v.isCountry">
-                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable collapse-tags placeholder="please choose">
+                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable collapse-tags :placeholder="$i.product.pleaseChoose">
                                         <el-option
                                                 v-for="item in countryOption"
                                                 :key="item.id"
@@ -51,7 +51,7 @@
                                     </el-select>
                                 </div>
                                 <div v-else>
-                                    <el-select class="speSelect" size="mini" v-model="productForm[v.key]" placeholder="请选择">
+                                    <el-select class="speSelect" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseChoose">
                                         <el-option
                                                 v-for="item in v.options"
                                                 :key="item.value"
@@ -62,16 +62,16 @@
                                 </div>
                             </div>
                             <div v-if="v.showType==='exwNumber'" class="section-number">
-                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice" :placeholder="$i.product.pleaseInput"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice" :placeholder="$i.product.pleaseInput"></el-input>
                             </div>
                             <div v-if="v.showType==='fobNumber'" class="section-number">
-                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"  :placeholder="$i.product.pleaseInput"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"  :placeholder="$i.product.pleaseInput"></el-input>
                             </div>
-                            <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"  :placeholder="$i.product.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -470,7 +470,6 @@
                             e.noneSellCountry.value=noneSellCountry;
 
                             e.status.value=this.$change(this.statusOption,'status',e,true).name;
-                            console.log(this.statusOption,'this.statusOption')
                             e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
                             e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
                             e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
@@ -546,13 +545,23 @@
                             bookmarkId:item.id.value
                         }
                     })
-                }else if(this.type==='product'){
-                    this.$windowOpen({
-                        url:'/product/sourcingDetail',
-                        params:{
-                            id:item.id.value
-                        }
-                    })
+                }
+                else if(this.type==='product'){
+                    if(item.bookmarkId.value){
+                        this.$windowOpen({
+                            url:'/product/bookmarkDetail',
+                            params:{
+                                id:item.bookmarkId.value
+                            }
+                        })
+                    }else{
+                        this.$windowOpen({
+                            url:'/product/sourcingDetail',
+                            params:{
+                                id:item.id.value
+                            }
+                        })
+                    }
                 }
             },
 

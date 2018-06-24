@@ -7,7 +7,6 @@
             <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
-
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
                                 <v-image :src="item"></v-image>
@@ -625,8 +624,7 @@
                         message: 'Successfully Add!',
                         type: 'success'
                     });
-                    this.disableClickAddBookmark=false;
-                }).catch(err=>{
+                }).finally(err=>{
                     this.disableClickAddBookmark=false;
                 });
             },

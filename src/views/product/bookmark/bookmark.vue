@@ -14,7 +14,7 @@
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList" :defaultProps="defaultProps"
                                        ref="dropDown" :expandOnClickNode="false"></drop-down>
-                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini" v-model="productForm[v.key]" placeholder="不限">
                                 <el-option
                                         v-for="item in v.options"
@@ -35,8 +35,8 @@
                     <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'" v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <drop-down v-if="v.showType==='dropdown'" class="" :list="dropData" ref="dropDown"></drop-down>
-                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"></el-input>
-                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="selectCountry">
+                            <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
+                            <el-select multiple collapse-tags class="speSelect" v-if="v.showType==='select'" size="mini" v-model="selectCountry" :placeholder="$i.product.pleaseChoose">
                                 <el-option
                                         v-for="item in countryOption"
                                         :key="item.id"
@@ -45,16 +45,16 @@
                                 </el-option>
                             </el-select>
                             <div v-if="v.showType==='exwNumber'" class="section-number">
-                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minExwPrice" :placeholder="$i.product.pleaseInput"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxExwPrice" :placeholder="$i.product.pleaseInput"></el-input>
                             </div>
                             <div v-if="v.showType==='fobNumber'" class="section-number">
-                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.minFobPrice" :placeholder="$i.product.pleaseInput"></el-input>
                                 <div class="section-line">--</div>
-                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice"></el-input>
+                                <el-input size="mini" class="section-input" v-model="productForm.maxFobPrice" :placeholder="$i.product.pleaseInput"></el-input>
                             </div>
-                            <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]"></el-input>
+                            <el-input v-if="v.showType==='number'" size="mini" v-model="productForm[v.key]" :placeholder="$i.product.pleaseInput"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -493,9 +493,20 @@
             //勾选的商品创建order
             createOrder(){
                 let supplierList=[];
+                let allow=true;
                 _.map(this.selectList,v=>{
+                    if(v.customerCreate.value){
+                        allow=false;
+                    }
                     supplierList.push(v.supplierCode.value);
                 });
+                if(!allow){
+                    return this.$message({
+                        message: this.$i.product.customerProductCanNotAddToOrder,
+                        type: 'warning'
+                    });
+                }
+
                 if(_.uniq(supplierList).length>1){
                     return this.$message({
                         message: this.$i.product.notAddDifferentSupplierProduct,

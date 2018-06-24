@@ -9,7 +9,7 @@
                     <el-col :span="6">
                         <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
-                                <img :src="item" style="width: 100%" alt="">
+                                <v-image :src="item"></v-image>
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -258,7 +258,7 @@
     import addTable from '../addlineTable'
     import compareList from '../compareList'
     import product from '../addProduct'
-    import {VTable,VUpload,VPagination} from '@/components/index'
+    import {VTable,VUpload,VPagination,VImage} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
@@ -269,7 +269,8 @@
             VTable,
             product,
             VUpload,
-            page:VPagination
+            page:VPagination,
+            VImage
         },
         data(){
             return{
