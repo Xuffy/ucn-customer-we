@@ -317,7 +317,7 @@
 
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-
+                    this.pageData=res;
                     this.disabledSearch=false;
                     this.selectList=[];
                     this.loadingTable=false;
@@ -545,6 +545,12 @@
             },
 
             compare(){
+                if(this.selectList.length>100){
+                    this.$message({
+                        message: this.$i.product.compareRecordMustLessThan100,
+                        type: 'success'
+                    });
+                }
                 let id='';
                 this.selectList.forEach((v,k)=>{
                     let item=_.findWhere(v,{key:'skuId'});

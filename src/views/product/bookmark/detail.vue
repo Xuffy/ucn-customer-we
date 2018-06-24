@@ -44,7 +44,7 @@
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
                     <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                    <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                    <el-button :disabled="productForm.customerCreate" @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
                     <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
