@@ -470,6 +470,7 @@
                             e.noneSellCountry.value=noneSellCountry;
 
                             e.status.value=this.$change(this.statusOption,'status',e,true).name;
+                            console.log(this.statusOption,'this.statusOption')
                             e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
                             e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
                             e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
