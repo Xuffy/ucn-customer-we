@@ -17,7 +17,7 @@
             <span v-if="$route.params.type==='new'">
                 <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
                 <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                <el-button @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
@@ -26,7 +26,7 @@
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
-                <el-button v-if="isModify" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
@@ -34,7 +34,6 @@
                 <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
             </el-checkbox-group>
         </div>
-
         <v-table
                 :height="500"
                 v-loading="loadingTable"
@@ -53,10 +52,9 @@
             </div>
         </div>
 
-        <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
-
+        <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <el-tabs v-model="addProductTabName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="Add From Product" name="1">
+                <el-tab-pane :label="$i.product.addFromProduct" name="1">
                     <product
                             :isInModify="$route.params.type==='modify'?true:false"
                             :disabledOkBtn="false"
@@ -66,7 +64,7 @@
                             @handleOK="handleOkClick"
                             @handleCancel="handleCancel"></product>
                 </el-tab-pane>
-                <el-tab-pane label="Add From Bookmark" name="2">
+                <el-tab-pane :label="$i.product.addFromBookmark" name="2">
                     <product
                             :isInModify="$route.params.type==='modify'?true:false"
                             :disabledOkBtn="false"
@@ -78,8 +76,6 @@
                             @handleCancel="handleCancel"></product>
                 </el-tab-pane>
             </el-tabs>
-
-
         </el-dialog>
 
         <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
@@ -156,6 +152,17 @@
                 disableClickSaveModify:false,
 
                 isChangeData:false,             //是否在最原始的基础上modify过数据
+
+
+                /**
+                 * 字典配置
+                 * */
+                statusOption:[],
+                weightOption:[],
+                dateOption:[],
+                volumeOption:[],
+                lengthOption:[],
+                skuUnitOption:[],
             }
         },
         methods:{
@@ -172,11 +179,7 @@
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                            if(e.status.value===1){
-                                e.status.value='上架';
-                            }else if(e.status.value===0){
-                                e.status.value='下架';
-                            }
+                            e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                             return e;
                         });
                         this.hasLoading=true;
@@ -215,11 +218,7 @@
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            if(e.status.value===1){
-                                e.status.value='上架';
-                            }else if(e.status.value===0){
-                                e.status.value='下架';
-                            }
+                            e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                             return e;
                         });
                         this.hasLoading=true;
@@ -325,9 +324,14 @@
                     })
                 }else{
                     let skus='',codes=[],supplierCodes='';
+                    console.log(this.selectList,'this.selectList')
                     _.map(this.selectList,v=>{
                         if(v.id.value){
-                            skus+=(v.skuId.value+',');
+                            if(this.$route.params.type==='modify'){
+                                skus+=(v.skuId.value+',');
+                            }else if(this.$route.params.type==='new'){
+                                skus+=(v.id.value+',');
+                            }
                         }
                         if(v.supplierCode.value){
                             codes.push(v.supplierCode.value)
@@ -351,9 +355,19 @@
             //勾选的商品创建order
             createOrder(){
                 let supplierList=[];
+                let allow=true;
                 _.map(this.selectList,v=>{
+                    if(v.customerCreate.value){
+                        allow=false;
+                    }
                     supplierList.push(v.supplierCode.value);
                 });
+                if(!allow){
+                    return this.$message({
+                        message: this.$i.product.customerProductCanNotAddToOrder,
+                        type: 'warning'
+                    });
+                }
                 if(_.uniq(supplierList).length>1){
                     return this.$message({
                         message: this.$i.product.notAddDifferentSupplierProduct,
@@ -400,9 +414,9 @@
 
             //删除product
             deleteProduct(){
-                this.$confirm('确定删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.selectList.forEach(v=>{
@@ -443,13 +457,12 @@
                     }
                 });
                 if(totalLen+e.length>100){
-                    this.$message({
-                        message: '警告哦，这是一条警告消息',
+                    return this.$message({
+                        message: this.$i.product.compareRecordMustLessThan100,
                         type: 'warning'
                     });
                 }else{
                     //现在跑出来的东西只是一个productId数组
-                    console.log(e,'抛出的数据')
                     if(this.$route.params.type==='new'){
                         //在新建状态的情况下，直接拿id重新请求获取表格数据
                         let id=[];
@@ -462,11 +475,7 @@
                         this.loadingTable=true;
                         this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                                if(e.status.value===1){
-                                    e.status.value='上架';
-                                }else if(e.status.value===0){
-                                    e.status.value='下架';
-                                }
+                                e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                                 return e;
                             });
                             this.hasLoading=true;
@@ -496,11 +505,7 @@
                         this.loadingTable=true;
                         this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                                if(e.status.value===1){
-                                    e.status.value='上架';
-                                }else if(e.status.value===0){
-                                    e.status.value='下架';
-                                }
+                                e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                                 e.skuId.value=e.id.value;       //把id的值给skuId
                                 return e;
                             });
@@ -659,6 +664,34 @@
             },
         },
         created(){
+            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
+                res.forEach(v=>{
+                    if(v.code==='SKU_SALE_STATUS'){
+                        this.statusOption=v.codes;
+                        console.log(this.statusOption,'this.statusOption')
+                    }else if(v.code==='WT_UNIT'){
+                        this.weightOption=v.codes;
+                    }else if(v.code==='ED_UNIT'){
+                        this.dateOption=v.codes;
+                    }else if(v.code==='VE_UNIT'){
+                        this.volumeOption=v.codes;
+                    }else if(v.code==='LH_UNIT'){
+                        this.lengthOption=v.codes;
+                    }else if(v.code==='SKU_UNIT'){
+                        this.skuUnitOption=v.codes;
+                    }
+                });
+                //国家
+                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                    this.countryOption=res;
+                    this.getData();
+                    this.getCategoryId();
+                }).catch(err=>{
+
+                });
+            }).catch(err=>{
+
+            });
             this.getList();
         },
         mounted(){

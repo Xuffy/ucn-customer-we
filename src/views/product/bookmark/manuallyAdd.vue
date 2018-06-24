@@ -775,7 +775,7 @@
             {{$i.product.attachment}}
         </div>
         <div style="margin-bottom: 20px">
-            <v-upload :limit="20" ref="uploadAttachmemt"></v-upload>
+            <v-upload :limit="20" :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
         </div>
 
         <div class="footBtn">
@@ -1010,7 +1010,13 @@
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
                     this.disabledSubmit=false;
-                    this.$router.push('/product/bookmark');
+                    // this.$router.push({
+                    //     path:'/product/bookmarkDetail',
+                    //     query:{
+                    //         id:'',
+                    //         bookmarkId:res
+                    //     }
+                    // });
                 }).catch(err=>{
                     this.disabledSubmit=false;
                 });
