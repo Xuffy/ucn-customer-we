@@ -97,5 +97,6 @@
   "sure":"Sure",
   "addProduct":"Add Product",
   "addFromProduct":"Add from Product",
-  "addFromBookmark":"Add from Bookmark"
+  "addFromBookmark":"Add from Bookmark",
+  "skuSaleStatus":"SKU Sale Status"
 }
