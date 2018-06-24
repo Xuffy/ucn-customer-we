@@ -26,6 +26,7 @@
           <!--        表格-->
            <v-table
             :height=360
+            :loading='loading'
             :data="tabData"
             :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
             @action="detail"
@@ -51,10 +52,10 @@
                 loading:false,
                 options: [{
                     id: '1',
-                    label: 'compareName'
+                    label: this.$i.supplier.compareName
                 }, {
                     id: '2',
-                    label: "compareItem"
+                    label: this.$i.supplier.compareItem
                 }],
                 params: {
                     id: '',

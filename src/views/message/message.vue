@@ -24,12 +24,11 @@
           @change-checked="changeChecked"
           :height="500"
           hide-filter-value
-          :style="computeStyle"
         />
         <page
           :page-data="pageData"
           @change="handleSizeChange"
-          :page-sizes="[50,100,200,500]"
+          :page-sizes="[50,100,200]"
           @size-change="pageSizeChange"></page>
       </div>
 
@@ -190,6 +189,7 @@
         };
         this.$ajax.post(url, this.params)
           .then(res => {
+            this.tabData = this.$getDB(this.$db.message.table, res.datas)
               this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
                 _.mapObject(e, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'));
@@ -200,7 +200,7 @@
                 }else{
                   e.read.value = '未读'
                 }
-
+                return e
               });
             this.pageData=res;
             this.tabLoad = false;
@@ -290,15 +290,6 @@
       this.getDataInfo()
       this.getMessageQuery()
     },
-    computed: {
-      computeStyle() {
-        this.tabData.forEach((v, k) => {
-          if (v.read.value = '未读'){
-            return { fontWeight:200 }
-          }
-        });
-      }
-    }
   }
 </script>
 
