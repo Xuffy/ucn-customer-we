@@ -94,13 +94,15 @@
         </div>
 
 
-        <el-dialog title="Add Product" :visible.sync="addProductDialogVisible" width="80%">
+        <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :disableBookmarkChoose="true"
                     :forceUpdateNumber="forceUpdateNumber"
                     :title="addProductTitle"
                     :type="addProductType"
                     :disabledOkBtn="disabledOkBtn"
                     :hideBtn="true"
+                    :isInModify="true"
                     @handleCancel="handleCancel"
                     @handleOK="handleOkClick"></product>
         </el-dialog>
@@ -237,6 +239,7 @@
                     ],
                 },
 
+
                 //Category下拉组件数据
                 categoryList:[
                     {
@@ -257,7 +260,9 @@
 
                 //底部table数据
                 tableDataList:[],
-                dataColumn:[]
+                dataColumn:[],
+
+                disabledLine:[]
             }
         },
         methods:{
@@ -571,6 +576,8 @@
             },
 
             addProduct(){
+                // this.disabledLine=this.$copyArr(this.tableDataList);
+
                 this.forceUpdateNumber=Math.random();
                 this.addProductDialogVisible=true;
             },

@@ -8,14 +8,17 @@
             </el-button>
         </div>
         <div>
-            <el-form ref="productFormTop" :model="productForm" :rules="productFormRules" label-width="190px">
+            <el-form ref="productFormTop" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="v.isDefaultShow && v.belongPage==='sellerProductOverview'"
                             v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
-                            <drop-down v-model="productForm[v.key]" v-if="v.showType==='dropdown'" :list="categoryList"
+                            <drop-down v-model="productForm[v.key]"
+                                       v-if="v.showType==='dropdown'"
+                                       :list="categoryList"
                                        :defaultProps="defaultProps"
-                                       ref="dropDown" :expandOnClickNode="false"></drop-down>
+                                       ref="dropDown"
+                                       :expandOnClickNode="false"></drop-down>
                             <el-input v-if="v.showType==='input'" size="mini" v-model="productForm[v.key]"
                                       :placeholder="$i.product.pleaseInput"></el-input>
                             <el-select class="speSelect" v-if="v.showType==='select'" size="mini"
@@ -33,7 +36,7 @@
             </el-form>
         </div>
         <div class="body" :class="{hide:hideBody}">
-            <el-form ref="productForm" :rule="productFormRules" :model="productForm" label-width="190px">
+            <el-form ref="productForm" :model="productForm" label-width="190px">
                 <el-row class="speZone">
                     <el-col v-if="!v.isDefaultShow && v.belongPage==='sellerProductOverview'"
                             v-for="v in $db.product.buyerBasic" :key="v.key" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -106,12 +109,12 @@
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns" v-if="!hideBtn">
-                        <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                        <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                        <el-button @click="compareProducts" :disabled="disabledCompare">{{$i.product.compare}}
+                        <el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>
+                        <el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>
+                        <el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}
                         </el-button>
                         <el-button @click="addToBookmark" :loading="disableClickAddBookmark"
-                                   :disabled="disabledAddBookmark">{{$i.product.addToBookmark}}
+                                   :disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}
                         </el-button>
                         <!--<el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
                         <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
@@ -195,6 +198,10 @@
                 type: Boolean,
                 default: false
             },
+            disableBookmarkChoose:{
+                type:Boolean,
+                default:false
+            },
         },
         data() {
             return {
@@ -262,11 +269,7 @@
 
                 },
                 //表格验证参数
-                productFormRules: {
-                    nameCn: [
-                        {max: 10, message: `长度在 3 到 10 个字符`, trigger: 'blur'}
-                    ],
-                },
+
                 /**
                  * 分页配置
                  * */
@@ -278,12 +281,14 @@
                     {
                         id: 123,
                         name: "系统分类",
-                        children: []
+                        children: [],
+                        _disableClick:true,
                     },
                     {
                         id: 5125,
                         name: "自己的分类",
-                        children: []
+                        children: [],
+                        _disableClick:true,
                     },
                 ],
                 defaultProps: {
@@ -493,6 +498,11 @@
                             e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
                             e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                             e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+
+                            if(this.disableBookmarkChoose && e.bookmarkId.value){
+                                this.$set(e,'_disabled',true);
+                            }
+
                             return e;
                         });
                         this.pageData = res;
@@ -648,7 +658,7 @@
             //对比product
             compareProducts() {
                 if(this.selectList.length>100){
-                    this.$message({
+                    return this.$message({
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'success'
                     });

@@ -121,7 +121,13 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.tradeHistory" name="History">
-                    <span style="color:red">暂时接口还没做</span>
+                    <v-table
+                            :height="500"
+                            :loading="loadingTable"
+                            :data="historyData">
+                    </v-table>
+
+
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
                     <v-upload readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
@@ -389,6 +395,8 @@
 
                     ],
                 },
+                loadingTable:false,
+                historyData:[],
 
                 /**
                  * compareList配置
@@ -441,7 +449,7 @@
                 }).then(res=>{
                     this.productForm=res;
                     this.notLoadingDone=true;
-                    this.tradeHistory.skuCode=this.productForm.sysCode;
+                    this.tradeHistory.skuCode=this.productForm.code;
                     let priceData=[{
                         fobCurrency:this.productForm.fobCurrency,
                         fobPrice:this.productForm.fobPrice,
@@ -461,10 +469,12 @@
 
                     this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
 
+                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
-                        console.log(res)
-                    }).finally(err=>{
 
+                        console.log(res,'res')
+                    }).finally(err=>{
+                        this.loadingTable=false;
                     });
                 }).catch(err=>{
                     console.log(err)

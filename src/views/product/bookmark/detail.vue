@@ -243,6 +243,7 @@
 
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :disableBookmarkChoose="true"
                     :forceUpdateNumber="forceNumber"
                     :title="addProductTitle"
                     :type="addProductType"
@@ -450,9 +451,7 @@
                  * compareList配置
                  * */
                 showCompareList:false,      //是否显示比较列表
-                compareData:[
-
-                ],
+                compareData:[],
 
                 /**
                  * remark data
@@ -497,7 +496,6 @@
                     this.copyNameCustomer=this.productForm.nameCustomer;
                 }
             },
-
             saveEdit(){
                 let params={
                     customerCode: "",
@@ -521,7 +519,6 @@
                     this.disabledClickSaveEdit=false;
                 });
             },
-
             cancelEdit(){
                 this.notEdit=true;
                 this.productForm.customerSkuCode=this.copyCustomerSkuCode;
@@ -564,11 +561,9 @@
                     url:'/product/bookmarkManuallyAdd'
                 });
             },
-
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
-
             handleOkClick(e){
                 if(e.length===0){
                     //表示一个都没选
@@ -592,11 +587,9 @@
                     });
                 }
             },
-
             handleClick(){
                 //切换tab页
             },
-
             getTableData(){
                 this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
@@ -642,7 +635,6 @@
                     this.loadingRemark=false;
                 });
             },
-
             editRemark(index,row){
                 this.editRemarkData.id=row.id;
                 this.editRemarkData.skuId=this.productForm.id;
@@ -682,8 +674,6 @@
                 this.remarkConfig.ps=e;
                 this.getRemarkData();
             },
-
-
 
 
             createRemark(){
@@ -733,7 +723,6 @@
 
                 });
             },
-
             createInquiry(){
                 this.$windowOpen({
                     url:'/negotiation/createInquiry',
@@ -743,7 +732,6 @@
                     },
                 })
             },
-
             createOrder(){
                 this.$windowOpen({
                     url:'/order/create',
@@ -783,17 +771,12 @@
                     this.$localStore.set('compareProductList',compareList)
                 }
             },
-
             addToBookmark(){
-
                 this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.log(err)
                 });
-
-
-
                 // this.$router.push({
                 //     path:'/product/bookmark/detail',
                 //     query:{
