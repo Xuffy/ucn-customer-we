@@ -551,7 +551,8 @@
                         this.$windowOpen({
                             url:'/product/bookmarkDetail',
                             params:{
-                                id:item.bookmarkId.value
+                                id:item.id.value,
+                                bookmarkId:item.bookmarkId.value
                             }
                         })
                     }else{
