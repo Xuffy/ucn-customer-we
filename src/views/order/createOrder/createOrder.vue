@@ -1464,23 +1464,16 @@
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
                             item.skuUnit._value=item.skuUnit.value?this.$change(this.skuUnitOption,'skuUnit',item,true).name:'';
-                            console.log(1)
                             item.skuUnitWeight._value=item.skuUnitWeight.value?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
-                            console.log(2)
                             item.skuUnitLength._value=item.skuUnitLength.value?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
-                            console.log(3)
                             item.skuExpireUnit._value=item.skuExpireUnit.value?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            console.log(4)
                             item.skuStatus._value=item.skuStatus.value?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
-                            console.log(5)
                             item.skuUnitVolume._value=item.skuUnitVolume.value?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
-                            console.log(6)
                             item.skuSaleStatus._value=item.skuSaleStatus.value?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
-                            console.log(7)
                             if(item.skuCategoryId.value){
-                                console.log(8)
+                                console.log(item,'item')
+                                console.log(this.category,'this.category')
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
-                                console.log(9)
                             }
                         }
                     });
