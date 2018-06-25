@@ -63,6 +63,9 @@
   }
 </style>
 <style>
+  .ucn-view-picture .ucn-image{
+    background: none!important;
+  }
   .ucn-view-picture {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: inherit;

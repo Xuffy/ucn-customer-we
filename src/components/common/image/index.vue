@@ -47,7 +47,7 @@
   .ucn-image {
     position: relative;
     background: none;
-    /*background-color: #F5F5F5;*/
+    background-color: #f9f9f9;
     text-align: center;
   }
   .ucn-image:before{
@@ -62,7 +62,6 @@
     max-height: 100%;
     display: inline-block;
     vertical-align: middle;
-    background-color: #FFFFFF;
   }
 
   /*.ucn-image .image {
