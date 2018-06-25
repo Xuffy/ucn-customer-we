@@ -26,7 +26,7 @@
                 <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
-
+addNewProduct
                 <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
             </span>
@@ -252,7 +252,9 @@
 
             //取消编辑
             cancelModify(){
-                this.isModify=false;
+              this.isModify=false;
+              this.selectNumber = [];
+              this.getList();
             },
             createInquiry() {
               if(this.selectList.length===0){
@@ -310,6 +312,10 @@
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
+                let v = [];
+                // this.getList.forEach(v => x[v.id] = v);
+              console.log(this.tableDataList)
+
             },
 
             //删除product
@@ -357,7 +363,7 @@
                 });
                 if(totalLen+e.length>100){
                     this.$message({
-                        message: '警告哦，这是一条警告消息',
+                        message: '不能超过100条',
                         type: 'warning'
                     });
                 }else{

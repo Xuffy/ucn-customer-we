@@ -6,6 +6,7 @@ import buyerDetailTop from './buyerDetailTop';
 import detailTab from './detailTab';
 import detailPriceTable from './detailPriceTable';
 import compareTable from './compare.indexTable';
+// import tradeHistory from './tradeHistory';
 
 export default {
     buyerBasic,
@@ -15,5 +16,6 @@ export default {
     buyerDetailTop,
     detailTab,
     detailPriceTable,
-    compareTable
+    compareTable,
+    // tradeHistory
 }

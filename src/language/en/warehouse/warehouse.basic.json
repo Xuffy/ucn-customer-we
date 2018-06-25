@@ -73,6 +73,7 @@
   "totalMoney":"总价",
   "action":"操作",
   "sysGenerate":"系统生成",
-  "skuRowNum":"sku款式数"
+  "skuRowNum":"sku款式数",
+  "skuQty":"合同数量"
 
 }

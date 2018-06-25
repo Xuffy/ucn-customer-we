@@ -1,4 +1,8 @@
 export default {
+    compareTime: {
+      key: "updateDt",
+      type: 'textDate',
+    },
     compareName: {
         key: "name"
     },
@@ -7,10 +11,6 @@ export default {
     },
     operater: {
         key: "updateName"
-    },
-    compareTime: {
-      key: "updateDt",
-      type: 'textDate',
     },
     id: {
         _hide: true,

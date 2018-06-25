@@ -775,7 +775,7 @@
             {{$i.product.attachment}}
         </div>
         <div style="margin-bottom: 20px">
-            <v-upload :limit="20" ref="uploadAttachmemt"></v-upload>
+            <v-upload :limit="20" :list="productForm.attachments" ref="uploadAttachmemt"></v-upload>
         </div>
 
         <div class="footBtn">
@@ -807,30 +807,6 @@
                     disabledDate(time) {
                         return time.getTime() > Date.now();
                     },
-                    shortcuts: [
-                        {
-                            text: '今天',
-                            onClick(picker) {
-                                picker.$emit('pick', new Date());
-                            }
-                        },
-                        {
-                            text: '昨天',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                                picker.$emit('pick', date);
-                            }
-                        },
-                        {
-                            text: '一周前',
-                            onClick(picker) {
-                                const date = new Date();
-                                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                                picker.$emit('pick', date);
-                            }
-                        }
-                    ]
                 },
                 disabledSubmit:false,
                 defaultProps:{
@@ -1009,9 +985,14 @@
 
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
-                    this.disabledSubmit=false;
-                    this.$router.push('/product/bookmark');
-                }).catch(err=>{
+                    // this.$router.push({
+                    //     path:'/product/bookmarkDetail',
+                    //     query:{
+                    //         id:'',
+                    //         bookmarkId:res
+                    //     }
+                    // });
+                }).finally(err=>{
                     this.disabledSubmit=false;
                 });
             },
