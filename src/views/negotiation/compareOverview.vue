@@ -6,7 +6,7 @@
                 <el-button :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedArg.length>0?checkedArg.length:'all'})` }}</el-button>
                 <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
             </div>
-            <select-search :options="options" @inputEnter="inputEnter" />
+            <select-search :options="options" @inputEnter="inputEnter"/>
         </div>
         <v-table
             :data="tabData"
@@ -20,6 +20,7 @@
             :page-data.sync="bodyData"
             @change="handleSizeChange"
             @size-change="pageSizeChange"
+            :page-sizes="[50, 100, 200]"
         />
     </div>
 </template>
@@ -34,34 +35,19 @@ export default {
       checkedArg: [],
       tabData: [],
       options: [{
-        id: '1',
-        label: 'Compare Name'
+        id: 'compareName',
+        label: this.$i.inquiry.compareName,
+        operator: 'like'
       }, {
-        id: '2',
-        label: 'Compare Item'
+        id: 'quotationNoLike',
+        label: this.$i.inquiry.compareItems
       }],
       bodyData: {
-        key: '',
-        keyType: '',
-        // operatorFilters: { //筛选条件
-        //     columnName: '',
-        //     operator: '',
-        //     property: '',
-        //     resultMapId: '',
-        //     value: {}
-        // },
         ps: 50,
         pn: 1,
         tc: 0,
-        recycle: 0
-        // sorts: [
-        //     {
-        //         nativeSql: true,
-        //         orderBy: "string",
-        //         orderType: "string",
-        //         resultMapId: "string"
-        //     }
-        // ]
+        recycle: 0,
+        operatorFilters: []
       },
       tabLoad: false
     };
@@ -92,15 +78,11 @@ export default {
           let data = res.datas;
           this.tabLoad = false;
           data.forEach(item => {
-            item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
+            item.updateDt = item.updateDt ? this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
           });
           this.bodyData.tc = res.tc;
           this.tabData = this.$getDB(this.$db.inquiry.compare, data);
         });
-    },
-    searchEnter(item) { // 搜索框
-      this.bodyData.key = item.key;
-      this.bodyData.keyType = item.keyType;
     },
     action(item, type) { // 操作表单 action
       let types = '';
@@ -132,29 +114,29 @@ export default {
         cancelButtonText: this.$i.common.cancel,
         type: 'warning'
       }).then(() => {
-        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg)
-          .then(res => {
-            this.getList();
-            this.checkedArg = [];
-          });
+        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg).then(res => {
+          this.getList();
+          this.checkedArg = [];
+        });
       });
     },
-    inputEnter() {
-
+    inputEnter(option, operatorFilters) {
+      if (option.id === 'quotationNoLike' && option.value) {
+        this.bodyData.quotationNoLike = option.value;
+      } else {
+        this.bodyData.quotationNoLike = null;
+        this.bodyData.operatorFilters = operatorFilters;
+      }
+      this.getList();
     },
     handleSizeChange(val) {
       this.bodyData.pn = val;
+      this.getList();
     },
     pageSizeChange(val) {
+      this.bodyData.pn = 1;
       this.bodyData.ps = val;
-    }
-  },
-  watch: {
-    bodyData: {
-      handler(val) {
-        this.getList();
-      },
-      deep: true
+      this.getList();
     }
   }
 };
