@@ -502,7 +502,6 @@
                             if(this.disableBookmarkChoose && e.bookmarkId.value){
                                 this.$set(e,'_disabled',true);
                             }
-
                             return e;
                         });
                         this.pageData = res;
