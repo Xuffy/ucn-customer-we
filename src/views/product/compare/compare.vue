@@ -648,7 +648,6 @@
                 });
             },
 
-
             handleClick(e){
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
@@ -656,11 +655,6 @@
                         this.selectList.push(v);
                     }
                 });
-            },
-
-            //切换tab页
-            handleClick(){
-
             },
         },
         created(){

@@ -66,6 +66,7 @@
         </div>
         <div class="footer">
             <v-table
+                    code="udata_purchase_sku_bookmark_overview"
                     :height="500"
                     v-loading="loadingTable"
                     :data="tableDataList"
@@ -79,6 +80,7 @@
                         <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
                         <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
                         <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
+                        <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
                         <!--<el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
                         <!--<el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>-->
                         <!--<el-button>{{$i.product.upload}}</el-button>-->
@@ -139,12 +141,13 @@
             </div>
         </el-dialog>
 
+        <v-import-template ref="importCategory" code="USER_IMPORT" biz-code="BIZ_USER"></v-import-template>
+
     </div>
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
-    import {dropDownSingle,VPagination} from '@/components/index'
+    import {dropDownSingle,VPagination,VImportTemplate,VTable} from '@/components/index'
     import sectionNumber from '../../product/sectionNumber'
     import product from '../addProduct'
     import { mapActions } from 'vuex'
@@ -156,7 +159,8 @@
             sectionNumber,
             VTable,
             product,
-            page:VPagination
+            page:VPagination,
+            VImportTemplate
         },
 
         data(){
