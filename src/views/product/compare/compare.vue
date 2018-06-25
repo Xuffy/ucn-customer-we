@@ -393,7 +393,11 @@
                     }else{
                         let ids='';
                         this.selectList.forEach(v=>{
-                            ids+=(v.id.value+',');
+                            if(this.$route.params.type==='modify'){
+                                ids+=(v.skuId.value+',');
+                            }else if(this.$route.params.type==='new'){
+                                ids+=(v.id.value+',');
+                            }
                         });
                         this.$windowOpen({
                             url:'/order/create',
