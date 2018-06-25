@@ -215,13 +215,17 @@
     watch: {
       data(val) {
         this.setDataList(val, true);
+      },
+      dataList(val) {
+        let selected = this.getSelected();
+        this.checkedAll = selected.length === val.length;
       }
     },
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
 
-      this.interval = setInterval(this.updateTable, 200);
+      this.interval = setInterval(this.updateTable, 400);
     },
     methods: {
       onFilterColumn(checked) {
