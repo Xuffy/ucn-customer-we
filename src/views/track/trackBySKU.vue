@@ -1,8 +1,7 @@
 <template>
     <div class="track">
         <div class="title">
-            trackBySKU
-            <!-- {{$t('track.page.trackBySKU')}} -->
+          {{$i.track.trackBySKU}}
         </div>
         <div class="body">
           <div class="search">
@@ -58,6 +57,7 @@
                 id: '2',
                 label: 'orderNo'
               }],
+              country:[]
             }
         },
         methods:{
@@ -87,11 +87,20 @@
               }
               this.getList()
             },
+            //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                this.country = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             getList() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.get_track_getTrackInfoByPage,this.params).then(res=>{
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
+                      let country;
                       const one = item.skuCategoryOne.value || '';
                       const two = item.skuCategoryTwo.value || '';
                       const three = item.skuCategoryThree.value || ''
@@ -112,7 +121,8 @@
             }
         },
         created(){
-            this.getList();
+          this.getCountryAll();
+          this.getList();
         }
     }
 </script>
@@ -124,5 +134,6 @@
         height: 32px;
         line-height: 32px;
         color:#666666;
+        padding-bottom: 10px;
     }
 </style>
