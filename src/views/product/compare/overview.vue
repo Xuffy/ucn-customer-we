@@ -162,22 +162,22 @@
             //搜索compare
             searchCompare(e){
                 console.log(e)
-                if(!e.keyType){
+                if(!e.id){
                     this.$message({
                         message: 'please choose a type',
                         type: 'warning'
                     });
                 }else{
                     this.loadingTable=true;
-                    if(e.keyType===1){
+                    if(e.id===1){
                         //compareName
                         this.queryParam.compareItem='';
-                        this.queryParam.name=e.key;
+                        this.queryParam.name=e.value;
                         this.getList();
-                    }else if(e.keyType===2){
+                    }else if(e.id===2){
                         //compareItem
                         this.queryParam.name='';
-                        this.queryParam.compareItem=e.key;
+                        this.queryParam.compareItem=e.value;
                         this.getList();
                     }
                 }
