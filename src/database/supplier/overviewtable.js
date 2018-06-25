@@ -44,5 +44,9 @@ export default {
 
     recycle: {
         _hide: true,
-    }
+    },
+  bookmarkId:{
+    key:"bookmarkId",
+    _hide: true,
+  }
 }

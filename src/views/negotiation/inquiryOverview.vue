@@ -17,8 +17,7 @@
             <select-search
                 :options="options"
                 @inputEnter="inputEnter"
-                :searchLoad="searchLoad"
-            />
+                :searchLoad="searchLoad"/>
         </div>
         <div class="fn">
             <div class="btn-wrap">
@@ -37,6 +36,8 @@
             </div>
         </div>
         <v-table
+            code="inquiry_list"
+            hide-filter-value
             :data="tabData"
             :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
@@ -78,11 +79,6 @@ export default {
         id: 'quotationNo',
         label: this.$i.inquiry.quotationNo,
         operator: 'like'
-      }, {
-        id: 'updateDt',
-        label: this.$i.inquiry.updateDt,
-        type: 'dateRange',
-        operator: 'between'
       }],
       tabData: [],
       viewByStatus: 0,
@@ -124,13 +120,8 @@ export default {
       'setRecycleBin',
       'setDic'
     ]),
-    inputEnter(val) {
-      if (!val.id || !val.value) {
-        this.params.operatorFilters = [];
-      } else {
-        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
-        this.params.operatorFilters = [{property: val.id, value, operator: val.operator}];
-      }
+    inputEnter(val, operatorFilters) {
+      this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
     },
     gettabData() {

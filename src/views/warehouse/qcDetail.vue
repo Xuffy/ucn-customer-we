@@ -266,6 +266,7 @@
         </div>
         <div class="product-info">
             <v-table
+                    code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
                     :buttons="[{'label': 'Detail', type: 1}]"
@@ -957,7 +958,7 @@
                 });
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_QC_ORDER'}});
+            this.setLog({query:{code:'WAREHOUSE'}});
         },
         watch:{
             selectList(n){

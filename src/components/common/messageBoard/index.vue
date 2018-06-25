@@ -12,16 +12,16 @@
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
           <pre class="box" v-text="item.content"></pre>
-          <img :src="item.src" v-if="item.src">
+          <!--<img :src="item.src" v-if="item.src">-->
         </li>
       </ul>
       <div class="form-box">
         <div class="form">
           <el-input type="textarea" v-model="messageContent"></el-input>
           <br/>
-          <!--<div class="upload_div">
-            <v-upload only-image></v-upload>
-          </div>-->
+          <div class="upload_div">
+            <v-upload only-image ref="fileUpload" :limit="5"></v-upload>
+          </div>
 
         </div>
         <div class="btn-box">
@@ -85,15 +85,21 @@
     },
     methods: {
       sendMessage() {
-        if (!this.messageContent) return this.$message.warning(this.$i.common.content);
+        let files = this.$refs.fileUpload.getFiles() || [];
+        if (!this.messageContent && _.isEmpty(files)) {
+          return this.$message.warning(this.$i.common.content);
+        }
 
         this.submitLoading = true;
 
+        // console.log(this.$refs.fileUpload.getFiles())
+        // return;
         this.$ajax.post(this.$apis.CHATMESSAGE_ADD, {
           moduleCode: this.module,
           bizCode: this.code,
           bizNo: this.id,
           content: this.messageContent,
+          filePaths: files
         }).then(data => {
           this.messageContent = '';
           this.getMessage();

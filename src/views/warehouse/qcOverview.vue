@@ -23,6 +23,7 @@
             </div>
         </div>
         <v-table
+                code="uwarehouse_qc_order_overview"
                 :height="500"
                 :data="tabData"
                 :loading='loading'
@@ -106,15 +107,15 @@
                 this.getQcOrderList();
             },
             checked(item) {
-                this.selectList = item
+                this.selectList = item;
             },
             inputEnter(val) {
-                if (!val.keyType) return this.$message({
-                    message: 'please choose a type',
+                if (!val.id) return this.$message({
+                    message: this.$i.warehouse.pleaseChooseAType,
                     type: 'warning'
                 });
-                if (val.keyType == '1') {
-                    this.params.qcOrderNo = val.key
+                if (val.id === 1) {
+                    this.params.qcOrderNo = val.value
                 }
                 this.getQcOrderList()
             },
@@ -184,7 +185,7 @@
             this.getUnit();
         },
         mounted() {
-            this.setLog({query: {code: 'BIZ_QC_ORDER'}});
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
     }
 </script>

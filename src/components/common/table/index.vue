@@ -6,8 +6,8 @@
         <slot name="header"></slot>
       </div>
       <div class="fixed">
-        <v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
-                        @change="val => {$emit('filter-value',val)}"></v-filter-value>
+        <!--<v-filter-value v-if="!hideFilterValue && code" ref="tableFilter" :code="code" :data="dataColumn"
+                        @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
                          @change="changeFilterColumn"></v-filter-column>

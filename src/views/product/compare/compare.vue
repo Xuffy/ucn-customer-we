@@ -35,6 +35,7 @@
             </el-checkbox-group>
         </div>
         <v-table
+                code="udata_purchase_sku_compare_list_detail"
                 :height="500"
                 v-loading="loadingTable"
                 :data="tableDataList"
@@ -392,7 +393,11 @@
                     }else{
                         let ids='';
                         this.selectList.forEach(v=>{
-                            ids+=(v.id.value+',');
+                            if(this.$route.params.type==='modify'){
+                                ids+=(v.skuId.value+',');
+                            }else if(this.$route.params.type==='new'){
+                                ids+=(v.id.value+',');
+                            }
                         });
                         this.$windowOpen({
                             url:'/order/create',
@@ -648,7 +653,6 @@
                 });
             },
 
-
             handleClick(e){
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
@@ -656,11 +660,6 @@
                         this.selectList.push(v);
                     }
                 });
-            },
-
-            //切换tab页
-            handleClick(){
-
             },
         },
         created(){
@@ -695,7 +694,7 @@
             this.getList();
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_SKU'}});
+            this.setLog({query:{code:'PRODUCT'}});
         },
         watch:{
             selectList(n){

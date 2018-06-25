@@ -15,6 +15,8 @@
           </div>
           <div class="tab-msg-wrap">
             <v-table
+                code="inquiry_list"
+                hide-filter-value
                 :height="450"
                 :data.sync="newTabData"
                 :selection="false"
@@ -30,11 +32,12 @@
           <div class="status">
             <div class="btn-wrap">
               <el-button @click="addProduct" :disabled="!statusModify">{{ $i.common.addProduct }}</el-button>
-              <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length - submitData.deleteDetailIds.length}})</span></el-button>
+              <el-button type="danger" :disabled="checkedAll && checkedAll.length && statusModify ? false : true" @click="removeProduct()">{{ $i.common.remove }} <span>({{checkedAll.length}})</span></el-button>
             </div>
-            <select-search :options="options" v-model="id" v-show="!statusModify" />
           </div>
           <v-table
+              code="inquiry_sku_list"
+              hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
               :loading="tableLoad"
@@ -139,14 +142,6 @@ export default {
       keyWord: '',
       value: '',
       switchStatus: false,
-      options: [
-        {id: '1', label: 'SKU code'},
-        {id: '2', label: 'SKU Name'},
-        {id: '3', label: 'SKU description'},
-        {id: '4', label: 'Vendor SKU code'},
-        {id: '5', label: 'Vendor SKU name'},
-        {id: '6', label: 'Vendor SKU description'}
-      ],
       list: [],
       tableColumn: '',
       submitData: {
@@ -509,6 +504,7 @@ export default {
     // 删除product 某个单
     removeProduct() {
       this.newProductTabData = this.newProductTabData.filter(item => this.checkedAll.map(i => i.skuId.value.toString()).indexOf(item.skuId.value.toString()) === -1);
+      // this.checkedAll.filter(item => item.id.value).map(item => item.id.value);
       this.checkedAll = [];
     },
     modifyCancel() {

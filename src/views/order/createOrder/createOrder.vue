@@ -653,6 +653,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
+                    @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -1227,7 +1228,6 @@
                     this.disableClickSaveDraft=false;
                 });
             },
-
             getDetail(e){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
@@ -1291,7 +1291,6 @@
                     }else{
                         this.hasCancelOrder=false;
                     }
-
                 }).finally(err=>{
                     this.loadingPage=false;
                     this.disableClickCancelModify=false;
@@ -1471,8 +1470,6 @@
                             item.skuUnitVolume._value=item.skuUnitVolume.value?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
-                                console.log(item,'item')
-                                console.log(this.category,'this.category')
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
                         }
@@ -2025,6 +2022,15 @@
 
 
             },
+
+
+            /**
+             * history插槽事件
+             * */
+            handlePriceBlur(e){
+                console.log(e,'???')
+            },
+
 
             /**
              * 搜索框事件
