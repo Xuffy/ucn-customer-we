@@ -28,7 +28,7 @@
             <el-button size="mini" style="width: 100%" @click="submitFilter">{{$i.common.confirm}}</el-button>
           </el-col>
           <el-col :span="12">
-            <el-button size="mini" style="width: 100%" @click="visible =  false">{{$i.common.cancel}}</el-button>
+            <el-button size="mini" style="width: 100%" @click="cancel">{{$i.common.cancel}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -130,6 +130,10 @@
           .finally(() => {
             this.loading = false;
           });
+      },
+      cancel() {
+        this.visible = false;
+        this.getConfig();
       },
       defaultChecked() {
         let list = [];

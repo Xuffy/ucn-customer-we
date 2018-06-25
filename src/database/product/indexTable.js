@@ -15,8 +15,8 @@ export default {
         _image:true,
         key:'pictures'
     },
-    status: {
-
+    skuSaleStatus: {
+        key:'status'
     },
     code:{
         
