@@ -90,7 +90,7 @@
     vertical-align: middle;
   }
   .ucn-view-picture .el-carousel__item .img .image{
-    background-size: 100% 100%;
+    /*background-size: 100% 100%;*/
   }
 
   .ucn-view-picture .el-dialog__body {
