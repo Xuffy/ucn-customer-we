@@ -556,6 +556,7 @@
                         message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
+
                     this.disableClickAddBookmark = false;
                 }).catch(err => {
                     this.disableClickAddBookmark = false;
@@ -774,7 +775,7 @@
 
         },
         mounted() {
-            this.setLog({query: {code: 'BIZ_SKU'}});
+            this.setLog({query: {code: 'PRODUCT'}});
         },
 
         watch: {

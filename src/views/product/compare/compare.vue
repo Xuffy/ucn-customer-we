@@ -35,6 +35,7 @@
             </el-checkbox-group>
         </div>
         <v-table
+                code="udata_purchase_sku_compare_list_detail"
                 :height="500"
                 v-loading="loadingTable"
                 :data="tableDataList"
