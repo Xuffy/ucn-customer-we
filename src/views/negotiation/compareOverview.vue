@@ -9,19 +9,19 @@
             <select-search :options="options" @inputEnter="inputEnter"/>
         </div>
         <v-table
+            code="inquiry_compare_list"
+            hide-filter-value
             :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]"
             @action="action"
             @change-checked="changeChecked"
-            :height="455"
-        />
+            :height="455"/>
         <v-pagination
             :page-data.sync="bodyData"
             @change="handleSizeChange"
             @size-change="pageSizeChange"
-            :page-sizes="[50, 100, 200]"
-        />
+            :page-sizes="[50, 100, 200]"/>
     </div>
 </template>
 <script>

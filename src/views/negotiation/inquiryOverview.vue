@@ -17,8 +17,7 @@
             <select-search
                 :options="options"
                 @inputEnter="inputEnter"
-                :searchLoad="searchLoad"
-            />
+                :searchLoad="searchLoad"/>
         </div>
         <div class="fn">
             <div class="btn-wrap">
@@ -37,6 +36,8 @@
             </div>
         </div>
         <v-table
+            code="inquiry_list"
+            hide-filter-value
             :data="tabData"
             :buttons="[{label: 'detail', type: 'detail'}]"
             :height="450"
