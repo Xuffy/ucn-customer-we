@@ -303,7 +303,6 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
-        console.log(val, type)
         if (this.dataList.length !== val.length) {
           this.$refs.tableBox.scrollTop = 0;
         }
