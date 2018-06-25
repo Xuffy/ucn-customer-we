@@ -405,6 +405,7 @@
             :visible.sync="quickCreateDialogVisible"
             width="70%">
             <v-table
+                    :selection="false"
                     :height="400"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -993,7 +994,7 @@
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    // status:99
+                    status:99
                 },
 
                 /**
@@ -1443,7 +1444,9 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
+                            if(item.skuPictures){
+                                item.skuPictures._image=false;
+                            }
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1457,13 +1460,13 @@
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuUnit._value=item.skuUnit?this.$change(this.skuUnitOption,'skuUnit',item,true).name:'';
+                            item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
+                            item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
+                            item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
+                            item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
@@ -1881,7 +1884,9 @@
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
+                            if(item.skuPictures){
+                                item.skuPictures._image=false;
+                            }
                             item.skuLabelPic._image=false;
                             item.skuPkgMethodPic._image=false;
                             item.skuInnerCartonPic._image=false;
@@ -1895,13 +1900,13 @@
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
-                            item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
-                            item.skuUnitLength._value=this.$change(this.lengthOption,'skuUnitLength',item,true).name;
-                            item.skuExpireUnit._value=this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name;
-                            item.skuStatus._value=this.$change(this.skuStatusOption,'skuStatus',item,true).name;
-                            item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
-                            item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
+                            item.skuUnit._value=item.skuUnit?this.$change(this.skuUnitOption,'skuUnit',item,true).name:'';
+                            item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
+                            item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
+                            item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
+                            item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
