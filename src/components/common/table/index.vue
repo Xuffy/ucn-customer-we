@@ -97,7 +97,7 @@
             <td v-if="rowspan < 2">
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && typeof item === 'object'">
-              <div v-text="totalItem[item.key]._value && totalItem[item.key].value"></div>
+              <div v-text="totalItem[item.key]._value || totalItem[item.key].value"></div>
             </td>
             <td v-if="buttons">
               <div></div>
@@ -303,6 +303,7 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
+        console.log(val, type)
         if (this.dataList.length !== val.length) {
           this.$refs.tableBox.scrollTop = 0;
         }
