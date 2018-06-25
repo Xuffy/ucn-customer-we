@@ -30,7 +30,7 @@
                     v-text="row[item.key]._value || row[item.key].value"></span>
 
               <div v-else-if="row[item.key]._slot && !row._remark">
-                <slot :name="item._slot" :data="{row:row,item:row[item.key]}"></slot>
+                <slot :name="item._slot" :data="row[item.key]"></slot>
               </div>
 
               <div v-else>

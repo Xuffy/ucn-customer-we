@@ -12,7 +12,7 @@
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
           <pre class="box" v-text="item.content"></pre>
-          <img :src="item.src" v-if="item.src">
+          <!--<img :src="item.src" v-if="item.src">-->
         </li>
       </ul>
       <div class="form-box">
