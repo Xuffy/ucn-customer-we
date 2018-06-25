@@ -25,6 +25,7 @@
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
+                                    format="yyyy-MM-dd"
                                     :disabled="v.disabled || v.disableDetail || !isModify"
                                     v-model="orderForm[v.key]"
                                     :editable="false"
@@ -469,6 +470,7 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table
+                code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
                 :buttons="isModify?productInfoBtn:productNotModifyBtn"
@@ -2623,7 +2625,7 @@
             });
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_ORDER'}});
+            this.setLog({query:{code:'ORDER'}});
             this.setDraft({
                 name: 'orderDraft',
                 show: true

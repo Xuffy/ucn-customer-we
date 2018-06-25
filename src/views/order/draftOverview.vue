@@ -319,11 +319,7 @@
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'BIZ_ORDER'}});
-            this.setDraft({
-                name: 'orderDraft',
-                show: true
-            });
+            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){

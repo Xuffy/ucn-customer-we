@@ -79,7 +79,7 @@
             :props="defaultProps"
             @check-change="generalCategoryChange"></el-tree>
           <div class="btn-wrap">
-            <el-button type="primary" @click="save">{{ $i.common.save }}</el-button>
+            <el-button type="primary" @click="save" :disabled="!myCategory">{{ $i.common.save }}</el-button>
           </div>
         </div>
       </div>
@@ -260,37 +260,16 @@
 
         });
       },
-      genCheckBox(id, list) {
-        list.forEach(items => {
-          if (id === items.id + '') this.$refs.generalTree.setChecked(items.id, true, true);
-          if (items[this.defaultProps.children] && items[this.defaultProps.children].length) this.genCheckBox(id, items[this.defaultProps.children]);
-        });
-      },
-      setCheckBox(list) {
-        console.log(list)
-        list.forEach(items => {
-          this.$refs.generalTree.setChecked(items.id, false, true);
-          if (items[this.defaultProps.children] && items[this.defaultProps.children].length) this.setCheckBox(items[this.defaultProps.children]);
-        });
-      },
       myCategoryChange(val) {
         if (val.children && val.children.length) {
+          this.$refs.generalTree.setCheckedKeys([]);
           return this.myCategory = '';
         }
         this.myCategory = val.id;
         this.$ajax.get(this.$apis.GET_PURCHASE_CHANGE_MAPPING_CATEGORY, {
           id: val.id
         }).then(res => {
-          console.log(res)
-          this.setCheckBox(this.mgeneralCategoryData)
-          if (res) {
-            const genCheckBox = res.split(',');
-            genCheckBox.forEach(item => {
-              this.genCheckBox(item, this.mgeneralCategoryData)
-            });
-          } else {
-            this.genCheckBox('', this.mgeneralCategoryData)
-          }
+          this.$refs.generalTree.setCheckedKeys(res ? res.split(',') : []);
         });
       },
       save() {
@@ -302,12 +281,9 @@
           categoryId: this.myCategory,
           sysId: nodes.toString()
         };
-        /*if (!params.categoryId) return this.$message({
-          type: 'info',
-          message: this.$i.common.pleaseSelectTheLeafNode
-        });*/
         this.$ajax.post(this.$apis.POST_PURCHASE_SAVE_MAPPING_CATEGORY, params)
           .then(res => {
+            this.$message.success(this.$i.hintMessage.operationSuccessful);
             this.mappingRelationData = res;
             this.mappingRelationDataSplit(this.mappingRelationData);
           });
