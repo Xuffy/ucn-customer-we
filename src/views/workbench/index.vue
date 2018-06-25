@@ -64,7 +64,7 @@
     <!--<button @click="test">sadas</button>-->
     <!--<v-upload ref="upload"></v-upload>-->
     <!--<v-import-template ref="importFile" code="PRODUCT_SUPPLIER" biz-code="PRODUCT_SUPPLIER"></v-import-template>-->
-    <v-message-board module="workbench" code="workbench" id="123"></v-message-board>
+    <!--<v-message-board module="workbench" code="workbench" id="123"></v-message-board>-->
   </div>
 </template>
 
