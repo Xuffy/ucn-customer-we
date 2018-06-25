@@ -33,7 +33,7 @@
                         </select-search>
                     </div>
                     <div class="Date">
-                        <span class="text" style="width:170px">{{$i.payment.orderCreateDate}} : </span>
+                        <span class="text" style="width:145px">{{$i.payment.orderCreateDate}} : </span>
                         <el-date-picker
                                 v-model="date"
                                 type="daterange"
@@ -219,12 +219,10 @@
                      item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
                      item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
                     let currencyCode;
-                    // currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-                    // item.currencyCode._value = currencyCode.name || '';
-                    console.log(item.currencyCode._value)
+                    currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currencyCode.name || '';
                      return item;
                   });
-                  console.log(this.totalRow)
                   this.pageData=res;
                 })
                 .catch((res) => {
@@ -273,7 +271,6 @@
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
-
                 this.$message({
                   type: 'success',
                   message: '催促成功!'
@@ -312,7 +309,7 @@
     }
     .head .text{
         display: inline-block;
-        width: 70px;
+        width: 60px;
         font-size: 14px;
         /*font-weight: bold;*/
         color:#999999;
@@ -321,7 +318,7 @@
         content: '';
         display: table;
         clear: both;
-      overflow: hidden;
+        overflow: hidden;
     }
     .spe-div .View{
         float: left;

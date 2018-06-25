@@ -55,7 +55,7 @@ export default {
       ULOG_URL: '//test.ulog-facade.ucnscm.cn', // 日志服务
       UPURCHASE_URL: '//test.upurchase-facade.ucnscm.cn', // 采购端
       USUPPLY_URL: '//test.usupply-facade.ucnscm.cn', // 供应商端
-      USERVICE_URL: '//test.uservice.ucnscm.cn', // 服务商端
+      USERVICE_URL: '//test.uservice-facade.ucnscm.cn', // 服务商端
       UBIZLOG_URL: '//test.ubizlog.ucnscm.cn', // 业务日志
       UWORKBENCH_URL: '//test.uworkbench-facade.ucnscm.cn',
       UIE_URL: '//test.uie.ucnscm.cn',

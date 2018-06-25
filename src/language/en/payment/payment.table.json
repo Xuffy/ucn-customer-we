@@ -14,5 +14,6 @@
   "waitReceipt":"Wait Receipt",
   "planDateOfReceipt":"Plan Date Of Receipt",
   "actualDateOfReceipt":"Actual Date Of Receipt",
-  "type": "type"
+  "type": "type",
+  "total": "Total"
 }
