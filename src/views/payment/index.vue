@@ -219,8 +219,8 @@
                      item.waitPayment.value = (Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8);
                      item.waitReceipt.value = (Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8);
                     let currencyCode;
-                    // currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-                    // item.currencyCode._value = currencyCode.name || '';
+                    currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
+                    item.currencyCode._value = currencyCode.name || '';
                     console.log(item.currencyCode._value)
                      return item;
                   });
