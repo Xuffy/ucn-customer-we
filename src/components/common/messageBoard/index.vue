@@ -19,9 +19,9 @@
         <div class="form">
           <el-input type="textarea" v-model="messageContent"></el-input>
           <br/>
-          <div class="upload_div">
+          <!--<div class="upload_div">
             <v-upload only-image></v-upload>
-          </div>
+          </div>-->
 
         </div>
         <div class="btn-box">

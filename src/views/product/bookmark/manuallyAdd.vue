@@ -985,13 +985,13 @@
 
                 this.disabledSubmit=true;
                 this.$ajax.post(this.$apis.add_customerSku,params).then(res=>{
-                    // this.$router.push({
-                    //     path:'/product/bookmarkDetail',
-                    //     query:{
-                    //         id:'',
-                    //         bookmarkId:res
-                    //     }
-                    // });
+                    this.$router.push({
+                        path:'/product/bookmarkDetail',
+                        query:{
+                            id:res.skuId,
+                            bookmarkId:res.bookmarkId
+                        }
+                    });
                 }).finally(err=>{
                     this.disabledSubmit=false;
                 });
