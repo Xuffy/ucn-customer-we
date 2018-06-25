@@ -14,8 +14,8 @@
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
                 <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
                 <div style="margin-left: 20px;">
-                  <el-checkbox v-model="hideSame" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
-                  <el-checkbox v-model="highLight" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
+                  <el-checkbox v-model="hideSame" @change="renderTabdata" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
+                  <el-checkbox v-model="highLight" @change="renderTabdata" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
                 </div>
             </div>
             <div>
@@ -41,6 +41,7 @@
             :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
+            :page-sizes="[50, 100, 200]"
         />
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
@@ -68,6 +69,7 @@ export default {
       compareName: '',
       tabLoad: false,
       tabData: [],
+      bakData: [],
       Filed: '',
       compareBy: 0,
       hideSame: false,
@@ -202,6 +204,16 @@ export default {
     getDirData() {
       return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(res));
     },
+    renderTabdata() {
+      let data = JSON.parse(JSON.stringify(this.bakData));
+      if (this.hideSame) {
+        data = this.$table.setHideSame(data);
+      }
+      if (this.highLight) {
+        data = this.$table.setHighlight(data);
+      }
+      this.tabData = data;
+    },
     getCompareList() {
       let url, column;
       this.tabLoad = true;
@@ -215,7 +227,8 @@ export default {
 
       this.$ajax.post(url, this.params).then(res => {
         this.pageTotal = res.tc;
-        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.bakData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.renderTabdata();
         this.compareName = res.appendant ? res.appendant.compareName : this.compareName;
         this.tabLoad = false;
       });
@@ -232,7 +245,8 @@ export default {
       }
       this.$ajax.post(url, this.params).then(res => {
         this.pageTotal = res.tc;
-        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.bakData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.renderTabdata();
         this.tabLoad = false;
         this.searchLoad = false;
       }, () => {
