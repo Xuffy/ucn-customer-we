@@ -107,7 +107,7 @@
                     id: 2,
                     label: 'Sku Code'
                 }],
-                keyType: '',
+                id: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
@@ -147,7 +147,7 @@
                 });
             },
             selectChange(val) {
-                this.keyType = val;
+                this.id = val;
             },
             checked(item) {
                 this.selectedList = item;
@@ -168,15 +168,15 @@
                 }
             },
             inputEnter(val) {
-                if (!val.keyType) return this.$message(this.$i.order.pleaseChooseType);
-                if (val.keyType === 1) {
-                    this.params.orderNo = val.key;
+                if (!val.id) return this.$message(this.$i.order.pleaseChooseType);
+                if (val.id === 1) {
+                    this.params.orderNo = val.value;
                     this.params.skuCode = '';
                     this.view='1';
                     this.getData()
                 } else {
                     this.params.orderNo = '';
-                    this.params.skuCode = val.key;
+                    this.params.skuCode = val.value;
                     this.view='2';
                     this.getData()
                 }
