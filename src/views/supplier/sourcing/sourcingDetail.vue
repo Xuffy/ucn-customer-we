@@ -191,7 +191,6 @@
               }
             },
             createInquiry() {
-              console.log(this.basicDate)
                 this.$windowOpen({
                     url: '/negotiation/createInquiry',
                     params: {

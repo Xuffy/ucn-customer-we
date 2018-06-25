@@ -95,5 +95,8 @@
   "sureDelete":"Sure Delete?",
   "prompt":"Prompt",
   "sure":"Sure",
-  "addProduct":"Add Product"
+  "addProduct":"Add Product",
+  "addFromProduct":"Add from Product",
+  "addFromBookmark":"Add from Bookmark",
+  "skuSaleStatus":"SKU Sale Status"
 }

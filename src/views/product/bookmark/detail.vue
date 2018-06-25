@@ -7,9 +7,9 @@
             <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
+                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="300px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
-                                <img :src="item" style="width: 100%" alt="">
+                                <v-image :src="item"></v-image>
                             </el-carousel-item>
                         </el-carousel>
                     </el-col>
@@ -44,7 +44,7 @@
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
                     <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                    <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                    <el-button :disabled="productForm.customerCreate" @click="createOrder">{{$i.product.createOrder}}</el-button>
                     <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
                     <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
                     <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
@@ -243,6 +243,7 @@
 
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
+                    :disableBookmarkChoose="true"
                     :forceUpdateNumber="forceNumber"
                     :title="addProductTitle"
                     :type="addProductType"
@@ -258,7 +259,7 @@
     import addTable from '../addlineTable'
     import compareList from '../compareList'
     import product from '../addProduct'
-    import {VTable,VUpload,VPagination} from '@/components/index'
+    import {VTable,VUpload,VPagination,VImage} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
@@ -269,7 +270,8 @@
             VTable,
             product,
             VUpload,
-            page:VPagination
+            page:VPagination,
+            VImage
         },
         data(){
             return{
@@ -449,9 +451,7 @@
                  * compareList配置
                  * */
                 showCompareList:false,      //是否显示比较列表
-                compareData:[
-
-                ],
+                compareData:[],
 
                 /**
                  * remark data
@@ -496,7 +496,6 @@
                     this.copyNameCustomer=this.productForm.nameCustomer;
                 }
             },
-
             saveEdit(){
                 let params={
                     customerCode: "",
@@ -520,7 +519,6 @@
                     this.disabledClickSaveEdit=false;
                 });
             },
-
             cancelEdit(){
                 this.notEdit=true;
                 this.productForm.customerSkuCode=this.copyCustomerSkuCode;
@@ -563,11 +561,9 @@
                     url:'/product/bookmarkManuallyAdd'
                 });
             },
-
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
-
             handleOkClick(e){
                 if(e.length===0){
                     //表示一个都没选
@@ -591,11 +587,9 @@
                     });
                 }
             },
-
             handleClick(){
                 //切换tab页
             },
-
             getTableData(){
                 this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
@@ -641,7 +635,6 @@
                     this.loadingRemark=false;
                 });
             },
-
             editRemark(index,row){
                 this.editRemarkData.id=row.id;
                 this.editRemarkData.skuId=this.productForm.id;
@@ -681,8 +674,6 @@
                 this.remarkConfig.ps=e;
                 this.getRemarkData();
             },
-
-
 
 
             createRemark(){
@@ -732,7 +723,6 @@
 
                 });
             },
-
             createInquiry(){
                 this.$windowOpen({
                     url:'/negotiation/createInquiry',
@@ -742,7 +732,6 @@
                     },
                 })
             },
-
             createOrder(){
                 this.$windowOpen({
                     url:'/order/create',
@@ -782,17 +771,12 @@
                     this.$localStore.set('compareProductList',compareList)
                 }
             },
-
             addToBookmark(){
-
                 this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
                     console.log(res)
                 }).catch(err=>{
                     console.log(err)
                 });
-
-
-
                 // this.$router.push({
                 //     path:'/product/bookmark/detail',
                 //     query:{

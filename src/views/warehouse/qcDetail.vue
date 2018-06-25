@@ -124,6 +124,8 @@
                     <el-col class="speCol" :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                         <el-form-item prop="11" :label="$i.warehouse.remark">
                             <el-input
+                                    type="textarea"
+                                    :autosize="{minRows: 2}"
                                     v-model="qcDetail.remark"
                                     :disabled="true">
                             </el-input>
