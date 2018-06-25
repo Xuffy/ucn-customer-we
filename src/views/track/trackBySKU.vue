@@ -76,14 +76,14 @@
                 this.getList();
             },
             inputEnter(val) {
-              if (!val.keyType) return this.$message({
+              if (!val.label) return this.$message({
                 message: 'please choose a type',
                 type: 'warning'
               });
-              if (val.keyType == '1') {
-                this.params.skuCodeLike= val.key
+              if (val.id == '1') {
+                this.params.skuCodeLike= val.value
               }else{
-                this.params.orderNoLike= val.key
+                this.params.orderNoLike= val.value
               }
               this.getList()
             },
