@@ -54,7 +54,7 @@
                 <el-tab-pane :label="$i.supplier.inquiryHistory"  name="inquireHistory">
                   <v-table  :data="inquireData" :selection="false"   style='marginTop:10px'/>
                 </el-tab-pane>
-                <el-tab-pane label="attachment" name="attchment">
+                <el-tab-pane :label="$i.supplier.attachment" name="attchment">
                   <!--<div class="section-btn" style="margin-bottom:10px;">-->
                     <!--<el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>-->
                   <!--</div>-->

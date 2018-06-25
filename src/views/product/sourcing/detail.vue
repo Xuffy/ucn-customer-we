@@ -691,7 +691,7 @@
             this.getCompareList();
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_SKU'}});
+            this.setLog({query:{code:'PRODUCT'}});
         },
     }
 </script>

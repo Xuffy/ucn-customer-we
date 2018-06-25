@@ -58,5 +58,6 @@
   "pleaseInput":"Please Input",
   "summary":"Summary",
   "baseSupplierName":"Base Supplier Name",
-  "importantSupplier":"Important Supplier"
+  "importantSupplier":"Important Supplier",
+  "skuQuantity":"SKU Quantity"
 }

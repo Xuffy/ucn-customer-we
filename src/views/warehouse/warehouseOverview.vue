@@ -6,7 +6,6 @@
         <div class="body">
             <div class="head">
                 <span>{{$i.warehouse.status}}</span>
-
                 <el-radio-group class="radioGroup" @change="changeStatus" v-model="warehouseConfig.skuInventoryStatusDictCode" size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
                     <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
@@ -19,6 +18,7 @@
             </div>
             <div class="section">
                 <v-table
+                        code="uwarehouse_overview"
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
@@ -132,22 +132,22 @@
             },
 
             searchInbound(e){
-                if(!e.keyType){
+                if(!e.id){
                     return this.$message({
-                        message: 'please choose a type',
+                        message: this.$i.warehouse.pleaseChooseAType,
                         type: 'warning'
                     });
                 }else{
-                    if(e.keyType===1){
+                    if(e.id===1){
                         this.warehouseConfig.inboundNo='';
-                        this.warehouseConfig.orderNo=e.key;
+                        this.warehouseConfig.orderNo=e.value;
                         this.warehouseConfig.skuCode='';
-                    }else if(e.keyType===2){
+                    }else if(e.id===2){
                         this.warehouseConfig.inboundNo='';
                         this.warehouseConfig.orderNo='';
-                        this.warehouseConfig.skuCode=e.key;
-                    }else if(e.keyType===3){
-                        this.warehouseConfig.inboundNo=e.key;
+                        this.warehouseConfig.skuCode=e.value;
+                    }else if(e.id===3){
+                        this.warehouseConfig.inboundNo=e.value;
                         this.warehouseConfig.orderNo='';
                         this.warehouseConfig.skuCode='';
                     }
@@ -197,7 +197,7 @@
             this.getUnit();
         },
         mounted(){
-
+            this.setLog({query:{code:'WAREHOUSE'}});
         },
         watch:{
 

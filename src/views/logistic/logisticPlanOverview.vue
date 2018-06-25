@@ -42,9 +42,10 @@
         </el-radio-group>
       </div>
     </div>
+    <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
       :data="tabData"
-      :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null"
+      :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
       @change-checked="changeChecked"
       :loading="tableLoading"
@@ -269,6 +270,7 @@
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
+          console.log(res,'res')
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
             _.mapObject(item, val => {
