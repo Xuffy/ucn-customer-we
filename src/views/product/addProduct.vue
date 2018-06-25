@@ -556,7 +556,7 @@
                         message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
-
+                    this.getData();
                     this.disableClickAddBookmark = false;
                 }).catch(err => {
                     this.disableClickAddBookmark = false;

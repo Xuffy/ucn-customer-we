@@ -25,6 +25,7 @@
 
         <!--form-->
         <v-table
+                code="uorder_list"
                 ref='vtable'
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
@@ -332,7 +333,7 @@
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'BIZ_ORDER'}});
+            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){

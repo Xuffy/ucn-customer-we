@@ -211,7 +211,6 @@
                 });
             },
 
-
             /**
              * 分页操作
              * */
@@ -233,7 +232,7 @@
             // });
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_SKU'}});
+            this.setLog({query:{code:'PRODUCT'}});
         },
         watch:{
             selectList(n){

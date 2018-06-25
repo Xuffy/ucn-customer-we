@@ -197,7 +197,7 @@
             this.getUnit();
         },
         mounted(){
-
+            this.setLog({query:{code:'WAREHOUSE'}});
         },
         watch:{
 

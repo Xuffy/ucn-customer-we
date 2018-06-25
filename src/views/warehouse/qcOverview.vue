@@ -185,7 +185,7 @@
             this.getUnit();
         },
         mounted() {
-            this.setLog({query: {code: 'BIZ_QC_ORDER'}});
+            this.setLog({query: {code: 'WAREHOUSE'}});
         },
     }
 </script>

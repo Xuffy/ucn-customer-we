@@ -2623,7 +2623,7 @@
             });
         },
         mounted(){
-            this.setLog({query:{code:'BIZ_ORDER'}});
+            this.setLog({query:{code:'ORDER'}});
             this.setDraft({
                 name: 'orderDraft',
                 show: true
