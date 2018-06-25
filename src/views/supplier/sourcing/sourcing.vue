@@ -243,14 +243,24 @@
             },
             //...........进入detail
             detail(item) {
+              if (item.bookmarkId.value){
                 this.$windowOpen({
-                    url: '/supplier/sourcingDetail',
-                    params: {
-                        companyId: item.companyId.value,
-                        id: item.id.value
-                    }
+                  url: '/supplier/bookmarkDetail',
+                  params: {
+                    companyId: item.companyId.value,
+                    id: item.id.value
+                  }
 
                 });
+              }else{
+                this.$windowOpen({
+                  url: '/supplier/sourcingDetail',
+                  params: {
+                    companyId: item.companyId.value,
+                    id: item.id.value
+                  }
+                });
+              }
             },
             //.........checked
             checked(item) {

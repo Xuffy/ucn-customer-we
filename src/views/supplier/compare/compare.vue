@@ -202,6 +202,8 @@ addNewProduct
 
                           return e;
                         });
+                        copy_data = this.tableDataList;
+                        console.log(copy_data)
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -218,6 +220,8 @@ addNewProduct
 
                       return e;
                     });
+                    copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
+                    console.log(copy_data)
                     this.disabledLine=this.tableDataList;
                     this.allowDeleteCompare=false;
                     this.allowBottomClick=false;
@@ -500,6 +504,7 @@ addNewProduct
               }
           },
           screenTableStatus(){
+            console.log(this.screenTableStatus)
              if (this.screenTableStatus.length != 0){
                this.screenTableStatus.forEach(v => {
                   if (v == 1){
@@ -509,20 +514,8 @@ addNewProduct
                   }
                })
              }else{
-               this.tableDataList.forEach( v => {
-                if(v.id._color){
-                  _.mapObject(v, val => {
-                    val._color = ''
-                  })
-                }else{
-                  _.mapObject(v, val => {
-                    val._hide = ''
-                    v.id._hide = true;
-                    v.companyId._hide = true;
-                  })
-                }
-               })
-               // this.tableDataList = copy_data
+                this.tableDataList = copy_data
+
              }
           },
         },
