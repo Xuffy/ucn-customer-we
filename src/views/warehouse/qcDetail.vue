@@ -266,6 +266,7 @@
         </div>
         <div class="product-info">
             <v-table
+                    code="uwarehouse_qc_order_detail"
                     :loading="loadingProductInfoTable"
                     :data="productInfoData"
                     :buttons="[{'label': 'Detail', type: 1}]"
