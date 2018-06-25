@@ -1,8 +1,9 @@
 <template>
   <div class="place-logistic-plan">
-    <div class="hd-top" v-if="planId&&!isLoadingList">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
-    <div class="hd-top" v-if="!planId">{{ $i.logistic.placeNewLogisticPlan }}</div>
-    <div class="hd-top" v-if="isLoadingList">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='placeLogisticPlan'">{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + '    ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='logisticDraftDetail'">{{ $i.logistic.logisticDraftDetail + '    ' + logisticsNo}}</div>
     <form-list :DeliveredEdit="deliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange" @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"/>
     <el-row :gutter="10">
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
@@ -64,7 +65,7 @@
       </div>
     </el-dialog>
     <messageBoard v-if="!isCopy&&planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -86,6 +87,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      fieldDisplay:null,
       deliveredEdit:false,
       negotiate:'',
       fieldDisplay:{},
@@ -319,6 +321,7 @@ export default {
     getDetails () {
       let url = this.$route.query.loadingList ? this.$apis.get_order_details :this.$apis.get_plan_details
       this.$ajax.get(`${url}${this.planId}`).then(res => {
+        this.fieldDisplay = res.fieldDisplay;
         this.createdPlanData(res)
         this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
@@ -605,6 +608,7 @@ export default {
             // this.pageName = 'planDetail';
           break;
         case 'confirm':
+        case 'read':
             this.conformPlan();
           break;
         case 'cancel':
@@ -624,13 +628,14 @@ export default {
       }
     },
     conformPlan(){
-      this.$ajax.post(this.$apis.logistics_plan_confirm,{id:this.planId}).then(res => {
+      let url = this.$route.name =='loadingListDetail' ? 'logistics_order_confirm' : 'logistics_plan_confirm';
+      this.$ajax.post(this.$apis[url],{id:this.planId}).then(res => {
          this.$message({
           message: '发送成功，正在跳转...',
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic');
+            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
           }
         })
       })
@@ -642,7 +647,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic');
+            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
           }
         })
       })
@@ -657,7 +662,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic');
+            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
           }
         })
       })

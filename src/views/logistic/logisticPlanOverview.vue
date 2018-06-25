@@ -5,7 +5,7 @@
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList">
+          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
             <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
             <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}
             </el-radio-button>
@@ -181,6 +181,7 @@
     watch: {
       viewBy(newVal) {
         this.selectCount = []
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -198,6 +199,12 @@
       this.registerRoutes()
     },
     methods: {
+      initPage(){
+        this.pageParams = {
+          pn: 1,
+          ps: 10
+        };
+      },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
           name: 'overviewDraft',
@@ -217,6 +224,7 @@
           this.getDictionary(['LS_STATUS'])
           this.getContainerType()
         }
+        this.initPage();
         this.fetchDataList()
       },
       deleteData() {
@@ -226,6 +234,7 @@
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
+            this.initPage();
             this.fetchDataList()
             this.selectCount = []
             this.$message({
@@ -261,7 +270,10 @@
       addNew() {
         this.$router.push('/logistic/placeLogisticPlan')
       },
-      fetchDataList() {
+      fetchDataList(arg) {
+        if(arg){
+         this.initPage();
+        }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
@@ -270,7 +282,6 @@
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
-          console.log(res,'res')
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
             _.mapObject(item, val => {
