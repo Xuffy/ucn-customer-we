@@ -9,8 +9,7 @@
                     <el-radio-button
                         v-for="item in $db.inquiry.overoiewState"
                         :label="item.id"
-                        :key="item.id"
-                    >
+                        :key="item.id">
                     {{ item.text }}
                     </el-radio-button>
                 </el-radio-group>

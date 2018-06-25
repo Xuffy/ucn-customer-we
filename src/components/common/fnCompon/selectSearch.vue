@@ -67,7 +67,11 @@ export default {
     },
     methods: {
         inputEnter() {
-            this.$emit('inputEnter', this.keyObject);
+            let operatorFilters = [];
+            if (this.keyObject.id && this.keyObject.value) {
+                operatorFilters.push({property: this.keyObject.id, value: this.keyObject.value, operator: this.keyObject.operator || '='});
+            }
+            this.$emit('inputEnter', this.keyObject, operatorFilters);
         }
     }
 }
