@@ -235,7 +235,7 @@
                             align="right"
                             type="date"
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="$i.order.pleaseChoose">
+                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -249,8 +249,7 @@
                             align="right"
                             :editable="false"
                             type="date"
-                            :disabled="true"
-                            :placeholder="$i.order.pleaseChoose">
+                            :disabled="true">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -261,7 +260,7 @@
                 <template slot-scope="scope">
                     <el-input
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="$i.order.pleaseInput"
+                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
                             v-model="scope.row.remark"
                             clearable>
                     </el-input>
@@ -278,7 +277,7 @@
                             type="date"
                             :editable="false"
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="$i.order.pleaseChoose">
+                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
                     </el-date-picker>
                 </template>
             </el-table-column>
@@ -1536,7 +1535,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -1587,7 +1586,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -1737,6 +1736,9 @@
                 });
             },
             changePayment(e){
+                if(!e){
+                    return;
+                }
                 let name=_.findWhere(this.paymentOption,{code:e}).name;
                 if(name!=='L/C'){
                     this.disabledLcNo=true;
@@ -1868,7 +1870,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
@@ -1888,7 +1890,6 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -2561,7 +2562,7 @@
                             item.skuUnitWeight._value=item.skuUnitWeight?this.$change(this.weightOption,'skuUnitWeight',item,true).name:'';
                             item.skuUnitLength._value=item.skuUnitLength?this.$change(this.lengthOption,'skuUnitLength',item,true).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit?this.$change(this.expirationDateOption,'skuExpireUnit',item,true).name:'';
-                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusOption,'skuStatus',item,true).name:'';
+                            item.skuStatus._value=item.skuStatus?this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume?this.$change(this.volumeOption,'skuUnitVolume',item,true).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus?this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name:'';
                             if(item.skuCategoryId.value){
