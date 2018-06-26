@@ -5,10 +5,12 @@ export default {
     incoterm:{},
     incotermArea:{},
     currency:{},
-    //采购单价
-    //采购总价
+    unitPrice:{},
+    skuPrice:{},
     totalQty:{},
-
-
-
+    actDeliveryDt:{},
+    confirmQcDt:{},
+    actDepartureDt:{},
+    totalContainerQty:{},
+    skuQty:{},
 }

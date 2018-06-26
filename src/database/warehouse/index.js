@@ -16,6 +16,7 @@ import outboundOverviewTable from './outboundOverviewTable';
 import createQcProductTable from './createQcProductTable';
 import payment from './payment';
 import qcDetailProductInfo from './qcDetailProductInfo';
+import qcOrderDetailBasicInfo from './qcOrderDetailBasicInfo';
 
 
 
@@ -50,5 +51,6 @@ export default {
      * 新配置
      * */
     warehouseOverview,
-    qcPaymentTable
+    qcPaymentTable,
+    qcOrderDetailBasicInfo
 }

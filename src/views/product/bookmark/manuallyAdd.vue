@@ -1016,6 +1016,7 @@
                 });
 
                 this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','SKU_READILY_AVAIALBLE','ED_UNIT','WT_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
+                    console.log(res)
                     res.forEach(v=>{
                         if(v.code==='ED_UNIT'){
                             this.dateOption=v.codes;
@@ -1031,7 +1032,6 @@
                             this.skuUnitOption=v.codes;
                         }else if(v.code==='SKU_READILY_AVAIALBLE'){
                             this.availableOption=v.codes;
-                            console.log(this.availableOption,'availableOption')
                         }else if(v.code==='OEM_IS'){
                             this.oemOption=v.codes;
                         }else if(v.code==='UDB_IS'){
