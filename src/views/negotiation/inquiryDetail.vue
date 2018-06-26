@@ -432,10 +432,13 @@ export default {
       }
       let historyApi = item.skuId ? this.$apis.GET_INQUIRY_DETAIL_HISTORY : this.$apis.GET_INQUIRY_HISTORY;
       // 历史中始终要显示的列
-      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', '_remark'];
+      let excludeColumns = ['id', 'skuId', 'fieldDisplay', 'fieldRemark', 'fieldRemarkDisplay', 'updateDt', 'updateId', 'updateName', 'status', '_remark'];
       this.$ajax.get(historyApi, {id: item.id.value}).then(res => {
         // 处理只显示修改列
-        res.forEach(i => {
+        res.forEach((i, idx) => {
+          if (idx === res.length - 1) {
+            return;
+          }
           if (i.fieldDisplay) {
             let fs = Object.keys(i.fieldDisplay);
             if(fs.length === 0) return;

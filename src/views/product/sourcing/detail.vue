@@ -126,8 +126,6 @@
                             :loading="loadingTable"
                             :data="historyData">
                     </v-table>
-
-
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
                     <v-upload readonly :list="productForm.attachments" ref="uploadAttachment"></v-upload>
@@ -389,7 +387,7 @@
                 priceData:[],
                 tradeHistory:{
                     pn:1,
-                    ps:10,
+                    ps:100,
                     skuCode:'',
                     sorts:[
 
@@ -434,7 +432,14 @@
                 addRemarkFormVisible:false,
                 editRemarkFormVisible:false,
                 disableCreateRemark:false,      //是否禁用提交按钮
-                disableModifyRemark:false
+                disableModifyRemark:false,
+
+
+                /**
+                 * 字典配置
+                 * */
+                currencyOption:[],
+                incotermOption:[]
             }
         },
         methods:{
@@ -466,18 +471,20 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-
                     this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
-
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
-
-                        console.log(res,'res')
-                    }).finally(err=>{
+                        this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
+                            e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
+                            e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
+                            e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
+                            e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
+                        });
+                    }).finally(()=>{
                         this.loadingTable=false;
+                        this.notLoadingDone=true;
                     });
-                }).catch(err=>{
-                    console.log(err)
+                }).catch(()=>{
                     this.notLoadingDone=true;
                 })
             },
@@ -526,8 +533,6 @@
                     this.addRemarkFormVisible=false;
                 });
             },
-
-
             editRemark(index,row){
                 this.editRemarkData.id=row.id;
                 this.editRemarkData.skuId=this.productForm.id;
@@ -550,7 +555,6 @@
                     this.editRemarkFormVisible=false;
                 });
             },
-
             deleteRemark(index, row){
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
@@ -576,7 +580,6 @@
 
                 });
             },
-
             createInquiry(){
                 this.$windowOpen({
                     url:'/negotiation/createInquiry',
@@ -586,7 +589,6 @@
                     },
                 })
             },
-
             createOrder(){
                 this.$windowOpen({
                     url:'/order/create',
@@ -626,7 +628,6 @@
                     this.$localStore.set('compareProductList',compareList)
                 }
             },
-
             addToBookmark(){
                 this.disableClickAddBookmark=true;
                 this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
@@ -684,11 +685,25 @@
                     }
                 });
             },
+
+            //获取字典
+            getUnit(){
+                // this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
+                //     this.currencyOption=res;
+                // });
+                this.notLoadingDone=false;
+                this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
+                    this.incotermOption=res[0].codes;
+                    this.getTableData();
+                    this.getRemarkData();
+                    this.getCompareList();
+                }).finally(()=>{
+                    this.notLoadingDone=true;
+                });
+            },
         },
         created(){
-            this.getTableData();
-            this.getRemarkData();
-            this.getCompareList();
+            this.getUnit();
         },
         mounted(){
             this.setLog({query:{code:'PRODUCT'}});

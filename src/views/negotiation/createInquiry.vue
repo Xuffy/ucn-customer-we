@@ -377,17 +377,19 @@ export default {
 
       let postData = this.$filterModify(upData);
 
-      if (typeof postData.incoterm === 'undefined' || postData.incoterm === null) {
-        this.$message.warning(this.$i.inquiry.incotermRequired);
-        return;
-      }
-      if (!postData.suppliers || postData.suppliers.length === 0) {
-        this.$message.warning(this.$i.inquiry.supplierRequired);
-        return;
-      }
-      if (!postData.details || postData.details.length === 0) {
-        this.$message.warning(this.$i.inquiry.skuRequired);
-        return;
+      if (type !== 'draft') {
+        if (typeof postData.incoterm === 'undefined' || postData.incoterm === null) {
+          this.$message.warning(this.$i.inquiry.incotermRequired);
+          return;
+        }
+        if (!postData.suppliers || postData.suppliers.length === 0) {
+          this.$message.warning(this.$i.inquiry.supplierRequired);
+          return;
+        }
+        if (!postData.details || postData.details.length === 0) {
+          this.$message.warning(this.$i.inquiry.skuRequired);
+          return;
+        }
       }
 
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {

@@ -12,7 +12,8 @@
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
           <pre class="box" v-text="item.content"></pre>
-          <!--<img :src="item.src" v-if="item.src">-->
+          <v-image class="image" v-for="imgItem in item.filePaths" :key="imgItem" :src="imgItem"
+                   width="100px" height="100px" @click="$refs.viewPicture.show(item.filePaths)"></v-image>
         </li>
       </ul>
       <div class="form-box">
@@ -29,6 +30,8 @@
         </div>
       </div>
     </div>
+
+    <v-view-picture ref="viewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -39,12 +42,16 @@
 
 
   import VUpload from '../upload/index'
+  import VImage from '../image'
+  import VViewPicture from '../viewPicture'
   import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VMessageBoard',
     components: {
-      VUpload
+      VUpload,
+      VImage,
+      VViewPicture
     },
     //传送的数据
     props: {
@@ -92,8 +99,6 @@
 
         this.submitLoading = true;
 
-        // console.log(this.$refs.fileUpload.getFiles())
-        // return;
         this.$ajax.post(this.$apis.CHATMESSAGE_ADD, {
           moduleCode: this.module,
           bizCode: this.code,
@@ -103,6 +108,7 @@
         }).then(data => {
           this.messageContent = '';
           this.getMessage();
+          this.$refs.fileUpload.reset();
         }).finally(() => {
           this.submitLoading = false;
         });
@@ -304,6 +310,27 @@
     margin-right: 5%;
   }
 
+  .image {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+
+  .image /deep/ img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .view-picture /deep/ .el-dialog__wrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: translate(calc(350px - 100vw), 0);
+  }
 
 </style>
 <style>

@@ -149,7 +149,11 @@
                     </el-form>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.tradeHistory" name="History">
-                    <span style="color:red">暂时接口还没做</span>
+                    <v-table
+                            :height="500"
+                            :loading="loadingTable"
+                            :data="historyData">
+                    </v-table>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.product.attachment" name="Attachment">
                     <v-upload readonly :list="productForm.attachments" :limit="20" ref="upload"></v-upload>
@@ -473,6 +477,22 @@
                 currentPage1:1,
                 addRemarkFormVisible:false,
                 disableCreateRemark:false,      //是否禁用提交按钮
+
+                tradeHistory:{
+                    pn:1,
+                    ps:100,
+                    skuCode:'',
+                    sorts:[
+
+                    ],
+                },
+                historyData:[],
+                loadingTable:false,
+
+                /**
+                 * 字典配置
+                 * */
+                incotermOption:[]
             }
         },
         methods:{
@@ -528,9 +548,9 @@
 
             //删除bookmark
             deleteBookmark(){
-                this.$confirm(this.$i.product.sureDelete, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.disableClickDelete=true;
@@ -614,8 +634,23 @@
                         dduCurrency:this.productForm.dduCurrency,
                         dduArea:this.productForm.dduArea,
                     }];
-
                     this.priceTable = this.$getDB(this.$db.product.detailTab, priceData);
+                    this.tradeHistory.skuCode=this.productForm.code;
+                    console.log(this.tradeHistory,'this.tradeHistory')
+                    this.loadingTable=true;
+                    this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory)
+                        .then(res=>{
+                            this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
+                                e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
+                                e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
+                                e.confirmQcDt._value=this.$dateFormat(e.confirmQcDt.value,'yyyy-mm-dd');
+                                e.actDepartureDt._value=this.$dateFormat(e.actDepartureDt.value,'yyyy-mm-dd');
+                            });
+                        }).finally(()=>{
+                            this.notLoadingDone=false;
+                            this.loadingTable=false;
+                        }
+                    )
 
                 }).catch(err=>{
                     this.notLoadingDone=false;
@@ -662,7 +697,6 @@
                 );
             },
 
-
             /**
              * 分页操作
              * */
@@ -674,8 +708,6 @@
                 this.remarkConfig.ps=e;
                 this.getRemarkData();
             },
-
-
             createRemark(){
                 this.addRemarkFormVisible=true;
                 this.addRemarkData.id=null;     //新增的时候要置为null
@@ -832,11 +864,26 @@
                 this.$localStore.remove('compareProductList');
                 this.compareData=[];
             },
+
+
+            //获取字典
+            getUnit(){
+                // this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
+                //     this.currencyOption=res;
+                // });
+                this.notLoadingDone=true;
+                this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
+                    this.incotermOption=res[0].codes;
+                    this.getTableData();
+                    this.getRemarkData();
+                    this.getCompareList();
+                }).finally(()=>{
+                    this.notLoadingDone=false;
+                });
+            },
         },
         created(){
-            this.getTableData();
-            this.getRemarkData();
-            this.getCompareList();
+            this.getUnit();
         },
         mounted(){
             this.setLog({query:{code:'PRODUCT'}});

@@ -369,7 +369,7 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
+          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
         },
         watch: {
             hideBody(n) {

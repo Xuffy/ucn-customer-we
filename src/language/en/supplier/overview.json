@@ -19,7 +19,7 @@
     "provideIncoterm": "Provide Incoterm",
     "exportLicense": "Export License",
 
-
+   "customerNo": "Customer No",
     "customerName": "Customer Name",
     "customerType": "Customer Type",
     "customerCountry": "Customer Country",

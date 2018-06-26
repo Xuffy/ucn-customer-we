@@ -4,7 +4,7 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.Status }}</span>
-                <el-radio-group v-model="params.status" size="mini">
+                <el-radio-group v-model="params.status" @change="gettabData" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button
                         v-for="item in $db.inquiry.overoiewState"
@@ -105,15 +105,6 @@ export default {
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
     this.gettabData();
   },
-  watch: {
-    params: {
-      handler(val, oldVal) {
-        this.gettabData();
-      },
-      deep: true
-    }
-
-  },
   methods: {
     ...mapActions([
       'setDraft',
@@ -123,6 +114,7 @@ export default {
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
+      this.gettabData();
     },
     gettabData() {
       let url, column;
@@ -191,9 +183,7 @@ export default {
       let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
       this.$router.push({
         path: '/negotiation/inquiryDetail',
-        query: {
-          id: id
-        }
+        query: {id}
       });
     },
     getChildrenId(type) {
@@ -222,11 +212,13 @@ export default {
       console.log(No);
     },
     handleSizeChange(val) {
-      console.log(val);
       this.params.pn = val;
+      this.gettabData();
     },
     pageSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.gettabData();
     },
     changeChecked(item) { // tab 勾选
       this.checkedData = item;

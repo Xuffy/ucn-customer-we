@@ -112,9 +112,6 @@
     },
     methods: {
       // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
-      /*test(){
-        console.log(this.$refs.upload.getFiles())
-      },*/
       getBasicInfo() {
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
