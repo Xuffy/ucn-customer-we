@@ -44,6 +44,7 @@
     </div>
     <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
+      :code="setTheField"
       :data="tabData"
       :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
