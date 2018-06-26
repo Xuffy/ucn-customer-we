@@ -3,8 +3,21 @@
         <div class="title">
           {{$i.track.trackBySKU}}
         </div>
-        <div class="body">
-          <div class="search">
+        <div class="body" style="overflow: hidden">
+          <div class="head" style="float: left">
+            <div>
+              <span class="text">{{$i.payment.status}} : </span>
+              <el-radio-group size="mini" @change="getList" v-model="params.status">
+                <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
+                <el-radio-button label="2" >{{$i.track.tbcC}}</el-radio-button>
+                <el-radio-button label="1" >{{$i.track.tbcS}}</el-radio-button>
+                <el-radio-button label="3" >{{$i.track.process}}</el-radio-button>
+                <el-radio-button label="4" >{{$i.track.shipped}}</el-radio-button>
+                <el-radio-button label="5" >{{$i.track.canceled}}</el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
+          <div class="search" style="float: right">
             <select-search
               v-model="searchId"
               class="search"
@@ -15,15 +28,16 @@
           </div>
         </div>
             <v-table
-            :data="dataList"
-            :height="500"
-            :selection="false"
-            :loading='loading'></v-table>
-            <page
-              :page-data="pageData"
-              @change="handleSizeChange"
-              :page-sizes="[50,100,200]"
-              @size-change="pageSizeChange"></page>
+              code="track"
+              :data="dataList"
+              :height="500"
+              :selection="false"
+              :loading='loading' />
+           <page
+            :page-data="pageData"
+            @change="handleSizeChange"
+            :page-sizes="[50,100,200]"
+            @size-change="pageSizeChange"></page>
     </div>
 </template>
 
@@ -49,6 +63,7 @@
                     "ps": 50,
                     "skuCodeLike":'',
                     "orderNoLike":'',
+                    "status": ''
                 },
               options: [{
                 id: '1',
@@ -108,13 +123,13 @@
                       if (one || two || three || four){
                         item.category.value = one+','+two+','+three+','+four
                       }
-                      _.mapObject(item, val => {
-                        val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                        return val
-                      })
+                        _.mapObject(item, val => {
+                          val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                          return val
+                        })
                       return item;
-                });
-                this.pageData=res;
+                      });
+                  this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
               });
@@ -135,5 +150,8 @@
         line-height: 32px;
         color:#666666;
         padding-bottom: 10px;
+    }
+    .head>div{
+      margin-bottom: 10px;
     }
 </style>
