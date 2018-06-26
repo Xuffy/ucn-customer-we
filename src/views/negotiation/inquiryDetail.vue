@@ -36,7 +36,7 @@
             </div>
           </div>
           <v-table
-              code="inquiry_sku_list"
+              code="inquiry"
               hide-filter-value
               :data.sync="newProductTabData"
               :buttons="productInfoBtn"
@@ -144,9 +144,7 @@ export default {
       switchStatus: false,
       list: [],
       tableColumn: '',
-      submitData: {
-        deleteDetailIds: []
-      },
+      deleteDetailIds: [],
       idType: ''
     };
   },
@@ -176,7 +174,6 @@ export default {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
 
-    this.submitData.id = this.$route.query.id;
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
@@ -504,14 +501,15 @@ export default {
     // 删除product 某个单
     removeProduct() {
       this.newProductTabData = this.newProductTabData.filter(item => this.checkedAll.map(i => i.skuId.value.toString()).indexOf(item.skuId.value.toString()) === -1);
-      // this.checkedAll.filter(item => item.id.value).map(item => item.id.value);
+      this.deleteDetailIds = this.deleteDetailIds.concat(this.checkedAll.filter(item => item.id.value).map(item => item.id.value));
       this.checkedAll = [];
     },
     modifyCancel() {
       // 页面编辑取消
       this.newTabData = this.tabData;
       this.newProductTabData = this.productTabData;
-      this.productCancel();
+      this.$set(this.newProductTabData, 'length', this.productTabData.length);
+      this.deleteDetailIds = [];
       this.statusModify = false;
     },
     modify() {
@@ -523,6 +521,7 @@ export default {
       let saveData = this.$filterModify(parentNode);
       saveData.attachment = null;
       saveData.skuQty = saveData.details.length;
+      saveData.deleteDetailIds = this.deleteDetailIds;
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, saveData).then(res => {
         this.newTabData[0].status.originValue = res.status;
         this.statusModify = false;
@@ -561,26 +560,6 @@ export default {
         list.push(o);
       }
       return list;
-    },
-    productCancel() {
-      //  取消 product 编辑
-      this.newProductTabData.forEach((item, index) => {
-        if (!item._remove && item._disabled) {
-          item._disabled = false;
-          item._remove = false;
-        }
-        this.$set(this.newProductTabData, index, item);
-      });
-    },
-    productModify() {
-      //  提交 product 编辑
-      this.newProductTabData.forEach((item, index) => {
-        if (!item._remove && item._disabled) {
-          item._remove = true;
-          this.submitData.deleteDetailIds.push(item);
-        }
-        this.$set(this.newProductTabData, index, item);
-      });
     }
   }
 };
