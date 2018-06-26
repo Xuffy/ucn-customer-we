@@ -44,7 +44,7 @@
     </div>
     <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
-      :code="setTheField"
+      :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
       :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
@@ -105,6 +105,7 @@
           plan: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -112,6 +113,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -119,6 +121,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -128,6 +131,7 @@
           loadingList: {
             plan: {
               key: 3,
+              setTheField:'ulogistics_OrderOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.loadingList,
               url: this.$apis.get_loading_list_plan,
@@ -135,6 +139,7 @@
             },
             transportation: {
               key: 4,
+              setTheField:'ulogistics_OrderOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_loading_list_unit,
@@ -142,6 +147,7 @@
             },
             sku: {
               key: 5,
+              setTheField:'ulogistics_OrderOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_loading_list_sku,
@@ -151,6 +157,7 @@
           draft: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -158,6 +165,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -165,6 +173,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -198,6 +207,7 @@
     mounted() {
       this.fetchData()
       this.registerRoutes()
+      // this.getContainerType() 接手注释
     },
     methods: {
       initPage(){
@@ -219,11 +229,9 @@
       fetchData() {
         if (this.pageType === 'plan') {
           this.getDictionary(['LS_PLAN'])
-          this.getContainerType()
         }
         if (this.pageType === 'loadingList') {
           this.getDictionary(['LS_STATUS'])
-          this.getContainerType()
         }
         this.initPage();
         this.fetchDataList()
@@ -286,10 +294,10 @@
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
             _.mapObject(item, val => {
-              if (val.type === 'select' && val.value) {
-                let obj = this.containerType.find(a => a.code === val.value)
-                val.value = obj ? obj.name : null
-              }
+              // if (val.type === 'select' && val.value) {
+              //   let obj = this.containerType.find(a => a.code === val.value)
+              //   val.value = obj ? obj.name : null
+              // } 接手注释
               val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
               return val
             })

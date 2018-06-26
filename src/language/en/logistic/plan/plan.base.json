@@ -212,6 +212,10 @@
   "refuse":"拒绝",
   "Dept":"催款",
   "logisticDraftDetail":"Logistic Draft",
+  "lcNo":"LC Number",
+  "customerOrderNo":"Customer Order No",
+  "supplierOrderNo":"Supplier Order No",
+  "skuBarCode":"SKU Bar-Code",
   "productInfo":{
 
   }
