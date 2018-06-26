@@ -4,7 +4,7 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.Status }}</span>
-                <el-radio-group v-model="params.status" size="mini">
+                <el-radio-group v-model="params.status" @change="gettabData" size="mini">
                     <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                     <el-radio-button
                         v-for="item in $db.inquiry.overoiewState"
@@ -183,9 +183,7 @@ export default {
       let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
       this.$router.push({
         path: '/negotiation/inquiryDetail',
-        query: {
-          id: id
-        }
+        query: {id}
       });
     },
     getChildrenId(type) {
