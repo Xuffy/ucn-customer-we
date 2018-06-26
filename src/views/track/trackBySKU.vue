@@ -129,7 +129,6 @@
                         })
                       return item;
                       });
-                    console.log(res)
                   this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
