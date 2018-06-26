@@ -82,12 +82,12 @@
                     pn: 1,
                     ps: 50,
                     recycle: false,
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ]
+                    sorts: [
+                        {
+                            orderBy: 'updateDt',
+                            orderType: 'desc',
+                        }
+                    ]
                 },
                 pageData:{}
             }

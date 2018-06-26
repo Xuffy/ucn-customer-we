@@ -3,17 +3,20 @@ export default {
         showType:'qc',
         value:'Waiting QC'
     },
+    skuInventoryStatusDictCode:{},
     skuCode:{},
     customerSkuCode:{},
     factorySkuCode:{},
     skuNameCn:{},
     skuBrand:{},
-    //产品设计
+    skuDesign:{},
     packingMethodCn:{},
     innerCartonPackingMethodCn:{},
-    //delivery date
+    deliveryDate:{},
     skuUnitDictCode:{},
-    //三个unit单位
+    lengthUnitDictCode:{},
+    volumeUnitDictCode:{},
+    weightUnitDictCode:{},
     inboundNo:{},
     orderSkuQty:{},
     expectQcQty:{
@@ -28,7 +31,6 @@ export default {
         key:'unqualifiedProcessingMode',
         showType:'input'
     },
-    //外箱数合计
     skuLength:{},
     skuWidth:{},
     skuHeight:{},
@@ -37,11 +39,11 @@ export default {
     actQtyOfOuterCarton:{
         fromService:true
     },
-    //外箱中包数
+    //外箱中包数(create的时候不要)
     actQuantityOfInnerBoxOuterCarton:{
         fromService:true
     },
-    //中包产品数
+    //中包产品数(create的时候不要)
     actualQuantityInnerCarton:{
         fromService:true
     },
@@ -128,15 +130,15 @@ export default {
     productLabelResults:{
         fromService:true
     },
-    //中包条码
+    innerPackingBarCode:{},
     innerPackingBarCodeResults:{
         fromService:true
     },
-    //外箱条码
+    outerCartonBarCode:{},
     outerCartonBarCodeResults:{
         fromService:true
     },
-    //外箱唛头
+    shippingMark:{},
     outerCartonMarksResults:{
         fromService:true
     },

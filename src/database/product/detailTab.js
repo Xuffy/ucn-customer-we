@@ -336,6 +336,11 @@ export default {
         showType:'number',
         belongTab:'priceInfo',
     },
+    refFobPrice:{
+        key:'refFobPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
     fobPort:{
         key:'fobPort',
         showType:'input',
@@ -357,6 +362,11 @@ export default {
         showType:'number',
         belongTab:'priceInfo',
     },
+    refCifPrice:{
+        key:'refCifPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
     cifCurrency:{
         key:'cifCurrency',
         showType:'select',
@@ -370,6 +380,11 @@ export default {
     },
     dduPrice:{
         key:'dduPrice',
+        showType:'number',
+        belongTab:'priceInfo',
+    },
+    refDduPrice:{
+        key:'refDduPrice',
         showType:'number',
         belongTab:'priceInfo',
     },
