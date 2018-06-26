@@ -3,8 +3,18 @@
         <div class="title">
           {{$i.track.trackBySKU}}
         </div>
-        <div class="body">
-          <div class="search">
+        <div class="body" style="overflow: hidden">
+          <div class="head" style="float: left">
+            <div>
+              <span class="text">{{$i.payment.status}} : </span>
+              <el-radio-group size="mini" @change="getList">
+                <el-radio-button label="-1" border>{{$i.common.all}}</el-radio-button>
+                <el-radio-button label="1" ></el-radio-button>
+                <el-radio-button label="0" ></el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
+          <div class="search" style="float: right">
             <select-search
               v-model="searchId"
               class="search"
@@ -15,10 +25,11 @@
           </div>
         </div>
             <v-table
-            :data="dataList"
-            :height="500"
-            :selection="false"
-            :loading='loading'></v-table>
+
+              :data="dataList"
+              :height="500"
+              :selection="false"
+              :loading='loading'></v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
@@ -108,12 +119,12 @@
                       if (one || two || three || four){
                         item.category.value = one+','+two+','+three+','+four
                       }
-                      _.mapObject(item, val => {
-                        val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
-                        return val
-                      })
-                      return item;
-                });
+                        _.mapObject(item, val => {
+                          val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
+                          return val
+                        })
+                      });
+                  console.log(this.dataList)
                 this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
@@ -135,5 +146,8 @@
         line-height: 32px;
         color:#666666;
         padding-bottom: 10px;
+    }
+    .head>div{
+      margin-bottom: 10px;
     }
 </style>

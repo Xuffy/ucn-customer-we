@@ -44,6 +44,7 @@ addNewProduct
 
         <v-table
           code="udata_pruchase_supplier_compare_detail_overview"
+          :height=500
           :data="tableDataList"
           :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
@@ -214,14 +215,13 @@ addNewProduct
                     this.isModify=true;
                   }
                   this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                    copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                     this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                       e.type.value=this.$change(this.options.type,'type',e,true).name;
                       e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                       return e;
                     });
-                    copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
-                    console.log(copy_data)
                     this.disabledLine=this.tableDataList;
                     this.allowDeleteCompare=false;
                     this.allowBottomClick=false;
@@ -514,7 +514,13 @@ addNewProduct
                   }
                })
              }else{
-                this.tableDataList = copy_data
+               this.tableDataList.forEach(item => {
+                 _.mapObject(item, val => {
+                   this.$set(val, '_hide', false);
+                   return val
+                 })
+               })
+               // this.tableDataList = [...copy_data]
 
              }
           },
@@ -524,7 +530,6 @@ addNewProduct
 
 <style scoped>
     .compare-overview{
-
     }
     .title{
         font-weight: bold;

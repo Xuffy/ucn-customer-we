@@ -8,6 +8,10 @@ export default {
     // orderStatus: {
     //     key: 'status'
     // },
+    orderCreateDate: {
+      key: 'orderEntryDt',
+      type: 'textDate',
+    },
     currency: {
       key: 'currencyCode'
     },
@@ -23,6 +27,14 @@ export default {
       _important:true,
       key: '' //待付
     },
+    planDateOfPayment: {   //应付时间
+      key: 'planPayDt',
+      type: 'textDate',
+    },
+    actualDateOfPayment: {
+      key: 'actualPayDt',
+      type: 'textDate',
+    },
     receivable: {
       key: 'planReceiveAmount',
       _important:true,   //应收
@@ -34,18 +46,6 @@ export default {
     waitReceipt: {
         _important:true,
         key: ''  //待收
-    },
-    orderCreateDate: {
-      key: 'orderEntryDt',
-      type: 'textDate',
-    },
-    planDateOfPayment: {   //应付时间
-      key: 'planPayDt',
-      type: 'textDate',
-    },
-    actualDateOfPayment: {
-      key: 'actualPayDt',
-      type: 'textDate',
     },
     planDateOfReceipt: {  //应收时间
        key:'planReceiveDt',

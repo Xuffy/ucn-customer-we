@@ -20,8 +20,8 @@ export default {
     //supplier
     post_add_supplier_remark: ['/purchase/supplier/remark',  'BASE_URL'],
     get_update_supplier_remark: ['/purchase/supplier/remark/{id}',  'BASE_URL'],
-    get_listSupplier: ['/purchase/listSupplier',  'BASE_CS'],
-    get_supplier_id: ['/purchase/supplier/{id}', 'BACE_CS'],
+    get_listSupplier: ['/purchase/listSupplier',  'BASE_URL'],
+    get_supplier_id: ['/purchase/supplier/{id}', 'BASE_URL'],
     post_supplier_list_remark: ['/purchase/supplier/listRemarks',  'BASE_URL'],
     post_supplier_remark: ['/purchase/supplier/remark',  'BASE_URL'],
     get_supplier_remark_de: ['/purchase/supplier/remark/{id}',  'BASE_URL'],
