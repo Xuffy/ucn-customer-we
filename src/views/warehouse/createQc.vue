@@ -39,8 +39,6 @@
                                             size="mini"
                                             v-model="serviceId"
                                             filterable
-                                            remote
-                                            reserve-keyword
                                             :placeholder="$i.warehouse.pleaseInputOrChoose"
                                             :remote-method="remoteMethod"
                                             :loading="loading">

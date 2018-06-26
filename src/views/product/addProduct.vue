@@ -742,6 +742,7 @@
 
         },
         created() {
+            this.loadingTable = true;
             this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
                 res.forEach(v => {
                     if (v.code === 'SKU_SALE_STATUS') {
@@ -770,7 +771,7 @@
 
                 });
             }).catch(err => {
-
+                this.loadingTable = false;
             });
 
         },
