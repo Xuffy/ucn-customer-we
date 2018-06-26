@@ -7,10 +7,13 @@
           <div class="head" style="float: left">
             <div>
               <span class="text">{{$i.payment.status}} : </span>
-              <el-radio-group size="mini" @change="getList">
-                <el-radio-button label="-1" border>{{$i.common.all}}</el-radio-button>
-                <el-radio-button label="1" ></el-radio-button>
-                <el-radio-button label="0" ></el-radio-button>
+              <el-radio-group size="mini" @change="getList" v-model="params.status">
+                <el-radio-button label="" border>{{$i.common.all}}</el-radio-button>
+                <el-radio-button label="2" >{{$i.track.tbcC}}</el-radio-button>
+                <el-radio-button label="1" >{{$i.track.tbcS}}</el-radio-button>
+                <el-radio-button label="3" >{{$i.track.process}}</el-radio-button>
+                <el-radio-button label="4" >{{$i.track.shipped}}</el-radio-button>
+                <el-radio-button label="5" >{{$i.track.canceled}}</el-radio-button>
               </el-radio-group>
             </div>
           </div>
@@ -25,16 +28,16 @@
           </div>
         </div>
             <v-table
-
+              code="track"
               :data="dataList"
               :height="500"
               :selection="false"
-              :loading='loading'></v-table>
-            <page
-              :page-data="pageData"
-              @change="handleSizeChange"
-              :page-sizes="[50,100,200]"
-              @size-change="pageSizeChange"></page>
+              :loading='loading' />
+           <page
+            :page-data="pageData"
+            @change="handleSizeChange"
+            :page-sizes="[50,100,200]"
+            @size-change="pageSizeChange"></page>
     </div>
 </template>
 
@@ -60,6 +63,7 @@
                     "ps": 50,
                     "skuCodeLike":'',
                     "orderNoLike":'',
+                    "status": ''
                 },
               options: [{
                 id: '1',
@@ -123,9 +127,10 @@
                           val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                           return val
                         })
+                      return item;
                       });
-                  console.log(this.dataList)
-                this.pageData=res;
+                    console.log(res)
+                  this.pageData=res;
               }).catch(err=>{
                 this.loading = false;
               });

@@ -1,6 +1,7 @@
 export default {
   pic: {
     key: 'pics',
+    _filed:'pic',
     _image:true,
   },
   orderNo: {
