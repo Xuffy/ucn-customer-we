@@ -1309,10 +1309,12 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
-
                         item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
                         item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
                         if(item.id.value===this.inquiryId){
+                            this.$set(item,'_disabled',true)
+                        }
+                        if(item.orderNo.value){
                             this.$set(item,'_disabled',true)
                         }
                     });

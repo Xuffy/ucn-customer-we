@@ -218,7 +218,7 @@
                         </div>
                         <div v-else>
                             <div v-if="v.type==='date'">
-                                {{$dateFormat(scope.row[v.realKey],'yyyy-mm-dd')}}
+                                {{scope.row[v.realKey]?$dateFormat(scope.row[v.realKey],'yyyy-mm-dd'):''}}
                             </div>
                             <div v-else-if="v.isStatus">
                                 <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
@@ -548,6 +548,10 @@
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
+                    console.log(this.paymentTableData,'this.paymentTableData')
+                    _.map(this.paymentTableData,v=>{
+                        v.actualPayDt='';
+                    })
                     if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
                         this.disableAdd=true;
                     }else{
