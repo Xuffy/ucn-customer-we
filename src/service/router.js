@@ -570,7 +570,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          name: $i.router.logisticPlaceDetail
+          name: $i.router.logisticLoadingDraft
         },
         component: () => import('../views/logistic/logisticPlanDetail')
       }

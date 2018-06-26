@@ -16,6 +16,8 @@
                         v-model="searchId"
                         :options="searchOptions"></select-search>
             </div>
+            <br>
+            <br>
             <div class="section">
                 <v-table
                         code="uwarehouse_overview"

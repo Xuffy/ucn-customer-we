@@ -3,7 +3,7 @@
     <el-popover
       :width="200"
       v-model="visible"
-      @hide="defaultChecked"
+      @after-leave="getConfig()"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="iconfont icon-shezhi"></i>
@@ -134,14 +134,6 @@
       cancel() {
         this.visible = false;
         this.getConfig();
-      },
-      defaultChecked() {
-        let list = [];
-        _.map(this.dataList, val => {
-          if (val.isChecked === 1) {
-            list.push(val.property);
-          }
-        });
       }
     }
   }

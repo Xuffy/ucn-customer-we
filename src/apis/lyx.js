@@ -29,6 +29,7 @@ export default {
   get_plan_supplier: ['/logistics/plan/getSupplier','LJ', 'BASE_URL'],
   get_plan_rate: ['/logistics/plan/getRate', 'LJ','BASE_URL'],
   logistics_plan_confirm: ['/logistics/plan/confirm', 'LJ','BASE_URL'],
+  logistics_order_confirm: ['/logistics/order/confirm', 'LJ','BASE_URL'],
   logistics_plan_cancel: ['/logistics/plan/cancel','LJ', 'BASE_URL'],
   logistics_order_cancelByIds: ['/logistics/order/cancelByIds', 'LJ','BASE_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','LJ', 'BASE_URL'],
