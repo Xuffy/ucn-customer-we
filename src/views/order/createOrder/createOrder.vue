@@ -653,6 +653,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
+                    @blur="handlePriceBlur(data)"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -1227,7 +1228,6 @@
                     this.disableClickSaveDraft=false;
                 });
             },
-
             getDetail(e){
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
@@ -1291,7 +1291,6 @@
                     }else{
                         this.hasCancelOrder=false;
                     }
-
                 }).finally(err=>{
                     this.loadingPage=false;
                     this.disableClickCancelModify=false;
@@ -2023,6 +2022,15 @@
 
 
             },
+
+
+            /**
+             * history插槽事件
+             * */
+            handlePriceBlur(e){
+                console.log(e,'???')
+            },
+
 
             /**
              * 搜索框事件

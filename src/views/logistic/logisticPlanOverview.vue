@@ -5,7 +5,7 @@
       <div class="btn-wrap">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
           <span>{{ $i.logistic.status}}:</span>
-          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList">
+          <el-radio-group v-model="fillterVal" size="mini" @change="fetchDataList('elRadioGroup')">
             <el-radio-button label="all">{{ $i.logistic.all }}</el-radio-button>
             <el-radio-button :label="+a.code" v-for="a of ls_plan" :key="'status-' + a.code">{{a.name}}
             </el-radio-button>
@@ -44,6 +44,7 @@
     </div>
     <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
+      :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
       :buttons="[{label: 'detail', type: 'detail'}]"
       @action="action"
@@ -104,6 +105,7 @@
           plan: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -111,6 +113,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -118,6 +121,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -127,6 +131,7 @@
           loadingList: {
             plan: {
               key: 3,
+              setTheField:'ulogistics_OrderOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.loadingList,
               url: this.$apis.get_loading_list_plan,
@@ -134,6 +139,7 @@
             },
             transportation: {
               key: 4,
+              setTheField:'ulogistics_OrderOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_loading_list_unit,
@@ -141,6 +147,7 @@
             },
             sku: {
               key: 5,
+              setTheField:'ulogistics_OrderOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_loading_list_sku,
@@ -150,6 +157,7 @@
           draft: {
             plan: {
               key: 0,
+              setTheField:'ulogistics_PlanOverviewPlanNo',
               label: 'plan',
               text: this.$i.logistic.plan,
               url: this.$apis.gei_plan_list,
@@ -157,6 +165,7 @@
             },
             transportation: {
               key: 1,
+              setTheField:'ulogistics_PlanOverviewByUnit',
               label: 'transportation',
               text: this.$i.logistic.transportationUnit,
               url: this.$apis.get_transportation_list,
@@ -164,6 +173,7 @@
             },
             sku: {
               key: 2,
+              setTheField:'ulogistics_PlanOverviewSkuCode',
               label: 'sku',
               text: this.$i.logistic.sku,
               url: this.$apis.get_sku_list,
@@ -181,6 +191,7 @@
     watch: {
       viewBy(newVal) {
         this.selectCount = []
+        this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -196,8 +207,15 @@
     mounted() {
       this.fetchData()
       this.registerRoutes()
+      // this.getContainerType() 接手注释
     },
     methods: {
+      initPage(){
+        this.pageParams = {
+          pn: 1,
+          ps: 10
+        };
+      },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
           name: 'overviewDraft',
@@ -211,12 +229,11 @@
       fetchData() {
         if (this.pageType === 'plan') {
           this.getDictionary(['LS_PLAN'])
-          this.getContainerType()
         }
         if (this.pageType === 'loadingList') {
           this.getDictionary(['LS_STATUS'])
-          this.getContainerType()
         }
+        this.initPage();
         this.fetchDataList()
       },
       deleteData() {
@@ -226,6 +243,7 @@
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
+            this.initPage();
             this.fetchDataList()
             this.selectCount = []
             this.$message({
@@ -261,7 +279,10 @@
       addNew() {
         this.$router.push('/logistic/placeLogisticPlan')
       },
-      fetchDataList() {
+      fetchDataList(arg) {
+        if(arg){
+         this.initPage();
+        }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
@@ -270,14 +291,13 @@
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         this.$ajax.post(url, {lgStatus, ...this.pageParams}).then(res => {
-          console.log(res,'res')
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
             _.mapObject(item, val => {
-              if (val.type === 'select' && val.value) {
-                let obj = this.containerType.find(a => a.code === val.value)
-                val.value = obj ? obj.name : null
-              }
+              // if (val.type === 'select' && val.value) {
+              //   let obj = this.containerType.find(a => a.code === val.value)
+              //   val.value = obj ? obj.name : null
+              // } 接手注释
               val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
               return val
             })
