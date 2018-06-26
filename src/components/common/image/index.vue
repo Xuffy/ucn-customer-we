@@ -3,7 +3,7 @@
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
-    <img class="image" :src="src" ref="image"  v-holder="{text:'IMAGE'}">
+    <img class="image" :src="src" ref="image" v-holder="{text:'UCN',img:'100px100p'}">
 
     <!--onerror="this.src='holder.js/300x200?theme=red';this.onerror=null"-->
   </div>
@@ -36,8 +36,7 @@
     watch: {},
     mounted() {
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 
@@ -59,7 +58,7 @@
   .ucn-image .image {
     max-width: 100%;
     max-height: 100%;
-    display: inline-block!important;
+    display: inline-block !important;
     vertical-align: middle;
   }
 </style>
