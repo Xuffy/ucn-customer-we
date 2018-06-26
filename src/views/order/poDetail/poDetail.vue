@@ -1556,7 +1556,7 @@
                 this.loadingPage=true;
                 this.$ajax.post(this.$apis.ORDER_DETAIL,{
                     orderId:this.$route.query.orderId,
-                    orderNo:this.$route.query.orderNo
+                    orderNo:this.$route.query.orderNo || this.$route.query.code,
                 }).then(res=>{
                     this.orderForm=res;
                     _.map(this.supplierOption,v=>{
@@ -1846,8 +1846,10 @@
             handleProductOk(e){
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
-                console.log()
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
+                    _.map(res,v=>{
+                        v.skuStatus='1';
+                    })
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         console.log(item,'item')
                         if(item._remark){
