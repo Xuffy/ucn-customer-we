@@ -105,15 +105,6 @@ export default {
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
     this.gettabData();
   },
-  watch: {
-    params: {
-      handler(val, oldVal) {
-        this.gettabData();
-      },
-      deep: true
-    }
-
-  },
   methods: {
     ...mapActions([
       'setDraft',
@@ -123,6 +114,7 @@ export default {
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
+      this.gettabData();
     },
     gettabData() {
       let url, column;
@@ -222,11 +214,13 @@ export default {
       console.log(No);
     },
     handleSizeChange(val) {
-      console.log(val);
       this.params.pn = val;
+      this.gettabData();
     },
     pageSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.gettabData();
     },
     changeChecked(item) { // tab 勾选
       this.checkedData = item;
