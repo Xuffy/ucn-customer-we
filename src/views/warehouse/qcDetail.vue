@@ -218,7 +218,7 @@
                         </div>
                         <div v-else>
                             <div v-if="v.type==='date'">
-                                {{$dateFormat(scope.row[v.realKey],'yyyy-mm-dd')}}
+                                {{scope.row[v.realKey]?$dateFormat(scope.row[v.realKey],'yyyy-mm-dd'):''}}
                             </div>
                             <div v-else-if="v.isStatus">
                                 <span v-if="scope.row.status===-1">{{$i.warehouse.abandon}}</span>
@@ -481,16 +481,30 @@
         methods:{
             ...mapActions(['setLog']),
             getQcOrderDetail(){
-                this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
-                    .then(res=>{
-                        this.qcDetail=res;
-                        this.loadingData=false;
-                        this.getProductInfo();
-                        this.getPaymentData();
-                    }).catch(err=>{
-                        this.loadingData=false;
-                    }
-                );
+                if(this.$route.query.id){
+                    this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
+                        .then(res=>{
+                            this.qcDetail=res;
+                            this.loadingData=false;
+                            this.getProductInfo();
+                            this.getPaymentData();
+                        }).catch(err=>{
+                            this.loadingData=false;
+                        }
+                    );
+                }else if(this.$route.query.code){
+                    this.$ajax.get(`${this.$apis.GET_QC_GETBYQCORDERNO}?qcOrderNo=${this.$route.query.code}`)
+                        .then(res=>{
+                            this.qcDetail=res;
+                            this.loadingData=false;
+                            this.getProductInfo();
+                            this.getPaymentData();
+                        }).catch(err=>{
+                            this.loadingData=false;
+                        }
+                    );
+                }
+
             },
             getProductInfo(){
                 this.loadingProductInfoTable=true;
@@ -548,6 +562,10 @@
                 }).then(res=>{
                     this.loadingPaymentTable=false;
                     this.paymentTableData=res.datas;
+                    console.log(this.paymentTableData,'this.paymentTableData')
+                    _.map(this.paymentTableData,v=>{
+                        v.actualPayDt='';
+                    })
                     if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
                         this.disableAdd=true;
                     }else{
