@@ -52,6 +52,7 @@
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
                 <v-table :data="tableDataList"
+                 code=""
                 :totalRow="totalRow"
                 :loading="tabLoad"
                 :buttons="setButtons"
@@ -261,7 +262,7 @@
                   this.$windowOpen({
                     url: '/logisticPlanDetail',
                     params: {
-                      logisticsNo:item.orderNo.value
+                      code:item.orderNo.value
                     }
                   });
               }
@@ -281,7 +282,7 @@
             },
             setButtons(item){
               // disabled:true/false   10 付款 20 退款
-                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planPayAmount'}).value !== _.findWhere(item, {'key': 'actualPayAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
+                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
                  return [{label: 'Detail', type: '2'}];
             },
             handleSizeChange(val) {

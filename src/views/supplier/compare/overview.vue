@@ -25,7 +25,8 @@
         <!--from-->
           <!--        表格-->
            <v-table
-            :height=360
+             code="udata_purchase_supplier_compare_overview"
+            :height=500
             :loading='loading'
             :data="tabData"
             :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
@@ -179,7 +180,7 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'BIZ_PURCHASE_SUPPLIER'}});
+          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
         },
     }
 

@@ -36,7 +36,9 @@
 </template>
 <script>
 import { VTable, selectSearch, VPagination } from '@/components/index';
+import codeUtils from '@/lib/code-utils';
 import { mapActions } from 'vuex';
+
 export default {
   name: '',
   data() {
@@ -72,6 +74,24 @@ export default {
     'v-table': VTable,
     'v-pagination': VPagination
   },
+  created() {
+    switch (this.$route.params.type) {
+      case 'inquiry':
+        this.title = this.$i.common.inquiryDraft;
+        break;
+    }
+    this.setRecycleBin({
+      name: 'negotiationRecycleBin',
+      params: {
+        type: 'inquiry'
+      },
+      show: true
+    });
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache').then(data => {
+      this.setDic(codeUtils.convertDicValueType(data));
+      this.getList();
+    });
+  },
   methods: {
     ...mapActions([
       'setDic',
@@ -79,9 +99,12 @@ export default {
     ]),
     handleSizeChange(val) {
       this.postParams.pn = val;
+      this.getList();
     },
     pageSizeChange(val) {
+      this.postParams.pn = 1;
       this.postParams.ps = val;
+      this.getList();
     },
     getInquiryList() { // 获取inquirylist
       let url, column;
@@ -95,26 +118,16 @@ export default {
       }
       this.$ajax.post(url, this.postParams).then(res => {
         res.tc ? this.postParams.tc = res.tc : this.postParams.tc = this.postParams.tc;
-        this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-          .then(data => {
-            this.setDic(data);
-            this.tabData = this.$getDB(column, res.datas, (item) => {
-              this.$filterDic(item);
-            });
-            this.checkedArg = [];
-            this.tabLoad = false;
-            this.searchLoad = false;
-          });
+        this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.tabLoad = false;
+        this.searchLoad = false;
+        this.checkedArg = [];
       });
     },
-    searchEnter(val) { // 搜索框
-      if (!val.id || !val.value) {
-        this.postParams.operatorFilters = [];
-      } else {
-        let value = val.type === 'dateRange' ? {start: val.value[0].getTime(), end: val.value[1].getTime()} : val.value;
-        this.postParams.operatorFilters = [{property: val.id, value, operator: val.operator}];
-      }
+    searchEnter(val, operatorFilters) { // 搜索框
+      this.postParams.operatorFilters = operatorFilters;
       this.searchLoad = true;
+      this.getList();
     },
     action(item, type) { // 操作表单 action
       this.$router.push({
@@ -185,29 +198,6 @@ export default {
         }
       });
     }
-  },
-  watch: {
-    postParams: {
-      handler(val) {
-        this.getList();
-      },
-      deep: true
-    }
-  },
-  created() {
-    this.getList();
-    switch (this.$route.params.type) {
-      case 'inquiry':
-        this.title = this.$i.common.inquiryDraft;
-        break;
-    }
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
   }
 };
 </script>

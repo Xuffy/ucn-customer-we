@@ -42,23 +42,23 @@ export default {
     birthday: {
         key: 'birthday',
     },
-   password:{
-     _rules:{
-       required:true,
-       min:6,
-     }
-   },
-  newPassword:{
-    _rules:{
-      required:true,
-      min:6,
-    }
-  },
-  comfirmNewPassword:{
-    _rules:{
-      required:true,
-      min:6,
-    }
+     password:{
+       _rules:{
+         required:true,
+         // minLength:6,
+         // length:20
+       }
+     },
+    newPassword:{
+      _rules:{
+        required:true,
+        minLength:6
+      }
+    },
+    comfirmNewPassword:{
+      _rules:{
+        required:true,
+      }
   },
 
 }
