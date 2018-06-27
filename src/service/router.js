@@ -420,9 +420,7 @@ export const routerMap = [
     component: Layout,
     redirect: '/warehouse/overview',
     name: 'Warehouse',
-    meta: {
-      name: $i.router.warehouse
-    },
+    meta: {name: $i.router.warehouse},
     noDropdown: false,
     children: [
       {
@@ -704,7 +702,7 @@ export const routerMap = [
   {
     path: '/draft',
     component: Layout,
-    meta: {name: 'Draft'},
+    meta: {name: $i.router.draft},
     redirect: '/draft/index',
     noDropdown: true,
     hidden: true,
@@ -725,7 +723,7 @@ export const routerMap = [
   {
     path: '/recycle',
     component: Layout,
-    meta: {name: 'Recycle Bin'},
+    meta: {name: $i.router.recycle},
     redirect: '/recycle/index',
     noDropdown: true,
     hidden: true,

@@ -54,5 +54,10 @@
   "logs": "Logs",
   "message": "Message",
   "messageManagement": "Management",
-  "logisticLoadingListOverview": "Loading List Overview"
+  "logisticLoadingListOverview": "Loading List Overview",
+  "draft": "Draft",
+  "recycle": "Recycle Bin",
+  "addNewProduct": "Add New Product",
+  "qcDetail": "Detail",
+  "customer": "Customer"
 }
