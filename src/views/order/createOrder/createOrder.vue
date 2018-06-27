@@ -1125,10 +1125,13 @@
                     }else if(v.skuSample==='0'){
                         v.skuSample=false;
                     }
+                    let picKey=['skuLabelPic','skuPkgMethodPic'];
 
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
-                    }
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
@@ -1475,7 +1478,8 @@
                             if(!m._remark){
                                 m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
                                 m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
                             }
                             this.productTableData.splice(k,1,m)
                         }

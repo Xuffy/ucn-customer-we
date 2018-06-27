@@ -1084,8 +1084,7 @@
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
         </v-history-modify>
-
-        <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
+        <v-message-board v-if="false" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
 
     </div>
 </template>
