@@ -945,12 +945,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
