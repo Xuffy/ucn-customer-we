@@ -4,6 +4,7 @@ export default {
     local: {
       MOCK: 'https://www.easy-mock.com/mock/5abe0744a2146a37688ec3c1/api',
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
+      // LOGIN_URL: 'http://192.168.51.138:8070',
       LJ: '//192.168.51.208:11001',
       BASE_URL: '//192.168.51.208:11001', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
