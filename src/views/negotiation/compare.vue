@@ -72,7 +72,7 @@ export default {
       Filed: '',
       compareBy: 0,
       hideSame: false,
-      highLight: false,
+      highLight: true,
       checkedArg: [],
       compareType: '',
       params: {
