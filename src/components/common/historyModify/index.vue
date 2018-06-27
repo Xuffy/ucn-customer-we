@@ -137,6 +137,8 @@
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
+        
+        return this.dataList;
 
       },
       changeSelect(val, item) {
