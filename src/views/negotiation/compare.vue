@@ -4,7 +4,7 @@
         <div>
             <el-form :inline="true" class="demo-form-inline" style="padding:0 0 0 20px;">
                 <el-form-item label="Compare Name">
-                    <el-input v-model="compareName" size="mini" :disabled="compareType  === 'only'"></el-input>
+                    <el-input v-model="compareInfo.compareName" size="mini" :disabled="compareType  === 'only'"></el-input>
                 </el-form-item>
             </el-form>
         </div>
@@ -12,7 +12,7 @@
             <div class="box-l">
                 <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompare" :disabled="(tabData.length - checkedArg.length < 2) || checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
                 <div style="margin-left: 20px;">
                   <el-checkbox v-model="hideSame" @change="renderTabdata" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
                   <el-checkbox v-model="highLight" @change="renderTabdata" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
@@ -32,8 +32,7 @@
             :loading="tabLoad"
             @change-checked="changeChecked"
             :buttons="[{label: 'detail', type: 'detail'}]"
-            @action="action"
-        />
+            @action="action"/>
         <v-pagination
             :pageNum.sync="params.pn"
             :pageSize.sync="params.ps"
@@ -41,17 +40,16 @@
             :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
-            :page-sizes="[50, 100, 200]"
-        />
+            :page-sizes="[50, 100, 200]"/>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare('all')" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:CANCEL'">{{ $i.common.cancel }}</el-button>
         <add-new-inqury
-            v-model="addNew"
+            v-model="showAddListDialog"
             @addInquiry="addCopare"
             :arg-disabled="argDisabled"
-            :compareId="params.id || null"
+            :compareId="compareInfo.id || null"
             :disableds="disableds"
         />
     </div>
@@ -64,9 +62,10 @@ export default {
   data() {
     return {
       dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
+      addInquiryIds: null,
       pageTotal: 0,
-      addNew: false,
-      compareName: '',
+      showAddListDialog: false,
+      compareInfo: {},
       tabLoad: false,
       tabData: [],
       bakData: [],
@@ -93,11 +92,12 @@ export default {
   },
   created() {
     if (this.$route.query.ids) {
-      this.params.ids = this.$route.query.ids.split(',');
+      this.addInquiryIds = this.$route.query.ids.split(',');
+      this.argDisabled = [...this.addInquiryIds];
     } else if (this.$route.query.id) {
-      this.params.id = this.$route.query.id;
+      this.compareInfo.id = this.$route.query.id;
     }
-    this.compareType = this.$route.params.type ? this.compareType = this.$route.params.type : '';
+    this.compareType = this.$route.params.type ? this.$route.params.type : '';
     this.getDirData().then(this.upData);
     // this.setRecycleBin({
     //   name: 'negotiationRecycleBin',
@@ -107,25 +107,19 @@ export default {
     //   show: false
     // });
   },
-  watch: {
-    params: {
-      handler() {
-        this.upData();
-      },
-      deep: true
-    }
-  },
   methods: {
     ...mapActions([
       'setRecycleBin',
       'setDic'
     ]),
     upData() {
-      if (this.$route.query.ids) {
-        this.getNewList();
-      } else {
-        this.getCompareList();
-      }
+      let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
+      this.getListByIds().then(this.getCompareList).then(datas => {
+        if (!datas) return;
+        this.bakData = this.$getDB(column, datas, item => this.$filterDic(item));
+        this.renderTabdata();
+        this.tabLoad = false;
+      });
     },
     cancel() {
       this.tabData.forEach((items, index) => {
@@ -135,55 +129,35 @@ export default {
       this.compareType = 'only';
     },
     onSubmit(type) { // 保存Compare
-      let arr = [], delIds = [];
-      if (this.compareBy + '' === '0') {
-        this.tabData.forEach(item => {
-          if (!item._disabled) {
-            arr.push(_.findWhere(item, {'key': 'id'}).value);
-          }
-          if (item._disabled) {
-            delIds.push(_.findWhere(item, {'key': 'id'}).value);
-          }
-        });
-      } else {
-        this.tabData.forEach(item => {
-          if (!item._disabled) {
-            arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
-          }
-          if (item._disabled) {
-            delinquiryIds.push(_.findWhere(item, {'key': 'inquiryId'}).value);
-          }
-        });
-      }
-
-      this.$confirm(this.$i.commonthisOperationKeepsAllOperationsContinuing, this.$i.common.prompt, {
+      this.$confirm(this.$i.common.thisOperationKeepsAllOperationsContinuing, this.$i.common.prompt, {
         confirmButtonText: this.$i.common.confirm,
         cancelButtonText: this.$i.common.cancel,
         type: 'warning'
       }).then(() => {
-        this.compareName ? this.compareName = this.compareName : this.compareName = new Date().getTime();
+        if (!this.compareInfo.compareName) {
+          this.compareInfo.compareName = new Date().getTime();
+        }
         this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RS, {
-          addInquiryIds: arr,
-          delInquiryIds: delIds,
+          addInquiryIds: this.argDisabled,
+          delInquiryIds: this.disableds,
           id: this.$route.query.id,
-          compareName: this.compareName
-        })
-          .then(res => {
-            if (this.$route.params.type === 'only') {
-              this.upData();
-              this.compareType = 'only';
-              return;
-            }
-            this.$router.push({
-              name: 'negotiationCompareDetail',
-              params: {
-                type: 'only'
-              },
-              query: {
-                id: res.id
-              }
-            });
+          compareName: this.compareInfo.compareName
+        }).then(res => {
+          this.argDisabled = [];
+          this.disableds = [];
+          if (this.$route.params.type === 'only') {
+            this.upData();
+            this.compareType = 'only';
+            return;
+          }
+          this.$router.push({
+            name: 'negotiationCompareDetail',
+            params: {
+              type: 'only'
+            },
+            query: {id: res.id}
           });
+        });
       });
     },
     action(item, type) {
@@ -196,9 +170,7 @@ export default {
     detail(item) {
       this.$router.push({
         path: '/negotiation/inquiryDetail',
-        query: {
-          id: _.findWhere(item, { 'key': 'id' }).value
-        }
+        query: {id: item.id.value}
       });
     },
     getDirData() {
@@ -214,148 +186,100 @@ export default {
       }
       this.tabData = data;
     },
-    getCompareList() {
-      let url, column;
-      this.tabLoad = true;
-      if (!this.compareBy) {
-        url = this.$apis.POST_INQUIRY_COMPARE;
-        column = this.$db.inquiry.viewByInqury;
+    getCompareList(datas) {
+      if (this.compareInfo.id) {
+        this.params.id = this.compareInfo.id;
+        let url = this.compareBy === 0 ? this.$apis.POST_INQUIRY_COMPARE : this.$apis.POST_INQUIRY_COMPARE_SKU;
+        return this.$ajax.post(url, this.params).then(res => {
+          this.pageTotal = res.tc;
+          if (res.appendant) {
+            this.compareInfo = res.appendant;
+          }
+          this.tabLoad = false;
+          return datas ? res.datas.concat(datas) : res.datas;
+        }, () => {
+          this.searchLoad = false;
+          this.tabLoad = false;
+        });
       } else {
-        url = this.$apis.POST_INQUIRY_SKU;
-        column = this.$db.inquiry.viewBySKU;
+        return Promise.resolve(datas);
       }
-
-      this.$ajax.post(url, this.params).then(res => {
-        this.pageTotal = res.tc;
-        this.bakData = this.$getDB(column, res.datas, item => this.$filterDic(item));
-        this.renderTabdata();
-        this.compareName = res.appendant ? res.appendant.compareName : this.compareName;
-        this.tabLoad = false;
-      });
     },
-    getNewList() {
-      let url, column;
-      this.tabLoad = true;
-      if (!this.compareBy) {
-        url = this.$apis.POST_INQIIRY_LIST;
-        column = this.$db.inquiry.viewByInqury;
-      } else {
-        url = this.$apis.POST_INQIIRY_LIST_SKU;
-        column = this.$db.inquiry.viewBySKU;
+    getListByIds() {
+      this.params.ids = [...this.argDisabled];
+      if (this.addInquiryIds) {
+        this.params.ids = this.params.ids.concat(this.addInquiryIds);
       }
-      this.$ajax.post(url, this.params).then(res => {
-        this.pageTotal = res.tc;
-        this.bakData = this.$getDB(column, res.datas, item => this.$filterDic(item));
-        this.renderTabdata();
-        this.tabLoad = false;
-        this.searchLoad = false;
-      }, () => {
-        this.searchLoad = false;
-        this.tabLoad = false;
-      });
+      if (this.params.ids.length > 0) {
+        this.params.id = null;
+        let url = this.compareBy === 0 ? this.$apis.POST_INQIIRY_LIST : this.$apis.POST_INQIIRY_LIST_SKU;
+        this.tabLoad = true;
+        return this.$ajax.post(url, this.params).then(res => {
+          this.pageTotal = res.tc;
+          this.tabLoad = false;
+          this.searchLoad = false;
+          return res.datas;
+        }, () => {
+          this.searchLoad = false;
+          this.tabLoad = false;
+        });
+      } else {
+        return Promise.resolve();
+      }
     },
     changeChecked(item) {
       this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
     addNewCopare() {
-      this.addNew = true;
-      this.argDisabled = this.mapTabData(true);
-      this.disableds = this.mapTabData(false);
+      this.showAddListDialog = true;
     },
-    deleteCompare(type) { // 删除
-      if (type === 'all') {
-        this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
-          confirmButtonText: this.$i.common.confirm,
-          cancelButtonText: this.$i.common.cancel,
-          type: 'warning'
-        }).then(() => {
-          this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id]).then(res => {
-            this.$router.push('/negotiation/compare');
-          });
+    deleteCompareItem() {
+      this.disableds = this.disableds.concat(this.checkedArg.map(i => i.originValue));
+      this.argDisabled = this.argDisabled.filter(i => this.disableds.indexOf(i) < 0);
+      this.tabData = this.tabData.filter(i => !i._checked);
+      this.checkedArg = [];
+    },
+    deleteCompare() { // 删除
+      this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
+        confirmButtonText: this.$i.common.confirm,
+        cancelButtonText: this.$i.common.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, [this.$route.query.id]).then(res => {
+          this.$router.push('/negotiation/compare');
         });
-      } else {
-        this.tabData = this.tabData.filter(i => !i._checked);
-        this.checkedArg = [];
-      }
-    },
-    mapTabData(type) {
-      let arr = [];
-      _.map(this.tabData, item => {
-        if (this.compareBy + '' === '0') {
-          if (type) {
-            if (!item._disabled) {
-              arr.push(_.findWhere(item, {'key': 'id'}).value);
-            }
-          } else {
-            if (item._disabled) {
-              arr.push(_.findWhere(item, {'key': 'id'}).value);
-            }
-          }
-        } else {
-          if (type) {
-            if (!item._disabled) {
-              arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
-            }
-          } else {
-            if (item._disabled) {
-              arr.push(_.findWhere(item, {'key': 'inquiryId'}).value);
-            }
-          }
-        }
       });
-      return arr;
     },
     addCopare(arg) { // add new compare
       if (!arg.length) {
-        return this.$message(this.$i.common.pleaseChooseGoods);
+        this.$message(this.$i.common.pleaseChooseGoods);
+        return;
       }
       let url, column;
-      if (this.compareBy + '' === '0') {
+      if (this.compareBy === 0) {
         url = this.$apis.POST_INQIIRY_LIST;
         column = this.$db.inquiry.viewByInqury;
       } else {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, {
-        recycleCustomer: 0,
-        ids: arg
-      }).then(res => {
-        let datas;
-        this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-          .then(data => {
-            this.setDic(data);
-            datas = this.$getDB(column, res.datas, (item) => {
-              this.$filterDic(item);
-            });
-            _.map(this.tabData, (item, index) => {
-              if (item._disabled) {
-                _.map(datas, items => {
-                  if (item.id.value === items.id.value) {
-                    item._disabled = false;
-                    item._checked = false;
-                    items._add = true;
-                  }
-                });
-              }
-            });
-            let arr = [];
-            _.map(datas, item => {
-              if (!item._add) {
-                arr.push(item);
-              }
-            });
-            arr = arr.concat(this.tabData);
-            this.tabData = arr;
-            this.addNew = false;
-          });
+      this.$ajax.post(url, {recycleCustomer: 0, ids: arg}).then(res => {
+        this.argDisabled = this.argDisabled.concat(arg);
+        this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
+
+        let datas = this.$getDB(column, res.datas, item => this.$filterDic(item));
+        this.tabData = datas.concat(this.tabData);
+        this.showAddListDialog = false;
       });
     },
     handleSizeChange(val) {
       this.params.pn = val;
+      this.upData();
     },
     pageSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.upData();
     }
   }
 };
