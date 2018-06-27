@@ -28,13 +28,13 @@
     </div>
 
     <!-- <div v-if="planId && feeList"> -->
-    <div v-if="planId">
+    <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
       <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
     </div>
 
-    <div v-if="planId">
+    <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
       <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum" @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView" :currencyCode="oldPlanObject.currency"/>
@@ -64,8 +64,8 @@
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <messageBoard v-if="!isCopy&&planId" module="logistic" code="planDetail" :id="planId"></messageBoard>
-    <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" :planId="planId" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
+    <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
+    <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit" :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"/>
   </div>
 </template>
 <script>
@@ -87,6 +87,7 @@ export default {
   name: 'logisticPlanDetail',
   data() {
     return {
+      planId:'',
       fieldDisplay:null,
       deliveredEdit:false,
       negotiate:'',
@@ -212,14 +213,14 @@ export default {
     attachmentReadonly(){
       return !this.edit;
     },
-    planId () {
-      return this.$route.query.id
+    pageTypeCurr(){
+      return this.$route.name;
+    },
+    isParams(){
+      return _.isEmpty(this.$route.query)
     },
     isCopy () {
       return this.$route.query.copy
-    },
-    isLoadingList () {
-      return this.$route.query.loadingList
     },
     productbButtons(){
       let aArr = [
@@ -258,7 +259,7 @@ export default {
     this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
       return value;
     })
-    if (this.planId) {
+    if (this.pageTypeCurr.slice(-6) == 'Detail') {
       this.getDetails();
       if(this.isCopy){
         this.edit = true;
@@ -319,8 +320,9 @@ export default {
       })
     },
     getDetails () {
-      let url = this.$route.query.loadingList ? this.$apis.get_order_details :this.$apis.get_plan_details
-      this.$ajax.get(`${url}${this.planId}`).then(res => {
+      let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_order_details :this.$apis.get_plan_details
+      this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
+        this.planId = res.id;
         this.fieldDisplay = res.fieldDisplay;
         this.createdPlanData(res)
         this.logisticsStatus = res.logisticsStatus;
@@ -337,7 +339,7 @@ export default {
       })
     },
     getSupplier (logisticsNo) {
-      let url = this.$route.query.loadingList ? this.$apis.get_order_supplier : this.$apis.get_plan_supplier
+      let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_order_supplier : this.$apis.get_plan_supplier
       this.$ajax.get(`${url}?logisticsNo=${logisticsNo}`).then(res => {
         this.selectArr.supplier = res.map((item)=>{
           item.value = item.skuSupplierName;
@@ -414,7 +416,7 @@ export default {
       this.getDictionaryPart()
     },
     getDictionaryPart () {
-      this.$set(this.dictionaryPart,'logisticsStatus',this.$route.query.loadingList ? 'LS_STATUS' : 'LS_PLAN') 
+      this.$set(this.dictionaryPart,'logisticsStatus',this.pageTypeCurr=="loadingListDetail" ? 'LS_STATUS' : 'LS_PLAN') 
       const params = _.map(this.dictionaryPart, v => v)
       this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
         _.mapObject(this.dictionaryPart, (v, k) => {
@@ -569,7 +571,7 @@ export default {
       })
     },
     productModifyfun(obj){
-      if(this.planId){
+      if(this.pageTypeCurr.slice(-6) == 'Detail'){
         this.prodFieldDisplay = obj;
       }
     },
@@ -635,7 +637,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+ (this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
@@ -647,7 +649,7 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+ (this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
@@ -662,13 +664,13 @@ export default {
           type: 'success',
           duration:3000,
           onClose:()=>{
-            this.$router.push('/logistic/'+( this.$route.query.loadingList || ''));
+            this.$router.push('/logistic/'+ (this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
           }
         })
       })
     },
     toExit () {
-      if ((this.isCopy&&this.planId)||(!this.isCopy&&!this.planId)) {
+      if ((this.isCopy&&this.pageTypeCurr.slice(-6) == 'Detail')||(!this.isCopy&&!this.pageTypeCurr.slice(-6) == 'Detail')) {
         return this.$router.go(-1)
       }
       this.edit = !this.edit
@@ -750,7 +752,7 @@ export default {
           this.$set(item,'fieldDisplay',null);
         })
       }
-      if(!this.planId){
+      if(this.isParams){
         this.oldPlanObject.fieldDisplay = null;
       }
       if(this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.basicInfoObj)){
