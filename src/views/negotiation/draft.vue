@@ -139,12 +139,12 @@ export default {
     },
     changeChecked(item) { // 选中的list
       let arr = [];
-      if (this.viewByStatus === '0') {
+      if (this.viewByStatus === 0) {
         item.forEach(item => {
           arr.push(item.id.value);
         });
       } else {
-        tem.forEach(item => {
+        item.forEach(item => {
           arr.push(item.inquiryId.value);
         });
       }
