@@ -44,7 +44,7 @@ addNewProduct
 
         <v-table
           code="udata_pruchase_supplier_compare_detail_overview"
-          :height=500
+
           :data="tableDataList"
           :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
@@ -204,7 +204,6 @@ addNewProduct
                           return e;
                         });
                         copy_data = this.tableDataList;
-                        console.log(copy_data)
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -504,24 +503,17 @@ addNewProduct
               }
           },
           screenTableStatus(){
-            console.log(this.screenTableStatus)
              if (this.screenTableStatus.length != 0){
+               console.log(this.screenTableStatus.length)
                this.screenTableStatus.forEach(v => {
                   if (v == 1){
-                    this.tableDataList = this.$table.setHideSame(this.tableDataList)
-                  }else{
+                    this.tableDataList = this.$table.setHideSame(this.tableDataList);
+                  }else if (v == 2){
                     this.tableDataList = this.$table.setHighlight(this.tableDataList)
                   }
                })
              }else{
-               this.tableDataList.forEach(item => {
-                 _.mapObject(item, val => {
-                   this.$set(val, '_hide', false);
-                   return val
-                 })
-               })
-               // this.tableDataList = [...copy_data]
-
+               this.tableDataList = this.$depthClone(copy_data)
              }
           },
         },
