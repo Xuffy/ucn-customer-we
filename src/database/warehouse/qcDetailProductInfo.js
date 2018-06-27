@@ -280,7 +280,8 @@ export default{
     },
     QCPic:{
         key: 'qcPic',
-        type: 'String'
+        type: 'String',
+        _image:true
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
