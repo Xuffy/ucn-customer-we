@@ -117,7 +117,7 @@
                   <div class="section-btn">
                     <el-button @click="upload" type="primary">{{$i.button.save}}</el-button>
                   </div>
-                  <v-upload ref="uploadAttachment" :limit="20" :list="companyInfo.attachments" oss-private/>
+                  <v-upload ref="uploadAttachment" :limit="20" :list="companyInfo.attachments" oss-private />
                 </el-tab-pane>
 
                 <el-tab-pane :label="$i.setting.custom">
@@ -241,9 +241,9 @@
                         <el-select  v-model="contactData.deptId" placeholder="请选择" style="width:100%" >
                           <el-option
                             v-for="item in department"
-                            :key="item.code"
-                            :label="item.name"
-                            :value="item.code"
+                            :key="item.deptId"
+                            :label="item.deptName"
+                            :value="item.deptId"
                             style="width:100%">
                           </el-option>
                         </el-select>
@@ -253,10 +253,10 @@
                         <el-form-item  :label="$i.setting.gender +'：'">
                           <el-select v-model="contactData.gender" placeholder="please input" style="width:100%">
                             <el-option
-                              v-for="item in genderOptions"
-                              :key="item.key"
-                              :label="item.label"
-                              :value="item.key"
+                              v-for="item in sex"
+                              :key="item.code"
+                              :label="item.name"
+                              :value="item.code"
                               style="width:100%">
                             </el-option>
                           </el-select>
@@ -413,19 +413,6 @@
                 documentDialogVisible:false,
                 customDialogVisible:false,
                 exchangerateDialogVisible:false,
-                 genderOptions:[{
-                    value: '男',
-                    label: 'Male',
-                   code: 1
-                }, {
-                    value: '女',
-                    label: 'Female',
-                   code: 0
-                }, {
-                    value: '未知',
-                    label: 'Unknown',
-                   code: 2
-                }],
                 //页面page绑定
                 companyInfo:{
                   city: "",
@@ -531,20 +518,21 @@
               },
               addressDatas:[],
               accountsData:[],
-                //btn loading状态
-                allowAddAddress:false,
-                allowAddAccount:false,
-                allowAddContact:false,
-                allowModifySummary:false,           //顶部保存按钮
-                //是否正在修改地址标识，因为新增和修改都是用的同一个按钮，所以为了区分增加一个标识
-                isModifyAddress:false,
-                isModifyAccount:false,
-                isModifyContact:false,
-              //判断是否修改过
-                isModify:false,
-                options:{},
-                department:[],
-                currencyList:[]
+              sex:[],
+              //btn loading状态
+              allowAddAddress:false,
+              allowAddAccount:false,
+              allowAddContact:false,
+              allowModifySummary:false,           //顶部保存按钮
+              //是否正在修改地址标识，因为新增和修改都是用的同一个按钮，所以为了区分增加一个标识
+              isModifyAddress:false,
+              isModifyAccount:false,
+              isModifyContact:false,
+            //判断是否修改过
+              isModify:false,
+              options:{},
+              department:[],
+              currencyList:[]
             }
         },
         methods:{
@@ -570,9 +558,8 @@
                     });
                     this.accountsData = this.$getDB(this.$db.setting.companyContact, res.concats, e => {
                       let gender;
-                      //genderOptions
-                      gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
-                      e.gender._value = gender.label || '';
+                      gender = _.findWhere(this.sex, {code: (e.gender.value)+''}) || {};
+                      e.gender._value = gender.name || '';
                       return e;
                     });
                     if(res.custom){
@@ -601,12 +588,12 @@
           },
           //获取字典
           getCodePart(){
-            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS"]).then(res=>{
+            this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
               this.options.payment = _.findWhere(res, {'code': 'PMT'}).codes;
               this.options.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
               this.options.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
               this.options.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
-
+              this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
             }).catch(err=>{
               console.log(err)
             });
@@ -711,7 +698,6 @@
               this.allowAddAddress=true;
               this.addressData.customerId=this.companyInfo.id;
               if(this.isModifyAddress){
-                console.log(this.addressData)
                 //表示是在修改地址
                 this.$ajax.post(`${this.$apis.post_purchase_customer_address_id}/${this.addressData.id}`,this.addressData).then(res=>{
                   this.allowAddAddress=false;
@@ -719,9 +705,6 @@
                     message: '修改成功',
                     type: 'success'
                   });
-                  if (!this.companyInfo.setting){
-                    this.postUpdateIsSetting();
-                  }
                   this.getWholeData();
                   this.addressDialogVisible=false;
                 }).catch(err=>{
@@ -729,6 +712,9 @@
                 });
               }else{
                 //表示是在新增地址
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
                   this.allowAddAddress=false;
                   this.$message({
@@ -807,9 +793,6 @@
                             message: '修改成功',
                             type: 'success'
                         });
-                        if (!this.companyInfo.setting){
-                          this.postUpdateIsSetting();
-                        }
                         this.getWholeData();
                         this.contactDialogVisible=false;
                     }).catch(err=>{
@@ -819,6 +802,9 @@
                 }
                 else{
                     //表示是在新增account
+                    if (!this.companyInfo.setting){
+                      this.postUpdateIsSetting();
+                    }
                     this.$ajax.post(this.$apis.post_purchase_customer_concat,this.contactData).then(res=>{
                         this.allowAddContact=false;
                         this.$message({
@@ -880,6 +866,9 @@
             this.documentData.customerId=this.companyInfo.id;
             if (!this.documentData.id){
               this.$ajax.post(this.$apis.post_purchase_customer_document,this.documentData).then(res=>{
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.$message({
                   message: '添加成功',
                   type: 'success'
@@ -896,9 +885,6 @@
                   message: '修改成功',
                   type: 'success'
                 });
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
                 this.getWholeData();
                 this.documentDialogVisible = false;
               }).catch(err=>{
@@ -923,6 +909,9 @@
                   message: '添加成功',
                   type: 'success'
                 });
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.getWholeData();
                 this.customDialogVisible = false;
               }).catch(err=>{
@@ -935,9 +924,6 @@
                   message: '修改成功',
                   type: 'success'
                 });
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
                 this.getWholeData();
                 this.customDialogVisible = false;
               }).catch(err=>{
@@ -1051,6 +1037,9 @@
                     this.isModifyContact=false;
                 }
             },
+        },
+        computed: {
+
         }
     }
 </script>

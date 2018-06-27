@@ -73,8 +73,8 @@
               @size-change="pageSizeChange"
               :page-sizes="[50,100,200,500]"></page>
             <div v-show='!isButton'  style='display:flex; justify-content: center'>
-                <el-button @click='emitData'>{{$i.common.ok}}</el-button>
-                <el-button type="primary" @click="cancelData">{{$i.common.cancel}}</el-button>
+                <el-button  type="primary"  @click='emitData'>{{$i.common.ok}}</el-button>
+                <el-button @click="cancelData">{{$i.common.cancel}}</el-button>
             </div>
 
     </div>
