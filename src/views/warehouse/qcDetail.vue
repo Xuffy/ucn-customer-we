@@ -481,16 +481,30 @@
         methods:{
             ...mapActions(['setLog']),
             getQcOrderDetail(){
-                this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
-                    .then(res=>{
-                        this.qcDetail=res;
-                        this.loadingData=false;
-                        this.getProductInfo();
-                        this.getPaymentData();
-                    }).catch(err=>{
-                        this.loadingData=false;
-                    }
-                );
+                if(this.$route.query.id){
+                    this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
+                        .then(res=>{
+                            this.qcDetail=res;
+                            this.loadingData=false;
+                            this.getProductInfo();
+                            this.getPaymentData();
+                        }).catch(err=>{
+                            this.loadingData=false;
+                        }
+                    );
+                }else if(this.$route.query.code){
+                    this.$ajax.get(`${this.$apis.GET_QC_GETBYQCORDERNO}?qcOrderNo=${this.$route.query.code}`)
+                        .then(res=>{
+                            this.qcDetail=res;
+                            this.loadingData=false;
+                            this.getProductInfo();
+                            this.getPaymentData();
+                        }).catch(err=>{
+                            this.loadingData=false;
+                        }
+                    );
+                }
+
             },
             getProductInfo(){
                 this.loadingProductInfoTable=true;

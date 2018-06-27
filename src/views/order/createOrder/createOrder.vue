@@ -384,7 +384,8 @@
         <el-dialog
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
-                width="70%">
+                width="70%"
+                top="2vh">
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
                     <v-product
@@ -573,31 +574,34 @@
                         <!--:value="item.name">-->
                 <!--</el-option>-->
             <!--</el-select>-->
-、
 
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
+                    @blur="handleFobPrice"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @blur="handleFobPrice"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @blur="handleFobPrice"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @blur="handleFobPrice"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
@@ -843,7 +847,6 @@
             <div slot="skuAdditionalFour" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
-
         </v-history-modify>
     </div>
 </template>
@@ -925,6 +928,7 @@
                 queryNo:0,
                 category:[],
                 inquiryId:'',           //存储选择的入库单id
+                chooseProduct:[],
 
                 /**
                  * 弹出框data配置
@@ -945,7 +949,7 @@
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    status:99
+                    // status:99
                 },
 
                 /**
@@ -1335,10 +1339,14 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
+                            if(!v._remark){
+                                this.chooseProduct=v;
+                                this.handlePriceBlur({},v);
+                            }
                             arr.push(v);
                         }
                     });
-                    this.$refs.HM.init(arr,[]);
+                    this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/sourcingDetail',
@@ -1458,6 +1466,7 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+                console.log(e,'?????')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1978,10 +1987,53 @@
             /**
              * history插槽事件
              * */
-            handlePriceBlur(e){
-                console.log(e,'???')
-            },
+            handlePriceBlur(e,item){
+                if(!this.orderForm.incoterm){return;}
+                let obj;
+                obj=item?item:this.chooseProduct[0];
+                console.log(obj,'objobjobj')
+                if(this.orderForm.incoterm==='1'){
+                    //fob
+                    if(obj.skuFobPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuFobPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='2'){
+                    //exw
+                    if(obj.skuExwPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuExwPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='3'){
+                    //cif
+                    if(obj.skuCifPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuCifPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='4'){
+                    //ddu
+                    if(obj.skuDduPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuDduPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }
 
+
+
+                // console.log(e,'当前字段数据')
+                // console.log(this.chooseProduct[0],'当前行')
+                // this.$set(this.chooseProduct[0].skuPrice,'value',1);
+            },
+            handleFobPrice(e){
+
+            },
+            handleExwPrice(e){},
+            handleCifPrice(e){},
+            handleDduPrice(e){},
 
             /**
              * 搜索框事件
