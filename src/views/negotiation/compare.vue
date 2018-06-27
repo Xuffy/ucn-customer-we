@@ -263,7 +263,7 @@ export default {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, {recycleCustomer: 0, ids: arg}).then(res => {
+      this.$ajax.post(url, {recycleCustomer: 0, ps: 200, ids: arg}).then(res => {
         this.argDisabled = this.argDisabled.concat(arg);
         this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
 
