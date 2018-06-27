@@ -3,7 +3,7 @@
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
-    <img class="image" :src="src" ref="image" v-holder="{text:'UCN',img:'100px100p'}">
+    <img class="image" :src="src" ref="image" v-holder="{text:' ',img:'100px100p',outline:'yes'}">
 
     <!--onerror="this.src='holder.js/300x200?theme=red';this.onerror=null"-->
   </div>

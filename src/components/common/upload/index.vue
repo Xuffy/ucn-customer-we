@@ -105,7 +105,8 @@
             , files = this.$refs.upload.files
             , fileNames = _.pluck(_.values(this.fileList), 'fileName');
 
-          _.map(files, val => {
+          _.map(files, value => {
+            let val = new File([value], value.name.replace(/\s/g, ''), {type: value.type});
             if (_.indexOf(prohibitType, val.name.split('.').pop().toLocaleUpperCase()) > -1) {
               return this.$message.warning(`${this.$i.upload.typeLimit}: ${prohibitType.join()} `);
             }

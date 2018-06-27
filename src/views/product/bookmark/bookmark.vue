@@ -312,9 +312,8 @@
                 }else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
-
                 this.loadingTable=true;
-
+                this.productForm.country='';
                 if(this.selectCountry.length>0){
                     _.map(this.selectCountry,v=>{
                         this.productForm.country+=(v+',');
@@ -499,27 +498,6 @@
 
             //勾选的商品创建order
             createOrder(){
-                let supplierList=[];
-                let allow=true;
-                _.map(this.selectList,v=>{
-                    if(v.customerCreate.value){
-                        allow=false;
-                    }
-                    supplierList.push(v.supplierCode.value);
-                });
-                if(!allow){
-                    return this.$message({
-                        message: this.$i.product.customerProductCanNotAddToOrder,
-                        type: 'warning'
-                    });
-                }
-
-                if(_.uniq(supplierList).length>1){
-                    return this.$message({
-                        message: this.$i.product.notAddDifferentSupplierProduct,
-                        type: 'warning'
-                    });
-                }
                 this.disabledOrderList=[];
                 this.selectList.forEach(v=>{
                     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
@@ -535,6 +513,21 @@
                             url:'/order/create',
                         })
                     }else{
+                        let supplierList=[];
+                        _.map(this.selectList,v=>{
+                            // if(v.customerCreate.value){
+                            //     allow=false;
+                            // }
+                            supplierList.push(v.supplierCode.value);
+                        });
+                        console.log(supplierList,'supplierList')
+                        if(_.uniq(supplierList).length>1){
+                            return this.$message({
+                                message: this.$i.product.notAddDifferentSupplierProduct,
+                                type: 'warning'
+                            });
+                        }
+
                         let ids='';
                         this.selectList.forEach(v=>{
                             ids+=(v.skuId.value+',');

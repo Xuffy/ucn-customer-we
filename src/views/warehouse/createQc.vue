@@ -183,6 +183,9 @@
                                     clearable>
                             </el-input>
                         </div>
+                        <div v-else-if="v.showType==='date'">
+                            {{scope.row[v.key]?$dateFormat(scope.row[v.key],'yyyy-mm-dd'):''}}
+                        </div>
                         <div v-else>
                             {{scope.row[v.key]}}
                         </div>
@@ -327,7 +330,7 @@
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-        <el-dialog width="70%" title="Add Product" :visible.sync="productDialogVisible">
+        <el-dialog width="70%" :title="$i.warehouse.addProduct" :visible.sync="productDialogVisible">
             <el-form ref="qcOrder" :model="productDialogConfig" :rules="dialogRules" label-width="120px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -522,6 +525,10 @@
                 surveyorOption:[],
                 qcResultOption:[],
                 barCodeResult:[],
+                skuUnitOption:[],       //计量单位
+                lengthOption:[],
+                volumeOption:[],
+                weightOption:[],
             }
         },
         methods:{
@@ -684,6 +691,10 @@
                         this.loadingProductTable=false;
                         res.forEach(v=>{
                             if(v.id!==0){
+                                v.skuUnitDictCode=_.findWhere(this.skuUnitOption,{code:v.skuUnitDictCode}).name;
+                                v.volumeUnitDictCode=_.findWhere(this.volumeOption,{code:v.volumeUnitDictCode}).name;
+                                v.weightUnitDictCode=_.findWhere(this.weightOption,{code:v.weightUnitDictCode}).name;
+                                v.lengthUnitDictCode=_.findWhere(this.lengthOption,{code:v.lengthUnitDictCode}).name;
                                 this.productTableData.push(v);
                             }
                         });
@@ -766,7 +777,7 @@
              * */
             getUnit(){
                 this.loadingData=true;
-                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT'],{cache:true}).then(res=>{
                     res.forEach(v=>{
                         if(v.code==='QC_TYPE'){
                             this.qcTypeOption=v.codes;
@@ -781,13 +792,19 @@
                             this.barCodeResult=v.codes;
                         }else if(v.code==='QC_STATUS'){
                             this.qcStatusOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }else if(v.code==='LH_UNIT'){
+                            this.lengthOption=v.codes;
+                        }else if(v.code==='VE_UNIT'){
+                            this.volumeOption=v.codes;
+                        }else if(v.code==='WT_UNIT'){
+                            this.weightOption=v.codes;
                         }
                     })
                 }).finally(()=>{
                     this.loadingData=false;
                 });
-
-
 
 
                 this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{

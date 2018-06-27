@@ -384,7 +384,8 @@
         <el-dialog
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
-                width="70%">
+                width="70%"
+                top="2vh">
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
                     <v-product
@@ -557,7 +558,7 @@
                         v-for="item in quarantineTypeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <!--<el-select-->
@@ -573,31 +574,34 @@
                         <!--:value="item.name">-->
                 <!--</el-option>-->
             <!--</el-select>-->
-、
 
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
@@ -820,30 +824,29 @@
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuInnerCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalThree" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
-
         </v-history-modify>
     </div>
 </template>
@@ -925,6 +928,7 @@
                 queryNo:0,
                 category:[],
                 inquiryId:'',           //存储选择的入库单id
+                chooseProduct:[],
 
                 /**
                  * 弹出框data配置
@@ -1098,9 +1102,10 @@
             ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
+                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                //     return;
+                // }
+                console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1121,30 +1126,35 @@
                     }else if(v.skuSample==='0'){
                         v.skuSample=false;
                     }
-
-                    if(_.isArray(v.skuLabelPic)){
-                        v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
+                    if(v.skuInspectQuarantineCategory){
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
                     }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
-                    });
-                }
+                // if(!rightCode){
+                //     return this.$message({
+                //         message: this.$i.order.supplierNotTheSame,
+                //         type: 'warning'
+                //     });
+                // }
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    console.log(res)
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
-                });
+                console.log(params,'???')
+                // this.disableClickSend=true;
+                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                //     this.$router.push('/order/overview');
+                // }).finally(err=>{
+                //     this.disableClickSend=false;
+                // });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1309,10 +1319,12 @@
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
-
                         item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
                         item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
                         if(item.id.value===this.inquiryId){
+                            this.$set(item,'_disabled',true)
+                        }
+                        if(item.orderNo.value){
                             this.$set(item,'_disabled',true)
                         }
                     });
@@ -1333,10 +1345,37 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
+                            if(!v._remark){
+                                this.handlePriceBlur({},v);
+                            }
                             arr.push(v);
                         }
                     });
-                    this.$refs.HM.init(arr,[]);
+                    if(this.$refs.uploadSkuLabelPic){
+                        this.$refs.uploadSkuLabelPic.reset();
+                    }
+                    if(this.$refs.uploadSkuPkgMethodPic){
+                        this.$refs.uploadSkuPkgMethodPic.reset();
+                    }
+                    if(this.$refs.uploadSkuInnerCartonPic){
+                        this.$refs.uploadSkuInnerCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuOuterCartonPic){
+                        this.$refs.uploadSkuOuterCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalOne){
+                        this.$refs.uploadSkuAdditionalOne.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalTwo){
+                        this.$refs.uploadSkuAdditionalTwo.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalThree){
+                        this.$refs.uploadSkuAdditionalThree.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalFour){
+                        this.$refs.uploadSkuAdditionalFour.reset();
+                    }
+                    this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
                         url:'/product/sourcingDetail',
@@ -1456,15 +1495,38 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+                console.log(e,'???')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
+                            if(!m._remark){
+                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
+                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
+                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
+                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
+                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
+                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
+
+
+                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
+                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
+                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
+                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
+                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
+                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
+                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
+                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
+
+
+                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-
+                // this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                // this.productTableData[0].skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
             },
             dataFilter(data) {
                 let arr = [],
@@ -1976,10 +2038,40 @@
             /**
              * history插槽事件
              * */
-            handlePriceBlur(e){
-                console.log(e,'???')
+            handlePriceBlur(e,item){
+                if(!this.orderForm.incoterm){return;}
+                let obj;
+                obj=item?item:this.chooseProduct[0];
+                if(this.orderForm.incoterm==='1'){
+                    //fob
+                    if(obj.skuFobPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuFobPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='2'){
+                    //exw
+                    if(obj.skuExwPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuExwPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='3'){
+                    //cif
+                    if(obj.skuCifPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuCifPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.orderForm.incoterm==='4'){
+                    //ddu
+                    if(obj.skuDduPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuDduPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }
             },
-
 
             /**
              * 搜索框事件

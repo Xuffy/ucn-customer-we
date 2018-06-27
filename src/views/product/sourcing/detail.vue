@@ -635,6 +635,15 @@
                         message: 'Successfully Add!',
                         type: 'success'
                     });
+
+                    this.$router.push({
+                        path:'/product/bookmarkDetail',
+                        query:{
+                            id:res[0].id,
+                            bookmarkId:res[0].bookmarkId
+                        }
+                    })
+
                 }).finally(err=>{
                     this.disableClickAddBookmark=false;
                 });

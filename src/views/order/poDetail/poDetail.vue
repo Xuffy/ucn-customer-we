@@ -469,8 +469,8 @@
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
+        <!--code="uorder_sku_list"-->
         <v-table
-                code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
                 :buttons="isModify?productInfoBtn:productNotModifyBtn"
@@ -827,31 +827,35 @@
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
-                    @blur="handleBlurSkuQty(data)"
+                    @blur="handlePriceBlur(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
@@ -1052,9 +1056,8 @@
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
 
-
             <div slot="skuPictures" slot-scope="{data}">
-                <v-upload ref="uploadSkuPictures" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
                 <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
@@ -1081,8 +1084,7 @@
                 <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
             </div>
         </v-history-modify>
-
-        <v-message-board module="order" code="detail" :id="$route.query.orderId"></v-message-board>
+        <v-message-board v-if="false" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
 
     </div>
 </template>
@@ -1206,6 +1208,8 @@
                     },
                 },
                 copyObj:{},
+                chooseProduct:{},
+                savedIncoterm:'',           //用来存储incoterm
 
                 /**
                  * payment data配置
@@ -1229,6 +1233,7 @@
                 ],
                 copyList:[],
                 disableClickDunning:false,
+
 
                 /**
                  * 弹出框data配置
@@ -1559,6 +1564,7 @@
                     orderNo:this.$route.query.orderNo || this.$route.query.code,
                 }).then(res=>{
                     this.orderForm=res;
+                    this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
                             this.orderForm.supplierName=v.id;
@@ -1600,6 +1606,7 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
+                    console.log(this.productTableData,'this.productTableData')
                     this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
@@ -1761,13 +1768,14 @@
                             if(!v._remark && !v.skuLabelPic.value){
                                 v.skuLabelPic.value=[];
                             }
+                            if(!v._remark){
+                                this.handlePriceBlur({},v);
+                            }
                             arr.push(v);
                         }
                     });
-                    console.log(arr,'arrrrr')
                     this.copyObj=Object.assign({},arr[0]);
-                    this.$refs.HM.init(arr,[]);
-
+                    this.chooseProduct=this.$refs.HM.init(arr, []);
                 }
                 else if(type==='detail'){
                     this.$windowOpen({
@@ -2187,6 +2195,40 @@
                     //EXW
                 }else if(this.orderForm.incoterm==='3'){
                     //CIF
+                }
+            },
+            handlePriceBlur(e,item){
+                if(!this.orderForm.incoterm){return;}
+                let obj;
+                obj=item?item:this.chooseProduct[0];
+                if(this.savedIncoterm==='1'){
+                    //fob
+                    if(obj.skuFobPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuFobPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='2'){
+                    //exw
+                    if(obj.skuExwPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuExwPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='3'){
+                    //cif
+                    if(obj.skuCifPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuCifPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
+                }else if(this.savedIncoterm==='4'){
+                    //ddu
+                    if(obj.skuDduPrice.value && obj.skuQty.value){
+                        obj.skuPrice.value=obj.skuDduPrice.value*obj.skuQty.value;
+                    }else{
+                        obj.skuPrice.value=0;
+                    }
                 }
             },
 

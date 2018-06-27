@@ -14,6 +14,9 @@ export default {
     destinationCountry:{
         _hide:true
     },
+    orderNo:{
+        _hide:true
+    },
     inquiryNo:{},
     quotationNo:{},
     inquiryStatus:{

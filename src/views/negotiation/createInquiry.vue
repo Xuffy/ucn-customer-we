@@ -3,7 +3,7 @@
     <h3 class="hd">{{ showInquiryNo ? `${$i.inquiry.inquiryNo}${fromArg.inquiryNo}` : $i.common.createInquiry }}</h3>
     <div class="select-wrap">
       <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
-      <el-form ref="ruleform" :model="fromArg">
+      <el-form ref="ruleform" :model="fromArg" :show-message="false">
         <el-row :gutter="10">
           <el-col
             v-for="(item, index) in $db.inquiry.basicInfo"
@@ -97,7 +97,7 @@
                 resize="none"
                 :disabled="item.disabled"/>
               <span v-else-if="item.type === 'Number'" style="display:flxe;">
-                <el-input-number v-model="fromArg[item.key]" :min="0" :max="100"
+                <el-input v-model="fromArg[item.key]" :min="0" :max="100"
                     controls-position="right" size="mini" :controls="false"
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
@@ -269,7 +269,11 @@ export default {
     },
     getInquiryInfo(id) {
       this.$ajax.get(`${this.$apis.GET_INQIIRY_DETAIL}/{id}`, {id}).then(res => {
-        res.exportLicense = res.exportLicense ? 1 : 0;
+        if (res.exportLicense === false) {
+          res.exportLicense = 0;
+        } else if (res.exportLicense === true) {
+          res.exportLicense = 1;
+        }
         if (Array.isArray(res.suppliers)) {
           res.suppliers.forEach(items => {
             _.mapObject(items, (val, k) => {
@@ -356,11 +360,13 @@ export default {
     submitForm(type) { // 提交
       let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
-      this.$refs.ruleform.validate((valid) => {
-        if (!valid) {
-          this.$message({message: this.$i.common.pleaseCompleteTheCompletion, type: 'warning'});
-        }
-      });
+      // this.$refs.ruleform.validate((valid) => {
+      //   if (!valid) {
+      //     valid failed.
+      //   } else {
+      //     successed.
+      //   }
+      // });
       let arr = [];
       _.map(this.fromArg.suppliers, item => {
         let json = {};
@@ -376,7 +382,10 @@ export default {
       upData.attachment = files && files.length > 0 ? files.join(',') : null;
 
       let postData = this.$filterModify(upData);
-
+      if (postData.discountRate && isNaN(postData.discountRate)) {
+        this.$message.warning(this.$i.inquiry.discountRateMustNumber);
+        return;
+      }
       if (type !== 'draft') {
         if (typeof postData.incoterm === 'undefined' || postData.incoterm === null) {
           this.$message.warning(this.$i.inquiry.incotermRequired);
@@ -392,7 +401,7 @@ export default {
         }
       }
 
-      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, this.$filterModify(upData)).then(() => {
+      this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, postData).then(() => {
         if (!this.fromArg.draft) {
           this.$router.push('/negotiation/inquiry')
         } else {
