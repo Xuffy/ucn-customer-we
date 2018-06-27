@@ -2,7 +2,7 @@
     <div class="inquiry">
         <el-dialog
             :title="$i.common.prompt"
-            :visible.sync="dialogVisible"
+            :visible.sync="showDialog"
             width="80%">
                 <div class="status">
                     <div class="state">
@@ -29,14 +29,15 @@
                     :selection-radio="selectionRadio"
                     ref="tab"/>
                 <el-pagination
-                    @size-change="handleSizeChange"
+                    @change="handleSizeChange"
+                    @size-change="pageSizeChange"
                     :currentPage.sync="params.pn"
                     :page-sizes="pazeSize"
                     :page-size="params.ps"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="pageTotal"/>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">{{ $i.common.cancel }}</el-button>
+                <el-button @click="showDialog = false">{{ $i.common.cancel }}</el-button>
                 <el-button type="primary" @click="addCompare">{{ $i.common.ok }}</el-button>
             </span>
         </el-dialog>
@@ -57,22 +58,18 @@ export default {
       pazeSize: [30, 40, 50, 100],
       searchLoad: false,
       options: [{
-        id: 'INQUIRY_NO',
-        label: '询价单号'
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
       }, {
-        id: 'QUOTATION_NO',
-        label: '询价单号（供应商自有）'
+        id: 'inquiryNo',
+        label: this.$i.inquiry.InquiryNo,
+        operator: 'like'
       }, {
-        id: 'SUPPLIER_NAME',
-        label: '供应商名称'
-      }, {
-        id: 'SUPPLIER_TYPE',
-        label: '供应商类型'
-      }, {
-        id: 'PAYMENT_METHOD',
-        label: '支付方式'
+        id: 'quotationNo',
+        label: this.$i.inquiry.quotationNo,
+        operator: 'like'
       }],
-
       tabData: [],
       viewByStatus: '',
       params: {
@@ -94,8 +91,12 @@ export default {
     'select-search': selectSearch,
     'v-table': VTable
   },
+  model: {
+    prop: 'show',
+    event: 'changeShow'
+  },
   props: {
-    value: {
+    show: {
       type: Boolean,
       default: false
     },
@@ -120,81 +121,52 @@ export default {
     }
   },
   computed: {
-    dialogVisible: {
+    showDialog: {
       get() {
-        return this.value;
+        return this.show;
       },
       set(val) {
-        this.$emit('input', val);
+        this.$emit('changeShow', val);
       }
     }
   },
   watch: {
-    params: {
-      handler(val, oldVal) {
+    show(val) {
+      if (val) {
+        this.checkedData = [];
+        this.params.compareInquiryIds = this.argDisabled;
+        this.params.compareInquiryDelIds = this.disableds;
+        this.params.compareId = this.compareId;
         this.gettabData();
-      },
-      deep: true
-    },
-    value() {
-      this.params.compareInquiryIds = this.argDisabled;
-      this.params.compareId = this.compareId;
-      this.params.compareInquiryDelIds = this.disableds;
+      }
     }
   },
   methods: {
     addCompare() {
-      let arg = this.$copyArr(this.checkedData);
-      let arr = [];
-      if (_.isObject(arg) && this.selectionRadio) {
-        this.$emit('addInquiry', arg);
-      } else {
-        _.map(arg, item => {
-          _.mapObject(item, (val, key) => {
-            if (key === '_disabled' && val === false) {
-              arr.push(item.id.value);
-            }
-          });
-        });
-        this.$emit('addInquiry', arr);
-      }
+      let ids = this.checkedData.filter(i => !i._disabled).map(i => i.id.value);
+      this.$emit('addInquiry', ids);
     },
-    inputEnter(val) {
-      if (!val.keyType) {
-        return this.$message(this.$i.common.pleaseSelectTheSearchType);
-      }
-      if (!val.key) {
-        return this.$message(this.$i.common.canTBeEmpty);
-      }
-      this.params.keyType = val.keyType;
-      this.params.key = val.key;
+    inputEnter(val, operatorFilters) {
+      this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
+      this.gettabData();
     },
     gettabData() {
       this.tabLoad = true;
-      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params)
-        .then(res => {
-          this.pageTotal = res.tc;
-          this.tabLoad = false;
-          this.searchLoad = false;
-          let arr = this.$getDB(this.$db.inquiry.viewByInqury, res.datas);
-          _.map(this.argDisabled, id => {
-            _.map(arr, items => {
-              if (_.findWhere(items, {'key': 'compareDisplay'}).value + '' === '1') {
-                items._disabled = true;
-                items._checked = true;
-              } else {
-                items._disabled = false;
-                items._checked = false;
-              }
-            });
-          });
-          this.tabData = arr;
-        })
-        ['catch'](() => {
-          this.searchLoad = false;
-          this.tabLoad = false;
+      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.params).then(res => {
+        this.pageTotal = res.tc;
+        this.tabLoad = false;
+        this.searchLoad = false;
+        this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, item => {
+          if (item.compareDisplay.value === 1) {
+            item._disabled = true;
+            item._checked = true;
+          }
         });
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');
@@ -213,11 +185,10 @@ export default {
       this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
         action: type,
         ids: argId
-      })
-        .then(res => {
-          this.gettabData();
-          this.checkedData = [];
-        });
+      }).then(() => {
+        this.gettabData();
+        this.checkedData = [];
+      });
     },
     getChildrenId(type) {
       let arr = [];
@@ -230,7 +201,13 @@ export default {
       return arr;
     },
     handleSizeChange(val) {
+      this.params.pn = val;
+      this.gettabData();
+    },
+    pageSizeChange(val) {
+      this.params.pn = 1;
       this.params.ps = val;
+      this.gettabData();
     },
     changeChecked(item) { // tab 勾选
       this.checkedData = item;

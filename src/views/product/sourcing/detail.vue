@@ -631,11 +631,19 @@
             addToBookmark(){
                 this.disableClickAddBookmark=true;
                 this.$ajax.post(this.$apis.add_buyerBookmark,[this.productForm.id]).then(res=>{
-                    console.log(res,'res')
                     this.$message({
                         message: 'Successfully Add!',
                         type: 'success'
                     });
+
+                    this.$router.push({
+                        path:'/product/bookmarkDetail',
+                        query:{
+                            id:res[0].id,
+                            bookmarkId:res[0].bookmarkId
+                        }
+                    })
+
                 }).finally(err=>{
                     this.disableClickAddBookmark=false;
                 });

@@ -333,7 +333,8 @@
                 this.disabledSearch = true;
                 if (!this.productForm.maxExwPrice) {
                     this.productForm.maxExwPrice = null;
-                } else {
+                }
+                else {
                     this.productForm.maxExwPrice = Number(this.productForm.maxExwPrice);
                 }
                 if (!this.productForm.minExwPrice) {
@@ -351,7 +352,7 @@
                 } else {
                     this.productForm.minFobPrice = Number(this.productForm.minFobPrice);
                 }
-
+                this.productForm.country='';
                 if (this.selectCountry.length > 0) {
                     _.map(this.selectCountry, v => {
                         this.productForm.country += (v + ',');

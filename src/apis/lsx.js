@@ -52,7 +52,7 @@ export default {
   //product buyer
   get_buyerProductList: ['/purchase/sku/listSkuByParams','BASE_URL'],
   get_buyerBookmarkList: ['/purchase/sku/listBookmark', 'BASE_URL'],
-  add_buyerBookmark: ['/purchase/sku/bookmark','BASE_CS', 'BASE_URL'],
+  add_buyerBookmark: ['/purchase/sku/bookmark', 'BASE_URL'],
   get_buyerRemarkList: ['/purchase/sku/listSkuRemark/{id}', 'BASE_URL'],
   add_buyerProductRemark: ['/purchase/sku/remark', 'BASE_URL'],
   update_buyerProductRemark: ['/purchase/sku/remark/{id}', 'BASE_URL'],

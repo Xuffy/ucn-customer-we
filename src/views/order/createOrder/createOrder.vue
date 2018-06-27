@@ -580,28 +580,28 @@
                     :controls="false"
                     slot="skuFobPrice"
                     slot-scope="{data}"
-                    @blur="handleFobPrice"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
-                    @blur="handleFobPrice"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
-                    @blur="handleFobPrice"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
-                    @blur="handleFobPrice"
+                    @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     class="speNumber spx"
@@ -824,28 +824,28 @@
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPkgMethodPic" :limit="1"></v-upload>
             </div>
             <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuInnerCartonPic" :limit="1"></v-upload>
             </div>
             <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuOuterCartonPic" :limit="1"></v-upload>
             </div>
             <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalOne" :limit="1"></v-upload>
             </div>
             <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalTwo" :limit="1"></v-upload>
             </div>
             <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalThree" :limit="1"></v-upload>
             </div>
             <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalFour" :limit="1"></v-upload>
             </div>
         </v-history-modify>
     </div>
@@ -949,7 +949,7 @@
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    // status:99
+                    status:99
                 },
 
                 /**
@@ -1340,12 +1340,15 @@
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             if(!v._remark){
-                                this.chooseProduct=v;
                                 this.handlePriceBlur({},v);
                             }
                             arr.push(v);
                         }
                     });
+                    console.log(arr,'arr')
+                    if(this.$refs.uploadSkuLabelPic){
+                        this.$refs.uploadSkuLabelPic.reset();
+                    }
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({
@@ -1466,16 +1469,20 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-                console.log(e,'?????')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
+                            if(!m._remark){
+                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
-
+                // this.productTableData[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                // this.productTableData[0].skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
             },
             dataFilter(data) {
                 let arr = [],
@@ -1991,7 +1998,6 @@
                 if(!this.orderForm.incoterm){return;}
                 let obj;
                 obj=item?item:this.chooseProduct[0];
-                console.log(obj,'objobjobj')
                 if(this.orderForm.incoterm==='1'){
                     //fob
                     if(obj.skuFobPrice.value && obj.skuQty.value){
@@ -2021,19 +2027,7 @@
                         obj.skuPrice.value=0;
                     }
                 }
-
-
-
-                // console.log(e,'当前字段数据')
-                // console.log(this.chooseProduct[0],'当前行')
-                // this.$set(this.chooseProduct[0].skuPrice,'value',1);
             },
-            handleFobPrice(e){
-
-            },
-            handleExwPrice(e){},
-            handleCifPrice(e){},
-            handleDduPrice(e){},
 
             /**
              * 搜索框事件
