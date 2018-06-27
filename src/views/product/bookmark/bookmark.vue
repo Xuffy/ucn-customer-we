@@ -312,9 +312,8 @@
                 }else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
-
                 this.loadingTable=true;
-
+                this.productForm.country='';
                 if(this.selectCountry.length>0){
                     _.map(this.selectCountry,v=>{
                         this.productForm.country+=(v+',');

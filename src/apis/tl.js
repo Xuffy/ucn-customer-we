@@ -35,7 +35,7 @@ export default {
   POST_INQUIRY_COMPARE: ['/inquiry/compare/{id}', 'BASE_URL'],
   POST_INQUIRY_COMPARE_RESTORE: ['/inquiry/compare/restore', 'BASE_URL'],
   POST_INQUIRY_COMPARE_RS: ['/inquiry/compare', 'BASE_URL'],
-  POST_INQUIRY_SKU: ['/inquiry/compare/{id}/sku', 'BASE_URL'],
+  POST_INQUIRY_COMPARE_SKU: ['/inquiry/compare/{id}/sku', 'BASE_URL'],
   GET_INQUIRY_HISTORY: ['/inquiry/{id}/history', 'BASE_URL'],
   POST_INQIIRY_COMPARE_LIST: ['/inquiry/compare/list', 'BASE_URL'],
   GET_INQUIRY_DETAIL_HISTORY: ['/inquiry/detail/{id}/history', 'BASE_URL'],
