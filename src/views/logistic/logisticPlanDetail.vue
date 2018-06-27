@@ -9,8 +9,13 @@
        <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
         <div class="input-item">
           <span>{{ $i.logistic.remark }}:</span>
-          <el-input class="el-input" type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
-          <p v-else>{{ remark }}</p>
+          <el-input @change="hightLightModifyFun({remark:remark},'remark')" 
+          :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']" 
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
+          <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
+            'color': '#f56c6c',
+            'text-shadow': '2px 1px 2px'
+          } : ''">{{ remark }}</p>
         </div>
       <!-- </el-col> -->
       <div class="input-item">
@@ -261,10 +266,6 @@ export default {
     })
     if (this.pageTypeCurr.slice(-6) == 'Detail') {
       this.getDetails();
-      if(this.isCopy){
-        this.edit = true;
-        this.getNewLogisticsNo();
-      }
     } else {
       this.edit = true
       this.basicInfoArr.forEach((item)=>{
@@ -273,6 +274,9 @@ export default {
       this.transportInfoArr.forEach((item)=>{
         this.$set(item,'value',item.defaultVal);
       })
+      if(this.isCopy){
+        this.getDetails();
+      }
       this.getNewLogisticsNo()
       this.getRate();
     }
@@ -323,12 +327,13 @@ export default {
       let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_order_details :this.$apis.get_plan_details
       this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
         this.planId = res.id;
-        this.fieldDisplay = res.fieldDisplay;
+        if(!this.isCopy){
+          this.fieldDisplay = res.fieldDisplay;
+        }
         this.createdPlanData(res)
         this.logisticsStatus = res.logisticsStatus;
         this.matchRate(res.currencyExchangeRate);
         this.attachmentList = res.attachment;
-        this.fieldDisplay = res.fieldDisplay;
         this.getPaymentList(res.logisticsNo);
         this.getSupplier(res.logisticsNo)
       })
@@ -632,14 +637,7 @@ export default {
     conformPlan(){
       let url = this.$route.name =='loadingListDetail' ? 'logistics_order_confirm' : 'logistics_plan_confirm';
       this.$ajax.post(this.$apis[url],{id:this.planId}).then(res => {
-         this.$message({
-          message: '发送成功，正在跳转...',
-          type: 'success',
-          duration:3000,
-          onClose:()=>{
-            this.$router.push('/logistic/'+ (this.pageTypeCurr=="loadingListDetail" ? 'loadingList' : ''));
-          }
-        })
+        this.getDetails();
       })
     },
     cancelPlan(){
@@ -670,12 +668,17 @@ export default {
       })
     },
     toExit () {
-      if ((this.isCopy&&this.pageTypeCurr.slice(-6) == 'Detail')||(!this.isCopy&&!this.pageTypeCurr.slice(-6) == 'Detail')) {
-        return this.$router.go(-1)
+      if (this.pageTypeCurr == 'placeLogisticPlan') {
+        if(this.isCopy){
+          this.$router.push('/logistic/plan')
+        }else{
+          this.$router.go(-1)
+        }
+      }else{
+        this.edit = !this.edit
+        this.createdPlanData()
+        this.createdPaymentData()
       }
-      this.edit = !this.edit
-      this.createdPlanData()
-      this.createdPaymentData()
     },
     restoreObj (obj) {
       return _.mapObject(obj, v => (v = v.value))
@@ -692,6 +695,7 @@ export default {
     },
     hightLightModifyFun(v,name){
       this.hightLightObj[name] = v ;
+      console.log(this.hightLightObj)
       let obj = {};
       _.mapObject(this.hightLightObj,(v,k)=>{
         Object.assign(obj,v);
@@ -839,6 +843,10 @@ export default {
   }
   .product-header {
     margin-bottom: 20px;
+  }
+  /deep/.definedStyleClass textarea{
+    background:#f56c6c;
+    color:#fff;
   }
 }
 </style>
