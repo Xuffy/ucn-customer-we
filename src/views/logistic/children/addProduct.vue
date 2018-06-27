@@ -1,9 +1,9 @@
 <template>
   <el-row>
     <div class="select-search-wrap">
-      <select-search :options="options"/>
+      <select-search :options="options" @inputEnter="searchFn"/>
     </div>
-    <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
+    <el-table height="500" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" ref="multipleTable">
       <el-table-column type="selection" width="30"></el-table-column>
       <el-table-column :label="$i.logistic.orderNo" width="140" align="center">
         <template slot-scope="scope">
@@ -162,7 +162,7 @@
       </el-table-column>
     </el-table>
     <div style="margin-top:20px;">
-      <v-pagination :page-data="pageParams" @spageParamsize-change="sizeChange" @change="pageChange"/>
+      <v-pagination :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
     </div>
   </el-row>
 </template>
@@ -187,21 +187,22 @@ export default {
       selectArrData: [],
       options: [
         {
-          id: '1',
-          label: 'logistic Plan No'
+          id: 'skuCode',
+          label: this.$i.logistic.skuCode
         },
         {
-          id: '2',
-          label: 'SKU Code'
-        },
-        {
-          id: '3',
-          label: 'Order No.'
+          id: 'orderNo',
+          label: this.$i.logistic.orderNo
         }
       ],
     }
   },
   methods: {
+    searchFn(obj){
+      const {pn, ps} = this.pageParams
+      this.pageParams = {pn, ps, [obj.id]: obj.value}
+      this.getOrderList()
+    },
     sizeChange(e) {
       this.pageParams.ps = e
       this.getOrderList();
@@ -213,13 +214,18 @@ export default {
       })
     },   
     pageChange(e) {
+      console.log(e,'21')
       this.pageParams.pn = e
       this.getOrderList()
     },
     getOrderList () {
       this.$ajax.post(this.$apis.get_order_list_with_page, this.pageParams).then(res => {
         this.tableData = res.datas
-        this.pageParams = res;
+        this.pageParams = {
+          pn: res.pn,
+          ps: res.ps,
+          tc: res.tc
+        }
       })
     },
     tableRowClassName({row, rowIndex}) {

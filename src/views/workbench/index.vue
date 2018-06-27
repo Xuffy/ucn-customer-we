@@ -91,6 +91,7 @@
     },
     data() {
       return {
+        value5:'',
         visible: false,
         settingState: {},
         settingStateShow: false,
