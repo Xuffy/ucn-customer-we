@@ -466,8 +466,8 @@ export default {
     },
     getProductHistory (productId, status, i) {
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
-
-      productId ? this.$ajax.get(`${this.$apis.get_product_history}?productId=${productId}`).then(res => {
+      let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
+      productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
         res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history)])
         : (this.productModifyList = [ currentProduct ])
       })
