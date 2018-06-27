@@ -183,6 +183,9 @@
                                     clearable>
                             </el-input>
                         </div>
+                        <div v-else-if="v.showType==='date'">
+                            {{scope.row[v.key]?$dateFormat(scope.row[v.key],'yyyy-mm-dd'):''}}
+                        </div>
                         <div v-else>
                             {{scope.row[v.key]}}
                         </div>
@@ -765,6 +768,9 @@
              * 获取单位
              * */
             getUnit(){
+                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                    console.log(res)
+                })
                 this.loadingData=true;
                 this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_QC_RS','PB_CODE','QC_STATUS'],{cache:true}).then(res=>{
                     res.forEach(v=>{
@@ -786,8 +792,6 @@
                 }).finally(()=>{
                     this.loadingData=false;
                 });
-
-
 
 
                 this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{

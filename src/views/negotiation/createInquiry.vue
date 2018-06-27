@@ -3,7 +3,7 @@
     <h3 class="hd">{{ showInquiryNo ? `${$i.inquiry.inquiryNo}${fromArg.inquiryNo}` : $i.common.createInquiry }}</h3>
     <div class="select-wrap">
       <h4 class="content-hd">{{ $i.inquiry.basicInfo }}</h4>
-      <el-form ref="ruleform" :model="fromArg">
+      <el-form ref="ruleform" :model="fromArg" :show-message="false">
         <el-row :gutter="10">
           <el-col
             v-for="(item, index) in $db.inquiry.basicInfo"
@@ -356,11 +356,13 @@ export default {
     submitForm(type) { // 提交
       let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
-      this.$refs.ruleform.validate((valid) => {
-        if (!valid) {
-          this.$message({message: this.$i.common.pleaseCompleteTheCompletion, type: 'warning'});
-        }
-      });
+      // this.$refs.ruleform.validate((valid) => {
+      //   if (!valid) {
+      //     valid failed.
+      //   } else {
+      //     successed.
+      //   }
+      // });
       let arr = [];
       _.map(this.fromArg.suppliers, item => {
         let json = {};

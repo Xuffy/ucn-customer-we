@@ -12,7 +12,9 @@ export default {
     skuDesign:{},
     packingMethodCn:{},
     innerCartonPackingMethodCn:{},
-    deliveryDate:{},
+    deliveryDate:{
+        showType:'date'
+    },
     skuUnitDictCode:{},
     lengthUnitDictCode:{},
     volumeUnitDictCode:{},

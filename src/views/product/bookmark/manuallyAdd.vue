@@ -817,13 +817,13 @@
                 //categoryID配置
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:5125,
+                        name:"自己的分类",
                         children:[]
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:123,
+                        name:"系统分类",
                         children:[]
                     },
                 ],
