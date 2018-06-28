@@ -7,5 +7,6 @@
   "import": "Import",
   "upload": "Upload",
   "selectFile": "Select the file",
-  "importPrompt": "The historical data of the same mailbox will be covered"
+  "note": "Note",
+  "importPrompt": "Data from the same email will be overwritten"
 }

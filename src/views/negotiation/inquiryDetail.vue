@@ -47,16 +47,17 @@
               :rowspan="2"
               :selection="statusModify"
               :hideFilterColumn="statusModify"/>
-          <div class="bom-btn-wrap" v-show="!statusModify">
-            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
+            <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
             <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
-            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
+            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
-            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.originValue+''!== '22'&&tabData[0].status.originValue+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
+            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
+            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.delete }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
             <el-button @click="modify">{{ $i.common.send }}</el-button>

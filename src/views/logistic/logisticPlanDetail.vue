@@ -52,6 +52,15 @@
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <label>{{ $i.logistic.shipmentStatus}} :</label>
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in [{label:1,value:2}]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </div>
       </v-table>
     </div>
@@ -75,6 +84,7 @@
 </template>
 <script>
 import { containerInfo, selectSearch, VTable } from '@/components/index';
+import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
 import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
@@ -144,7 +154,8 @@ export default {
         logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
         payment: 'PMT',
-        skuIncoterm: 'ITM'
+        skuIncoterm: 'ITM',
+        ShipmentStatus : 'SKU_LOGISTICS_STATUS'
       },
       configUrl: {
         placeLogisticPlan: {
@@ -250,6 +261,7 @@ export default {
     } 
   },
   mounted () {
+    this.setLog({query:{code: this.pageTypeCurr&&this.pageTypeCurr=="loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -283,6 +295,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
     //获取customerName
     getCustomer(){
       this.$ajax.get(`${this.$apis.get_Customer}`).then(res => {

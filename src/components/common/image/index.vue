@@ -1,9 +1,9 @@
 <template>
-  <div class="ucn-image"
+  <div class="ucn-image" v-if="src"
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
-    <img v-if="src" class="image" :src="src" ref="image">
+    <img class="image" :src="src" ref="image">
     <!--<img class="image" v-else src="holder.js/100px100p?text=%20&amp;outline=yes" ref="defaultImage">-->
     <!--onerror="this.src='holder.js/300x200?theme=red';this.onerror=null"-->
   </div>
