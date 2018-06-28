@@ -460,6 +460,10 @@ export default {
       this.checkedAll = item;
     },
     getList(ids) {
+      if (!Array.isArray(ids) || !ids.length) {
+        this.$message.warning(this.$i.inquiry.noItemSelected);
+        return;
+      }
       this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids)
         .then(res => {
           let arr = this.$getDB(this.$db.inquiry.productInfo, this.$refs.HM.getFilterData(res, 'skuId'), (item) => {
