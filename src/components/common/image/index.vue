@@ -29,8 +29,6 @@
     },
     data() {
       return {
-        iconSize: 0,
-        errorImage: ''
       }
     },
     watch: {},
