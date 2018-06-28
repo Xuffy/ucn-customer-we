@@ -177,7 +177,13 @@ export default {
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
-    this.getBaseData().then(this.getInquiryDetail);
+    Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this)]).then(res => {
+      let data = res[0];
+      if (res[1]) {
+        data.push(res[1]);
+      }
+      this.setDic(data);
+    }).then(this.getInquiryDetail);
   },
   watch: {
     ChildrenCheckList(val) {
@@ -207,49 +213,6 @@ export default {
         }).then(() => {
           this.$router.push('/negotiation/inquiry');
         });
-      });
-    },
-    getBaseData() {
-      const postCodes = this.$ajax.post(
-        this.$apis.POST_CODE_PART,
-        [
-          'INQUIRY_STATUS',
-          'PMT',
-          'ITM',
-          'AE_IS',
-          'EL_IS',
-          'RA_IS',
-          'SUPPLIER_TYPE',
-          'MD_TN',
-          'SKU_SALE_STATUS',
-          'SKU_UNIT',
-          'ED_UNIT',
-          'LH_UNIT',
-          'WT_UNIT',
-          'VE_UNIT',
-          'OEM_IS',
-          'UDB_IS',
-          'SKU_PG_IS'
-        ],
-        { cache: true }
-      );
-      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
-      const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
-      return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
-        let data = res[0];
-
-        res[1].forEach(item => item.name = item.code);
-        data.push({
-          code: 'CY_UNIT',
-          name: 'CY_UNIT(币种)',
-          codes: res[1]
-        });
-        data.push({
-          code: 'COUNTRY',
-          name: 'COUNTRY(国家)',
-          codes: res[2]
-        });
-        this.setDic(codeUtils.convertDicValueType(data));
       });
     },
     addProduct() {
@@ -319,7 +282,7 @@ export default {
         let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
         if (fieldRemarkDisplay && typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
-            if (fieldRemarkDisplay[k] === '1' && remark[k]) {
+            if (remark && fieldRemarkDisplay[k] === '1' && remark[k]) {
               remark[k]._style = 'background-color: ' + c;
             }
           });
@@ -353,7 +316,7 @@ export default {
         this.markFieldHighlight(this.newTabData);
         this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
-      }).catch(() => {
+      }, () => {
         this.tableLoad = false;
       });
     },

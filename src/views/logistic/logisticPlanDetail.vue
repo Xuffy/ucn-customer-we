@@ -179,7 +179,8 @@ export default {
         }
       },
       pageName:'',
-      prodFieldDisplay:{}
+      prodFieldDisplay:{},
+      CustomerName:'',
     }
   },
   components: {
@@ -274,13 +275,20 @@ export default {
       })
       if(this.isCopy){
         this.getDetails();
+      }else{
+        this.getCustomer();
       }
       this.getNewLogisticsNo()
       this.getRate();
     }
   },
   methods: {
-    //获取实时汇率
+    //获取customerName
+    getCustomer(){
+      this.$ajax.get(`${this.$apis.get_Customer}`).then(res => {
+        this.basicInfoArr.find(a => a.key === 'customerName').value = res.customerCompanyName;
+      })
+    },
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
         this.matchRate(res);
