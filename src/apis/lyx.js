@@ -2,6 +2,7 @@ export default {
   // logistic
   gei_plan_list: ['/logistics/plan/pageByPlanNo','LJ', 'BASE_URL'],
   get_transportation_list: ['/logistics/plan/pageByUnit', 'LJ','BASE_URL'],
+  get_Customer: ['/logistics/plan/getCustomer', 'LJ','BASE_URL'],
   get_sku_list: ['/logistics/plan/pageBySkuCode','LJ', 'BASE_URL'],
   get_dictionary: ['/code/part','UMETA_URL'],
   delete_by_ids: ['/logistics/plan/deleteByIds', 'LJ','BASE_URL'],
