@@ -117,7 +117,6 @@ export default {
   name: 'inquiryDetail',
   data() {
     return {
-      loading: false,
       disabledLine: [],
       trig: 0,
       disabledTabData: [],
@@ -180,13 +179,13 @@ export default {
     this.getBaseData().then(this.getInquiryDetail);
   },
   watch: {
-    ChildrenCheckList(val, oldVal) {
+    ChildrenCheckList(val) {
       let data = this.tabData;
       val.forEach(item => {
-        if (item + '' === '0') {
+        if (item === 0) {
           data = this.$table.setHideSame(this.tabData);
         }
-        if (item + '' === '1') {
+        if (item === 1) {
           data = this.$table.setHighlight(this.tabData);
         }
       });
@@ -250,7 +249,6 @@ export default {
           codes: res[2]
         });
         this.setDic(codeUtils.convertDicValueType(data));
-        return Promise.resolve(data);
       });
     },
     addProduct() {
