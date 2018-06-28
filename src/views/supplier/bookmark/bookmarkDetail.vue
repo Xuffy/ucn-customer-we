@@ -8,7 +8,7 @@
                  <el-form  label-width="190px">
                      <el-row>
                        <el-col :span="4">
-                         <v-image :src="basicDate.logo"/>
+                         <v-image :src="basicDate.logo" style="height: 273px;"/>
                        </el-col>
                        <el-col :span="20">
                          <el-form>
