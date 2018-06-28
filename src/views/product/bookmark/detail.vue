@@ -851,9 +851,8 @@
                     }
                 });
                 this.$windowOpen({
-                    url:'product/compareDetail/{type}',
+                    url:'product/compareDetail/new',
                     params:{
-                        type:'new',
                         id:id,
                     }
                 });

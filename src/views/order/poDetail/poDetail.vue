@@ -1060,28 +1060,29 @@
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuLabelPic" :list="data.value" :onlyImage="true" :limit="20"></v-upload>
+                {{data._value}}
+                <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuInnerCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalThree" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :limit="20"></v-upload>
+                <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
         </v-history-modify>
         <v-message-board v-if="false" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
@@ -1136,8 +1137,6 @@
                  * Negotiate 插槽变量
                  * */
                 skuLabelPic:'',
-
-
 
                 /**
                  * 底部按钮禁用状态
@@ -1606,7 +1605,6 @@
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    console.log(this.productTableData,'this.productTableData')
                     this.markImportant=this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
                     if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
@@ -1765,15 +1763,39 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
-                            if(!v._remark && !v.skuLabelPic.value){
-                                v.skuLabelPic.value=[];
-                            }
+                            // if(!v._remark && !v.skuLabelPic.value){
+                            //     v.skuLabelPic.value=[];
+                            // }
                             if(!v._remark){
                                 this.handlePriceBlur({},v);
                             }
                             arr.push(v);
                         }
                     });
+                    if(this.$refs.uploadSkuLabelPic){
+                        this.$refs.uploadSkuLabelPic.reset();
+                    }
+                    if(this.$refs.uploadSkuPkgMethodPic){
+                        this.$refs.uploadSkuPkgMethodPic.reset();
+                    }
+                    if(this.$refs.uploadSkuInnerCartonPic){
+                        this.$refs.uploadSkuInnerCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuOuterCartonPic){
+                        this.$refs.uploadSkuOuterCartonPic.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalOne){
+                        this.$refs.uploadSkuAdditionalOne.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalTwo){
+                        this.$refs.uploadSkuAdditionalTwo.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalThree){
+                        this.$refs.uploadSkuAdditionalThree.reset();
+                    }
+                    if(this.$refs.uploadSkuAdditionalFour){
+                        this.$refs.uploadSkuAdditionalFour.reset();
+                    }
                     this.copyObj=Object.assign({},arr[0]);
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }
