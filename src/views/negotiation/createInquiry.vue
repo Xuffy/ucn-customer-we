@@ -159,6 +159,7 @@
 import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
 import product from '@/views/product/addProduct';
 import {mapActions} from 'vuex';
+import codeUtils from '@/lib/code-utils';
 
 export default {
   name: 'createInquiry',
@@ -204,8 +205,24 @@ export default {
   created() {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-    this.getBaseData();
-    this.getSuppliers('').then(this.initFromParams);
+
+    Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
+      let data = res[0];
+      if (res[1]) {
+        data.push(res[1]);
+      }
+      this.$store.dispatch('setDic', data);
+
+      this.optionData.paymentMethod = codeUtils.findCodes(this, 'PMT');
+      this.optionData.transport = codeUtils.findCodes(this, 'MD_TN');
+      this.optionData.incoterm = codeUtils.findCodes(this, 'ITM');
+      this.optionData.exportLicense = codeUtils.findCodes(this, 'EL_IS');
+
+      this.optionData.currency = codeUtils.findCodes(this, 'CY_UNIT');
+
+      this.optionData.destinationCountry = codeUtils.findCodes(this, 'COUNTRY');
+      this.optionData.departureCountry = codeUtils.findCodes(this, 'COUNTRY');
+    }).then(this.initFromParams);
   },
   methods: {
     ...mapActions([
