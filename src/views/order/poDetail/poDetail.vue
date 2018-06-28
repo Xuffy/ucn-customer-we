@@ -601,6 +601,7 @@
         </div>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 title=""
                 :visible.sync="quickCreateDialogVisible"
                 width="70%">
@@ -630,6 +631,7 @@
         </el-dialog>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
                 width="70%">
@@ -796,7 +798,7 @@
             </el-select>
             <el-select
                     slot="skuInspectQuarantineCategory"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -804,7 +806,7 @@
                         v-for="item in quarantineTypeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
@@ -1598,22 +1600,20 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
-
-
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
                             //图片处理
                             let skuLabelPic=item.skuLabelPic.value,
                                 skuPkgMethodPic=item.skuPkgMethodPic.value,
                                 skuInnerCartonPic=item.skuInnerCartonPic.value,
                                 skuOuterCartonPic=item.skuOuterCartonPic.value;
-                            item.skuLabelPic._value=[skuLabelPic];
-                            item.skuLabelPic.value=[skuLabelPic];
-                            item.skuPkgMethodPic._value=[skuPkgMethodPic];
-                            item.skuPkgMethodPic.value=[skuPkgMethodPic];
-                            item.skuInnerCartonPic._value=[skuInnerCartonPic];
-                            item.skuInnerCartonPic.value=[skuInnerCartonPic];
-                            item.skuOuterCartonPic._value=[skuOuterCartonPic];
-                            item.skuOuterCartonPic.value=[skuOuterCartonPic];
-
+                            item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuPkgMethodPic.value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuInnerCartonPic._value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
+                            item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1684,9 +1684,9 @@
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
                     if(v.skuInspectQuarantineCategory){
-                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuPictures','skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
@@ -1788,7 +1788,6 @@
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
                             if(!v._remark){
                                 this.handlePriceBlur({},v);
-                                console.log(v,'???????')
                             }
                             arr.push(v);
                         }
@@ -1818,6 +1817,7 @@
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
                     this.copyObj=Object.assign({},arr[0]);
+                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }
                 else if(type==='detail'){
