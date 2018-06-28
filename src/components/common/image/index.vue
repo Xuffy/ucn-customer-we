@@ -1,6 +1,5 @@
 <template>
   <div class="ucn-image" ref="image"
-       v-if="src"
        @click="val => {$emit('click', val)}"
        :style="{height:height, width:width}">
 
