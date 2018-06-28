@@ -75,7 +75,6 @@
 </template>
 <script>
 import { containerInfo, selectSearch, VTable } from '@/components/index';
-import {mapActions, mapState} from 'vuex';
 import attachment from '@/components/common/upload/index';
 import messageBoard from '@/components/common/messageBoard/index';
 import formList from '@/views/logistic/children/formList'
@@ -250,7 +249,6 @@ export default {
     } 
   },
   mounted () {
-    this.setLog({query:{code:'planDetail'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -282,7 +280,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
     //获取实时汇率
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
@@ -695,7 +692,6 @@ export default {
     },
     hightLightModifyFun(v,name){
       this.hightLightObj[name] = v ;
-      console.log(this.hightLightObj)
       let obj = {};
       _.mapObject(this.hightLightObj,(v,k)=>{
         Object.assign(obj,v);

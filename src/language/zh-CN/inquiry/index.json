@@ -6,5 +6,6 @@
   "supplierRequired": "Less one supplier required.",
   "skuRequired": "Less one product required.",
   "incotermRequired": "Incoterm is required.",
-  "discountRateMustNumber": "Discount Rate must a number"
+  "discountRateMustNumber": "Discount Rate must a number",
+  "noItemSelected": "No item selected!"
 }
