@@ -1102,10 +1102,9 @@
             ...mapActions(['setLog','setRecycleBin','setDraft']),
             //就是保存
             send(){
-                // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                //     return;
-                // }
-                console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
+                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+                    return;
+                }
                 let params=Object.assign({},this.orderForm);
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
@@ -1138,23 +1137,23 @@
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                // if(!rightCode){
-                //     return this.$message({
-                //         message: this.$i.order.supplierNotTheSame,
-                //         type: 'warning'
-                //     });
-                // }
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
                 console.log(params,'???')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
@@ -1508,8 +1507,6 @@
                                 m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
                                 m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
                                 m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-
-
                                 m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
                                 m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
                                 m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
@@ -1518,8 +1515,6 @@
                                 m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
                                 m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
                                 m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
-
-
                             }
                             this.productTableData.splice(k,1,m)
                         }

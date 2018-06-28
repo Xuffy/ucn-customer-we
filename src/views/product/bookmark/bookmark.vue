@@ -546,7 +546,7 @@
 
             compare(){
                 if(this.selectList.length>100){
-                    this.$message({
+                    return this.$message({
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'success'
                     });
@@ -562,9 +562,8 @@
                 });
 
                 this.$windowOpen({
-                    url:'product/compareDetail/{type}',
+                    url:'product/compareDetail/new',
                     params:{
-                        type:'new',
                         id:id,
                     }
                 });

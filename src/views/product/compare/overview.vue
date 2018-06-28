@@ -134,9 +134,8 @@
                 if(type===1){
                     //modify
                     this.$windowOpen({
-                        url:'/product/compareDetail/{type}',
+                        url:'/product/compareDetail/modify',
                         params:{
-                            type:'modify',
                             isModify:true,
                             compareId:e.id.value,
                             compareName:e.name.value
@@ -145,9 +144,8 @@
                 }else if(type===2){
                     //Detail
                     this.$windowOpen({
-                        url:'/product/compareDetail/{type}',
+                        url:'/product/compareDetail/modify',
                         params:{
-                            type:'modify',
                             compareId:e.id.value,
                             compareName:e.name.value
                         },

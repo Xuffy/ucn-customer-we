@@ -21,11 +21,11 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedData.length >= 2?false:true" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
+                <el-button @click="toCompare" :disabled="checkedIds.length >= 2?false:true" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
-                <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedData ? checkedData.length : '' }})</span></el-button>
-                <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedData.length >= 1 ? checkedData.length : 'all'})` }}</el-button>
+                <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedIds.length >= 1 ? checkedIds.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <v-table
-            code="inquiry_list"
+            code="inquiry_sku_list"
             hide-filter-value
             :data="tabData"
             :buttons="[{label: 'detail', type: 'detail'}]"
@@ -60,6 +60,8 @@
 */
 import { selectSearch, VTable, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: '',
   data() {
@@ -100,10 +102,15 @@ export default {
     'v-table': VTable,
     'v-pagination': VPagination
   },
+  computed: {
+    checkedIds() {
+      return Array.from(new Set(this.checkedData.map(i => i[i.inquiryId ? 'inquiryId' : 'id'].value)));
+    }
+  },
   created() {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-    this.gettabData();
+    this.getBaseData().then(this.gettabData);
   },
   methods: {
     ...mapActions([
@@ -116,6 +123,21 @@ export default {
       this.searchLoad = true;
       this.gettabData();
     },
+    getBaseData() {
+      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], { cache: true });
+      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
+      return this.$ajax.all([postCodes, getCurrencies]).then(res => {
+        let data = res[0];
+
+        res[1].forEach(item => item.name = item.code);
+        data.push({
+          code: 'CY_UNIT',
+          name: 'CY_UNIT(币种)',
+          codes: res[1]
+        });
+        this.setDic(codeUtils.convertDicValueType(data));
+      });
+    },
     gettabData() {
       let url, column;
       this.tabLoad = true;
@@ -126,28 +148,18 @@ export default {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, this.params)
-        .then(res => {
-          res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], 'cache')
-            .then(data => {
-              this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
-                .then(datas => {
-                  data.push({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: datas});
-                  this.setDic(data);
-                  this.tabData = this.$getDB(column, res.datas, (item) => {
-                    this.$filterDic(item);
-                  });
-                  this.tabLoad = false;
-                  this.searchLoad = false;
-                  this.checkedData = [];
-                });
-            });
-        })
-        ['catch'](() => {
-          this.searchLoad = false;
-          this.tabLoad = false;
+      this.$ajax.post(url, this.params).then(res => {
+        this.checkedData = [];
+        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+        this.tabData = this.$getDB(column, res.datas, (item) => {
+          this.$filterDic(item);
         });
+        this.tabLoad = false;
+        this.searchLoad = false;
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');
@@ -162,10 +174,9 @@ export default {
       });
     },
     ajaxInqueryAction(type) {
-      const argId = this.getChildrenId();
       this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
         action: type,
-        ids: argId
+        ids: this.checkedIds
       })
         .then(res => {
           this.gettabData();
@@ -180,36 +191,22 @@ export default {
       }
     },
     detail(item) {
-      let id = _.findWhere(item, {'key': 'inquiryId'}) ? _.findWhere(item, {'key': 'inquiryId'}).value : _.findWhere(item, {'key': 'id'}).value;
+      let id = item.inquiryId ? item.inquiryId.value : item.id.value;
       this.$router.push({
         path: '/negotiation/inquiryDetail',
         query: {id}
       });
     },
-    getChildrenId(type) {
-      let arr = [];
-      _.map(this.checkedData, item => {
-        if (!_.isUndefined(item)) {
-          arr.push(_.findWhere(item, {'key': 'id'}).value);
-        }
-      });
-      if (typeof type === 'string') {
-        arr.join(',');
-      }
-      return arr;
-    },
     toCompare() {
-      let argId = this.getChildrenId('str');
-      this.$windowOpen({
-        url: '/negotiation/compareDetail/{type}',
-        params: {
-          type: 'new',
-          ids: argId.join(',')
-        }
-      });
-    },
-    pageChange(No) {
-      console.log(No);
+      if (this.checkedIds.length) {
+        this.$windowOpen({
+          url: '/negotiation/compareDetail/new',
+          params: {
+            type: 'new',
+            ids: this.checkedIds.join(',')
+          }
+        });
+      }
     },
     handleSizeChange(val) {
       this.params.pn = val;

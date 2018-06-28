@@ -395,6 +395,7 @@
                 },
                 loadingTable:false,
                 historyData:[],
+                category:[],
 
                 /**
                  * compareList配置
@@ -453,6 +454,11 @@
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
+
+                    console.log(this.category,'this.category')
+                    console.log(this.productForm,'this.productForm')
+
+
                     this.notLoadingDone=true;
                     this.tradeHistory.skuCode=this.productForm.code;
                     let priceData=[{
@@ -687,9 +693,8 @@
                     }
                 });
                 this.$windowOpen({
-                    url:'product/compareDetail/{type}',
+                    url:'product/compareDetail/new',
                     params:{
-                        type:'new',
                         id:id,
                     }
                 });
@@ -701,13 +706,34 @@
                 //     this.currencyOption=res;
                 // });
                 this.notLoadingDone=false;
-                this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
-                    this.incotermOption=res[0].codes;
-                    this.getTableData();
-                    this.getRemarkData();
-                    this.getCompareList();
-                }).finally(()=>{
-                    this.notLoadingDone=true;
+                let category=[];
+                this.category=[];
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    _.map(res,v=>{
+                        category.push(v);
+                    });
+                    this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
+                        _.map(data,v=>{
+                            category.push(v);
+                        });
+                        _.map(category,data=>{
+                            _.map(data.children,ele=>{
+                                this.category.push(ele);
+                            })
+                        });
+                        this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
+                            this.incotermOption=res[0].codes;
+                            this.getTableData();
+                            this.getRemarkData();
+                            this.getCompareList();
+                        }).finally(()=>{
+                            this.notLoadingDone=true;
+                        });
+                    }).catch(err=>{
+                        this.notLoadingDone=false;
+                    });
+                }).catch(err=>{
+                    this.notLoadingDone=false;
                 });
             },
         },

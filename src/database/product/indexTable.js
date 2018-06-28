@@ -75,7 +75,7 @@ export default {
     design:{
         
     },
-    categoryId:{
+    categoryName:{
         key:"categoryName"
     },
     barcode:{

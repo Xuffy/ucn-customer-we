@@ -8,6 +8,9 @@ export default {
   inquiryNo: { // 系统自动生成 询价母单号
 
   },
+  quotationNo: { // 系统带入：当前询价单的子单号
+
+  },
   status: { // 系统带入，共四个状态及其触发： 询价状态
     transForm: 'INQUIRY_STATUS'
   },
