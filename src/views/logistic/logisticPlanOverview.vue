@@ -205,7 +205,7 @@
       }
     },
     mounted() {
-      this.setLog({query:{code:'planDetail'}});
+      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
       this.fetchData()
       this.registerRoutes()
       // this.getContainerType() 接手注释

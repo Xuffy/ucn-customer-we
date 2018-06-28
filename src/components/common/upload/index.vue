@@ -219,8 +219,12 @@
         }
 
         _.map(list, value => {
-          let urls = value.split('?')
-            , param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
+          let urls, param;
+          if (!_.isString(value)) {
+            return;
+          }
+          urls = value.split('?');
+          param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
