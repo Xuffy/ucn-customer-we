@@ -1105,8 +1105,9 @@
                 // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
                 //     return;
                 // }
-                console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
                 let params=Object.assign({},this.orderForm);
+                console.log(this.supplierOption,'this.supplierOption')
+                console.log(params,'params')
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
                         params.supplierName=v.name;
@@ -1127,6 +1128,8 @@
                         v.skuSample=false;
                     }
                     if(v.skuInspectQuarantineCategory){
+                        console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
+                        console.log(v.skuInspectQuarantineCategory,'v.skuInspectQuarantineCategory')
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
                     }
                     let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
