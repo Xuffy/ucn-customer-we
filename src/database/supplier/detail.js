@@ -1,39 +1,51 @@
 export default {
     supplierNO: {
-        key: 'code'
+      key: 'code',
+      fullLine:false,
     },
    supplierName: {
-        key: 'name'
+      key: 'name',
+      fullLine:false,
     },
    supplierType: {
-        key: 'type'
+      key: 'type',
+      fullLine:false,
     },
    country: {
-        key: 'country'
+      key: 'country',
+      fullLine:false,
     },
     city: {
-        key: 'city'
+      key: 'city',
+      fullLine:false,
     },
    provideIncoterm: {
-        key: 'incoterm'
+      key: 'incoterm',
+      fullLine:false,
     },
    exportLicense: {
-        key: 'exportLicense'
+      key: 'exportLicense',
+      fullLine:false,
     },
    businessScope: {
-        key: 'businessScope'
+      key: 'businessScope',
+      fullLine:false,
     },
    currency: {
-        key: 'currency'
+      key: 'currency',
+      fullLine:false,
     },
    payment: {
-        key: 'payment'
+      key: 'payment',
+      fullLine:false,
     },
    supplierShortName: {
-        key: 'shortName'
+      key: 'shortName',
+      fullLine:false,
     },
   description: {
-        key: 'description'
+      key: 'description',
+      fullLine:false,
     },
 
 }
