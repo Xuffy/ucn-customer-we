@@ -1147,7 +1147,6 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'???')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');

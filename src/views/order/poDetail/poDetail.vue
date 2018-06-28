@@ -1678,7 +1678,6 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
-                console.log(params,'params')
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
@@ -2009,7 +2008,7 @@
                                         json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code;
                                     }else{
                                         json[k] = item[k].value;
                                     }
