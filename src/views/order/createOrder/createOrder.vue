@@ -1105,8 +1105,9 @@
                 // if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
                 //     return;
                 // }
-                console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
                 let params=Object.assign({},this.orderForm);
+                console.log(this.supplierOption,'this.supplierOption')
+                console.log(params,'params')
                 _.map(this.supplierOption,v=>{
                     if(params.supplierName===v.id){
                         params.supplierName=v.name;
@@ -1127,6 +1128,8 @@
                         v.skuSample=false;
                     }
                     if(v.skuInspectQuarantineCategory){
+                        console.log(this.quarantineTypeOption,'this.quarantineTypeOption')
+                        console.log(v.skuInspectQuarantineCategory,'v.skuInspectQuarantineCategory')
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
                     }
                     let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
@@ -1138,23 +1141,23 @@
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                // if(!rightCode){
-                //     return this.$message({
-                //         message: this.$i.order.supplierNotTheSame,
-                //         type: 'warning'
-                //     });
-                // }
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
                 console.log(params,'???')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
