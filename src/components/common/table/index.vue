@@ -224,8 +224,7 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-      // this.updateTable();
-      this.interval = setInterval(this.updateTable, 400);
+      // this.interval = setInterval(this.updateTable, 400);
     },
     methods: {
       onFilterColumn(checked) {
@@ -303,10 +302,10 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
-        if (this.dataList.length !== val.length) {
-          this.$refs.tableBox.scrollTop = 0;
-          this.$refs.tableBox.scrollLeft = 0;
-        }
+        // if (this.dataList.length !== val.length) {
+        this.$refs.tableBox.scrollTop = 0;
+        this.$refs.tableBox.scrollLeft = 0;
+        // }
 
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig(false, val).then(res => {
@@ -314,6 +313,8 @@
               clearTimeout(to);
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);
               type && this.filterColumn();
+
+              this.updateTable();
             }, 50);
           })
         } else {
@@ -321,6 +322,8 @@
             clearTimeout(to);
             this.dataList = val;
             type && this.filterColumn();
+
+            this.updateTable();
           }, 50);
         }
       },

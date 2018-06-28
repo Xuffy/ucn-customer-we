@@ -12,8 +12,8 @@
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
           <pre class="box" v-text="item.content"></pre>
-          <v-image class="image" v-for="imgItem in item.filePaths" :key="imgItem" :src="imgItem"
-                   width="100px" height="100px" @click="$refs.viewPicture.show(item.filePaths)"></v-image>
+          <v-image class="image" v-for="imgItem in item.picUrls" :key="imgItem" :src="imgItem"
+                   width="100px" height="100px" @click="$refs.viewPicture.show(item.picUrls)"></v-image>
         </li>
       </ul>
       <div class="form-box">
@@ -104,7 +104,7 @@
           bizCode: this.code,
           bizNo: this.id,
           content: this.messageContent,
-          filePaths: files
+          picPaths: files
         }).then(data => {
           this.messageContent = '';
           this.getMessage();
@@ -115,9 +115,10 @@
       },
       getMessage() {
         this.contentLoading = true;
-        this.$ajax.post(this.$apis.CHATMESSAGE_QUERY, {moduleCode: this.module, bizCode: this.code, bizNo: this.id,})
+        this.$ajax.post(this.$apis.CHATMESSAGE_QUERY,
+          {moduleCode: this.module, bizCode: this.code, bizNo: this.id, pn: 1, ps: 100})
           .then(data => {
-            data = data || [];
+            data = data.datas || [];
             this.messageList = data.reverse();
             this.$refs.messageBox && this.$nextTick(() => {
               this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
