@@ -65,7 +65,7 @@
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
                 :style="cItem._style">
               <!-- 是否为图片显示 -->
-              <div v-if="!cItem._image"
+              <div v-if="!cItem._image" class="image-box"
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
                    v-text="cItem._value || cItem.value"></div>
 
@@ -224,7 +224,7 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-      // this.interval = setInterval(this.updateTable, 400);
+      this.interval = setInterval(this.updateTable, 400);
     },
     methods: {
       onFilterColumn(checked) {
@@ -302,10 +302,10 @@
           _.where(this.dataList, {_checked: true});
       },
       setDataList(val, type) {
-        // if (this.dataList.length !== val.length) {
-        this.$refs.tableBox.scrollTop = 0;
-        this.$refs.tableBox.scrollLeft = 0;
-        // }
+        if (this.dataList.length !== val.length) {
+          this.$refs.tableBox.scrollTop = 0;
+          this.$refs.tableBox.scrollLeft = 0;
+        }
 
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig(false, val).then(res => {
@@ -314,7 +314,7 @@
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);
               type && this.filterColumn();
 
-              this.updateTable();
+              // this.updateTable()
             }, 50);
           })
         } else {
@@ -323,7 +323,7 @@
             this.dataList = val;
             type && this.filterColumn();
 
-            this.updateTable();
+            // this.updateTable()
           }, 50);
         }
       },
@@ -341,6 +341,7 @@
       }
     },
     beforeDestroy() {
+      this.$refs.tableBox.removeEventListener('scroll', this.updateTable);
       clearInterval(this.interval);
       this.interval = null;
     }
@@ -583,5 +584,9 @@
 
   .ucn-table /deep/ .ucn-image > i {
     display: none;
+  }
+
+  .ucn-table /deep/ .ucn-image {
+    margin: 0 auto;
   }
 </style>

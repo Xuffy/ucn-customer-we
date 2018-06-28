@@ -6,5 +6,6 @@
   "template": "Template",
   "import": "Import",
   "upload": "Upload",
-  "selectFile": "Select the file"
+  "selectFile": "Select the file",
+  "importPrompt": "The historical data of the same mailbox will be covered"
 }
