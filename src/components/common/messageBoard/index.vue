@@ -7,7 +7,7 @@
     </div>
 
     <div class="content">
-      <ul class="message-box" v-loading="contentLoading" ref="messageBox">
+      <ul class="message-box" v-loading="contentLoading" ref="messageBox" :class="{readonly:readonly}">
         <li v-for="item in messageList" :key="item.id">
           <span class="name">{{item.sendByUserName}}</span>
           <label class="time">{{$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')}}</label>
@@ -16,7 +16,7 @@
                    width="100px" height="100px" @click="$refs.viewPicture.show(item.picUrls)"></v-image>
         </li>
       </ul>
-      <div class="form-box">
+      <div class="form-box" v-if="!readonly">
         <div class="form">
           <el-input type="textarea" v-model="messageContent"></el-input>
           <br/>
@@ -57,16 +57,20 @@
     props: {
       module: {
         type: String,
-        required: true,
+        required: true
       },
       code: {
         type: String,
-        required: true,
+        required: true
       },
       id: {
         type: [String, Number],
-        default: '',
+        default: ''
       },
+      readonly: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
@@ -109,6 +113,7 @@
           this.messageContent = '';
           this.getMessage();
           this.$refs.fileUpload.reset();
+          this.$emit('send');
         }).finally(() => {
           this.submitLoading = false;
         });
@@ -241,6 +246,10 @@
     background-color: rgba(245, 245, 245, .3);
     padding: 10px 10px;
     border: 1px solid rgba(220, 220, 220, .5);
+  }
+
+  .message-box.readonly {
+    height: 100%;
   }
 
   .message-box > li {
