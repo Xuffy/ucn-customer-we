@@ -279,14 +279,14 @@
                 dropData: [],
                 categoryList: [
                     {
-                        id: 123,
-                        name: "系统分类",
+                        id: 5125125,
+                        name: "自己的分类",
                         children: [],
                         _disableClick:true,
                     },
                     {
-                        id: 5125,
-                        name: "自己的分类",
+                        id: 12312512,
+                        name: "系统分类",
                         children: [],
                         _disableClick:true,
                     },
@@ -303,7 +303,6 @@
         },
         methods: {
             ...mapActions(['setLog']),
-
 
             tableFilterValue(val) {
                 let {operatorFilters, sorts} = val;
@@ -426,12 +425,12 @@
             //获取类别数据
             getCategoryId() {
                 this.$ajax.get(this.$apis.get_buyer_sys_category, {}).then(res => {
-                    this.categoryList[0].children = res;
+                    this.categoryList[1].children = res;
                 }).catch(err => {
 
                 });
                 this.$ajax.get(this.$apis.get_buyer_my_category, {}).then(res => {
-                    this.categoryList[1].children = res;
+                    this.categoryList[0].children = res;
                 }).catch(err => {
 
                 });
@@ -534,11 +533,11 @@
                         this.selectList.forEach(v => {
                             v._disabled = true;
                         });
-                        this.loadingTable = false;
-                        this.disabledSearch = false;
-                    }).catch(err => {
-                        this.loadingTable = false;
-                        this.disabledSearch = false;
+                    }).finally(err => {
+                        setTimeout(()=>{
+                            this.loadingTable = false;
+                            this.disabledSearch = false;
+                        },350)
                     });
                 }
             },

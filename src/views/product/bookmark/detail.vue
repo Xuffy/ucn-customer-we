@@ -62,7 +62,7 @@
         <div class="body">
             <el-tabs v-model="tabName" type="border-card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.product.basicInformation" name="Basic Info">
-                    <el-form class="speForm" label-width="300px" :label-position="labelPosition">
+                    <el-form class="speForm" label-width="310px" :label-position="labelPosition">
                         <el-row>
                             <el-row>
                                 <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">

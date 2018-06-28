@@ -1601,7 +1601,6 @@
 
 
                             //图片处理
-                            console.log(item,'item')
                             let skuLabelPic=item.skuLabelPic.value,
                                 skuPkgMethodPic=item.skuPkgMethodPic.value,
                                 skuInnerCartonPic=item.skuInnerCartonPic.value,
@@ -1788,9 +1787,6 @@
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
-                            // if(!v._remark && !v.skuLabelPic.value){
-                            //     v.skuLabelPic.value=[];
-                            // }
                             if(!v._remark){
                                 this.handlePriceBlur({},v);
                                 console.log(v,'???????')
