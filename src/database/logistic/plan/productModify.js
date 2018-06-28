@@ -99,6 +99,32 @@ export default {
   },
   "skuOuterCartonCode": {
     type: 'text'
-  }
+  },
+  "containerNo":{
+    type: 'text'
+  },
+  "containerType":{
+    type: 'text'
+  },
+  "totalQuantityInContainer":{
+    key:'totalContainerQty',
+    type: 'text'
+  },
+  "totalVolumeInContainer":{
+    key:'totalContainerVolume',
+    type: 'text'
+  },
+  "totalNetWeightInContainer":{
+    key:'totalContainerNetWeight',
+    type: 'text'
+  },
+  "totalQuantityOfOuterCartonsInContainer":{ 
+    key:'totalContainerOuterCartonsQty',
+    type: 'text'
+  },
+  // "shipmentStatus":{
+  //   _hide: true,
+  //   type: 'text'
+  // },
 }
 
