@@ -36,7 +36,7 @@
             </div>
         </div>
         <v-table
-            code="inquiry_list"
+            code="inquiry_sku_list"
             hide-filter-value
             :data="tabData"
             :buttons="[{label: 'detail', type: 'detail'}]"
@@ -60,6 +60,8 @@
 */
 import { selectSearch, VTable, VPagination } from '@/components/index';
 import { mapActions } from 'vuex';
+import codeUtils from '@/lib/code-utils';
+
 export default {
   name: '',
   data() {
@@ -103,7 +105,7 @@ export default {
   created() {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-    this.gettabData();
+    this.getBaseData().then(this.gettabData);
   },
   methods: {
     ...mapActions([
@@ -116,6 +118,21 @@ export default {
       this.searchLoad = true;
       this.gettabData();
     },
+    getBaseData() {
+      const postCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], { cache: true });
+      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
+      return this.$ajax.all([postCodes, getCurrencies]).then(res => {
+        let data = res[0];
+
+        res[1].forEach(item => item.name = item.code);
+        data.push({
+          code: 'CY_UNIT',
+          name: 'CY_UNIT(币种)',
+          codes: res[1]
+        });
+        this.setDic(codeUtils.convertDicValueType(data));
+      });
+    },
     gettabData() {
       let url, column;
       this.tabLoad = true;
@@ -126,28 +143,18 @@ export default {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, this.params)
-        .then(res => {
-          res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
-          this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'ITM'], 'cache')
-            .then(data => {
-              this.$ajax.get(this.$apis.GET_CURRENCY_ALL)
-                .then(datas => {
-                  data.push({code: 'CY_UNIT', name: 'CY_UNIT(币种)', codes: datas});
-                  this.setDic(data);
-                  this.tabData = this.$getDB(column, res.datas, (item) => {
-                    this.$filterDic(item);
-                  });
-                  this.tabLoad = false;
-                  this.searchLoad = false;
-                  this.checkedData = [];
-                });
-            });
-        })
-        ['catch'](() => {
-          this.searchLoad = false;
-          this.tabLoad = false;
+      this.$ajax.post(url, this.params).then(res => {
+        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+        this.tabData = this.$getDB(column, res.datas, (item) => {
+          this.$filterDic(item);
         });
+        this.tabLoad = false;
+        this.searchLoad = false;
+        this.checkedData = [];
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');

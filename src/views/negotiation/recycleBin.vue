@@ -6,7 +6,7 @@
                 <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.recover}(${checkedArg.length})` }}</el-button>
                 <!-- <el-button type="primary">{{ `${$i.common.download}(${checkedArg.length ? checkedArg.length : 'all'})`}}</el-button> -->
             </div>
-            <select-search :options="options" @inputChange="searchEnter" />
+            <select-search :options="options" @inputEnter="searchEnter" />
         </div>
         <v-table
             :data="tabData"
@@ -18,203 +18,188 @@
     </div>
 </template>
 <script>
-    import { VTable, selectSearch } from '@/components/index';
-    import { mapActions } from 'vuex';
-    export default {
-        name:'',
-        data() {
-            return {
-                title: '',
-                pageTotal:0,
-                checkedArg: [],
-                tabData: [],
-                options:[{
-                    id:'1',
-                    label:'Compare Name'
-                }, {
-                    id: '2',
-                    label: 'Compare Item'
-                }],
-                bodyData: {
-                    key: '',
-                    keyType: '',
-                    // operatorFilters: { //筛选条件
-                    //     columnName: '',
-                    //     operator: '',
-                    //     property: '',
-                    //     resultMapId: '',
-                    //     value: {}
-                    // },
-                    ps: 50,
-                    pn: 1,
-                    // sorts: [
-                    //     {
-                    //         nativeSql: true,
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //         resultMapId: "string"
-                    //     }
-                    // ]
-                },
-                tabLoad: false
+import { VTable, selectSearch } from '@/components/index';
+import { mapActions } from 'vuex';
+export default {
+  name: '',
+  data() {
+    return {
+      title: '',
+      pageTotal: 0,
+      checkedArg: [],
+      tabData: [],
+      options: [],
+      bodyData: {
+        operatorFilters: [],
+        ps: 50,
+        pn: 1
+      },
+      tabLoad: false
+    };
+  },
+  components: {
+    'select-search': selectSearch,
+    'v-table': VTable
+  },
+  methods: {
+    ...mapActions([
+      'setDic'
+    ]),
+    getInquiryList() { // 获取inquirylist
+      this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData).then(res => {
+        this.pageTotal = res.tc;
+        this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
+          this.$filterDic(item);
+        });
+        this.tabLoad = false;
+        this.searchLoad = false;
+      }, () => {
+        this.searchLoad = false;
+        this.tabLoad = false;
+      });
+    },
+    getCompare() { // 获取compare
+      this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData).then(res => {
+        let data = res.datas;
+        this.tabLoad = false;
+        data.forEach(item => {
+          item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') || '';
+        });
+        this.pageTotal = res.tc;
+        this.tabData = this.$getDB(this.$db.inquiry.compare, data);
+      });
+    },
+    searchEnter(option, operatorFilters) { // 搜索框
+      if (option.id === 'quotationNoLike' && option.value) {
+        this.bodyData.quotationNoLike = option.value;
+      } else {
+        this.bodyData.quotationNoLike = null;
+        this.bodyData.operatorFilters = operatorFilters;
+      }
+      this.getList();
+    },
+    action(item, type) { // 操作表单 action
+      switch (this.$route.params.type) {
+        case 'compare':
+          this.$router.push({
+            name: 'negotiationCompareDetail',
+            query: {
+              id: item.id.value
+            },
+            params: {
+              type: 'only'
             }
-        },
-        components: {
-            'select-search':selectSearch,
-            'v-table': VTable
-        },
-        methods: {
-            ...mapActions([
-                'setDic'
-            ]),
-            buttonsFn() {
-                if(this.$route.params.type === 'inquiry') return [{label: 'Detail', type: 'detail'}];
-            },
-            getInquiryList() { // 获取inquirylist
-                this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData)
-                .then(res => {
-                    this.pageTotal = res.tc;
-
-                    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-                    .then(data => {
-                        this.setDic(data);
-                        this.tabData = this.$getDB(this.$db.inquiry.viewByInqury, res.datas, (item) => {
-                            this.$filterDic(item);
-                        });
-                        this.tabLoad = false;
-                        this.searchLoad = false;
-                    });
-
-                })
-                .catch(() => {
-                    this.searchLoad = false;
-                    this.tabLoad = false;
-                });
-            },
-            getCompare() { // 获取compare
-                this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
-                .then(res => {
-                    let data = res.datas;
-                    this.tabLoad = false;
-                    data.forEach(item => {
-                        item.updateDt ? item.updateDt = this.$dateFormat(data.updateDt, 'yyyy-mm-dd') : '';
-                    });
-                    this.pageTotal = res.tc;
-                    this.tabData = this.$getDB(this.$db.inquiry.compare, data);
-                });
-            },
-            searchEnter(item) { // 搜索框
-                this.bodyData.key = item.key;
-                this.bodyData.keyType = item.keyType;
-            },
-            action(item, type) { //操作表单 action
-                switch(this.$route.params.type) {
-                    case 'compare':
-                        this.$router.push({
-                            name: 'negotiationCompareDetail',
-                            query: {
-                                id: item.id.value
-                            },
-                            params: {
-                                type: 'only'
-                            }
-                        })
-                        break;
-                    case 'inquiry':
-                        this.$router.push({
-                            path: '/negotiation/inquiryDetail',
-                            query: {
-                                id: item.id.value
-                            }
-                        })
-                        break;
-                }
-            },
-            changeChecked(item) { //选中的list
-                let arr = [];
-                item.forEach(item => {
-                    arr.push(item.id.value);
-                });
-                this.checkedArg = arr;
-            },
-            getList() {
-                switch(this.$route.params.type) {
-                    case 'inquiry':
-                        this.getInquiryList();
-                        break;
-                    case 'compare':
-                        this.getCompare();
-                        break;
-                }
-            },
-            actionInquiry(type) {
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
-                    ids:this.checkedArg,
-                    action: type
-                })
-                .then(res => {
-                    this.tabData.forEach((item, index) => {
-                        res.forEach(key => {
-                            if(item.id.value === key) {
-                                this.tabData.splice(index, 1);
-                            }
-                        });
-                    });
-                    this.checkedArg = [];
-                });
-            },
-            actionCompare() {
-                this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RESTORE, this.checkedArg)
-                .then(res => {
-                    this.checkedArg = [];
-                    this.getCompare();
-                });
-            },
-            submit() { //删除恢复
-                switch(this.$route.params.type) {
-                    case 'inquiry':
-                        this.actionInquiry('revert');
-                        break;
-                    case 'compare':
-                        this.actionCompare('revert');
-                        break;
-                }
-            },
-            ajaxInqueryAction(type) {
-                const argId = this.getChildrenId();
-                this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
-                    action: type,
-                    ids:argId
-                })
-                .then(res => {
-                    this.getInquiryList();
-                    this.checkedData = [];
-                });
+          });
+          break;
+        case 'inquiry':
+          this.$router.push({
+            path: '/negotiation/inquiryDetail',
+            query: {
+              id: item.id.value
             }
-        },
-        watch: {
-            bodyData: {
-                handler(val) {
-                    this.getList();
-                },
-                deep: true
+          });
+          break;
+      }
+    },
+    changeChecked(item) { // 选中的list
+      let arr = [];
+      item.forEach(item => {
+        arr.push(item.id.value);
+      });
+      this.checkedArg = arr;
+    },
+    getList() {
+      switch (this.$route.params.type) {
+        case 'inquiry':
+          this.getInquiryList();
+          break;
+        case 'compare':
+          this.getCompare();
+          break;
+      }
+    },
+    actionInquiry(type) {
+      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+        ids: this.checkedArg,
+        action: type
+      }).then(res => {
+        this.tabData.forEach((item, index) => {
+          res.forEach(key => {
+            if (item.id.value === key) {
+              this.tabData.splice(index, 1);
             }
-        },
-        created() {
-            switch(this.$route.params.type) {
-                case 'inquiry':
-                    this.title = this.$i.common.inquiryRecycleBin;
-                    this.bodyData.recycleCustomer = 1;
-                    break;
-                case 'compare':
-                    this.title = this.$i.common.compareRecycleBin;
-                    this.bodyData.recycle = 1;
-                    //recycleSupplier
-                    break;
-            };
-            this.getList();
-        }
+          });
+        });
+        this.checkedArg = [];
+      });
+    },
+    actionCompare() {
+      this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_RESTORE, this.checkedArg)
+        .then(res => {
+          this.checkedArg = [];
+          this.getCompare();
+        });
+    },
+    submit() { // 删除恢复
+      switch (this.$route.params.type) {
+        case 'inquiry':
+          this.actionInquiry('revert');
+          break;
+        case 'compare':
+          this.actionCompare('revert');
+          break;
+      }
+    },
+    ajaxInqueryAction(type) {
+      const argId = this.getChildrenId();
+      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
+        action: type,
+        ids: argId
+      }).then(res => {
+        this.getInquiryList();
+        this.checkedData = [];
+      });
     }
+  },
+  created() {
+    switch (this.$route.params.type) {
+      case 'inquiry':
+        this.options = [{
+          id: 'supplierName',
+          label: this.$i.inquiry.supplierName,
+          operator: 'like'
+        }, {
+          id: 'inquiryNo',
+          label: this.$i.inquiry.InquiryNo,
+          operator: 'like'
+        }, {
+          id: 'quotationNo',
+          label: this.$i.inquiry.quotationNo,
+          operator: 'like'
+        }];
+        this.title = this.$i.common.inquiryRecycleBin;
+        this.bodyData.recycleCustomer = 1;
+        break;
+      case 'compare':
+        this.options = [{
+          id: 'compareName',
+          label: this.$i.inquiry.compareName,
+          operator: 'like'
+        }, {
+          id: 'quotationNoLike',
+          label: this.$i.inquiry.compareItems
+        }];
+        this.title = this.$i.common.compareRecycleBin;
+        this.bodyData.recycle = 1;
+        // recycleSupplier
+        break;
+    }
+
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
+      .then(data => this.setDic(data))
+      .then(this.getList);
+  }
+};
 </script>
 <style lang="less" scoped>
     .compare-overview{

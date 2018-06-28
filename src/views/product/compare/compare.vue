@@ -169,6 +169,7 @@
         methods:{
             ...mapActions(['setLog']),
             getList() {
+                console.log(this.$route.params.type,'this.$route.params.type')
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];

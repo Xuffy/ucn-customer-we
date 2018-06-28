@@ -2,25 +2,31 @@
     <div class="souringDetail">
         <div class="head">
             <div class="title">
-                <img :src='basicDate.logo'/>
                 <span>{{basicDate.name}}</span>
             </div>
             <div class="detail">
                  <el-form  label-width="190px">
-                    <el-row>
-                        <el-row class="right">
-                            <el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"
-                                   v-for='(item,index) in $db.supplier.detail'
-                                   :key='index'
-                                   >
-                                    <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
-                                       {{basicDate[item.key]}}
-                                    </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                </el-row>
-                  </el-form>
+                     <el-row>
+                       <el-col :span="4">
+                         <v-image :src="basicDate.logo"/>
+                       </el-col>
+                       <el-col :span="20">
+                         <el-form>
+                           <el-row>
+                             <el-col
+                               v-for='(item,index) in $db.supplier.detail'
+                               :key='index'
+                               :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                             >
+                               <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                                 {{basicDate[item.key]}}
+                               </el-form-item>
+                             </el-col>
+                           </el-row>
+                         </el-form>
+                       </el-col>
+                    </el-row>
+                 </el-form>
                 <div class="btns" v-if="noEdit">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
@@ -106,7 +112,7 @@
     import VRemark from '../../product/addlineTable'
     import VAttachment from '../attachment'
     import {
-        VTable,VUpload
+        VTable,VUpload,VImage
     } from '@/components/index';
 
     export default {
@@ -116,7 +122,8 @@
             VCompareList,
             VRemark,
             VUpload,
-            VAttachment
+            VAttachment,
+            VImage
         },
         data() {
             return {
@@ -158,19 +165,13 @@
                 lookRemarkFormVisible:false,
                 isModifyAddress:false,
                 formLabelWidth:'80px',
-                genderOptions:[{
-                  value: '男',
-                  label: 'Male',
-                  code: 1
-                }, {
-                  value: '女',
-                  label: 'Female',
-                  code: 0
-                }, {
-                  value: '未知',
-                  label: 'Unknown',
-                  code: 2
-                }],
+                countryOption:[],
+                currency:[],
+                type:[],
+                exportLicense:[],
+                incoterm:[],
+                payment:[],
+                sex:[],
             }
         },
         methods: {
@@ -234,7 +235,6 @@
                         type: 'warning'
                     });
                 } else {
-
                     if (this.basicDate.id && this.basicDate != '') {
                         compareList.push({
                             name: this.basicDate.name,
@@ -315,6 +315,26 @@
                 console.log(err)
               });
             },
+            //获取字典
+            getCodePart(){
+              this.$ajax.post(this.$apis.POST_CODE_PART,["ITM","PMT","CUSTOMER_TYPE","EL_IS","SEX"]).then(res=>{
+                this.payment = _.findWhere(res, {'code': 'PMT'}).codes;
+                this.incoterm = _.findWhere(res, {'code': 'ITM'}).codes;
+                this.type = _.findWhere(res, {'code': 'CUSTOMER_TYPE'}).codes;
+                this.exportLicense = _.findWhere(res, {'code': 'EL_IS'}).codes;
+                this.sex = _.findWhere(res, {'code': 'SEX'}).codes;
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
+            //获取国家
+            getCountryAll(){
+              this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
+                this.countryOption = res
+              }).catch(err=>{
+                console.log(err)
+              });
+            },
             //..................获取数据
             get_data() {
                 this.$ajax.get(this.$apis.get_supplier_id, {
@@ -323,6 +343,18 @@
                     .then(res => {
                         this.basicDate = res;
                         this.attachments = res.attachments
+                        let country,type,incoterm,payment,currency;
+                        country = _.findWhere(this.countryOption, {code: this.basicDate.country}) || {};
+                        incoterm = _.findWhere(this.incoterm, {code: (this.basicDate.incoterm)+''}) || {};
+                        type = _.findWhere(this.type, {code: (this.basicDate.type)+''}) || {};
+                        payment = _.findWhere(this.payment, {code: (this.basicDate.payment)+''}) || {};
+                        currency = _.findWhere(this.currency, {code: this.basicDate.currency}) || {};
+                        this.basicDate.type = type.name || '';
+                        this.basicDate.country = country.name || '';
+                        this.basicDate.incoterm = incoterm.name || '';
+                        this.basicDate.payment = payment.name || '';
+                        this.basicDate.currency = currency.name || '';
+
                         this.accounts = this.$getDB(this.$db.supplier.detailTable, res.accounts,e => {
                           let currency;
                           currency = _.findWhere(this.currency, {code: e.currency.value}) || {};
@@ -332,8 +364,8 @@
                         this.address = this.$getDB(this.$db.supplier.detailTable, res.address);
                         this.concats = this.$getDB(this.$db.supplier.concats, res.concats, e => {
                           let gender;
-                          gender = _.findWhere(this.genderOptions, {code: e.gender.value}) || {};
-                          e.gender._value = gender.label || '';
+                          gender = _.findWhere(this.sex, {code:(e.gender.value)+''}) || {};
+                          e.gender._value = gender.name || '';
                           return e;
                         });
                     })
@@ -503,8 +535,10 @@
           },
         },
         created() {
-            this.get_data();
-            this.getCurrency();
+          this.getCountryAll();
+          this.getCurrency();
+          this.getCodePart();
+          this.get_data();
         },
     }
 

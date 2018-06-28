@@ -1,7 +1,7 @@
 export default {
   //inquireHistory
   inquiryNumber: {
-    key: 'inquiryNo'
+    key: 'quotationNo'
   },
   inquiryDate: {
     key: 'entryDt',

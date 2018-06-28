@@ -24,15 +24,16 @@
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
-
                 <div style="padding: 10px 0">
-                    <el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
-                    <div class="viewBy">
-                        <span>{{$i.order.viewBy}}</span>
-                        <el-radio-group style="margin-left: 10px" v-model="view" size="mini" @change='changeView'>
-                            <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
-                            <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
-                        </el-radio-group>
+                    <!--<el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>-->
+                    <div class="speHead">
+                        <div class="viewBy">
+                            <span>{{$i.order.viewBy}}</span>
+                            <el-radio-group style="margin-left: 10px" v-model="view" size="mini" @change='changeView'>
+                                <el-radio-button label='1'>{{($i.order.order)}}</el-radio-button>
+                                <el-radio-button label='2'>{{($i.order.sku)}}</el-radio-button>
+                            </el-radio-group>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -361,6 +362,11 @@
     }
     .viewBy{
         float: right;
+    }
+    .speHead:after{
+        content: '';
+        clear: both;
+        display: table;
     }
 
 </style>
