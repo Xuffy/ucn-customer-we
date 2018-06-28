@@ -154,11 +154,7 @@
                 this.selectedList = item;
             },
             changeStatus() {
-                if (this.view === '1') {
-                    this.getData();
-                } else {
-                    this.getData();
-                }
+                this.getData();
             },
             changeView() {
                 this.disableFinish=true;
