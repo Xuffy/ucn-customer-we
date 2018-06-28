@@ -554,9 +554,14 @@
                       receiveCountry = _.findWhere(this.options.country, {code: e.receiveCountry.value}) || {};
                       e.country._value = country.name || '';
                       e.receiveCountry._value = receiveCountry.name || '';
-
-                      e.companyAddress.value = e.country._value +' '+e.province.value+' '+e.city.value+' '+e.address.value;
-                      e.receiverAddress.value = e.receiveCountry._value +' '+e.receiveProvince.value+' '+e.receiveCity.value+' '+e.receiveAddress.value
+                      const province = e.province.value || '';
+                      const city = e.city.value || '';
+                      const address = e.address.value || ''
+                      const receiveProvince = e.receiveProvince.value || '';
+                      const receiveCity = e.receiveCity.value || '';
+                      const receiveAddress = e.receiveAddress.value || '';
+                      e.companyAddress.value = e.country._value +' '+province+' '+city+' '+address;
+                      e.receiverAddress.value = e.receiveCountry._value +' '+receiveProvince+' '+receiveCity+' '+receiveAddress
                       return e;
 
                     });
