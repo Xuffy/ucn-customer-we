@@ -10,7 +10,7 @@
                     <el-row>
                       <el-row>
                         <el-col :span="4">
-                          <v-image :src="basicDate.logo" style="height: 273px;"/>
+                          <v-image :src="basicDate.logo" style="height: 184px;"/>
                         </el-col>
                         <el-col :span="20">
                           <el-form>
