@@ -1060,7 +1060,6 @@
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                {{data._value}}
                 <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
@@ -1599,6 +1598,23 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+
+
+                            //图片处理
+                            console.log(item,'item')
+                            let skuLabelPic=item.skuLabelPic.value,
+                                skuPkgMethodPic=item.skuPkgMethodPic.value,
+                                skuInnerCartonPic=item.skuInnerCartonPic.value,
+                                skuOuterCartonPic=item.skuOuterCartonPic.value;
+                            item.skuLabelPic._value=[skuLabelPic];
+                            item.skuLabelPic.value=[skuLabelPic];
+                            item.skuPkgMethodPic._value=[skuPkgMethodPic];
+                            item.skuPkgMethodPic.value=[skuPkgMethodPic];
+                            item.skuInnerCartonPic._value=[skuInnerCartonPic];
+                            item.skuInnerCartonPic.value=[skuInnerCartonPic];
+                            item.skuOuterCartonPic._value=[skuOuterCartonPic];
+                            item.skuOuterCartonPic.value=[skuOuterCartonPic];
+
                         }
                     });
                     this.productTableData=[];
@@ -1663,18 +1679,27 @@
                     }
                 });
                 params.skuList=this.dataFilter(this.productTableData);
+                console.log(params,'params')
                 _.map(params.skuList,v=>{
                     if(_.isArray(v.skuLabelPic)){
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
+                    if(v.skuInspectQuarantineCategory){
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
+                    }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
                     this.getDetail();
-                    // this.$router.push('/order/overview');
                 }).finally(err=>{
                     this.disableClickSend=false;
                 });
@@ -1768,6 +1793,7 @@
                             // }
                             if(!v._remark){
                                 this.handlePriceBlur({},v);
+                                console.log(v,'???????')
                             }
                             arr.push(v);
                         }
@@ -1927,12 +1953,28 @@
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
+                            if(!m._remark){
+                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
+                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
+                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
+                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
+                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
+                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
+                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
+                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
+                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
+                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
+                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
+                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
+                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
+                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
+                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                e[0].skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
-                e[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).key;
             },
             dataFilter(data) {
                 let arr = [],
@@ -2296,7 +2338,8 @@
                 }).then(() => {
                     this.disableCancelOrder=true;
                     this.$ajax.post(this.$apis.ORDER_CANCEL,{
-                        ids:[this.orderForm.id]
+                        ids:[this.orderForm.id],
+                        orderNo:this.orderForm.orderNo
                     }).then(res=>{
                         this.$message({
                             message: this.$i.order.handleSuccess,

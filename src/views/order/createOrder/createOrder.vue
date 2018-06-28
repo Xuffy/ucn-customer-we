@@ -1507,8 +1507,6 @@
                                 m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
                                 m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
                                 m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-
-
                                 m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
                                 m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
                                 m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
@@ -1517,8 +1515,6 @@
                                 m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
                                 m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
                                 m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
-
-
                             }
                             this.productTableData.splice(k,1,m)
                         }
