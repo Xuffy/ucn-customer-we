@@ -1138,23 +1138,23 @@
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                // if(!rightCode){
-                //     return this.$message({
-                //         message: this.$i.order.supplierNotTheSame,
-                //         type: 'warning'
-                //     });
-                // }
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
                 console.log(params,'???')
-                // this.disableClickSend=true;
-                // this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                //     this.$router.push('/order/overview');
-                // }).finally(err=>{
-                //     this.disableClickSend=false;
-                // });
+                this.disableClickSend=true;
+                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
+                    this.$router.push('/order/overview');
+                }).finally(err=>{
+                    this.disableClickSend=false;
+                });
             },
             saveAsDraft(){
                 let params=Object.assign({},this.orderForm);
