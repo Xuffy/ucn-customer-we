@@ -224,7 +224,7 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-
+      // this.updateTable();
       this.interval = setInterval(this.updateTable, 400);
     },
     methods: {
@@ -305,6 +305,7 @@
       setDataList(val, type) {
         if (this.dataList.length !== val.length) {
           this.$refs.tableBox.scrollTop = 0;
+          this.$refs.tableBox.scrollLeft = 0;
         }
 
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {

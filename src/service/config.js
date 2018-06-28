@@ -6,9 +6,11 @@ export default {
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       // LOGIN_URL: 'http://192.168.51.138:8070',
       LJ: '//192.168.51.208:11001',
-      BASE_URL: '//192.168.51.111:11001', // 采购端
+      BASE_CS:'//192.168.51.33:11001',
+
+
+      BASE_URL: '//192.168.51.208:11001', // 采购端
       USSO_URL: '//192.168.51.208:11006', // sso 服务
-      // UUSER_URL: '//192.168.51.198:11004', // 用户中心
       UUSER_URL: '//192.168.51.208:11004', // 用户中心
       UMETA_URL: '//192.168.51.208:11005', // 元数据
       UMESSAGE_URL: '//192.168.51.208:11007', // 消息服务
@@ -20,7 +22,6 @@ export default {
       UBIZLOG_URL: '//192.168.51.208:13301', // 业务日志
       UWORKBENCH_URL: '//192.168.51.208:11010',
       UIE_URL: '//192.168.51.208:13003',
-      BASE_CS:'//192.168.51.33:11001',
 
       OSS_BUCKET_PUBLIC: 'dev-public-ucn-oss',
       OSS_BUCKET_PRIVATE: 'dev-private-ucn-oss'
