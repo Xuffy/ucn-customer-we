@@ -761,6 +761,7 @@ export default {
       if(this.$validateForm(obj || this.oldPlanObject,this.$db.logistic.transportInfoObj)){
         return;
       }
+      return
       this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
         this.$message({
           message: '发送成功，正在跳转...',
