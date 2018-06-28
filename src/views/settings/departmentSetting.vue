@@ -721,6 +721,7 @@
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
+            this.getDepartmentData();
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
