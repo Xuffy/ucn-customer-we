@@ -25,7 +25,6 @@
         <!--from-->
           <!--        表格-->
            <v-table
-             code="udata_purchase_supplier_compare_overview"
             :height=500
             :loading='loading'
             :data="tabData"
