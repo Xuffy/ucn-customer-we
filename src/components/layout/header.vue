@@ -119,7 +119,7 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        this.getMessage();
+        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
