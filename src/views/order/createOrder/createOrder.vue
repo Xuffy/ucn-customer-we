@@ -1128,7 +1128,7 @@
                     if(v.skuInspectQuarantineCategory){
                         v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{name:v.skuInspectQuarantineCategory}).code;
                     }
-                    let picKey=['skuPictures','skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
