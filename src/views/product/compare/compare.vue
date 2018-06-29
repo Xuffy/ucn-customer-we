@@ -29,10 +29,12 @@
                 <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
-                <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
-                <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
-            </el-checkbox-group>
+            <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            <!--<el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">-->
+                <!--<el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>-->
+                <!--<el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>-->
+            <!--</el-checkbox-group>-->
         </div>
         <v-table
                 code="udata_purchase_sku_compare_list_detail"
@@ -154,6 +156,12 @@
 
                 isChangeData:false,             //是否在最原始的基础上modify过数据
 
+                isHideTheSame:false,
+                isHighlight:false,
+
+                copySameData:[],
+                copyLightData:[],
+
 
                 /**
                  * 字典配置
@@ -232,7 +240,6 @@
                     });
                 }
             },
-
             btnClick(e){
                 let id;
                 if(this.$route.params.type==='new'){
@@ -257,6 +264,22 @@
                             id:id
                         }
                     })
+                }
+            },
+            changeHideTheSame(e){
+                if(e){
+                    this.copySameData=this.$depthClone(this.tableDataList);
+                    this.$table.setHideSame(this.tableDataList);
+                }else{
+                    this.tableDataList=this.$depthClone(this.copySameData);
+                }
+            },
+            changeHighlight(e){
+                if(e){
+                    this.copyLightData=this.$depthClone(this.tableDataList);
+                    this.$table.setHighlight(this.tableDataList);
+                }else{
+                    this.tableDataList=this.$depthClone(this.copyLightData);
                 }
             },
 
