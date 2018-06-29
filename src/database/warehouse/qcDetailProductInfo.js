@@ -279,7 +279,7 @@ export default{
         type: 'String'
     },
     QCPic:{
-        key: 'qcPic',
+        key: 'qcPics',
         type: 'String',
         _image:true
     },

@@ -1461,6 +1461,8 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+
                         }
                     });
                     _.map(data,v=>{
@@ -1919,6 +1921,7 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
                     _.map(data,v=>{
@@ -2017,6 +2020,7 @@
                             this.isNeedSampleOption=v.codes;
                         }else if(v.code==='QUARANTINE_TYPE'){
                             this.quarantineTypeOption=v.codes;
+                            console.log(this.quarantineTypeOption,'??')
                         }else if(v.code==='SKU_SALE_STATUS'){
                             this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='INQUIRY_STATUS'){
@@ -2156,6 +2160,7 @@
                                     if(item.skuCategoryId.value){
                                         item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                                     }
+                                    item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                                 }
                             });
                             _.map(data,v=>{

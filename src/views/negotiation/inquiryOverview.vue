@@ -112,6 +112,9 @@ export default {
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
     this.getBaseData().then(this.gettabData);
   },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  },
   methods: {
     ...mapActions([
       'setDraft',

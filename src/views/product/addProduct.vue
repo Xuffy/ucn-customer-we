@@ -50,8 +50,12 @@
                                       :placeholder="$i.product.pleaseInput"></el-input>
                             <div v-if="v.showType==='select'">
                                 <div v-if="v.isCountry">
-                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable
-                                               collapse-tags :placeholder="$i.product.pleaseChoose">
+                                    <el-select class="speSelect"
+                                               size="mini"
+                                               v-model="selectCountry"
+                                               multiple
+                                               filterable
+                                               :placeholder="$i.product.pleaseChoose">
                                         <el-option
                                                 v-for="item in countryOption"
                                                 :key="item.id"
