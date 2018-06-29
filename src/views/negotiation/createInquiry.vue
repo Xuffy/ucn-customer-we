@@ -134,6 +134,7 @@
     </div>
     <div class="bom-btn-wrap-station"></div>
     <el-dialog
+      custom-class="ucn-dialog-center"
       title="Add Product"
       :visible.sync="dialogTableVisible"
       width="80%"
