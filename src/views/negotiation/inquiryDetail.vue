@@ -47,16 +47,17 @@
               :rowspan="2"
               :selection="statusModify"
               :hideFilterColumn="statusModify"/>
-          <div class="bom-btn-wrap" v-show="!statusModify">
-            <el-button @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
+          <div class="bom-btn-wrap" v-show="!statusModify" v-if="tabData[0]">
+            <el-button type="primary" @click="ajaxInqueryAction('accept')" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:ACCEPT'">{{ $i.common.accept }}</el-button>
             <!-- <el-button @click="windowOpen('/order/creatOrder')">{{ $i.common.createOrder }}</el-button> -->
             <el-button @click="addToCompare" v-authorize="'INQUIRY:DETAIL:ADD_COMPARE'">{{ $i.common.addToCompare }}</el-button>
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
-            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
-            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue+''!=='22'" v-if="tabData[0]" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+            <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
+            <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
             <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
-            <el-button type="info" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="tabData[0].status.originValue+''!== '22'&&tabData[0].status.originValue+''!=='21'" v-if="tabData[0]">{{ $i.common.cancel }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
+            <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
+            <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.delete }}</el-button>
           </div>
           <div class="bom-btn-wrap" v-show="statusModify">
             <el-button @click="modify">{{ $i.common.send }}</el-button>
@@ -81,6 +82,7 @@
           :hideBtn="true"
           :disabledLine="disabledLine"
           @handleOK="queryAndAddProduction"
+          @handleCancel="newSearchDialogVisible = false"
           :forceUpdateNumber="trig"
           :type="radio"
           :isInquiry="true">
@@ -117,7 +119,6 @@ export default {
   name: 'inquiryDetail',
   data() {
     return {
-      loading: false,
       disabledLine: [],
       trig: 0,
       disabledTabData: [],
@@ -177,16 +178,22 @@ export default {
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
-    this.getBaseData().then(this.getInquiryDetail);
+    Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this)]).then(res => {
+      let data = res[0];
+      if (res[1]) {
+        data.push(res[1]);
+      }
+      this.setDic(data);
+    }).then(this.getInquiryDetail);
   },
   watch: {
-    ChildrenCheckList(val, oldVal) {
+    ChildrenCheckList(val) {
       let data = this.tabData;
       val.forEach(item => {
-        if (item + '' === '0') {
+        if (item === 0) {
           data = this.$table.setHideSame(this.tabData);
         }
-        if (item + '' === '1') {
+        if (item === 1) {
           data = this.$table.setHighlight(this.tabData);
         }
       });
@@ -207,50 +214,6 @@ export default {
         }).then(() => {
           this.$router.push('/negotiation/inquiry');
         });
-      });
-    },
-    getBaseData() {
-      const postCodes = this.$ajax.post(
-        this.$apis.POST_CODE_PART,
-        [
-          'INQUIRY_STATUS',
-          'PMT',
-          'ITM',
-          'AE_IS',
-          'EL_IS',
-          'RA_IS',
-          'SUPPLIER_TYPE',
-          'MD_TN',
-          'SKU_SALE_STATUS',
-          'SKU_UNIT',
-          'ED_UNIT',
-          'LH_UNIT',
-          'WT_UNIT',
-          'VE_UNIT',
-          'OEM_IS',
-          'UDB_IS',
-          'SKU_PG_IS'
-        ],
-        { cache: true }
-      );
-      const getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL, '', {cache: false});
-      const getCountries = this.$ajax.get(this.$apis.GET_COUNTRY_ALL, '', {cache: true});
-      return this.$ajax.all([postCodes, getCurrencies, getCountries]).then(res => {
-        let data = res[0];
-
-        res[1].forEach(item => item.name = item.code);
-        data.push({
-          code: 'CY_UNIT',
-          name: 'CY_UNIT(币种)',
-          codes: res[1]
-        });
-        data.push({
-          code: 'COUNTRY',
-          name: 'COUNTRY(国家)',
-          codes: res[2]
-        });
-        this.setDic(codeUtils.convertDicValueType(data));
-        return Promise.resolve(data);
       });
     },
     addProduct() {
@@ -320,7 +283,7 @@ export default {
         let fieldRemarkDisplay = line.fieldRemarkDisplay.value;
         if (fieldRemarkDisplay && typeof fieldRemarkDisplay === 'object') {
           Object.keys(fieldRemarkDisplay).forEach(k => {
-            if (fieldRemarkDisplay[k] === '1' && remark[k]) {
+            if (remark && fieldRemarkDisplay[k] === '1' && remark[k]) {
               remark[k]._style = 'background-color: ' + c;
             }
           });
@@ -354,11 +317,15 @@ export default {
         this.markFieldHighlight(this.newTabData);
         this.markFieldHighlight(this.newProductTabData);
         this.tableLoad = false;
-      }).catch(() => {
+      }, () => {
         this.tableLoad = false;
       });
     },
     queryAndAddProduction(ids) {
+      if (!Array.isArray(ids) || !ids.length) {
+        this.$message.warning(this.$i.inquiry.noItemSelected);
+        return;
+      }
       this.$ajax.post(this.$apis.POST_INQUIRY_SKUS, ids).then(res => {
         let arr = this.$getDB(
           this.$db.inquiry.productInfo,

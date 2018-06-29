@@ -14,6 +14,7 @@
 
         <!--form-->
         <v-table
+                :code="tableCode"
                 ref='vtable'
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
@@ -105,6 +106,7 @@
                 selectedList: [],
                 selectedNumber: [],
                 disableClickSend:false,
+                tableCode:'uorder_list',
 
                 /**
                  * 字典
@@ -158,17 +160,19 @@
             },
             changeStatus() {
                 if (this.params.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 } else {
-                    this.getData(this.$db.order.overviewBysku);
+                    this.getData();
                 }
             },
             changeView() {
                 this.disableFinish=true;
                 if (this.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder)
+                    this.tableCode='uorder_list';
+                    this.getData()
                 } else {
-                    this.getData(this.$db.order.overviewBysku)
+                    this.tableCode='uorder_sku_list';
+                    this.getData()
                 }
             },
             inputEnter(val) {
@@ -221,9 +225,9 @@
                 })
                     .then((res) => {
                         if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overviewByOrder)
+                            this.getdata()
                         } else {
-                            this.getdata(this.$db.order.overviewBysku)
+                            this.getdata()
                         }
                     })
                     .catch((res) => {
@@ -256,8 +260,14 @@
                             if(e.status){
                                 e.status.value=this.$change(this.orderStatusOption,'status',e).name;
                             }
+                            if(e.skuStatus){
+                                e.skuStatus.value=this.$change(this.orderStatusOption,'skuStatus',e).name;
+                            }
                             if(e.incoterm){
                                 e.incoterm.value=this.$change(this.incotermOption,'incoterm',e).name;
+                            }
+                            if(e.skuIncoterm){
+                                e.skuIncoterm.value=this.$change(this.incotermOption,'skuIncoterm',e).name;
                             }
                             if(e.payment){
                                 e.payment.value=this.$change(this.paymentOption,'payment',e).name;
@@ -362,6 +372,7 @@
     }
     .viewBy{
         float: right;
+        margin-right: 70px;
     }
     .speHead:after{
         content: '';

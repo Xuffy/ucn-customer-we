@@ -22,10 +22,9 @@
                 </selectSearch>
             </div>
         </div>
-
         <!--form-->
         <v-table
-                code="uorder_list"
+                :code="tableCode"
                 ref='vtable'
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
@@ -40,7 +39,7 @@
                     <div class="btn-wrap">
                         <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
                         <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                        <el-button :disabled='disableFinish' @click='finish'>{{$i.order.shipped}}</el-button>
+                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish'>{{$i.order.shipped}}</el-button>
                         <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
                     </div>
                     <div class="viewBy">
@@ -121,6 +120,9 @@
                 },
                 selectedList: [],
                 selectedNumber: [],
+                tableCode:'uorder_list',
+                disableClickFinish:false,
+
 
                 /**
                  * 字典
@@ -154,18 +156,16 @@
                 this.selectedList = item;
             },
             changeStatus() {
-                if (this.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder);
-                } else {
-                    this.getData(this.$db.order.overviewBysku);
-                }
+                this.getData();
             },
             changeView() {
                 this.disableFinish=true;
                 if (this.view === '1') {
-                    this.getData(this.$db.order.overviewByOrder)
+                    this.tableCode='uorder_list';
+                    this.getData()
                 } else {
-                    this.getData(this.$db.order.overviewBysku)
+                    this.tableCode='uorder_sku_list';
+                    this.getData()
                 }
             },
             inputEnter(val) {
@@ -183,14 +183,18 @@
                 }
             },
             finish() {
-                let ids=[];
+                let ids=[],orderNos=[];
                 _.map(this.selectedList,v=>{
                     ids.push(v.id.value);
+                    orderNos.push(v.orderNo.value);
                 });
+                console.log(this.selectedList,'this.selectedList')
+                this.disableClickFinish=true;
                 this.$ajax.post(this.$apis.ORDER_FINISH, {
                     draftCustomer: false,
                     draftSupplier: false,
                     ids:ids,
+                    orderNos:orderNos,
                     recycleCustomer: false,
                     recycleSupplier: false,
                 })
@@ -199,10 +203,10 @@
                             message: this.$i.order.shippedSuccess,
                             type: 'success'
                         });
-                        this.getData(this.$db.order.overviewByOrder);
+                        this.getData();
                     })
-                    .catch((res) => {
-                        console.log(res)
+                    .finally(() => {
+                        this.disableClickFinish=false;
                     });
             },
             download() {

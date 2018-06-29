@@ -593,14 +593,15 @@
                 <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
             </div>
             <div v-else>
-                <el-button :disabled="loadingPage || disableModify || hasCancelOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
+                <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
                 <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder" :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}</el-button>
-                <el-button :disabled="loadingPage || hasCancelOrder" :loading="disableCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancel}}</el-button>
+                <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" :loading="disableCancelOrder" @click="cancelOrder" type="danger">{{$i.order.cancel}}</el-button>
                 <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant" @change="changeMarkImportant">{{$i.order.markAsImportant}}</el-checkbox>
             </div>
         </div>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 title=""
                 :visible.sync="quickCreateDialogVisible"
                 width="70%">
@@ -630,6 +631,7 @@
         </el-dialog>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
                 :visible.sync="productTableDialogVisible"
                 width="70%">
@@ -796,7 +798,7 @@
             </el-select>
             <el-select
                     slot="skuInspectQuarantineCategory"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -804,11 +806,12 @@
                         v-for="item in quarantineTypeOption"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.code">
+                        :value="item.name">
                 </el-option>
             </el-select>
             <el-select
                     slot="skuStatus"
+                    :disabled="disableChangeSkuStatus"
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
@@ -1060,7 +1063,6 @@
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
             <div slot="skuLabelPic" slot-scope="{data}">
-                {{data._value}}
                 <v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>
             </div>
             <div slot="skuPkgMethodPic" slot-scope="{data}">
@@ -1085,7 +1087,7 @@
                 <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
         </v-history-modify>
-        <v-message-board v-if="false" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
+        <v-message-board :readonly="orderForm.status==='5'" module="order" code="detail" :id="$route.query.orderId"></v-message-board>
 
     </div>
 </template>
@@ -1146,6 +1148,7 @@
                 disableConfirm:false,
                 disableCancelOrder:false,
                 hasCancelOrder:false,
+                hasFinishOrder:false,
                 disableClickCancelModify:false,
                 disableClickConfirm:false,
 
@@ -1209,6 +1212,7 @@
                 copyObj:{},
                 chooseProduct:{},
                 savedIncoterm:'',           //用来存储incoterm
+                disableChangeSkuStatus:false,
 
                 /**
                  * payment data配置
@@ -1599,6 +1603,20 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
+                            //图片处理
+                            let skuLabelPic=item.skuLabelPic.value,
+                                skuPkgMethodPic=item.skuPkgMethodPic.value,
+                                skuInnerCartonPic=item.skuInnerCartonPic.value,
+                                skuOuterCartonPic=item.skuOuterCartonPic.value;
+                            item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
+                            item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuPkgMethodPic.value=skuPkgMethodPic?[skuPkgMethodPic]:[];
+                            item.skuInnerCartonPic._value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
+                            item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
+                            item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
                         }
                     });
                     this.productTableData=[];
@@ -1616,6 +1634,11 @@
                         this.disableConfirm=true;
                     }else{
                         this.disableConfirm=false;
+                    }
+                    if(res.status==='4'){
+                        this.hasFinishOrder=true;
+                    }else{
+                        this.hasFinishOrder=false;
                     }
                     if(res.status==='5'){
                         this.hasCancelOrder=true;
@@ -1668,13 +1691,21 @@
                         v.skuLabelPic=(v.skuLabelPic[0]?v.skuLabelPic[0]:null);
                     }
                     v.skuSample=v.skuSample==='1'?true:false;
+                    if(v.skuInspectQuarantineCategory){
+                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
+                    }
+                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
+                    _.map(picKey,item=>{
+                        if(_.isArray(v[item])){
+                            v[item]=(v[item][0]?v[item][0]:null);
+                        }
+                    })
                 });
                 params.attachments=this.$refs.upload[0].getFiles();
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE,params).then(res=>{
                     this.isModify=false;
                     this.getDetail();
-                    // this.$router.push('/order/overview');
                 }).finally(err=>{
                     this.disableClickSend=false;
                 });
@@ -1760,12 +1791,14 @@
              * */
             productInfoAction(e,type){
                 if(type==='negotiate'){
+                    if(e._isNew){
+                        this.disableChangeSkuStatus=true;
+                    }else{
+                        this.disableChangeSkuStatus=false;
+                    }
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
-                            // if(!v._remark && !v.skuLabelPic.value){
-                            //     v.skuLabelPic.value=[];
-                            // }
                             if(!v._remark){
                                 this.handlePriceBlur({},v);
                             }
@@ -1879,9 +1912,9 @@
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     _.map(res,v=>{
                         v.skuStatus='1';
-                    })
+                    });
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        console.log(item,'item')
+                        item._isNew=true;
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
                             if(item.skuPictures){
@@ -1927,12 +1960,28 @@
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
+                            if(!m._remark){
+                                m.skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
+                                m.skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles();
+                                m.skuPkgMethodPic._value=this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
+                                m.skuPkgMethodPic.value=this.$refs.uploadSkuPkgMethodPic.getFiles();
+                                m.skuInnerCartonPic._value=this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
+                                m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
+                                m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
+                                m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
+                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
+                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
+                                m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
+                                m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
+                                m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
+                                m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
+                                m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
+                                m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
+                            }
                             this.productTableData.splice(k,1,m)
                         }
                     })
                 });
-                e[0].skuLabelPic._value=this.$refs.uploadSkuLabelPic.getFiles(true).url;
-                e[0].skuLabelPic.value=this.$refs.uploadSkuLabelPic.getFiles(true).key;
             },
             dataFilter(data) {
                 let arr = [],
@@ -1971,8 +2020,12 @@
                                         json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
                                     }
                                     else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
-                                    }else{
+                                        json[k]=_.findWhere(this.isNeedSampleOption,{code:item[k].value}).code;
+                                    }
+                                    else if(item[k].key==='skuInspectQuarantineCategory'){
+                                        json[k]=_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code;
+                                    }
+                                    else{
                                         json[k] = item[k].value;
                                     }
                                 }else{
@@ -2296,7 +2349,8 @@
                 }).then(() => {
                     this.disableCancelOrder=true;
                     this.$ajax.post(this.$apis.ORDER_CANCEL,{
-                        ids:[this.orderForm.id]
+                        ids:[this.orderForm.id],
+                        orderNos:[this.orderForm.orderNo]
                     }).then(res=>{
                         this.$message({
                             message: this.$i.order.handleSuccess,

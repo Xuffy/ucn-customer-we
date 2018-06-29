@@ -58,7 +58,7 @@
 </template>
 <script>
   import {selectSearch, VTable, VPagination} from '@/components/index';
-
+  import {mapActions, mapState} from 'vuex';
   export default {
     name: 'logisticPlanOverview',
     data() {
@@ -205,11 +205,13 @@
       }
     },
     mounted() {
+      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
       this.fetchData()
       this.registerRoutes()
       // this.getContainerType() 接手注释
     },
     methods: {
+      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
       initPage(){
         this.pageParams = {
           pn: 1,

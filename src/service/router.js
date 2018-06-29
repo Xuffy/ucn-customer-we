@@ -497,6 +497,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
+          importTask: false,
           name: $i.router.logisticLoadingListOverview
         },
         component: () => import('../views/logistic/logisticPlanOverview')
@@ -509,6 +510,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
+          importTask: false,
           name: $i.router.logisticLoadingDraft
         },
         component: () => import('../views/logistic/logisticPlanOverview')
@@ -521,6 +523,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
+          importTask: false,
           name: $i.router.logisticLoadingArchive
         },
         component: () => import('../views/logistic/logisticPlanOverview')
@@ -532,7 +535,8 @@ export const routerMap = [
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
-          log: true,
+          log: false,
+          importTask: false,
           name: $i.router.logisticPlaceLogisticPlan
         },
         component: () => import('../views/logistic/logisticPlanDetail')
@@ -544,7 +548,8 @@ export const routerMap = [
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
-          log: true,
+          log: false,
+          importTask: false,
           name: $i.router.logisticPlaceDetail
         },
         component: () => import('../views/logistic/logisticPlanDetail')
@@ -556,7 +561,8 @@ export const routerMap = [
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
-          log: true,
+          log: false,
+          importTask: false,
           name: $i.router.logisticLoadingList
         },
         component: () => import('../views/logistic/logisticPlanDetail')
@@ -568,7 +574,8 @@ export const routerMap = [
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
-          log: true,
+          log: false,
+          importTask: false,
           name: $i.router.logisticLoadingDraft
         },
         component: () => import('../views/logistic/logisticPlanDetail')

@@ -1147,7 +1147,6 @@
                 _.map(params.skuList,v=>{
                     v.skuStatus=1;
                 });
-                console.log(params,'???')
                 this.disableClickSend=true;
                 this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
                     this.$router.push('/order/overview');
@@ -1226,6 +1225,7 @@
                             if(item.skuCategoryId.value){
                                 item.skuCategoryId._value=_.findWhere(this.category,{id:item.skuCategoryId.value}).name;
                             }
+                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory?this.$change(this.quarantineTypeOption,'skuInspectQuarantineCategory',item,true).name:'';
                         }
                     });
                     this.productTableData=[];
@@ -1494,7 +1494,6 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
-                console.log(e,'???')
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
@@ -1507,8 +1506,6 @@
                                 m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
                                 m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
                                 m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-
-
                                 m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
                                 m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
                                 m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
@@ -1517,8 +1514,6 @@
                                 m.skuAdditionalThree.value=this.$refs.uploadSkuAdditionalThree.getFiles();
                                 m.skuAdditionalFour._value=this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
                                 m.skuAdditionalFour.value=this.$refs.uploadSkuAdditionalFour.getFiles();
-
-
                             }
                             this.productTableData.splice(k,1,m)
                         }

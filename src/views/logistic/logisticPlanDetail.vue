@@ -52,6 +52,15 @@
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <label>{{ $i.logistic.shipmentStatus}} :</label>
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in [{label:1,value:2}]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </div>
       </v-table>
     </div>
@@ -145,7 +154,8 @@ export default {
         logisticsStatus: 'LS_PLAN',
         transportationWay: 'MD_TN',
         payment: 'PMT',
-        skuIncoterm: 'ITM'
+        skuIncoterm: 'ITM',
+        ShipmentStatus : 'SKU_LOGISTICS_STATUS'
       },
       configUrl: {
         placeLogisticPlan: {
@@ -180,7 +190,8 @@ export default {
         }
       },
       pageName:'',
-      prodFieldDisplay:{}
+      prodFieldDisplay:{},
+      CustomerName:'',
     }
   },
   components: {
@@ -250,7 +261,7 @@ export default {
     } 
   },
   mounted () {
-    this.setLog({query:{code:'planDetail'}});
+    this.setLog({query:{code: this.pageTypeCurr&&this.pageTypeCurr=="loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
     const arr = this.$route.fullPath.split('/')
     this.pageName =  arr[arr.length - 1].split('?')[0]
     this.registerRoutes()
@@ -276,6 +287,8 @@ export default {
       })
       if(this.isCopy){
         this.getDetails();
+      }else{
+        this.getCustomer();
       }
       this.getNewLogisticsNo()
       this.getRate();
@@ -283,7 +296,12 @@ export default {
   },
   methods: {
     ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
-    //获取实时汇率
+    //获取customerName
+    getCustomer(){
+      this.$ajax.get(`${this.$apis.get_Customer}`).then(res => {
+        this.basicInfoArr.find(a => a.key === 'customerName').value = res.customerCompanyName;
+      })
+    },
     getRate(){
       this.$ajax.post(`${this.$apis.get_plan_rate}`).then(res => {
         this.matchRate(res);
@@ -695,7 +713,6 @@ export default {
     },
     hightLightModifyFun(v,name){
       this.hightLightObj[name] = v ;
-      console.log(this.hightLightObj)
       let obj = {};
       _.mapObject(this.hightLightObj,(v,k)=>{
         Object.assign(obj,v);
