@@ -15,25 +15,11 @@
             </el-input>
         </div>
         <div class="btns">
-            <span v-if="$route.query.type==='new'">
+            <span>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
-            </span>
-            <span v-if="$route.query.type==='modify'">
-                <el-button  v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-
-                <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
-                <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
-            </span>
-           <span v-if="$route.query.type==='read'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-                <el-button  @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
-                <!--<el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>-->
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
                 <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
@@ -51,7 +37,7 @@
           @filter-value="tableFilterValue"></v-table>
 
         <div class="footBtn">
-            <div v-if="$route.params.type==='new'">
+            <div v-if="$route.query.type==='new'">
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary" v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.query.type==='modify'">
@@ -156,7 +142,7 @@
               });
             },
             getList() {
-                if(this.$route.params.type==='new'){
+                if(this.$route.query.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
@@ -189,7 +175,7 @@
 
                     })
 
-                }else if(this.$route.params.type==='modify'){
+                }else if(this.$route.query.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
                     if(this.$route.query.isModify){
