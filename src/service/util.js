@@ -246,10 +246,13 @@ export default {
         // i++;
         return val;
       });
+      console.log(keyData)
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
           if (_.isObject(val)) {
-            val._color = keyData[key] || '';
+            val._style = val._style || {};
+            val._style.backgroundColor = keyData[key] || '';
+            val._style.color = '#ffffff';
           }
           return val;
         });

@@ -681,9 +681,7 @@
       btnClick(item, type) {
         if (type === 1) {
           this.roleOption = this.$copyArr(this.roleData[0].children);
-          this.addUser = _.mapObject(item, val => {
-            return val.value;
-          })
+          this.addUser = _.mapObject(item, val => val.value);
           this.editUserdialog.type = 1;
           this.editUserdialog.show = true;
         } else {
@@ -721,10 +719,14 @@
 
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
-            this.getDepartmentData();
+            this.getDepartmentData().then(depRes => {
+              console.log('11111', depRes)
+            });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
+            // this.roleData = this.$options.data().roleData;
+            // this.userData = this.$options.data().userData;
             this.$message.success(this.$i.setting.successfulOperation);
           }).finally(err => {
             this.addUserLoading = false;
