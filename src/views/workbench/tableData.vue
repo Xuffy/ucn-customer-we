@@ -205,11 +205,11 @@
             }
             break;
           case 'PAYMENT':
-            this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: item.bizNo.value})
+            return this.$ajax.post(this.$apis.PAYMENT_GETORDERBYPAYMENTNOS, {paymentNos: item.bizNo.value})
               .then(res => {
                 url = url[res];
+                this.$windowOpen({url,params});
               });
-            break;
         }
         this.$windowOpen({url,params});
       }

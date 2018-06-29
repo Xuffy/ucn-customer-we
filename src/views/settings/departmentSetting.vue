@@ -720,13 +720,13 @@
         this.$ajax.post(this.$apis.add_departmentUser, params)
           .then(res => {
             this.getDepartmentData().then(depRes => {
-              console.log('11111', depRes)
+              let roles = _.findWhere(depRes, {deptId: this.userData.deptId});
+
+              this.roleData[0].children = roles ? roles.deptRoles : [];
             });
             this.getDepartmentUser();
             this.editUserdialog.show = false;
             this.addUser = this.$options.data().addUser;
-            // this.roleData = this.$options.data().roleData;
-            // this.userData = this.$options.data().userData;
             this.$message.success(this.$i.setting.successfulOperation);
           }).finally(err => {
             this.addUserLoading = false;
