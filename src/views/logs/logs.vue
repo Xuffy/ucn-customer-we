@@ -4,19 +4,19 @@
            {{$i.logs.logs}}
         </div>
         <div>
-            <el-form label-width="130px" class="searchCondition">
+            <el-form label-width="130px" class="searchCondition" ref="params" :model="params">
                 <el-row>
                     <!-- <el-col :span="2">
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
                         <el-form-item :label="$i.logs.description">
-                            <el-input type="text" v-model="params.operationContent" @change="getbizlogs" clearable style="max-width:200px"></el-input>
+                            <el-input type="text" v-model="params.operationContent"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
                         <el-form-item :label="$i.logs.operater">
-                            <el-input type="text" v-model="params.operatorName"  @change="getbizlogs"  clearable style="max-width:200px"></el-input>
+                            <el-input type="text" v-model="params.operatorName"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -30,13 +30,17 @@
                             :start-placeholder="$i.element.startDate"
                             :end-placeholder="$i.element.endDate"
                             :picker-options="pickerOptions2"
-                            value-format="timestamp"
-                            change="getbizlogs">
+                            value-format="timestamp">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
+
+          <div class="btn-group">
+            <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
+            <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
+          </div>
             <!--<el-input-->
                     <!--class="message-input"-->
                     <!--placeholder="请输入内容"-->
@@ -50,7 +54,11 @@
         </div>
 
         <div class="body">
-            <v-table :data="logslist" :loading="tabLoad" :height="500"></v-table>
+            <v-table
+              :data="logslist"
+              :loading="tabLoad"
+              :height="500"
+              :selection="false"></v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
@@ -124,17 +132,19 @@
                if (this.date != null){
                  this.params.operationDtStart = this.date[0];
                  this.params.operationDtEnd = this.date[1];
-                 this.getbizlogs()
                }else{
                  this.params.operationDtStart = '';
                  this.params.operationDtEnd = '';
-                 this.getbizlogs()
                }
             },
         },
         methods:{
             formatter(row, column) {
                 return row.remark;
+            },
+            //清除填写的表格数据
+            clear(name) {
+              // this.$refs[name].resetFields();
             },
             //分页
             handleSizeChange(val) {
@@ -200,9 +210,10 @@
     .head-btn .btn{
         float: left;
     }
-
-
-
+    .btn-group {
+      text-align: center;
+      margin-top: 10px;
+    }
     .body{
         margin-top: 15px;
     }
