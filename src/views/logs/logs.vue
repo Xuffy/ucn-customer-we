@@ -10,17 +10,17 @@
                         <el-button type="primary">Download (ALL)</el-button>
                     </el-col> -->
                     <el-col :span="7">
-                        <el-form-item :label="$i.logs.description">
+                        <el-form-item :label="$i.logs.description+':'">
                             <el-input type="text" v-model="params.operationContent"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item :label="$i.logs.operater">
+                        <el-form-item :label="$i.logs.operater+':'">
                             <el-input type="text" v-model="params.operatorName"  clearable style="max-width:200px"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item :label="$i.logs.operationDate">
+                        <el-form-item :label="$i.logs.operationDate+':'">
                             <el-date-picker
                             v-model="date"
                             type="daterange"
@@ -39,7 +39,7 @@
 
           <div class="btn-group">
             <el-button @click="getbizlogs" type="primary" class="search" >{{$i.common.search}}</el-button>
-            <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
+            <el-button @click="clear()">{{$i.common.clear}}</el-button>
           </div>
             <!--<el-input-->
                     <!--class="message-input"-->
@@ -57,8 +57,7 @@
             <v-table
               :data="logslist"
               :loading="tabLoad"
-              :height="500"
-              :selection="false"></v-table>
+              :height="500"></v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
@@ -143,8 +142,11 @@
                 return row.remark;
             },
             //清除填写的表格数据
-            clear(name) {
-              // this.$refs[name].resetFields();
+            clear() {
+              this.params.operatorName = '';
+              this.params.operationContent = '';
+              this.date = '';
+
             },
             //分页
             handleSizeChange(val) {
