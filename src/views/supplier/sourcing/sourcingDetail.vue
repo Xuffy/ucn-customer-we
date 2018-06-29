@@ -239,12 +239,18 @@
                         type: 'warning'
                     });
                 } else {
-
                     if (this.basicDate.id && this.basicDate != '') {
                         compareList.push({
                             name: this.basicDate.name,
                             id: this.basicDate.id
                         });
+                        if (compareList.length>=100){
+                          this.$message({
+                            message: '对比项不能超过100',
+                            type: 'warning'
+                          });
+                          return false;
+                        }
                         this.compareData = compareList;
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {
