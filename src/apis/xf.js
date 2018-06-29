@@ -1,5 +1,5 @@
 export default {
-  UNREADMESSAGE_QUERYUNREAD: ['/companymessage/queryunread', 'UMESSAGE_URL'], // 查询未读消息
+  UNREADMESSAGE_QUERY: ['/companymessage/query', 'UMESSAGE_URL'], // 查询未读消息
   UNREADMESSAGE_UPDATEUNREAD: ['/companymessage/updateunread', 'UMESSAGE_URL'], // 标记消息已读
   USER_PRIVILEGE: ['/user/privilege', 'UUSER_URL'],
   UTASK_PAGELIST: ['/utask/pageList', 'UWORKBENCH_URL'],
