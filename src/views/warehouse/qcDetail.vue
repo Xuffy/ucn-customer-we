@@ -536,7 +536,6 @@
                         e.skuLabelResultDictCode._value=e.skuLabelResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}).name:'';
                         e.outerCartonBarCodeResultDictCode._value=e.outerCartonBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}).name:'';
                         e.shippingMarkResultDictCode._value=e.shippingMarkResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}).name:'';
-
                         return e;
                     });
                     let diffData=[];
