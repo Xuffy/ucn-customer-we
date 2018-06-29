@@ -494,6 +494,7 @@
 
   .ucn-table tbody td {
     padding: 10px;
+    border-right: 1px solid #FFFFFF;
   }
 
   .ucn-table tbody td .img {
