@@ -15,7 +15,13 @@ export default {
   post_company_updateread: ['/companymessagesubscribe/updateread', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   get_messagesetting_query: ['/messagesetting/query', 'UMESSAGE_URL', 'UMESSAGE_URL'],
   post_messagesetting_updatesetting: ['/messagesetting/updatesetting', 'UMESSAGE_URL', 'UMESSAGE_URL'],
-  //logs
+
+  post_usermessage_queryCompany: ['/usermessage/queryCompany', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_querySystem: ['/usermessage/querySystem', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_read: ['/usermessage/read', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_readCompany: ['/usermessage/readCompany', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+  post_usermessage_readSystem: ['/usermessage/readSystem', 'UMESSAGE_URL', 'UMESSAGE_URL'],
+    //logs
   post_bizloQuery: ['/bizlog/query', 'UBIZLOG_URL', 'UBIZLOG_URL'],
   //Personal Setting
   get_user_profile: ['/user/profile', 'UUSER_URL', 'UUSER_URL'],

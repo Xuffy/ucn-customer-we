@@ -91,7 +91,6 @@
     },
     data() {
       return {
-        value5:'',
         visible: false,
         settingState: {},
         settingStateShow: false,
@@ -117,7 +116,7 @@
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
           .then(res => {
-            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo || !res.personalInfo) {
+            if (!res.categoryInfo || !res.companyInfo || !res.departmentInfo) {
               this.settingStateShow = true;
               this.layout.paddingRight = '240px'
               this.settingState = res;
