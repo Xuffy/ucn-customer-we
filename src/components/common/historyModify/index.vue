@@ -120,9 +120,12 @@
       init(editData, history = [], isModify = true) {
         let ed = [];
         if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        this.dataList = [];
+        this.defaultData = [];
+        this.dataColumn = [];
         // 初始化可编辑行
-        ed = _.map(editData, value => {
-          return _.mapObject(value, (val, index) => {
+        ed = _.map(editData, (value, index) => {
+          return _.mapObject(value, val => {
             if (!_.isObject(val)) return val;
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;

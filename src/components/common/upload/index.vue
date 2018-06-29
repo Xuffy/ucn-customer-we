@@ -90,6 +90,7 @@
     },
     mounted() {
       this.bucket = this.ossPrivate ? config.ENV.OSS_BUCKET_PRIVATE : config.ENV.OSS_BUCKET_PUBLIC;
+      this.setList(this.list);
     },
     watch: {
       fileList(val) {
