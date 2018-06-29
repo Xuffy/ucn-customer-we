@@ -256,7 +256,7 @@ export default {
         return res;
       });
     },
-    initFromParams(res) {
+    initFromParams() {
       let query = this.$route.query, regex = (/^\d+(,\d+)*$/);
       if (query.id && !isNaN(query.id)) {
         this.getInquiryInfo(query.id);
@@ -272,13 +272,13 @@ export default {
       if (query.supplierCompanies && regex.test(query.supplierCompanies)) {
         let supplierCompanies = query.supplierCompanies.split(',');
         if (supplierCompanies.length > 0) {
-          suppliers.push.apply(suppliers, res.filter(c => supplierCompanies.indexOf(c.companyId.toString()) > -1));
+          suppliers.push.apply(suppliers, this.optionData.supplierName.filter(c => supplierCompanies.indexOf(c.companyId.toString()) > -1));
         }
       }
       if (query.supplierCodes && (/^\w+(,\w+)*$/).test(query.supplierCodes)) {
         let supplierCodes = query.supplierCodes.split(',');
         if (supplierCodes.length > 0) {
-          suppliers.push.apply(suppliers, res.filter(c => supplierCodes.indexOf(c.code.toString()) > -1));
+          suppliers.push.apply(suppliers, this.optionData.supplierName.filter(c => supplierCodes.indexOf(c.code.toString()) > -1));
         }
       }
       if (suppliers.length > 0) {

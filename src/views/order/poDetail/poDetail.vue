@@ -471,9 +471,10 @@
         </div>
         <!--code="uorder_sku_list"-->
         <v-table
+                code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
-                :buttons="isModify?productInfoBtn:productNotModifyBtn"
+                :buttons="handleShowBtn"
                 @action="productInfoAction"
                 :loading='loadingProductTable'
                 @change-checked="changeProductChecked"
@@ -1673,7 +1674,6 @@
                     this.loadingPaymentTable=false;
                 });
             },
-
             //就是保存
             send(){
                 let params=Object.assign({},this.orderForm);
@@ -1734,13 +1734,11 @@
                     this.disableClickSaveDraft=false;
                 });
             },
-
             //获取订单号(先手动生成一个)
             getOrderNo(){
                 // this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
-
             //获取供应商
             getSupplier(){
                 this.loadingPage=true;
@@ -1789,6 +1787,19 @@
             /**
              * product info事件
              * */
+            handleShowBtn(item){
+                let config;
+                if(this.isModify){
+                    if(item.skuStatus.value==='4'){
+                        config=this.productNotModifyBtn;
+                    }else{
+                        config=this.productInfoBtn;
+                    }
+                }else{
+                    config=this.productNotModifyBtn;
+                }
+                return config;
+            },
             productInfoAction(e,type){
                 if(type==='negotiate'){
                     if(e._isNew){
