@@ -46,7 +46,7 @@
 
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
                <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
 <!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
@@ -233,7 +233,7 @@
                 let id = '';
                 this.selectedData.forEach((v, k) => {
                     let item = _.findWhere(v, {
-                        key: 'id'
+                        key: 'supplierId'
                     });
                     if (k === this.selectedData.length - 1) {
                         id += item.value;
@@ -247,7 +247,7 @@
                         type: 'new',
                         id: id,
                     }
-                });
+                 });
             },
             //...........进入detail
             detail(item) {

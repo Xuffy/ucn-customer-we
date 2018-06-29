@@ -39,6 +39,7 @@ export default {
   pic: {
     key: 'skuPic',
     type: 'attachment',
+    _image: true,
     _disabled: true
   },
   skuSaleStatus: {
