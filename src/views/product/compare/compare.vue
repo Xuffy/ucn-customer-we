@@ -31,10 +31,6 @@
             </span>
             <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
             <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
-            <!--<el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">-->
-                <!--<el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>-->
-                <!--<el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>-->
-            <!--</el-checkbox-group>-->
         </div>
         <v-table
                 code="udata_purchase_sku_compare_list_detail"
@@ -81,7 +77,7 @@
             </el-tabs>
         </el-dialog>
 
-        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+        <el-dialog :title="$i.product.followingProductCantAddOrder" :visible.sync="dialogFormVisible" width="50%">
             <el-table
                     :data="disabledOrderList"
                     border
@@ -108,8 +104,7 @@
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">{{$i.product.sure}}</el-button>
             </div>
         </el-dialog>
 
@@ -157,7 +152,7 @@
                 isChangeData:false,             //是否在最原始的基础上modify过数据
 
                 isHideTheSame:false,
-                isHighlight:false,
+                isHighlight:true,
 
                 copySameData:[],
                 copyLightData:[],
@@ -177,7 +172,6 @@
         methods:{
             ...mapActions(['setLog']),
             getList() {
-                console.log(this.$route.params.type,'this.$route.params.type')
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];
@@ -207,30 +201,16 @@
                     }
                     let params={
                         id: Number(this.$route.query.compareId),
-                        // operatorFilters: [
-                        //     {
-                        //         "columnName": "string",
-                        //         "operator": "string",
-                        //         "property": "string",
-                        //         "resultMapId": "string",
-                        //         "value": {}
-                        //     }
-                        // ],
                         pn: 1,
                         ps: 100,
                         recycle: false,
-                        // sorts: [
-                        //     {
-                        //         orderBy: "string",
-                        //         orderType: "string",
-                        //     }
-                        // ]
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                             return e;
                         });
+                        this.changeHighlight(true);
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -282,7 +262,6 @@
                     this.tableDataList=this.$depthClone(this.copyLightData);
                 }
             },
-
             changeChecked(e){
                 this.selectList=e;
             },
@@ -379,30 +358,8 @@
 
             //勾选的商品创建order
             createOrder(){
-                let supplierList=[];
-                let allow=true;
-                _.map(this.selectList,v=>{
-                    if(v.customerCreate.value){
-                        allow=false;
-                    }
-                    supplierList.push(v.supplierCode.value);
-                });
-                if(!allow){
-                    return this.$message({
-                        message: this.$i.product.customerProductCanNotAddToOrder,
-                        type: 'warning'
-                    });
-                }
-                if(_.uniq(supplierList).length>1){
-                    return this.$message({
-                        message: this.$i.product.notAddDifferentSupplierProduct,
-                        type: 'warning'
-                    });
-                }
-
                 this.disabledOrderList=[];
-                this.selectList.forEach(v=>{
-                    //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                _.map(this.selectList,v=>{
                     if(v.customerCreate.value){
                         this.disabledOrderList.push(v);
                     }
@@ -415,13 +372,20 @@
                             url:'/order/create',
                         })
                     }else{
+                        let supplierList=[];
+                        _.map(this.selectList,v=>{
+                            supplierList.push(v.supplierCode.value);
+                        });
+                        if(_.uniq(supplierList).length>1){
+                            return this.$message({
+                                message: this.$i.product.notAddDifferentSupplierProduct,
+                                type: 'warning'
+                            });
+                        }
+
                         let ids='';
                         this.selectList.forEach(v=>{
-                            if(this.$route.params.type==='modify'){
-                                ids+=(v.skuId.value+',');
-                            }else if(this.$route.params.type==='new'){
-                                ids+=(v.id.value+',');
-                            }
+                            ids+=(v.skuId.value+',');
                         });
                         this.$windowOpen({
                             url:'/order/create',
@@ -433,6 +397,63 @@
                         })
                     }
                 }
+
+
+
+                // let supplierList=[];
+                // let allow=true;
+                // _.map(this.selectList,v=>{
+                //     if(v.customerCreate.value){
+                //         allow=false;
+                //     }
+                //     supplierList.push(v.supplierCode.value);
+                // });
+                // if(!allow){
+                //     return this.$message({
+                //         message: this.$i.product.customerProductCanNotAddToOrder,
+                //         type: 'warning'
+                //     });
+                // }
+                // if(_.uniq(supplierList).length>1){
+                //     return this.$message({
+                //         message: this.$i.product.notAddDifferentSupplierProduct,
+                //         type: 'warning'
+                //     });
+                // }
+                //
+                // this.disabledOrderList=[];
+                // this.selectList.forEach(v=>{
+                //     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                //     if(v.customerCreate.value){
+                //         this.disabledOrderList.push(v);
+                //     }
+                // });
+                // if(this.disabledOrderList.length>0){
+                //     this.dialogFormVisible=true;
+                // }else{
+                //     if(this.selectList.length===0){
+                //         this.$windowOpen({
+                //             url:'/order/create',
+                //         })
+                //     }else{
+                //         let ids='';
+                //         this.selectList.forEach(v=>{
+                //             if(this.$route.params.type==='modify'){
+                //                 ids+=(v.skuId.value+',');
+                //             }else if(this.$route.params.type==='new'){
+                //                 ids+=(v.id.value+',');
+                //             }
+                //         });
+                //         this.$windowOpen({
+                //             url:'/order/create',
+                //             params:{
+                //                 type:'product',
+                //                 ids:ids,
+                //                 supplierCode:this.selectList[0].supplierCode.value
+                //             },
+                //         })
+                //     }
+                // }
             },
 
             //新增product
@@ -476,7 +497,6 @@
 
                 });
             },
-
             handleOkClick(e){
                 //如果总条数>100，则进行提示
                 let totalLen=0;
@@ -551,7 +571,6 @@
                 }
                 this.addProductDialogVisible=false;
             },
-
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
