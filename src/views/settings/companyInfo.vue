@@ -228,7 +228,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
             <el-form label-width="150px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -256,7 +256,7 @@
                               v-for="item in sex"
                               :key="item.code"
                               :label="item.name"
-                              :value="item.code"
+                              :value="Number(item.code)"
                               style="width:100%">
                             </el-option>
                           </el-select>

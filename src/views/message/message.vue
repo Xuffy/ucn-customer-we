@@ -94,7 +94,7 @@
         multipleSelection:[],
         tableData:[],
         params: {
-          mark: 0,
+          title: '',
           content: '',
           ps:50,
           pn:1
@@ -115,7 +115,9 @@
     },
     methods:{
       handleClick(tab, event) {
+        console.log(1)
         console.log(tab, event);
+        // this.getMessageQuery()
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
@@ -183,13 +185,12 @@
         let url;
         this.tabLoad = true;
         if(this.viewByStatus + '' === '1') {
-          url = this.$apis.post_systemmessage_query;
+          url = this.$apis.post_usermessage_querySystem;
         } else {
-          url = this.$apis.post_companymessage_query;
+          url = this.$apis.post_usermessage_queryCompany;
         };
         this.$ajax.post(url, this.params)
           .then(res => {
-            this.tabData = this.$getDB(this.$db.message.table, res.datas)
               this.tabData = this.$getDB(this.$db.message.table, res.datas, e => {
                 _.mapObject(e, val => {
                   val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd hh:ss:mm'));
@@ -214,13 +215,14 @@
       postRead(){
         let url;
         if(this.viewByStatus + '' === '1'){
-          url = this.$apis.post_sys_updateread;
+          url = this.$apis.post_usermessage_readSystem;
         } else {
-          url = this.$apis.post_company_updateread;
+          url = this.$apis.post_usermessage_readCompany;
         };
         let arr = [];
         _.map(this.checkedData, item => {
-          if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'subscribeId'}).value);
+          console.log(this.checkedData)
+          if(!_.isUndefined(item)) arr.push(_.findWhere(item, {'key': 'id'}).value);
         });
         this.$ajax.post(url, arr)
           .then(res => {
@@ -288,8 +290,8 @@
     },
     created(){
       this.message = '1';
-      this.getDataInfo()
-      this.getMessageQuery()
+      this.getDataInfo();
+      this.getMessageQuery();
     },
   }
 </script>
