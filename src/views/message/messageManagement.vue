@@ -48,6 +48,7 @@
 
 <script>
     import { VTable,VPagination } from '@/components/index';
+    import config from 'service/config';
     export default {
         name: "message-management",
         components:{
@@ -61,8 +62,10 @@
                 pageData:{},
                 params:{
                   title:'',
-                  content:'',
-                  language:''
+                  contentZh:'',
+                  language:'',
+                  contentEn:'',
+                  content:''
                 },
                 pData:{
                   ps:50,
@@ -111,8 +114,12 @@
           getMessageList(){
             let url, column;
             this.tabLoad = true;
+            if(this.$route.query.type == 1) {;
+              url = this.$apis.post_systemmessage_query;
+            } else {
+              url = this.$apis.post_companymessage_query;
+            };
             column = this.$db.message.table;
-            url = this.$apis.post_company_queryownlist;
             this.$ajax.post(url,this.pData)
               .then(res => {
                 this.tabData = this.$getDB(column, res.datas,item=>{
@@ -130,11 +137,13 @@
           },
           postAddMessage(){
             let url
-            if(this.$route.query.type == 1) {;
-              url = this.$apis.post_sys_addsystemmessage;
-            } else {
-              url = this.$apis.post_company_addcompanymessage;
-            };
+            // if(this.$route.query.type == 1) {;
+            //   url = this.$apis.post_sys_addsystemmessage;
+            // } else {
+            //   url = this.$apis.post_company_addcompanymessage;
+            // };
+            url = this.$apis.post_company_addcompanymessage
+            this.params.language = config.LANGUAGE
             this.$ajax.post(url, this.params)
             .then(res => {
               this.$message({
