@@ -331,7 +331,7 @@
         </div>
 
         <el-dialog width="70%" :title="$i.warehouse.addProduct" :visible.sync="productDialogVisible">
-            <el-form ref="qcOrder" :model="productDialogConfig" :rules="dialogRules" label-width="120px">
+            <el-form ref="qcOrder" :model="productDialogConfig" label-width="120px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item prop="orderNo" label="Order No">
@@ -380,15 +380,17 @@
                 <el-button @click="clear" :disabled="loadingProductDialogTable">Clear</el-button>
             </div>
             <v-table
+                    code="uwarehouse_qc_order_detail"
                     v-loading="loadingProductDialogTable"
                     :data="productDialogTableData"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @action="btnClick"
                     @change-checked="changeProductDialogChecked"></v-table>
-            <page
-                    @size-change="changeSize"
-                    @change="changePage"
-                    :page-data="pageData"></page>
+            <!--<page-->
+                    <!--@size-change="changeSize"-->
+                    <!--@change="changePage"-->
+                    <!--:page-sizes="[50,100,200,500]"-->
+                    <!--:page-data="pageData"></page>-->
 
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
@@ -637,7 +639,7 @@
                                     this.$set(e,'_disabled',true);
                                 }
                             });
-                            this.pageData={datas:res};
+                            this.pageData=res;
                             this.productTableData.forEach(v=>{
                                 this.productDialogTableData.forEach(m=>{
                                     if(v.id===m.id.value){
@@ -678,11 +680,11 @@
             },
             postProduct(){
                 this.productConfig.ids=[];
-                this.productDialogTableData.forEach(v=>{
-                    if(v._checked && !v._disabled){
-                        this.productConfig.ids.push(v.id.value);
-                    }
+
+                _.map(this.selectProductList,v=>{
+                    this.productConfig.ids.push(v.id.value);
                 });
+
                 this.productDialogVisible=false;
                 if(this.productConfig.ids.length!==0){
                     this.productConfig.orderNo=this.productDialogTableData[0].orderNo.value;
