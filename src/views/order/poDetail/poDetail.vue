@@ -1477,11 +1477,11 @@
                 // ];
                 this.skuStatusOption=[
                     {
-                        code:'3',
+                        code:'PROCESS',
                         name:'PROCESS'
                     },
                     {
-                        code:'5',
+                        code:'CANCLED',
                         name:'CANCLED'
                     },
                 ];
