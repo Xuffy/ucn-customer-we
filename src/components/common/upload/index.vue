@@ -36,7 +36,7 @@
       <li v-for="item in fileList">
         <i class="el-icon-success" v-if="item.progress === 1"></i>
         <i class="el-icon-document"></i>
-        <span v-text="item.fileName" @click="$windowOpen({url:item.url})"></span>
+        <span v-text="item.fileName" :title="item.fileName" @click="downloadFile(item)"></span>
         <i class="el-icon-delete" @click="deleteFile(item)"></i>
         <el-progress :percentage="parseInt(item.progress * 100)"
                      v-if="item.progress && item.progress !== 1"></el-progress>
@@ -294,9 +294,10 @@
   }
 
   .upload-btn:not(.only-image) {
-    height: 30px!important;
+    height: 30px !important;
   }
-  .upload-btn:not(.only-image) .el-icon-upload{
+
+  .upload-btn:not(.only-image) .el-icon-upload {
     font-size: 16px;
   }
 
@@ -487,17 +488,37 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    max-width: 340px;
+    max-width: 100%;
     vertical-align: middle;
+    padding-right: 30px;
+    padding-left: 20px;
+    box-sizing: border-box;
   }
 
+  .upload-files .el-icon-success,
   .upload-files .el-icon-delete {
     position: absolute;
     right: 5px;
     line-height: 20px;
     cursor: pointer;
     opacity: 0;
-    transition: all .5s;
+    transition: all .3s;
+    top: 0;
+  }
+
+  .upload-files .el-icon-success {
+    opacity: 1;
+  }
+
+  .upload-files .el-icon-document {
+    position: absolute;
+    left: 0;
+    line-height: 20px;
+    top: 0;
+  }
+
+  .upload-files li:hover .el-icon-success {
+    opacity: 0;
   }
 
   .upload-files li:hover .el-icon-delete {

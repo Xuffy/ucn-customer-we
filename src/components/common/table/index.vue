@@ -476,6 +476,7 @@
     text-align: center;
     width: 100%;
     line-height: 14px;
+    min-height: 14px;
   }
 
   .ucn-table thead td > div {
@@ -548,6 +549,7 @@
 
   .ucn-table .button.disabled {
     color: #dad8d8;
+    cursor: not-allowed;
   }
 
   .ucn-table .button:last-child {
