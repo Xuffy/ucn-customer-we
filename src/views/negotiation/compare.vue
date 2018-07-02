@@ -44,14 +44,13 @@
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
-        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:CANCEL'">{{ $i.common.cancel }}</el-button>
+        <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
         <add-new-inqury
             v-model="showAddListDialog"
             @addInquiry="addCopare"
             :arg-disabled="argDisabled"
             :compareId="compareInfo.id || null"
-            :disableds="disableds"
-        />
+            :disableds="disableds"/>
     </div>
 </template>
 <script>
@@ -98,7 +97,7 @@ export default {
       this.compareInfo.id = this.$route.query.id;
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
-    this.getDirData().then(this.upData);
+    this.getDirData().then(this.upData, this.upData);
     // this.setRecycleBin({
     //   name: 'negotiationRecycleBin',
     //   params: {
