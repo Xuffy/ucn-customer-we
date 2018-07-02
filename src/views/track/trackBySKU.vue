@@ -128,10 +128,6 @@
                 this.loading = false;
               });
             },
-          uploadAttachment(){
-            console.log(1)
-            console.log(this.$ref.uploadAttachment)
-          }
         },
         created(){
           this.getCountryAll();

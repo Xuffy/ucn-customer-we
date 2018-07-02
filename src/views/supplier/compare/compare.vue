@@ -152,6 +152,7 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
+                          copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country='';
                           e.country.value.split(',').forEach(v=>{
@@ -170,7 +171,6 @@
                           return e;
                         });
                         this.disabledLine=this.tableDataList;
-                        copy_data = this.tableDataList;
                     }).catch(err=>{
 
                     })
@@ -182,13 +182,13 @@
                         this.isModify=true;
                     }
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                         copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                           return e;
                         });
-                        copy_data = this.tableDataList;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
