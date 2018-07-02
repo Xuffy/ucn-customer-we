@@ -26,6 +26,13 @@
         </template>
       </el-table-column>
 
+      <el-table-column :label="$i.logistic.shipmentStatus" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <!-- <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input> -->
+          <span>{{ scope.row.shipmentStatus.value }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column :label="$i.logistic.totalQuantityOfOuterCartonsInContainer" width="200" align="center" sortable>
         <template slot-scope="scope">
           <!-- <el-input placeholder="请输入内容" v-model="scope.row.totalContainerOuterCartonsQty.value" @change="currentChange(scope.row.totalContainerOuterCartonsQty.key,scope.row.totalContainerOuterCartonsQty.value)" v-if="scope.row.toShipCartonQty.edit"></el-input> -->
@@ -73,14 +80,6 @@
         </template>
       </el-table-column>
       
-      <!-- <el-table-column :label="$i.logistic.shipmentStatus" width="200" align="center" sortable>
-        <template slot-scope="scope">
-          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.shipmentStatus.value" placeholder="请输入内容" @change="currentChange(scope.row.shipmentStatus.key,scope.row.shipmentStatus.value)">
-            <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
-          </el-select>
-          <span v-else>{{ scope.row.shipmentStatus.value }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode.value }}</span>
@@ -121,7 +120,7 @@
           <span>{{ scope.row.hsCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.reportElements" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.reportElement" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.reportElement.value }}</span>
         </template>
@@ -141,7 +140,7 @@
           <span>{{ scope.row.skuCustomerSkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.factorySKUCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.factorySkuCode" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.factorySkuCode.value }}</span>
         </template>
