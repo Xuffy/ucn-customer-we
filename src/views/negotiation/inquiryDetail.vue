@@ -184,7 +184,7 @@ export default {
         data.push(res[1]);
       }
       this.setDic(data);
-    }).then(this.getInquiryDetail);
+    }).then(this.getInquiryDetail, this.getInquiryDetail);
   },
   watch: {
     ChildrenCheckList(val) {
