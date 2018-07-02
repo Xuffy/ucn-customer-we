@@ -37,7 +37,7 @@
         <i class="el-icon-success" v-if="item.progress === 1"></i>
         <i class="el-icon-document"></i>
         <span v-text="item.fileName" :title="item.fileName" @click="downloadFile(item)"></span>
-        <i class="el-icon-delete" @click="deleteFile(item)"></i>
+        <i v-if="!readonly" class="el-icon-delete" @click="deleteFile(item)"></i>
         <el-progress :percentage="parseInt(item.progress * 100)"
                      v-if="item.progress && item.progress !== 1"></el-progress>
       </li>
