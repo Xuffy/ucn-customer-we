@@ -1216,6 +1216,7 @@
                 chooseProduct:{},
                 savedIncoterm:'',           //用来存储incoterm
                 disableChangeSkuStatus:false,
+                initialData:{},
 
                 /**
                  * payment data配置
@@ -1338,6 +1339,7 @@
                     incotermArea: "",
                     lcNo: "",
                     orderNo: "",
+                    orderSkuUpdateList:[],
                     payment: "",
                     paymentDays: 0,
                     productFlag:false,
@@ -1475,11 +1477,11 @@
                 // ];
                 this.skuStatusOption=[
                     {
-                        code:'3',
+                        code:'PROCESS',
                         name:'PROCESS'
                     },
                     {
-                        code:'5',
+                        code:'CANCLED',
                         name:'CANCLED'
                     },
                 ];
@@ -1573,6 +1575,7 @@
                     orderNo:this.$route.query.orderNo || this.$route.query.code,
                 }).then(res=>{
                     this.orderForm=res;
+                    this.initialData=this.$depthClone(this.orderForm)
                     this.savedIncoterm=Object.assign({},res).incoterm;
                     _.map(this.supplierOption,v=>{
                         if(v.code===res.supplierCode){
@@ -1847,7 +1850,6 @@
                     if(this.$refs.uploadSkuAdditionalFour){
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
-                    this.copyObj=Object.assign({},arr[0]);
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }
                 else if(type==='detail'){
@@ -1929,7 +1931,7 @@
                 this.productTableDialogVisible=false;
                 this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
                     _.map(res,v=>{
-                        v.skuStatus='1';
+                        v.skuStatus='TBC';
                     });
                     let data=this.$getDB(this.$db.order.productInfoTable,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         item._isNew=true;
@@ -1976,6 +1978,55 @@
                 this.productTableDialogVisible=false;
             },
             saveNegotiate(e){
+                if(!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length===0){
+                    this.orderForm.orderSkuUpdateList=[];
+                    let isChange=false;
+                    _.map(this.initialData.skuList,v=>{
+                        if(v.id===e[0].id.value){
+                            if(v.skuStatus!==e[0].skuStatus._value){
+                                isChange=true;
+                            }
+                        }
+                    });
+                    this.orderForm.orderSkuUpdateList.push({
+                        skuId: e[0].id.value,
+                        skuInfo: true,
+                        skuStatus: isChange
+                    });
+                }
+                else{
+                    let isIn=false;
+                    _.map(this.orderForm.orderSkuUpdateList,v=>{
+                        if(e[0].id.value===v.skuId){
+                            isIn=true;
+                            _.map(this.initialData.skuList,data=>{
+                                if(data.id===e[0].id.value){
+                                    if(data.skuStatus===e[0].skuStatus._value){
+                                        v.skuStatus=false;
+                                    }else{
+                                        v.skuStatus=true;
+                                    }
+                                }
+                            });
+                        }
+                    })
+                    if(!isIn){
+                        let isChange=false;
+                        _.map(this.initialData.skuList,v=>{
+                            if(v.id===e[0].id.value){
+                                if(v.skuStatus!==e[0].skuStatus._value){
+                                    isChange=true;
+                                }
+                            }
+                        });
+                        this.orderForm.orderSkuUpdateList.push({
+                            skuId: e[0].id.value,
+                            skuInfo: true,
+                            skuStatus: isChange
+                        });
+                    }
+                }
+
                 _.map(this.productTableData,(v,k)=>{
                     _.map(e,m=>{
                         if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){

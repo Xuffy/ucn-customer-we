@@ -121,10 +121,6 @@ export default {
     type: 'text',
     _important:true
   },
-  "shipmentStatus":{
-    _hide: true,
-    type: 'text'
-  },
   "skuOuterCartonQty": {
     type: 'text'
   },
@@ -159,6 +155,9 @@ export default {
     type: 'text'
   },
   "skuSupplierTenantId": {
+    type: 'text'
+  },
+  "shipmentStatus":{
     type: 'text'
   }
 }
