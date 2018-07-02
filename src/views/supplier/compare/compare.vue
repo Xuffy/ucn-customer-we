@@ -397,7 +397,8 @@
                 this.disabledSaveCompare=true;
                 let params={
                     compares: [],
-                    name: this.compareName
+                    name: this.compareName,
+                    id: this.$route.query.compareId
                 };
                 this.tableDataList.forEach(v=>{
                     let id,name;
@@ -408,22 +409,42 @@
                         name:name
                     });
                 });
-                this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
-                    let compareId=res;
-                    this.$router.push({
+                if (this.$route.query.type==='modify'){
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}?type=${this.$route.query.compareId}`,params).then(res=>{
+                      let compareId=res;
+                      this.$router.push({
                         name:'supplierCompareDetail',
                         params:{
-                            type:'modify'
+                          type:'modify'
                         },
                         query:{
-                            compareId:compareId,
-                            compareName:this.compareName
+                          compareId:compareId,
+                          compareName:this.compareName
                         }
+                      });
+                      this.disabledSaveCompare=false;
+                    }).catch(err=>{
+                      this.disabledSaveCompare=false;
+                    });
+                }else{
+                  this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
+                    let compareId=res;
+                    this.$router.push({
+                      name:'supplierCompareDetail',
+                      params:{
+                        type:'modify'
+                      },
+                      query:{
+                        compareId:compareId,
+                        compareName:this.compareName
+                      }
                     });
                     this.disabledSaveCompare=false;
-                }).catch(err=>{
+                  }).catch(err=>{
                     this.disabledSaveCompare=false;
-                });
+                  });
+                }
+
             },
             //删除该compare
             deleteCompare(){

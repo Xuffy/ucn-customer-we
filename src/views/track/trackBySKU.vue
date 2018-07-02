@@ -118,18 +118,10 @@
                     this.loading = false;
                     this.dataList = this.$getDB(this.$db.track.track, res.datas,item=>{
                       let country;
-                      const one = item.skuCategoryOne.value || '';
-                      const two = item.skuCategoryTwo.value || '';
-                      const three = item.skuCategoryThree.value || ''
-                      const four = item.skuCategoryFour.value || ''
-                      if (one || two || three || four){
-                        item.category.value = one+','+two+','+three+','+four
-                      }
                         _.mapObject(item, val => {
                           val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                           return val
                         })
-                      return item;
                       });
                   this.pageData=res;
               }).catch(err=>{
