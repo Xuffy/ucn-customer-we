@@ -228,7 +228,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog width="70%" :title="$i.setting.accountInfo" :visible.sync="contactDialogVisible">
+        <el-dialog width="70%" :title="$i.setting.contactInfo" :visible.sync="contactDialogVisible">
             <el-form label-width="150px" :model="contactData">
                 <el-row>
                     <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -256,7 +256,7 @@
                               v-for="item in sex"
                               :key="item.code"
                               :label="item.name"
-                              :value="item.code"
+                              :value="Number(item.code)"
                               style="width:100%">
                             </el-option>
                           </el-select>
@@ -679,6 +679,9 @@
                 this.logoParmas.id = this.companyInfo.id;
                 this.logoParmas.url = this.$refs.uploadFile[0].getFiles()[0];
                 this.$ajax.post(this.$apis.post_oss_company_upload,this.logoParmas).then(res=>{
+                  if (!this.companyInfo.setting){
+                    this.postUpdateIsSetting();
+                  }
                   this.getWholeData();
                 })
             },
@@ -723,11 +726,11 @@
                 });
               }else{
                 //表示是在新增地址
-                if (!this.companyInfo.setting){
-                  this.postUpdateIsSetting();
-                }
                 this.$ajax.post(this.$apis.post_purchase_customer_address,this.addressData).then(res=>{
                   this.allowAddAddress=false;
+                  if (!this.companyInfo.setting){
+                    this.postUpdateIsSetting();
+                  }
                   this.$message({
                     message: '添加成功',
                     type: 'success'
@@ -813,10 +816,10 @@
                 }
                 else{
                     //表示是在新增account
-                    if (!this.companyInfo.setting){
-                      this.postUpdateIsSetting();
-                    }
                     this.$ajax.post(this.$apis.post_purchase_customer_concat,this.contactData).then(res=>{
+                        if (!this.companyInfo.setting){
+                          this.postUpdateIsSetting();
+                        }
                         this.allowAddContact=false;
                         this.$message({
                             message: '添加成功',
@@ -892,6 +895,9 @@
               });
             }else{
               this.$ajax.post(`${this.$apis.post_purchase_customer_document_id}/${this.documentData.id}`,this.documentData).then(res=>{
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.$message({
                   message: '修改成功',
                   type: 'success'
@@ -931,6 +937,9 @@
               });
             }else{
               this.$ajax.post(`${this.$apis.post_purchase_customer_custom_id}/${this.customData.id}`,this.customData).then(res=>{
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.$message({
                   message: '修改成功',
                   type: 'success'
@@ -972,6 +981,9 @@
               return false;
             }
             this.$ajax.post(this.$apis.post_exchangerate_update,this.exchangerateData).then(res=>{
+              if (!this.companyInfo.setting){
+                this.postUpdateIsSetting();
+              }
               this.$message({
                 message: '修改成功',
                 type: 'success'
@@ -999,6 +1011,9 @@
             };
             if (this.$refs.uploadAttachment.getFiles().length !== 0){
               if (this.$refs.uploadAttachment.getFiles().length === 1){
+                if (!this.companyInfo.setting){
+                  this.postUpdateIsSetting();
+                }
                 this.$ajax.post(this.$apis.post_oss_company_upload,uploadParams).then(res=>{
                   this.$message({
                     message: '上传成功',
@@ -1009,6 +1024,9 @@
 
               }else{
                 this.$ajax.post(this.$apis.post_oss_company_batchUpload,batchUploadParams).then(res=>{
+                  if (!this.companyInfo.setting){
+                    this.postUpdateIsSetting();
+                  }
                   this.$message({
                     message: '上传成功',
                     type: 'success'

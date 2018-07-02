@@ -435,7 +435,6 @@
                 disableCreateRemark:false,      //是否禁用提交按钮
                 disableModifyRemark:false,
 
-
                 /**
                  * 字典配置
                  * */
@@ -458,9 +457,8 @@
                     console.log(this.category,'this.category')
                     console.log(this.productForm,'this.productForm')
 
-
                     this.notLoadingDone=true;
-                    this.tradeHistory.skuCode=this.productForm.code;
+                    this.tradeHistory.skuCode=this.productForm.sysCode;
                     let priceData=[{
                         fobCurrency:this.productForm.fobCurrency,
                         fobPrice:this.productForm.fobPrice,

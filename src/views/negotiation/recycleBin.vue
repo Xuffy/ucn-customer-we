@@ -41,6 +41,9 @@ export default {
     'select-search': selectSearch,
     'v-table': VTable
   },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  },
   methods: {
     ...mapActions([
       'setDic'

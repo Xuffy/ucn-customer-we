@@ -6,6 +6,7 @@
 
 
         <v-table
+                :height="500"
                 v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"

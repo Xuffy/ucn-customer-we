@@ -15,26 +15,11 @@
             </el-input>
         </div>
         <div class="btns">
-            <span v-if="$route.params.type==='new'">
+            <span>
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
-            </span>
-            <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button @click="createOrder" v-if="!isModify" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-
-                <el-button v-if="!isModify" @click="modifyCompare" >Modify</el-button>
-addNewProduct
-                <el-button v-if="isModify" @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>
-            </span>
-           <span v-if="$route.params.type==='read'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click="createInquiry">{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-                <el-button @click="createOrder" v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-                <el-button  @click="addNewProduct" v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'">{{$i.product.addNew}}</el-button>
-                <!--<el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.delete}}</el-button>-->
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
                 <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
@@ -52,15 +37,15 @@ addNewProduct
           @filter-value="tableFilterValue"></v-table>
 
         <div class="footBtn">
-            <div v-if="$route.params.type==='new'">
+            <div v-if="$route.query.type==='new'">
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary" v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">{{$i.product.saveTheCompare}}</el-button>
             </div>
-            <div v-if="$route.params.type==='modify'">
+            <div v-if="$route.query.type==='modify'">
                 <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.deleteTheCompare}}</el-button>
                 <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                 <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
             </div>
-          <div v-if="$route.params.type==='read'">
+          <div v-if="$route.query.type==='read'">
             <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">OK</el-button>
             <el-button :disabled="allowBottomClick" @click="cancelModify">Cancel</el-button>
           </div>
@@ -157,7 +142,7 @@ addNewProduct
               });
             },
             getList() {
-                if(this.$route.params.type==='new'){
+                if(this.$route.query.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
@@ -167,6 +152,7 @@ addNewProduct
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
+                          copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country='';
                           e.country.value.split(',').forEach(v=>{
@@ -185,25 +171,24 @@ addNewProduct
                           return e;
                         });
                         this.disabledLine=this.tableDataList;
-                        copy_data = this.tableDataList;
                     }).catch(err=>{
 
                     })
 
-                }else if(this.$route.params.type==='modify'){
+                }else if(this.$route.query.type==='modify'){
                     //表示这里已经生成对应的compare单，直接获取该单数据即可
                     this.compareName=this.$route.query.compareName;
                     if(this.$route.query.isModify){
                         this.isModify=true;
                     }
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                         copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                           return e;
                         });
-                        copy_data = this.tableDataList;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -412,7 +397,8 @@ addNewProduct
                 this.disabledSaveCompare=true;
                 let params={
                     compares: [],
-                    name: this.compareName
+                    name: this.compareName,
+                    id: this.$route.query.compareId
                 };
                 this.tableDataList.forEach(v=>{
                     let id,name;
@@ -423,22 +409,42 @@ addNewProduct
                         name:name
                     });
                 });
-                this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
-                    let compareId=res;
-                    this.$router.push({
+                if (this.$route.query.type==='modify'){
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}?type=${this.$route.query.compareId}`,params).then(res=>{
+                      let compareId=res;
+                      this.$router.push({
                         name:'supplierCompareDetail',
                         params:{
-                            type:'modify'
+                          type:'modify'
                         },
                         query:{
-                            compareId:compareId,
-                            compareName:this.compareName
+                          compareId:compareId,
+                          compareName:this.compareName
                         }
+                      });
+                      this.disabledSaveCompare=false;
+                    }).catch(err=>{
+                      this.disabledSaveCompare=false;
+                    });
+                }else{
+                  this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
+                    let compareId=res;
+                    this.$router.push({
+                      name:'supplierCompareDetail',
+                      params:{
+                        type:'modify'
+                      },
+                      query:{
+                        compareId:compareId,
+                        compareName:this.compareName
+                      }
                     });
                     this.disabledSaveCompare=false;
-                }).catch(err=>{
+                  }).catch(err=>{
                     this.disabledSaveCompare=false;
-                });
+                  });
+                }
+
             },
             //删除该compare
             deleteCompare(){

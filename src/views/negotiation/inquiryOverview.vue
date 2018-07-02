@@ -85,7 +85,7 @@ export default {
       tabData: [],
       viewByStatus: 0,
       params: {
-        status: 22,
+        status: null,
         ps: 50,
         pn: 1,
         tc: 0,
@@ -110,7 +110,10 @@ export default {
   created() {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-    this.getBaseData().then(this.gettabData);
+    this.getBaseData().then(this.gettabData, this.gettabData);
+  },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([

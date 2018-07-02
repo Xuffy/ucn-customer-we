@@ -45,9 +45,9 @@
              <div class="btnline">
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
 
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+                 <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
+                  <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
 <!--                  <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectNumber.length}})</el-button>-->
 
@@ -162,6 +162,7 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
+
             },
             //当作为主键时
             emitData() {
@@ -397,7 +398,7 @@
     }
 
     .title-btn {
-        float: right;
+        float: right;item
         margin-right: 5px;
     }
 

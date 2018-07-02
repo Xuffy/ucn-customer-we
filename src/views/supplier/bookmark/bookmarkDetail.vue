@@ -8,7 +8,7 @@
                  <el-form  label-width="190px">
                      <el-row>
                        <el-col :span="4">
-                         <v-image :src="basicDate.logo" style="height: 273px;"/>
+                         <v-image :src="basicDate.logo" style="height: 184px;"/>
                        </el-col>
                        <el-col :span="20">
                          <el-form>
@@ -240,6 +240,13 @@
                             name: this.basicDate.name,
                             id: this.basicDate.id
                         });
+                        if (compareList.length>=100){
+                          this.$message({
+                            message: '对比项不能超过100',
+                            type: 'warning'
+                          });
+                          return false;
+                        }
                         this.compareData = compareList;
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {

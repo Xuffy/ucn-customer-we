@@ -476,6 +476,7 @@
     text-align: center;
     width: 100%;
     line-height: 14px;
+    min-height: 14px;
   }
 
   .ucn-table thead td > div {
@@ -494,6 +495,7 @@
 
   .ucn-table tbody td {
     padding: 10px;
+    border-right: 1px solid #FFFFFF;
   }
 
   .ucn-table tbody td .img {
@@ -547,6 +549,7 @@
 
   .ucn-table .button.disabled {
     color: #dad8d8;
+    cursor: not-allowed;
   }
 
   .ucn-table .button:last-child {

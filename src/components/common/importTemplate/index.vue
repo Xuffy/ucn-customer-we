@@ -8,6 +8,11 @@
       width="50%">
 
       <el-form label-width="80px">
+
+        <el-form-item :label="$i.importTemplate.note" class="remark-box important">
+          <h5>{{$i.importTemplate.importPrompt}}</h5>
+        </el-form-item>
+
         <el-form-item :label="$i.importTemplate.upload">
           <el-upload
             :action="$apis.IMPORTFILE_IMPORTTASKE"
@@ -25,15 +30,11 @@
           </el-upload>
         </el-form-item>
 
-        <el-form-item :label="$i.importTemplate.remark" class="remark-box" style="margin-bottom: 0">
+        <el-form-item :label="$i.importTemplate.remark" class="remark-box">
           <h5>1.{{$i.importTemplate.remark1}}
             <a :href="downTemplate" v-if="downTemplate" target="_blank" v-text="$i.importTemplate.template"></a></h5>
           <h5>2.{{$i.importTemplate.remark2}}</h5>
           <h5>3.{{$i.importTemplate.remark3}}</h5>
-        </el-form-item>
-
-        <el-form-item :label="$i.common.prompt" class="remark-box important">
-          <h5>{{$i.importTemplate.importPrompt}}</h5>
           <router-link to="/logs/import">
             <el-button type="text">{{$i.logs.lookImportTitle}}</el-button>
           </router-link>
@@ -119,6 +120,7 @@
   .remark-box.important /deep/ .el-form-item__label,
   .remark-box.important {
     color: red;
+    margin-bottom: 5px;
   }
 </style>
 <style>
