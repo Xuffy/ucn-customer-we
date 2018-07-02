@@ -162,6 +162,7 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
+
             },
             //当作为主键时
             emitData() {

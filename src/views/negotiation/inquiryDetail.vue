@@ -200,6 +200,9 @@ export default {
       this.newTabData = data;
     }
   },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  },
   methods: {
     ...mapActions(['setDraft', 'setRecycleBin', 'setDic']),
     deleteInquiry() {

@@ -107,6 +107,9 @@ export default {
     //   show: false
     // });
   },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  },
   methods: {
     ...mapActions([
       'setRecycleBin',
