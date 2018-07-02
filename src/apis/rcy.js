@@ -15,6 +15,7 @@ export default {
     post_cancleOrder: ['/order/cancle', 'BASE_URL'],
     post_updataOrder: ['/order/update', 'BASE_URL'],
     post_confirm: ['/order/confirm  ', 'BASE_URL'],
+    ORDER_MESSAGE_TALK:['/order/messageToTask','BASE_URL'],
 
 
     //supplier

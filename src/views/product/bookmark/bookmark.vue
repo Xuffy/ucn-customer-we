@@ -95,7 +95,6 @@
                     :page-data="pageData"></page>
         </div>
 
-
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
                     :disableBookmarkChoose="true"
@@ -109,7 +108,7 @@
                     @handleOK="handleOkClick"></product>
         </el-dialog>
 
-        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+        <el-dialog :title="$i.product.followingProductCantAddOrder" :visible.sync="dialogFormVisible" width="50%">
             <el-table
                     :data="disabledOrderList"
                     border
@@ -291,7 +290,6 @@
             //搜查
             search(){
                 this.disabledSearch=true;
-
                 if(!this.productForm.maxExwPrice){
                     this.productForm.maxExwPrice=null;
                 }else{
@@ -394,7 +392,6 @@
                     this.loadingTable=false;
                 });
             },
-
             handleOkClick(e){
                 if(e.length===0){
                     //表示一个都没选
