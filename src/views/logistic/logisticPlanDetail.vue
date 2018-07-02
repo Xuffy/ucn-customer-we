@@ -52,15 +52,6 @@
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
-          <label>{{ $i.logistic.shipmentStatus}} :</label>
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in [{label:1,value:2}]"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
         </div>
       </v-table>
     </div>
@@ -406,7 +397,11 @@ export default {
         item.vId = i;
         return item;
       });
-      this.productList = this.$getDB(this.$db.logistic.productInfo, res.product)
+      this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el=>{
+        let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
+        el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+        return el;
+      }))
       this.productList.forEach((item)=>{
         if(item.fieldDisplay.value){
           _.mapObject(item.fieldDisplay.value,(v,k)=>{
@@ -465,6 +460,8 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
+      }).catch(()=>{
+        this.getDetails();
       })
     },
     computeType (key) {
@@ -491,7 +488,11 @@ export default {
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
       let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
       productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-        res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history)])
+        res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history.map(el=>{
+          let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
+          el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+          return el;
+        }))])
         : (this.productModifyList = [ currentProduct ])
       })
       : this.productModifyList = [ currentProduct ]
