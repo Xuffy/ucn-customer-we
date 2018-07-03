@@ -20,7 +20,7 @@
              :style="{width: (item.progress * 100) + '%'}">
         </div>
 
-        <div class="operation-box" :class="{readonly:readonly,image:readonly && item.isImage}"
+        <div class="operation-box" :class="{readonly:readonly,image:readonly}"
              v-show="item.progress === 1 || item.url">
 
           <i class="el-icon-download" @click="downloadFile(item)"></i>
@@ -142,7 +142,7 @@
           return this.$message.warning(`${this.$i.upload.numberLimit}: ${this.limit}`);
         }
 
-        params = _.extend(this.filterType(files.name), {
+        params = _.extend(this.$getOssKey(files.name)[0], {
           fileKey,
           fileName: files.name,
           progress: 0,
@@ -234,12 +234,11 @@
         }
 
         _.map(list, value => {
-          let urls, param;
+          let param;
           if (!_.isString(value)) {
             return;
           }
-          urls = value.split('?');
-          param = this.filterType(`${decodeURIComponent(urls[0])}${urls[1] ? ('?' + urls[1]) : ''}`);
+          param = this.$getOssKey(value)[0];
 
           if (_.isEmpty(this.fileList[param.id])) {
             this.$set(this.fileList, param.id, param);
@@ -249,9 +248,7 @@
       },
       getFiles(type) {
         let files = _.pluck(_.values(this.fileList), 'fileKey')
-          , key = _.map(files, val => {
-          return `${this.bucket}:${val}`;
-        });
+          , key = _.map(files, val => `${this.bucket}:${val}`);
 
         return type ? {key, url: _.pluck(_.values(this.fileList), 'url')} : key;
       },
