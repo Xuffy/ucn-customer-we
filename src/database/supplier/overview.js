@@ -12,10 +12,10 @@ export default {
         key: 'skuNameEn',
         type: 'input'
     },
-  skuCode: {
-        key: 'skuCode',
-        type: 'input'
-    },
+  // skuCode: {
+  //       key: 'skuCode',
+  //       type: 'input'
+  //   },
   description: {
         key: 'description',
         type: 'input'

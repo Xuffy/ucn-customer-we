@@ -996,7 +996,6 @@
                             this.weightOption=v.codes;
                         }else if(v.code==='PB_CODE'){
                             this.pbCodeOption=v.codes;
-                            console.log(this.pbCodeOption,'pbCodeOption')
                         }
                     });
                     this.getQcOrderDetail();
