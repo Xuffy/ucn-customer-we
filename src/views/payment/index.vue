@@ -282,15 +282,22 @@
                     }
                   });
               }else if(item.orderType.value == 20){
-                  this.$windowOpen({
-                    url: '/warehouse/qcDetail',
-                    params: {
+                  this.$router.push({
+                    path: '/warehouse/qcDetail',
+                    query: {
                       code:item.orderNo.value
                     }
-                  });
+                  })
+                  // this.$windowOpen({
+                  //   url: '/warehouse/qcDetail',
+                  //   params: {
+                  //     code:item.orderNo.value
+                  //   }
+                  // });
               }else{
                   this.$windowOpen({
                     url: '/logisticPlanDetail',
+                    params: {
                     params: {
                       code:item.orderNo.value
                     }
