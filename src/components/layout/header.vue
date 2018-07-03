@@ -150,7 +150,7 @@
           this.$localStore.clearAll();
           this.$localStore.clearAll();
           this.$router.push('/login');
-        });
+        }).catch(e => e);
       },
       goMessage() {
         this.message.show = false;

@@ -81,10 +81,6 @@
                         <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
                         <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
                         <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
-                        <!--<el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
-                        <!--<el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>-->
-                        <!--<el-button>{{$i.product.upload}}</el-button>-->
-                        <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
                 </template>
             </v-table>
@@ -244,12 +240,12 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:123,
+                        id:121213,
                         name:"系统分类",
                         children:[]
                     },
                     {
-                        id:5125,
+                        id:513522625,
                         name:"自己的分类",
                         children:[]
                     },
@@ -274,7 +270,6 @@
             switchDisplay(){
                 this.hideBody=!this.hideBody;
             },
-
             //清除填写的表格数据
             clear(){
                 this.$refs['productFormTop'].resetFields();
@@ -286,7 +281,6 @@
                 this.$set(this.productForm,'maxFobPrice','');
                 this.selectCountry=[];
             },
-
             //搜查
             search(){
                 this.disabledSearch=true;
@@ -331,16 +325,13 @@
                 });
 
             },
-
             handleChange(value) {
                 console.log(value);
             },
-
             //切换check状态
             changeChecked(e){
                 this.selectList=e;
             },
-
             //emit数据
             postData(){
                 this.$emit('handleOK',this.selectList);
@@ -348,7 +339,6 @@
             cancel(){
                 this.$emit('handleCancel');
             },
-
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
@@ -384,6 +374,7 @@
                         e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
                         e.unitVolume.value=this.$change(this.volumeOption,'unitVolume',e,true).name;
                         e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
+                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                         return e;
                     });
                     this.pageData=res;
