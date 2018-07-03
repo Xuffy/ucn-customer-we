@@ -249,10 +249,13 @@ export default {
       productModifyObj:{}
     }
   },
-  watch: {
-    tableData () {
+  watch:{
+    tableData(){
       this.createModifyData()
     }
+  },
+  mounted(){
+    this.createModifyData()
   },
   methods: {
     currentChange(key,v){
