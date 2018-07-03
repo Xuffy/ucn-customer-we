@@ -837,7 +837,7 @@
                 <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
+                <v-upload ref="skuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
             <div slot="skuAdditionalTwo" slot-scope="{data}">
                 <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
@@ -1185,9 +1185,13 @@
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
+                        }else if(_.isString(v[item])){
+                            // console.log(item,'item')
+                            // console.log(this.$refs[item]);
                         }
                     })
                 });
+
                 //如果选的产品和上面选的供应商不一致，要给出提示
                 if(!rightCode){
                     return this.$message({
@@ -1378,8 +1382,8 @@
                     if(this.$refs.uploadSkuOuterCartonPic){
                         this.$refs.uploadSkuOuterCartonPic.reset();
                     }
-                    if(this.$refs.uploadSkuAdditionalOne){
-                        this.$refs.uploadSkuAdditionalOne.reset();
+                    if(this.$refs.skuAdditionalOne){
+                        this.$refs.skuAdditionalOne.reset();
                     }
                     if(this.$refs.uploadSkuAdditionalTwo){
                         this.$refs.uploadSkuAdditionalTwo.reset();
@@ -1524,8 +1528,8 @@
                                 m.skuInnerCartonPic.value=this.$refs.uploadSkuInnerCartonPic.getFiles();
                                 m.skuOuterCartonPic._value=this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
                                 m.skuOuterCartonPic.value=this.$refs.uploadSkuOuterCartonPic.getFiles();
-                                m.skuAdditionalOne._value=this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
-                                m.skuAdditionalOne.value=this.$refs.uploadSkuAdditionalOne.getFiles();
+                                m.skuAdditionalOne._value=this.$refs.skuAdditionalOne.getFiles(true).url;
+                                m.skuAdditionalOne.value=this.$refs.skuAdditionalOne.getFiles();
                                 m.skuAdditionalTwo._value=this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
                                 m.skuAdditionalTwo.value=this.$refs.uploadSkuAdditionalTwo.getFiles();
                                 m.skuAdditionalThree._value=this.$refs.uploadSkuAdditionalThree.getFiles(true).url;

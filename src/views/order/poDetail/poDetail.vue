@@ -1059,7 +1059,6 @@
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
             <div slot="skuPictures" slot-scope="{data}">
                 <v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>
             </div>
@@ -1721,9 +1720,14 @@
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
+                        }else if(_.isString(v[item])){
+                            console.log(v[item],'v[item]')
                         }
+                        console.log(v['skuLabelPic'],'skuLabelPic')
+                        // this.$getOssKey(,true);
                     })
                 });
+                return console.log(params,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.orderSkuUpdateList,v=>{
                     let nowStatus,initialStatus;

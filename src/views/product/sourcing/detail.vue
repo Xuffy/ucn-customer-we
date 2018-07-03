@@ -7,7 +7,7 @@
             <div class="detail head-detail">
                 <el-row>
                     <el-col :span="6">
-                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="150px">
+                        <el-carousel class="banner" :autoplay="false" indicator-position="none" arrow="always" trigger="click" height="300px">
                             <el-carousel-item v-for="item in productForm.pictures" :key="item">
                                 <v-image :src="item"></v-image>
                             </el-carousel-item>
@@ -29,7 +29,7 @@
                                                 {{fobPrice}}
                                             </span>
                                             <span v-if="v.key==='status'">
-                                                {{productForm[v.key]===1?'上架':'下架'}}
+                                                {{productForm[v.key]}}
                                             </span>
                                             <span v-else>
                                                 {{productForm[v.key]}}
@@ -59,7 +59,7 @@
                                 <el-col v-if="v.belongTab==='basicInfo'" v-for="v in $db.product.detailTab" :key="v.key" class="list" :xs="24" :sm="24" :md="v.fullLine?24:12" :lg="v.fullLine?24:12" :xl="v.fullLine?24:12">
                                     <el-form-item :label="v.label+' :'">
                                         <span v-if="v.key==='status'">
-                                           {{productForm[v.key]===1?'上架':'下架'}}
+                                           {{productForm[v.key]}}
                                         </span>
                                         <span v-else>
                                             {{productForm[v.key]}}
@@ -260,7 +260,7 @@
                     supplierCode: "",
                     supplierName: "",
                     code: "",                       //新增时系统生成，传空
-                    unit: "2",
+                    unit: null,
                     formation: "",
                     materialEn: "",
                     materialCn: "",
@@ -439,7 +439,18 @@
                  * 字典配置
                  * */
                 currencyOption:[],
-                incotermOption:[]
+                incotermOption:[],
+                skuSaleStatusOption:[],
+                skuUnitOption:[],       //计量单位
+                expirationOption:[],    //保质期单位
+                quarantineTypeOption:[],//检疫类别
+                weightOption:[],
+                volumeOption:[],
+                lengthOption:[],
+                oemOption:[],
+                udbOption:[],
+                skuPkgOption:[],
+                countryOption:[],
             }
         },
         methods:{
@@ -447,18 +458,50 @@
             handleClick(){
                 //切换tab页
             },
-
             getTableData(){
                 this.$ajax.get(this.$apis.get_buyerProductDetail,{
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
 
-                    console.log(this.category,'this.category')
-                    console.log(this.productForm,'this.productForm')
+                    //处理国家显示
+                    if(this.productForm.noneSellCountry){
+                        let noneSellCountry=this.productForm.noneSellCountry.split(',');
+                        this.productForm.noneSellCountry='';
+                        _.map(noneSellCountry,v=>{
+                            this.productForm.noneSellCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.noneSellCountry=this.productForm.noneSellCountry.slice(0,this.productForm.noneSellCountry.length-1);
+                    }
+                    if(this.productForm.mainSaleCountry){
+                        let mainSaleCountry=this.productForm.mainSaleCountry.split(',');
+                        this.productForm.mainSaleCountry='';
+                        _.map(mainSaleCountry,v=>{
+                            this.productForm.mainSaleCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
+                    }
+
+
+                    /**
+                     * 字典转换
+                     * */
+                    this.productForm.status=_.findWhere(this.skuSaleStatusOption,{code:String(this.productForm.status)}).name;
+                    this.productForm.unit=this.productForm.unit?_.findWhere(this.skuUnitOption,{code:String(this.productForm.unit)}).name:'';
+                    this.productForm.expireUnit=this.productForm.expireUnit?_.findWhere(this.expirationOption,{code:String(this.productForm.expireUnit)}).name:'';
+                    this.productForm.inspectQuarantineCategory=this.productForm.inspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:this.productForm.inspectQuarantineCategory}).name:'';
+                    this.productForm.unitLength=this.productForm.unitLength?_.findWhere(this.lengthOption,{code:String(this.productForm.unitLength)}).name:'';
+                    this.productForm.unitVolume=this.productForm.unitVolume?_.findWhere(this.volumeOption,{code:String(this.productForm.unitVolume)}).name:'';
+                    this.productForm.unitWeight=this.productForm.unitWeight?_.findWhere(this.weightOption,{code:String(this.productForm.unitWeight)}).name:'';
+                    this.productForm.oem=_.findWhere(this.oemOption,{code:String(Number(this.productForm.oem))}).name;
+                    this.productForm.yearListed=this.$dateFormat(this.productForm.yearListed,'yyyy-mm');
+                    this.productForm.useDisplayBox=_.findWhere(this.udbOption,{code:String(Number(this.productForm.useDisplayBox))}).name;
+                    this.productForm.adjustPackage=_.findWhere(this.skuPkgOption,{code:String(Number(this.productForm.adjustPackage))}).name;
 
                     this.notLoadingDone=true;
                     this.tradeHistory.skuCode=this.productForm.sysCode;
+                    this.fobPort=this.productForm.fobPort;
+                    this.fobPrice=this.productForm.fobPrice;
                     let priceData=[{
                         fobCurrency:this.productForm.fobCurrency,
                         fobPrice:this.productForm.fobPrice,
@@ -478,6 +521,7 @@
                     this.priceData = this.$getDB(this.$db.product.detailTab, priceData);
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory).then(res=>{
+                        if(!res || !res.datas || res.datas.length===0){return}
                         this.historyData=this.$getDB(this.$db.product.tradeHistory,res.datas,e=>{
                             e.incoterm._value=_.findWhere(this.incotermOption,{code:e.incoterm.value}).name;
                             e.actDeliveryDt._value=this.$dateFormat(e.actDeliveryDt.value,'yyyy-mm-dd');
@@ -700,39 +744,63 @@
 
             //获取字典
             getUnit(){
-                // this.$ajax.get(this.$apis.get_currencyUnit,{},{cache:true}).then(res=>{
-                //     this.currencyOption=res;
-                // });
                 this.notLoadingDone=false;
-                let category=[];
                 this.category=[];
-                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    _.map(res,v=>{
-                        category.push(v);
-                    });
-                    this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(data=>{
-                        _.map(data,v=>{
-                            category.push(v);
-                        });
-                        _.map(category,data=>{
-                            _.map(data.children,ele=>{
-                                this.category.push(ele);
+
+                const sysCategory=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
+                const myCategory=this.$ajax.get(this.$apis.get_buyer_my_category,{});
+
+                this.$ajax.all([sysCategory,myCategory]).then(res=>{
+                    _.map(res,data=>{
+                        _.map(data,ele=>{
+                            _.map(ele.children,v=>{
+                                this.category.push(v);
                             })
+                        })
+                    });
+
+                    this.$ajax.post(this.$apis.get_partUnit,['ITM','SKU_SALE_STATUS', 'SKU_UNIT','ED_UNIT','QUARANTINE_TYPE','WT_UNIT','VE_UNIT','LH_UNIT','OEM_IS','UDB_IS','SKU_PG_IS'],{cache:true}).then(res=>{
+                        res.forEach(v=>{
+                            if(v.code==='ITM'){
+                                this.incotermOption=v.codes;
+                            }else if(v.code==='SKU_SALE_STATUS'){
+                                this.skuSaleStatusOption=v.codes;
+                            }else if (v.code === 'SKU_UNIT') {
+                                this.skuUnitOption = v.codes;
+                            }else if (v.code === 'ED_UNIT') {
+                                this.expirationOption = v.codes;
+                            }else if(v.code==='QUARANTINE_TYPE'){
+                                this.quarantineTypeOption=v.codes;
+                            }else if(v.code==='WT_UNIT'){
+                                this.weightOption=v.codes;
+                            }else if(v.code==='VE_UNIT'){
+                                this.volumeOption=v.codes;
+                            }else if(v.code==='LH_UNIT'){
+                                this.lengthOption=v.codes;
+                            }else if(v.code==='OEM_IS'){
+                                this.oemOption=v.codes;
+                            }else if(v.code==='UDB_IS'){
+                                this.udbOption=v.codes;
+                            }else if(v.code==='SKU_PG_IS'){
+                                this.skuPkgOption=v.codes;
+                            }
                         });
-                        this.$ajax.post(this.$apis.get_partUnit,['ITM'],{cache:true}).then(res=>{
-                            this.incotermOption=res[0].codes;
+                        this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                            this.countryOption=res;
                             this.getTableData();
                             this.getRemarkData();
                             this.getCompareList();
-                        }).finally(()=>{
+                        }).catch(()=>{
                             this.notLoadingDone=true;
                         });
-                    }).catch(err=>{
-                        this.notLoadingDone=false;
+
+                    }).finally(()=>{
+                        this.notLoadingDone=true;
                     });
-                }).catch(err=>{
-                    this.notLoadingDone=false;
-                });
+
+                }).catch(()=>{
+
+                })
             },
         },
         created(){
