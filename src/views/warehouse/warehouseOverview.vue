@@ -71,6 +71,7 @@
                 downloadBtnInfo:'All',
                 selectList:[],
                 warehouseStatusOption:[],
+                skuUnitOption:[],
                 warehouseConfig:{
                     inboundNo: "",
                     orderNo: "",
@@ -124,9 +125,9 @@
                 this.$ajax.post(this.$apis.get_buyerWarehouseOverview,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,e=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
+                        e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                     });
                     this.pageData=res;
-                    console.log(res,'?????');
                     this.loadingTable=false;
                 }).catch(err=>{
                     this.loadingTable=false;
@@ -175,10 +176,19 @@
              * 字典获取
              * */
             getUnit(){
-                this.$ajax.post(this.$apis.get_partUnit,['SKU_INVENTORY_STATUS'],{cache:true}).then(res=>{
-                    this.warehouseStatusOption=res[0].codes;
-                }).catch(err=>{
+                this.loadingTable=true;
+                this.$ajax.post(this.$apis.get_partUnit,['SKU_INVENTORY_STATUS','SKU_UNIT'],{cache:true}).then(res=>{
+                    res.forEach(v=>{
+                        if(v.code==='SKU_INVENTORY_STATUS'){
+                            this.warehouseStatusOption=v.codes;
+                        }else if(v.code==='SKU_UNIT'){
+                            this.skuUnitOption=v.codes;
+                        }
+                    });
+                    this.getWarehouseData();
 
+                }).catch(err=>{
+                    this.loadingTable=false;
                 });
             },
 
@@ -195,7 +205,6 @@
             }
         },
         created(){
-            this.getWarehouseData();
             this.getUnit();
         },
         mounted(){

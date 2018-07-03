@@ -1516,6 +1516,7 @@
                             this.skuSaleStatusOption=v.codes;
                         }else if(v.code==='SKU_STATUS'){
                             this.skuStatusTotalOption=v.codes;
+                            console.log(this.skuStatusTotalOption,'this.skuStatusTotalOption')
                         }
                     })
                 }).finally(err=>{
