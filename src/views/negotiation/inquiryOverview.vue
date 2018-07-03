@@ -201,6 +201,13 @@ export default {
       });
     },
     toCompare() {
+      if(this.checkedData.length>=100){
+        this.$message({
+          message: 'No more than a hundred!',
+          type: 'warning'
+        })
+        return;
+      }
       if (this.checkedIds.length>=2) {
         this.$windowOpen({
           url: '/negotiation/compareDetail/new',
