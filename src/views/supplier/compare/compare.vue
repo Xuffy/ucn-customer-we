@@ -510,7 +510,6 @@
           },
           screenTableStatus(){
              if (this.screenTableStatus.length != 0){
-               console.log(this.screenTableStatus.length)
                this.screenTableStatus.forEach(v => {
                   if (v == 1){
                     this.tableDataList = this.$table.setHideSame(this.tableDataList);

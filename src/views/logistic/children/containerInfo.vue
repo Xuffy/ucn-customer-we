@@ -10,7 +10,7 @@
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
-        <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/>
+        <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
           <template slot-scope="scope">
@@ -104,6 +104,14 @@ export default {
     }
   },
   methods: {
+    //返回当前行是否可选中 复选框
+    checkboxInit(row,index){
+      // console.log(row)
+      if (row.checked) 
+        return 0;//不可勾选
+      else
+        return 1;//可勾选
+    },
     handleSelectionChange (val) {
       this.$emit('handleSelectionChange', val.map(a => a))
     },
