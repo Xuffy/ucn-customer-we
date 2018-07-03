@@ -236,10 +236,12 @@ export default {
       this.showAddListDialog = true;
     },
     deleteCompareItem() {
-      this.disableds = this.disableds.concat(this.checkedArg.map(i => i.originValue));
+      let delIds = this.checkedArg.map(i => i.originValue);
+      this.disableds = this.disableds.concat(delIds);
       this.argDisabled = this.argDisabled.filter(i => this.disableds.indexOf(i) < 0);
-      this.tabData = this.tabData.filter(i => !i._checked);
+      this.bakData = this.bakData.filter(i => !delIds.includes(i.id.originValue));
       this.checkedArg = [];
+      this.renderTabdata();
     },
     deleteCompare() { // 删除
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
@@ -270,7 +272,8 @@ export default {
         this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
 
         let datas = this.$getDB(column, res.datas, item => this.$filterDic(item));
-        this.tabData = datas.concat(this.tabData);
+        this.bakData = datas.concat(this.bakData);
+        this.renderTabdata();
         this.showAddListDialog = false;
       });
     },

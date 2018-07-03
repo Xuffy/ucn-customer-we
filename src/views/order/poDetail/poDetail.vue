@@ -1477,11 +1477,11 @@
                 // ];
                 this.skuStatusOption=[
                     {
-                        code:'3',
+                        code:'PROCESS',
                         name:'PROCESS'
                     },
                     {
-                        code:'5',
+                        code:'CANCLED',
                         name:'CANCLED'
                     },
                 ];
@@ -1619,7 +1619,11 @@
                             let skuLabelPic=item.skuLabelPic.value,
                                 skuPkgMethodPic=item.skuPkgMethodPic.value,
                                 skuInnerCartonPic=item.skuInnerCartonPic.value,
-                                skuOuterCartonPic=item.skuOuterCartonPic.value;
+                                skuOuterCartonPic=item.skuOuterCartonPic.value,
+                                skuAdditionalOne=item.skuAdditionalOne.value,
+                                skuAdditionalTwo=item.skuAdditionalTwo.value,
+                                skuAdditionalThree=item.skuAdditionalThree.value,
+                                skuAdditionalFour=item.skuAdditionalFour.value;
                             item.skuLabelPic._value=skuLabelPic?[skuLabelPic]:[];
                             item.skuLabelPic.value=skuLabelPic?[skuLabelPic]:[];
                             item.skuPkgMethodPic._value=skuPkgMethodPic?[skuPkgMethodPic]:[];
@@ -1628,6 +1632,15 @@
                             item.skuInnerCartonPic.value=skuInnerCartonPic?[skuInnerCartonPic]:[];
                             item.skuOuterCartonPic._value=skuOuterCartonPic?[skuOuterCartonPic]:[];
                             item.skuOuterCartonPic.value=skuOuterCartonPic?[skuOuterCartonPic]:[];
+                            item.skuAdditionalOne._value=skuAdditionalOne?[skuAdditionalOne]:[];
+                            item.skuAdditionalOne.value=skuAdditionalOne?[skuAdditionalOne]:[];
+                            item.skuAdditionalTwo._value=skuAdditionalTwo?[skuAdditionalTwo]:[];
+                            item.skuAdditionalTwo.value=skuAdditionalTwo?[skuAdditionalTwo]:[];
+                            item.skuAdditionalThree._value=skuAdditionalThree?[skuAdditionalThree]:[];
+                            item.skuAdditionalThree.value=skuAdditionalThree?[skuAdditionalThree]:[];
+                            item.skuAdditionalFour._value=skuAdditionalFour?[skuAdditionalFour]:[];
+                            item.skuAdditionalFour.value=skuAdditionalFour?[skuAdditionalFour]:[];
+
                         }
                     });
                     this.productTableData=[];
@@ -2416,6 +2429,7 @@
                 this.disableClickConfirm=true;
                 this.$ajax.post(this.$apis.ORDER_CONFIRM,{
                     ids: [this.orderForm.id],
+                    orderNos:[this.orderForm.orderNo]
                 }).then(res=>{
                     this.getDetail();
                 }).finally(err=>{
