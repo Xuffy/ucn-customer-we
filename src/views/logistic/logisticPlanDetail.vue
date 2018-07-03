@@ -355,7 +355,7 @@ export default {
     getSupplier (logisticsNo) {
       let url = this.pageTypeCurr=="loadingListDetail" ? this.$apis.get_order_supplier : this.$apis.get_plan_supplier
       this.$ajax.get(`${url}?logisticsNo=${logisticsNo}`).then(res => {
-        this.selectArr.supplier = res.map((item)=>{
+        this.selectArr.supplier = res&&res.map((item)=>{
           item.value = item.skuSupplierName;
           return item;
         });
@@ -398,10 +398,10 @@ export default {
         return item;
       });
       this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el=>{
-        let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
+        let ShipmentStatusItem = this.selectArr.ShipmentStatu&&this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
         el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
         return el;
-      }))
+      }));
       this.productList.forEach((item)=>{
         if(item.fieldDisplay.value){
           _.mapObject(item.fieldDisplay.value,(v,k)=>{
@@ -460,9 +460,7 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
-      }).catch(()=>{
-        this.getDetails();
-      })
+      })  
     },
     computeType (key) {
       return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
@@ -486,10 +484,11 @@ export default {
     },
     getProductHistory (productId, status, i) {
       const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
+      console.log(currentProduct)
       let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
       productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
         res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify, res.history.map(el=>{
-          let ShipmentStatusItem = this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
+          let ShipmentStatusItem = this.selectArr.ShipmentStatu&&this.selectArr.ShipmentStatus.find(item=> item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
         }))])
