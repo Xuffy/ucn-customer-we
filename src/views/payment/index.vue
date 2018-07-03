@@ -298,7 +298,6 @@
                   this.$windowOpen({
                     url: '/logisticPlanDetail',
                     params: {
-                    params: {
                       code:item.orderNo.value
                     }
                   });
