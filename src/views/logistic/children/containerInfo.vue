@@ -109,8 +109,7 @@ export default {
   methods: {
     //返回当前行是否可选中 复选框
     checkboxInit(row,index){
-      // console.log(row)
-      if (row.checked) 
+      if (row.beBinding) 
         return 0;//不可勾选
       else
         return 1;//可勾选
