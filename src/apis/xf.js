@@ -1,6 +1,4 @@
 export default {
-  UNREADMESSAGE_QUERY: ['/companymessage/query', 'UMESSAGE_URL'], // 查询未读消息
-  UNREADMESSAGE_UPDATEUNREAD: ['/companymessage/updateunread', 'UMESSAGE_URL'], // 标记消息已读
   USER_PRIVILEGE: ['/user/privilege', 'UUSER_URL'],
   UTASK_PAGELIST: ['/utask/pageList', 'UWORKBENCH_URL'],
   UTASK_TYPELIST: ['/utask/typeList', 'UWORKBENCH_URL'],
@@ -24,5 +22,6 @@ export default {
   PRIVILEGE_DATA_BIZDOMAIN: ['/privilege/data/biz-domain', 'UUSER_URL'],
   PRIVILEGE_RESOURCE: ['/privilege/resource', 'UUSER_URL'],
   ROLE_PRIVILEGE: ['/role/privilege', 'UUSER_URL'],
-  PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL']
+  USERMESSAGE_READ: ['/usermessage/read', 'UMESSAGE_URL'],
+  USERMESSAGE_UNREADTOP: ['/usermessage/unreadTop', 'UMESSAGE_URL']
 }
