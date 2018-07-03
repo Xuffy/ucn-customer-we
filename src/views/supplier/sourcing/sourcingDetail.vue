@@ -317,6 +317,14 @@
                             type: 'success',
                         });
                     })
+                    // console.log(res)
+                    // this.$router.push({
+                    //   path:'/bookmark/bookmarkDetail',
+                    //   query:{
+                    //     id:res[0].id,
+                    //     companyId:res[0].bookmarkId
+                    //   }
+                    // })
                     .catch((res) => {
                         console.log(res)
                     });
