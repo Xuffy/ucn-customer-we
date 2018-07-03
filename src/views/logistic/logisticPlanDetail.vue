@@ -522,13 +522,13 @@
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-        this.productModifyList =  res.history.length ? this.$getDB(this.$db.logistic.productModify,
+        this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
           res.history.map(el => {
             let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
               item => item.code == el.shipmentStatus)
             el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
             return el;
-          })) : [currentProduct];
+          }))[0]]: [currentProduct];
         }) : this.productModifyList = [currentProduct];
 
 
