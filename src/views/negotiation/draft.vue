@@ -14,7 +14,7 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus" @change="getList"  size="mini">
+                <el-radio-group v-model="postParams.viewType" @change="getList"  size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -43,7 +43,6 @@ export default {
   name: '',
   data() {
     return {
-      viewByStatus: 0,
       title: '',
       pageTotal: 0,
       checkedArg: [],
@@ -53,17 +52,15 @@ export default {
         label: this.$i.inquiry.InquiryNo,
         operator: 'like'
       }, {
-        id: 'updateDt',
-        label: this.$i.inquiry.updateDt,
-        type: 'dateRange',
-        operator: 'between'
+        id: 'supplierName',
+        label: this.$i.inquiry.supplierName,
+        operator: 'like'
       }],
       postParams: {
         ps: 50,
         pn: 1,
         tc: 0,
-        draft: 1,
-        recycleCustomer: 0,
+        viewType: 0,
         operatorFilters: []
       },
       tabLoad: false
@@ -107,13 +104,11 @@ export default {
       this.getList();
     },
     getInquiryList() { // 获取inquirylist
-      let url, column;
+      let url = this.$apis.POST_INQIIRY_DRAFT, column;
       this.tabLoad = true;
-      if (this.viewByStatus === 0) {
-        url = this.$apis.POST_INQIIRY_LIST;
+      if (this.postParams.viewType === 0) {
         column = this.$db.inquiry.viewByInqury;
       } else {
-        url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
       this.$ajax.post(url, this.postParams).then(res => {

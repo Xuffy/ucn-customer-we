@@ -27,6 +27,17 @@
                                     </el-option>
                                 </el-select>
                             </div>
+                            <div v-if="v.type==='selectCurrency'">
+                              <el-select :disabled="summaryDisabled" class="speWidth" v-model="companyInfo[v.key]" placeholder="请选择">
+                                <el-option
+                                  size="mini"
+                                  v-for="item in options[v.key]"
+                                  :key="item.code"
+                                  :label="item.code"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+                            </div>
                             <div v-if="v.type==='textarea'">
                                 <el-input
                                         :disabled="summaryDisabled"
