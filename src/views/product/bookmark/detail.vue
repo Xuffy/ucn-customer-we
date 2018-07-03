@@ -502,6 +502,7 @@
                 oemOption:[],
                 udbOption:[],
                 skuPkgOption:[],
+                countryOption:[],
             }
         },
         methods:{
@@ -624,6 +625,25 @@
                     id:Number(this.$route.query.id)
                 }).then(res=>{
                     this.productForm=res;
+
+                    //处理国家显示
+                    if(this.productForm.noneSellCountry){
+                        let noneSellCountry=this.productForm.noneSellCountry.split(',');
+                        this.productForm.noneSellCountry='';
+                        _.map(noneSellCountry,v=>{
+                            this.productForm.noneSellCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.noneSellCountry=this.productForm.noneSellCountry.slice(0,this.productForm.noneSellCountry.length-1);
+                    }
+                    if(this.productForm.mainSaleCountry){
+                        let mainSaleCountry=this.productForm.mainSaleCountry.split(',');
+                        this.productForm.mainSaleCountry='';
+                        _.map(mainSaleCountry,v=>{
+                            this.productForm.mainSaleCountry+=(_.findWhere(this.countryOption,{code:v}).name+',');
+                        });
+                        this.productForm.mainSaleCountry=this.productForm.mainSaleCountry.slice(0,this.productForm.mainSaleCountry.length-1);
+                    }
+
                     /**
                      * 字典转换
                      * */
@@ -660,7 +680,6 @@
                     }];
                     this.priceTable = this.$getDB(this.$db.product.detailTab, priceData);
                     this.tradeHistory.skuCode=this.productForm.code;
-                    console.log(this.tradeHistory,'this.tradeHistory')
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_buyerProductTradeList,this.tradeHistory)
                         .then(res=>{
@@ -917,9 +936,15 @@
                             this.skuPkgOption=v.codes;
                         }
                     });
-                    this.getTableData();
-                    this.getRemarkData();
-                    this.getCompareList();
+
+                    this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
+                        this.countryOption=res;
+                        this.getTableData();
+                        this.getRemarkData();
+                        this.getCompareList();
+                    }).catch(()=>{
+                        this.notLoadingDone=false;
+                    });
                 }).finally(()=>{
                     this.notLoadingDone=false;
                 });
