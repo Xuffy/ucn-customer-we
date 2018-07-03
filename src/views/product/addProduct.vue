@@ -502,6 +502,7 @@
                             e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
                             e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                             e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
 
                             if(this.disableBookmarkChoose && e.bookmarkId.value){
                                 this.$set(e,'_disabled',true);
