@@ -2168,7 +2168,10 @@
                                     // item.skuStatus._value=this.$change(this.skuStatusTotalOption,'skuStatus',item,true).name;
                                     // item.skuUnitVolume._value=this.$change(this.volumeOption,'skuUnitVolume',item,true).name;
                                     // item.skuSaleStatus._value=this.$change(this.skuSaleStatusOption,'skuSaleStatus',item,true).name;
-                                    item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
+                                    /**
+                                     * 后续处理
+                                     * */
+                                    // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
                                     item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                                 }
                             });
