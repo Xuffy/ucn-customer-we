@@ -50,6 +50,7 @@ export default {
     _hide: true,
   },
   supplierId:{
-    key:'supplierId'
+    key:'supplierId',
+    _hide: true,
   }
 }

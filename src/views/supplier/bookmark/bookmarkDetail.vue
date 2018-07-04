@@ -31,7 +31,10 @@
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
-                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
+                  <router-link :to="{ name:'productSourcingOverview', params: {supplierName: basicDate.name}}">
+                    <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
+                  </router-link>
+
                 <!--<el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>-->
 
                 </div>
@@ -213,12 +216,12 @@
                 this.compareConfig.showCompareList = true;
             },
             supplierProducts() {
-                this.$windowOpen({
-                    url: '/product/sourcing',
-                    params: {
-                        supplierName: this.basicDate.name
-                    }
-                });
+                // this.$windowOpen({
+                //     url: '/product/sourcing',
+                //     params: {
+                //         supplierName: this.basicDate.name
+                //     }
+                // });
             },
             //添加比较
             addCompare() {
