@@ -16,9 +16,9 @@ export default {
   //       key: 'skuCode',
   //       type: 'input'
   //   },
-  description: {
-        key: 'description',
-        type: 'input'
-    },
+  // description: {
+  //       key: 'description',
+  //       type: 'input'
+  //   },
 
 }

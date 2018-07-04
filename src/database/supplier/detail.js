@@ -43,9 +43,9 @@ export default {
       key: 'shortName',
       fullLine:false,
     },
-  description: {
-      key: 'description',
-      fullLine:false,
-    },
+  // description: {
+  //     key: 'description',
+  //     fullLine:false,
+  //   },
 
 }

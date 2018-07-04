@@ -7,7 +7,7 @@
           <div style='marginTop:20px;'>
             <el-form ref="params" :model="params" label-width="200px" size="mini">
               <el-row>
-                <el-col :xs="24" :sm="12" :md="6" :lg="6"
+                <el-col :xs="24" :sm="12" :md="8" :lg="8"
                         v-for='(v,index) in $db.supplier.overview'
                         :key="index+'j'">
                   <el-form-item class="speWidth" :prop="v.key"  :label="v.label + ':' ">
@@ -312,23 +312,27 @@
                         e.type.value=this.$change(this.options.type,'type',e,true).name;
                         e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
                         return e;
-                        if (this.disabledLine.length > 0) {
-                            this.disabledLine.forEach(v => {
-                                let id = _.findWhere(v, {
-                                    key: 'id'
-                                }).value;
-                                this.tabData.forEach(m => {
-                                    let newId = _.findWhere(m, {
-                                        key: 'id'
-                                    }).value;
-                                    if (id === newId) {
-                                        m._disabled = true;
-                                    }
-                                })
-                            })
-                        }
-
                       })
+                      if (this.disabledLine.length > 0) {
+                        this.disabledLine.forEach(v => {
+                          let id = _.findWhere(v, {
+                            key: 'id'
+                          }).value;
+                          this.tabData.forEach(m => {
+                            let newId = _.findWhere(m, {
+                              key: 'id'
+                            }).value;
+                            if (id === newId) {
+                              m._disabled = true;
+                              m._checked = true;
+                            }
+                          })
+                        })
+                      }
+                      this.selectedData = this.$copyArr(this.disabledLine);
+                      this.selectedData.forEach(v => {
+                        v._disabled = true;
+                      });
                   })
                   .catch((res) => {
                       this.loading = false
@@ -377,6 +381,21 @@
           this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
         },
         watch: {
+          disabledLine(n) {
+            if (n.length > 0) {
+              n.forEach(v => {
+                let id;
+                id = _.findWhere(v, {key: 'id'}).value;
+                this.tabData.forEach(m => {
+                  let newId = _.findWhere(m, {key: 'id'}).value;
+                  if (id === newId) {
+                    this.$set(m, '_disabled', true);
+                    this.$set(m, '_checked', true);
+                  }
+                })
+              })
+            }
+          },
 
         }
     }

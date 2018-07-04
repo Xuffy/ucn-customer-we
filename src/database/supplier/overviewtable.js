@@ -27,9 +27,9 @@ export default {
    exportLicense: {
         key: 'exportLicense'
     },
-    description: {
-        key: 'description'
-    },
+    // description: {
+    //     key: 'description'
+    // },
 
     id: {
         _hide: true,

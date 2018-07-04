@@ -21,13 +21,13 @@
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox  @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox  @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
 
         <v-table
           code="udata_pruchase_supplier_compare_detail_overview"
-
+          :loading="loading"
           :data="tableDataList"
           :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
@@ -51,9 +51,10 @@
 
         <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
             <VSupplier
-                @handleOkClick='handleOkClick'
                 :isButton=false
+                :hideBtn="true"
                 :disabledLine="disabledLine"
+                @handleOkClick='handleOkClick'
                 @handleCancel="handleCancel"
                 >
             </VSupplier>
@@ -74,8 +75,7 @@
     import product from '../../product/addProduct'
     import VSupplier from '../sourcing/sourcing'
 
-    let copy_data=[];
-
+    let copy_Data = [];
     export default {
         name: "compare",
         components:{
@@ -109,6 +109,7 @@
                 allowBottomClick:true,          //是否禁止点击底部操作按钮,
                 isHideTheSame:false,
                 isHighlight:true,
+                loading:false,
                 selectedData:[],
                 selectNumber: [],
                 params:{
@@ -144,12 +145,14 @@
             getList() {
                 if(this.$route.query.type==='new'){
                     //表示是新建detail还未保存
+                    this.loading = true;
                     let id=[];
                     this.$route.query.id.split(',').forEach(v=>{
                         id.push(Number(v));
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
+                    this.loading = true;
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
@@ -171,8 +174,9 @@
                         });
                         this.changeHighlight(true);
                         this.disabledLine=this.tableDataList;
+                        this.loading = false;
                     }).catch(err=>{
-
+                        this.loading = false;
                     })
 
                 }else if(this.$route.query.type==='modify'){
@@ -181,6 +185,7 @@
                     if(this.$route.query.isModify){
                         this.isModify=true;
                     }
+                    this.loading = true;
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
@@ -190,10 +195,12 @@
                         });
                         this.changeHighlight(true);
                         this.disabledLine=this.tableDataList;
+                        this.loading = false;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
                     })
                 }else{
+                  this.loading = true;
                   this.compareName=this.$route.query.compareName;
                   if(this.$route.query.isModify){
                     this.isModify=true;
@@ -202,11 +209,11 @@
                     this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                       e.type.value=this.$change(this.options.type,'type',e,true).name;
                       e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
-
                       return e;
                     });
                     this.changeHighlight(true);
                     this.disabledLine=this.tableDataList;
+                    this.loading = false;
                     this.allowDeleteCompare=false;
                     this.allowBottomClick=false;
                   })
@@ -302,7 +309,6 @@
                 this.forceUpdateNumber=Math.random();
                 let v = [];
                 // this.getList.forEach(v => x[v.id] = v);
-              console.log(this.tableDataList)
 
             },
 
@@ -367,13 +373,14 @@
                         });
                         if(!isIn){
                             this.tableDataList.push(v);
+                            copy_Data = this.$depthClone(this.tableDataList);
+
                         }
                     });
                     this.disabledLine=[];
                     this.tableDataList.forEach(v=>{
                         if(!v._disabled){
                           this.disabledLine.push(v);
-                          copy_data = this.tableDataList
                         }
                     });
 
@@ -524,7 +531,25 @@
               }else{
                   this.disableDelete=true;
               }
+          },
+          //isHideTheSame isHighlight
+          isHideTheSame(e){
+            if(e){
+              this.copyHideSameData = this.$depthClone(this.tableDataList);
+              this.$table.setHideSame(this.tableDataList);
+            }else{
+              this.tableDataList = this.$depthClone(this.copyHideSameData)
+            }
+          },
+          isHighlight(e){
+            if(e){
+              this.copyHighlightData = this.$depthClone(this.tableDataList);
+              this.$table.setHighlight(this.tableDataList)
+            }else{
+              this.tableDataList = this.$depthClone(this.copyHighlightData)
+            }
           }
+
         },
     }
 </script>

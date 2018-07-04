@@ -7,7 +7,7 @@
             <div style='marginTop:20px;'>
               <el-form ref="params" :model="params" label-width="200px" size="mini">
                 <el-row>
-                  <el-col :xs="24" :sm="12" :md="6" :lg="6"
+                  <el-col :xs="24" :sm="12" :md="8" :lg="8"
                           v-for='(v,index) in $db.supplier.overview'
                           :key="index+'j'">
                     <el-form-item class="speWidth" :prop="v.key"  :label="v.label  + ':'">
