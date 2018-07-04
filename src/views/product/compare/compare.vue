@@ -184,23 +184,14 @@
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                            console.log(e,'e')
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                            console.log(1)
                             e.categoryName._value=e.categoryId.value?_.findWhere(this.categoryList,{id:e.categoryId.value}).name:'';
-                            console.log(2)
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                            console.log(3)
                             e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                            console.log(4)
                             e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                            console.log(5)
                             e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                            console.log(6)
                             e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
-                            console.log(7)
                             e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
-                            console.log(8)
                             return e;
                         });
                         this.changeHighlight(true);
@@ -737,6 +728,16 @@
                 });
             },
 
+            handleCategory(data){
+                _.map(data,item=>{
+                    if(!item.children.length){
+                        this.categoryList.push(item);
+                    }else{
+                        this.handleCategory(item.children);
+                    }
+                });
+            },
+
         },
         created(){
             const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true});
@@ -744,7 +745,6 @@
             const sysCategoryAjax=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
             const myCategoryAjax=this.$ajax.get(this.$apis.get_buyer_my_category,{});
             this.$ajax.all([codeAjax,countryAjax,sysCategoryAjax,myCategoryAjax]).then(res=>{
-                console.log(this.$depthClone(res[0]))
                 res[0].forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
@@ -766,11 +766,7 @@
                         this.categoryList.push(data);
                     })
                 });
-                _.map(res[3],v=>{
-                    _.map(v.children,data=>{
-                        this.categoryList.push(data);
-                    })
-                });
+                this.handleCategory(res[3]);
                 this.getList();
             }).catch(()=>{
 
