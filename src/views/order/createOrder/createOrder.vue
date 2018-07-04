@@ -2153,13 +2153,21 @@
                                     item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                                     item.skuSample._value=item.skuSample.value?'YES':'NO';
                                     item.skuSample.value=item.skuSample.value?'1':'0';
+                                    console.log(1)
                                     item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
+                                    console.log(2)
                                     item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
+                                    console.log(3)
                                     item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
+                                    console.log(4)
                                     item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
+                                    console.log(5)
                                     item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
+                                    console.log(6)
                                     item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
+                                    console.log(7)
                                     item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                                    console.log(8)
 
                                     // item.skuUnit._value=this.$change(this.skuUnitOption,'skuUnit',item,true).name;
                                     // item.skuUnitWeight._value=this.$change(this.weightOption,'skuUnitWeight',item,true).name;
@@ -2173,6 +2181,7 @@
                                      * */
                                     // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
                                     item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                                    console.log(9)
                                 }
                             });
                             _.map(data,v=>{
