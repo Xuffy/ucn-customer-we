@@ -153,7 +153,7 @@
         :type="radio"
         :isInquiry="true"></v-product>
     </el-dialog>
-    <v-history-modify @save="save" ref="HM"/>
+    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"/>
   </div>
 </template>
 <script>
@@ -347,6 +347,17 @@ export default {
     },
     inputEnter(val) {
 
+    },
+    beforeSave(data) {
+      if (Array.isArray(data)) {
+        for (let item of data) {
+          if (!item._remark && item.skuReadilyAvailable.value === 1 && (isNaN(item.skuAvailableQty.value) || item.skuAvailableQty.value < 1)) {
+            this.$message.warning(this.$i.inquiry.skuAvailableQtyMustGreatNotLessThanOne);
+            return false;
+          }
+        }
+      }
+      return true;
     },
     save(data) { // modify 编辑完成反填数据
       let items = _.map(data, item => {
