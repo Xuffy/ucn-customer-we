@@ -26,6 +26,7 @@ export default {
   //采购端
   POST_INQIIRY_LIST: ['/inquiry/list', 'BASE_URL'], // inquiry list
   POST_INQIIRY_LIST_SKU: ['/inquiry/list/sku', 'BASE_URL'], // inquiry list sku
+  POST_INQIIRY_DRAFT: ['/inquiry/list/draft', 'BASE_URL'], // inquiry list draft
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_URL'], // inquiry操作
   GET_INQIIRY_DETAIL: ['/inquiry', 'BASE_URL'], //获取inquiry详情
   GET_INQIIRY_DETAIL_BY_CODE: ['/inquiry/detail', 'BASE_URL'], //获取inquiry详情

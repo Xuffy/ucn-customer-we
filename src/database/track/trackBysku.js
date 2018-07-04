@@ -139,7 +139,7 @@ export default {
   remark: {
     key: 'remark'
   },
-    skuStatus: {
+  skuStatus: {
     key: 'skuStatus'
   },
   sampleProvideDate: {
@@ -294,9 +294,9 @@ export default {
   logisticsNo: {
     key: 'logisticsNo'
   },
-  category:{
-    key: '',
-    _important:true,
+  category: {
+    key: 'category',
+    // _important:true,
   },
   categoryLevel1: {
     key: 'skuCategoryOne',

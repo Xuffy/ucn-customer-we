@@ -50,8 +50,12 @@
                                       :placeholder="$i.product.pleaseInput"></el-input>
                             <div v-if="v.showType==='select'">
                                 <div v-if="v.isCountry">
-                                    <el-select class="speSelect" size="mini" v-model="selectCountry" multiple filterable
-                                               collapse-tags :placeholder="$i.product.pleaseChoose">
+                                    <el-select class="speSelect"
+                                               size="mini"
+                                               v-model="selectCountry"
+                                               multiple
+                                               filterable
+                                               :placeholder="$i.product.pleaseChoose">
                                         <el-option
                                                 v-for="item in countryOption"
                                                 :key="item.id"
@@ -324,6 +328,7 @@
                 this.$set(this.productForm, 'maxExwPrice', null);
                 this.$set(this.productForm, 'minFobPrice', null);
                 this.$set(this.productForm, 'maxFobPrice', null);
+                this.$set(this.productForm, 'supplierNameLike', null);
                 this.selectCountry = [];
             },
 
@@ -358,11 +363,9 @@
                     });
                     this.productForm.country = this.productForm.country.slice(0, this.productForm.country.length - 1);
                 }
-                console.log(this.productForm.country, 'this.productForm.country')
 
                 this.getData();
             },
-
             handleChange(value) {
                 console.log(value);
             },
@@ -474,7 +477,8 @@
                     let url = '';
                     if (this.type === 'product') {
                         url = this.$apis.get_buyerProductList;
-                    } else if (this.type === 'bookmark') {
+                    }
+                    else if (this.type === 'bookmark') {
                         url = this.$apis.get_buyerBookmarkList;
                     }
                     this.loadingTable = true;
@@ -498,6 +502,7 @@
                             e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
                             e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                             e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
 
                             if(this.disableBookmarkChoose && e.bookmarkId.value){
                                 this.$set(e,'_disabled',true);
@@ -738,7 +743,6 @@
                 this.productForm.ps = e;
                 this.getData();
             },
-
         },
         created() {
             this.loadingTable = true;
@@ -758,8 +762,8 @@
                         this.skuUnitOption = v.codes;
                     }
                 });
-                if (this.$route.query.supplierName) {
-                    this.productForm.supplierNameLike = this.$route.query.supplierName;
+                if (this.$route.params.supplierName) {
+                    this.productForm.supplierNameLike = this.$route.params.supplierName;
                 }
                 //国家
                 this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {

@@ -260,6 +260,13 @@ export const payMentInfo = {
   }
 }
 
+export const dbcontainerInfo = {
+  containerType: {
+    _rules:{
+      required:true
+    }
+  }
+}
 
 export const dbProductInfo = {
   "toShipCartonQty": {

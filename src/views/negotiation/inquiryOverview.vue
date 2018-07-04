@@ -21,7 +21,7 @@
         </div>
         <div class="fn">
             <div class="btn-wrap">
-                <el-button @click="toCompare" :disabled="checkedIds.length >= 2?false:true" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="toCompare" :class="{'is-disabled':checkedIds.length < 2}" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
@@ -85,7 +85,7 @@ export default {
       tabData: [],
       viewByStatus: 0,
       params: {
-        status: 22,
+        status: null,
         ps: 50,
         pn: 1,
         tc: 0,
@@ -110,7 +110,10 @@ export default {
   created() {
     this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
     this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
-    this.getBaseData().then(this.gettabData);
+    this.getBaseData().then(this.gettabData, this.gettabData);
+  },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions([
@@ -198,7 +201,14 @@ export default {
       });
     },
     toCompare() {
-      if (this.checkedIds.length) {
+      if(this.checkedData.length>=100){
+        this.$message({
+          message: 'No more than a hundred!',
+          type: 'warning'
+        })
+        return;
+      }
+      if (this.checkedIds.length>=2) {
         this.$windowOpen({
           url: '/negotiation/compareDetail/new',
           params: {
@@ -206,6 +216,11 @@ export default {
             ids: this.checkedIds.join(',')
           }
         });
+      }else{
+         this.$message({
+          message: 'please choose at least two inquiries!',
+          type: 'warning'
+        })
       }
     },
     handleSizeChange(val) {

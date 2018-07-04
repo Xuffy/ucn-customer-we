@@ -48,5 +48,8 @@ export default {
   bookmarkId:{
     key:"bookmarkId",
     _hide: true,
+  },
+  supplierId:{
+    key:'supplierId'
   }
 }

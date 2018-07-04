@@ -10,7 +10,7 @@
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
-        <el-table-column type="selection" width="100" align="center" class-name="checkbox-no-margin" v-if="edit"/>
+        <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="50" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
           <template slot-scope="scope">
@@ -27,11 +27,14 @@
             <span>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerType" width="140" align="center">
+        <el-table-column :label="$i.logistic.containerType" width="180" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.containerType" placeholder="请选择" v-if="edit">
-              <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
-            </el-select>
+            <div v-if="edit" style="display:flex;">
+              <label class="reqiuredStar"></label>
+              <el-select v-model="scope.row.containerType" placeholder="请选择">
+                <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
+              </el-select>
+            </div>
             <span v-else>{{ scope.row.containerType }}</span>
           </template>
         </el-table-column>
@@ -104,6 +107,13 @@ export default {
     }
   },
   methods: {
+    //返回当前行是否可选中 复选框
+    checkboxInit(row,index){
+      if (row.beBinding) 
+        return 0;//不可勾选
+      else
+        return 1;//可勾选
+    },
     handleSelectionChange (val) {
       this.$emit('handleSelectionChange', val.map(a => a))
     },
@@ -191,5 +201,10 @@ export default {
 <style lang="less" scoped>
 .btn-wraps {
   padding:10px 0;
+}
+.reqiuredStar:before{
+  content: '*';
+  color: #f56c6c;
+  margin-right: 4px;
 }
 </style>

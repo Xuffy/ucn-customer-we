@@ -41,7 +41,7 @@
 
       <div class="header-right" style="color: #999999!important;">
         <div class="message-box" v-popover:messageBox>
-          <el-badge :value="message.list.length || ''">
+          <el-badge :value="message.count || ''">
             <i class="el-icon-bell"></i>
           </el-badge>
 
@@ -53,9 +53,9 @@
             v-model="message.show"
             trigger="click">
             <div v-loading="message.loading">
-              <h3 class="ucn-content-title">{{$i.common.systemMessage}}（{{message.list.length}} {{$i.common.new}} ）</h3>
-              <ul class="list" v-if="message.list.length">
-                <li class="unread" v-for="item in message.list">
+              <h3 class="ucn-content-title">{{$i.common.systemMessage}}（{{message.count}} {{$i.common.new}} ）</h3>
+              <ul class="list" v-if="message.count">
+                <li class="unread" v-for="item in message.list" @click="goMessage(item)">
                   <p v-text="item.title"></p>
                   <span v-text="$dateFormat(item.sendTime,'yyyy-mm-dd HH:MM:ss')"></span>
                 </li>
@@ -65,7 +65,7 @@
               </div>
               <el-row>
                 <el-col :span="12" style="text-align: left;padding: 5px 10px">
-                  <el-button type="text" size="mini" @click="readMessage" v-if="message.list.length">
+                  <el-button type="text" size="mini" @click="readMessage" v-if="message.count">
                     {{$i.common.markAsReaded}}
                   </el-button>
                 </el-col>
@@ -110,6 +110,7 @@
         activeName: null,
         activeOpen: [],
         message: {
+          count: 0,
           show: false,
           list: [],
           loading: false,
@@ -119,7 +120,7 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        this.getMessage();
+        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
@@ -149,9 +150,11 @@
           this.$localStore.clearAll();
           this.$localStore.clearAll();
           this.$router.push('/login');
-        });
+        }).catch(e => e);
       },
-      goMessage() {
+      goMessage({id, type}) {
+        id && type && this.$ajax.post(this.$apis.USERMESSAGE_READ, [{id, type}])
+          .then(() => this.getMessage());
         this.message.show = false;
         this.$router.push('/message/index');
       },
@@ -178,9 +181,10 @@
       },
       getMessage() {
         this.message.loading = true;
-        this.$ajax.get(this.$apis.UNREADMESSAGE_QUERYUNREAD)
-          .then(data => {
-            this.message.list = data || [];
+        this.$ajax.get(this.$apis.USERMESSAGE_UNREADTOP, {top: 8})
+          .then(res => {
+            this.message.list = res.messages || [];
+            this.message.count = res.count || 0;
           })
           .finally(() => {
             this.message.loading = false;
@@ -190,21 +194,13 @@
         let list = [];
         if (_.isEmpty(this.message.list)) return false;
 
-
         this.message.loading = true;
 
+        list = _.map(this.message.list, ({id, type}) => ({id, type}));
 
-        _.map(this.message.list, val => {
-          let {id, type} = val;
-          list.push({id, type});
-        });
-        this.$ajax.post(this.$apis.UNREADMESSAGE_UPDATEUNREAD, list)
-          .then(() => {
-            this.getMessage();
-          })
-          .finally(() => {
-            this.message.loading = false;
-          });
+        this.$ajax.post(this.$apis.USERMESSAGE_READ, list)
+          .then(() => this.getMessage())
+          .finally(() => this.message.loading = false);
       },
       clearData() {
         this.$sessionStore.remove('request_cache');

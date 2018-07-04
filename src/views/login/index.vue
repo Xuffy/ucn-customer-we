@@ -33,6 +33,8 @@
       this.$sessionStore.clearAll();
 
       window.__authorize = this.getUserInfo;
+
+      document.title = `UCN-${this.$i.common.signIn}`;
     },
     mounted() {
       let iframe = this.$refs.login;

@@ -1,10 +1,15 @@
 <template>
   <el-row>
     <!--<v-table-filter :hideFilterValue="true" class="filter"/>-->
-    <el-table :data="tableData" style="width: 100%" class="table" max-height="400">
-      <!-- <el-table-column :label="$i.logistic.negotiate" width="120" align="center">
+    <el-table :data="tableData" style="width: 100%" class="table" max-height="400"> 
+      <el-table-column :label="$i.logistic.entryDt" width="150" align="center" sortable>
         <template slot-scope="scope">
-          <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd') : null }}</span>
+           <span>{{ scope.row.entryDt ? $dateFormat(scope.row.entryDt.value, 'yyyy-mm-dd hh:mm') : null }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column :label="$i.logistic.entryName" width="120" align="center" sortable>
+        <template slot-scope="scope">
+          <span>{{ scope.row.entryName.value }}</span>
         </template>
       </el-table-column> -->
       <el-table-column :label="$i.logistic.orderNo" width="100" align="center" sortable>
@@ -23,6 +28,13 @@
         <template slot-scope="scope">
           <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input>
           <span v-else>{{ scope.row.toShipQty.value }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$i.logistic.shipmentStatus" width="150" align="center" sortable>
+        <template slot-scope="scope">
+          <!-- <el-input placeholder="请输入内容" v-model="scope.row.toShipQty.value" @change="currentChange(scope.row.toShipQty.key,scope.row.toShipQty.value)" v-if="scope.row.toShipQty.edit"></el-input> -->
+          <span>{{ scope.row.shipmentStatus.value }}</span>
         </template>
       </el-table-column>
 
@@ -73,14 +85,6 @@
         </template>
       </el-table-column>
       
-      <!-- <el-table-column :label="$i.logistic.shipmentStatus" width="200" align="center" sortable>
-        <template slot-scope="scope">
-          <el-select v-if="scope.row.toShipCartonQty.edit" v-model="scope.row.shipmentStatus.value" placeholder="请输入内容" @change="currentChange(scope.row.shipmentStatus.key,scope.row.shipmentStatus.value)">
-            <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
-          </el-select>
-          <span v-else>{{ scope.row.shipmentStatus.value }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column :label="$i.logistic.skuCode" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.skuCode.value }}</span>
@@ -121,7 +125,7 @@
           <span>{{ scope.row.hsCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.reportElements" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.reportElement" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.reportElement.value }}</span>
         </template>
@@ -141,7 +145,7 @@
           <span>{{ scope.row.skuCustomerSkuCode.value }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$i.logistic.factorySKUCode" width="160" align="center" sortable>
+      <el-table-column :label="$i.logistic.factorySkuCode" width="160" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.factorySkuCode.value }}</span>
         </template>
@@ -250,10 +254,13 @@ export default {
       productModifyObj:{}
     }
   },
-  watch: {
-    tableData () {
+  watch:{
+    tableData(){
       this.createModifyData()
     }
+  },
+  mounted(){
+    this.createModifyData()
   },
   methods: {
     currentChange(key,v){

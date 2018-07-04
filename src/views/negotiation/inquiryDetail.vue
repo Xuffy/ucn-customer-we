@@ -88,7 +88,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify @save="save" ref="HM"></v-history-modify>
+    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
     <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
   </div>
 </template>
@@ -184,7 +184,7 @@ export default {
         data.push(res[1]);
       }
       this.setDic(data);
-    }).then(this.getInquiryDetail);
+    }).then(this.getInquiryDetail, this.getInquiryDetail);
   },
   watch: {
     ChildrenCheckList(val) {
@@ -199,6 +199,9 @@ export default {
       });
       this.newTabData = data;
     }
+  },
+  mounted() {
+    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
   },
   methods: {
     ...mapActions(['setDraft', 'setRecycleBin', 'setDic']),
@@ -359,6 +362,18 @@ export default {
       }
       return options;
     },
+    beforeSave(data) {
+      if (this.idType === 'basicInfo') return true;
+      if (Array.isArray(data)) {
+        for (let item of data) {
+          if (!item._remark && item.skuReadilyAvailable.value === 1 && (isNaN(item.skuAvailableQty.value) || item.skuAvailableQty.value < 1)) {
+            this.$message.warning(this.$i.inquiry.skuAvailableQtyMustGreatNotLessThanOne);
+            return false;
+          }
+        }
+      }
+      return true;
+    },
     save(data) {
       // modify 编辑完成反填数据
       let items = _.map(data, item => {
@@ -405,20 +420,16 @@ export default {
           if (idx === res.length - 1) {
             return;
           }
-          if (i.fieldDisplay) {
-            let fs = Object.keys(i.fieldDisplay);
-            if(fs.length === 0) return;
-            Object.keys(i).forEach(field => {
-              if (!excludeColumns.includes(field) && !fs.includes(field)) {
-                i[field] = null;
-              }
-            });
-          }
-          if (i.fieldRemarkDisplay) {
-            let fs = Object.keys(i.fieldRemarkDisplay);
-            if(fs.length === 0) return;
+          let showKeys = excludeColumns.concat(i.fieldDisplay ? Object.keys(i.fieldDisplay) : []);
+          Object.keys(i).forEach(field => {
+            if (!showKeys.includes(field)) {
+              i[field] = null;
+            }
+          });
+          let showRemarkKeys = excludeColumns.concat(i.fieldRemarkDisplay ? Object.keys(i.fieldRemarkDisplay) : []);
+          if (i.fieldRemark && showRemarkKeys) {
             Object.keys(i.fieldRemark).forEach(field => {
-              if (!excludeColumns.includes(field) && !fs.includes(field)) {
+              if (!showRemarkKeys.includes(field)) {
                 i.fieldRemark[field] = null;
               }
             });

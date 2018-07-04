@@ -75,16 +75,12 @@
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns">
-                        <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                        <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                        <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                        <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}({{selectList.length}})</el-button>
                         <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
                         <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
                         <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
-                        <!--<el-button>{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
-                        <!--<el-button @click="deleteBookmark" :loading="disableClickDelete" :disabled="disabledRemove" type="danger">{{$i.product.delete}}</el-button>-->
-                        <!--<el-button>{{$i.product.upload}}</el-button>-->
-                        <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
                 </template>
             </v-table>
@@ -94,7 +90,6 @@
                     :page-sizes="[50,100,200,500]"
                     :page-data="pageData"></page>
         </div>
-
 
         <el-dialog :title="$i.product.addProduct" :visible.sync="addProductDialogVisible" width="80%">
             <product
@@ -109,7 +104,7 @@
                     @handleOK="handleOkClick"></product>
         </el-dialog>
 
-        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+        <el-dialog :title="$i.product.followingProductCantAddOrder" :visible.sync="dialogFormVisible" width="50%">
             <el-table
                     :data="disabledOrderList"
                     border
@@ -245,13 +240,13 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:123,
-                        name:"系统分类",
+                        id:513522625,
+                        name:"自己的分类",
                         children:[]
                     },
                     {
-                        id:5125,
-                        name:"自己的分类",
+                        id:121213,
+                        name:"系统分类",
                         children:[]
                     },
                 ],
@@ -271,11 +266,11 @@
             ...mapActions([
                 'setRecycleBin','setLog'
             ]),
+
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
             },
-
             //清除填写的表格数据
             clear(){
                 this.$refs['productFormTop'].resetFields();
@@ -287,31 +282,64 @@
                 this.$set(this.productForm,'maxFobPrice','');
                 this.selectCountry=[];
             },
-
             //搜查
             search(){
                 this.disabledSearch=true;
-
                 if(!this.productForm.maxExwPrice){
                     this.productForm.maxExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
                 }
                 if(!this.productForm.minExwPrice){
                     this.productForm.minExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
                 }
                 if(!this.productForm.maxFobPrice){
                     this.productForm.maxFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
                 }
                 if(!this.productForm.minFobPrice){
                     this.productForm.minFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
+                this.getData();
+            },
+            handleChange(value) {
+                console.log(value);
+            },
+            //切换check状态
+            changeChecked(e){
+                this.selectList=e;
+            },
+            //emit数据
+            postData(){
+                this.$emit('handleOK',this.selectList);
+            },
+            cancel(){
+                this.$emit('handleCancel');
+            },
+            //获取类别数据
+            getCategoryId(){
+                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
+                    this.categoryList[1].children=res;
+                }).catch(err=>{
+
+                });
+                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
+                    this.categoryList[0].children=res;
+                }).catch(err=>{
+
+                });
+            },
+            //获取table数据
+            getData() {
                 this.loadingTable=true;
                 this.productForm.country='';
                 if(this.selectCountry.length>0){
@@ -320,53 +348,6 @@
                     });
                     this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
                 }
-
-                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    this.pageData=res;
-                    this.disabledSearch=false;
-                    this.selectList=[];
-                    this.loadingTable=false;
-                }).catch(err=>{
-                    this.disabledSearch=false;
-                    this.loadingTable=false;
-                });
-
-            },
-
-            handleChange(value) {
-                console.log(value);
-            },
-
-            //切换check状态
-            changeChecked(e){
-                this.selectList=e;
-            },
-
-            //emit数据
-            postData(){
-                this.$emit('handleOK',this.selectList);
-            },
-            cancel(){
-                this.$emit('handleCancel');
-            },
-
-            //获取类别数据
-            getCategoryId(){
-                this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    this.categoryList[0].children=res;
-                }).catch(err=>{
-
-                });
-                this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
-                }).catch(err=>{
-
-                });
-            },
-            //获取table数据
-            getData() {
-                this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
                         let noneSellCountry='';
@@ -379,22 +360,21 @@
                         });
                         noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
                         e.noneSellCountry.value=noneSellCountry;
-
                         e.status.value=this.$change(this.statusOption,'status',e,true).name;
                         e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
                         e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
                         e.unitLength.value=this.$change(this.lengthOption,'unitLength',e,true).name;
                         e.unitVolume.value=this.$change(this.volumeOption,'unitVolume',e,true).name;
                         e.unitWeight.value=this.$change(this.weightOption,'unitWeight',e,true).name;
+                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                         return e;
                     });
                     this.pageData=res;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                }).finally(err=>{
+                    this.disabledSearch=false;
                     this.loadingTable=false;
                 });
             },
-
             handleOkClick(e){
                 if(e.length===0){
                     //表示一个都没选

@@ -37,7 +37,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item prop="lang" :label="$i.setting.language+':'"  v-if="isVisible" required>
+                <el-form-item  :label="$i.setting.language+':'"  v-if="isVisible" required>
                     <el-select v-model="form.lang" placeholder="请选择" style="width: 200px" :disabled="isModify">
                         <el-option
                                 v-for="item in language"
@@ -254,6 +254,7 @@ export default {
                 });
               this.isModifyPass = false;
               this.summaryDisabled=true;
+              this.isModify = true;
               this.allowModifySummary=false;
             }).catch(err=>{
               this.allowModifySummary=false;

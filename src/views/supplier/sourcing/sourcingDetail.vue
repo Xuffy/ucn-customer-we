@@ -10,7 +10,7 @@
                     <el-row>
                       <el-row>
                         <el-col :span="4">
-                          <v-image :src="basicDate.logo" style="height: 273px;"/>
+                          <v-image :src="basicDate.logo" style="height: 184px;"/>
                         </el-col>
                         <el-col :span="20">
                           <el-form>
@@ -77,6 +77,11 @@
                     <!--<el-button  @click="upload" type="primary" >{{$i.button.upload}}</el-button>-->
                   <!--</div>-->
                   <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
+                  <div class="attachment" v-show="!attachments" style="margin-top:40px;">
+                    <div>
+                      No Attachment
+                    </div>
+                  </div>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -239,12 +244,18 @@
                         type: 'warning'
                     });
                 } else {
-
                     if (this.basicDate.id && this.basicDate != '') {
                         compareList.push({
                             name: this.basicDate.name,
                             id: this.basicDate.id
                         });
+                        if (compareList.length>=100){
+                          this.$message({
+                            message: '对比项不能超过100',
+                            type: 'warning'
+                          });
+                          return false;
+                        }
                         this.compareData = compareList;
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {
@@ -310,6 +321,13 @@
                             message: '添加成功',
                             type: 'success',
                         });
+                      this.$router.push({
+                        path:'/supplier/bookmarkDetail',
+                        query:{
+                          id:this.$route.query.id,
+                          companyId:this.$route.query.companyId
+                        }
+                      })
                     })
                     .catch((res) => {
                         console.log(res)
@@ -658,6 +676,19 @@
         width: 80%;
     }
 
+    .attachment{
+      max-height: 300px;
+      max-width: 100%;
+      overflow-y: scroll;
+      overflow-x: auto;
+      border: 1px solid #ebeef5;
+    }
+    .attachment div{
+      text-align: center;
+      color: #999999;
+      height: 200px;
+      line-height: 200px;
+    }
     /*
     .attchment {
         display: flex;

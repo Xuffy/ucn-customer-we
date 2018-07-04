@@ -8,6 +8,9 @@ export default {
     customerCreate:{
         _hide:true
     },
+    categoryId:{
+        _hide:true
+    },
     bookmarkId:{
         _hide:true
     },

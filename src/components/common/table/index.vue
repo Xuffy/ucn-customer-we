@@ -29,7 +29,7 @@
         <table v-if="dataList.length">
           <thead ref="tableTitle">
           <tr>
-            <td ref="tableCheckbox" v-if="selection">
+            <td ref="tableCheckbox" v-if="selection" class="checkbox">
               <div style="visibility: hidden">
                 <input type="checkbox" :class="{visibility:selectionRadio}"/>
               </div>
@@ -37,8 +37,14 @@
             <td v-if="rowspan < 2">
               <div>#</div>
             </td>
-            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key">
-              <div v-text="item.label">
+            <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
+                :class="{'sort-wrapper':item._sort}">
+              <div>
+                {{item.label}}
+                <div class="sort-box">
+                  <i class="el-icon-caret-top"></i>
+                  <i class="el-icon-caret-bottom"></i>
+                </div>
               </div>
             </td>
             <td v-if="buttons" ref="tableAction">
@@ -65,15 +71,26 @@
             <td v-for="(cItem,cKey) in item" v-if="!cItem._hide && !cItem._hidden && cItem.key"
                 :style="cItem._style">
               <!-- 是否为图片显示 -->
-              <div v-if="!cItem._image" class="image-box"
-                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
-                   v-text="cItem._value || cItem.value"></div>
-
-              <v-image class="img" v-else
+              <v-image class="img" v-if="cItem._image"
                        :src="getImage(cItem._value || cItem.value)"
                        height="30px"
                        width="30px"
                        @click="$refs.tableViewPicture.show(cItem._value || cItem.value)"></v-image>
+
+              <el-popover
+                v-else-if="cItem._upload && !item._remark"
+                placement="bottom"
+                width="300"
+                trigger="click">
+                <v-upload readonly :limit="cItem._upload.limit || 5"
+                          :ref="cItem._upload.ref || 'upload'"
+                          :list="cItem._value || cItem.value"></v-upload>
+                <el-button slot="reference" type="text">查看附件</el-button>
+              </el-popover>
+
+              <div v-else
+                   :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
+                   v-text="cItem._value || cItem.value"></div>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
@@ -147,11 +164,12 @@
   import VFilterValue from './filterValue'
   import VFilterColumn from './filterColumn'
   import VViewPicture from '../viewPicture/index'
+  import VUpload from '../upload/index'
   import VImage from '../image/index'
 
   export default {
     name: 'VTable',
-    components: {VFilterValue, VViewPicture, VImage, VFilterColumn},
+    components: {VFilterValue, VViewPicture, VImage, VFilterColumn, VUpload},
     props: {
       data: {
         type: Array,
@@ -437,6 +455,7 @@
   .ucn-table tfoot td {
     word-break: keep-all;
     padding: 0 10px;
+    position: relative;
   }
 
   .ucn-table tfoot td {
@@ -476,6 +495,7 @@
     text-align: center;
     width: 100%;
     line-height: 14px;
+    min-height: 14px;
   }
 
   .ucn-table thead td > div {
@@ -488,12 +508,13 @@
     white-space: nowrap;
   }
 
-  .ucn-table thead tr td:first-child > div {
+  .ucn-table thead tr td.checkbox:first-child > div {
     width: 20px;
   }
 
   .ucn-table tbody td {
     padding: 10px;
+    border-right: 1px solid #FFFFFF;
   }
 
   .ucn-table tbody td .img {
@@ -547,6 +568,7 @@
 
   .ucn-table .button.disabled {
     color: #dad8d8;
+    cursor: not-allowed;
   }
 
   .ucn-table .button:last-child {
@@ -588,5 +610,40 @@
 
   .ucn-table /deep/ .ucn-image {
     margin: 0 auto;
+  }
+
+  .sort-wrapper {
+    padding: 0 10px 0 34px !important;
+    cursor: pointer;
+  }
+
+  thead td:not(.sort-wrapper) .sort-box {
+    display: none;
+    cursor: initial;
+  }
+
+  .sort-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    overflow: initial;
+    position: relative;
+    transition: all .3s;
+    opacity: 0;
+  }
+
+  .sort-wrapper:hover .sort-box {
+    opacity: 1;
+  }
+
+  .sort-box i {
+    height: 10px;
+  }
+
+  .sort-box i:hover {
+    color: #409EFF;
   }
 </style>

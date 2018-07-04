@@ -15,6 +15,14 @@ export default {
     type: 'text',
     _hide: true
   },
+  "entryDt": {
+    type: 'text',
+    _hide: true
+  },
+  "entryName":{
+    type: 'text',
+    _hide: true
+  },
   "orderNo": {
     type: 'text'
   },
@@ -121,10 +129,6 @@ export default {
     type: 'text',
     _important:true
   },
-  "shipmentStatus":{
-    _hide: true,
-    type: 'text'
-  },
   "skuOuterCartonQty": {
     type: 'text'
   },
@@ -156,9 +160,14 @@ export default {
     type: 'text'
   },
   "skuSupplierCompanyId": {
-    type: 'text'
+    type: 'text',
+    _hide: true
   },
   "skuSupplierTenantId": {
+    type: 'text',
+    _hide: true
+  },
+  "shipmentStatus":{
     type: 'text'
-  }
+  },
 }

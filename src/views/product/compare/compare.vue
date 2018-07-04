@@ -15,24 +15,22 @@
         </div>
         <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
                 <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}</el-button>
+                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}({{selectList.length}})</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
                 <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
-                <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
-                <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
-            </el-checkbox-group>
+            <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
         <v-table
                 code="udata_purchase_sku_compare_list_detail"
@@ -79,7 +77,7 @@
             </el-tabs>
         </el-dialog>
 
-        <el-dialog title="以下商品不能添加order" :visible.sync="dialogFormVisible" width="50%">
+        <el-dialog :title="$i.product.followingProductCantAddOrder" :visible.sync="dialogFormVisible" width="50%">
             <el-table
                     :data="disabledOrderList"
                     border
@@ -106,8 +104,7 @@
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">{{$i.product.sure}}</el-button>
             </div>
         </el-dialog>
 
@@ -154,6 +151,13 @@
 
                 isChangeData:false,             //是否在最原始的基础上modify过数据
 
+                isHideTheSame:false,
+                isHighlight:true,
+
+                copySameData:[],
+                copyLightData:[],
+                categoryList:[],
+
 
                 /**
                  * 字典配置
@@ -169,7 +173,6 @@
         methods:{
             ...mapActions(['setLog']),
             getList() {
-                console.log(this.$route.params.type,'this.$route.params.type')
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
                     let id=[];
@@ -182,8 +185,15 @@
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
+                        this.changeHighlight(true);
                         this.hasLoading=true;
                         this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
@@ -199,30 +209,22 @@
                     }
                     let params={
                         id: Number(this.$route.query.compareId),
-                        // operatorFilters: [
-                        //     {
-                        //         "columnName": "string",
-                        //         "operator": "string",
-                        //         "property": "string",
-                        //         "resultMapId": "string",
-                        //         "value": {}
-                        //     }
-                        // ],
                         pn: 1,
                         ps: 100,
                         recycle: false,
-                        // sorts: [
-                        //     {
-                        //         orderBy: "string",
-                        //         orderType: "string",
-                        //     }
-                        // ]
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
+                        this.changeHighlight(true);
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -232,7 +234,6 @@
                     });
                 }
             },
-
             btnClick(e){
                 let id;
                 if(this.$route.params.type==='new'){
@@ -259,7 +260,22 @@
                     })
                 }
             },
-
+            changeHideTheSame(e){
+                if(e){
+                    this.copySameData=this.$depthClone(this.tableDataList);
+                    this.$table.setHideSame(this.tableDataList);
+                }else{
+                    this.tableDataList=this.$depthClone(this.copySameData);
+                }
+            },
+            changeHighlight(e){
+                if(e){
+                    this.copyLightData=this.$depthClone(this.tableDataList);
+                    this.$table.setHighlight(this.tableDataList);
+                }else{
+                    this.tableDataList=this.$depthClone(this.copyLightData);
+                }
+            },
             changeChecked(e){
                 this.selectList=e;
             },
@@ -356,30 +372,8 @@
 
             //勾选的商品创建order
             createOrder(){
-                let supplierList=[];
-                let allow=true;
-                _.map(this.selectList,v=>{
-                    if(v.customerCreate.value){
-                        allow=false;
-                    }
-                    supplierList.push(v.supplierCode.value);
-                });
-                if(!allow){
-                    return this.$message({
-                        message: this.$i.product.customerProductCanNotAddToOrder,
-                        type: 'warning'
-                    });
-                }
-                if(_.uniq(supplierList).length>1){
-                    return this.$message({
-                        message: this.$i.product.notAddDifferentSupplierProduct,
-                        type: 'warning'
-                    });
-                }
-
                 this.disabledOrderList=[];
-                this.selectList.forEach(v=>{
-                    //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                _.map(this.selectList,v=>{
                     if(v.customerCreate.value){
                         this.disabledOrderList.push(v);
                     }
@@ -392,13 +386,20 @@
                             url:'/order/create',
                         })
                     }else{
+                        let supplierList=[];
+                        _.map(this.selectList,v=>{
+                            supplierList.push(v.supplierCode.value);
+                        });
+                        if(_.uniq(supplierList).length>1){
+                            return this.$message({
+                                message: this.$i.product.notAddDifferentSupplierProduct,
+                                type: 'warning'
+                            });
+                        }
+
                         let ids='';
                         this.selectList.forEach(v=>{
-                            if(this.$route.params.type==='modify'){
-                                ids+=(v.skuId.value+',');
-                            }else if(this.$route.params.type==='new'){
-                                ids+=(v.id.value+',');
-                            }
+                            ids+=(v.skuId.value+',');
                         });
                         this.$windowOpen({
                             url:'/order/create',
@@ -410,6 +411,63 @@
                         })
                     }
                 }
+
+
+
+                // let supplierList=[];
+                // let allow=true;
+                // _.map(this.selectList,v=>{
+                //     if(v.customerCreate.value){
+                //         allow=false;
+                //     }
+                //     supplierList.push(v.supplierCode.value);
+                // });
+                // if(!allow){
+                //     return this.$message({
+                //         message: this.$i.product.customerProductCanNotAddToOrder,
+                //         type: 'warning'
+                //     });
+                // }
+                // if(_.uniq(supplierList).length>1){
+                //     return this.$message({
+                //         message: this.$i.product.notAddDifferentSupplierProduct,
+                //         type: 'warning'
+                //     });
+                // }
+                //
+                // this.disabledOrderList=[];
+                // this.selectList.forEach(v=>{
+                //     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
+                //     if(v.customerCreate.value){
+                //         this.disabledOrderList.push(v);
+                //     }
+                // });
+                // if(this.disabledOrderList.length>0){
+                //     this.dialogFormVisible=true;
+                // }else{
+                //     if(this.selectList.length===0){
+                //         this.$windowOpen({
+                //             url:'/order/create',
+                //         })
+                //     }else{
+                //         let ids='';
+                //         this.selectList.forEach(v=>{
+                //             if(this.$route.params.type==='modify'){
+                //                 ids+=(v.skuId.value+',');
+                //             }else if(this.$route.params.type==='new'){
+                //                 ids+=(v.id.value+',');
+                //             }
+                //         });
+                //         this.$windowOpen({
+                //             url:'/order/create',
+                //             params:{
+                //                 type:'product',
+                //                 ids:ids,
+                //                 supplierCode:this.selectList[0].supplierCode.value
+                //             },
+                //         })
+                //     }
+                // }
             },
 
             //新增product
@@ -453,7 +511,6 @@
 
                 });
             },
-
             handleOkClick(e){
                 //如果总条数>100，则进行提示
                 let totalLen=0;
@@ -484,6 +541,13 @@
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                                 return e;
                             });
+                            if(this.isHideTheSame){
+                                this.changeHideTheSame(true);
+                            }
+                            if(this.isHighlight){
+                                this.changeHighlight(true);
+                            }
+
                             this.hasLoading=true;
                             this.disabledLine=this.tableDataList;
                             this.loadingTable=false;
@@ -528,7 +592,6 @@
                 }
                 this.addProductDialogVisible=false;
             },
-
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
@@ -662,13 +725,27 @@
                     }
                 });
             },
+
+            handleCategory(data){
+                _.map(data,item=>{
+                    if(item.children.length===0){
+                        this.categoryList.push(item);
+                    }else{
+                        this.handleCategory(item.children);
+                    }
+                });
+            },
+
         },
         created(){
-            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
-                res.forEach(v=>{
+            const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true});
+            const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+            const sysCategoryAjax=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
+            const myCategoryAjax=this.$ajax.get(this.$apis.get_buyer_my_category,{});
+            this.$ajax.all([codeAjax,countryAjax,sysCategoryAjax,myCategoryAjax]).then(res=>{
+                res[0].forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
-                        console.log(this.statusOption,'this.statusOption')
                     }else if(v.code==='WT_UNIT'){
                         this.weightOption=v.codes;
                     }else if(v.code==='ED_UNIT'){
@@ -681,18 +758,19 @@
                         this.skuUnitOption=v.codes;
                     }
                 });
-                //国家
-                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                    this.getData();
-                    this.getCategoryId();
-                }).catch(err=>{
+                this.countryOption=res[1];
+                // _.map(res[2],v=>{
+                //     _.map(v.children,data=>{
+                //         this.categoryList.push(data);
+                //     })
+                // });
+                console.log(this.$depthClone(res[3]),'res[3]')
+                this.handleCategory(res[3]);
+                console.log(this.$depthClone(this.categoryList),'this.categoryList')
+                this.getList();
+            }).catch(()=>{
 
-                });
-            }).catch(err=>{
-
-            });
-            this.getList();
+            })
         },
         mounted(){
             this.setLog({query:{code:'PRODUCT'}});

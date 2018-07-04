@@ -215,6 +215,40 @@ export default {
 
 
   /**
+   * 获取oss地址key
+   * @param url
+   * @param type
+   * @returns {Uint8Array | any[] | Int32Array | Uint16Array | Uint32Array | Float64Array | any}
+   */
+  $getOssKey(url, type) {
+    url = _.isArray(url) ? url : [url];
+
+    return _.map(url, val => {
+      let rs, ns, param = {}, u = val.split('?'), bucket;
+
+      val = `${decodeURIComponent(u[0])}${u[1] ? ('?' + u[1]) : ''}`;
+      rs = val.split('?')[0].split('/')
+      ns = rs.pop().split('.');
+      param.url = val;
+      param.id = rs[rs.length - 1];
+
+      if (ns.length > 1) {
+        let k = val.split('?')[0].match(/.com\/(\S*)/);
+        param.fileName = ns.join('.');
+        param.showType = ns.pop().toLocaleUpperCase();
+        param.showName = ns.shift();
+        param.fileKey = k ? k[1] : '';
+      } else {
+        param.showName = ns[0];
+        param.showType = 'File';
+        param.fileName = ns[0];
+      }
+      bucket = val.match(/\/\/(\S*)ucn-oss./);
+      return type ? `${bucket[1]}ucn-oss:${param.fileKey}` : param;
+    });
+  },
+
+  /**
    * table 数据过滤
    * @type {{contrast(*=, *=): *, setHighlight(*=): *, setHideSame(*=): *}}
    */
@@ -241,15 +275,19 @@ export default {
         , i = 0;
       keyData = _.mapObject(keyData, (val) => {
         // let z = 200 - ((255 / len) * i);
-        // val = `rgba(${z},255,255,1)`;
+        // val = `rgba(${z},81,10,1)`;
+        // val =  '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6);
         val = `#f3510a`;
         // i++;
-        return val;
+        return val
       });
+
       return _.map(data, value => {
         return _.mapObject(value, (val, key) => {
-          if (_.isObject(val)) {
-            val._color = keyData[key] || '';
+          if (_.isObject(val) && keyData[key]) {
+            val._style = val._style || {};
+            val._style.backgroundColor = keyData[key];
+            val._style.color = '#ffffff';
           }
           return val;
         });

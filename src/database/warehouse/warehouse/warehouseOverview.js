@@ -5,6 +5,9 @@ export default {
     skuId:{
         _hide:true
     },
+    skuPics:{
+        _image:true
+    },
     inboundNo:{},
     inboundDate:{},
     customerNo:{},
