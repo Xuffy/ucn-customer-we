@@ -166,6 +166,7 @@
           :key="v.key"
           :label="v.key"
           align="center"
+          :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
           width="180">
           <template slot-scope="scope">
             <div v-if="v.showType==='qc'">
@@ -568,14 +569,15 @@
         this.qcOrderConfig.qcOrderDetailCreateParams = [];
 
         if (_.isEmpty(this.productTableData)) {
-          return this.$message({
-            message: this.$i.warehouse.pleaseAddProduct,
-            type: 'warning'
-          });
+          return this.$message.warning(this.$i.warehouse.pleaseAddProduct);
         }
 
-        this.productTableData.forEach(v => {
+        let checkExpectQcQty = false;
+        _.map(this.productTableData, v => {
           if (v.id !== 0) {
+            if (!checkExpectQcQty) {
+              checkExpectQcQty = (!v.expectQcQty && v.expectQcQty !== 0);
+            }
             this.qcOrderConfig.qcOrderDetailCreateParams.push({
               expectQcQty: v.expectQcQty ? v.expectQcQty : 0,
               inboundSkuId: v.id,
@@ -584,6 +586,11 @@
             });
           }
         });
+
+        if (checkExpectQcQty) {
+          return this.$message.warning(`${this.$i.util.validateRequired} ${this.$i.warehouse.expectQcQty}`);
+        }
+
         this.qcOrderConfig.attachments = this.$refs.upload[0].getFiles();
 
         this.disableClickSubmit = true;
@@ -712,7 +719,7 @@
                   , wo = _.findWhere(this.weightOption, {code: v.weightUnitDictCode}) || {}
                   , lo = _.findWhere(this.lengthOption, {code: v.lengthUnitDictCode}) || {};
                 v.skuUnitDictCode = suo.name || '';
-                v.volumeUnitDictCode = vo.name||'';
+                v.volumeUnitDictCode = vo.name || '';
                 v.weightUnitDictCode = wo.name || '';
                 v.lengthUnitDictCode = lo.name || '';
                 this.productTableData.push(v);
@@ -842,7 +849,6 @@
         this.productConfig.ids = this.$route.query.ids.split(',');
         this.loadingProductTable = true;
         this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
-          console.log(res)
           res.forEach(v => {
             if (v.id !== 0) {
               this.productTableData.push(v);
