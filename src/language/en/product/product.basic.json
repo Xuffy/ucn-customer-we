@@ -89,5 +89,6 @@
   "addProduct": "Add Product",
   "addFromProduct": "Add from Product",
   "addFromBookmark": "Add from Bookmark",
-  "skuSaleStatus": "SKU Sale Status"
+  "skuSaleStatus": "SKU Sale Status",
+  "customersInfo":"海关信息"
 }

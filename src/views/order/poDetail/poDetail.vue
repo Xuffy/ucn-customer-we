@@ -1727,7 +1727,7 @@
                         // this.$getOssKey(,true);
                     })
                 });
-                return console.log(params,'params')
+                // return console.log(params,'params')
                 params.attachments=this.$refs.upload[0].getFiles();
                 _.map(params.orderSkuUpdateList,v=>{
                     let nowStatus,initialStatus;
@@ -2460,12 +2460,11 @@
              * quick create弹出框事件
              * */
             searchInquiry(e){
-                console.log(e)
-                if(!e.keyType){return this.$message({
+                if(!e.id){return this.$message({
                     message: this.$i.order.pleaseChooseType,
                     type: 'warning'
                 });}
-                this.inquiryConfig.inquiryNo=e.key;
+                this.inquiryConfig.inquiryNo=e.value;
                 this.getInquiryData();
             },
             changeChecked(){
@@ -2954,6 +2953,6 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index:2000;
+        z-index:5;
     }
 </style>

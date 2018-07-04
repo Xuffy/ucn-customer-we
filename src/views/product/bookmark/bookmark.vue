@@ -240,13 +240,13 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:121213,
-                        name:"系统分类",
+                        id:513522625,
+                        name:"自己的分类",
                         children:[]
                     },
                     {
-                        id:513522625,
-                        name:"自己的分类",
+                        id:121213,
+                        name:"系统分类",
                         children:[]
                     },
                 ],
@@ -266,6 +266,7 @@
             ...mapActions([
                 'setRecycleBin','setLog'
             ]),
+
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -286,44 +287,29 @@
                 this.disabledSearch=true;
                 if(!this.productForm.maxExwPrice){
                     this.productForm.maxExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
                 }
                 if(!this.productForm.minExwPrice){
                     this.productForm.minExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
                 }
                 if(!this.productForm.maxFobPrice){
                     this.productForm.maxFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
                 }
                 if(!this.productForm.minFobPrice){
                     this.productForm.minFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
-                this.loadingTable=true;
-                this.productForm.country='';
-                if(this.selectCountry.length>0){
-                    _.map(this.selectCountry,v=>{
-                        this.productForm.country+=(v+',');
-                    });
-                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
-                }
-
-                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    this.pageData=res;
-                    this.disabledSearch=false;
-                    this.selectList=[];
-                    this.loadingTable=false;
-                }).catch(err=>{
-                    this.disabledSearch=false;
-                    this.loadingTable=false;
-                });
-
+                this.getData();
             },
             handleChange(value) {
                 console.log(value);
@@ -342,12 +328,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
@@ -355,6 +341,13 @@
             //获取table数据
             getData() {
                 this.loadingTable=true;
+                this.productForm.country='';
+                if(this.selectCountry.length>0){
+                    _.map(this.selectCountry,v=>{
+                        this.productForm.country+=(v+',');
+                    });
+                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
+                }
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
                         let noneSellCountry='';
@@ -367,7 +360,6 @@
                         });
                         noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
                         e.noneSellCountry.value=noneSellCountry;
-
                         e.status.value=this.$change(this.statusOption,'status',e,true).name;
                         e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
                         e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
@@ -378,8 +370,8 @@
                         return e;
                     });
                     this.pageData=res;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                }).finally(err=>{
+                    this.disabledSearch=false;
                     this.loadingTable=false;
                 });
             },
