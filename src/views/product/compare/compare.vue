@@ -156,6 +156,7 @@
 
                 copySameData:[],
                 copyLightData:[],
+                categoryList:[],
 
 
                 /**
@@ -184,8 +185,16 @@
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                            e.categoryName._value=e.categoryId.value?_.findWhere(this.categoryList,{id:e.categoryId.value}).name:'';
+                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
+                        this.changeHighlight(true);
                         this.hasLoading=true;
                         this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
@@ -208,6 +217,13 @@
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                            e.categoryName._value=e.categoryId.value?_.findWhere(this.categoryList,{id:e.categoryId.value}).name:'';
+                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
                         this.changeHighlight(true);
@@ -527,6 +543,13 @@
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                                 return e;
                             });
+                            if(this.isHideTheSame){
+                                this.changeHideTheSame(true);
+                            }
+                            if(this.isHighlight){
+                                this.changeHighlight(true);
+                            }
+
                             this.hasLoading=true;
                             this.disabledLine=this.tableDataList;
                             this.loadingTable=false;
@@ -704,13 +727,27 @@
                     }
                 });
             },
+
+            handleCategory(data){
+                _.map(data,item=>{
+                    if(!item.children.length){
+                        this.categoryList.push(item);
+                    }else{
+                        this.handleCategory(item.children);
+                    }
+                });
+            },
+
         },
         created(){
-            this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
-                res.forEach(v=>{
+            const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true});
+            const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+            const sysCategoryAjax=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
+            const myCategoryAjax=this.$ajax.get(this.$apis.get_buyer_my_category,{});
+            this.$ajax.all([codeAjax,countryAjax,sysCategoryAjax,myCategoryAjax]).then(res=>{
+                res[0].forEach(v=>{
                     if(v.code==='SKU_SALE_STATUS'){
                         this.statusOption=v.codes;
-                        console.log(this.statusOption,'this.statusOption')
                     }else if(v.code==='WT_UNIT'){
                         this.weightOption=v.codes;
                     }else if(v.code==='ED_UNIT'){
@@ -723,18 +760,17 @@
                         this.skuUnitOption=v.codes;
                     }
                 });
-                //国家
-                this.$ajax.get(this.$apis.get_country,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                    this.getData();
-                    this.getCategoryId();
-                }).catch(err=>{
-
+                this.countryOption=res[1];
+                _.map(res[2],v=>{
+                    _.map(v.children,data=>{
+                        this.categoryList.push(data);
+                    })
                 });
-            }).catch(err=>{
+                this.handleCategory(res[3]);
+                this.getList();
+            }).catch(()=>{
 
-            });
-            this.getList();
+            })
         },
         mounted(){
             this.setLog({query:{code:'PRODUCT'}});

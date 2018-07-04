@@ -21,10 +21,8 @@
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox-group v-model="screenTableStatus" class="compare-checkbox">
-                <el-checkbox label="1">{{$i.product.hideTheSame}}</el-checkbox>
-                <el-checkbox label="2">{{$i.product.highlightTheDifferent}}</el-checkbox>
-            </el-checkbox-group>
+            <el-checkbox  @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox  @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
 
         <v-table
@@ -109,6 +107,10 @@
                 disableDelete:true,            //是否禁止删除
                 allowDeleteCompare:true,      //是否可以点击delete，在数据还没加载完的时候不能点击
                 allowBottomClick:true,          //是否禁止点击底部操作按钮,
+                isHideTheSame:false,
+                isHighlight:true,
+                selectedData:[],
+                selectNumber: [],
                 params:{
                   id: Number(this.$route.query.compareId),
                   name:'',
@@ -118,8 +120,6 @@
                   operatorFilters:[],
                   sorts:[]
                 },
-                selectedData:[],
-                selectNumber: [],
             }
         },
         methods:{
@@ -152,7 +152,6 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
-                          copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country='';
                           e.country.value.split(',').forEach(v=>{
@@ -170,6 +169,7 @@
 
                           return e;
                         });
+                        this.changeHighlight(true);
                         this.disabledLine=this.tableDataList;
                     }).catch(err=>{
 
@@ -182,13 +182,13 @@
                         this.isModify=true;
                     }
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
-                         copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                           return e;
                         });
+                        this.changeHighlight(true);
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
@@ -199,13 +199,13 @@
                     this.isModify=true;
                   }
                   this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
-                    copy_data = this.$getDB(this.$db.supplier.compareDetail, res.datas)
                     this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                       e.type.value=this.$change(this.options.type,'type',e,true).name;
                       e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
                       return e;
                     });
+                    this.changeHighlight(true);
                     this.disabledLine=this.tableDataList;
                     this.allowDeleteCompare=false;
                     this.allowBottomClick=false;
@@ -486,8 +486,25 @@
             this.params.operatorFilters=operatorFilters||[];
             this.params.sorts=sorts||[];
             this.getList();
-          }
-
+          },
+          //相同项隐藏
+          changeHideTheSame(e){
+            if(e){
+              this.copyHideSameData = this.$depthClone(this.tableDataList);
+              this.$table.setHideSame(this.tableDataList);
+            }else{
+              this.tableDataList = this.$depthClone(this.copyHideSameData)
+            }
+          },
+          //不同项高亮
+          changeHighlight(e){
+            if(e){
+              this.copyHighlightData = this.$depthClone(this.tableDataList);
+              this.$table.setHighlight(this.tableDataList)
+            }else{
+              this.tableDataList = this.$depthClone(this.copyHighlightData)
+            }
+          },
         },
         created(){
             this.getCodePart();
@@ -507,20 +524,7 @@
               }else{
                   this.disableDelete=true;
               }
-          },
-          screenTableStatus(){
-             if (this.screenTableStatus.length != 0){
-               this.screenTableStatus.forEach(v => {
-                  if (v == 1){
-                    this.tableDataList = this.$table.setHideSame(this.tableDataList);
-                  }else if (v == 2){
-                    this.tableDataList = this.$table.setHighlight(this.tableDataList)
-                  }
-               })
-             }else{
-               this.tableDataList = this.$depthClone(copy_data)
-             }
-          },
+          }
         },
     }
 </script>

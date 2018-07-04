@@ -2460,12 +2460,11 @@
              * quick create弹出框事件
              * */
             searchInquiry(e){
-                console.log(e)
-                if(!e.keyType){return this.$message({
+                if(!e.id){return this.$message({
                     message: this.$i.order.pleaseChooseType,
                     type: 'warning'
                 });}
-                this.inquiryConfig.inquiryNo=e.key;
+                this.inquiryConfig.inquiryNo=e.value;
                 this.getInquiryData();
             },
             changeChecked(){
