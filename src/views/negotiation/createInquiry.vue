@@ -102,7 +102,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-else-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="fromArg[item.key] ? fromArg[item.key].split(',') : ''" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachment" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -153,7 +153,7 @@
         :type="radio"
         :isInquiry="true"></v-product>
     </el-dialog>
-    <v-history-modify @save="save" ref="HM"/>
+    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"/>
   </div>
 </template>
 <script>
@@ -333,11 +333,7 @@ export default {
       this.dialogTableVisible = false;
     },
     addProduct() {
-      let arr = [];
-      _.map(this.tabData, item => {
-        if (!item._disabled) arr.push(item);
-      });
-      this.disabledLine = arr;
+      this.disabledLine = this.tabData.filter(i => !i._disabled);
       this.trig = new Date().getTime();
       this.dialogTableVisible = true;
     },
@@ -351,6 +347,17 @@ export default {
     },
     inputEnter(val) {
 
+    },
+    beforeSave(data) {
+      if (Array.isArray(data)) {
+        for (let item of data) {
+          if (!item._remark && item.skuReadilyAvailable.value === 1 && (isNaN(item.skuAvailableQty.value) || item.skuAvailableQty.value < 1)) {
+            this.$message.warning(this.$i.inquiry.skuAvailableQtyMustGreatNotLessThanOne);
+            return false;
+          }
+        }
+      }
+      return true;
     },
     save(data) { // modify 编辑完成反填数据
       let items = _.map(data, item => {
@@ -376,7 +383,6 @@ export default {
       this.trig = new Date().getTime();
     },
     submitForm(type) { // 提交
-      let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
       // this.$refs.ruleform.validate((valid) => {
       //   if (!valid) {
@@ -397,7 +403,7 @@ export default {
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
       upData.skuQty = upData.details.length;
-      upData.attachment = files && files.length > 0 ? files.join(',') : null;
+      upData.attachments = this.$refs.UPLOAD[0].getFiles();
 
       let postData = this.$filterModify(upData);
       if (postData.discountRate && isNaN(postData.discountRate)) {
@@ -609,7 +615,7 @@ export default {
     padding: 10px;
   }
 
-  .select-wrap .el-form-item > > > .el-form-item__label {
+  .select-wrap .el-form-item /deep/ .el-form-item__label {
     display: flex;
     justify-content: flex-end;
     text-align: left;

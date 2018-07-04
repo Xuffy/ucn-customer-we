@@ -328,6 +328,7 @@
                 this.$set(this.productForm, 'maxExwPrice', null);
                 this.$set(this.productForm, 'minFobPrice', null);
                 this.$set(this.productForm, 'maxFobPrice', null);
+                this.$set(this.productForm, 'supplierNameLike', null);
                 this.selectCountry = [];
             },
 
@@ -362,11 +363,9 @@
                     });
                     this.productForm.country = this.productForm.country.slice(0, this.productForm.country.length - 1);
                 }
-                console.log(this.productForm.country, 'this.productForm.country')
 
                 this.getData();
             },
-
             handleChange(value) {
                 console.log(value);
             },
@@ -478,7 +477,8 @@
                     let url = '';
                     if (this.type === 'product') {
                         url = this.$apis.get_buyerProductList;
-                    } else if (this.type === 'bookmark') {
+                    }
+                    else if (this.type === 'bookmark') {
                         url = this.$apis.get_buyerBookmarkList;
                     }
                     this.loadingTable = true;
@@ -743,7 +743,6 @@
                 this.productForm.ps = e;
                 this.getData();
             },
-
         },
         created() {
             this.loadingTable = true;
@@ -763,8 +762,8 @@
                         this.skuUnitOption = v.codes;
                     }
                 });
-                if (this.$route.query.supplierName) {
-                    this.productForm.supplierNameLike = this.$route.query.supplierName;
+                if (this.$route.params.supplierName) {
+                    this.productForm.supplierNameLike = this.$route.params.supplierName;
                 }
                 //国家
                 this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {

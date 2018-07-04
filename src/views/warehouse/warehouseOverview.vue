@@ -76,7 +76,7 @@
                     inboundNo: "",
                     orderNo: "",
                     pn: 1,
-                    ps: 10,
+                    ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: "",
 
