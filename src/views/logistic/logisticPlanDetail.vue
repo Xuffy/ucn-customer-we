@@ -227,7 +227,7 @@
           _.mapObject(item, (v, k) => {
             if (v._important) {
               obj[k] = {
-                value: Number(v.value) + Number(obj[k] ? obj[k].value : 0)
+                value: Number(v.value)  + (Number(obj[k] ? obj[k].value : 0) || 0)
               };
             } else {
               obj[k] = {
@@ -522,16 +522,27 @@
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-            res.history.length ? (this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-                res.history.map(el => {
-                  let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-                    item => item.code == el.shipmentStatus)
-                  el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                  return el;
-                }))]) :
-              (this.productModifyList = [currentProduct])
-          }) :
-          this.productModifyList = [currentProduct]
+        this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
+          res.history.map(el => {
+            let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
+              item => item.code == el.shipmentStatus)
+            el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+            return el;
+          }))[0]]: [currentProduct];
+        }) : this.productModifyList = [currentProduct];
+
+
+        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {  //以前版本 历史修改记录也会返回
+        //   res.history.length ? this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
+        //       res.history.map(el => {
+        //         let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
+        //           item => item.code == el.shipmentStatus)
+        //         el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+        //         return el;
+        //       }))] :
+        //     (this.productModifyList = [currentProduct])
+        // }) :
+        // this.productModifyList = [currentProduct]
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -879,6 +890,14 @@
         this.$set(this.oldPlanObject, 'currency', v);
       }
     },
+    watch:{
+      containerInfo:{
+        handler: function (val, oldVal) {
+          console.log(val)
+        },
+        deep: true
+      }
+    }
   }
 
 </script>
