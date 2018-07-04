@@ -591,7 +591,7 @@
         <div class="footBtn">
             <div v-if="isModify">
                 <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-                <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
+                <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.exit}}</el-button>
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
@@ -830,6 +830,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
+                    :precision="1"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>

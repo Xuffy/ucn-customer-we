@@ -75,9 +75,9 @@
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns">
-                        <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                        <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
-                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}</el-button>
+                        <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                        <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}({{selectList.length}})</el-button>
                         <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
                         <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
                         <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
