@@ -1131,5 +1131,4 @@
     .dialog-footer{
         text-align: center;
     }
-
 </style>
