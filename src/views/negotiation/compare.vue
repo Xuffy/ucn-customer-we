@@ -40,7 +40,7 @@
             :pageData="params"
             @page-change="handleSizeChange"
             @page-size-change="pageSizeChange"
-            :page-sizes="[50, 100, 200]"/>
+            :page-sizes="[100]"/>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
