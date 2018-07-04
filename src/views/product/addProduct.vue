@@ -362,7 +362,6 @@
                     });
                     this.productForm.country = this.productForm.country.slice(0, this.productForm.country.length - 1);
                 }
-                console.log(this.productForm.country, 'this.productForm.country')
 
                 this.getData();
             },

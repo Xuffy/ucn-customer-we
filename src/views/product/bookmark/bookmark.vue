@@ -240,13 +240,13 @@
                 //Category下拉组件数据
                 categoryList:[
                     {
-                        id:121213,
-                        name:"系统分类",
+                        id:513522625,
+                        name:"自己的分类",
                         children:[]
                     },
                     {
-                        id:513522625,
-                        name:"自己的分类",
+                        id:121213,
+                        name:"系统分类",
                         children:[]
                     },
                 ],
@@ -286,22 +286,26 @@
                 this.disabledSearch=true;
                 if(!this.productForm.maxExwPrice){
                     this.productForm.maxExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxExwPrice=Number(this.productForm.maxExwPrice);
                 }
                 if(!this.productForm.minExwPrice){
                     this.productForm.minExwPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minExwPrice=Number(this.productForm.minExwPrice);
                 }
                 if(!this.productForm.maxFobPrice){
                     this.productForm.maxFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.maxFobPrice=Number(this.productForm.maxFobPrice);
                 }
                 if(!this.productForm.minFobPrice){
                     this.productForm.minFobPrice=null;
-                }else{
+                }
+                else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
                 this.loadingTable=true;
@@ -342,12 +346,12 @@
             //获取类别数据
             getCategoryId(){
                 this.$ajax.get(this.$apis.get_buyer_sys_category,{}).then(res=>{
-                    this.categoryList[0].children=res;
+                    this.categoryList[1].children=res;
                 }).catch(err=>{
 
                 });
                 this.$ajax.get(this.$apis.get_buyer_my_category,{}).then(res=>{
-                    this.categoryList[1].children=res;
+                    this.categoryList[0].children=res;
                 }).catch(err=>{
 
                 });
