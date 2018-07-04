@@ -184,9 +184,7 @@
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                            console.log(e,'e')
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                            e.categoryName._value=e.categoryId.value?_.findWhere(this.categoryList,{id:e.categoryId.value}).name:'';
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
                             e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
                             e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
@@ -218,7 +216,6 @@
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                            e.categoryName._value=e.categoryId.value?_.findWhere(this.categoryList,{id:e.categoryId.value}).name:'';
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
                             e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
                             e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
