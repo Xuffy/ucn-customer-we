@@ -65,6 +65,11 @@
                     <!--<el-button  @click="upload" type="primary">{{$i.button.upload}}</el-button>-->
                   <!--</div>-->
                   <v-upload ref="uploadAttachment" :limit="20" :list="attachments" readonly/>
+                  <div class="attachment" v-show="!attachments" style="margin-top:40px;">
+                    <div>
+                      No Attachment
+                    </div>
+                  </div>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.supplier.remark" name="remark">
                   <div class="section-btn">
@@ -647,40 +652,18 @@
         width: 80%;
     }
 
-    /*
-    .attchment {
-        display: flex;
-        justify-content: flex-start;
-        height: 400px;
+    .attachment{
+      max-height: 300px;
+      max-width: 100%;
+      overflow-y: scroll;
+      overflow-x: auto;
+      border: 1px solid #ebeef5;
     }
-
-    .attchment_item {
-        width: 180px;
-        height: 60px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border: 1px solid #BEBEBE;
-        border-radius: 3px;
-        margin-left: 20px;
+    .attachment div{
+      text-align: center;
+      color: #999999;
+      height: 200px;
+      line-height: 200px;
     }
-
-    .attchment_item_content {
-        width: 180px;
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
-    }
-
-    .attchment_item p {
-        font-size: 14px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .attchment_item i {
-        font-size: 40px;
-    }
-*/
 
 </style>
