@@ -102,7 +102,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-else-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="fromArg[item.key] ? fromArg[item.key].split(',') : ''" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="Array.isArray(fromArg[item.key]) ? fromArg[item.key] : []" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
