@@ -35,6 +35,8 @@
                             <el-input-number v-model="remarkJson[item.key]" :min="1" :max="100" controls-position="right" size="mini" :controls="false"></el-input-number> %
                         </span>
 
+                        <v-image class="img" v-if="item._image" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
+
                         <v-up-load v-if="item.type === 'attachment' && scope.row[item.key] &&scope.row[item.key].history"/>
                     </template>
                 </el-table-column>
@@ -50,6 +52,7 @@
 </template>
 <script>
 import VTable from '@/components/common/table/index';
+import VImage from '@/components/common/image/index';
 // import Upload from '@/components/common/upload/upload';
 export default {
   data() {
@@ -176,6 +179,13 @@ export default {
         }
       }
     },
+    getImage(value, split = ',') {
+      if (_.isEmpty(value)) return '';
+      if (_.isString(value)) {
+        value = value.split(split);
+      }
+      return value[0];
+    },
     tableRowClassName(row, index) {
       row.index = index;
     },
@@ -188,6 +198,7 @@ export default {
   },
   components: {
     VTable,
+    VImage
     // 'v-up-load': Upload
   }
 };
