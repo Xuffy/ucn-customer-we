@@ -82,8 +82,7 @@
     </el-dialog>
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
-      :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy" @createdPlanData="createdPlanData" @createdPaymentData="createdPaymentData"
-    />
+      :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
   </div>
 </template>
 <script>
@@ -288,27 +287,30 @@
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
       })
-      if (this.pageTypeCurr.slice(-6) == 'Detail') {
-        this.getDetails();
-      } else {
-        this.edit = true
-        this.basicInfoArr.forEach((item) => {
-          this.$set(item, 'value', item.defaultVal);
-        })
-        this.transportInfoArr.forEach((item) => {
-          this.$set(item, 'value', item.defaultVal);
-        })
-        if (this.isCopy) {
-          this.getDetails();
-        } else {
-          this.getCustomer();
-        }
-        this.getNewLogisticsNo()
-        this.getRate();
-      }
     },
     methods: {
       ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      //初始化页面数据
+      pageInit(){
+        if (this.pageTypeCurr.slice(-6) == 'Detail') {
+          this.getDetails();
+        } else {
+          this.edit = true
+          this.basicInfoArr.forEach((item) => {
+            this.$set(item, 'value', item.defaultVal);
+          })
+          this.transportInfoArr.forEach((item) => {
+            this.$set(item, 'value', item.defaultVal);
+          })
+          if (this.isCopy) {
+            this.getDetails();
+          } else {
+            this.getCustomer();
+          }
+          this.getNewLogisticsNo()
+          this.getRate();
+        }
+      },
       //获取customerName
       getCustomer() {
         this.$ajax.get(`${this.$apis.get_Customer}`).then(res => {
@@ -420,7 +422,7 @@
           return item;
         });
         this.productList = this.$getDB(this.$db.logistic.productInfo, res.product.map(el => {
-          let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(item =>
+          let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item =>
             item.code == el.shipmentStatus)
           el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
           return el;
@@ -463,7 +465,22 @@
         this.$ajax.post(this.$apis.get_dictionary, params).then(res => {
           _.mapObject(this.dictionaryPart, (v, k) => {
             this.$set(this.selectArr, k, res.find(a => a.code === v).codes)
+            if (k == "ShipmentStatus") {
+              this.selectArr[k].unshift({
+                code: "0",
+                defaultCode: 0,
+                id: 0,
+                name: " ",
+                remark: "",
+                seqNum: "",
+                typeCode: "SKU_LOGISTICS_STATUS",
+                value: "0"
+              })
+            }
           })
+          this.pageInit();
+        }).catch(()=>{
+          this.pageInit();
         })
       },
       handleSelectionContainer(selectArray) {
@@ -522,13 +539,13 @@
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-        this.productModifyList =  res.history.length ? [this.$getDB(this.$db.logistic.productModify,
+        this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
           res.history.map(el => {
             let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
               item => item.code == el.shipmentStatus)
             el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
             return el;
-          }))[0]]: [currentProduct];
+          })): [currentProduct];
         }) : this.productModifyList = [currentProduct];
 
 
@@ -633,8 +650,6 @@
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
-        // console.log(selectArrData)
-        // TODO
       },
 
       selectProduct(arr) {
@@ -731,7 +746,7 @@
             type: 'success',
             duration: 3000,
             onClose: () => {
-              this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : ''));
+              this.$router.push('/logistic/' + (this.pageTypeCurr == "loadingListDetail" ? 'loadingList' : (this.pageTypeCurr == "logisticDraftDetail" ? 'draft' : '')));
             }
           })
         })

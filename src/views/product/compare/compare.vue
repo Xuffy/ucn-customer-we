@@ -15,14 +15,14 @@
         </div>
         <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}</el-button>
+                <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
                 <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
                 <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}</el-button>
+                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}({{selectList.length}})</el-button>
 
                 <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
 
