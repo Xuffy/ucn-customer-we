@@ -102,7 +102,7 @@ export default {
   get_currency: ['/currency/all', 'UMETA_URL', 'UMETA_URL'],
   add_buyerQcOrder: ['/qc/add', 'BASE_URL'],
   GET_QC_DETAIL_GETBYID: ['/qc/detail/getById', 'USUPPLY_URL', 'USUPPLY_URL'],
-  GET_QC_GETBYQCORDERNO: ['/qc/getByQcOrderNo', 'USUPPLY_URL', 'USUPPLY_URL'],
+  GET_QC_GETBYQCORDERNO: ['/qc/getByQcOrderNo', 'BASE_SERVICE'],
   POST_RETURN_HANDLE: ['/qc/return/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
   POST_REWORK_HANDLE: ['/qc/rework/handle', 'USUPPLY_URL', 'USUPPLY_URL'],
   get_qcDetail: ['/qc/getById', 'BASE_URL'],
