@@ -266,6 +266,7 @@
             ...mapActions([
                 'setRecycleBin','setLog'
             ]),
+
             //切换body的收缩展开状态
             switchDisplay(){
                 this.hideBody=!this.hideBody;
@@ -308,26 +309,7 @@
                 else{
                     this.productForm.minFobPrice=Number(this.productForm.minFobPrice);
                 }
-                this.loadingTable=true;
-                this.productForm.country='';
-                if(this.selectCountry.length>0){
-                    _.map(this.selectCountry,v=>{
-                        this.productForm.country+=(v+',');
-                    });
-                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
-                }
-
-                this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                    this.pageData=res;
-                    this.disabledSearch=false;
-                    this.selectList=[];
-                    this.loadingTable=false;
-                }).catch(err=>{
-                    this.disabledSearch=false;
-                    this.loadingTable=false;
-                });
-
+                this.getData();
             },
             handleChange(value) {
                 console.log(value);
@@ -359,6 +341,13 @@
             //获取table数据
             getData() {
                 this.loadingTable=true;
+                this.productForm.country='';
+                if(this.selectCountry.length>0){
+                    _.map(this.selectCountry,v=>{
+                        this.productForm.country+=(v+',');
+                    });
+                    this.productForm.country=this.productForm.country.slice(0,this.productForm.country.length-1);
+                }
                 this.$ajax.post(this.$apis.get_buyerBookmarkList,this.productForm).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,e=>{
                         let noneSellCountry='';
@@ -371,7 +360,6 @@
                         });
                         noneSellCountry=noneSellCountry.slice(0,noneSellCountry.length-1);
                         e.noneSellCountry.value=noneSellCountry;
-
                         e.status.value=this.$change(this.statusOption,'status',e,true).name;
                         e.expireUnit.value=this.$change(this.dateOption,'expireUnit',e,true).name;
                         e.unit.value=this.$change(this.skuUnitOption,'unit',e,true).name;
@@ -382,8 +370,8 @@
                         return e;
                     });
                     this.pageData=res;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                }).finally(err=>{
+                    this.disabledSearch=false;
                     this.loadingTable=false;
                 });
             },
