@@ -102,7 +102,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-else-if="item.type === 'attachment' || item.type === 'upData'" :limit="20" :list="Array.isArray(fromArg[item.key]) ? fromArg[item.key] : []" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachment" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -333,11 +333,7 @@ export default {
       this.dialogTableVisible = false;
     },
     addProduct() {
-      let arr = [];
-      _.map(this.tabData, item => {
-        if (!item._disabled) arr.push(item);
-      });
-      this.disabledLine = arr;
+      this.disabledLine = this.tabData.filter(i => !i._disabled);
       this.trig = new Date().getTime();
       this.dialogTableVisible = true;
     },
@@ -376,7 +372,6 @@ export default {
       this.trig = new Date().getTime();
     },
     submitForm(type) { // 提交
-      let files = this.$refs.UPLOAD[0].getFiles();
       this.fromArg.draft = type && type === 'draft' ? 1 : 0;
       // this.$refs.ruleform.validate((valid) => {
       //   if (!valid) {
@@ -397,7 +392,7 @@ export default {
       if (arr.length) upData.suppliers = arr;
       upData.details = this.dataFilter(this.tabData);
       upData.skuQty = upData.details.length;
-      upData.attachment = files && files.length > 0 ? files.join(',') : null;
+      upData.attachments = this.$refs.UPLOAD[0].getFiles();
 
       let postData = this.$filterModify(upData);
       if (postData.discountRate && isNaN(postData.discountRate)) {
