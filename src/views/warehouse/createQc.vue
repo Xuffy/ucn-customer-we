@@ -952,7 +952,7 @@
     width: 80%;
   }
 
-  .speTimezone > > > .el-select {
+  .speTimezone /deep/ .el-select {
     display: block;
   }
 
@@ -960,7 +960,7 @@
     margin-top: 10px;
   }
 
-  .product-table > > > .el-checkbox {
+  .product-table /deep/ .el-checkbox {
     margin: 0;
   }
 
@@ -972,7 +972,7 @@
     width: 80%;
   }
 
-  .summaryInput > > > input {
+  .summaryInput /deep/ input {
     text-align: center;
   }
 </style>

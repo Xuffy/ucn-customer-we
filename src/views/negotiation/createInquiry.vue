@@ -609,7 +609,7 @@ export default {
     padding: 10px;
   }
 
-  .select-wrap .el-form-item > > > .el-form-item__label {
+  .select-wrap .el-form-item /deep/ .el-form-item__label {
     display: flex;
     justify-content: flex-end;
     text-align: left;
