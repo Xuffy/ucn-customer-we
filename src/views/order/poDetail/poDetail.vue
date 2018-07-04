@@ -591,7 +591,7 @@
         <div class="footBtn">
             <div v-if="isModify">
                 <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-                <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.cancel}}</el-button>
+                <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.exit}}</el-button>
             </div>
             <div v-else>
                 <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder" @click="modifyOrder" type="primary">{{$i.order.modify}}</el-button>
@@ -737,6 +737,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in weightOption"
@@ -750,6 +751,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in lengthOption"
@@ -763,6 +765,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in volumeOption"
@@ -830,6 +833,7 @@
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
+                    :precision="1"
                     slot-scope="{data}"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
@@ -870,7 +874,7 @@
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuRateValueAddedTax"
@@ -878,7 +882,7 @@
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
-                    :max="100"
+                    :max="1"
                     class="speNumber spx"
                     :controls="false"
                     slot="skuTaxRefundRate"
@@ -1111,6 +1115,7 @@
         },
         data(){
             return{
+                num9:1,
                 options:[],
                 test:1,
                 /**

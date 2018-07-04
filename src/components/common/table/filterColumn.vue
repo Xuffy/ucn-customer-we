@@ -66,6 +66,7 @@
     created() {
     },
     mounted() {
+      this.getBaseConfig();
     },
     methods: {
       filterNode(value, data) {
@@ -82,12 +83,20 @@
           });
         });
       },
+      getBaseConfig() {
+      },
       getConfig(isUpdate = false, data = []) {
 
         if (!_.isEmpty(data)) {
           this.columns = data[0];
         }
 
+        /*return this.$ajax.all([
+          this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code}, {contentType: 'F'}),
+          this.$ajax.post(this.$apis.GRIDFAVORITE_PART, {bizCode: this.code}, {contentType: 'F'})
+        ]).then(res => {
+          console.log(res)
+        });*/
         return this.$ajax.post(this.$apis.GRIDFAVORITE_LIST, {bizCode: this.code},
           {contentType: 'F', cache: true, updateCache: isUpdate})
           .then(res => {

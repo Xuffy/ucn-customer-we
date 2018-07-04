@@ -24,5 +24,6 @@ export default {
   ROLE_PRIVILEGE: ['/role/privilege', 'UUSER_URL'],
   USERMESSAGE_READ: ['/usermessage/read', 'UMESSAGE_URL'],
   USERMESSAGE_UNREADTOP: ['/usermessage/unreadTop', 'UMESSAGE_URL'],
-  PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL']
+  PAYMENT_GETORDERBYPAYMENTNOS: ['/payment/getOrderByPaymentNos', 'UWORKBENCH_URL'],
+  GRIDFAVORITE_PART: ['/gridfavorite/part', 'UMETA_URL']
 }
