@@ -39,16 +39,20 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload :limit="row[item.key]._upload.limit || 5"
-                            :ref="row[item.key]._upload.ref || 'upload'"
+                  <v-upload @change="val => $set(row[item.key]._upload,'list',val)"
+                            :limit="row[item.key]._upload.limit || 5"
+                            :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
-                            :readonly="!isModify && row[item.key].readonly"
+                            :readonly="!isModify || row[item.key]._upload.readonly"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
-                  <el-button slot="reference" type="text" v-if="!row[item.key]._image">
-                    {{isModify && !row[item.key].readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
-                  </el-button>
-                  <el-button slot="reference" type="text" v-else>
-                    {{isModify && !row[item.key].readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
+                  <el-button slot="reference" type="text">
+                    <span v-if="!row[item.key]._image">
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                    </span>
+                    <span v-else>
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
+                    </span>
+                    ({{row[item.key]._upload.list ? row[item.key]._upload.list.length : 0}})
                   </el-button>
                 </el-popover>
               </div>
@@ -146,7 +150,7 @@
         data[0] = _.mapObject(data[0], (val, key) => {
           let files;
           if (val._upload && _.isObject(val._upload)) {
-            uploadVm = this.$refs[val._upload.ref];
+            uploadVm = this.$refs[key + 'Upload'];
             uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
             files = uploadVm.getFiles(true);
             val.value = files.key;
@@ -176,7 +180,12 @@
         // 初始化可编辑行
         ed = _.map(editData, (value, index) => {
           return _.mapObject(value, val => {
-            if (!_.isObject(val)) return val;
+            if (!_.isObject(val)) {
+              return val;
+            }
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || val.value;
