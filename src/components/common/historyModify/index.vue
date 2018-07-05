@@ -65,12 +65,14 @@
               <div v-else>
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
+                          @change="() => row[item.key]._isModified = true"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
                 <el-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
+                  @change="() => row[item.key]._isModified = true"
                   :min="row[item.key].min || 0"
                   :max="row[item.key].max || 99999999"
                   controls-position="right"
@@ -208,6 +210,7 @@
         param[item._optionValue || 'code'] = val;
         obj = _.findWhere(item._option, param);
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
+        item._isModified = true;
       },
       getFilterData(data, k = 'id') {
         let list = [];
