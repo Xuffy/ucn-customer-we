@@ -27,6 +27,7 @@ export default {
         _image:true,
         key:'skuPictures',
         _upload: {
+          readonly:true,
             ref: 'uploadSkuPictures'
         }
         // disabled:true
