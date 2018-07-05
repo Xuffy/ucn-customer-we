@@ -7,7 +7,7 @@
                 <div class="status">
                     <div class="state">
                         <span>{{ $i.common.Status }}</span>
-                        <el-radio-group v-model="params.status" size="mini">
+                        <el-radio-group v-model="params.status" @change="gettabData" size="mini">
                             <el-radio-button :label="null">{{$i.common.all}}</el-radio-button>
                             <el-radio-button
                                 v-for="item in $db.inquiry.overoiewState"
@@ -19,7 +19,7 @@
                     </div>
                     <select-search
                         :options="options"
-                        @inputChange="inputEnter"
+                        @inputEnter="inputEnter"
                         :searchLoad="searchLoad"/>
                 </div>
                 <v-table
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       checkedData: [],
-      pazeSize: [30, 40, 50, 100],
+      pazeSize: [50, 100, 200],
       searchLoad: false,
       options: [{
         id: 'supplierName',
@@ -71,7 +71,6 @@ export default {
         operator: 'like'
       }],
       tabData: [],
-      viewByStatus: '',
       params: {
         status: null,
         keyType: '',

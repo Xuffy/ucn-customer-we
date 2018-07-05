@@ -25,7 +25,10 @@ export default {
         _slot:'skuPictures',
         type:'pic',
         _image:true,
-        key:'skuPictures'
+        key:'skuPictures',
+        _upload: {
+            ref: 'uploadSkuPictures'
+        }
         // disabled:true
     },
     skuNameEn:{
@@ -249,11 +252,23 @@ export default {
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
     skuOuterCartonCode:{},
+    // skuPic:{
+    //     _slot:'skuPictures',
+    //     type:'pic',
+    //     _image:true,
+    //     key:'skuPictures',
+    //     _upload: {
+    //         ref: 'uploadSkuPictures'
+    //     }
+    //     // disabled:true
+    // },
     skuLabelPic:{
         _slot:'skuLabelPic',
-        _image:true
-        // _image:true,
-        // type:'pic'
+        _image:true,
+        _upload:{
+            ref:'uploadSkuLabelPic',
+            limit:1
+        }
     },
     skuLabelDesc:{},
     skuPkgMethodPic:{
