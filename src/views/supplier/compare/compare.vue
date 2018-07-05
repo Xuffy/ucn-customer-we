@@ -40,8 +40,8 @@
             </div>
             <div v-if="$route.query.type==='modify'">
                 <el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger" v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'">{{$i.product.deleteTheCompare}}</el-button>
-                <el-button :disabled="allowBottomClick" type="primary" v-if="isModify" @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
-                <el-button :disabled="allowBottomClick" @click="cancelModify" v-if="isModify">Cancel</el-button>
+                <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
+                <el-button :disabled="allowBottomClick" @click="cancelModify" >Cancel</el-button>
             </div>
           <div v-if="$route.query.type==='read'">
             <el-button :disabled="allowBottomClick" type="primary"  @click='saveCompare' v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">OK</el-button>
@@ -113,7 +113,7 @@
                 selectedData:[],
                 selectNumber: [],
                 params:{
-                  id: Number(this.$route.query.compareId),
+                  id: Number(this.$route.query.id),
                   name:'',
                   pn: 1,
                   ps: 50,
@@ -156,17 +156,9 @@
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
-                          let country='';
-                          e.country.value.split(',').forEach(v=>{
-                            this.countryOption.forEach(m=>{
-                              if(m.code===v){
-                                country+=(m.name+',');
-                              }
-                            })
-                          });
-                          country=country.slice(0,country.length-1);
-
-                          e.country.value=country;
+                          let country;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          e.country._value = country.name || '';
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
 
@@ -405,7 +397,7 @@
                 let params={
                     compares: [],
                     name: this.compareName,
-                    id: this.$route.query.compareId
+                    id: this.$route.query.id
                 };
                 this.tableDataList.forEach(v=>{
                     let id,name;
@@ -417,7 +409,7 @@
                     });
                 });
                 if (this.$route.query.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}?type=${this.$route.query.compareId}`,params).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.id}`,params).then(res=>{
                       let compareId=res;
                       this.$router.push({
                         name:'supplierCompareDetail',
@@ -425,7 +417,7 @@
                           type:'modify'
                         },
                         query:{
-                          compareId:compareId,
+                          id:compareId,
                           compareName:this.compareName
                         }
                       });
@@ -442,7 +434,7 @@
                         type:'modify'
                       },
                       query:{
-                        compareId:compareId,
+                        id:compareId,
                         compareName:this.compareName
                       }
                     });

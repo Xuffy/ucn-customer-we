@@ -57,6 +57,7 @@ export default {
     },
     _totalRow: {
        key:'total',
+      label:'total',
       _important:true,
       _hide:true
     },

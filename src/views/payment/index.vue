@@ -83,8 +83,6 @@
         data(){
             return{
                 // flag:true,
-                pazeSize: [10, 20, 30, 40, 50, 100],
-                pageTotal:0,
                 searchLoad: false,
                 viewByStatus:'',
                 date:'',
