@@ -25,9 +25,9 @@
               <p v-if="row[item.key]._title" v-text="row[item.key]._title"></p>
             </div>
 
-            <div v-else-if="row[item.key]._image">
+            <!--<div v-else-if="row[item.key]._image">
               <v-image class="img" :src="getImage(item._value || item.value)" height="30px" width="30px"></v-image>
-            </div>
+            </div>-->
 
             <div v-else>
               <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
@@ -41,10 +41,13 @@
                   trigger="click">
                   <v-upload :limit="row[item.key]._upload.limit || 5"
                             :ref="row[item.key]._upload.ref || 'upload'"
-                            :readonly="!isModify"
+                            :readonly="!isModify && row[item.key].readonly"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
-                  <el-button slot="reference" type="text">
-                    {{isModify ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                  <el-button slot="reference" type="text" v-if="!row[item.key]._image">
+                    {{isModify && !row[item.key].readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                  </el-button>
+                  <el-button slot="reference" type="text" v-else>
+                    {{isModify && !row[item.key].readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
                   </el-button>
                 </el-popover>
               </div>
