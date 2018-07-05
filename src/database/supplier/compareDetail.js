@@ -20,9 +20,9 @@ export default {
     mainBusinessScope: {
         key: "mainBuiness"
     },
-    description: {
-      key: 'description'
-    },
+    // description: {
+    //   key: 'description'
+    // },
     category: {
         key: ""
     },
