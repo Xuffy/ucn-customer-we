@@ -558,56 +558,6 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalGrossWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalGrossWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalNetWeight">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalNetWeight"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.totalVolume">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.totalVolume"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.paidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.paidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">-->
-                    <!--<el-form-item :label="$i.order.unpaidAmount">-->
-                    <!--<el-input-->
-                    <!--class="summaryInput"-->
-                    <!--size="mini"-->
-                    <!--v-model="orderForm.unpaidAmount"-->
-                    <!--:disabled="true">-->
-                    <!--</el-input>-->
-                    <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
             </el-form>
         </div>
@@ -707,6 +657,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -786,6 +737,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified = true"
                     :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
@@ -1127,9 +1079,11 @@
                 <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
             </div>
         </v-history-modify>
-        <v-message-board @send="afterSend" :readonly="orderForm.status==='5'" module="order" code="detail"
-                         :id="$route.query.orderId"></v-message-board>
-
+        <v-message-board
+                @send="afterSend"
+                :readonly="orderForm.status==='5'" module="order"
+                code="detail"
+                :id="$route.query.orderId"></v-message-board>
     </div>
 </template>
 
@@ -1663,8 +1617,8 @@
                                 skuAdditionalTwo = item.skuAdditionalTwo.value,
                                 skuAdditionalThree = item.skuAdditionalThree.value,
                                 skuAdditionalFour = item.skuAdditionalFour.value;
-                            item.skuLabelPic._value = skuLabelPic ? [skuLabelPic] : [];
-                            item.skuLabelPic.value = skuLabelPic ? [skuLabelPic] : [];
+                            // item.skuLabelPic._value = skuLabelPic ? [skuLabelPic] : [];
+                            // item.skuLabelPic.value = skuLabelPic ? [skuLabelPic] : [];
                             item.skuPkgMethodPic._value = skuPkgMethodPic ? [skuPkgMethodPic] : [];
                             item.skuPkgMethodPic.value = skuPkgMethodPic ? [skuPkgMethodPic] : [];
                             item.skuInnerCartonPic._value = skuInnerCartonPic ? [skuInnerCartonPic] : [];
@@ -1739,6 +1693,8 @@
             //就是保存
             send() {
                 let params = Object.assign({}, this.orderForm);
+                console.log(this.productTableData,'productTableData')
+                return console.log(params.skuList, "params");
                 _.map(this.supplierOption, v => {
                     if (params.supplierName === v.id) {
                         params.supplierName = v.name;
@@ -1748,7 +1704,6 @@
                     }
                 });
                 params.skuList = this.dataFilter(this.productTableData);
-                console.log(params.skuList,'params.skuList')
                 _.map(params.skuList, v => {
                     v.skuSample = v.skuSample === "1" ? true : false;
                     if (v.skuInspectQuarantineCategory) {
@@ -1758,43 +1713,44 @@
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
                             v[item] = (v[item][0] ? v[item][0] : null);
+                        }else if(_.isString(v[item])){
+                            let key=this.$getOssKey(v[item],true);
+                            v[item]=key[0];
                         }
                     });
                 });
-
-                let compareList = [];
-                _.map(params.skuList[0], (v, index) => {
-                    if (index !== "fieldRemark" && index !== "skuPictures" && index !== "label") {
-                        compareList.push(index);
-                    }
-                });
-
-                //判断有哪些字段变了
-                _.map(params.skuList, v => {
-                    let infoChange = false;
-                    _.map(this.initialData.skuList, data => {
-                        if (v.id === data.id) {
-                            _.map(compareList, item => {
-                                if (v[item] !== data[item]) {
-                                    if (item === "skuUnit" || item === "skuUnitWeight" || item === "skuUnitLength" || item === "skuUnitVolume" || item === "skuExpireUnit") {
-                                        if (Number(v[item]) !== Number(data[item])) {
-                                            infoChange = true;
-                                            console.log(item, "item");
-                                        }
-                                    } else {
-                                        infoChange = true;
-                                        console.log(item, "item");
-                                    }
-                                }
-                            });
-                        }
-                    });
-                    console.log(infoChange, "infoChange");
-                });
+                // //列出有哪些需要对比的字段
+                // let compareList = [];
+                // _.map(params.skuList[0], (v, index) => {
+                //     if (index !== "fieldRemark" && index !== "skuPictures" && index !== "label") {
+                //         compareList.push(index);
+                //     }
+                // });
+                //
+                // //判断有哪些字段变了
+                // _.map(params.skuList, v => {
+                //     let infoChange = false;
+                //     _.map(this.initialData.skuList, data => {
+                //         if (v.id === data.id) {
+                //             _.map(compareList, item => {
+                //                 if (v[item] !== data[item]) {
+                //                     if (item === "skuUnit" || item === "skuUnitWeight" || item === "skuUnitLength" || item === "skuUnitVolume" || item === "skuExpireUnit") {
+                //                         if (Number(v[item]) !== Number(data[item])) {
+                //                             infoChange = true;
+                //                             console.log(item, "item");
+                //                         }
+                //                     } else {
+                //                         infoChange = true;
+                //                         console.log(item, "item");
+                //                     }
+                //                 }
+                //             });
+                //         }
+                //     });
+                //     console.log(infoChange, "infoChange");
+                // });
 
                 params.attachments = this.$refs.upload[0].getFiles();
-                console.log(this.$depthClone(this.initialData.skuList), "initialData");
-                return console.log(params.skuList, "params");
                 _.map(params.orderSkuUpdateList, v => {
                     let nowStatus, initialStatus;
                     _.map(params.skuList, e => {
@@ -1927,30 +1883,6 @@
                             arr.push(v);
                         }
                     });
-                    if (this.$refs.uploadSkuLabelPic) {
-                        this.$refs.uploadSkuLabelPic.reset();
-                    }
-                    if (this.$refs.uploadSkuPkgMethodPic) {
-                        this.$refs.uploadSkuPkgMethodPic.reset();
-                    }
-                    if (this.$refs.uploadSkuInnerCartonPic) {
-                        this.$refs.uploadSkuInnerCartonPic.reset();
-                    }
-                    if (this.$refs.uploadSkuOuterCartonPic) {
-                        this.$refs.uploadSkuOuterCartonPic.reset();
-                    }
-                    if (this.$refs.uploadSkuAdditionalOne) {
-                        this.$refs.uploadSkuAdditionalOne.reset();
-                    }
-                    if (this.$refs.uploadSkuAdditionalTwo) {
-                        this.$refs.uploadSkuAdditionalTwo.reset();
-                    }
-                    if (this.$refs.uploadSkuAdditionalThree) {
-                        this.$refs.uploadSkuAdditionalThree.reset();
-                    }
-                    if (this.$refs.uploadSkuAdditionalFour) {
-                        this.$refs.uploadSkuAdditionalFour.reset();
-                    }
                     this.chooseProduct = this.$refs.HM.init(arr, []);
                 }
                 else if (type === "detail") {
@@ -2079,7 +2011,6 @@
                 this.productTableDialogVisible = false;
             },
             saveNegotiate(e) {
-                console.log(e,'e')
                 if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
                     this.orderForm.orderSkuUpdateList = [];
                     this.orderForm.orderSkuUpdateList.push({
@@ -2087,7 +2018,8 @@
                         skuInfo: true,
                         skuStatus: true
                     });
-                } else {
+                }
+                else {
                     let isIn = false;
                     _.map(this.orderForm.orderSkuUpdateList, v => {
                         if (v.skuId === e[0].skuId.value) {
@@ -2106,24 +2038,6 @@
                 _.map(this.productTableData, (v, k) => {
                     _.map(e, m => {
                         if (m.skuSysCode.value === v.skuSysCode.value && m.label.value === v.label.value) {
-                            if (!m._remark) {
-                                // m.skuLabelPic._value = this.$refs.uploadSkuLabelPic.getFiles(true).url;
-                                // m.skuLabelPic.value = this.$refs.uploadSkuLabelPic.getFiles();
-                                m.skuPkgMethodPic._value = this.$refs.uploadSkuPkgMethodPic.getFiles(true).url;
-                                m.skuPkgMethodPic.value = this.$refs.uploadSkuPkgMethodPic.getFiles();
-                                m.skuInnerCartonPic._value = this.$refs.uploadSkuInnerCartonPic.getFiles(true).url;
-                                m.skuInnerCartonPic.value = this.$refs.uploadSkuInnerCartonPic.getFiles();
-                                m.skuOuterCartonPic._value = this.$refs.uploadSkuOuterCartonPic.getFiles(true).url;
-                                m.skuOuterCartonPic.value = this.$refs.uploadSkuOuterCartonPic.getFiles();
-                                m.skuAdditionalOne._value = this.$refs.uploadSkuAdditionalOne.getFiles(true).url;
-                                m.skuAdditionalOne.value = this.$refs.uploadSkuAdditionalOne.getFiles();
-                                m.skuAdditionalTwo._value = this.$refs.uploadSkuAdditionalTwo.getFiles(true).url;
-                                m.skuAdditionalTwo.value = this.$refs.uploadSkuAdditionalTwo.getFiles();
-                                m.skuAdditionalThree._value = this.$refs.uploadSkuAdditionalThree.getFiles(true).url;
-                                m.skuAdditionalThree.value = this.$refs.uploadSkuAdditionalThree.getFiles();
-                                m.skuAdditionalFour._value = this.$refs.uploadSkuAdditionalFour.getFiles(true).url;
-                                m.skuAdditionalFour.value = this.$refs.uploadSkuAdditionalFour.getFiles();
-                            }
                             this.productTableData.splice(k, 1, m);
                         }
                     });
