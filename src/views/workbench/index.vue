@@ -22,7 +22,7 @@
         <router-link to="/settings/category">
           <el-button type="text">{{$i.workbench.goSet}}>></el-button>
         </router-link>
-      </li> 
+      </li>
       <!--<li v-if="!settingState.personalInfo">
         <el-checkbox disabled>{{$i.workbench.settingPersonal}}</el-checkbox>
         <br>
@@ -99,7 +99,6 @@
       }
     },
     created() {
-      console.log(this.$getOssKey('https://dev-public-ucn-oss.oss-cn-hangzhou.aliyuncs.com/7416251337940992%2Ffab79cdc-a9e8-4c4a-beb6-e9ed50160f9c%2F1352a3bebd6791a7ac9fcb772b25b853.jpg'))
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();
