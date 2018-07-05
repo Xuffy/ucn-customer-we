@@ -441,7 +441,7 @@
             },
 
             initData(data){
-                this.tableDataList = this.$getDB(this.$db.product.indexTable, data, (e) => {
+                this.tableDataList = this.$getDB(this.$db.product.indexTable, data.datas, (e) => {
                     let noneSellCountry = '';
                     e.noneSellCountry.value.split(',').forEach(v => {
                         this.countryOption.forEach(m => {
@@ -466,7 +466,7 @@
                     }
                     return e;
                 });
-                this.pageData = res;
+                this.pageData = data;
                 if (this.disabledLine.length > 0) {
                     this.disabledLine.forEach(v => {
                         let id;
@@ -548,7 +548,7 @@
                     this.loadingTable = true;
                     this.productForm.recycle = false;
                     this.$ajax.post(url, this.productForm).then(res => {
-                        this.initData(res.datas);
+                        this.initData(res);
                     }).finally(err => {
                         setTimeout(()=>{
                             this.loadingTable = false;
