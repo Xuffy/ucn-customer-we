@@ -206,6 +206,10 @@
                 type:Boolean,
                 default:false
             },
+            dataResource:{
+                type:Function,
+
+            }
         },
         data() {
             return {
@@ -219,7 +223,6 @@
                 dateOption: [],
                 skuUnitOption: [],
                 countryOption: [],
-
 
                 hideBody: true,            //是否显示body
                 btnInfo: this.$i.product.advanced,     //按钮默认文字显示
@@ -416,8 +419,6 @@
                         });
                     }
                 }
-
-
                 this.$emit('handleOK', newArr);
             },
             cancel() {
@@ -438,9 +439,72 @@
 
                 });
             },
+
+            initData(data){
+                this.tableDataList = this.$getDB(this.$db.product.indexTable, data, (e) => {
+                    let noneSellCountry = '';
+                    e.noneSellCountry.value.split(',').forEach(v => {
+                        this.countryOption.forEach(m => {
+                            if (m.code === v) {
+                                noneSellCountry += (m.name + ',');
+                            }
+                        })
+                    });
+                    noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
+                    e.noneSellCountry.value = noneSellCountry;
+
+                    e.status.value = this.$change(this.statusOption, 'status', e, true).name;
+                    e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
+                    e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
+                    e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
+                    e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
+                    e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                    e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
+
+                    if(this.disableBookmarkChoose && e.bookmarkId.value){
+                        this.$set(e,'_disabled',true);
+                    }
+                    return e;
+                });
+                this.pageData = res;
+                if (this.disabledLine.length > 0) {
+                    this.disabledLine.forEach(v => {
+                        let id;
+                        if (this.isInModify) {
+                            id = _.findWhere(v, {key: 'skuId'}).value;
+                        } else if (this.isInquiry) {
+                            id = _.findWhere(v, {key: 'skuId'}).value;
+                        } else {
+                            id = _.findWhere(v, {key: 'id'}).value;
+                        }
+                        this.tableDataList.forEach(m => {
+                            let newId;
+                            if (this.type === 'product') {
+                                newId = _.findWhere(m, {key: 'id'}).value;
+                            } else if (this.type === 'bookmark') {
+                                newId = _.findWhere(m, {key: 'skuId'}).value;
+                            }
+                            if (id === newId) {
+                                m._disabled = true;
+                                m._checked = true;
+                            }
+                        })
+                    })
+                }
+                this.selectList = this.$copyArr(this.disabledLine);
+                this.selectList.forEach(v => {
+                    v._disabled = true;
+                });
+            },
+
             //获取table数据
             getData(e) {
-                if (this.type === 'recycle') {
+                if(this.dataResource){
+                    this.dataResource().then(data=>{
+                        this.initData(data);
+                    })
+                }
+                else if (this.type === 'recycle') {
                     this.loadingTable = true;
                     this.$ajax.post(this.$apis.get_buyerBookmarkList, {
                         recycle: true,
@@ -484,60 +548,7 @@
                     this.loadingTable = true;
                     this.productForm.recycle = false;
                     this.$ajax.post(url, this.productForm).then(res => {
-                        this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-                            let noneSellCountry = '';
-                            e.noneSellCountry.value.split(',').forEach(v => {
-                                this.countryOption.forEach(m => {
-                                    if (m.code === v) {
-                                        noneSellCountry += (m.name + ',');
-                                    }
-                                })
-                            });
-                            noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                            e.noneSellCountry.value = noneSellCountry;
-
-                            e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                            e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                            e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                            e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                            e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                            e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
-                            e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
-
-                            if(this.disableBookmarkChoose && e.bookmarkId.value){
-                                this.$set(e,'_disabled',true);
-                            }
-                            return e;
-                        });
-                        this.pageData = res;
-                        if (this.disabledLine.length > 0) {
-                            this.disabledLine.forEach(v => {
-                                let id;
-                                if (this.isInModify) {
-                                    id = _.findWhere(v, {key: 'skuId'}).value;
-                                } else if (this.isInquiry) {
-                                    id = _.findWhere(v, {key: 'skuId'}).value;
-                                } else {
-                                    id = _.findWhere(v, {key: 'id'}).value;
-                                }
-                                this.tableDataList.forEach(m => {
-                                    let newId;
-                                    if (this.type === 'product') {
-                                        newId = _.findWhere(m, {key: 'id'}).value;
-                                    } else if (this.type === 'bookmark') {
-                                        newId = _.findWhere(m, {key: 'skuId'}).value;
-                                    }
-                                    if (id === newId) {
-                                        m._disabled = true;
-                                        m._checked = true;
-                                    }
-                                })
-                            })
-                        }
-                        this.selectList = this.$copyArr(this.disabledLine);
-                        this.selectList.forEach(v => {
-                            v._disabled = true;
-                        });
+                        this.initData(res.datas);
                     }).finally(err => {
                         setTimeout(()=>{
                             this.loadingTable = false;
