@@ -161,7 +161,6 @@
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
-        console.log(data)
         this.$emit('save', data);
         this.showDialog = false;
       },
@@ -181,7 +180,12 @@
         // 初始化可编辑行
         ed = _.map(editData, (value, index) => {
           return _.mapObject(value, val => {
-            if (!_.isObject(val)) return val;
+            if (!_.isObject(val)) {
+              return val;
+            }
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || val.value;

@@ -149,7 +149,6 @@
                 :props="{label: 'name'}"
                 show-checkbox
                 node-key="code"
-                :default-checked-keys="checkedPrivilegeData"
                 :default-expanded-keys="['pageAll','dataAll']"
                 :expand-on-click-node="false"
                 :filter-node-method="filterPrivilege">
@@ -377,7 +376,6 @@
         checkedRole: [],
         selectList: [],
         languageOption: [],
-        checkedPrivilegeData: [],
         genderOption: [
           {code: 0, name: $i.setting.man},
           {code: 1, name: $i.setting.woman},
@@ -773,10 +771,7 @@
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
           .then(res => {
             this.languageOption = res[0].codes;
-          }).finally(err => {
-
-          }
-        );
+          });
       },
       savePrivilege() {
         let nodes = [], dataNodes
@@ -786,18 +781,14 @@
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
-        _.map(nodes, val => {
-          val.parentCode && params.resourceCodes.push(val.code);
-        });
+        _.map(nodes, val => params.resourceCodes.push(val.code));
 
         _.map(dataNodes.childNodes, value => {
           let checked = _.where(value.childNodes, {checked: true})
             , userIds = [];
 
           if (!_.isEmpty(checked)) {
-            userIds = _.map(checked, val => {
-              return val.data.code;
-            });
+            userIds = _.map(checked, val => val.data.code);
             params.domainCodes.push({bizDomainCode: value.data.code, userIds});
           }
         });
@@ -808,6 +799,7 @@
         this.$ajax.post(this.$apis.ROLE_PRIVILEGE, {datas: [params]})
           .then(res => {
             this.$message.success(this.$i.setting.privilegeSetSuccess);
+            this.getPrivilege();
           })
           .finally(() => this.loadingPrivilege = false);
       },
@@ -817,7 +809,6 @@
           return false;
         }
 
-        this.checkedPrivilegeData = [];
         this.$ajax.post(this.$apis.PRIVILEGE_PRIVILEGE_SELECT, {
           deptId: this.userData.deptId,
           roleId: this.checkedRole[0]
@@ -826,35 +817,36 @@
             this.getPrivilegeResource(),
             this.getPrivilegeData()
           ]).then(() => {
-            this.$nextTick(() => {
-              if (!_.isEmpty(res.selectedDomainUserIds)) {
-                this.checkedPrivilegeData = this.checkedPrivilegeData.concat(_.flatten(_.values(res.selectedDomainUserIds)));
-              }
+            let checked = [];
+            if (!_.isEmpty(res.selectedDomainUserIds)) {
+              checked = checked.concat(_.flatten(_.values(res.selectedDomainUserIds)));
+            }
 
-              if (!_.isEmpty(res.selectedResourceCodes)) {
-                this.checkedPrivilegeData = this.checkedPrivilegeData.concat(res.selectedResourceCodes);
-              }
-            })
-            console.log(this.checkedPrivilegeData)
+            if (!_.isEmpty(res.selectedResourceCodes)) {
+              checked = checked.concat(res.selectedResourceCodes);
+            }
+            // console.log(checked)
+            this.$refs.privilegeTree.setCheckedKeys(checked)
           });
         });
       },
       getPrivilegeResource(data) {
         return this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE, {}, {cache: true})
-          .then(res => {
-            this.privilegeData[0].children = res;
-          });
+          .then(res => this.privilegeData[0].children = res);
       },
       getPrivilegeData(data) {
         return this.$ajax.all([
           this.$ajax.get(this.$apis.PRIVILEGE_DATA_BIZDOMAIN, {}, {cache: true}),
-          this.$ajax.get(this.$apis.get_departmentUser)
+          this.$ajax.get(this.$apis.get_departmentUser, {}, {cache: true})
         ]).then(res => {
           let list = [], users = [];
 
           users = _.map(res[1], val => ({name: val.userName, code: val.userId}));
 
-          list = _.map(res[0], val => ({name: val.bizDomainName, code: val.bizDomainCode, children: users}));
+          list = _.map(res[0], val => {
+            console.log(val)
+            return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
+          });
 
           this.privilegeData[1].children = list;
         });
