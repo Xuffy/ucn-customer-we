@@ -907,14 +907,20 @@
     },
     watch:{
       containerInfo:{
-        handler: function (val, oldVal) {
-          console.log(val)
+        handler: function (val) {
+          val.forEach(el=>{
+            this.productList.forEach(item=>{
+              if(el.id==item.containerId.value){
+                item.containerType.value = el.containerType;
+              }
+            })
+          })
         },
         deep: true
       }
     }
   }
-
+8365380501769216
 </script>
 <style lang="less" scoped>
   .place-logistic-plan {

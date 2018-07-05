@@ -11,6 +11,10 @@ export default {
     type: 'text',
     _hide: true
   },
+  "containerId": {
+    type: 'text',
+    _hide: true
+  },
   "skuSupplierId": {
     type: 'text',
     _hide: true
