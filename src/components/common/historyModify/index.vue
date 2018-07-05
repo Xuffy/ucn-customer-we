@@ -41,6 +41,7 @@
                   trigger="click">
                   <v-upload :limit="row[item.key]._upload.limit || 5"
                             :ref="row[item.key]._upload.ref || 'upload'"
+                            :only-image="row[item.key]._image"
                             :readonly="!isModify && row[item.key].readonly"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
                   <el-button slot="reference" type="text" v-if="!row[item.key]._image">

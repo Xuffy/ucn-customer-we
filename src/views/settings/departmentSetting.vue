@@ -826,13 +826,15 @@
             this.getPrivilegeResource(),
             this.getPrivilegeData()
           ]).then(() => {
-            if (!_.isEmpty(res.selectedDomainUserIds)) {
-              this.checkedPrivilegeData=this.checkedPrivilegeData.concat(_.flatten(_.values(res.selectedDomainUserIds)));
-            }
+            this.$nextTick(() => {
+              if (!_.isEmpty(res.selectedDomainUserIds)) {
+                this.checkedPrivilegeData = this.checkedPrivilegeData.concat(_.flatten(_.values(res.selectedDomainUserIds)));
+              }
 
-            if (!_.isEmpty(res.selectedResourceCodes)){
-              this.checkedPrivilegeData=this.checkedPrivilegeData.concat(res.selectedResourceCodes);
-            }
+              if (!_.isEmpty(res.selectedResourceCodes)) {
+                this.checkedPrivilegeData = this.checkedPrivilegeData.concat(res.selectedResourceCodes);
+              }
+            })
             console.log(this.checkedPrivilegeData)
           });
         });
@@ -841,7 +843,6 @@
         return this.$ajax.get(this.$apis.PRIVILEGE_RESOURCE, {}, {cache: true})
           .then(res => {
             this.privilegeData[0].children = res;
-            // this.$nextTick(() => this.checkedPrivilegeData = this.checkedPrivilegeData.concat(data))
           });
       },
       getPrivilegeData(data) {
@@ -851,13 +852,9 @@
         ]).then(res => {
           let list = [], users = [];
 
-          users = _.map(res[1], val => {
-            return {name: val.userName, code: val.userId};
-          });
+          users = _.map(res[1], val => ({name: val.userName, code: val.userId}));
 
-          list = _.map(res[0], val => {
-            return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
-          });
+          list = _.map(res[0], val => ({name: val.bizDomainName, code: val.bizDomainCode, children: users}));
 
           this.privilegeData[1].children = list;
         });
