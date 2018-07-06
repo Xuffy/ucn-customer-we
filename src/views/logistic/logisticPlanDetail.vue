@@ -58,7 +58,8 @@
       <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
-          <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
+          <!-- <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button> -->
+          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
@@ -74,7 +75,7 @@
     </el-dialog>
     <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <product title="addProduct" type="product" :hideBtn="true" :a="addProductFun"></product>
+      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
       <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
@@ -346,11 +347,18 @@
           }
         })
       },
-      getSupplierIds() {
-        this.showAddProductDialog = true;
-        this.$nextTick(() => {
-          this.$refs.addProduct.getSupplierIds();
+      addProductFun(){
+        this.getSupplierIds();
+      },
+      async getSupplierIds() {
+        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
+        let pageParams = {};
+        await this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+          pageParams.skuSupplierIds = res.supplierIds;
+          pageParams.customerId = res.customerId;
+          return pageParams
         })
+        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams);
       },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
