@@ -14,8 +14,8 @@
         <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
           type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
         <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
-            'color': '#f56c6c',
-            'text-shadow': '2px 1px 2px'
+            'background': 'yellow',
+            'padding':'5px'
           } : ''">{{ remark }}</p>
       </div>
       <!-- </el-col> -->
@@ -58,7 +58,8 @@
       <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
-          <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
+          <!-- <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button> -->
+          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
@@ -72,30 +73,35 @@
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
+    <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
+      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
+      <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
-      </div>
+      </div> -->
     </el-dialog>
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
+    <v-history-modify ref="HM" disabled-remark></v-history-modify>
+
   </div>
 </template>
 <script>
   import {
     containerInfo,
     selectSearch,
-    VTable
+    VTable,
+    VHistoryModify
   } from '@/components/index';
   import {
     mapActions,
     mapState
   } from 'vuex';
   import attachment from '@/components/common/upload/index';
+  import product from '@/views/product/addProduct'
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
   import oneLine from '@/views/logistic/children/oneLine'
@@ -104,7 +110,6 @@
   import btns from '@/views/logistic/children/btns'
   import productModify from '@/views/logistic/children/productModify'
   import addProduct from '@/views/logistic/children/addProduct'
-
   // import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
   export default {
@@ -214,7 +219,9 @@
       btns,
       productModify,
       addProduct,
-      messageBoard
+      messageBoard,
+      VHistoryModify,
+      product
     },
     computed: {
       productListTotal() {
@@ -340,11 +347,18 @@
           }
         })
       },
-      getSupplierIds() {
-        this.showAddProductDialog = true;
-        this.$nextTick(() => {
-          this.$refs.addProduct.getSupplierIds();
+      addProductFun(){
+        this.getSupplierIds();
+      },
+      async getSupplierIds() {
+        let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
+        let pageParams = {};
+        await this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+          pageParams.skuSupplierIds = res.supplierIds;
+          pageParams.customerId = res.customerId;
+          return pageParams
         })
+        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams);
       },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
@@ -430,7 +444,9 @@
         this.productList.forEach((item) => {
           if (item.fieldDisplay.value) {
             _.mapObject(item.fieldDisplay.value, (v, k) => {
-              this.$set(item[k], '_color', 'red')
+              this.$set(item[k], '_style', {
+                background:'yellow'
+              })
             })
           }
         })
@@ -538,17 +554,20 @@
       getProductHistory(productId, status, i) {
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
-        productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-        this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
-          res.history.map(el => {
-            let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-              item => item.code == el.shipmentStatus)
-            el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-            return el;
-          })): [currentProduct];
-        }) : this.productModifyList = [currentProduct];
-
-
+        if(productId){
+          this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+            this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
+            res.history.map(el => {
+              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+              return el;
+            })): [currentProduct];
+            this.$refs.HM.init(this.productModifyList, []);
+          })
+        }else{
+          this.productModifyList = [currentProduct]
+          this.$refs.HM.init(this.productModifyList, []);
+        }
         // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {  //以前版本 历史修改记录也会返回
         //   res.history.length ? this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
         //       res.history.map(el => {
@@ -882,7 +901,7 @@
         })
       },
       //递归重置 copy
-      //arg 传入的对象 
+      //arg 传入的对象
       //restArr 要重置字段集合数组
       restIdNull(arg, restArr) {
         restArr = restArr || [];
@@ -964,8 +983,7 @@
       margin-bottom: 20px;
     }
     /deep/.definedStyleClass textarea {
-      background: #f56c6c;
-      color: #fff;
+      background:yellow;
     }
   }
 

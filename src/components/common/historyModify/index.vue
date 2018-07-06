@@ -65,12 +65,14 @@
               <div v-else>
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
+                          @change="() => row[item.key]._isModified = true"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
                 <el-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
+                  @change="() => row[item.key]._isModified = true"
                   :min="row[item.key].min || 0"
                   :max="row[item.key].max || 99999999"
                   controls-position="right"
@@ -120,6 +122,10 @@
         type: Boolean,
         default: false
       },
+      disabledRemark: {
+        type: Boolean,
+        default: false
+      },
       beforeSave: Function
     },
     data() {
@@ -161,7 +167,6 @@
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
-        console.log(data)
         this.$emit('save', data);
         this.showDialog = false;
       },
@@ -181,7 +186,12 @@
         // 初始化可编辑行
         ed = _.map(editData, (value, index) => {
           return _.mapObject(value, val => {
-            if (!_.isObject(val)) return val;
+            if (!_.isObject(val)) {
+              return val;
+            }
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || val.value;
@@ -204,6 +214,7 @@
         param[item._optionValue || 'code'] = val;
         obj = _.findWhere(item._option, param);
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
+        item._isModified = true;
       },
       getFilterData(data, k = 'id') {
         let list = [];
@@ -228,7 +239,7 @@
         this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
-        if (columnIndex === 0) {
+        if (columnIndex === 0 && !this.disabledRemark) {
           if (rowIndex % 2 === 0) {
             return {
               rowspan: 2,
