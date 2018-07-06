@@ -22,8 +22,10 @@ export default {
         _slot:'skuPictures',
         type:'pic',
         _image:true,
-        key:'skuPictures'
-        // disabled:true
+        key:'skuPictures',
+        _upload: {
+            readonly:true,
+        }
     },
     skuNameEn:{
         _disabled:true
@@ -89,21 +91,27 @@ export default {
     skuMaterialCn:{},
     skuQty:{
         _slot:'skuQty',
+        _calculate:true
     },
     skuPrice:{
         _slot:'skuPrice',
+        _calculate:true
     },
     skuQualifiedQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuUntestedQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuDeliveredQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuUndeliveredQty:{
-        _disabled:true
+        _disabled:true,
+        _calculate:true
     },
     skuRateValueAddedTax:{
         _slot:'skuRateValueAddedTax',
@@ -122,6 +130,9 @@ export default {
     skuDesign:{},
     skuCategoryId:{
         _disabled:true
+    },
+    skuCategoryName:{
+        _hide:true
     },
     // skuCategoryOne:{},
     // skuCategoryTwo:{},
@@ -171,6 +182,7 @@ export default {
     skuInnerCartonUnit:{},
     skuInnerCartonQty:{
         _slot:'skuInnerCartonQty',
+        _calculate:true
     },
     skuInnerCartonLength:{
         _slot:'skuInnerCartonLength',
@@ -197,9 +209,11 @@ export default {
     skuOuterCartonDesc:{},
     skuInnerCartonOuterNum:{
         _slot:'skuInnerCartonOuterNum',
+        _calculate:true
     },
     skuOuterCartonQty:{
         _slot:'skuOuterCartonQty',
+        _calculate:true
     },
     skuOuterCartonLength:{
         _slot:'skuOuterCartonLength',
@@ -248,28 +262,39 @@ export default {
     skuOuterCartonCode:{},
     skuLabelPic:{
         _slot:'skuLabelPic',
-        _image:true
-        // _image:true,
-        // type:'pic'
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuLabelDesc:{},
     skuPkgMethodPic:{
         _slot:'skuPkgMethodPic',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuInnerCartonPic:{
         _slot:'skuInnerCartonPic',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuOuterCartonPic:{
         _slot:'skuOuterCartonPic',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuSample:{
         _slot:'skuSample',
     },
     skuSampleQty:{
         _slot:'skuSampleQty',
+        _calculate:true
     },
     skuSamplePrice:{
         _slot:'skuSamplePrice',
@@ -282,18 +307,30 @@ export default {
     skuRemarkThree:{},
     skuAdditionalOne:{
         _slot:'skuAdditionalOne',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuAdditionalTwo:{
         _slot:'skuAdditionalTwo',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuAdditionalThree:{
         _slot:'skuAdditionalThree',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
     skuAdditionalFour:{
         _slot:'skuAdditionalFour',
-        _image:true
+        _image:true,
+        _upload: {
+            limit:1
+        }
     },
 }

@@ -1640,11 +1640,13 @@
                     }
                 });
                 params.skuList = this.dataFilter(this.productTableData);
+                let rightCode=true;
                 _.map(params.skuList, v => {
-                    v.skuSample = v.skuSample === "1" ? true : false;
-                    if (v.skuInspectQuarantineCategory) {
-                        v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
+                    if(v.skuSupplierCode!==params.supplierCode){
+                        rightCode=false;
                     }
+                    v.skuSample = v.skuSample === "1" ? true : false;
+                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code:'';
                     let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
                     _.map(picKey, item => {
                         if (_.isArray(v[item])) {
@@ -1655,8 +1657,13 @@
                         }
                     });
                 });
+                if(!rightCode){
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: 'warning'
+                    });
+                }
                 params.attachments = this.$refs.upload[0].getFiles();
-
 
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
