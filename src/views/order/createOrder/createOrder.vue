@@ -296,56 +296,6 @@
             </template>
         </v-table>
 
-        <div class="summary">
-            <div class="second-title">
-                {{$i.order.summary}}
-            </div>
-            <el-form label-width="280px">
-                <el-row class="speZone">
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalQty">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalQty"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.skuQtys">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.skuQty"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalSkuPrice">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalSkuPrice"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.order.totalOuterCartonQty">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="orderForm.totalOuterCartonQty"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </div>
-
         <div class="footBtn">
             <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
             <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
