@@ -1354,56 +1354,7 @@
                     remark: "",
                     remind: true,
                     responsibilityFlag: false,
-                    responsibilityList: [
-                        // {
-                        //     type: '0',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '1',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '2',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '3',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '4',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '5',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
                     // skuQty: 0,
                     // skuSupplierName: "",
@@ -1582,6 +1533,8 @@
                     this.orderForm = res;
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
+                    console.log(this.supplierOption,'this.supplierOption')
+                    console.log(res.supplierCode,'res.supplierCode')
                     _.map(this.supplierOption, v => {
                         if (v.code === res.supplierCode) {
                             this.orderForm.supplierName = v.id;
