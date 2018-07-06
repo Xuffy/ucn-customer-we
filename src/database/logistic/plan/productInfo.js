@@ -46,6 +46,14 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "skuPictures":{
+    type: 'String',
+    _image:true,
+    _upload:{
+      readonly:true
+    },
+    typeSlef: 'text'
+  },
   "orderId": {
     type: 'String',
     _disabled: true,

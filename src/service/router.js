@@ -516,18 +516,57 @@ export const routerMap = [
         component: () => import('../views/logistic/logisticPlanOverview')
       },
       {
-        path: 'archive',
-        name: 'overviewArchive',
+        path: 'archivePlan',
+        name: 'archivePlan',
         hidden: true,
         meta: {
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
           importTask: false,
-          name: $i.router.logisticLoadingArchive
+          name: $i.router.archive
         },
-        component: () => import('../views/logistic/logisticPlanOverview')
+        component: () => import('../views/logistic/archivePlan')
       },
+      {
+        path: 'archiveDraft',
+        name: 'archiveDraft',
+        hidden: true,
+        meta: {
+          draft: '/logistic/draft',
+          recycleBin: false,
+          log: true,
+          importTask: false,
+          name: $i.router.archive
+        },
+        component: () => import('../views/logistic/archiveDraft')
+      },
+      {
+        path: 'archiveLoadingList',
+        name: 'archiveLoadingList',
+        hidden: true,
+        meta: {
+          draft: '/logistic/draft',
+          recycleBin: false,
+          log: true,
+          importTask: false,
+          name: $i.router.archive
+        },
+        component: () => import('../views/logistic/archiveLoadingList')
+      },
+      // {
+      //   path: 'archive',
+      //   name: 'overviewArchive',
+      //   hidden: true,
+      //   meta: {
+      //     draft: '/logistic/draft',
+      //     recycleBin: false,
+      //     log: true,
+      //     importTask: false,
+      //     name: $i.router.logisticLoadingArchive
+      //   },
+      //   component: () => import('../views/logistic/logisticPlanOverview')
+      // },
       {
         path: 'placeLogisticPlan',
         name: 'placeLogisticPlan',
