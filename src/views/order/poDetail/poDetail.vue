@@ -1533,8 +1533,6 @@
                     this.orderForm = res;
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
-                    console.log(this.supplierOption,'this.supplierOption')
-                    console.log(res.supplierCode,'res.supplierCode')
                     _.map(this.supplierOption, v => {
                         if (v.code === res.supplierCode) {
                             this.orderForm.supplierName = v.id;
@@ -1657,8 +1655,8 @@
                         }
                     });
                 });
-
                 params.attachments = this.$refs.upload[0].getFiles();
+
 
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
@@ -1691,7 +1689,6 @@
                     }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
-                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
 
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
