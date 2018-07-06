@@ -28,6 +28,7 @@
                         </div>
                         <div v-else-if="v.type==='date'">
                             <el-date-picker
+                                    @change="handleChange(v.key)"
                                     format="yyyy-MM-dd"
                                     :disabled="v.disabled || v.disableDetail || !isModify"
                                     v-model="orderForm[v.key]"
@@ -303,10 +304,12 @@
                     class="payTable"
                     :data="paymentData"
                     border
+                    :summary-method="getSummaries"
+                    show-summary
                     :row-class-name="tableRowClassName"
                     style="width: 100%">
                 <el-table-column
-                        prop="date"
+                        fixed="left"
                         label="#"
                         align="center"
                         width="55">
@@ -379,7 +382,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                        prop="name"
+                        prop="actualPayAmount"
                         :label="$i.order.actualPayAmount"
                         width="160">
                     <template slot-scope="scope">
@@ -400,6 +403,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="planRefundAmount"
                         :label="$i.order.planRefundAmount"
                         width="180">
                     <template slot-scope="scope">
@@ -414,6 +418,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                        prop="actualRefundAmount"
                         :label="$i.order.actualRefundAmount"
                         width="180">
                     <template slot-scope="scope">
@@ -493,6 +498,7 @@
         </div>
         <!--code="uorder_sku_list"-->
         <v-table
+                :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
                 :data.sync="productTableData"
@@ -1142,7 +1148,6 @@
                 skuStatusTotalOption: [],
                 skuSaleStatusOption: [],
 
-
                 /**
                  * Negotiate 插槽变量
                  * */
@@ -1333,11 +1338,7 @@
                         // additionalProp2: "string",
                         // additionalProp3: "string"
                     },
-                    fieldUpdate: {
-                        // additionalProp1: "string",
-                        // additionalProp2: "string",
-                        // additionalProp3: "string"
-                    },
+                    fieldUpdate: {},
                     // importantCustomer: true,
                     // importantSupplier: true,
                     incoterm: "",
@@ -1367,6 +1368,30 @@
                     transport: "1"
                 }
             };
+        },
+        computed:{
+            totalRow(){
+                let obj={};
+                console.log(this.productTableData,'productTableData')
+                if(this.productTableData.length<=0){
+                    return;
+                };
+                // _.map(this.productTableData,v=>{
+                //     _.mapObject(v,(item,key)=>{
+                //         if(item._calculate){
+                //             obj[key]={
+                //                 value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                //             };
+                //         }else{
+                //             obj[key] = {
+                //                 value: ''
+                //             };
+                //         }
+                //     })
+                // });
+                //
+                // return [obj];
+            }
         },
         methods: {
             ...mapActions(["setLog", "setDraft"]),
@@ -1664,7 +1689,6 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
                     let isModify=false,isModifyStatus=false;
@@ -1696,8 +1720,7 @@
                     }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
-                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
-
+                // return console.log(params.fieldUpdate,'fieldUpdate')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1779,6 +1802,20 @@
                     this.disabledLcNo = false;
                 }
             },
+
+            /**
+             * basic info事件
+             * */
+            handleChange(key){
+                // console.log(key,'???')
+                // console.log(this.orderForm.fieldUpdate,'fieldUpdate')
+                if(!this.orderForm.fieldUpdate){
+                    this.orderForm.fieldUpdate={};
+                }
+                this.orderForm.fieldUpdate[key]='';
+
+            },
+
 
             /**
              * product info事件
@@ -2211,6 +2248,36 @@
                 }
                 return "";
             },
+            getSummaries(param){
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.product.total;
+                        return;
+                    }else if(index===4 || index===6 || index===8 || index===10){
+                        if(_.uniq(_.pluck(this.paymentData,'currencyCode')).length>1){
+                            sums[index] = '-';
+                        }
+                        else{
+                            const values = data.map(item => Number(item[column.property]));
+                            if (!values.every(value => isNaN(value))) {
+                                sums[index] = values.reduce((prev, curr) => {
+                                    const value = Number(curr);
+                                    if (!isNaN(value)) {
+                                        return prev + curr;
+                                    } else {
+                                        return prev;
+                                    }
+                                }, 0);
+                            } else {
+
+                            }
+                        }
+                    }
+                });
+                return sums;
+            },
             confirmPay(data) {
                 this.$confirm(this.$i.order.sureConfirm, this.$i.order.prompt, {
                     confirmButtonText: this.$i.order.sure,
@@ -2235,6 +2302,8 @@
 
                 });
             },
+
+
 
             /**
              * history部分事件
