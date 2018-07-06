@@ -550,6 +550,7 @@
             res.history.map(el => {
               let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
               el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+              el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
               return el;
             })): status==1 ? [currentProduct] : [];
             status==1 ? this.$refs.HM.init(this.productModifyList,[],true) : this.$refs.HM.init([], this.productModifyList,false);
