@@ -85,8 +85,8 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <!-- <VHistoryModify ref="HM"></VHistoryModify> -->
-    
+    <v-history-modify ref="HM" disabled-remark></v-history-modify>
+
   </div>
 </template>
 <script>
@@ -562,11 +562,11 @@
               el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el;
             })): [currentProduct];
-            // this.$refs.HM.init(this.productModifyList, []);
+            this.$refs.HM.init(this.productModifyList, []);
           })
         }else{
           this.productModifyList = [currentProduct]
-          // this.$refs.HM.init(this.productModifyList, []);
+          this.$refs.HM.init(this.productModifyList, []);
         }
         // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {  //以前版本 历史修改记录也会返回
         //   res.history.length ? this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
@@ -901,7 +901,7 @@
         })
       },
       //递归重置 copy
-      //arg 传入的对象 
+      //arg 传入的对象
       //restArr 要重置字段集合数组
       restIdNull(arg, restArr) {
         restArr = restArr || [];
