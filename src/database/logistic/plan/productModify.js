@@ -18,7 +18,10 @@ export default {
     type: 'text'
   },
   "orderNo": {
-    type: 'String'
+    type: 'text'
+  },
+  "skuPictures":{
+    type: 'text'
   },
   "orderId": {
     type: 'text',

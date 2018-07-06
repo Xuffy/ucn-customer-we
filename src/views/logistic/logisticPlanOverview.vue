@@ -1,5 +1,8 @@
 <template>
   <div class="logistic-plan-overview">
+    <router-link to="/logistic/archivePlan">archivePlan</router-link>
+    <router-link to="/logistic/archiveDraft">archiveDraft</router-link>
+    <router-link to="/logistic/archiveLoadingList">archiveLoadingList</router-link>
     <div class="hd-top">{{ headerText[pageType] }}</div>
     <div class="status">
       <div class="btn-wrap">
@@ -30,10 +33,10 @@
           <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
           <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
-        <div v-if="pageType === 'archive'">
+        <!-- <div v-if="pageType === 'archive'">
           <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
           <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        </div>
+        </div> -->
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>

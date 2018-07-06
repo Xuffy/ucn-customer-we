@@ -36,5 +36,5 @@ export default {
   logistics_order_cancelByIds: ['/logistics/order/cancelByIds', 'LJ','BASE_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','LJ', 'BASE_URL'],
   logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds','LJ', 'BASE_URL'],
-  logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft','LJ', 'BASE_URL'],
+  logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft','LJ', 'BASE_URL']
 }
