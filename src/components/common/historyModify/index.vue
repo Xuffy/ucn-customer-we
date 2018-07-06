@@ -3,7 +3,7 @@
     <el-dialog
       :title="isModify ? $i.common.modify : $i.common.history"
       width="80%"
-      @close="closeDialog"
+      @closed="closeDialog"
       :close-on-click-modal="false"
       :visible.sync="showDialog">
 
@@ -45,7 +45,7 @@
                             :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
                             :readonly="!isModify || row[item.key]._upload.readonly"
-                            :list="row[item.key]._value || row[item.key].value"></v-upload>
+                            :list.sync="row[item.key]._value || row[item.key].value"></v-upload>
                   <el-button slot="reference" type="text">
                     <span v-if="!row[item.key]._image">
                       {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
@@ -150,8 +150,6 @@
     mounted() {
     },
     methods: {
-      handkleClose() {
-      },
       submit() {
         let data = [this.dataList[0], this.dataList[1]]
           , uploadVm = null;
@@ -187,7 +185,6 @@
         return value[0];
       },
       init(editData, history = [], isModify = true) {
-        let ed = [];
         if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
           return false
         }
@@ -195,24 +192,21 @@
         this.defaultData = [];
         this.dataColumn = [];
         // 初始化可编辑行
-        ed = _.map(editData, (value, index) => {
-          return _.mapObject(value, val => {
+        _.map(this.$depthClone(editData), (value, index) => {
+          this.$set(this.dataList, index, _.mapObject(value, (val, key) => {
             if (!_.isObject(val)) {
               return val;
-            }
-            if (val._upload && this.$refs[val.key + 'Upload']) {
-              this.$refs[val.key + 'Upload'][0].reset();
             }
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || val.value;
             val.value = _.isBoolean(val.value) ? val.value : val.value; // todo 屏蔽Boolean
             return val;
-          });
+          }));
         });
-        this.dataList = this.$depthClone(ed.concat(history));
+        this.dataList = this.dataList.concat(history);
 
-        this.defaultData = this.$depthClone(ed.concat(history));
+        this.defaultData = this.$depthClone(this.dataList);
         this.dataColumn = this.dataList[0];
         this.showDialog = true;
         this.isModify = isModify;
@@ -250,6 +244,13 @@
         if (this.modified) {
           this.dataList = this.$depthClone(this.defaultData);
         }
+        _.map(this.dataList, value => {
+          _.map(value, val => {
+            if (_.isObject(val) && val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
+          });
+        });
         this.modified = false;
         this.$emit('update:visible', false);
       },
