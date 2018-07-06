@@ -671,6 +671,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -684,6 +685,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -697,6 +699,7 @@
                     v-model="data.value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in currencyOption"
@@ -710,6 +713,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in skuUnitOption"
@@ -723,6 +727,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
@@ -752,6 +757,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :disabled="true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
@@ -766,6 +772,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in expirationDateOption"
@@ -779,6 +786,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in isNeedSampleOption"
@@ -792,6 +800,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val => data._isModified=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in quarantineTypeOption"
@@ -806,6 +815,7 @@
                     v-model="data._value"
                     slot-scope="{data}"
                     clearable
+                    @change="val=>data._isModifyStatus=true"
                     :placeholder="$i.order.pleaseChoose">
                 <el-option
                         v-for="item in skuStatusOption"
@@ -815,13 +825,12 @@
                 </el-option>
             </el-select>
 
-
             <el-input-number
                     class="speNumber spx"
                     :controls="false"
                     slot="skuFobPrice"
-                    :precision="1"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -829,6 +838,7 @@
                     :controls="false"
                     slot="skuExwPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -836,6 +846,7 @@
                     :controls="false"
                     slot="skuCifPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -843,6 +854,7 @@
                     :controls="false"
                     slot="skuDduPrice"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -850,6 +862,7 @@
                     :controls="false"
                     slot="skuQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     @blur="handlePriceBlur(data)"
                     v-model="data.value"></el-input-number>
             <el-input-number
@@ -866,6 +879,7 @@
                     :controls="false"
                     slot="skuRateValueAddedTax"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -874,6 +888,7 @@
                     :controls="false"
                     slot="skuTaxRefundRate"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -881,6 +896,7 @@
                     :controls="false"
                     slot="skuLength"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -888,6 +904,7 @@
                     :controls="false"
                     slot="skuWidth"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -895,6 +912,7 @@
                     :controls="false"
                     slot="skuHeight"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -902,6 +920,7 @@
                     :controls="false"
                     slot="skuNetWeight"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -909,6 +928,7 @@
                     :controls="false"
                     slot="skuVolume"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -916,11 +936,13 @@
                     :controls="false"
                     slot="skuInnerCartonQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonLength"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -928,6 +950,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -935,6 +958,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -942,6 +966,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonWeightNet"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -949,6 +974,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuInnerCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -958,6 +984,7 @@
                     :controls="false"
                     slot="skuInnerCartonVolume"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -965,6 +992,7 @@
                     :controls="false"
                     slot="skuInnerCartonOuterNum"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
@@ -972,11 +1000,13 @@
                     :controls="false"
                     slot="skuOuterCartonQty"
                     slot-scope="{data}"
+                    @change="val => data._isModified=true"
                     v-model="data.value"></el-input-number>
             <el-input-number
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonLength"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -984,6 +1014,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonWidth"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -991,6 +1022,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonHeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -998,6 +1030,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonNetWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1005,6 +1038,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonRoughWeight"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1012,6 +1046,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuOuterCartonVolume"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1019,6 +1054,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuApplicableAge"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1026,6 +1062,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuExpireDates"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1033,6 +1070,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuSampleQty"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1040,6 +1078,7 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuSamplePrice"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
@@ -1047,37 +1086,10 @@
                     :min="0"
                     class="speNumber spx"
                     :controls="false"
+                    @change="val => data._isModified=true"
                     slot="skuDeliveryDates"
                     slot-scope="{data}"
                     v-model="data.value"></el-input-number>
-
-            <!--<div slot="skuPictures" slot-scope="{data}">-->
-            <!--<v-upload ref="uploadSkuPictures" readonly :list="data.value" :onlyImage="true" :limit="20"></v-upload>-->
-            <!--</div>-->
-            <!--<div slot="skuLabelPic" slot-scope="{data}">-->
-                <!--<v-upload ref="uploadSkuLabelPic" :list="data._value" :onlyImage="true" :limit="1"></v-upload>-->
-            <!--</div>-->
-            <div slot="skuPkgMethodPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuPkgMethodPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuInnerCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuInnerCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuOuterCartonPic" slot-scope="{data}">
-                <v-upload ref="uploadSkuOuterCartonPic" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalOne" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalOne" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalTwo" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalTwo" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalThree" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalThree" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
-            <div slot="skuAdditionalFour" slot-scope="{data}">
-                <v-upload ref="uploadSkuAdditionalFour" :list="data._value" :limit="1" :onlyImage="true"></v-upload>
-            </div>
         </v-history-modify>
         <v-message-board
                 @send="afterSend"
@@ -1608,31 +1620,6 @@
                             }
                             item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
                             item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-                            //图片处理
-                            let skuLabelPic = item.skuLabelPic.value,
-                                skuPkgMethodPic = item.skuPkgMethodPic.value,
-                                skuInnerCartonPic = item.skuInnerCartonPic.value,
-                                skuOuterCartonPic = item.skuOuterCartonPic.value,
-                                skuAdditionalOne = item.skuAdditionalOne.value,
-                                skuAdditionalTwo = item.skuAdditionalTwo.value,
-                                skuAdditionalThree = item.skuAdditionalThree.value,
-                                skuAdditionalFour = item.skuAdditionalFour.value;
-                            // item.skuLabelPic._value = skuLabelPic ? [skuLabelPic] : [];
-                            // item.skuLabelPic.value = skuLabelPic ? [skuLabelPic] : [];
-                            item.skuPkgMethodPic._value = skuPkgMethodPic ? [skuPkgMethodPic] : [];
-                            item.skuPkgMethodPic.value = skuPkgMethodPic ? [skuPkgMethodPic] : [];
-                            item.skuInnerCartonPic._value = skuInnerCartonPic ? [skuInnerCartonPic] : [];
-                            item.skuInnerCartonPic.value = skuInnerCartonPic ? [skuInnerCartonPic] : [];
-                            item.skuOuterCartonPic._value = skuOuterCartonPic ? [skuOuterCartonPic] : [];
-                            item.skuOuterCartonPic.value = skuOuterCartonPic ? [skuOuterCartonPic] : [];
-                            item.skuAdditionalOne._value = skuAdditionalOne ? [skuAdditionalOne] : [];
-                            item.skuAdditionalOne.value = skuAdditionalOne ? [skuAdditionalOne] : [];
-                            item.skuAdditionalTwo._value = skuAdditionalTwo ? [skuAdditionalTwo] : [];
-                            item.skuAdditionalTwo.value = skuAdditionalTwo ? [skuAdditionalTwo] : [];
-                            item.skuAdditionalThree._value = skuAdditionalThree ? [skuAdditionalThree] : [];
-                            item.skuAdditionalThree.value = skuAdditionalThree ? [skuAdditionalThree] : [];
-                            item.skuAdditionalFour._value = skuAdditionalFour ? [skuAdditionalFour] : [];
-                            item.skuAdditionalFour.value = skuAdditionalFour ? [skuAdditionalFour] : [];
 
                         }
                     });
@@ -1693,8 +1680,6 @@
             //就是保存
             send() {
                 let params = Object.assign({}, this.orderForm);
-                console.log(this.productTableData,'productTableData')
-                return console.log(params.skuList, "params");
                 _.map(this.supplierOption, v => {
                     if (params.supplierName === v.id) {
                         params.supplierName = v.name;
@@ -1719,56 +1704,42 @@
                         }
                     });
                 });
-                // //列出有哪些需要对比的字段
-                // let compareList = [];
-                // _.map(params.skuList[0], (v, index) => {
-                //     if (index !== "fieldRemark" && index !== "skuPictures" && index !== "label") {
-                //         compareList.push(index);
-                //     }
-                // });
-                //
-                // //判断有哪些字段变了
-                // _.map(params.skuList, v => {
-                //     let infoChange = false;
-                //     _.map(this.initialData.skuList, data => {
-                //         if (v.id === data.id) {
-                //             _.map(compareList, item => {
-                //                 if (v[item] !== data[item]) {
-                //                     if (item === "skuUnit" || item === "skuUnitWeight" || item === "skuUnitLength" || item === "skuUnitVolume" || item === "skuExpireUnit") {
-                //                         if (Number(v[item]) !== Number(data[item])) {
-                //                             infoChange = true;
-                //                             console.log(item, "item");
-                //                         }
-                //                     } else {
-                //                         infoChange = true;
-                //                         console.log(item, "item");
-                //                     }
-                //                 }
-                //             });
-                //         }
-                //     });
-                //     console.log(infoChange, "infoChange");
-                // });
 
                 params.attachments = this.$refs.upload[0].getFiles();
-                _.map(params.orderSkuUpdateList, v => {
-                    let nowStatus, initialStatus;
-                    _.map(params.skuList, e => {
-                        if (e.skuId === v.skuId) {
-                            nowStatus = e.skuStatus;
+
+                let orderSkuUpdateList=[];
+                _.map(this.productTableData,item=>{
+                    let isModify=false,isModifyStatus=false;
+                    _.map(item,(val,index)=>{
+                        if(val._isModified){
+                            isModify=true;
                         }
-                    });
-                    _.map(this.initialData.skuList, e => {
-                        if (e.skuId === v.skuId) {
-                            initialStatus = e.skuStatus;
+                        if(val._isModifyStatus){
+                            isModifyStatus=true;
                         }
+
                     });
-                    if (nowStatus !== initialStatus) {
-                        v.skuStatus = true;
-                    } else {
-                        v.skuStatus = false;
+                    if(isModify || isModifyStatus){
+                        let isIn=false;
+                        _.map(orderSkuUpdateList,data=>{
+                            if(data.skuId===item.skuId.value){
+                                data.skuInfo=isModify;
+                                data.skuStatus=isModifyStatus;
+                                isIn=true;
+                            }
+                        });
+                        if(!isIn){
+                            orderSkuUpdateList.push({
+                                skuId:item.skuId.value,
+                                skuInfo:isModify,
+                                skuStatus:isModifyStatus
+                            });
+                        }
                     }
                 });
+                params.orderSkuUpdateList=orderSkuUpdateList;
+                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
+
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1883,6 +1854,7 @@
                             arr.push(v);
                         }
                     });
+                    console.log(this.$depthClone(arr),'arr')
                     this.chooseProduct = this.$refs.HM.init(arr, []);
                 }
                 else if (type === "detail") {
@@ -2011,29 +1983,29 @@
                 this.productTableDialogVisible = false;
             },
             saveNegotiate(e) {
-                if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
-                    this.orderForm.orderSkuUpdateList = [];
-                    this.orderForm.orderSkuUpdateList.push({
-                        skuId: e[0].skuId.value,
-                        skuInfo: true,
-                        skuStatus: true
-                    });
-                }
-                else {
-                    let isIn = false;
-                    _.map(this.orderForm.orderSkuUpdateList, v => {
-                        if (v.skuId === e[0].skuId.value) {
-                            isIn = true;
-                        }
-                    });
-                    if (!isIn) {
-                        this.orderForm.orderSkuUpdateList.push({
-                            skuId: e[0].skuId.value,
-                            skuInfo: true,
-                            skuStatus: true
-                        });
-                    }
-                }
+                // if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
+                //     this.orderForm.orderSkuUpdateList = [];
+                //     this.orderForm.orderSkuUpdateList.push({
+                //         skuId: e[0].skuId.value,
+                //         skuInfo: true,
+                //         skuStatus: true
+                //     });
+                // }
+                // else {
+                //     let isIn = false;
+                //     _.map(this.orderForm.orderSkuUpdateList, v => {
+                //         if (v.skuId === e[0].skuId.value) {
+                //             isIn = true;
+                //         }
+                //     });
+                //     if (!isIn) {
+                //         this.orderForm.orderSkuUpdateList.push({
+                //             skuId: e[0].skuId.value,
+                //             skuInfo: true,
+                //             skuStatus: true
+                //         });
+                //     }
+                // }
 
                 _.map(this.productTableData, (v, k) => {
                     _.map(e, m => {
