@@ -821,8 +821,9 @@
             if (!_.isEmpty(res.selectedDomainUserIds)) {
               let users = [];
               _.mapObject(res.selectedDomainUserIds, (val, key) => {
+                _.map(val, v => users.push(`${key}_${v}`));
               })
-              checked = checked.concat(_.flatten(_.values(res.selectedDomainUserIds)));
+              checked = checked.concat(users);
             }
 
             if (!_.isEmpty(res.selectedResourceCodes)) {

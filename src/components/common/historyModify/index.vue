@@ -122,6 +122,10 @@
         type: Boolean,
         default: false
       },
+      disabledRemark: {
+        type: Boolean,
+        default: false
+      },
       beforeSave: Function
     },
     data() {
@@ -235,7 +239,7 @@
         this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
-        if (columnIndex === 0) {
+        if (columnIndex === 0 && !this.disabledRemark) {
           if (rowIndex % 2 === 0) {
             return {
               rowspan: 2,
