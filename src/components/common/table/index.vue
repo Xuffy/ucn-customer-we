@@ -83,9 +83,9 @@
                 width="300"
                 trigger="click">
                 <v-upload readonly :limit="cItem._upload.limit || 5"
-                          :ref="cItem._upload.ref || 'upload'"
+                          :ref="cItem.key + 'Upload'"
                           :list="cItem._value || cItem.value"></v-upload>
-                <el-button slot="reference" type="text">查看附件</el-button>
+                <el-button slot="reference" type="text">{{$i.upload.viewAttachment}}</el-button>
               </el-popover>
 
               <div v-else
@@ -325,6 +325,7 @@
           this.$refs.tableBox.scrollLeft = 0;
         }
 
+        this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
           this.$refs.filterColumn.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
@@ -344,6 +345,15 @@
             // this.updateTable()
           }, 50);
         }
+      },
+      resetFile() {
+        _.mapObject(this.dataList, value => {
+          _.map(value, val => {
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
+          });
+        });
       },
       changeFilterColumn(data) {
         this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, data);

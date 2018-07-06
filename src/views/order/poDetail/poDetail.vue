@@ -1354,56 +1354,7 @@
                     remark: "",
                     remind: true,
                     responsibilityFlag: false,
-                    responsibilityList: [
-                        // {
-                        //     type: '0',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '1',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '2',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '3',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '4',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                        // {
-                        //     type: '5',
-                        //     customer: '',
-                        //     supplier: '',
-                        //     remark: '',
-                        //     actualDt: '',
-                        //     orderNo:''
-                        // },
-                    ],
+                    responsibilityList: [],
                     skuList: [],
                     // skuQty: 0,
                     // skuSupplierName: "",
@@ -1704,8 +1655,8 @@
                         }
                     });
                 });
-
                 params.attachments = this.$refs.upload[0].getFiles();
+
 
                 let orderSkuUpdateList=[];
                 _.map(this.productTableData,item=>{
@@ -1738,7 +1689,6 @@
                     }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
-                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
 
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
