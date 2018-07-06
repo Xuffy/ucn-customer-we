@@ -39,8 +39,7 @@
         type:Object,
         default (){
           return {
-            color: '#f56c6c',
-            'text-shadow': '2px 1px 2px'
+            background:'yellow'
           }
         }
       },
@@ -154,8 +153,7 @@
       min-width: 150px;
     }
     /deep/.definedStyleClass input{
-      background:#f56c6c;
-      color:#fff;
+      background:yellow;
     }
   }
 

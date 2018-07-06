@@ -25,8 +25,10 @@ export default {
         _slot:'skuPictures',
         type:'pic',
         _image:true,
-        key:'skuPictures'
-        // disabled:true
+        key:'skuPictures',
+        _upload: {
+            readonly:true,
+        }
     },
     skuNameEn:{
         _disabled:true
@@ -249,24 +251,44 @@ export default {
     skuShippingMarks:{},
     skuOuterCartonBarCode:{},
     skuOuterCartonCode:{},
+    // skuPic:{
+    //     _slot:'skuPictures',
+    //     type:'pic',
+    //     _image:true,
+    //     key:'skuPictures',
+    //     _upload: {
+    //         ref: 'uploadSkuPictures'
+    //     }
+    //     // disabled:true
+    // },
     skuLabelPic:{
         _slot:'skuLabelPic',
-        _image:true
-        // _image:true,
-        // type:'pic'
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuLabelDesc:{},
     skuPkgMethodPic:{
         _slot:'skuPkgMethodPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuInnerCartonPic:{
         _slot:'skuInnerCartonPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuOuterCartonPic:{
         _slot:'skuOuterCartonPic',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuSample:{
         _slot:'skuSample',
@@ -285,18 +307,30 @@ export default {
     skuRemarkThree:{},
     skuAdditionalOne:{
         _slot:'skuAdditionalOne',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalTwo:{
         _slot:'skuAdditionalTwo',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalThree:{
         _slot:'skuAdditionalThree',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
     skuAdditionalFour:{
         _slot:'skuAdditionalFour',
-        _image:true
+        _image:true,
+        _upload:{
+            limit:1
+        }
     },
 }

@@ -119,6 +119,7 @@
       <!-- <select-search :options="[]" @inputEnter="inputEnter" /> -->
     </div>
     <v-table
+      code="inquiry"
       :data.sync="tabData"
       :buttons="productInfoBtn"
       :loading="tableLoad"
