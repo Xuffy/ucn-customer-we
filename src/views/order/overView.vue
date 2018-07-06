@@ -124,7 +124,6 @@
                 tableCode:'uorder_list',
                 disableClickFinish:false,
 
-
                 /**
                  * 字典
                  * */

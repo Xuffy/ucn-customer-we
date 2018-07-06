@@ -18,7 +18,7 @@ export default {
     type: 'text'
   },
   "orderNo": {
-    type: 'text'
+    type: 'String'
   },
   "orderId": {
     type: 'text',

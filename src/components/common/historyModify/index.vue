@@ -30,8 +30,9 @@
             </div>-->
 
             <div v-else>
-              <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
-                    v-text="row[item.key]._value || row[item.key].value"></span>
+              <span
+                v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
+                v-text="row[item.key]._value || row[item.key].value"></span>
 
               <!--附件上传-->
               <div v-else-if="row[item.key]._upload && !row._remark">
@@ -39,15 +40,20 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload :limit="row[item.key]._upload.limit || 5"
-                            :ref="row[item.key]._upload.ref || 'upload'"
-                            :readonly="!isModify && row[item.key].readonly"
+                  <v-upload @change="val => {changeUploadFile(val,row[item.key])}"
+                            :limit="row[item.key]._upload.limit || 5"
+                            :ref="item.key + 'Upload'"
+                            :only-image="row[item.key]._image"
+                            :readonly="!isModify || row[item.key]._upload.readonly"
                             :list="row[item.key]._value || row[item.key].value"></v-upload>
-                  <el-button slot="reference" type="text" v-if="!row[item.key]._image">
-                    {{isModify && !row[item.key].readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
-                  </el-button>
-                  <el-button slot="reference" type="text" v-else>
-                    {{isModify && !row[item.key].readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
+                  <el-button slot="reference" type="text">
+                    <span v-if="!row[item.key]._image">
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadingAttachments : $i.upload.viewAttachment}}
+                    </span>
+                    <span v-else>
+                      {{isModify && !row[item.key]._upload.readonly ? $i.upload.uploadImage : $i.upload.viewImage}}
+                    </span>
+                    ({{row[item.key]._upload.list ? row[item.key]._upload.list.length : 0}})
                   </el-button>
                 </el-popover>
               </div>
@@ -60,12 +66,14 @@
               <div v-else>
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
+                          @change="() => row[item.key]._isModified = true"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
                 <el-input-number
                   v-else-if="row[item.key].type === 'Number'"
                   v-model="row[item.key].value"
+                  @change="() => row[item.key]._isModified = true"
                   :min="row[item.key].min || 0"
                   :max="row[item.key].max || 99999999"
                   controls-position="right"
@@ -115,7 +123,12 @@
         type: Boolean,
         default: false
       },
-      beforeSave: Function
+      disabledRemark: {
+        type: Boolean,
+        default: false
+      },
+      beforeSave: Function,
+      closeBefore: Function
     },
     data() {
       return {
@@ -137,6 +150,8 @@
     mounted() {
     },
     methods: {
+      handkleClose() {
+      },
       submit() {
         let data = [this.dataList[0], this.dataList[1]]
           , uploadVm = null;
@@ -145,7 +160,7 @@
         data[0] = _.mapObject(data[0], (val, key) => {
           let files;
           if (val._upload && _.isObject(val._upload)) {
-            uploadVm = this.$refs[val._upload.ref];
+            uploadVm = this.$refs[key + 'Upload'];
             uploadVm = _.isArray(uploadVm) ? uploadVm[0] : uploadVm;
             files = uploadVm.getFiles(true);
             val.value = files.key;
@@ -156,8 +171,13 @@
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
-        this.$emit('save', data);
-        this.showDialog = false;
+
+        if (this.closeBefore) {
+          this.closeBefore(data, () => this.showDialog = false)
+        } else {
+          this.$emit('save', data);
+          this.showDialog = false
+        }
       },
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return '';
@@ -168,14 +188,21 @@
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
-        if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
+          return false
+        }
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];
         // 初始化可编辑行
         ed = _.map(editData, (value, index) => {
           return _.mapObject(value, val => {
-            if (!_.isObject(val)) return val;
+            if (!_.isObject(val)) {
+              return val;
+            }
+            if (val._upload && this.$refs[val.key + 'Upload']) {
+              this.$refs[val.key + 'Upload'][0].reset();
+            }
             val._edit = true;
             val.type = index === 1 ? 'String' : val.type;
             val.value = val.value || val.value;
@@ -198,6 +225,7 @@
         param[item._optionValue || 'code'] = val;
         obj = _.findWhere(item._option, param);
         item._value = obj ? obj[item._optionLabel || 'name'] : '';
+        item._isModified = true;
       },
       getFilterData(data, k = 'id') {
         let list = [];
@@ -214,6 +242,10 @@
         });
         return list;
       },
+      changeUploadFile(val, item) {
+        this.$set(item._upload, 'list', val);
+        this.$set(item, '_isModified', true);
+      },
       closeDialog() {
         if (this.modified) {
           this.dataList = this.$depthClone(this.defaultData);
@@ -222,7 +254,7 @@
         this.$emit('update:visible', false);
       },
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
-        if (columnIndex === 0) {
+        if (columnIndex === 0 && !this.disabledRemark) {
           if (rowIndex % 2 === 0) {
             return {
               rowspan: 2,
