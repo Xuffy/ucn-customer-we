@@ -393,7 +393,7 @@
   .ucn-table.fixed-left-box .fixed-left,
   .ucn-table.fixed-right-box .fixed-right {
     position: absolute;
-    z-index: 9;
+    z-index: 4;
     top: 0;
     height: 40px;
     width: 20px;
