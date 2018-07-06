@@ -292,13 +292,19 @@
           this.isShow = false;
           this.isHide = true;
         }
-        // this.getDataInfo()
       }
     },
     created(){
-      this.message = '1';
       this.getDataInfo();
       this.getMessageQuery();
+      switch (Number(this.$route.query.type)){
+        case 1:
+          this.viewByStatus = '1'
+          break;
+        case 2:
+          this.viewByStatus = '2'
+          break;
+      }
     },
   }
 </script>
