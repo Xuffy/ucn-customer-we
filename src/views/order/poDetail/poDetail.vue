@@ -1696,6 +1696,7 @@
                     }
                 });
                 params.orderSkuUpdateList=orderSkuUpdateList;
+                return console.log(orderSkuUpdateList,'orderSkuUpdateList')
 
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
@@ -1940,30 +1941,6 @@
                 this.productTableDialogVisible = false;
             },
             saveNegotiate(e) {
-                // if (!this.orderForm.orderSkuUpdateList || this.orderForm.orderSkuUpdateList.length === 0) {
-                //     this.orderForm.orderSkuUpdateList = [];
-                //     this.orderForm.orderSkuUpdateList.push({
-                //         skuId: e[0].skuId.value,
-                //         skuInfo: true,
-                //         skuStatus: true
-                //     });
-                // }
-                // else {
-                //     let isIn = false;
-                //     _.map(this.orderForm.orderSkuUpdateList, v => {
-                //         if (v.skuId === e[0].skuId.value) {
-                //             isIn = true;
-                //         }
-                //     });
-                //     if (!isIn) {
-                //         this.orderForm.orderSkuUpdateList.push({
-                //             skuId: e[0].skuId.value,
-                //             skuInfo: true,
-                //             skuStatus: true
-                //         });
-                //     }
-                // }
-
                 _.map(this.productTableData, (v, k) => {
                     _.map(e, m => {
                         if (m.skuSysCode.value === v.skuSysCode.value && m.label.value === v.label.value) {
