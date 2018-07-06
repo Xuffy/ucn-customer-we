@@ -9,6 +9,6 @@
   "title": "Please enter title",
   "content": "Please enter contents",
   "release": "Release",
-  "passwordAuthentication": "The new password cannot be the same as the original password",
+  "passwordAuthentication": "The new passwplease choose a typeord cannot be the same as the original password",
   "modifySuccess": "Modify Success"
 }
