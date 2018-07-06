@@ -30,8 +30,9 @@
             </div>-->
 
             <div v-else>
-              <span v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload)"
-                    v-text="row[item.key]._value || row[item.key].value"></span>
+              <span
+                v-if="(row[item.key]._disabled && !row._remark) || (!isModify && !row[item.key]._upload) || (!isModify && row._remark)"
+                v-text="row[item.key]._value || row[item.key].value"></span>
 
               <!--附件上传-->
               <div v-else-if="row[item.key]._upload && !row._remark">
@@ -39,7 +40,7 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload @change="val => $set(row[item.key]._upload,'list',val)"
+                  <v-upload @change="val => {changeUploadFile(val,row[item.key])}"
                             :limit="row[item.key]._upload.limit || 5"
                             :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
@@ -126,7 +127,8 @@
         type: Boolean,
         default: false
       },
-      beforeSave: Function
+      beforeSave: Function,
+      closeBefore: Function
     },
     data() {
       return {
@@ -148,6 +150,8 @@
     mounted() {
     },
     methods: {
+      handkleClose() {
+      },
       submit() {
         let data = [this.dataList[0], this.dataList[1]]
           , uploadVm = null;
@@ -167,8 +171,13 @@
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
           return;
         }
-        this.$emit('save', data);
-        this.showDialog = false;
+
+        if (this.closeBefore) {
+          this.closeBefore(data, () => this.showDialog = false)
+        } else {
+          this.$emit('save', data);
+          this.showDialog = false
+        }
       },
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return '';
@@ -179,7 +188,9 @@
       },
       init(editData, history = [], isModify = true) {
         let ed = [];
-        if (_.isEmpty(editData) || !_.isArray(editData)) return false;
+        if (isModify && (_.isEmpty(editData) || !_.isArray(editData))) {
+          return false
+        }
         this.dataList = [];
         this.defaultData = [];
         this.dataColumn = [];
@@ -230,6 +241,10 @@
           }), value.fieldRemark));
         });
         return list;
+      },
+      changeUploadFile(val, item) {
+        this.$set(item._upload, 'list', val);
+        this.$set(item, '_isModified', true);
       },
       closeDialog() {
         if (this.modified) {

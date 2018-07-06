@@ -64,7 +64,7 @@
         </div>
       </v-table>
     </div>
-    <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
+    <!-- <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
       @close="closeModify(0)">
       <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun"
         :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" />
@@ -72,7 +72,7 @@
         <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
         <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false" @close="closeAddProduct(0)">
       <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
@@ -85,7 +85,7 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <v-history-modify ref="HM" disabled-remark></v-history-modify>
+    <v-history-modify ref="HM" disabled-remark @save="closeModify"></v-history-modify>
 
   </div>
 </template>
@@ -562,23 +562,12 @@
               el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
               return el;
             })): [currentProduct];
-            this.$refs.HM.init(this.productModifyList, []);
+            status==1 ? this.$refs.HM.init(this.productModifyList,[]) : this.$refs.HM.init([], this.productModifyList,false);
           })
         }else{
           this.productModifyList = [currentProduct]
           this.$refs.HM.init(this.productModifyList, []);
         }
-        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {  //以前版本 历史修改记录也会返回
-        //   res.history.length ? this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-        //       res.history.map(el => {
-        //         let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-        //           item => item.code == el.shipmentStatus)
-        //         el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-        //         return el;
-        //       }))] :
-        //     (this.productModifyList = [currentProduct])
-        // }) :
-        // this.productModifyList = [currentProduct]
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -689,13 +678,13 @@
           this.prodFieldDisplay = obj;
         }
       },
-      closeModify(status) {
-        if (!status) {
+      closeModify(data) {
+        if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
           return
         };
-        const currrentProduct = this.productModifyList[0]
+        const currrentProduct = data[0]
         let obj = _.mapObject(currrentProduct, v => Number(v.value) || v.value)
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
           return;
@@ -860,7 +849,7 @@
         // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
-            if (v.type == 'text') {
+            if (v.typeSlef == 'text') {
               return v.value;
             } else {
               return null;
