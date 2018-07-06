@@ -102,7 +102,27 @@
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();
-      // this.setLog({query:{code:'productSourcingOverview'}});
+     /* // 第一种 单个设置
+      this.setMenuLink({
+        path: '',
+        query: {code: ''},
+        type: 10,
+        label: this.$i.common.archive
+      });
+
+      // 多个设置
+      this.setMenuLink([{
+        path: '',
+        query: {code: ''},
+        type: 10,
+        label: this.$i.common.archive
+      }, {
+        path: '',
+        query: {code: ''},
+        type: 100, // type = 100  为log
+        label: this.$i.common.archive
+      }]);*/
+
     },
     computed: {
       ...mapState({
@@ -111,7 +131,7 @@
       }),
     },
     methods: {
-      // ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       getBasicInfo() {
         this.settingStateLoading = true;
         this.$ajax.post(this.$apis.USER_CUSTOMER_ISSETUSERINFO, {type: config.CLIENT_TYPE})
