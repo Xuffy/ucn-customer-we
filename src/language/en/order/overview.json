@@ -55,5 +55,6 @@
   "deliveredQuantity": "Delivered Quantity",
   "productStatus": "Product Status",
   "incoterm": "Incoterm",
-  "incotermarea": "Incoterm Area"
+  "incotermarea": "Incoterm Area",
+  "archiveOverview":"Archive Overview"
 }

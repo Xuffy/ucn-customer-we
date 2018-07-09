@@ -2022,9 +2022,14 @@
                 label: this.$i.common.draft
             });
             this.setMenuLink({
-                path: '/order/archive',
+                path: '/order/archiveOrder',
                 type: 20,
-                label: this.$i.common.archive
+                label: this.$i.order.archiveOrder
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                type: 30,
+                label: this.$i.order.archiveDraft
             });
         },
         watch:{

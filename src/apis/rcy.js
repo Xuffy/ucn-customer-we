@@ -103,5 +103,7 @@ export default {
     ORDER_SAVE_DRAFT:['/order/saveDraft','BASE_URL'],
     ORDER_SEND:['/order/send','BASE_URL'],
     ORDER_HISTORY:['/order/skuHistory','BASE_URL'],
-
+    ORDER_RECYCLE_ORDER_PAGE:['/order/recycle/orderPage','BASE_URL'],
+    ORDER_RECYCLE_SKU_PAGE:['/order/recycle/skuPage','BASE_URL'],
+    ORDER_RECOVER:['/order/recover','BASE_URL']
 }

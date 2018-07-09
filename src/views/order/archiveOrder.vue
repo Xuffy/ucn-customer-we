@@ -1,19 +1,7 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">{{$i.order.orderOverview}}</h3>
+        <h3 class="hd">{{$i.order.archiveOverview}}</h3>
         <div class="status">
-            <div class="btn-wrap">
-                <span>{{$i.order.status}}</span>
-                <el-radio-group style="margin-left: 10px" v-model="params.status" size="mini" @change='changeStatus'>
-                    <el-radio-button label="">{{($i.order.all)}}</el-radio-button>
-                    <el-radio-button
-                            v-for="v in orderStatusOption"
-                            :key="v.id"
-                            :label="v.code">
-                        {{v.name}}
-                    </el-radio-button>
-                </el-radio-group>
-            </div>
             <div class="select-wrap">
                 <selectSearch
                         :options=options
@@ -27,7 +15,6 @@
                 :code="tableCode"
                 ref='vtable'
                 :data="tabData"
-                :buttons="[{label: 'Detail', type: 1}]"
                 @action="onAction"
                 :loading='loading'
                 :pageTotal='pageTotal'
@@ -37,10 +24,7 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish' v-authorize="'ORDER:OVERVIEW:SHIPPED'">{{$i.order.shipped}}</el-button>
-                        <el-button v-authorize="'ORDER:OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}</el-button>
-                        <el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.archive)}}</el-button>
+                        <el-button :loading="disableClickRecover" :disabled="selectedList.length===0" @click='recover'>{{($i.order.recover)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -77,7 +61,7 @@
     } from '@/components/index';
 
     export default {
-        name: 'orderOverview',
+        name: 'orderArchiveOrder',
         components: {
             dropDown,
             VTable,
@@ -100,31 +84,33 @@
                 selectSearch: 1,
                 pageTotal: 1,
                 rowspan: 1,
-                options: [{
-                    id: 1,
-                    label: 'Order No'
-                }, {
-                    id: 2,
-                    label: 'Sku Code'
-                }],
+                options: [
+                    {
+                        id: 1,
+                        label: 'Order No'
+                    },
+                    {
+                        id: 2,
+                        label: 'Sku Code'
+                    }
+                ],
                 id: '',
                 params: {
                     orderNo: '',
                     skuCode: '',
                     status: '',
+                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
                     operatorFilters: [],
                     sorts: [],
-                    draftCustomer:false,
-                    recycleCustomer:false,
+                    recycleCustomer:true
                 },
                 selectedList: [],
                 selectedNumber: [],
                 tableCode:'uorder_list',
                 disableClickFinish:false,
-                disableClickDelete:false,
-                disableDelete:true,
+                disableClickRecover:false,
 
                 /**
                  * 字典
@@ -145,6 +131,21 @@
                         orderId: item.id.value
                     }
                 });
+            },
+            recover(){
+                let ids=[];
+                _.map(this.selectedList,v=>{
+                    ids.push(v.id.value);
+                });
+                this.disableClickRecover=true;
+                this.$ajax.post(this.$apis.ORDER_RECOVER,{
+                    ids:ids
+                }).then(res=>{
+                    this.selectedList=[];
+                    this.getData();
+                }).finally(()=>{
+                    this.disableClickRecover=false;
+                })
             },
             createOrder() {
                 this.$windowOpen({
@@ -177,12 +178,12 @@
                     this.params.orderNo = val.value;
                     this.params.skuCode = '';
                     this.view='1';
-                    this.getData()
+                    this.getData();
                 } else {
                     this.params.orderNo = '';
                     this.params.skuCode = val.value;
                     this.view='2';
-                    this.getData()
+                    this.getData();
                 }
             },
             finish() {
@@ -224,39 +225,25 @@
                     });
             },
             deleteOrder() {
-                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
-                    confirmButtonText: this.$i.order.sure,
-                    cancelButtonText: this.$i.order.cancel,
-                    type: 'warning'
-                }).then(() => {
-                    let ids=[];
-                    _.map(this.selectedList,v=>{
-                        ids.push(v.id.value);
-                    });
-                    this.disableClickDelete=true;
-                    this.$ajax.post(this.$apis.delete_order,{
-                        ids:ids,
-                        recycleCustomer:true
-                    }).then(res=>{
-                        this.selectedList=[];
-                        this.getData();
-                    }).finally(()=>{
-                        this.disableClickDelete=false;
-                    });
-
-                    this.$message({
-                        type: 'success',
-                        message: this.$i.order.deleteSuccess
-                    });
-                }).catch(() => {
-
-                });
+                // this.$ajax.post(this.$apis.delete_order, {
+                //     ids: this.selectedNumber
+                // })
+                //     .then((res) => {
+                //         if (this.params.view == 1) {
+                //             this.getdata(this.$db.order.overviewByOrder)
+                //         } else {
+                //             this.getdata(this.$db.order.overviewBysku)
+                //         }
+                //     })
+                //     .catch((res) => {
+                //         console.log(res)
+                //     });
             },
             //get_orderlist数据
             getData() {
                 this.loading = true;
                 let url='',query='';
-                url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
+                url=(this.view==='1'?this.$apis.ORDER_RECYCLE_ORDER_PAGE:this.$apis.ORDER_RECYCLE_SKU_PAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
                 this.$ajax.post(url, this.params)
                     .then((res) => {
@@ -355,33 +342,12 @@
                 type: 20,
                 label: this.$i.common.log
             });
-            this.setMenuLink({
-                path: '/order/archiveOrder',
-                type: 30,
-                label: this.$i.order.archiveOrder
-            });
-            this.setMenuLink({
-                path: '/order/archiveDraft',
-                type: 40,
-                label: this.$i.order.archiveDraft
-            });
         },
         mounted() {
             this.loading = false;
         },
         watch: {
             selectedList(n){
-                let disableArchive=false;
-                if(n.length===0){
-                    disableArchive=true;
-                }else{
-                    _.map(n,v=>{
-                        if(v.status.value!=='CANCLED'){
-                            disableArchive=true;
-                        }
-                    });
-                }
-                this.disableDelete=disableArchive;
                 if(this.view==='1'){
                     if(n.length>0){
                         let allow=true;
@@ -419,44 +385,15 @@
             color: #666666;
         }
         .status {
-            display: flex;
-            height: 60px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            box-sizing: border-box;
-            .btn-wrap {
-                display: flex;
-                align-items: center;
-                span {
-                    font-size: 14px;
-                }
-                button {
-                    padding: 2px 5px;
-                    cursor: pointer;
-                    border: 1px solid #108ee9;
-                    background-color: #fff;
-                    margin-left: 10px;
-                    border-radius: 5px;
-                    transition: all .5s ease;
-                    &:hover,
-                    &.active {
-                        background-color: #108ee9;
-                        color: #fff;
-                    }
-                }
+            margin-top: 15px;
+            .select-wrap{
+                float: right;
             }
-            .select-wrap {
-                display: flex;
-                align-items: center;
-                .select {
-                    width: 110px;
-                    margin-right: 5px;
-                    input {
-                    }
-                }
-            }
-
+        }
+        .status:after{
+            content: '';
+            display: table;
+            clear: both;
         }
         .fn {
             display: flex;
