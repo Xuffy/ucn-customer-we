@@ -170,6 +170,7 @@
           return false;
         }
 
+        this.disabledRemark && data.pop();
         this.$emit('save', data);
         this.showDialog = false
       },
