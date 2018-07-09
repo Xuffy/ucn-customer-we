@@ -45,6 +45,9 @@
       code: {
         type: String,
         default: '',
+      },
+      getConfig: {
+        type: Function
       }
     },
     data() {
@@ -68,6 +71,11 @@
     mounted() {
     },
     methods: {
+      init(data, checkList) {
+        this.dataList[0].children = data;
+
+        this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(checkList));
+      },
       filterNode(value, data) {
         if (!value) return true;
         return data._name && data._name.toLowerCase().indexOf(value.toLowerCase()) !== -1;
@@ -80,33 +88,6 @@
             }
             return v;
           });
-        });
-      },
-      getConfig(isUpdate = false, data = []) {
-
-        if (!_.isEmpty(data)) {
-          this.columns = data[0];
-        }
-
-        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {
-          cache: true,
-          updateCache: isUpdate
-        }).then(res => {
-          let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-            , dataList = [];
-
-          _.map(this.columns, (val, key) => {
-            let item = _.findWhere(res, {property: val._filed || key})
-            if (!val._hide && item) {
-              item._name = val.label;
-              dataList.push(item);
-            }
-          });
-
-          this.dataList[0].children = dataList;
-
-          this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(list));
-          return list;
         });
       },
       submitFilter() {
