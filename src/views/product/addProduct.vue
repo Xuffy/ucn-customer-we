@@ -103,7 +103,7 @@
         </div>
         <div class="footer">
             <v-table
-                    code="udata_purchase_sku_overview"
+                    :code="code"
                     :height="500"
                     :loading="loadingTable"
                     :data="tableDataList"
@@ -208,6 +208,10 @@
             },
             dataResource:{
                 type:Function,
+            },
+            code:{
+                type:String,
+                default:'udata_purchase_sku_overview'
             },
             // dataBase:{
             //     type:Object,
@@ -444,29 +448,36 @@
             },
 
             initData(data){
-                console.log(data,'data')
-                this.tableDataList = this.$getDB(this.$db.product.indexTable, data.datas, (e) => {
-                    let noneSellCountry = '';
-                    e.noneSellCountry.value.split(',').forEach(v => {
-                        this.countryOption.forEach(m => {
-                            if (m.code === v) {
-                                noneSellCountry += (m.name + ',');
-                            }
-                        })
-                    });
-                    noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                    e.noneSellCountry.value = noneSellCountry;
+                let database;
+                if(this.code==='udata_purchase_sku_overview'){
+                    database=this.$db.product.indexTable;
+                }else{
+                    database=this.$db.logistic.dbBasicInfoObj;
+                }
+                this.tableDataList = this.$getDB(database, data.datas, (e) => {
+                    if(this.code==='udata_purchase_sku_overview'){
+                        let noneSellCountry = '';
+                        e.noneSellCountry.value.split(',').forEach(v => {
+                            this.countryOption.forEach(m => {
+                                if (m.code === v) {
+                                    noneSellCountry += (m.name + ',');
+                                }
+                            })
+                        });
+                        noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
+                        e.noneSellCountry.value = noneSellCountry;
 
-                    e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                    e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                    e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                    e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                    e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                    e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
-                    e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
+                        e.status.value = this.$change(this.statusOption, 'status', e, true).name;
+                        e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
+                        e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
+                        e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
+                        e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
+                        e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
+                        e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
 
-                    if(this.disableBookmarkChoose && e.bookmarkId.value){
-                        this.$set(e,'_disabled',true);
+                        if(this.disableBookmarkChoose && e.bookmarkId.value){
+                            this.$set(e,'_disabled',true);
+                        }
                     }
                     return e;
                 });
@@ -499,6 +510,7 @@
                 this.selectList.forEach(v => {
                     v._disabled = true;
                 });
+                this.loadingTable = false;
             },
 
             //获取table数据
