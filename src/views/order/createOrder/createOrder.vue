@@ -1039,7 +1039,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog','setRecycleBin','setDraft']),
+            ...mapActions(['setMenuLink']),
             //就是保存
             send(){
                 if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
@@ -2015,9 +2015,16 @@
         },
         mounted(){
             // this.setLog({query:{code:'BIZ_ORDER'}});
-            this.setDraft({
-                name: 'orderDraft',
-                show: true
+            this.setMenuLink({
+                path: '/order/draft',
+                // query: {code: ''},
+                type: 10,
+                label: this.$i.common.draft
+            });
+            this.setMenuLink({
+                path: '/order/archive',
+                type: 20,
+                label: this.$i.common.archive
             });
         },
         watch:{

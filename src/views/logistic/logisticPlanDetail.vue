@@ -75,7 +75,7 @@
     </el-dialog> -->
     <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
+      <product code="ulogistics_PlanDetail" title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
       <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>

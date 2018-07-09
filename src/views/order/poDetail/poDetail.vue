@@ -577,25 +577,38 @@
                 </el-button>
             </div>
             <div v-else>
-                <el-button :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder"
-                           @click="modifyOrder" type="primary">{{$i.order.modify}}
-                </el-button>
-                <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder"
-                           :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}
+                <el-button
+                        v-authorize="'ORDER:DETAIL:MODIFY'"
+                        :disabled="loadingPage || disableModify || hasCancelOrder || hasFinishOrder"
+                        @click="modifyOrder"
+                        type="primary">{{$i.order.modify}}
                 </el-button>
                 <el-button
-                        v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
+                        v-authorize="'ORDER:DETAIL:CONFIRM'"
+                        :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                        @click="confirmOrder"
+                        :loading="disableClickConfirm"
+                        type="primary">{{$i.order.confirm}}
+                </el-button>
+                <el-button
+                        v-authorize="'ORDER:DETAIL:DOWNLOAD'"
                         :disabled="loadingPage || disableConfirm || hasCancelOrder"
                         @click="downloadOrder"
                         :loading="disableClickConfirm"
                         type="primary">
                     {{$i.order.download}}
                 </el-button>
-                <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" :loading="disableCancelOrder"
-                           @click="cancelOrder" type="danger">{{$i.order.cancel}}
+                <el-button
+                        v-authorize="'ORDER:DETAIL:CANCEL'"
+                        :disabled="loadingPage || hasCancelOrder || hasFinishOrder" :loading="disableCancelOrder"
+                        @click="cancelOrder"
+                        type="danger">{{$i.order.cancel}}
                 </el-button>
-                <el-checkbox :disabled="loadingPage || hasCancelOrder" v-model="markImportant"
-                             @change="changeMarkImportant">{{$i.order.markAsImportant}}
+                <el-checkbox
+                        v-authorize="'ORDER:DETAIL:MARK_AS_IMPORTANT'"
+                        :disabled="loadingPage || hasCancelOrder"
+                        v-model="markImportant"
+                        @change="changeMarkImportant">{{$i.order.markAsImportant}}
                 </el-checkbox>
             </div>
         </div>
@@ -1432,7 +1445,7 @@
             },
         },
         methods: {
-            ...mapActions(["setLog", "setDraft"]),
+            ...mapActions(["setMenuLink"]),
             /**
              * 获取页面数据
              * */
@@ -2877,11 +2890,23 @@
             });
         },
         mounted() {
-            // this.setLog({ query: { code: "ORDER" } });
-            // this.setDraft({
-            //     name: "orderDraft",
-            //     show: true
-            // });
+            this.setMenuLink({
+                path: '/order/draft',
+                // query: {code: ''},
+                type: 10,
+                label: this.$i.common.draft
+            });
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'ORDER'},
+                type: 20,
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archive',
+                type: 30,
+                label: this.$i.common.archive
+            });
         },
         watch: {
             allowQuery(n) {
