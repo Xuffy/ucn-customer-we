@@ -292,7 +292,7 @@
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
-        this.$emit('change-sort', {sort: [this.currentSort]});
+        this.$emit('change-sort', {sorts: [this.currentSort]});
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
