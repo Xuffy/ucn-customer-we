@@ -10,6 +10,7 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
+                         :get-config="getConfig"
                          @change="changeFilterColumn"></v-filter-column>
       </div>
     </div>
@@ -38,12 +39,15 @@
               <div>#</div>
             </td>
             <td v-for="item in dataColumn" v-if="!item._hide && !item._hidden && item.key"
-                :class="{'sort-wrapper':item._sort}">
+                :class="{'sort-wrapper':item._sort,active:currentSort.orderBy === item.key}"
+                @click="changeSort(item.key)">
               <div>
                 {{item.label}}
                 <div class="sort-box">
-                  <i class="el-icon-caret-top"></i>
-                  <i class="el-icon-caret-bottom"></i>
+                  <i class="el-icon-caret-top" :class="{active:currentSort.orderType === 'asc'}"
+                     @click.stop="changeSort(item.key,'asc')"></i>
+                  <i class="el-icon-caret-bottom" :class="{active:currentSort.orderType === 'desc'}"
+                     @click.stop="changeSort(item.key,'desc')"></i>
                 </div>
               </div>
             </td>
@@ -228,6 +232,7 @@
         checkedAll: false,
         interval: null,
         tableAttr: {st: 0, sl: 0},
+        currentSort: {orderBy: '', orderType: ''}
       }
     },
     watch: {
@@ -242,13 +247,13 @@
     mounted() {
       this.setDataList(this.data, true);
       this.$refs.tableBox.addEventListener('scroll', this.updateTable);
-      this.interval = setInterval(this.updateTable, 400);
+      this.interval = setInterval(this.updateTable, 300);
     },
     methods: {
       getConfig(isUpdate = false, data = []) {
 
         if (!_.isEmpty(data)) {
-          this.dataColumn = data[0];
+          this.dataColumn = _.values(data[0]);
         }
 
         return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {
@@ -258,19 +263,32 @@
           let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
             , dataList = [];
 
-          _.map(this.dataColumn, (val, key) => {
-            let item = _.findWhere(res, {property: val._filed || key})
+          this.dataColumn = _.map(this.dataColumn, val => {
+            let item = _.findWhere(res, {property: val._filed || val.key})
             if (!val._hide && item) {
               item._name = val.label;
               dataList.push(item);
             }
+
+            if (_.isUndefined(val._sort)) {
+              val._sort = item.sortable === 1;
+            }
+            return val;
           });
 
-          this.dataList[0].children = dataList;
+          this.$refs.filterColumn.init(dataList, list);
 
-          this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(list));
           return list;
         });
+      },
+      changeSort(key, type) {
+        this.currentSort.orderBy = key;
+        if (type) {
+          this.currentSort.orderType = type;
+        } else {
+          this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
+        }
+        this.$emit('changeSort', [this.currentSort]);
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
@@ -354,7 +372,7 @@
 
         this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
-          this.$refs.filterColumn.getConfig(false, val).then(res => {
+          this.getConfig(false, val).then(res => {
             let to = setTimeout(() => {
               clearTimeout(to);
               this.dataList = this.$refs.filterColumn.getFilterData(val, res);
@@ -672,6 +690,7 @@
     opacity: 0;
   }
 
+  .sort-wrapper.active .sort-box,
   .sort-wrapper:hover .sort-box {
     opacity: 1;
   }
@@ -680,6 +699,7 @@
     height: 10px;
   }
 
+  .sort-box i.active,
   .sort-box i:hover {
     color: #409EFF;
   }

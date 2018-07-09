@@ -3,15 +3,17 @@
         <h3 class="hd">{{$i.supplier.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
-<!--
                 <el-button :disabled='!selectedData.length>0'
                  @click='downloadSelected'
-                >{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>
--->
-                <!--<el-button type="danger" v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DELETE'" :disabled='!selectedData.length>0'-->
-                <!--@click='remove'-->
-                <!--&gt;{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
+                 >{{$i.common.download}}({{selectedNumber.length}})</el-button>
+
+                <el-button type="danger" v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DELETE'" :disabled='!selectedData.length>0'
+                @click='remove'
+                >{{$i.common.remove}}({{selectedNumber.length}})</el-button>
             </div>
+
+
+
 
        <div class="select-wrap">
                    <selectSearch :options='options' @inputEnter='inputEnter'
