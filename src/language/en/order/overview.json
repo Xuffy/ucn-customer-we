@@ -56,5 +56,6 @@
   "productStatus": "Product Status",
   "incoterm": "Incoterm",
   "incotermarea": "Incoterm Area",
-  "archiveOverview":"Archive Overview"
+  "archiveOrderOverview":"Archive Order Overview",
+  "archiveDraftOverview":"Archive Draft Overview"
 }

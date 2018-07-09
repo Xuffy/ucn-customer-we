@@ -1,6 +1,6 @@
 <template>
     <div class="orderOverview">
-        <h3 class="hd">{{$i.order.archiveOverview}}</h3>
+        <h3 class="hd">{{$i.order.archiveOrderOverview}}</h3>
         <div class="status">
             <div class="select-wrap">
                 <selectSearch
@@ -341,6 +341,12 @@
                 query: {code: 'ORDER'},
                 type: 20,
                 label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                query: {code: 'ORDER'},
+                type: 30,
+                label: this.$i.order.archiveDraft
             });
         },
         mounted() {
