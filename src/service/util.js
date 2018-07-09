@@ -28,6 +28,9 @@ const deleteObject = (list, fieldRemark, details) => {
   });
 };
 
+// 需要直接下载的文件格式
+const NEED_DOWNLOAD_FILE = ['jpg', 'gif', 'png', 'pdf', 'text', 'bmp', 'jpeg', 'webp'];
+
 export default {
   /**
    * 本地永久缓存
@@ -123,6 +126,10 @@ export default {
       , auths = (user.userResourceCodes || []).concat(user.userType)
       , pass = false;
 
+    if (user.userType === 0) {
+      return true;
+    }
+
     value = _.isArray(value) ? value : [value];
 
     _.map(value, val => {
@@ -132,8 +139,20 @@ export default {
     return pass;
   },
 
-  $download() {
-    // Downloadjs
+  $download(url) {
+    let str, flag;
+
+    if (!url || !_.isString(url)) {
+      return false;
+    }
+
+    str = url.split('?')[0];
+    flag = false;
+    if (str && _.find(NEED_DOWNLOAD_FILE, val => str.toLocaleLowerCase().indexOf(val.toLocaleLowerCase()) > -1)) {
+      Downloadjs(url);
+    } else {
+      window.open(url);
+    }
   },
 
   /**
