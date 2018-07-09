@@ -40,6 +40,7 @@
                         <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
                         <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
                         <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish'>{{$i.order.shipped}}</el-button>
+                        <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}</el-button>
                         <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
                     </div>
                     <div class="viewBy">
@@ -148,6 +149,7 @@
                     url: '/order/create'
                 });
             },
+            downloadOrder(){},
             selectChange(val) {
                 this.id = val;
             },
@@ -329,14 +331,9 @@
             //     name: 'orderRecycleBin',
             //     show: true
             // });
-            this.setDraft({
-                name: 'orderDraft',
-                show: true
-            });
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){

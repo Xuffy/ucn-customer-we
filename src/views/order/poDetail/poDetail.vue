@@ -583,6 +583,14 @@
                 <el-button :disabled="loadingPage || disableConfirm || hasCancelOrder" @click="confirmOrder"
                            :loading="disableClickConfirm" type="primary">{{$i.order.confirm}}
                 </el-button>
+                <el-button
+                        v-authorize="'ORDER:DRAFT_OVERVIEW:DOWNLOAD'"
+                        :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                        @click="downloadOrder"
+                        :loading="disableClickConfirm"
+                        type="primary">
+                    {{$i.order.download}}
+                </el-button>
                 <el-button :disabled="loadingPage || hasCancelOrder || hasFinishOrder" :loading="disableCancelOrder"
                            @click="cancelOrder" type="danger">{{$i.order.cancel}}
                 </el-button>
@@ -1372,26 +1380,56 @@
         computed:{
             totalRow(){
                 let obj={};
-                console.log(this.productTableData,'productTableData')
+                let arr=[];
+                _.map(this.productTableData,v=>{
+                    if(!v._remark){
+                        arr.push(v);
+                    }
+                });
+                let sameCurrency=true;
+                if(this.orderForm.incoterm==='1'){
+                    let size=new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='2'){
+                    let size=new Set(arr.map(e => e.skuExwCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='3'){
+                    let size=new Set(arr.map(e => e.skuCifCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }else if(this.orderForm.incoterm==='4'){
+                    let size=new Set(arr.map(e => e.skuDduCurrency).map(e => e.value));
+                    if([...size].length>1) sameCurrency=false;
+                }
                 if(this.productTableData.length<=0){
                     return;
-                };
-                // _.map(this.productTableData,v=>{
-                //     _.mapObject(v,(item,key)=>{
-                //         if(item._calculate){
-                //             obj[key]={
-                //                 value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
-                //             };
-                //         }else{
-                //             obj[key] = {
-                //                 value: ''
-                //             };
-                //         }
-                //     })
-                // });
-                //
-                // return [obj];
-            }
+                }
+                _.map(this.productTableData,v=>  {
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            if(key==='skuPrice'){
+                                if(sameCurrency){
+                                    obj[key]={
+                                        value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                                    };
+                                }else{
+                                    obj[key] = {
+                                        value: '-'
+                                    };
+                                }
+                            }else{
+                                obj[key]={
+                                    value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                                };
+                            }
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+            },
         },
         methods: {
             ...mapActions(["setLog", "setDraft"]),
@@ -2245,6 +2283,8 @@
             tableRowClassName({ row, rowIndex }) {
                 if (row.status === -1) {
                     return "warning-row";
+                }else if(row.status===10 || row.status===20 || row.status===30){
+                    return "waiting-row"
                 }
                 return "";
             },
@@ -2390,6 +2430,9 @@
                 }).finally(err => {
                     this.disableClickConfirm = false;
                 });
+            },
+            downloadOrder(){
+
             },
             cancelOrder() {
                 this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
@@ -2834,11 +2877,11 @@
             });
         },
         mounted() {
-            this.setLog({ query: { code: "ORDER" } });
-            this.setDraft({
-                name: "orderDraft",
-                show: true
-            });
+            // this.setLog({ query: { code: "ORDER" } });
+            // this.setDraft({
+            //     name: "orderDraft",
+            //     show: true
+            // });
         },
         watch: {
             allowQuery(n) {
@@ -2907,6 +2950,9 @@
 
     .el-table >>> .warning-row {
         background: #f5f7fa;
+    }
+    .el-table >>> .waiting-row {
+        background: yellow;
     }
 
     .summaryInput {

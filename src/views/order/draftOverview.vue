@@ -26,7 +26,7 @@
                 style='marginTop:10px'>
             <template slot="header">
                 <div style="padding: 10px 0">
-                    <!--<el-button :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>-->
+                    <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'" :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
                     <div class="speHead">
                         <div class="viewBy">
                             <span>{{$i.order.viewBy}}</span>
