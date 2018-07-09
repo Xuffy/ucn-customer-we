@@ -337,7 +337,11 @@
 
             //搜查
             search() {
+                if (this.$validateForm(this.productForm, this.$db.product.buyerBasic)) {
+                  return false;
+                }
                 this.disabledSearch = true;
+
                 if (!this.productForm.maxExwPrice) {
                     this.productForm.maxExwPrice = null;
                 }
