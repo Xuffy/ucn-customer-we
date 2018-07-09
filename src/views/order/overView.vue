@@ -1,6 +1,5 @@
 <template>
     <div class="orderOverview">
-        asd
         <h3 class="hd">{{$i.order.orderOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
