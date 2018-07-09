@@ -100,7 +100,6 @@
   import btns from '@/views/logistic/children/btns'
   import productModify from '@/views/logistic/children/productModify'
   import addProduct from '@/views/logistic/children/addProduct'
-  // import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
   export default {
     name: 'logisticPlanDetail',
@@ -338,9 +337,8 @@
         })
       },
       addProductFun(){
-        return this.getSupplierIds().then(res=>{
-          console.log(this.$db.logistic.basicInfoObj)
-        });
+        return this.getSupplierIds();
+                  // console.log(this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas))
       },
       async getSupplierIds() {
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
