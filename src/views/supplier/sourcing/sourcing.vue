@@ -66,6 +66,7 @@
                     @action="detail"
                     @change-checked='checked'
                     @filter-value="tableFilterValue"
+                    @change-sort="sort"
                     style='marginTop:10px'/>
             <page
               :page-data="pageData"
@@ -144,7 +145,7 @@
         },
         methods: {
              ...mapActions([
-               'setLog'
+               'setMenuLink'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -272,6 +273,10 @@
                 });
                 this.selectNumber = number
             },
+          //...............sort
+          sort(item){
+            console.log(item)
+          },
           //获取字典
           getCodePart(){
             this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE","ITM"]).then(res=>{
@@ -378,7 +383,7 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
+          this.setMenuLink({query:{code:'PRUCHASE_SUPPLIER'}});
         },
         watch: {
           disabledLine(n) {
