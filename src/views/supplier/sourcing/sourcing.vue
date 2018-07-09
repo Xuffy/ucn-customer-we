@@ -275,7 +275,8 @@
             },
           //...............sort
           sort(item){
-            console.log(item)
+               this.params.sorts =  item.sorts;
+               this.get_data();
           },
           //获取字典
           getCodePart(){
@@ -383,7 +384,12 @@
             // });
         },
         mounted(){
-          this.setMenuLink({query:{code:'PRUCHASE_SUPPLIER'}});
+          this.setMenuLink({
+            path: '',
+            query: {code: 'PRUCHASE_SUPPLIER'},
+            type: 100,
+            label: this.$i.common.log
+          });
         },
         watch: {
           disabledLine(n) {
