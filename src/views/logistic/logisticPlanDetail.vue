@@ -348,7 +348,6 @@
       },
       addProductFun(){
         return this.getSupplierIds();
-                  // console.log(this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas))
       },
       async getSupplierIds() {
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
