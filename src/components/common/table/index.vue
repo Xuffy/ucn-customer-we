@@ -44,9 +44,11 @@
               <div>
                 {{item.label}}
                 <div class="sort-box">
-                  <i class="el-icon-caret-top" :class="{active:currentSort.orderType === 'asc'}"
+                  <i class="el-icon-caret-top"
+                     :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
-                  <i class="el-icon-caret-bottom" :class="{active:currentSort.orderType === 'desc'}"
+                  <i class="el-icon-caret-bottom"
+                     :class="{active:currentSort.orderType === 'desc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'desc')"></i>
                 </div>
               </div>
@@ -285,6 +287,8 @@
         this.currentSort.orderBy = key;
         if (type) {
           this.currentSort.orderType = type;
+        } else if (this.currentSort.orderType === 'desc') {
+          this.currentSort = this.$options.data().currentSort;
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
