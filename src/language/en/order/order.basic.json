@@ -60,5 +60,8 @@
   "baseSupplierName": "Base Supplier Name",
   "importantSupplier": "Important Supplier",
   "skuQuantity": "SKU Quantity",
-  "exit":"Exit"
+  "exit":"Exit",
+  "recover":"Recover",
+  "archiveOrder":"Archive Order",
+  "archiveDraft":"Archive Draft"
 }
