@@ -105,9 +105,7 @@
 
           this.dataList[0].children = dataList;
 
-          this.$nextTick(() => {
-            this.$refs.columnTree.setCheckedKeys(list);
-          });
+          this.$nextTick(() => this.$refs.columnTree.setCheckedKeys(list));
           return list;
         });
       },
@@ -128,9 +126,7 @@
               this.$emit('change', data);
             });
           })
-          .finally(() => {
-            this.loading = false;
-          });
+          .finally(() => this.loading = false);
       },
       cancel() {
         this.visible = false;
