@@ -27,6 +27,7 @@
             <template slot="header">
                 <div style="padding: 10px 0">
                     <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'" :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
+                    <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
                     <div class="speHead">
                         <div class="viewBy">
                             <span>{{$i.order.viewBy}}</span>
@@ -118,7 +119,7 @@
         },
         methods: {
             ...mapActions([
-                'setRecycleBin', 'setDraft','setLog'
+                'setMenuLink'
             ]),
             send(){
                 let ids=[];
@@ -138,6 +139,9 @@
                 }).finally(()=>{
                     this.disableClickSend=false;
                 })
+            },
+            deleteOrder(){
+                console.log('删除')
             },
             onAction(item) {
                 this.$windowOpen({
@@ -244,7 +248,6 @@
                     .then((res) => {
                         this.loading = false;
                         this.tabData = this.$getDB(query, res.datas,e=>{
-                            console.log(e,'????')
                             if(e.entryDt){
                                 e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
                             }
@@ -322,6 +325,11 @@
         },
         created() {
             this.getUnit();
+            this.setMenuLink({
+                path: '/order/archive',
+                type: 10,
+                label: this.$i.common.archive
+            });
             // this.setRecycleBin({
             //     name: 'orderRecycleBin',
             //     show: true
@@ -330,7 +338,6 @@
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){
