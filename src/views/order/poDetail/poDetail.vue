@@ -293,11 +293,18 @@
             {{$i.order.payment}}
         </div>
         <div class="payment-table">
-            <el-button :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
-                       :loading="disableClickApplyPay" @click="applyPay" type="primary">{{$i.order.applyPay}}
+            <el-button
+                    v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
+                    :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
+                    :loading="disableClickApplyPay"
+                    @click="applyPay"
+                    type="primary">{{$i.order.applyPay}}
             </el-button>
-            <el-button :loading="disableClickDunning" :disabled="!allowHandlePay || loadingPaymentTable"
-                       @click="dunningPay">{{$i.order.remindSupplierRefund}}
+            <el-button
+                    v-authorize="'ORDER:DETAIL:PRESS_FOR_PAYMENT'"
+                    :loading="disableClickDunning"
+                    :disabled="!allowHandlePay || loadingPaymentTable"
+                    @click="dunningPay">{{$i.order.remindSupplierRefund}}
             </el-button>
             <el-table
                     v-loading="loadingPaymentTable"
@@ -450,7 +457,10 @@
                         width="125">
                     <template slot-scope="scope">
                         <div v-if="scope.row.status===10">
-                            <el-button @click="confirmPay(scope.row)" type="text">{{$i.order.confirm}}</el-button>
+                            <el-button
+                                    v-authorize="'ORDER:DETAIL:CONFIRM_REFUNDS'"
+                                    @click="confirmPay(scope.row)"
+                                    type="text">{{$i.order.confirm}}</el-button>
                         </div>
                         <div v-else-if="scope.row.status===40 && scope.row.planRefundDt">
 
@@ -466,23 +476,38 @@
                             </div>
                             <div v-else>
                                 <div v-if="scope.row.status===-1">
-                                    <el-button v-if="scope.row.planPayDt" :disabled="!allowHandlePay"
-                                               @click="restorePay(scope.row)" type="text">{{$i.order.restore}}
+                                    <el-button
+                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                            v-if="scope.row.planPayDt"
+                                            :disabled="!allowHandlePay"
+                                            @click="restorePay(scope.row)"
+                                            type="text">{{$i.order.restore}}
                                     </el-button>
                                 </div>
                                 <div v-else-if="scope.row.isModify">
-                                    <el-button :disabled="!allowHandlePay" @click="saveModifyPay(scope.row)" type="text"
-                                               size="small">{{$i.order.save}}
+                                    <el-button
+                                            :disabled="!allowHandlePay"
+                                            @click="saveModifyPay(scope.row)"
+                                            type="text"
+                                            size="small">{{$i.order.save}}
                                     </el-button>
                                     <el-button :disabled="!allowHandlePay" @click="cancelModifyPay(scope.row)"
                                                type="text" size="small">{{$i.order.cancel}}
                                     </el-button>
                                 </div>
                                 <div v-else>
-                                    <el-button @click="modifyPay(scope.row)" :disabled="!allowHandlePay" type="text">
+                                    <el-button
+                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                            @click="modifyPay(scope.row)"
+                                            :disabled="!allowHandlePay"
+                                            type="text">
                                         {{$i.order.modify}}
                                     </el-button>
-                                    <el-button @click="abandonPay(scope.row)" :disabled="!allowHandlePay" type="text">
+                                    <el-button
+                                            v-authorize="'ORDER:DETAIL:PAYMENT_ACTION'"
+                                            @click="abandonPay(scope.row)"
+                                            :disabled="!allowHandlePay"
+                                            type="text">
                                         {{$i.order.abandon}}
                                     </el-button>
                                 </div>
@@ -2903,9 +2928,14 @@
                 label: this.$i.common.log
             });
             this.setMenuLink({
-                path: '/order/archive',
+                path: '/order/archiveOrder',
                 type: 30,
-                label: this.$i.common.archive
+                label: this.$i.order.archiveOrder
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                type: 40,
+                label: this.$i.order.archiveDraft
             });
         },
         watch: {

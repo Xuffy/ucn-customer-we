@@ -156,7 +156,10 @@ export const routerMap = [
   {
     path: '/supplier',
     component: Layout,
-    meta: {name: $i.router.supplier},
+    meta: {
+      name: $i.router.supplier,
+      auth: ['SUPPLIER']
+    },
     redirect: '/supplier/sourcing',
     children: [
       {
@@ -166,7 +169,8 @@ export const routerMap = [
           draft: false,
           recycleBin: false,
           log: true,
-          name: $i.router.supplierOverview
+          name: $i.router.supplierOverview,
+          auth: ['SUPPLIER:OVERVIEW']
         },
         component: () => import ('../views/supplier/sourcing/sourcing.vue'),
       },
@@ -177,8 +181,10 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierBookmark
+          name: $i.router.supplierBookmark,
+          auth: ['SUPPLIER:BOOKMARK_OVERVIEW']
         },
+
         component: () => import ('../views/supplier/bookmark/bookmark.vue')
       },
       {
@@ -189,7 +195,8 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierBookmarkDetail
+          name: $i.router.supplierBookmarkDetail,
+          auth: ['SUPPLIER:BOOKMARK_DETAIL']
         },
         component: () => import ('../views/supplier/bookmark/bookmarkDetail.vue')
       },
@@ -213,7 +220,8 @@ export const routerMap = [
           draft: false,
           recycleBin: false,
           log: true,
-          name: $i.router.supplierSourcingDetail
+          name: $i.router.supplierSourcingDetail,
+          auth: ['SUPPLIER:DETAIL']
         },
         component: () => import ('../views/supplier/sourcing/sourcingDetail.vue')
       },
@@ -225,7 +233,8 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierCompareDetail
+          name: $i.router.supplierCompareDetail,
+          auth: ['SUPPLIER:COMPARE_DETAIL']
         },
         component: () => import ('../views/supplier/compare/compare.vue')
       },
@@ -236,7 +245,8 @@ export const routerMap = [
           draft: false,
           recycleBin: true,
           log: true,
-          name: $i.router.supplierCompareOverview
+          name: $i.router.supplierCompareOverview,
+          auth: ['SUPPLIER:COMPARE_OVERVIEW']
         },
         component: () => import ('../views/supplier/compare/overview.vue')
       },
@@ -332,7 +342,10 @@ export const routerMap = [
   },
   {
     path: '/payment',
-    meta: {name: $i.router.payment},
+    meta: {
+      name: $i.router.payment,
+      auth: ['PAYMENT']
+    },
     component: Layout,
     redirect: '/payment/index',
     noDropdown: true,
@@ -401,16 +414,21 @@ export const routerMap = [
         },
         component: () => import('../views/order/draftOverview.vue')
       }, {
-        path: 'recycleBin',
-        name: 'orderRecycleBin',
+        path: 'archiveOrder',
+        name: 'orderArchiveOrder',
         meta: {
-          draft: true,
-          recycleBin: true,
-          log: true,
           name: $i.router.orderRecycleBin
         },
-        component: () => import('../views/order/recycleBin.vue')
-      }
+        component: () => import('../views/order/archiveOrder.vue')
+      },
+        {
+            path: 'archiveDraft',
+            name: 'orderArchiveDraft',
+            meta: {
+                name: $i.router.orderRecycleBin
+            },
+            component: () => import('../views/order/archiveDraft.vue')
+        }
     ]
   },
   {
@@ -623,7 +641,10 @@ export const routerMap = [
     path: '/settings',
     component: Layout,
     redirect: '/settings/department',
-    meta: {name: $i.router.settings},
+    meta: {
+      name: $i.router.settings,
+      auth: ['SETTING']
+    },
     children: [
       {
         path: 'department',
@@ -653,7 +674,8 @@ export const routerMap = [
           draft: true,
           recycleBin: true,
           log: true,
-          name: $i.router.settingsPersonal
+          name: $i.router.settingsPersonal,
+          auth: ['SETTING:PERSONAL']
         },
         component: () => import('../views/settings/personalSetting')
       },
@@ -720,7 +742,10 @@ export const routerMap = [
     path: '/message',
     component: Layout,
     redirect: '/message/index',
-    meta: {name: $i.router.message},
+    meta: {
+      name: $i.router.message,
+      auth: ['MESSAGE']
+    },
     hidden: true,
     children: [
       {
