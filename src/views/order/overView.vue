@@ -37,10 +37,10 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <!--<el-button @click='download' v-authorize="'ORDER:OVERVIEW:DOWNLOAD'">{{($i.common.download)}}({{selectedList.length}})</el-button>-->
                         <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish'>{{$i.order.shipped}}</el-button>
-                        <!--                <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>-->
+                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish' v-authorize="'ORDER:OVERVIEW:SHIPPED'">{{$i.order.shipped}}</el-button>
+                        <el-button v-authorize="'ORDER:OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}</el-button>
+                        <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -133,7 +133,7 @@
         },
         methods: {
             ...mapActions([
-                'setDraft','setLog'
+                'setMenuLink'
             ]),
             onAction(item) {
                 this.$windowOpen({
@@ -148,6 +148,7 @@
                     url: '/order/create'
                 });
             },
+            downloadOrder(){},
             selectChange(val) {
                 this.id = val;
             },
@@ -220,19 +221,19 @@
                     });
             },
             deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        if (this.params.view == 1) {
-                            this.getdata(this.$db.order.overviewByOrder)
-                        } else {
-                            this.getdata(this.$db.order.overviewBysku)
-                        }
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
+                // this.$ajax.post(this.$apis.delete_order, {
+                //     ids: this.selectedNumber
+                // })
+                //     .then((res) => {
+                //         if (this.params.view == 1) {
+                //             this.getdata(this.$db.order.overviewByOrder)
+                //         } else {
+                //             this.getdata(this.$db.order.overviewBysku)
+                //         }
+                //     })
+                //     .catch((res) => {
+                //         console.log(res)
+                //     });
             },
             //get_orderlist数据
             getData() {
@@ -325,18 +326,26 @@
         },
         created() {
             this.getUnit();
-            // this.setRecycleBin({
-            //     name: 'orderRecycleBin',
-            //     show: true
-            // });
-            this.setDraft({
-                name: 'orderDraft',
-                show: true
+            this.setMenuLink({
+                path: '/order/draft',
+                // query: {code: ''},
+                type: 10,
+                label: this.$i.common.draft
+            });
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'ORDER'},
+                type: 20,
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/archive',
+                type: 30,
+                label: this.$i.common.archive
             });
         },
         mounted() {
             this.loading = false;
-            this.setLog({query:{code:'ORDER'}});
         },
         watch: {
             selectedList(n){

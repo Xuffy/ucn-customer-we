@@ -64,9 +64,18 @@
         </div>
       </v-table>
     </div>
+    <!-- <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
+      @close="closeModify(0)">
+      <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun"
+        :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
+        <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
+      </div>
+    </el-dialog> -->
     <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <product title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
+      <product code="ulogistics_PlanDetail" title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
       <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
@@ -76,7 +85,8 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <v-history-modify ref="HM" disabled-remark :close-before="closeModify"></v-history-modify>
+    <v-history-modify ref="HM" disabled-remark @save="closeModify"></v-history-modify>
+
   </div>
 </template>
 <script>
@@ -100,7 +110,6 @@
   import btns from '@/views/logistic/children/btns'
   import productModify from '@/views/logistic/children/productModify'
   import addProduct from '@/views/logistic/children/addProduct'
-  // import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
 
   export default {
     name: 'logisticPlanDetail',
@@ -275,7 +284,7 @@
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.registerRoutes()
       this.getDictionary()
-      this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
+      this.basicInfoArr = _.map(this.$depthClone(this.$db.logistic.basicInfoObj), (value, key) => {
         return value;
       })
       this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
@@ -338,7 +347,7 @@
         })
       },
       addProductFun(){
-        this.getSupplierIds();
+        return this.getSupplierIds();
       },
       async getSupplierIds() {
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
@@ -550,10 +559,9 @@
             res.history.map(el => {
               let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
               el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
               return el;
-            })): status==1 ? [currentProduct] : [];
-            status==1 ? this.$refs.HM.init(this.productModifyList,[],true) : this.$refs.HM.init([], this.productModifyList,false);
+            })): [currentProduct];
+            status==1 ? this.$refs.HM.init(this.productModifyList,[]) : this.$refs.HM.init([], this.productModifyList,false);
           })
         }else{
           this.productModifyList = [currentProduct]
@@ -669,7 +677,7 @@
           this.prodFieldDisplay = obj;
         }
       },
-      closeModify(data,fun) {
+      closeModify(data) {
         if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
@@ -680,7 +688,7 @@
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
           return;
         }
-        fun();
+        this.showProductDialog = false
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
           this.$set(item.fieldDisplay, 'value', null);
