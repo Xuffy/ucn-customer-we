@@ -120,7 +120,7 @@
                         <el-button @click="addToBookmark" :loading="disableClickAddBookmark"
                                    :disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}
                         </el-button>
-                        <!--<el-button :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                        <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                         <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
                     <div class="btns" v-if="type==='recycle'">
@@ -208,8 +208,11 @@
             },
             dataResource:{
                 type:Function,
-
-            }
+            },
+            // dataBase:{
+            //     type:Object,
+            //     default:this.$db.product.indexTable
+            // },
         },
         data() {
             return {
@@ -441,6 +444,7 @@
             },
 
             initData(data){
+                console.log(data,'data')
                 this.tableDataList = this.$getDB(this.$db.product.indexTable, data.datas, (e) => {
                     let noneSellCountry = '';
                     e.noneSellCountry.value.split(',').forEach(v => {
@@ -790,7 +794,7 @@
 
         },
         mounted() {
-            this.setLog({query: {code: 'PRODUCT'}});
+
         },
 
         watch: {
