@@ -181,7 +181,8 @@
         this.$emit('change', _.values(list));
       },
       downloadFile(item) {
-        item.url && window.open(item.url);
+
+        // item && Downloadjs(item.url);
       },
       signature(params) {
         return new OSS.Wrapper({

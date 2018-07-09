@@ -285,7 +285,7 @@
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.registerRoutes()
       this.getDictionary()
-      this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
+      this.basicInfoArr = _.map(this.$depthClone(this.$db.logistic.basicInfoObj), (value, key) => {
         return value;
       })
       this.ExchangeRateInfoArr = _.map(this.$db.logistic.ExchangeRateInfo, (value, key) => {
@@ -348,7 +348,9 @@
         })
       },
       addProductFun(){
-        this.getSupplierIds();
+        return this.getSupplierIds().then(res=>{
+          console.log(this.$db.logistic.basicInfoObj)
+        });
       },
       async getSupplierIds() {
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
