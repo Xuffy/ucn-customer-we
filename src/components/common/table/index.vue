@@ -273,7 +273,7 @@
             }
 
             if (_.isUndefined(val._sort)) {
-              val._sort = item.sortable === 1;
+              val._sort = !!item && item.sortable === 1;
             }
             return val;
           });
