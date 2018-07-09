@@ -49,7 +49,7 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
                <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-<!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
+                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
 
               </div>
               <div>
@@ -59,7 +59,7 @@
 <!--        表格-->
              <v-table
                 code="udata_pruchase_supplier_bookmark_overview"
-                :height=360
+                :height=500
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="detail"

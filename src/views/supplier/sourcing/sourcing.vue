@@ -59,7 +59,7 @@
 <!--        表格-->
              <v-table
                     code="udata_pruchase_supplier_overview"
-                    :height=360
+                    :height=500
                     :loading='loading'
                     :data="tabData"
                     :buttons="[{label: 'Detail', type: 1}]"
