@@ -25,7 +25,7 @@ export const routerMap = [
   {
     path: '/workbench',
     component: Layout,
-    meta: {name: $i.router.workbench},
+    meta: {name: $i.router.workbench, auth: ['WORKBENCH']},
     redirect: '/workbench/index',
     noDropdown: true,
     children: [
@@ -33,9 +33,7 @@ export const routerMap = [
         path: 'index',
         name: 'workbench',
         meta: {
-          draft: false,
-          recycleBin: false,
-          log: false,
+          auth: ['WORKBENCH']
         },
         component: () => import('../views/workbench/index.vue')
       }
@@ -636,9 +634,6 @@ export const routerMap = [
         path: 'department',
         name: 'settingsDepartment',
         meta: {
-          // draft: true,
-          // recycleBin: false,
-          // log: true,
           auth: [0],
           name: $i.router.settingsDepartment
         },
@@ -809,44 +804,10 @@ router.beforeResolve((to, from, next) => {
   }
 
   if (to.path !== '/login' || from.path === '/login') {
-    /*version = localStore.get('version');
-
-    if (version !== Config.VERSION) { // 版本控制
-      return next({path: '/login'});
-    }*/
     if (_.isEmpty(ts)) { // 登录验证
       return next({path: '/login'});
     }
   }
-
-  // 判断路由是否必须带入参数 todo 跳转之前页面地址没有带上参数
-  /*if (to.meta.needParam) {
-    if (_.isEmpty(to.params) && _.isEmpty(to.query)) {
-      if (!_.isEmpty(cp)) {
-        _.map(cp.query, (val, key) => {
-          to.query[key] = val;
-        });
-
-        _.map(cp.params, (val, key) => {
-          to.params[key] = val;
-        });
-      } else {
-        return to.matched.length ?
-          next({path: to.matched[1] ? to.matched[1].redirect : to.matched[0].redirect}) : next({path: '/'});
-      }
-    }
-    if (!_.isEmpty(cp)) {
-      cacheParam = _.filter(cacheParam, val => {
-        return val.path !== to.path;
-      });
-    }
-
-    cacheParam.push(_.pick(to, 'path', 'params', 'query'));
-    sessionStore.set('cache_router_param', cacheParam);
-
-  }*/
-
-  // Notification.closeAll();
 
   next();
 });
