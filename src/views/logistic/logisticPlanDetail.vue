@@ -932,9 +932,11 @@
     watch:{
       containerInfo:{
         handler: function (val) {
+          console.log(val)
           val.forEach(el=>{
             this.productList.forEach(item=>{
               if(el.id==item.containerId.value){
+                console.log(el.containerType)
                 item.containerType.value = el.containerType;
               }
             })
