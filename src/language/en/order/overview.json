@@ -57,5 +57,6 @@
   "incoterm": "Incoterm",
   "incotermarea": "Incoterm Area",
   "archiveOrderOverview":"Archive Order Overview",
-  "archiveDraftOverview":"Archive Draft Overview"
+  "archiveDraftOverview":"Archive Draft Overview",
+  "archiveOverview":"Archive Overview"
 }

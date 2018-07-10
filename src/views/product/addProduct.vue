@@ -109,6 +109,7 @@
                     :data="tableDataList"
                     :buttons="type==='recycle'?null:[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
+                    @change-sort="val=>{getData({sorts:val})}"
                     @filter-value="tableFilterValue"
                     @action="btnClick">
                 <template slot="header">
@@ -164,7 +165,7 @@
                 type: String,
                 default: ''
             },
-            type: { //product || bookmark
+            type: {
                 type: String,
                 default: 'product'
             },
@@ -213,10 +214,6 @@
                 type:String,
                 default:'udata_purchase_sku_overview'
             },
-            // dataBase:{
-            //     type:Object,
-            //     default:this.$db.product.indexTable
-            // },
         },
         data() {
             return {
@@ -394,7 +391,8 @@
                 if (this.type === 'product') {
                     arr.forEach(v => {
                         if (v._checked && !v._disabled) {
-                            newArr.push(v.id.value);        //只把id带出去
+                            newArr.push(v);
+                            // newArr.push(v.id.value);        //只把id带出去
                         }
                     });
                 } else if (this.type === 'bookmark') {
@@ -514,7 +512,8 @@
             },
 
             //获取table数据
-            getData(e) {
+            getData(params) {
+                this.productForm=_.extend(this.productForm,params);
                 if(this.dataResource){
                     this.dataResource().then(data=>{
                         this.initData(data);
@@ -764,11 +763,11 @@
              * */
             changePage(e) {
                 this.productForm.pn = e;
-                this.getData();
+                this.getData({pn:e});
             },
             changeSize(e) {
                 this.productForm.ps = e;
-                this.getData();
+                this.getData({ps:e});
             },
         },
         created() {

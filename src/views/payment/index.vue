@@ -60,6 +60,7 @@
                 :rowspan="1"
                 :height="500"
                 @filter-value="onFilterValue"
+                @change-sort="sort"
                 ></v-table>
                <page
                 :page-data="pageData"
@@ -325,6 +326,11 @@
             handleSizeChange(val) {
                 this.params.ps = val;
             },
+          //...............sort
+          sort(item){
+            this.params.sorts =  item.sorts;
+            this.getList();
+          },
         },
         created(){
            this.viewByStatus = '1';
