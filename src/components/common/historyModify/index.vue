@@ -127,8 +127,7 @@
         type: Boolean,
         default: false
       },
-      beforeSave: Function,
-      closeBefore: Function
+      beforeSave: Function
     },
     data() {
       return {
@@ -165,17 +164,15 @@
             val._value = files.url;
           }
           return val;
-        })
+        });
+
         if (typeof this.beforeSave === 'function' && this.beforeSave(data) === false) {
-          return;
+          return false;
         }
 
-        if (this.closeBefore) {
-          this.closeBefore(data, () => this.showDialog = false)
-        } else {
-          this.$emit('save', data);
-          this.showDialog = false
-        }
+        this.disabledRemark && data.pop();
+        this.$emit('save', data);
+        this.showDialog = false
       },
       getImage(value, split = ',') {
         if (_.isEmpty(value)) return '';

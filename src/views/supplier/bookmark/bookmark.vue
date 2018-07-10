@@ -49,7 +49,7 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
                <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
 <!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
-<!--                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}({{selectedNumber.length}})</el-button>-->
+                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
 
               </div>
               <div>
@@ -59,13 +59,14 @@
 <!--        表格-->
              <v-table
                 code="udata_pruchase_supplier_bookmark_overview"
-                :height=360
+                :height=500
                 :data="tabData"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="detail"
                 @change-checked='checked'
                 :loading='loading'
                 @filter-value="tableFilterValue"
+                @change-sort="sort"
                 style='marginTop:10px'/>
             <page
               :page-data="pageData"
@@ -146,7 +147,7 @@
         methods: {
               ...mapActions([
                 // 'setRecycleBin',
-                'setLog'
+                'setMenuLink'
             ]),
             //获取字典
             getCodePart(){
@@ -277,6 +278,11 @@
                 console.log(err)
               });
             },
+            //...............sort
+            sort(item){
+              this.params.sorts =  item.sorts;
+              this.get_data();
+            },
             get_data() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
@@ -369,7 +375,12 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
+          this.setMenuLink({
+            path: '',
+            query: {code: 'PRUCHASE_SUPPLIER'},
+            type: 100,
+            label: this.$i.common.log
+          });
         },
         watch: {
             hideBody(n) {

@@ -25,9 +25,9 @@
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
-                <div style="padding: 10px 0">
+                <div>
                     <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'" :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
-                    <el-button type='danger' :disabled='!(selectedList.length>0)' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.common.delete)}}</el-button>
+                    <el-button :loading="disableClickDelete" type='danger' :disabled='selectedList.length===0' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.order.archive)}}</el-button>
                     <div class="speHead">
                         <div class="viewBy">
                             <span>{{$i.order.viewBy}}</span>
@@ -100,14 +100,15 @@
                     orderNo: '',
                     skuCode: '',
                     status: '',
-                    // view: '1', //view by的按钮组
                     ps: 50,
                     pn: 1,
+                    draftCustomer:true
                 },
                 selectedList: [],
                 selectedNumber: [],
                 disableClickSend:false,
                 tableCode:'uorder_list',
+                disableClickDelete:false,
 
                 /**
                  * 字典
@@ -141,7 +142,34 @@
                 })
             },
             deleteOrder(){
-                console.log('删除')
+                this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
+                    confirmButtonText: this.$i.order.sure,
+                    cancelButtonText: this.$i.order.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    let ids=[];
+                    _.map(this.selectedList,v=>{
+                        ids.push(v.id.value);
+                    });
+                    this.disableClickDelete=true;
+                    this.$ajax.post(this.$apis.delete_order,{
+                        ids:ids,
+                        recycleCustomer:true,
+                        draftCustomer:true
+                    }).then(res=>{
+                        this.selectedList=[];
+                        this.getData();
+                    }).finally(()=>{
+                        this.disableClickDelete=false;
+                    });
+
+                    this.$message({
+                        type: 'success',
+                        message: this.$i.order.deleteSuccess
+                    });
+                }).catch(() => {
+
+                });
             },
             onAction(item) {
                 this.$windowOpen({
@@ -218,21 +246,6 @@
                 })
                     .then((res) => {
                         console.log(res)
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            deleteOrder() {
-                this.$ajax.post(this.$apis.delete_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        if (this.params.view == 1) {
-                            this.getdata()
-                        } else {
-                            this.getdata()
-                        }
                     })
                     .catch((res) => {
                         console.log(res)
@@ -326,15 +339,21 @@
         created() {
             this.getUnit();
             this.setMenuLink({
-                path: '/order/archive',
+                path: '/logs/index',
+                query: {code: 'ORDER'},
                 type: 10,
-                label: this.$i.common.archive
+                label: this.$i.common.log
             });
-            // this.setRecycleBin({
-            //     name: 'orderRecycleBin',
-            //     show: true
-            // });
-
+            this.setMenuLink({
+                path: '/order/archiveOrder',
+                type: 20,
+                label: this.$i.order.archiveOrder
+            });
+            this.setMenuLink({
+                path: '/order/archiveDraft',
+                type: 30,
+                label: this.$i.order.archiveDraft
+            });
         },
         mounted() {
             this.loading = false;
@@ -379,7 +398,10 @@
     }
     .viewBy{
         float: right;
-        margin-right: 70px;
+        margin-right: 40px;
+    }
+    .speHead{
+        float: right;
     }
     .speHead:after{
         content: '';

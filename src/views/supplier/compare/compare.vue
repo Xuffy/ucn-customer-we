@@ -32,6 +32,7 @@
           :buttons="[{label: 'Detail', type: 1}]"
           @action="btnClick"
           @change-checked="changeChecked"
+          @change-sort="sort"
           @filter-value="tableFilterValue"></v-table>
 
         <div class="footBtn">
@@ -511,6 +512,11 @@
             }else{
               this.tableDataList = this.$depthClone(this.copyHighlightData)
             }
+          },
+          //...............sort
+          sort(item){
+            this.params.sorts =  item.sorts;
+            this.getList();
           },
         },
         created(){

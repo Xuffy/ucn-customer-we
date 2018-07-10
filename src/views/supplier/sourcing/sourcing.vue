@@ -59,13 +59,14 @@
 <!--        表格-->
              <v-table
                     code="udata_pruchase_supplier_overview"
-                    :height=360
+                    :height=500
                     :loading='loading'
                     :data="tabData"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @action="detail"
                     @change-checked='checked'
                     @filter-value="tableFilterValue"
+                    @change-sort="sort"
                     style='marginTop:10px'/>
             <page
               :page-data="pageData"
@@ -144,7 +145,7 @@
         },
         methods: {
              ...mapActions([
-               'setLog'
+               'setMenuLink'
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
@@ -272,6 +273,11 @@
                 });
                 this.selectNumber = number
             },
+          //...............sort
+          sort(item){
+               this.params.sorts =  item.sorts;
+               this.get_data();
+          },
           //获取字典
           getCodePart(){
             this.$ajax.post(this.$apis.POST_CODE_PART,["SR_TYPE","ITM"]).then(res=>{
@@ -378,7 +384,12 @@
             // });
         },
         mounted(){
-          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
+          this.setMenuLink({
+            path: '',
+            query: {code: 'PRUCHASE_SUPPLIER'},
+            type: 100,
+            label: this.$i.common.log
+          });
         },
         watch: {
           disabledLine(n) {
