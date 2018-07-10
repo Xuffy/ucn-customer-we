@@ -296,12 +296,15 @@
                 this.$emit('search',Object.assign(this.$depthClone(this.formData),{pn:1,ps:50}));
             },
             clear(){
+                console.log(this.formData,'this.formData')
                 _.map(this.formData,(v,k)=>{
-                    if(typeof this.formData[k]==='object'){
+                    if(_.isArray(this.formData[k])){
                         this.formData[k]=[];
-                    }else if(typeof this.formData[k]==='number'){
+                    }else if(_.isObject(this.formData[k])){
+                        this.formData[k]={};
+                    }else if(_.isNumber(this.formData[k])){
                         this.formData[k]=null;
-                    }else if(typeof this.formData[k]==='string'){
+                    }else if(_.isString(this.formData[k])){
                         this.formData[k]='';
                     }
                 })
