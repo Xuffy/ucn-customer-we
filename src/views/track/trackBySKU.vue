@@ -32,6 +32,7 @@
               :data="dataList"
               :height="500"
               :selection="false"
+              @change-sort="sort"
               :loading='loading' />
            <page
             :page-data="pageData"
@@ -59,11 +60,12 @@
                 searchId:'',
                 pageData:{},
                 params:{
-                    "pn": 1,
-                    "ps": 50,
-                    "skuCodeLike":'',
-                    "orderNoLike":'',
-                    "status": ''
+                    pn: 1,
+                    ps: 50,
+                    skuCodeLike:'',
+                    orderNoLike:'',
+                    status: '',
+                    sorts:[]
                 },
               options: [{
                 id: '1',
@@ -128,6 +130,11 @@
                 this.loading = false;
               });
             },
+          //...............sort
+          sort(item){
+            this.params.sorts =  item.sorts;
+            this.getList();
+          },
         },
         created(){
           this.getCountryAll();

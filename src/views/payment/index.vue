@@ -84,7 +84,6 @@
         data(){
             return{
                 // flag:true,
-                pazeSize: [10, 20, 30, 40, 50, 100],
                 pageTotal:0,
                 searchLoad: false,
                 viewByStatus:'',
@@ -233,8 +232,8 @@
                     if (Number(item.orderType.value) >= 10 && Number(item.orderType.value)<= 30) {
                       item.orderType._value = statusType[Number(item.orderType.value)]
                     }
-                    item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
+                    // item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
+                    // item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
                     let currency;
                     currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
                     item.currencyCode._value = currency.name || '';
@@ -248,8 +247,8 @@
 
 
                   this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                    item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
+                    // item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
+                    // item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
                     let currencyCode;
                     currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
                     item.currencyCode._value = currencyCode.name || '';
@@ -265,7 +264,7 @@
             },
             action(item, type) {
                 switch(type) {
-                    case '1':
+                  case '1':
                       this.urgingPayment(item);
                       break;
                     case '2':
@@ -307,6 +306,9 @@
             urgingPayment(item) {
               // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
+              if (this.$auth(item)){
+                console.log(this.$auth(item))
+              }
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
                 // console.log(res)
@@ -320,7 +322,8 @@
             },
             setButtons(item){
               // disabled:true/false   10 付款 20 退款
-                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'},{label: 'Detail', type: '2'}];
+                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'
+                },{label: 'Detail', type: '2'}];
                  return [{label: 'Detail', type: '2'}];
             },
             handleSizeChange(val) {
