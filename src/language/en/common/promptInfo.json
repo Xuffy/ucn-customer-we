@@ -10,5 +10,16 @@
   "content": "Please enter contents",
   "release": "Release",
   "passwordAuthentication": "The new password cannot be the same as the original password",
-  "modifySuccess": "Modify Success"
+  "modifySuccess": "Modify Success",
+  "supplierSearch": "供应商只能单选",
+  "supplierAddList": "该商品已经添加到列表了",
+  "compareLength": "对比项不能超过100",
+  "addError": "添加失败",
+  "uploadedSuccess": "上传成功",
+  "sureToDeleteRemark": "确定删除该备注?",
+  "prompt": "提示",
+  "confirm": "确定",
+  "cancel": "取消",
+  "deleteTheSuccess": "删除成功"
+
 }

@@ -14,13 +14,13 @@
                       <div v-if="v.type==='input'">
                         <el-input
                           size="mini"
-                          placeholder="请输入内容"
+                          :placeholder="$i.common.inputkeyWordToSearch"
                           v-model="params[v.key]">
                         </el-input>
                       </div>
                       <div v-if="v.type==='select'">
                         {{params[v.country]}}
-                        <el-select class="speWidth" v-model="params[v.key]" placeholder="请选择">
+                        <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
                           <el-option
                             size="mini"
                             v-for="item in options[v.key]"
@@ -223,7 +223,7 @@
                 });
               }else{
                 this.$message({
-                  message: '供应商只能单选!',
+                  message: this.$i.common.supplierSearch,
                   type: 'warning',
                 });
                 return false;
@@ -290,16 +290,6 @@
                         this.pageData=res;
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas, e => {
-                          // let country='';
-                          // e.country.value.split(',').forEach(v=>{
-                          //   this.countryOption.forEach(m=>{
-                          //     if(m.code===v){
-                          //       country+=(m.name+',');
-                          //     }
-                          //   })
-                          // });
-                          // country = country.slice(0,country.length-1);
-                          // e.country.value=country;
 
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm ,'incoterm',e,true).name;
@@ -344,7 +334,7 @@
             if (params.length != []){
               this.$ajax.post(this.$apis.post_supplier_addbookmark,params).then(res=>{
                 this.$message({
-                  message: '添加成功',
+                  message: this.$i.common.addSuccess,
                   type: 'success',
                 })
                 this.get_data();

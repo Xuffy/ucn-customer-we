@@ -239,7 +239,7 @@
                 });
                 if (hasAdd) {
                     this.$message({
-                        message: '该商品已经添加到列表了',
+                        message: this.$i.common.supplierAddList,
                         type: 'warning'
                     });
                 } else {
@@ -250,7 +250,7 @@
                         });
                         if (compareList.length>=100){
                           this.$message({
-                            message: '对比项不能超过100',
+                            message: this.$i.common.compareLength,
                             type: 'warning'
                           });
                           return false;
@@ -259,7 +259,7 @@
                         this.$localStore.set('compareSupplierList', compareList)
                     } else {
                         this.$message({
-                            message: '添加失败',
+                            message: this.$i.common.addError,
                             type: 'warning'
                         });
                     }
