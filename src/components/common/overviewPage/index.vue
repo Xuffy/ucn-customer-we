@@ -293,10 +293,9 @@
              * */
             search(){
                 this.disabledSearch=true;
-                this.$emit('search',Object.assign(this.$depthClone(this.formData),{pn:1,ps:50}));
+                this.$emit('search',this.$depthClone(this.formData));
             },
             clear(){
-                console.log(this.formData,'this.formData')
                 _.map(this.formData,(v,k)=>{
                     if(_.isArray(this.formData[k])){
                         this.formData[k]=[];
@@ -316,6 +315,7 @@
                 this.$emit('tableBtnClick',e);
             },
             changeSort(e){
+                console.log(this.$depthClone(e.sorts[0]),'e')
                 this.$emit('change-sort',e);
             },
 
@@ -328,7 +328,6 @@
         },
         watch:{
             tableData(n){
-                console.log(n,'new')
                 this.disabledSearch=false;
             }
         },
