@@ -30,7 +30,7 @@ export default {
     _hide: true
   },
   "entryDt": {
-    type: 'String',
+    type: 'Date',
     _disabled: true,
     typeSlef: 'text',
     _hide: true

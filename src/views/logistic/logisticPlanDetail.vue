@@ -34,6 +34,7 @@
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
       <container-info :tableData.sync="containerInfo" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer"
         @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType" :currencyCode="oldPlanObject.currency"
+        @ContainerInfoLight="ContainerInfoLight"
       />
     </div>
 
@@ -54,7 +55,6 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
       <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct">
         <div slot="header" class="product-header" v-if="edit">
@@ -85,8 +85,7 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <v-history-modify ref="HM" disabled-remark @save="closeModify"></v-history-modify>
-
+    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"></v-history-modify>
   </div>
 </template>
 <script>
@@ -204,7 +203,7 @@
         },
         pageName: '',
         prodFieldDisplay: {},
-        CustomerName: '',
+        CustomerName: ''
       }
     },
     components: {
@@ -441,12 +440,14 @@
           return el;
         }));
         this.productList.forEach((item) => {
-          if (item.fieldDisplay.value) {
-            _.mapObject(item.fieldDisplay.value, (v, k) => {
-              this.$set(item[k], '_style', {
-                background:'yellow'
+          if(!this.isCopy){
+            if (item.fieldDisplay.value) {
+              _.mapObject(item.fieldDisplay.value, (v, k) => {
+                this.$set(item[k], '_style', {
+                  background:'yellow'
+                })
               })
-            })
+            }
           }
         })
       },
@@ -547,22 +548,27 @@
         this.productInfoModifyStatus = status
         this.showProductDialog = true
         this.modefiyProductIndex = i
-        this.modefiyProductIndexArr.push(i);
+        this.modefiyProductIndexArr[i]=i;
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
       getProductHistory(productId, status, i) {
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         if(productId){
-          this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-            this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
-            res.history.map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
-              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              return el;
-            })): [currentProduct];
-            status==1 ? this.$refs.HM.init(this.productModifyList,[]) : this.$refs.HM.init([], this.productModifyList,false);
-          })
+          if(status==1){
+            this.productModifyList = [currentProduct];
+            this.$refs.HM.init(this.productModifyList,[]);
+          }else{
+            this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
+              this.productModifyList = this.$getDB(this.$db.logistic.productInfo,res.history.map(el => {
+                let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
+                el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
+                return el;
+              }));
+              this.$refs.HM.init(this.productModifyList,[],false);
+            })
+          }
         }else{
           this.productModifyList = [currentProduct]
           this.$refs.HM.init(this.productModifyList, []);
@@ -672,11 +678,6 @@
           })
         })
       },
-      productModifyfun(obj) {
-        if (this.pageTypeCurr.slice(-6) == 'Detail') {
-          this.prodFieldDisplay = obj;
-        }
-      },
       closeModify(data) {
         if (!data.length) {
           this.productModifyList = [];
@@ -686,15 +687,28 @@
         const currrentProduct = data[0]
         let obj = _.mapObject(currrentProduct, v => Number(v.value) || v.value)
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
-          return;
+          return false;
         }
-        this.showProductDialog = false
+      },
+      closeModifyNext(data){
+        if (!data.length) {
+          this.productModifyList = [];
+          this.showProductDialog = false;
+          return 
+        };
+        const currrentProduct = data[0]
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
         this.productList.forEach(item => {
           this.$set(item.fieldDisplay, 'value', null);
         })
         this.modefiyProductIndexArr.forEach((item) => {
-          this.$set(this.productList[item].fieldDisplay, 'value', this.prodFieldDisplay)
+          let fieldDisplayObj = {};
+          _.mapObject(data[0],(v,k)=>{
+            if(v._isModified&&v.key!='skuPictures'){
+              fieldDisplayObj[v.key] = v.value;
+            }
+          })
+          this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
         const vId = +new Date();
@@ -809,6 +823,10 @@
         })
         this.oldPlanObject.fieldDisplay = obj;
       },
+      ContainerInfoLight(data,index){
+        this.containerInfo[index].fieldDisplay=this.$depthClone(data);
+        this.oldPlanObject.containerDetail =  this.containerInfo;
+      },
       sendData(keyString) {
         let url = this.configUrl[this.pageName][keyString].api;
         this.basicInfoArr.forEach(a => {
@@ -828,7 +846,6 @@
           this.oldPlanObject[key] = value
         })
         this.oldPlanObject.attachment = this.$refs.attachment.getFiles();
-        this.oldPlanObject.containerDetail = this.containerInfo
         this.oldPlanObject.fee = this.feeList && this.feeList.length > 0 ? this.sendfee : null;
         // this.oldPlanObject.product = this.modifyProductArray 原版;
         this.oldPlanObject.currencyExchangeRate = _.map(this.$depthClone(this.ExchangeRateInfoArr), (item) => {
@@ -915,9 +932,11 @@
     watch:{
       containerInfo:{
         handler: function (val) {
+          console.log(val)
           val.forEach(el=>{
             this.productList.forEach(item=>{
               if(el.id==item.containerId.value){
+                console.log(el.containerType)
                 item.containerType.value = el.containerType;
               }
             })

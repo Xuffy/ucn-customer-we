@@ -91,5 +91,7 @@
   "addFromBookmark": "Add from Bookmark",
   "skuSaleStatus": "SKU Sale Status",
   "customersInfo":"海关信息",
-  "total":"Total"
+  "total":"Total",
+  "myCategory":"My Category",
+  "sysCategory":"System Category"
 }

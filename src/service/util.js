@@ -3,6 +3,7 @@ import {localStore, sessionStore} from 'service/store';
 import database from '../database/index';
 import $i from '../language/index';
 import router from 'service/router'
+import $fetch from 'service/fetch'
 import _config from "./config";
 import store from '@/store';
 import Qs from 'qs'
@@ -15,8 +16,8 @@ import {Message, MessageBox} from 'element-ui';
  */
 const deleteArr = (list, fieldRemark) => {
   _.map(list, item => {
-    if (item) deleteObject(item);
-    if (item[fieldRemark]) deleteObject(item[fieldRemark]);
+    item && deleteObject(item);
+    item[fieldRemark] && deleteObject(item[fieldRemark]);
   });
 };
 
@@ -53,10 +54,13 @@ export default {
   $i,
 
   /**
+   * 公共请求
+   */
+  $fetch,
+  /**
    * 字段配置
    */
   $db: database,
-
 
   /**
    * 字段配置
@@ -132,9 +136,7 @@ export default {
 
     value = _.isArray(value) ? value : [value];
 
-    _.map(value, val => {
-      pass = _.indexOf(auths, val) > -1;
-    });
+    _.map(value, val => pass = _.indexOf(auths, val) > -1);
 
     return pass;
   },

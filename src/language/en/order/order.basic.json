@@ -63,5 +63,6 @@
   "exit":"Exit",
   "recover":"Recover",
   "archiveOrder":"Archive Order",
-  "archiveDraft":"Archive Draft"
+  "archiveDraft":"Archive Draft",
+  "detail":"Detail"
 }

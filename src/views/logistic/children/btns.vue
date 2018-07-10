@@ -3,12 +3,12 @@
     <div v-if="!edit">
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'&&(logisticsStatus==2||logisticsStatus==3)" @click.stop="$emit('switchEdit','edit')">{{ $i.logistic.modify }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'&&pageTypeCurr!='logisticDraftDetail'&&(logisticsStatus==2)" @click.stop="$emit('switchEdit','confirm')">{{ $i.logistic.confirm }}</el-button>
-      <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'&&logisticsStatus!=5" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'" @click.stop="$emit('switchEdit','copy')">{{ $i.logistic.copy }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr=='loadingListDetail'&&fieldDisplay" @click.stop="$emit('switchEdit','read')">{{ $i.logistic.read }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr=='loadingListDetail'&&logisticsStatus!=4" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
       <el-button size="mini" type="primary">{{ $i.logistic.download }}</el-button>
+      <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'&&logisticsStatus!=5" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
     </div>
     <div v-else>
       <el-button size="mini" type="primary" v-if="pageTypeCurr=='placeLogisticPlan'||pageTypeCurr=='logisticDraftDetail'" @click.stop="$emit('sendData', 'saveAsDraft')">{{ $i.logistic.saveAsDraft }}</el-button>
