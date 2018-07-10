@@ -11,7 +11,7 @@
                 :pageData="pageData"
                 :tableButtons="[{label: 'Detail', type: 1}]"
                 :hideBtns="false"
-                :loading="loadingTable"
+                :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
                 @tableBtnClick="btnClick"
@@ -117,8 +117,8 @@
                     this.loadingTable=false;
                 });
             },
-            btnClick(){
-
+            btnClick(e){
+                console.log(e,'eee')
             },
             changeSort(e){
                 console.log(e,'val')

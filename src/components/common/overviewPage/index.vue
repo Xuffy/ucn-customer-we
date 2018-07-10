@@ -108,7 +108,7 @@
             <v-table
                     :code="tableCode"
                     :height="500"
-                    :loading="loading"
+                    :loading="loadingTable"
                     :data="tableData"
                     :buttons="tableButtons"
                     @change-checked="changeChecked"
@@ -193,7 +193,7 @@
             changeSize:{
                 type:Function
             },
-            loading:{           //表格转圈
+            loadingTable:{           //表格转圈
                 type:Boolean,
                 default:false,
             },
@@ -213,7 +213,6 @@
                 /**
                  * 表格数据配置
                  * */
-                loadingTable:false,
                 selectList:[],
             }
         },
@@ -293,6 +292,7 @@
              *  一些事件
              * */
             search(){
+                this.disabledSearch=true;
                 this.$emit('search',Object.assign(this.$depthClone(this.formData),{pn:1,ps:50}));
             },
             clear(){
@@ -316,16 +316,19 @@
                 this.$emit('change-sort',e);
             },
 
-
-
-
         },
         created(){
             this.init();
         },
         mounted(){
             // console.log(this.formColumn,'formColumn')
-        }
+        },
+        watch:{
+            tableData(n){
+                console.log(n,'new')
+                this.disabledSearch=false;
+            }
+        },
     };
 </script>
 
