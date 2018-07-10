@@ -9,7 +9,7 @@
             </el-button>
         </div>
         <div class="search-option">
-            <el-form label-width="190px">
+            <el-form :label-width="`${labelWidth}px`">
                 <el-row>
                     <el-col v-for="v in formColumn" :key="v.key" v-if="v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
@@ -44,9 +44,9 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <el-form class="body" :class="{hide:hideBody}" label-width="190px">
+            <el-form :model="formData" ref="formData" class="body" :class="{hide:hideBody}" :label-width="`${labelWidth}px`">
                 <el-row>
-                    <el-col v-for="v in formColumn" :key="v.key" v-if="!v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                    <el-col class="search-item" v-for="v in formColumn" :key="v.key" v-if="!v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
@@ -59,7 +59,12 @@
                             </div>
                             <div v-else-if="v.type==='select'">
                                 <el-select class="speLine"
+                                           :prop="v.key"
+                                           :filterable="v._filterable?true:false"
                                            v-model="formData[v.key]"
+                                           clearable
+                                           :multiple="v._multiple?true:false"
+                                           :collapse-tags="v._collapse?true:false"
                                            :placeholder="$i.product.pleaseChoose">
                                     <el-option
                                             v-for="item in v._options"
@@ -74,8 +79,18 @@
                                          :form="formData"
                                          :between-key="v.betweenKey"></between>
                             </div>
+                            <div v-else-if="v.type==='number'">
+                                <el-input-number
+                                        class="speNumber speLine"
+                                        :controls="false"
+                                        v-model="formData[v.key]"></el-input-number>
+                            </div>
+                            <div v-else-if="v._slot">
+                                <slot :name="v._slot" :data="formData"></slot>
+                            </div>
                             <div v-else>
                                 <el-input
+                                        :prop="v.key"
                                         class="speLine"
                                         v-model="formData[v.key]"
                                         :placeholder="$i.product.pleaseInput"></el-input>
@@ -86,7 +101,44 @@
             </el-form>
         </div>
         <div class="search-btn">
-            <el-button @click="search">搜索</el-button>
+            <el-button @click="search" :loading="disabledSearch" type="primary">{{$i.product.search}}</el-button>
+            <el-button @click="clear" type="info" plain>{{$i.product.clear}}</el-button>
+        </div>
+        <div class="table">
+            <v-table
+                    :code="tableCode"
+                    :height="500"
+                    :loading="loading"
+                    :data="tableData"
+                    :buttons="tableButtons"
+                    @change-checked="changeChecked"
+                    @change-sort="val=>{changeSort(val)}"
+                    @action="tableBtnClick">
+                <template slot="header">
+                    <slot name="btns"></slot>
+                    <!--<div class="btns" v-if="!hideBtns">-->
+                        <!--&lt;!&ndash;<el-button @click="createInquiry">{{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<el-button @click="createOrder">{{`${$i.product.createOrder}(${selectList.length})`}}</el-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<el-button @click="compareProducts" :disabled="disabledCompare">{{`${$i.product.compare}(${selectList.length})`}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<el-button @click="addToBookmark" :loading="disableClickAddBookmark"&ndash;&gt;-->
+                                   <!--&lt;!&ndash;:disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                        <!--<el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>-->
+                        <!--&lt;!&ndash;<el-button type="danger">{{$i.product.delete}}</el-button>&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;<div class="btns" v-if="type==='recycle'">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<el-button :disabled="disabledRecover" :loading="disabledClickRecover" @click="recover"&ndash;&gt;-->
+                                   <!--&lt;!&ndash;type="primary">{{$i.product.recover}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<el-button>{{$i.product.download+'('+downloadRecycleListInfo+')'}}</el-button>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                </template>
+            </v-table>
+            <slot name="pagination"></slot>
+        </div>
+        <div class="footer-btn">
+            <slot name="footerBtn"></slot>
         </div>
     </div>
 </template>
@@ -94,14 +146,16 @@
 <script>
     import dropDownSingle from '../fnCompon/dropDownSingle'
     import between from './betweenNumber'
-
-    import {VPagination} from '@/components/index'
+    import VTable from '../table/index'
+    import VPagination from '../table/pagination'
 
     export default {
         name: "overview",
         components:{
             dropDownSingle,
-            between
+            between,
+            VTable,
+            VPagination
         },
         props:{
             title:{
@@ -110,6 +164,39 @@
             formColumn:{
                 type:Object,
             },
+            labelWidth:{
+                type:Number,
+                default:190
+            },
+            tableData:{
+                type:Array,
+                default:[]
+            },
+            tableCode:{
+                type:String,
+                default:''
+            },
+            tableButtons:{
+                type:Array,
+                default:[]
+            },
+            hideBtns:{
+                type:Boolean,
+                default:false,
+            },
+            pageData:{
+                type:Object
+            },
+            changePage:{
+                type:Function,
+            },
+            changeSize:{
+                type:Function
+            },
+            loading:{           //表格转圈
+                type:Boolean,
+                default:false,
+            },
         },
         data(){
             return{
@@ -117,6 +204,17 @@
                 formData:{},
                 dictionary:[],
                 showAdvancedBtn:false,      //是否要显示高级按钮
+
+                /**
+                 * 按钮状态
+                 * */
+                disabledSearch:false,
+
+                /**
+                 * 表格数据配置
+                 * */
+                loadingTable:false,
+                selectList:[],
             }
         },
         methods:{
@@ -132,8 +230,12 @@
                     }
                 });
                 this.getUnit(queryCode).then(res=>{
-                    console.log(res,'一个单位')
-                    let dictionary=res;
+                    res[0].push({
+                        id:19124124018,
+                        code:'country',
+                        codes:res[1]
+                    });
+                    let dictionary=res[0];
                     _.map(this.formColumn,v=>{
                         if(v.type==='dropdown'){
                             if(v.dropDownType==='category'){
@@ -161,16 +263,10 @@
                             v._options=_.findWhere(dictionary,{code:v.selectCode}).codes;
                         }
                     })
-
                 }).catch(()=>{
 
                 });
-
-
-
-
             },
-
             getCategory(){
                 const myCategory=this.$ajax.get(this.$apis.get_buyer_sys_category, {});
                 const sysCategory=this.$ajax.get(this.$apis.get_buyer_my_category, {});
@@ -181,10 +277,15 @@
                 })
             },
             getUnit(codes){
-                this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                    console.log(res,'单位')
-                });
-                return this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
+                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+                //     console.log(res,'单位')
+                // });
+                // this.$ajax.get(this.$apis.get_country).then(res=>{
+                //     console.log(res,'国家')
+                // });
+                const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
+                const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
+                return this.$ajax.all([unitAjax,countryAjax]);
             },
 
 
@@ -192,8 +293,30 @@
              *  一些事件
              * */
             search(){
-                console.log(this.formData,'formData')
+                this.$emit('search',Object.assign(this.$depthClone(this.formData),{pn:1,ps:50}));
             },
+            clear(){
+                _.map(this.formData,(v,k)=>{
+                    if(typeof this.formData[k]==='object'){
+                        this.formData[k]=[];
+                    }else if(typeof this.formData[k]==='number'){
+                        this.formData[k]=null;
+                    }else if(typeof this.formData[k]==='string'){
+                        this.formData[k]='';
+                    }
+                })
+            },
+            changeChecked(e){
+                this.$emit('change-checked',e);
+            },
+            tableBtnClick(e){
+                this.$emit('tableBtnClick',e);
+            },
+            changeSort(e){
+                this.$emit('change-sort',e);
+            },
+
+
 
 
         },
@@ -228,11 +351,22 @@
     .hide {
         max-height: 0;
     }
-    .speLine{
+    .speLine, .search-item >>> .speLine{
         width: 80% !important;
     }
-
+    .speNumber >>> input{
+        text-align: left;
+    }
+    .search-item{
+        height: 51px;
+    }
     .search-btn{
+        text-align: center;
+    }
+    .table{
+        margin-top: 20px;
+    }
+    .footer-btn{
         text-align: center;
     }
 </style>
