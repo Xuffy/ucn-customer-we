@@ -31,7 +31,7 @@
           <template slot-scope="scope">
             <div v-if="edit" style="display:flex;">
               <label class="reqiuredStar"></label>
-              <el-select v-model="scope.row.containerType" placeholder="请选择">
+              <el-select v-model="scope.row.containerType" placeholder="请选择" @change="ContainerInfoLight('containerType',scope.row.containerType,scope.$index)">
                 <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
               </el-select>
             </div>
@@ -83,7 +83,8 @@ export default {
   data () {
     return {
       containerNo: '',
-      containerSelect: ''
+      containerSelect: '',
+      ContainerInfoLightObj:{}
     }
   },
   props: {
@@ -107,6 +108,11 @@ export default {
     }
   },
   methods: {
+    //高亮
+    ContainerInfoLight(key,v,index){
+      this.ContainerInfoLightObj[key] = v;
+      this.$emit('ContainerInfoLight',this.ContainerInfoLightObj,index);
+    },
     //返回当前行是否可选中 复选框
     checkboxInit(row,index){
       if (row.beBinding) 
