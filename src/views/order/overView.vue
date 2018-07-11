@@ -134,9 +134,7 @@
             }
         },
         methods: {
-            ...mapActions([
-                'setMenuLink'
-            ]),
+            ...mapActions(['setMenuLink']),
             onAction(item) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -333,7 +331,7 @@
                             this.paymentOption=v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 })
             },
 

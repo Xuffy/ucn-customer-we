@@ -25,6 +25,7 @@
                         :loading="loadingTable"
                         :data="tableDataList"
                         :buttons="[{label: 'Detail', type: 1}]"
+                        @change-sort="val=>{getWarehouseData(val)}"
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
@@ -79,21 +80,6 @@
                     ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: "",
-
-                    // sorts: [
-                    //     {
-                    //         "orderBy": "string",
-                    //         "orderType": "string",
-                    //     }
-                    // ],
-                    // operatorFilters: [
-                    //     {
-                    //         "columnName": "string",
-                    //         "operator": "string",
-                    //         "property": "string",
-                    //         "value": {}
-                    //     }
-                    // ],
                 },
                 searchId:1,
                 searchOptions:[
@@ -113,15 +99,18 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             changeStatus(){
                 this.warehouseConfig.pn=1;
                 this.getWarehouseData();
             },
 
             //获取表格数据
-            getWarehouseData(){
+            getWarehouseData(e){
                 this.loadingTable=true;
+                if(e){
+                    Object.assign(this.warehouseConfig,e);
+                }
                 this.$ajax.post(this.$apis.get_buyerWarehouseOverview,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,e=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
@@ -208,7 +197,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query:{code:'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
         watch:{
 
