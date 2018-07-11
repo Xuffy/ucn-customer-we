@@ -5,7 +5,7 @@
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
@@ -27,7 +27,7 @@
             <span>{{ scope.row.containerWeight }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.containerType" width="180" align="center">
+        <el-table-column :label="$i.logistic.containerType" width="180" align="center" prop="containerType">
           <template slot-scope="scope">
             <div v-if="edit" style="display:flex;">
               <label class="reqiuredStar"></label>
@@ -35,7 +35,7 @@
                 <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
               </el-select>
             </div>
-            <span v-else>{{ scope.row.containerType }}</span>
+            <span v-else>{{ scope.row.containerType }}</span>       
           </template>
         </el-table-column>
         <el-table-column :label="$i.logistic.vgm" prop="vgm" width="120" align="center">
@@ -112,6 +112,13 @@ export default {
     ContainerInfoLight(key,v,index){
       this.ContainerInfoLightObj[key] = v;
       this.$emit('ContainerInfoLight',this.ContainerInfoLightObj,index);
+    },
+    lightHight({row, column, rowIndex, columnIndex}){
+      if(column.property&&row.fieldDisplay){
+        if(column.property in row.fieldDisplay){
+          return 'lightHight'
+        }
+      }
     },
     //返回当前行是否可选中 复选框
     checkboxInit(row,index){
@@ -213,4 +220,10 @@ export default {
   color: #f56c6c;
   margin-right: 4px;
 }
+.tab-wrap{
+  /deep/.lightHight{
+    background: yellow;
+  }
+}
+
 </style>

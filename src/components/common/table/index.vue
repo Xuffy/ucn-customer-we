@@ -43,7 +43,7 @@
                 @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box">
+                <div class="sort-box" v-if="!disabledSort || !item._sort">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
@@ -218,6 +218,10 @@
         type: Boolean,
         default: false,
       },
+      disabledSort: {
+        type: Boolean,
+        default: false,
+      },
       totalRow: {
         type: [Boolean, Array],
         default: false,
@@ -282,7 +286,12 @@
           });
       },
       changeSort(key, type) {
+        if (key !== this.currentSort.orderBy) {
+          this.currentSort = this.$options.data().currentSort;
+        }
+
         this.currentSort.orderBy = key;
+
         if (type) {
           this.currentSort.orderType = type;
         } else if (this.currentSort.orderType === 'desc') {
@@ -290,7 +299,7 @@
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
-        this.$emit('change-sort', {sorts: [this.currentSort]});
+        this.$emit('change-sort', {sorts: this.currentSort.orderType ? [this.currentSort] : []});
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
@@ -674,10 +683,10 @@
     cursor: pointer;
   }
 
-  thead td:not(.sort-wrapper) .sort-box {
+  /*thead td:not(.sort-wrapper) .sort-box {
     display: none;
     cursor: initial;
-  }
+  }*/
 
   .sort-box {
     display: inline-flex;

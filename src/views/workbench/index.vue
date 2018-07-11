@@ -99,7 +99,6 @@
       }
     },
     created() {
-      console.log(this.$fetch)
     },
     mounted() {
       this.userInfo.userType === 0 && this.getBasicInfo();

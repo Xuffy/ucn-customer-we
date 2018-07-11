@@ -134,9 +134,7 @@
             }
         },
         methods: {
-            ...mapActions([
-                'setMenuLink'
-            ]),
+            ...mapActions(['setMenuLink']),
             onAction(item) {
                 this.$windowOpen({
                     url: '/order/detail',
@@ -150,7 +148,10 @@
                     url: '/order/create'
                 });
             },
-            downloadOrder(){},
+            downloadOrder(){
+                let ids=_.pluck(_.pluck(this.selectedList,'id'),'value');
+                console.log(ids,'ids')
+            },
             selectChange(val) {
                 this.id = val;
             },
@@ -260,7 +261,7 @@
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
-                if(e.sorts){
+                if(e && e.sorts){
                     Object.assign(this.params,e);
                 }
                 this.$ajax.post(url, this.params)
@@ -330,7 +331,7 @@
                             this.paymentOption=v.codes;
                         }
                     });
-                    this.getData(this.$db.order.overviewByOrder);
+                    this.getData();
                 })
             },
 
