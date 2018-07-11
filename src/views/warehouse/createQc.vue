@@ -153,6 +153,7 @@
                     :data="productTableData"
                     border
                     show-summary
+                    :summary-method="getSummaries"
                     @selection-change="handleProductTableChange"
                     style="width: 100%">
                 <el-table-column
@@ -165,6 +166,7 @@
                 <el-table-column
                         v-for="v in $db.warehouse.createQcProductTable"
                         :key="v.key"
+                        :prop="v.key"
                         :label="v.key"
                         align="center"
                         :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
@@ -206,128 +208,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-
-
-        </div>
-
-        <div class="summary">
-            <div class="second-title">
-                {{$i.warehouse.summary}}
-            </div>
-            <el-form label-width="280px">
-                <el-row class="speZone">
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.cartonOfQualifiedProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.quantityOfQualifiedProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.volumeOfQualifiedProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.netWeightOfQualifiedProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.grossWeightOfQualifiedProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.quantityOfSubQualityProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.cartonOfSubQualityProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.netWeightOfSubQualityProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.volumeOfSubQualityProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.grossWeightOfSubQualityProducts">
-                            <el-input
-                                    class="speInput"
-                                    size="mini"
-                                    v-model="value"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :label="$i.warehouse.skuQuantity">
-                            <el-input
-                                    class="summaryInput"
-                                    size="mini"
-                                    v-model="summaryData.skuQuantity"
-                                    :disabled="true">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
         </div>
 
         <div class="footBtn">
@@ -607,7 +487,6 @@
                     this.disableClickSubmit = false;
                 });
             },
-
             cancel() {
                 window.close();
             },
@@ -760,12 +639,11 @@
                 // });
             },
             removeProduct() {
-                this.$confirm("Sure Delete?", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
+                this.$confirm(this.$i.warehouse.sureDelete, this.$i.warehouse.prompt, {
+                    confirmButtonText: this.$i.warehouse.sure,
+                    cancelButtonText: this.$i.warehouse.cancel,
                     type: "warning"
                 }).then(() => {
-
                     this.productTableData = _.difference(this.productTableData, this.selectProductTableData);
                     this.selectProductTableData = [];
                     this.$message({
@@ -778,6 +656,32 @@
             },
             handleProductTableChange(e) {
                 this.selectProductTableData = e;
+            },
+            getSummaries(param){
+                const { columns, data } = param;
+                const sums = [];
+                columns.forEach((column, index) => {
+                    if (index === 0) {
+                        sums[index] = this.$i.warehouse.total;
+                        return;
+                    }else if(index===17 || index===18 || index===41 || index===42 || index===43 || index===44 || index===45 || index===46 || index===47 || index===48 || index===49 || index===50 || index===51 || index===52 || index===65){
+                        const values = data.map(item => Number(item[column.property]));
+                        if (!values.every(value => isNaN(value))) {
+                            sums[index] = values.reduce((prev, curr) => {
+                                const value = Number(curr);
+                                if (!isNaN(value)) {
+                                    return prev + curr;
+                                } else {
+                                    return prev;
+                                }
+                            }, 0);
+                        }else{
+                            sums[index]='-';
+                        }
+                    }
+                });
+
+                return sums;
             },
             handleClick(e) {
                 this.$windowOpen({

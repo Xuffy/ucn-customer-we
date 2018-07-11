@@ -18,8 +18,8 @@
                         :options="options"
                         v-model="searchValue"
                         @inputEnter="inputEnter"
-                        :searchLoad="searchLoad"
-                />
+                        :searchLoad="searchLoad">
+                </select-search>
             </div>
         </div>
         <v-table
@@ -34,8 +34,14 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <!--<el-button @click='download'>{{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                        <el-button @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
+                        <el-button
+                                v-authorize="'WAREHOUSE:QC_ORDER_OVERVIEW:DOWNLOAD'"
+                                @click='download'>
+                            {{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})
+                        </el-button>
+                        <el-button
+                                v-authorize="'WAREHOUSE:QC_ORDER_OVERVIEW:CREATE'"
+                                @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
                     </div>
                 </div>
             </template>
@@ -123,13 +129,7 @@
             },
             download() {
                 console.log('下载')
-                // this.$ajax.post(this.$apis.download_order, {ids:this.selectedNumber})
-                //   .then((res) => {
-                //     console.log(res)
-                //   })
-                //   .catch((res) => {
-                //     console.log(res)
-                //   });
+
             },
             changeQcStatus(){
                 this.params.pn = 1;
