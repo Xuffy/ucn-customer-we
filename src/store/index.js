@@ -36,7 +36,6 @@ const actions = {
    * @param params  数据：{path:'',query:'',label:'',type:1}
    */
   setMenuLink({commit}, params) {
-    console.log(params)
     commit(type.SETMENULINK, params);
   },
   setDraft({commit}, params) {

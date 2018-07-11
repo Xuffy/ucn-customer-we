@@ -33,7 +33,7 @@
           <el-table-column
             align="center"
             width="100"
-            prop="status"
+            prop="_status"
             :label="$i.logs.uploadStatus">
           </el-table-column>
           <el-table-column
@@ -72,11 +72,11 @@
             :label="$i.logs.uploadAction">
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
-                         @click="downloadLogs(scope.row.successMsgFileUrl)">
+                         @click="$download(scope.row.successMsgFileUrl)">
                 {{$i.logs.downSuccess}}
               </el-button>
               <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
-                         @click="downloadLogs(scope.row.errorMsgFileUrl)">
+                         @click="$download(scope.row.errorMsgFileUrl)">
                 {{$i.logs.downError}}
               </el-button>
             </template>
@@ -97,22 +97,24 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="uploadFileName"
             :label="$i.logs.uploadFileName"
             min-width="200">
+            <template slot-scope="scope">
+              {{scope.row.fileName || $i.logs.inOperating}}
+            </template>
           </el-table-column>
           <el-table-column
             align="center"
             :label="$i.logs.uploadFileSize"
             width="100">
             <template slot-scope="scope">
-              {{$bytesConvert(scope.row.uploadFileSize)}}
+              {{scope.row.fileSize ? $bytesConvert(scope.row.fileSize) : $i.logs.inOperating}}
             </template>
           </el-table-column>
           <el-table-column
             align="center"
             width="100"
-            prop="status"
+            prop="_status"
             :label="$i.logs.uploadStatus">
           </el-table-column>
           <el-table-column
@@ -130,33 +132,23 @@
           </el-table-column>
           <el-table-column
             align="center"
-            :label="$i.logs.uploadEntryDt">
+            :label="$i.logs.creationTime">
             <template slot-scope="scope">
-              {{scope.row.entryDt ? $dateFormat(scope.row.entryDt,'yyyy-mm-dd hh:mm:ss') : ''}}
+              {{scope.row.startTime ? $dateFormat(scope.row.startTime,'yyyy-mm-dd hh:mm:ss') : ''}}
             </template>
           </el-table-column>
           <el-table-column
             align="center"
-            prop="successRows"
-            :label="$i.logs.uploadSuccessRows">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="errorRows"
-            :label="$i.logs.uploadErrorRows">
-          </el-table-column>
-          <el-table-column
-            align="center"
             fixed="right"
-            :label="$i.logs.uploadAction">
+            :label="$i.logs.exportAction">
             <template slot-scope="scope">
-              <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
-                         @click="downloadLogs(scope.row.successMsgFileUrl)">
-                {{$i.logs.downSuccess}}
+              <el-button type="text" size="small" v-if="scope.row.status !== 1 && scope.row.status !== 7"
+                         @click="retryExport(scope.row.id)">
+                {{$i.logs.retry}}
               </el-button>
-              <el-button type="text" size="small" v-if="scope.row.errorMsgFileUrl"
-                         @click="downloadLogs(scope.row.errorMsgFileUrl)">
-                {{$i.logs.downError}}
+              <el-button type="text" size="small" v-else-if="scope.row.fileUrl"
+                         @click="$download(scope.row.fileUrl)">
+                {{$i.logs.exportDownload}}
               </el-button>
             </template>
           </el-table-column>
@@ -205,7 +197,7 @@
           this.importParams.data = res[1];
           this.importParams.data.datas = _.map(res[1].datas, val => {
             let item = _.findWhere(res[0], {code: val.status.toString()});
-            val.status = item ? item.name : '';
+            val._status = item ? item.name : '';
             return val;
           });
         })
@@ -218,6 +210,11 @@
           this.$ajax.post(this.$apis.EXPORTFILE_GETEXPORTTASKE, this.exportParams.paging)
         ]).then(res => {
           this.exportParams.data = res[1];
+          this.exportParams.data.datas = _.map(res[1].datas, val => {
+            let item = _.findWhere(res[0], {code: val.status.toString()});
+            val._status = item ? item.name : '';
+            return val;
+          });
         })
           .finally(() => this.exportParams.loading = false);
       },
@@ -225,6 +222,12 @@
         return this.$ajax.post(this.$apis.CODE_PART, [code], {cache: true})
           .then(res => {
             return res && res[0] ? res[0].codes : [];
+          });
+      },
+      retryExport(id) {
+        this.$ajax.get(this.$apis.EXPORTFILE_EXECUTE, {taskNo: id})
+          .then(res => {
+            console.log(res)
           });
       },
       changeTab(paging) {
@@ -240,9 +243,6 @@
             }
             return this.getExportData();
         }
-      },
-      downloadLogs(url) {
-        url && window.open(url);
       }
     }
   }
