@@ -83,7 +83,7 @@
                         <el-button @click="manuallyAddProduct" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD'">{{$i.product.manuallyAdd}}</el-button>
                         <el-button @click="()=>$refs.importCategory.show()" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:UPLOAD'">{{$i.button.upload}}</el-button>
                         <el-button v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">{{$i.button.download}}</el-button>
-                        <el-button v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'">{{$i.button.remove}}</el-button>
+                        <el-button type="danger" :disabled="selectList.length<1" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'" @click="deleteBookmark">{{$i.button.remove}}</el-button>
                     </div>
                 </template>
             </v-table>
@@ -267,7 +267,7 @@
         },
         methods:{
             ...mapActions([
-                'setRecycleBin','setLog'
+                'setMenuLink'
             ]),
 
             //切换body的收缩展开状态
@@ -577,24 +577,16 @@
                     });
                     this.$ajax.post(this.$apis.delete_buyerProductBookmark,id).then(res=>{
                         this.selectList=[];
-                        this.$ajax.post(this.$apis.get_buyerBookmarkList,{
-                            recycle:false
-                        }).then(res=>{
-                            this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas);
-                            this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                            });
-                            this.disableClickDelete=false;
-                            this.loadingTable=false;
-                        }).catch(err=>{
-                            this.disableClickDelete=false;
-                            this.loadingTable=false;
+                        this.disableClickDelete=false;
+                        this.$message({
+                          type: 'success',
+                          message: '删除成功!'
                         });
+                        this.getData();
                     });
 
                 }).catch(() => {
-
+                  this.disableClickDelete=false;
                 });
             },
 
@@ -614,6 +606,10 @@
               this.productForm.sorts =  item.sorts;
               this.getData();
             },
+            // 导出
+            download(){
+
+            }
         },
         created(){
             this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
@@ -649,7 +645,12 @@
             // });
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+          this.setMenuLink({
+            path: '',
+            query: {code: 'PRODUCT'},
+            type: 100,
+            label: this.$i.common.log
+          });
         },
 
         watch:{

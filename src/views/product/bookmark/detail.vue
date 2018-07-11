@@ -42,14 +42,14 @@
                     </el-col>
                 </el-row>
                 <div class="btns" v-show="hideBtns" v-if="notEdit">
-                    <el-button @click="createInquiry">{{$i.product.createInquiry}}</el-button>
-                    <el-button :disabled="productForm.customerCreate" @click="createOrder">{{$i.product.createOrder}}</el-button>
-                    <el-button @click="addCompare">{{$i.product.addToCompare}}</el-button>
-                    <el-button @click="editProduct">{{$i.product.editEn}}</el-button>
-                    <!--<el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark">{{$i.product.delete}}</el-button>-->
-                    <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                    <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                    <!--<el-button>{{$i.product.downloadTheProduct}}</el-button>-->
+                    <el-button @click="createInquiry" v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_INQUIRY'">{{$i.product.createInquiry}}</el-button>
+                    <el-button :disabled="productForm.customerCreate" @click="createOrder" v-authorize="'PRODUCT:BOOKMARK_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}</el-button>
+                    <el-button @click="addCompare" v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_COMPARE'">{{$i.product.addToCompare}}</el-button>
+                    <el-button @click="editProduct" v-authorize="'PRODUCT:BOOKMARK_DETAIL:MODIFY'">{{$i.product.editEn}}</el-button>
+                    <el-button @click="addProduct" v-authorize="'PRODUCT:BOOKMARK_DETAIL:ADD_PRODUCT'">{{$i.product.addNewProductEn}}</el-button>
+                    <el-button @click="manuallyAddProduct" v-authorize="'PRODUCT:BOOKMARK_DETAIL:MANUALLY_ADD'">{{$i.product.manuallyAdd}}</el-button>
+                    <el-button v-authorize="'PRODUCT:BOOKMARK_DETAIL:DOWNLOAD'">{{$i.product.downloadTheProduct}}</el-button>
+                    <el-button type="danger" :loading="disableClickDelete" @click="deleteBookmark" v-authorize="'PRODUCT:BOOKMARK_DETAIL:RECYCLE_BIN'">{{$i.product.remove}}</el-button>
                     <!--<el-button>{{$i.product.uploadProduct}}</el-button>-->
                 </div>
                 <div class="btns" v-else>
