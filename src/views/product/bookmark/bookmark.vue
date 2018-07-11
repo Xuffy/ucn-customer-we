@@ -72,15 +72,18 @@
                     :data="tableDataList"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @change-checked="changeChecked"
+                    @change-sort="sort"
                     @action="btnClick">
                 <template slot="header">
                     <div class="btns">
-                        <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                        <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
-                        <el-button @click="compare" :disabled="disabledCompare">{{$i.product.compare}}({{selectList.length}})</el-button>
-                        <el-button @click="addProduct">{{$i.product.addNewProductEn}}</el-button>
-                        <el-button @click="manuallyAddProduct">{{$i.product.manuallyAdd}}</el-button>
-                        <el-button @click="()=>$refs.importCategory.show()">{{$i.button.upload}}</el-button>
+                        <el-button @click="createInquiry" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_INQUIRY'">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                        <el-button @click="createOrder" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_ORDER'">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                        <el-button @click="compare" :disabled="disabledCompare" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:COMPARE'">{{$i.product.compare}}({{selectList.length}})</el-button>
+                        <el-button @click="addProduct" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:ADD_PRODUCT'">{{$i.product.addNewProductEn}}</el-button>
+                        <el-button @click="manuallyAddProduct" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD'">{{$i.product.manuallyAdd}}</el-button>
+                        <el-button @click="()=>$refs.importCategory.show()" v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:UPLOAD'">{{$i.button.upload}}</el-button>
+                        <el-button v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">{{$i.button.download}}</el-button>
+                        <el-button v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'">{{$i.button.remove}}</el-button>
                     </div>
                 </template>
             </v-table>
@@ -605,7 +608,12 @@
             changeSize(e){
                 this.productForm.ps=e;
                 this.getData();
-            }
+            },
+            //表格字段排序
+            sort(item){
+              this.productForm.sorts =  item.sorts;
+              this.getData();
+            },
         },
         created(){
             this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true}).then(res=>{
