@@ -80,11 +80,13 @@ export default{
     },
     orderSkuQuantity: {
         key: 'orderSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     expectQCQTY: {
         key: 'expectQcQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     samplingRate: {
         key: 'samplingRate',
@@ -188,35 +190,43 @@ export default{
     },
     actualProductTotalCTNS:{
         key: 'actSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalCTNS:{
         key: 'qualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalCTNS:{
         key: 'unqualifiedSkuCartonTotalQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     actProductQuantity:{
         key: 'actSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalQTYS:{
         key: 'qualifiedSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductsQTY:{
         key: 'unqualifiedSkuQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductTotalNW:{
         key: 'qualifiedSkuNetWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalNW:{
         key: 'unqualifiedSkuNetWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductsTotalCBM:{
         key: 'qualifiedSkuVolume',
@@ -224,19 +234,22 @@ export default{
     },
     unqualifiedProductsTotalCBM:{
         key: 'unqualifiedSkuVolume',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     qualifiedProductTotalGW:{
         key: 'qualifiedSkuGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     unqualifiedProductTotalGW:{
         key: 'unqualifiedSkuGrossWeight',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     }, 
     unqualifiedType:{
         key: 'unqualifiedType',
-        type: 'String'
+        type: 'String',
     },
     SKUBarCode:{
         key: 'skuBarCode',
@@ -285,7 +298,8 @@ export default{
     },
     checkOuterCartons:{
         key: 'checkOuterCartonQty',
-        type: 'Number'
+        type: 'Number',
+        _calculate:true
     },
     remark:{
         key: 'remark',

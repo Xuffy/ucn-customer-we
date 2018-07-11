@@ -178,11 +178,9 @@
             },
             tableButtons:{
                 type:Array,
-                default:[]
-            },
-            hideBtns:{
-                type:Boolean,
-                default:false,
+                default:function() {
+                    return []
+                }
             },
             pageData:{
                 type:Object

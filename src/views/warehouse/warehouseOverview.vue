@@ -29,9 +29,11 @@
                         @change-checked="changeChecked"
                         @action="btnClick">
                     <template slot="header">
-                        <!--<div class="btns">-->
-                            <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                        <!--</div>-->
+                        <div class="btns">
+                            <el-button
+                                    v-authorize="'WAREHOUSE:DOWNLOAD'"
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>
+                        </div>
                     </template>
                 </v-table>
                 <page
@@ -122,7 +124,6 @@
                     this.loadingTable=false;
                 });
             },
-
             searchInbound(e){
                 if(!e.id){
                     return this.$message({
@@ -146,7 +147,6 @@
                     this.getWarehouseData();
                 }
             },
-
             btnClick(e){
                 this.$windowOpen({
                     url:'/product/sourcingDetail',
@@ -155,11 +155,19 @@
                     }
                 })
             },
-
             changeChecked(e){
                 this.selectList=e;
             },
-
+            download(){
+                let ids;
+                if(this.selectList.length===0){
+                    ids=[];
+                }
+                else{
+                    ids=_.pluck(_.pluck(this.selectList,'id'),'value');
+                }
+                this.$fetch.export_task('WAREHOUES',this.warehouseConfig);
+            },
 
             /**
              * 字典获取
