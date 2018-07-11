@@ -32,6 +32,7 @@
                 :loading='loading'
                 :pageTotal='pageTotal'
                 @change-checked='checked'
+                @change-sort="val=>{getData(val)}"
                 :height="500"
                 style='marginTop:10px'>
             <template slot="header">
@@ -114,8 +115,6 @@
                     status: '',
                     ps: 50,
                     pn: 1,
-                    operatorFilters: [],
-                    sorts: [],
                     draftCustomer:false,
                     recycleCustomer:false,
                 },
@@ -151,12 +150,18 @@
                     url: '/order/create'
                 });
             },
-            downloadOrder(){},
+            downloadOrder(){
+                let ids=_.pluck(_.pluck(this.selectedList,'id'),'value');
+                console.log(ids,'ids')
+            },
             selectChange(val) {
                 this.id = val;
             },
             checked(item) {
                 this.selectedList = item;
+            },
+            changeSort(e){
+                console.log(e,'eeee')
             },
             changeStatus() {
                 this.getData();
@@ -253,11 +258,14 @@
                 });
             },
             //get_orderlist数据
-            getData() {
+            getData(e) {
                 this.loading = true;
                 let url='',query='';
                 url=(this.view==='1'?this.$apis.OVERVIEW_ORDERPAGE:this.$apis.OVERVIEW_SKUPAGE);
                 query=(this.view==='1'?this.$db.order.overviewByOrder:this.$db.order.overviewBysku);
+                if(e && e.sorts){
+                    Object.assign(this.params,e);
+                }
                 this.$ajax.post(url, this.params)
                     .then((res) => {
                         this.loading = false;

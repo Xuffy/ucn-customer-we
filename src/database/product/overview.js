@@ -24,5 +24,27 @@ export default {
         type:'between',
         betweenKey:['minExwPrice','maxExwPrice'],
     },
+    codeLike:{},
+    nameCnLike:{},
+    fobPrice:{
+        type:'between',
+        betweenKey:['minFobPrice','maxFobPrice'],
+    },
+    materialEnLike:{},
+    country:{
+        type:'select',
+        selectCode:'country',
+        _filterable:true,
+        _multiple:true,
+    },
+    supplierNameLike:{},
+    outerCartonMethodEnLike:{},
+    methodPkgEnLike:{},
+    deliveryDates:{
+        type:'number'
+    },
+    descEnLike:{},
+    descCnLike:{
 
+    },
 }
