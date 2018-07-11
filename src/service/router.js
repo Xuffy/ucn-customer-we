@@ -25,7 +25,7 @@ export const routerMap = [
   {
     path: '/workbench',
     component: Layout,
-    meta: {name: $i.router.workbench, auth: ['WORKBENCH']},
+    meta: {name: $i.router.workbench},
     redirect: '/workbench/index',
     noDropdown: true,
     children: [
@@ -33,7 +33,6 @@ export const routerMap = [
         path: 'index',
         name: 'workbench',
         meta: {
-          auth: ['WORKBENCH']
         },
         component: () => import('../views/workbench/index.vue')
       }
@@ -731,10 +730,10 @@ export const routerMap = [
         component: () => import('../views/logs/logs.vue')
       },
       {
-        path: 'import',
-        name: 'logsImport',
+        path: 'task',
+        name: 'logsTask',
         meta: {},
-        component: () => import('../views/logs/import.vue')
+        component: () => import('../views/logs/task.vue')
       }
     ]
   },
@@ -814,13 +813,11 @@ let router = new Router({
 });
 
 router.beforeResolve((to, from, next) => {
-  let ts = localStore.get('token')
-    , cacheParam = sessionStore.get('cache_router_param') || []
-    , cp = _.findWhere(cacheParam, {path: to.path}) // 从缓存中获取对应路由参数
-    , version;
+  let ts = localStore.get('token');
 
   if (to.meta && to.meta.auth && !Util.$auth(to.meta.auth)) {
-    return next({path: '/'});
+    return;
+    // return next({path: '/'});
   }
 
   if (to.path !== '/login' || from.path === '/login') {

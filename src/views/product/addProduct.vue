@@ -121,7 +121,9 @@
                         <el-button @click="addToBookmark" :loading="disableClickAddBookmark"
                                    :disabled="disabledAddBookmark">{{`${$i.product.addToBookmark}(${selectList.length})`}}
                         </el-button>
-                        <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'" :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
+                        <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"
+                                   @click="download"
+                                   :disabled="disabledDownload">{{$i.product.download+'('+downloadBtnInfo+')'}}</el-button>
                         <!--<el-button type="danger">{{$i.product.delete}}</el-button>-->
                     </div>
                     <div class="btns" v-if="type==='recycle'">
@@ -391,8 +393,8 @@
                 if (this.type === 'product') {
                     arr.forEach(v => {
                         if (v._checked && !v._disabled) {
-                            newArr.push(v);
-                            // newArr.push(v.id.value);        //只把id带出去
+                            // newArr.push(v);
+                            newArr.push(v.id.value);        //只把id带出去
                         }
                     });
                 } else if (this.type === 'bookmark') {
@@ -592,6 +594,10 @@
                 }).catch(err => {
                     this.disableClickAddBookmark = false;
                 });
+            },
+            download(){
+
+                this.$fetch.export_taske('SKU_PURCHASE_EXPORT_IDS',_.pluck(_.pluck(this.selectList,"id"),'value'));
             },
 
             //表格按钮点击

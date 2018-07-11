@@ -183,6 +183,7 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
+                        console.log(res,'res')
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             e.status._value=e.status.value?_.findWhere(this.statusOption,{code:String(e.status.value)}).name:'';
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
@@ -764,9 +765,7 @@
                 //         this.categoryList.push(data);
                 //     })
                 // });
-                console.log(this.$depthClone(res[3]),'res[3]')
                 this.handleCategory(res[3]);
-                console.log(this.$depthClone(this.categoryList),'this.categoryList')
                 this.getList();
             }).catch(()=>{
 

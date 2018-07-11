@@ -16,12 +16,12 @@
     </div>
 
     <div class="table-container" ref="tableContainer">
-      <div class="fixed-left" v-if="selection"
+      <div class="fixed-left" v-if="dataList.length && selection"
            ref="fixedLeft" :class="{show:dataColumn.length}">
         <input type="checkbox" v-model="checkedAll" :class="{visibility:selectionRadio}" ref="checkboxAll"
                @change="changeCheckedAll"/>
       </div>
-      <div class="fixed-right" v-if="buttons"
+      <div class="fixed-right" v-if="dataList.length && buttons"
            ref="fixedRight" :class="{show:dataColumn.length}">
         {{$i.table.action}}
       </div>
@@ -43,7 +43,7 @@
                 @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box">
+                <div class="sort-box" v-if="!disabledSort || !item._sort">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
@@ -218,6 +218,10 @@
         type: Boolean,
         default: false,
       },
+      disabledSort: {
+        type: Boolean,
+        default: false,
+      },
       totalRow: {
         type: [Boolean, Array],
         default: false,
@@ -258,33 +262,36 @@
           this.dataColumn = _.values(data[0]);
         }
 
-        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {
-          cache: true,
-          updateCache: isUpdate
-        }).then(res => {
-          let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-            , dataList = [];
+        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
+          .then(res => {
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+              , dataList = [];
 
-          this.dataColumn = _.map(this.dataColumn, val => {
-            let item = _.findWhere(res, {property: val._filed || val.key})
-            if (!val._hide && item) {
-              item._name = val.label;
-              dataList.push(item);
-            }
+            this.dataColumn = _.map(this.dataColumn, val => {
+              let item = _.findWhere(res, {property: val._filed || val.key})
+              if (!val._hide && item) {
+                item._name = val.label;
+                dataList.push(item);
+              }
 
-            if (_.isUndefined(val._sort)) {
-              val._sort = !!item && item.sortable === 1;
-            }
-            return val;
+              if (_.isObject(val) && _.isUndefined(val._sort)) {
+                val._sort = !!item && item.sortable === 1;
+              }
+              return val;
+            });
+
+            this.$refs.filterColumn.init(dataList, list);
+
+            return list;
           });
-
-          this.$refs.filterColumn.init(dataList, list);
-
-          return list;
-        });
       },
       changeSort(key, type) {
+        if (key !== this.currentSort.orderBy) {
+          this.currentSort = this.$options.data().currentSort;
+        }
+
         this.currentSort.orderBy = key;
+
         if (type) {
           this.currentSort.orderType = type;
         } else if (this.currentSort.orderType === 'desc') {
@@ -292,7 +299,7 @@
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
-        this.$emit('change-sort', {sorts: [this.currentSort]});
+        this.$emit('change-sort', {sorts: this.currentSort.orderType ? [this.currentSort] : []});
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
@@ -676,10 +683,10 @@
     cursor: pointer;
   }
 
-  thead td:not(.sort-wrapper) .sort-box {
+  /*thead td:not(.sort-wrapper) .sort-box {
     display: none;
     cursor: initial;
-  }
+  }*/
 
   .sort-box {
     display: inline-flex;

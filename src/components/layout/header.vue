@@ -93,7 +93,7 @@
               {{userInfo.userName || 'User Name'}}
             </a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled>{{userInfo.userName || 'User Name'}}</el-dropdown-item>
+              <el-dropdown-item disabled>Signed in as {{userInfo.userName || 'User Name'}}</el-dropdown-item>
               <el-dropdown-item divided><span @click="clearData">{{$i.common.cleanCache}}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
