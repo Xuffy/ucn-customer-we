@@ -43,7 +43,7 @@
                 @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box">
+                <div class="sort-box" v-if="!disabledSort || !item._sort">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>
@@ -215,6 +215,10 @@
         default: false,
       },
       hideFilterColumn: {
+        type: Boolean,
+        default: false,
+      },
+      disabledSort: {
         type: Boolean,
         default: false,
       },
@@ -679,10 +683,10 @@
     cursor: pointer;
   }
 
-  thead td:not(.sort-wrapper) .sort-box {
+  /*thead td:not(.sort-wrapper) .sort-box {
     display: none;
     cursor: initial;
-  }
+  }*/
 
   .sort-box {
     display: inline-flex;

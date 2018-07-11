@@ -1,9 +1,9 @@
 <template>
   <div class="logs-import">
     <br>
-    <h3 class="ucn-content-title inline" v-text="$i.logs.importTitle"></h3>&nbsp;&nbsp;&nbsp;&nbsp;
-    <el-button icon="el-icon-refresh" type="primary" :loading="importParams.loading"
-               @click="getImportData">{{$i.logs.refreshTask}}
+    <h3 class="ucn-content-title inline" v-text="$i.logs.taskList"></h3>&nbsp;&nbsp;&nbsp;&nbsp;
+    <el-button icon="el-icon-refresh" type="primary" :loading="importParams.loading || exportParams.loading"
+               @click="changeTab()">{{$i.logs.refreshTask}}
     </el-button>
     <br>
     <br>
@@ -41,7 +41,7 @@
             width="180"
             :label="$i.logs.uploadEndTime">
             <template slot-scope="scope">
-              {{$dateFormat(scope.row.endTime,'yyyy-mm-dd hh:mm:ss')}}
+              {{$dateFormat(scope.row.endTime,'yyyy-mm-dd HH:MM:ss')}}
             </template>
           </el-table-column>
           <el-table-column
@@ -53,7 +53,7 @@
             align="center"
             :label="$i.logs.uploadEntryDt">
             <template slot-scope="scope">
-              {{scope.row.entryDt ? $dateFormat(scope.row.entryDt,'yyyy-mm-dd hh:mm:ss') : ''}}
+              {{scope.row.entryDt ? $dateFormat(scope.row.entryDt,'yyyy-mm-dd HH:MM:ss') : ''}}
             </template>
           </el-table-column>
           <el-table-column
@@ -122,7 +122,7 @@
             width="180"
             :label="$i.logs.uploadEndTime">
             <template slot-scope="scope">
-              {{$dateFormat(scope.row.endTime,'yyyy-mm-dd hh:mm:ss')}}
+              {{$dateFormat(scope.row.endTime,'yyyy-mm-dd HH:MM:ss')}}
             </template>
           </el-table-column>
           <el-table-column
@@ -134,7 +134,7 @@
             align="center"
             :label="$i.logs.creationTime">
             <template slot-scope="scope">
-              {{scope.row.startTime ? $dateFormat(scope.row.startTime,'yyyy-mm-dd hh:mm:ss') : ''}}
+              {{scope.row.startTime ? $dateFormat(scope.row.startTime,'yyyy-mm-dd HH:MM:ss') : ''}}
             </template>
           </el-table-column>
           <el-table-column
@@ -143,7 +143,7 @@
             :label="$i.logs.exportAction">
             <template slot-scope="scope">
               <el-button type="text" size="small" v-if="scope.row.status !== 1 && scope.row.status !== 7"
-                         @click="retryExport(scope.row.id)">
+                         @click="retryExport(scope.row.taskNo)">
                 {{$i.logs.retry}}
               </el-button>
               <el-button type="text" size="small" v-else-if="scope.row.fileUrl"
@@ -220,15 +220,11 @@
       },
       getPart(code) {
         return this.$ajax.post(this.$apis.CODE_PART, [code], {cache: true})
-          .then(res => {
-            return res && res[0] ? res[0].codes : [];
-          });
+          .then(res => res && res[0] ? res[0].codes : []);
       },
       retryExport(id) {
         this.$ajax.get(this.$apis.EXPORTFILE_EXECUTE, {taskNo: id})
-          .then(res => {
-            console.log(res)
-          });
+          .then(() => this.getExportData());
       },
       changeTab(paging) {
         switch (this.tabActive) {
