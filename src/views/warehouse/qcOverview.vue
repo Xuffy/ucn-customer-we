@@ -6,7 +6,7 @@
         <div class="status">
             <div class="state">
                 <span>{{ $i.common.qcStatus }}</span>
-                <el-radio-group class="radios" @change="getQcOrderList(true)" v-model="params.qcStatusDictCode"
+                <el-radio-group class="radios" @change="changeQcStatus" v-model="params.qcStatusDictCode"
                                 size="mini">
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
                     <el-radio-button v-for="v in qcStatusOption" :key="v.id" :label="v.code">{{v.name}}
@@ -29,6 +29,7 @@
                 :loading='loading'
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="onAction"
+                @change-sort="val=>{getQcOrderList(val)}"
                 @change-checked='checked'>
             <template slot="header">
                 <div class="fn">
@@ -79,13 +80,6 @@
                     ps: 50,
                     qcOrderNo: "",
                     qcStatusDictCode: "",
-
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ],
                 },
                 tabData: [],
                 selectList: [],
@@ -94,7 +88,7 @@
             }
         },
         methods: {
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getSort(val, key) {
                 console.log(val, key)
             },
@@ -137,12 +131,16 @@
                 //     console.log(res)
                 //   });
             },
+            changeQcStatus(){
+                this.params.pn = 1;
+                this.getQcOrderList();
+            },
             //获取表格data
             getQcOrderList(e) {
-                if (e) {
-                    this.params.pn = 1;
-                }
                 this.loading = true;
+                if(e){
+                    Object.assign(this.params,e);
+                }
                 this.$ajax.post(this.$apis.post_qc_page, this.params)
                     .then(res => {
                         this.loading = false;
@@ -185,7 +183,12 @@
             this.getUnit();
         },
         mounted() {
-            this.setLog({query: {code: 'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>
