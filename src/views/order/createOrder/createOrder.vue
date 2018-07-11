@@ -2039,7 +2039,6 @@
                         this.getDetail();
                     }else if(this.$route.query.ids && this.$route.query.ids.length>0){
                         let ids=this.$route.query.ids;
-                        ids=ids.slice(0,ids.length-1);
                         this.loadingProductTable=true;
                         this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
                             let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
