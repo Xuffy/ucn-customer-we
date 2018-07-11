@@ -74,8 +74,8 @@
       </div>
     </el-dialog> -->
     <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
-      :close-on-press-escape="false" @close="closeAddProduct(0)">
-      <product code="ulogistics_PlanDetail" title="addProduct" type="product" :hideBtn="true" :dataResource="addProductFun"></product>
+      :close-on-press-escape="false">
+      
       <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
@@ -100,7 +100,6 @@
     mapState
   } from 'vuex';
   import attachment from '@/components/common/upload/index';
-  import product from '@/views/product/addProduct'
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
   import oneLine from '@/views/logistic/children/oneLine'
@@ -114,6 +113,7 @@
     name: 'logisticPlanDetail',
     data() {
       return {
+        testval:[],
         planId: '',
         fieldDisplay: null,
         deliveredEdit: false,
@@ -203,7 +203,8 @@
         },
         pageName: '',
         prodFieldDisplay: {},
-        CustomerName: ''
+        CustomerName: '',
+        isContainerInfoLight:false
       }
     },
     components: {
@@ -356,7 +357,10 @@
           pageParams.customerId = res.customerId;
           return pageParams
         })
-        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams);
+        this.$ajax.post(this.$apis.get_order_list_with_page, pageParams).then(res=>{
+          this.testval = res;
+        });
+        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams)
       },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
@@ -447,6 +451,7 @@
                   background:'yellow'
                 })
               })
+              item.fieldDisplay.value = null;
             }
           }
         })
@@ -634,10 +639,12 @@
           this.getPaymentList(res.orderNo);
         }
       },
-      closeAddProduct(status) {
+      closeAddProduct(arr) {
+        arr = [this.testval.datas[0]];
+        //还带有调整 会传入 多个情况的下表数组  循环匹配
         this.showAddProductDialog = false
-        const selectArrData = this.$depthClone(this.$refs.addProduct.selectArrData);
-        if (!status || !selectArrData.length) return this.$refs.addProduct.$refs.multipleTable.clearSelection()
+        const selectArrData = this.$depthClone(arr);
+        if (!arr.length || !selectArrData.length) return
         selectArrData.forEach(a => {
           let sliceStr = this.selectArr.skuIncoterm.find(item => item.code == a.skuIncoterm).name;
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
@@ -708,7 +715,7 @@
               fieldDisplayObj[v.key] = v.value;
             }
           })
-          this.$set(this.productList[item].fieldDisplay, 'value',fieldDisplayObj);
+          this.$set(this.productList[item].fieldDisplay,'value',fieldDisplayObj);
         })
         const id = currrentProduct.id.value
         const vId = +new Date();
@@ -824,6 +831,7 @@
         this.oldPlanObject.fieldDisplay = obj;
       },
       ContainerInfoLight(data,index){
+        this.isContainerInfoLight = true;
         this.containerInfo[index].fieldDisplay=this.$depthClone(data);
         this.oldPlanObject.containerDetail =  this.containerInfo;
       },
@@ -894,6 +902,12 @@
         }).some(el=> el)){
           return
         }
+        //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
+        if(!this.isContainerInfoLight){
+          this.oldPlanObject.containerDetail.forEach(el =>{
+            el.fieldDisplay = null;
+          })
+        }
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
             message: '发送成功，正在跳转...',
@@ -932,11 +946,9 @@
     watch:{
       containerInfo:{
         handler: function (val) {
-          console.log(val)
           val.forEach(el=>{
             this.productList.forEach(item=>{
               if(el.id==item.containerId.value){
-                console.log(el.containerType)
                 item.containerType.value = el.containerType;
               }
             })
@@ -982,9 +994,7 @@
         text-align: right;
         padding-right: 10px;
         box-sizing: border-box;
-      } // .el-select, .el-input {
-      //   flex:1;
-      // }
+      }
     }
     .product-header {
       margin-bottom: 20px;
@@ -993,5 +1003,4 @@
       background:yellow;
     }
   }
-
 </style>
