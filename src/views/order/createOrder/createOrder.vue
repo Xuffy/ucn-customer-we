@@ -1690,7 +1690,7 @@
                             skuOuterCartonUnit: '',
                             skuOuterCartonVolume: null,
                             skuOuterCartonWidth: null,
-                            skuPic: '',
+                            skuPictures: '',
                             skuPkgMethodPic: '',
                             skuPrice: null,
                             skuProductionDates: null,
