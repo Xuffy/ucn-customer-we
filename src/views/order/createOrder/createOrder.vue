@@ -1409,7 +1409,6 @@
                             item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
                             item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
                             item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
-                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
                             item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
                             /**
