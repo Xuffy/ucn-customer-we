@@ -19,21 +19,13 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="download">{{ $i.logistic.download }}</el-button>
           <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
         <div v-if="pageType === 'draft'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="download">{{ $i.logistic.download }}</el-button>
           <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
-        <!-- <div v-if="pageType === 'archive'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        </div> -->
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -42,7 +34,6 @@
         </el-radio-group>
       </div>
     </div>
-    <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
       :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
@@ -236,6 +227,17 @@
           pn: 1,
           ps: 10
         };
+      },
+      download(){
+        const url = this.urlObj[this.pageType][this.viewBy].url
+        const db = this.urlObj[this.pageType][this.viewBy].db
+        const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+        this.pageType === 'draft' && (this.pageParams.planStatus = 1)
+        this.pageType === 'plan' && (this.pageParams.planStatus = 2)
+        let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
+        console.log({lgStatus, ...this.pageParams})
+        return
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams})
       },
       changeSort(arr){
         this.pageParams.sorts = arr.sorts;
