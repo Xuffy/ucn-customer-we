@@ -212,6 +212,7 @@ export default {
       this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
         this.$set(this.pageParams,'skuSupplierIds',res.supplierIds);
         this.$set(this.pageParams,'customerId',res.customerId);
+        console.log(1)
         this.getOrderList();
       })
     },   

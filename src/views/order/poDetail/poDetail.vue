@@ -1428,13 +1428,16 @@
                 if(this.orderForm.incoterm==='1'){
                     let size=new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
                     if([...size].length>1) sameCurrency=false;
-                }else if(this.orderForm.incoterm==='2'){
+                }
+                else if(this.orderForm.incoterm==='2'){
                     let size=new Set(arr.map(e => e.skuExwCurrency).map(e => e.value));
                     if([...size].length>1) sameCurrency=false;
-                }else if(this.orderForm.incoterm==='3'){
+                }
+                else if(this.orderForm.incoterm==='3'){
                     let size=new Set(arr.map(e => e.skuCifCurrency).map(e => e.value));
                     if([...size].length>1) sameCurrency=false;
-                }else if(this.orderForm.incoterm==='4'){
+                }
+                else if(this.orderForm.incoterm==='4'){
                     let size=new Set(arr.map(e => e.skuDduCurrency).map(e => e.value));
                     if([...size].length>1) sameCurrency=false;
                 }
@@ -1621,7 +1624,7 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingProductTable = false;
                 });
             },

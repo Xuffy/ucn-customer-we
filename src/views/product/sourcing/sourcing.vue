@@ -3,14 +3,13 @@
         <!--<product-->
                 <!--:title="title"-->
                 <!--:type="type"></product>-->
-        <overviewPage
+        <overview-page
                 :title="title"
                 :label-width="labelWidth"
-                :form-column="formDatabase"
+                :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
                 :tableButtons="[{label: 'Detail', type: 1}]"
-                :hideBtns="false"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
@@ -40,7 +39,7 @@
                           @size-change="val=>{getData({ps:val})}"
                           :page-sizes="[50,100,200,500]"
                           :page-data="pageData"></v-pagination>
-        </overviewPage>
+        </overview-page>
     </div>
 </template>
 <script>

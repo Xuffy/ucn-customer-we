@@ -10,7 +10,7 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                <el-button type="primary" @click="showModify" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
                 <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
                 <div style="margin-left: 20px;">
@@ -123,11 +123,19 @@ export default {
         this.tabLoad = false;
       });
     },
+    showModify() {
+      this.compareType = 'modify';
+      this.compareInfo._compareName = this.compareInfo.compareName;
+    },
     cancel() {
-      this.tabData.forEach((items, index) => {
-        delete items._disabled;
-        this.$set(this.tabData, index, items);
-      });
+      if (Array.isArray(this.argDisabled)) {
+        let idKey = this.compareBy === 0 ? 'id' : 'inquiryId';
+        this.bakData = this.bakData.filter(i => !this.argDisabled.includes(i[idKey].value));
+        this.argDisabled = [];
+        this.compareInfo.compareName = this.compareInfo._compareName;
+        delete this.compareInfo._compareName;
+        this.renderTabdata();
+      }
       this.compareType = 'only';
     },
     onSubmit(type) { // 保存Compare
@@ -267,7 +275,7 @@ export default {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, {recycleCustomer: 0, ps: 200, ids: arg}).then(res => {
+      this.$ajax.post(url, {recycleCustomer: 0, ps: 100, ids: arg}).then(res => {
         this.argDisabled = this.argDisabled.concat(arg);
         this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
 

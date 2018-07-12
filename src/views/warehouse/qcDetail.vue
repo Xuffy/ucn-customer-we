@@ -155,6 +155,7 @@
                 <el-table-column
                     label="#"
                     align="center"
+                    fixed="left"
                     width="60">
                     <template slot-scope="scope">
                         {{scope.$index+1}}
@@ -271,6 +272,7 @@
                     :data="productInfoData"
                     :buttons="[{'label': 'Detail', type: 1}]"
                     @action="btnClick"
+                    @change-sort="val=>{getProductInfo(val)}"
                     @change-checked="changeChecked"
                     :totalRow="totalRow">
                 <template slot="header">
@@ -457,7 +459,7 @@
                     pn: 1,
                     ps: 200,
                     qcOrderId: this.$route.query.id,
-
+                    qcOrderNo:this.$route.query.code
                     // sorts: [
                     //     {
                     //         orderBy: "",
@@ -468,7 +470,6 @@
                 productInfoData:[],
                 selectList:[],
                 loadingData:false,
-                totalRow:[],
 
                 /**
                  * summary Data
@@ -490,8 +491,31 @@
 
             }
         },
+        computed:{
+            totalRow(){
+                let obj={};
+                if(this.productInfoData.length<=0){
+                    return;
+                }
+                _.map(this.productInfoData,v=>{
+                    _.mapObject(v,(item,key)=>{
+                        if(item._calculate){
+                            obj[key]={
+                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
+                            };
+                        }else{
+                            obj[key] = {
+                                value: ''
+                            };
+                        }
+                    })
+                });
+                return [obj];
+
+            }
+        },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(["setMenuLink"]),
             getQcOrderDetail(){
                 if(this.$route.query.id){
                     this.$ajax.get(`${this.$apis.get_qcDetail}?id=${this.$route.query.id}`)
@@ -518,8 +542,11 @@
                 }
 
             },
-            getProductInfo(){
+            getProductInfo(e){
                 this.loadingProductInfoTable=true;
+                if(e){
+                    Object.assign(this.productInfoConfig,e);
+                }
                 this.$ajax.post(this.$apis.get_qcProductInfo,this.productInfoConfig).then(res=>{
                     this.productInfoData = this.$getDB(this.$db.warehouse.qcDetailProductInfo, res.datas,e=>{
                         if(e.skuQcResultDictCode.value==='WAIT_FOR_QC'){
@@ -562,9 +589,6 @@
 
                             })
                         })
-                        this.totalRow = this.$getDB(this.$db.warehouse.qcDetailProductInfo, [obj],item=>{
-
-                        });
                     }
                     this.loadingProductInfoTable=false;
                     this.selectList=[];
@@ -582,12 +606,13 @@
                     this.paymentTableData=res.datas;
                     _.map(this.paymentTableData,v=>{
                         v.actualPayDt='';
-                    })
+                    });
                     if(this.qcDetail.qcStatusDictCode==='WAITING_QC'){
                         this.disableAdd=true;
                     }else{
                         this.disableAdd=false;
                     }
+                    console.log(this.disableAdd,'this.disableAdd')
                 }).catch(err=>{
                     this.loadingPaymentTable=false;
 
@@ -976,9 +1001,9 @@
         created(){
             this.getCurrency();
             this.loadingData=true;
-            this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                console.log(res)
-            })
+            // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
+            //     console.log(res)
+            // })
             this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE'],{cache:true})
                 .then(res=>{
                     res.forEach(v=>{
@@ -1006,7 +1031,12 @@
                 });
         },
         mounted(){
-            this.setLog({query:{code:'WAREHOUSE'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'WAREHOUSE'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
         watch:{
             selectList(n){
