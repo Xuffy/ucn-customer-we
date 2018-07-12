@@ -553,8 +553,6 @@
             },
 
             addProduct(){
-                // this.disabledLine=this.$copyArr(this.tableDataList);
-
                 this.forceUpdateNumber=Math.random();
                 this.addProductDialogVisible=true;
             },

@@ -21,6 +21,7 @@ import VAddQuickLink from './common/addQuickLink/index';
 import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 import overviewPage from './common/overviewPage/index';
+import VInputNumber from './common/inputNumber/index';
 import VProduct from './common/overviewPage/addProduct';
 
 export {
@@ -45,5 +46,6 @@ export {
   VHistory,
   addNewInqury,
   overviewPage,
+  VInputNumber,
   VProduct
-}
+};

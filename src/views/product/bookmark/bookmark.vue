@@ -1,8 +1,5 @@
 <template>
     <div>
-        <!--<product-->
-        <!--:title="title"-->
-        <!--:type="type"></product>-->
         <overview-page
                 :title="$i.product.bookmark"
                 :label-width="labelWidth"
@@ -17,22 +14,38 @@
                 @change-sort="val=>{getData(val)}"
                 @change-checked="changeChecked">
             <template slot="btns">
-                <el-button @click="createInquiry">
-                    {{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>
-                <el-button @click="createOrder">
-                    {{`${$i.product.createOrder}(${selectList.length})`}}</el-button>
-                <el-button @click="compareProducts"
-                           :disabled="selectList.length<2">
-                    {{`${$i.product.compare}(${selectList.length})`}}
-                </el-button>
-                <el-button @click="addToBookmark"
-                           :loading="loadingAddBookmark"
-                           :disabled="selectList.length===0">
-                    {{`${$i.product.addToBookmark}(${selectList.length})`}}
-                </el-button>
-                <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"
-                           @click="download"
-                           :disabled="selectList.length===0">{{`${$i.product.download}(${selectList.length})`}}</el-button>
+                <el-button
+                        @click="createInquiry"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_INQUIRY'">
+                    {{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button
+                        @click="createOrder"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_ORDER'">
+                    {{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                        @click="compareProducts" :disabled="disabledCompare"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:COMPARE'">
+                    {{$i.product.compare}}({{selectList.length}})</el-button>
+                <el-button
+                        @click="addProduct"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:ADD_PRODUCT'">
+                    {{$i.product.addNewProductEn}}</el-button>
+                <el-button @click="manuallyAddProduct"
+                           v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD'">
+                    {{$i.product.manuallyAdd}}</el-button>
+                <el-button
+                        @click="()=>$refs.importCategory.show()"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:UPLOAD'">
+                    {{$i.button.upload}}</el-button>
+                <el-button
+                        @click="download"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">
+                    {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})</el-button>
+                <el-button
+                        type="danger"
+                        :disabled="selectList.length<1"
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'" @click="deleteBookmark">
+                    {{$i.button.remove}}</el-button>
             </template>
             <v-pagination slot="pagination"
                           @change="val=>{getData({pn:val})}"
@@ -40,6 +53,38 @@
                           :page-sizes="[50,100,200,500]"
                           :page-data="pageData"></v-pagination>
         </overview-page>
+
+        <el-dialog :title="$i.product.followingProductCantAddOrder" :visible.sync="dialogFormVisible" width="50%">
+            <el-table
+                    :data="disabledOrderList"
+                    border
+                    style="width: 100%">
+                <el-table-column
+                        label="#"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.$index+1}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i.product.skuNameEn"
+                        width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.nameEn.value}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        :label="$i.product.skuCode">
+                    <template slot-scope="scope">
+                        {{scope.row.code.value}}
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -62,8 +107,12 @@
                 loadingTable:false,
                 queryConfig:{
                     pn:1,
-                    ps:50
+                    ps:50,
+                    recycle: false,
                 },
+                disabledCompare:true,
+                disabledOrderList:[],
+                dialogFormVisible:false,
 
                 /**
                  * 按钮状态
@@ -95,7 +144,7 @@
                     params.country=params.country.join(',');
                 }
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_buyerProductList, params).then(res => {
+                this.$ajax.post(this.$apis.get_buyerBookmarkList, params).then(res => {
                     this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
                         let noneSellCountry = '';
                         e.noneSellCountry.value.split(',').forEach(v => {
@@ -146,7 +195,7 @@
                         url: '/negotiation/createInquiry',
                     })
                 } else {
-                    let skus=_.pluck(_.pluck(this.selectList, "id"), "value").join(',');
+                    let skus=_.pluck(_.pluck(this.selectList, "skuId"), "value").join(',');
                     let supplierCodes=_.pluck(_.pluck(this.selectList, "supplierCode"), "value").join(',');
                     this.$windowOpen({
                         url: '/negotiation/createInquiry',
@@ -163,6 +212,16 @@
                         url: '/order/create',
                     })
                 } else {
+                    this.disabledOrderList=[];
+                    _.map(this.selectList,v=>{
+                        if(v.customerCreate.value){
+                            this.disabledOrderList.push(v);
+                        }
+                    });
+                    if(this.disabledOrderList.length>0){
+                        return this.dialogFormVisible=true;
+                    }
+
                     let supplierList =_.uniq( _.pluck(_.pluck(this.selectList,'supplierCode'),'value'));
                     if (supplierList.length > 1) {
                         return this.$message({
@@ -188,7 +247,7 @@
                         type: 'success'
                     });
                 }
-                let id = _.pluck(_.pluck(this.selectList,'id'),'value').join(',');
+                let id = _.pluck(_.pluck(this.selectList,'skuId'),'value').join(',');
                 this.$windowOpen({
                     url: 'product/compareDetail/new',
                     params: {
@@ -196,22 +255,44 @@
                     }
                 });
             },
-            addToBookmark(){
-                let id = _.pluck(_.pluck(this.selectList,'id'),'value');
-                this.loadingAddBookmark = true;
-                this.$ajax.post(this.$apis.add_buyerBookmark, id).then(res => {
-                    this.$message({
-                        message: this.$i.product.successfullyAdd,
-                        type: 'success'
-                    });
-                    this.getData();
-                }).finally(() => {
-                    this.loadingAddBookmark = false;
+            addProduct(){},
+            manuallyAddProduct(){
+                this.$windowOpen({
+                    url:'/product/bookmarkManuallyAdd'
                 });
             },
             download(){
-                let ids=_.pluck(_.pluck(this.selectList,"id"),'value');
-                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
+                let ids=_.pluck(_.pluck(this.selectList,"skuId"),'value');
+                if(ids.length>0){
+                    this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
+                }else{
+                    let params=this.$depthClone(this.queryConfig);
+                    if(_.isArray(params.country)){
+                        params.country=params.country.join(',');
+                    }
+                    this.$fetch.export_task('SKU_PURCHASE_EXPORT_BOOKMARK_PARAMS',params);
+                }
+            },
+            deleteBookmark(){
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
+                    type: 'warning'
+                }).then(() => {
+                    this.loadingTable=true;
+                    let id=_.pluck(_.pluck(this.selectList,'id'),'value');
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,id).then(res=>{
+                        this.selectList=[];
+                        this.$message({
+                            type: 'success',
+                            message: this.$i.product.deleteSuccess
+                        });
+                        this.getData();
+                    });
+
+                }).finally(() => {
+
+                });
             },
 
             getUnit(){
@@ -248,6 +329,11 @@
         },
         created(){
             this.getUnit();
+        },
+        watch:{
+            selectList(){
+
+            },
         },
     }
 </script>
