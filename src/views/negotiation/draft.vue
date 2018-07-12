@@ -74,7 +74,7 @@ export default {
   },
   created() {
     let type = this.$route.params.type;
-    if (type !== 'compare' || type !== 'inquiry') {
+    if (type !== 'compare' && type !== 'inquiry') {
       this.$router.push({name: 'negotiationInquiry'});
       return;
     }
@@ -155,11 +155,10 @@ export default {
       this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
         ids: this.checkedArg,
         action: type
-      })
-        .then(res => {
-          this.getInquiryList();
-          this.checkedArg = [];
-        });
+      }).then(res => {
+        this.getInquiryList();
+        this.checkedArg = [];
+      });
     },
     submit() { // 提交草稿
       switch (this.$route.params.type) {
