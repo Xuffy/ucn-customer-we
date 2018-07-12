@@ -113,14 +113,14 @@
                 if(e){
                     Object.assign(this.warehouseConfig,e);
                 }
+                this.selectList=[];
                 this.$ajax.post(this.$apis.get_buyerWarehouseOverview,this.warehouseConfig).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.warehouse.warehouseOverview, res.datas,e=>{
                         e.inboundDate.value=this.$dateFormat(e.inboundDate.value,'yyyy-mm-dd');
                         e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
                     });
                     this.pageData=res;
-                    this.loadingTable=false;
-                }).catch(err=>{
+                }).finally(err=>{
                     this.loadingTable=false;
                 });
             },
@@ -166,7 +166,10 @@
                 else{
                     ids=_.pluck(_.pluck(this.selectList,'id'),'value');
                 }
-                this.$fetch.export_task('WAREHOUES',this.warehouseConfig);
+                let params=this.$depthClone(this.warehouseConfig);
+                params.inboundSkuIds=ids;
+                return console.log(params,'params')
+                this.$fetch.export_task('WAREHOUES',params);
             },
 
             /**
