@@ -93,7 +93,7 @@
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
                 tableDataList:[],       //表格数据展示
-                addProductTitle:'哇哈哈',
+                addProductTitle:'',
                 totalDataList:[],       //因为要分页，所以先取一个全部数据
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
                 selectList:[],          //保存选择的数剧
@@ -292,7 +292,7 @@
               console.log(this.selectedData)
               if(_.uniq(this.selectNumber).length>1){
                 this.$message({
-                  message: '供应商只能单选!',
+                  message: this.$i.common.supplierSearch,
                   type: 'warning',
                 });
                 return false;
