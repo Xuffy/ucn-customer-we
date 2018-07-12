@@ -617,7 +617,7 @@
                 </el-button>
                 <el-button
                         v-authorize="'ORDER:DETAIL:DOWNLOAD'"
-                        :disabled="loadingPage || disableConfirm || hasCancelOrder"
+                        :disabled="loadingPage"
                         @click="downloadOrder"
                         :loading="disableClickConfirm"
                         type="primary">
@@ -2487,7 +2487,7 @@
                 });
             },
             downloadOrder() {
-
+                this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
             },
             cancelOrder() {
                 this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
