@@ -103,7 +103,7 @@ export default {
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions(['setMenuLink']),
+    ...mapActions(['setMenuLink', 'setDic']),
     upData() {
       let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
       this.getListByIds().then(this.getCompareList).then(datas => {

@@ -114,7 +114,7 @@ export default {
     this.getBaseData().then(this.gettabData, this.gettabData);
   },
   methods: {
-    ...mapActions(['setMenuLink']),
+    ...mapActions(['setMenuLink', 'setDic']),
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
