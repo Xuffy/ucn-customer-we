@@ -291,13 +291,11 @@
       },{
         path: '/logistic/archiveDraft',
         label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
       }];
-      if(this.pageType=="loadingList"){
-        menuList.push({
-          path: '/logistic/archiveLoadingList',
-          label: this.$i.logistic.archiveLoadingList
-        })
-      }
       this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]

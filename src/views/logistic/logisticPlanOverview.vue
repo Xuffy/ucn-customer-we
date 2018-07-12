@@ -220,13 +220,11 @@
       },{
         path: '/logistic/archiveDraft',
         label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
       }];
-      if(this.pageType=="loadingList"){
-        menuList.push({
-          path: '/logistic/archiveLoadingList',
-          label: this.$i.logistic.archiveLoadingList
-        })
-      }
       this.setMenuLink(menuList);
       this.fetchData();
       // this.getContainerType() 接手注释
