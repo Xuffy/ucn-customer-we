@@ -407,6 +407,7 @@
         </div>
 
         <div class="footBtn">
+            <el-button :disabled="loadingData" type="primary" @click="download">{{$i.warehouse.download}}</el-button>
             <el-button @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
         </div>
 
@@ -987,6 +988,9 @@
 
                 });
             },
+            download(){
+                this.$fetch.export_task('WAREHOUES',{qcOrderNos:[this.qcDetail.qcOrderNo]});
+            },
             cancel(){
                 window.close();
             },
@@ -1001,9 +1005,6 @@
         created(){
             this.getCurrency();
             this.loadingData=true;
-            // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-            //     console.log(res)
-            // })
             this.$ajax.post(this.$apis.get_partUnit,['QC_TYPE','QC_MD','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','PB_CODE'],{cache:true})
                 .then(res=>{
                     res.forEach(v=>{

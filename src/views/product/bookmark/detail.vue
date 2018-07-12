@@ -259,7 +259,6 @@
 </template>
 
 <script>
-    import addTable from '../addlineTable'
     import compareList from '../compareList'
     import product from '../addProduct'
     import {VTable,VUpload,VPagination,VImage} from '@/components/index'
@@ -268,7 +267,6 @@
     export default {
         name: "detail",
         components:{
-            addTable,
             compareList,
             VTable,
             product,

@@ -15,7 +15,7 @@
             </el-input>
         </div>
         <div class="btns">
-            <span>
+            <span v-show="$route.query.type !== 'archive'">
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
@@ -93,7 +93,7 @@
                 compareName:'',         //对比的名称
                 screenTableStatus:[],   //表格筛选状态
                 tableDataList:[],       //表格数据展示
-                addProductTitle:'哇哈哈',
+                addProductTitle:'',
                 totalDataList:[],       //因为要分页，所以先取一个全部数据
                 disabledLine:[],        //在弹出框中默认置灰不能操作的条目
                 selectList:[],          //保存选择的数剧
@@ -192,6 +192,23 @@
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
                     })
+                }else if (this.$route.query.type==='archive'){
+                  this.params.recycle = true;
+                  this.loading = true;
+                  this.compareName=this.$route.query.compareName;
+                  this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                    this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
+                      e.type.value=this.$change(this.options.type,'type',e,true).name;
+                      e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
+                      return e;
+                    });
+                    this.changeHighlight(true);
+                    this.disabledLine=this.tableDataList;
+                    this.loading = false;
+                    this.allowDeleteCompare=false;
+                    this.allowBottomClick=false;
+                  })
+
                 }else{
                   this.loading = true;
                   this.compareName=this.$route.query.compareName;
@@ -275,7 +292,7 @@
               console.log(this.selectedData)
               if(_.uniq(this.selectNumber).length>1){
                 this.$message({
-                  message: '供应商只能单选!',
+                  message: this.$i.common.supplierSearch,
                   type: 'warning',
                 });
                 return false;
@@ -427,6 +444,7 @@
                       this.disabledSaveCompare=false;
                     });
                 }else{
+                  params.id = ''
                   this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
                     let compareId=res;
                     this.$router.push({

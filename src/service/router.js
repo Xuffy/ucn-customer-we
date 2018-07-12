@@ -250,16 +250,16 @@ export const routerMap = [
         component: () => import ('../views/supplier/compare/overview.vue')
       },
       {
-        path: 'compareRecycleBin',
-        name: 'supplierCompareRecycleBin',
+        path: 'compareArchive',
+        name: 'supplierCompareArchive',
         hidden: true,
         meta: {
           draft: false,
           recycleBin: true,
           log: true,
-          name: 'Compare RecycleBin'
+          name: 'Compare Archive'
         },
-        component: () => import ('../views/supplier/compare/recycleBin.vue')
+        component: () => import ('../views/supplier/compare/archiveSupplier.vue')
       }
     ]
   },
@@ -500,7 +500,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          importTask: false,
+          importTask: true,
           name: $i.router.logisticPlanOverview
         },
         component: () => import('../views/logistic/logisticPlanOverview')

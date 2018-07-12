@@ -1,12 +1,9 @@
 <template>
     <div>
-        <!--<product-->
-                <!--:title="title"-->
-                <!--:type="type"></product>-->
         <overview-page
-                :title="title"
+                ref="mainProduct"
                 :label-width="labelWidth"
-                :form-column="$db.product.overview"
+                :form-column="formColumn"
                 :tableData="productData"
                 :pageData="pageData"
                 :tableButtons="[{label: $i.product.detail, type: 1}]"
@@ -16,24 +13,10 @@
                 @tableBtnClick="btnClick"
                 @change-sort="val=>{getData(val)}"
                 @change-checked="changeChecked">
-            <template slot="btns">
-                <el-button @click="createInquiry">
-                    {{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>
-                <el-button @click="createOrder">
-                    {{`${$i.product.createOrder}(${selectList.length})`}}</el-button>
-                <el-button @click="compareProducts"
-                           :disabled="selectList.length<2">
-                    {{`${$i.product.compare}(${selectList.length})`}}
-                </el-button>
-                <el-button @click="addToBookmark"
-                           :loading="loadingAddBookmark"
-                           :disabled="selectList.length===0">
-                    {{`${$i.product.addToBookmark}(${selectList.length})`}}
-                </el-button>
-                <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"
-                           @click="download"
-                           :disabled="selectList.length===0">{{`${$i.product.download}(${selectList.length})`}}</el-button>
-            </template>
+            <div slot="footerBtn">
+                <el-button @click="postData" :disabled="loadingTable" type="primary">{{$i.product.sure}}</el-button>
+                <el-button @click="cancel" :disabled="loadingTable" type="primary">{{$i.product.cancel}}</el-button>
+            </div>
             <v-pagination slot="pagination"
                           @change="val=>{getData({pn:val})}"
                           @size-change="val=>{getData({ps:val})}"
@@ -43,12 +26,31 @@
     </div>
 </template>
 <script>
-    import {overviewPage,VPagination} from '@/components/index'
+    import overviewPage from './index';
+    import VPagination from '../table/pagination';
     export default {
         name:"sourcing",
         components:{
             overviewPage,
             VPagination
+        },
+        props:{
+            formColumn:{
+                type:Object,
+                default:()=>{
+                    return {}
+                }
+            },
+            queryType:{
+                type:String,
+                default:''
+            },
+            disabledLine:{
+                type:Array,
+                default:()=>{
+                    return [];
+                }
+            },
         },
         data(){
             return{
@@ -94,8 +96,14 @@
                 if(_.isArray(params.country)){
                     params.country=params.country.join(',');
                 }
+                let url='';
+                if(this.queryType==='product'){
+                    url=this.$apis.get_buyerProductList;
+                }else if(this.queryType==='bookmark'){
+                    url=this.$apis.get_buyerBookmarkList;
+                }
                 this.loadingTable=true;
-                this.$ajax.post(this.$apis.get_buyerProductList, params).then(res => {
+                this.$ajax.post(url, params).then(res => {
                     this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
                         let noneSellCountry = '';
                         e.noneSellCountry.value.split(',').forEach(v => {
@@ -115,10 +123,19 @@
                         e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
                         e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
                         e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
-
-                        if(this.disableBookmarkChoose && e.bookmarkId.value){
-                            this.$set(e,'_disabled',true);
-                        }
+                        _.map(this.disabledLine,item=>{
+                            if(this.queryType==='product'){
+                                if(item===e.id.value){
+                                    this.$set(e,'_disabled',true);
+                                    this.$set(e,'_checked',true);
+                                }
+                            }else if(this.queryType==='bookmark'){
+                                if(item===e.skuId.value){
+                                    this.$set(e,'_disabled',true);
+                                    this.$set(e,'_checked',true);
+                                }
+                            }
+                        });
                         return e;
                     });
                     this.pageData=res;
@@ -135,6 +152,19 @@
             },
             changeChecked(e){
                 this.selectList=e;
+            },
+            postData(){
+                let arr=[];
+                _.map(this.selectList,v=>{
+                    if(v._checked && !v._disabled){
+                        arr.push(v);
+                    }
+                });
+                this.$emit('sure',this.$depthClone(arr),this.queryType);
+            },
+            cancel(){
+                this.$refs.mainProduct.clear();
+                this.$emit('cancel')
             },
 
             /**
@@ -211,9 +241,8 @@
             },
             download(){
                 let ids=_.pluck(_.pluck(this.selectList,"id"),'value');
-                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
+                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',ids);
             },
-
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
                     res.forEach(v => {
