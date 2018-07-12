@@ -129,7 +129,7 @@
         </table>
 
         <div v-else class="empty">
-          {{$i.hintMessage.noData}}
+          {{loading ? $i.table.gettingData : $i.hintMessage.noData}}
         </div>
       </div>
     </div>
