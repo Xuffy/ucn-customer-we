@@ -1417,22 +1417,12 @@
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
-<<<<<<< HEAD
                             item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}) || {}).name;
-=======
-                            item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)})||{}).name;
->>>>>>> test
                             item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
                             item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
                             item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
                             item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
                             item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
-<<<<<<< HEAD
-=======
-                            /**
-                             * 后续处理
-                             * */
->>>>>>> test
                             item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
                         }
                     });
@@ -1848,18 +1838,11 @@
                             item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
                             item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-<<<<<<< HEAD
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-=======
                             // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            /**
-                             * 后续处理
-                             * */
-                            // item.skuCategoryId._value=item.skuCategoryName.value;
->>>>>>> test
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
