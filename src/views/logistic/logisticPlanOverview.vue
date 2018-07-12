@@ -1,8 +1,5 @@
 <template>
   <div class="logistic-plan-overview">
-    <router-link to="/logistic/archivePlan">archivePlan</router-link>
-    <router-link to="/logistic/archiveDraft">archiveDraft</router-link>
-    <router-link to="/logistic/archiveLoadingList">archiveLoadingList</router-link>
     <div class="hd-top">{{ headerText[pageType] }}</div>
     <div class="status">
       <div class="btn-wrap">
@@ -209,17 +206,33 @@
       }
     },
     mounted() {
-      this.setMenuLink({
+      let menuList = [{
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
         label: this.$i.common.log
-      });
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      }];
+      if(this.pageType=="loadingList"){
+        menuList.push({
+          path: '/logistic/archiveLoadingList',
+          label: this.$i.logistic.archiveLoadingList
+        })
+      }
+      this.setMenuLink(menuList);
       this.fetchData();
       // this.getContainerType() 接手注释
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setMenuLink']),
+      ...mapActions(['setMenuLink']),
       initPage(){
         this.pageParams = {
           pn: 1,

@@ -277,11 +277,28 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      }];
+      if(this.pageType=="loadingList"){
+        menuList.push({
+          path: '/logistic/archiveLoadingList',
+          label: this.$i.logistic.archiveLoadingList
+        })
+      }
+      this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.registerRoutes()
@@ -297,7 +314,7 @@
       })
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       //初始化页面数据
       pageInit(){
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
