@@ -30,6 +30,9 @@
   "enterPasswordAgain": "请再次输入密码",
   "theTwoPasswordsDoNotMatch": "两次输入密码不一致",
   "pleaseKeepTheSamePasswordYouEnteredTwice": "两次输入的密码请保持一致",
-  "cannotPassword": "新密码不能与旧密码相同"
+  "cannotPassword": "新密码不能与旧密码相同",
+  "sureDelete": "确认删除",
+  "noLength": "不能超过100条",
+  "sureDeleteToCompare": "确认删除该compare"
 
 }
