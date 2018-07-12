@@ -1,23 +1,22 @@
 <template>
-    <div class="place-logistic-plan">
-        <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + ' ' + logisticsNo}}</div>
-        <div class="hd-top" v-if="$route.name=='placeLogisticPlan'">{{ $i.logistic.placeNewLogisticPlan }}</div>
-        <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + ' ' + logisticsNo}}</div>
-        <div class="hd-top" v-if="$route.name=='logisticDraftDetail'">{{ $i.logistic.logisticDraftDetail + ' ' + logisticsNo}}</div>
-        <form-list :DeliveredEdit="deliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange"
-                   @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
-        />
-        <el-row :gutter="10">
-            <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
-            <div class="input-item">
-                <span>{{ $i.logistic.remark }}:</span>
-                <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
-                          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
-                <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
-            'color': '#f56c6c',
-            'text-shadow': '2px 1px 2px'
+  <div class="place-logistic-plan">
+    <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + ' ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='placeLogisticPlan'">{{ $i.logistic.placeNewLogisticPlan }}</div>
+    <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + ' ' + logisticsNo}}</div>
+    <div class="hd-top" v-if="$route.name=='logisticDraftDetail'">{{ $i.logistic.logisticDraftDetail + ' ' + logisticsNo}}</div>
+    <form-list :DeliveredEdit="deliveredEdit" name="BasicInfo" :fieldDisplay="fieldDisplay" :showHd="false" @selectChange="formListSelectChange"
+      @hightLightModifyFun="hightLightModifyFun" :edit="edit" :listData.sync="basicInfoArr" :selectArr="selectArr" :title="$i.logistic.basicInfoTitle"
+    />
+    <el-row :gutter="10">
+      <!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"> -->
+      <div class="input-item">
+        <span>{{ $i.logistic.remark }}:</span>
+        <el-input @change="hightLightModifyFun({remark:remark},'remark')" :class="[{definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty('remark')},'el-input']"
+          type="textarea" resize="none" :autosize="{ minRows: 3 }" placeholder="请输入内容" v-model="remark" v-if="edit"></el-input>
+        <p v-else :style="fieldDisplay&&fieldDisplay.hasOwnProperty('remark') ? {
+            'background': 'yellow',
+            'padding':'5px'
           } : ''">{{ remark }}</p>
-<<<<<<< HEAD
       </div>
       <!-- </el-col> -->
       <div class="input-item">
@@ -38,36 +37,14 @@
         @ContainerInfoLight="ContainerInfoLight"
       />
     </div>
-=======
-            </div>
-            <!-- </el-col> -->
-            <div class="input-item">
-                <span>{{ $i.logistic.attachment }}:</span>
-                <attachment ref="attachment" :readonly="attachmentReadonly" :list="attachmentList" :limit="20" />
-            </div>
-            <!-- <one-line :edit="edit" :list="exchangeRateList" :title="$i.logistic.exchangeRate"/> -->
-        </el-row>
-        <form-list :DeliveredEdit="deliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
-        />
-        <form-list :DeliveredEdit="deliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
-                   :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
-        <div>
-            <div class="hd"></div>
-            <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-            <container-info :tableData.sync="containerInfo" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer"
-                            @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType" :currencyCode="oldPlanObject.currency"
-            />
-        </div>
->>>>>>> test
 
-        <!-- <div v-if="planId && feeList"> -->
-        <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
-            <div class="hd"></div>
-            <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
-            <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
-        </div>
+    <!-- <div v-if="planId && feeList"> -->
+    <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
+      <div class="hd"></div>
+      <div class="hd active">{{ $i.logistic.feeInfoTitle }}</div>
+      <fee-info :edit="edit" :tableData.sync="feeList"></fee-info>
+    </div>
 
-<<<<<<< HEAD
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
@@ -84,49 +61,9 @@
         <div slot="header" class="product-header" v-if="edit">
           <el-button type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
-=======
-        <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
-            <div class="hd"></div>
-            <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-            <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
-                     @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
-                     :currencyCode="oldPlanObject.currency" />
->>>>>>> test
         </div>
-        <div>
-            <div class="hd"></div>
-            <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-            <!-- <v-table :data.sync="productList" @action="action" :buttons="edit ? productbButtons : null" @change-checked="selectProduct"> -->
-            <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
-                     @change-checked="selectProduct">
-                <div slot="header" class="product-header" v-if="edit">
-                    <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button>
-                    <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
-                </div>
-            </v-table>
-        </div>
-        <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
-                   @close="closeModify(0)">
-            <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun"
-                            :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" />
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
-                <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
-            </div>
-        </el-dialog>
-        <el-dialog :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
-                   :close-on-press-escape="false" @close="closeAddProduct(0)">
-            <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
-                <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
-            </div>
-        </el-dialog>
-        <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
-        <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
-              :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
+      </v-table>
     </div>
-<<<<<<< HEAD
     <el-dialog width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false">
       <overviewPage
@@ -153,20 +90,14 @@
       @closed="$refs.productInfo.update()"
     ></v-history-modify>
   </div>
-=======
->>>>>>> test
 </template>
 <script>
   import {
     containerInfo,
     selectSearch,
-<<<<<<< HEAD
     VTable,
     VHistoryModify,
     overviewPage
-=======
-    VTable
->>>>>>> test
   } from '@/components/index';
   import {
     mapActions,
@@ -181,11 +112,6 @@
   import btns from '@/views/logistic/children/btns'
   import productModify from '@/views/logistic/children/productModify'
   import addProduct from '@/views/logistic/children/addProduct'
-<<<<<<< HEAD
-=======
-
-  // import {basicInfoInput, basicInfoSelector, basicInfoDate, basicInfoObj, transportInfoObj } from '@/database/logistic/plan/staticData'
->>>>>>> test
 
   export default {
     name: 'logisticPlanDetail',
@@ -228,9 +154,9 @@
         selectArr: {
           containerType: [],
           permitedForTransportation: [{
-            code: '1',
-            name: this.$i.logistic.yes
-          },
+              code: '1',
+              name: this.$i.logistic.yes
+            },
             {
               code: '0',
               name: this.$i.logistic.no
@@ -297,13 +223,9 @@
       btns,
       productModify,
       addProduct,
-<<<<<<< HEAD
       messageBoard,
       VHistoryModify,
       overviewPage
-=======
-      messageBoard
->>>>>>> test
     },
     computed: {
       productListTotal() {
@@ -340,10 +262,10 @@
       },
       productbButtons() {
         let aArr = [{
-          label: 'Negociate',
-          type: 1,
-          disabled: !this.edit
-        },
+            label: 'Negociate',
+            type: 1,
+            disabled: !this.edit
+          },
           {
             label: 'Detail',
             type: 3
@@ -443,7 +365,6 @@
           }
         })
       },
-<<<<<<< HEAD
       getSupplierIds(arg) {
         let pageParams = {
           pn: 1,
@@ -459,12 +380,6 @@
           pageParams.skuSupplierIds = res.supplierIds;
           pageParams.customerId = res.customerId;
           this.addProductFromOrder(pageParams);
-=======
-      getSupplierIds() {
-        this.showAddProductDialog = true;
-        this.$nextTick(() => {
-          this.$refs.addProduct.getSupplierIds();
->>>>>>> test
         })
       },
       ProductFromOrderDetail(e){
@@ -549,7 +464,6 @@
           return el;
         }));
         this.productList.forEach((item) => {
-<<<<<<< HEAD
           if(!this.isCopy){
             if (item.fieldDisplay.value) {
               _.mapObject(item.fieldDisplay.value, (v, k) => {
@@ -559,12 +473,6 @@
               })
               item.fieldDisplay.value = null;
             }
-=======
-          if (item.fieldDisplay.value) {
-            _.mapObject(item.fieldDisplay.value, (v, k) => {
-              this.$set(item[k], '_color', 'red')
-            })
->>>>>>> test
           }
         })
       },
@@ -671,7 +579,6 @@
       getProductHistory(productId, status, i) {
         const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
-<<<<<<< HEAD
         if(productId){
           if(status==1){
             this.productModifyList = [currentProduct];
@@ -691,30 +598,6 @@
           this.productModifyList = [currentProduct]
           this.$refs.HM.init(this.productModifyList, []);
         }
-=======
-        productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-          this.productModifyList =  res.history.length ? status==1 ? [currentProduct] : this.$getDB(this.$db.logistic.productModify,
-            res.history.map(el => {
-              let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-                item => item.code == el.shipmentStatus)
-              el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-              return el;
-            })): [currentProduct];
-        }) : this.productModifyList = [currentProduct];
-
-
-        // productId ? this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {  //以前版本 历史修改记录也会返回
-        //   res.history.length ? this.productModifyList = [currentProduct, ...this.$getDB(this.$db.logistic.productModify,
-        //       res.history.map(el => {
-        //         let ShipmentStatusItem = this.selectArr.ShipmentStatu && this.selectArr.ShipmentStatus.find(
-        //           item => item.code == el.shipmentStatus)
-        //         el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-        //         return el;
-        //       }))] :
-        //     (this.productModifyList = [currentProduct])
-        // }) :
-        // this.productModifyList = [currentProduct]
->>>>>>> test
       },
       addPayment() {
         const obj = this.basicInfoArr.find(a => a.key === 'exchangeCurrency')
@@ -761,11 +644,11 @@
         })
       },
       updatePaymentWithView({
-                              i,
-                              edit,
-                              status,
-                              res
-                            }) {
+        i,
+        edit,
+        status,
+        res
+      }) {
         const obj = {
           ...this.paymentList[i],
           edit,
@@ -829,23 +712,13 @@
           })
         })
       },
-<<<<<<< HEAD
       closeModify(data) {
         if (!data.length) {
-=======
-      productModifyfun(obj) {
-        if (this.pageTypeCurr.slice(-6) == 'Detail') {
-          this.prodFieldDisplay = obj;
-        }
-      },
-      closeModify(status) {
-        if (!status) {
->>>>>>> test
           this.productModifyList = [];
           this.showProductDialog = false;
           return
         };
-        const currrentProduct = this.productModifyList[0]
+        const currrentProduct = data[0]
         let obj = _.mapObject(currrentProduct, v => Number(v.value) || v.value)
         if (this.$validateForm(obj, this.$db.logistic.dbProductInfo)) {
           return false;
@@ -1099,17 +972,22 @@
     },
     watch:{
       containerInfo:{
-        handler: function (val, oldVal) {
-          console.log(val)
+        handler: function (val) {
+          val.forEach(el=>{
+            this.productList.forEach(item=>{
+              if(el.id==item.containerId.value){
+                item.containerType.value = el.containerType;
+              }
+            })
+          })
         },
         deep: true
       }
     }
   }
-
+8365380501769216
 </script>
 <style lang="less" scoped>
-<<<<<<< HEAD
   .place-logistic-plan {
     margin-top: 20px;
     position: relative;
@@ -1152,52 +1030,4 @@
       background:yellow;
     }
   }
-=======
-    .place-logistic-plan {
-        margin-top: 20px;
-        position: relative;
-        padding-bottom: 80px;
-        .hd-top {
-            font-size: 18px;
-            color: #666;
-            height: 50px;
-            line-height: 50px;
-            border-bottom: 1px solid #ccc;
-            padding: 0 15px;
-        }
-        .hd {
-            height: 40px;
-            line-height: 40px;
-            border-bottom: 1px solid #ccc;
-            padding: 0 15px;
-            font-weight: bold;
-            &.active {
-                border: none;
-            }
-        }
-        .input-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            span {
-                width: 180px;
-                display: inline-block;
-                font-size: 12px;
-                text-align: right;
-                padding-right: 10px;
-                box-sizing: border-box;
-            } // .el-select, .el-input {
-            //   flex:1;
-            // }
-        }
-        .product-header {
-            margin-bottom: 20px;
-        }
-        /deep/.definedStyleClass textarea {
-            background: #f56c6c;
-            color: #fff;
-        }
-    }
-
->>>>>>> test
 </style>

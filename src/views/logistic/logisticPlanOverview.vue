@@ -229,6 +229,7 @@
         };
       },
       download(){
+        console.log({lgStatus, ...this.pageParams})
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
@@ -254,9 +255,9 @@
         this.fetchDataList()
       },
       deleteData() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
@@ -265,7 +266,7 @@
             this.selectCount = []
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: this.$i.logistic.operationSuccess
             })
           })
         })

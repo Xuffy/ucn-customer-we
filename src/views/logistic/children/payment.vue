@@ -10,14 +10,14 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.paymentItem" align="center" width="140">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.name" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$i.logistic.supplierName" align="center" width="140">
         <template slot-scope="scope">
           <el-col v-if="scope.row.edit">
-            <el-select v-model="scope.row.payToCompanyId" filterable placeholder="请选择">
+            <el-select v-model="scope.row.payToCompanyId" filterable :placeholder="$i.logistic.placeholder">
               <el-option
                 v-for="item in selectArr.supplier"
                 :key="item.value"
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.estAmount" prop="planPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.planPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.planPayAmount }}</span>
         </template>
       </el-table-column>
@@ -52,7 +52,7 @@
       </el-table-column>
       <el-table-column :label="$i.logistic.actAmount" prop="actualPayAmount" align="center" width="180">
         <template slot-scope="scope">
-          <el-input placeholder="请输入内容" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
+          <el-input :placeholder="$i.logistic.placeholder" v-model="scope.row.actualPayAmount" v-if="scope.row.edit"></el-input>
           <span v-else>{{ scope.row.actualPayAmount }}</span>
         </template>
       </el-table-column>
@@ -256,9 +256,9 @@ export default {
       this.$emit('updatePaymentWithView', { i, edit: false })
     },
     switchStatus (i, url,title) {
-      this.$confirm('此操作将'+title+'该数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+        confirmButtonText: this.$i.logistic.confirm,
+        cancelButtonText: this.$i.logistic.cancel,
         type: 'warning'
       }).then(() => {
         this.addPaymentBtn = false;
