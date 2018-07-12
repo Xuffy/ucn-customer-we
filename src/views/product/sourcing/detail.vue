@@ -223,14 +223,12 @@
 
 <script>
     import {VTable,VUpload,VPagination,VImage} from '@/components/index'
-    import addTable from '../addlineTable'
     import compareList from '../compareList'
     import {mapActions} from 'vuex'
 
     export default {
         name: "detail",
         components:{
-            addTable,
             compareList,
             VTable,
             VUpload,

@@ -735,7 +735,7 @@
 
       },
       disabledUser(userId, type = true) {
-        this.$confirm(`是否确认${type ? 'disable' : 'enable'}用户`, '提示', {
+        this.$confirm(type ? this.$i.setting.disabledUser : this.$i.setting.enabledUser, this.$i.hintMessage.systemHints, {
           confirmButtonText: this.$i.button.confirm,
           cancelButtonText: this.$i.button.ccancel,
           type: 'warning'
@@ -762,7 +762,7 @@
             callback: `${config.ENV.LOGIN_URL}/#/activation?activeToken=%s&email=%s&redirect=${Base64.encode(window.location.origin + '/#/login')}`
           })
           .then(res => {
-            this.$message.success('邀请成功');
+            this.$message.success(this.$i.setting.invitationSuccess);
           }).finally(err => {
           this.inviteUserLoading = false;
         });

@@ -334,41 +334,29 @@
         </el-dialog>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
+                :close-on-click-modal="false"
                 :visible.sync="productTableDialogVisible"
-                width="70%"
-                top="2vh">
+                width="70%">
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
-                    <overview-page
+                    <v-product
+                            ref="addProduct"
+                            queryType="product"
                             :form-column="$db.product.overview"
-                            :pageData="productPageData"
-                            :tableButtons="[{label: $i.product.detail, type: 1}]"
-                            tableCode="udata_purchase_sku_overview"
-                            :loadingTable="loadingDialogProduct"
-                            :tableData="productData">
-                    </overview-page>
-
-                    <!--<v-product-->
-                            <!--:disabledLine="disabledProductLine"-->
-                            <!--:forceUpdateNumber="updateProduct"-->
-                            <!--:hideBtn="true"-->
-                            <!--:isInModify="true"-->
-                            <!--:type="type1"-->
-                            <!--@handleOK="handleProductOk"-->
-                            <!--@handleCancel="handleCancel"></v-product>-->
+                            :disabledLine="disableProductLine"
+                            @sure="handleSure"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
                     <v-product
-                            :disablePostCustomerBookmark="true"
-                            :disablePostCustomerCreate="true"
-                            :disabledLine="disabledProductLine"
-                            :forceUpdateNumber="updateBookmark"
-                            :hideBtn="true"
-                            :isInModify="true"
-                            @handleOK="handleProductOk"
-                            @handleCancel="handleCancel"
-                            :type="type2"></v-product>
+                            ref="addBookmark"
+                            queryType="bookmark"
+                            :form-column="$db.product.overview"
+                            :disabledLine="disableProductLine"
+                            @sure="handleSure"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -778,8 +766,7 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage} from '@/components/index'
-    import VProduct from '@/views/product/addProduct';
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -789,9 +776,9 @@
             page:VPagination,
             selectSearch,
             VUpload,
-            VProduct,
             VHistoryModify,
-            overviewPage
+            overviewPage,
+            VProduct
         },
         data(){
             return{
@@ -860,24 +847,7 @@
                 /**
                  * 弹出框data配置
                  * */
-                productData:[],
-                productPageData:{},
-                productDialogQuery:{
-                    pn:1,
-                    ps:50
-                },
-                selectProductList:[],
-                loadingDialogProduct:false,
-
-                bookmarkData:[],
-                bookmarkPageData:{},
-                bookmarkDialogQuery:{
-                    pn:1,
-                    ps:50
-                },
-                selectBookmarkList:[],
-                loadingDialogBookmark:false,
-
+                disableProductLine:[],
                 pageData:{},
                 loadingTable:false,
                 tableDataList:[],
@@ -1373,51 +1343,25 @@
                 this.selectProductInfoTable=e;
             },
             addProduct(){
+                this.disableProductLine=[];
+                if(this.productTableData.length>0){
+                    _.map(this.productTableData,v=>{
+                        if(!v._remark){
+                            this.disableProductLine.push(v.skuId.value);
+                        }
+                    })
+                }
                 this.productTableDialogVisible=true;
                 this.activeTab='product';
-                this.getDialogProductData();
+                this.$nextTick(()=>{
+                    if(this.$refs.addProduct){
+                        this.$refs.addProduct.getData();
+                    }
+                    if(this.$refs.addBookmark){
+                        this.$refs.addBookmark.getData();
+                    }
+                })
             },
-            getDialogProductData(){
-                let params=this.$depthClone(this.productDialogQuery);
-                if(_.isArray(params.country)){
-                    params.country=params.country.join(',');
-                }
-                this.loadingDialogProduct=true;
-                this.$ajax.post(this.$apis.get_buyerProductList, params).then(res => {
-                    this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
-                        let noneSellCountry = '';
-                        e.noneSellCountry.value.split(',').forEach(v => {
-                            this.countryOption.forEach(m => {
-                                if (m.code === v) {
-                                    noneSellCountry += (m.name + ',');
-                                }
-                            })
-                        });
-                        noneSellCountry = noneSellCountry.slice(0, noneSellCountry.length - 1);
-                        e.noneSellCountry.value = noneSellCountry;
-                        console.log(this.skuStatusTotalOption,'this.statusOption')
-                        console.log(e.status.value,'e.status.value')
-                        e.status._value=e.status.value?_.findWhere(this.skuStatusTotalOption,{code:String(e.status.value)}).name:'';
-                        // e.status.value = this.$change(this.statusOption, 'status', e, true).name;
-                        // e.expireUnit.value = this.$change(this.dateOption, 'expireUnit', e, true).name;
-                        // e.unit.value = this.$change(this.skuUnitOption, 'unit', e, true).name;
-                        // e.unitLength.value = this.$change(this.lengthOption, 'unitLength', e, true).name;
-                        // e.unitVolume.value = this.$change(this.volumeOption, 'unitVolume', e, true).name;
-                        // e.unitWeight.value = this.$change(this.weightOption, 'unitWeight', e, true).name;
-                        // e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
-                        //
-                        // if(this.disableBookmarkChoose && e.bookmarkId.value){
-                        //     this.$set(e,'_disabled',true);
-                        // }
-                        // return e;
-                    });
-                    this.productPageData=res;
-                    this.selectProductList=[];
-                }).finally(err => {
-                    this.loadingDialogProduct=false;
-                });
-            },
-            getDialogBookmarkData(){},
             removeProduct(){
                 this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
                     confirmButtonText: this.$i.order.sure,
@@ -1446,15 +1390,16 @@
             },
             handleClick(tab){
                 if(tab.index==='0'){
-                    this.updateProduct=Math.random();
+                    this.$refs.addProduct.getData();
                 }else if(tab.index==='1'){
-                    this.updateBookmark=Math.random();
+                    this.$refs.addBookmark.getData();
                 }
             },
-            handleProductOk(e){
+            handleSure(e,type){
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
-                this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
+                let ids=_.pluck(_.pluck(e,type==='product'?'id':'skuId'),'value');
+                this.$ajax.post(this.$apis.ORDER_SKUS,ids).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
@@ -1472,45 +1417,18 @@
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            /**
-                             * 后续处理
-                             * */
-                            // item.skuCategoryId._value=item.skuCategoryName.value;
-                            // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                            item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}) || {}).name;
+                            item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
+                            item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
+                            item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
+                            item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
+                            item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
+                            item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
                         }
                     });
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    this.orderForm.totalQty=0;
-                    this.orderForm.skuQty=0;
-                    this.orderForm.totalSkuPrice=0;
-                    this.orderForm.totalOuterCartonQty=0;
-                    this.orderForm.totalGrossWeight=0;
-                    this.orderForm.totalNetWeight=0;
-                    this.orderForm.totalVolume=0;
-                    _.map(this.productTableData,v=>{
-                        if(!v._remark){
-                            this.orderForm.totalQty+=v.skuQty.value;
-                            this.orderForm.skuQty++;
-                            this.orderForm.totalSkuPrice+=v.skuPrice.value;
-                            if(v.skuOuterCartonQty.value!==null && v.skuQty.value!==null){
-                                this.orderForm.totalOuterCartonQty+=Math.floor(v.skuQty.value/v.skuOuterCartonQty.value);
-                            }
-                            this.orderForm.totalGrossWeight+=v.skuOuterCartonRoughWeight.value;
-                            this.orderForm.totalNetWeight+=v.skuOuterCartonNetWeight.value;
-                            this.orderForm.totalVolume+=v.skuOuterCartonVolume.value;
-                        }
-                    })
-
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1920,6 +1838,9 @@
                             item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
                             item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
+                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
+                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
