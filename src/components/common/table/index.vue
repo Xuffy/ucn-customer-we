@@ -10,8 +10,7 @@
                         @change="val => {$emit('filter-value',val)}"></v-filter-value>-->
 
         <v-filter-column v-if="!hideFilterColumn && code" ref="filterColumn" :code="code"
-                         :get-config="getConfig"
-                         @change="changeFilterColumn"></v-filter-column>
+                         @change="val => {dataList = $refs.filterColumn.getFilterData(dataList, val)}"></v-filter-column>
       </div>
     </div>
 
@@ -256,35 +255,6 @@
       this.interval = setInterval(this.updateTable, 300);
     },
     methods: {
-      getConfig(isUpdate = false, data = []) {
-
-        if (!_.isEmpty(data)) {
-          this.dataColumn = _.values(data[0]);
-        }
-
-        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
-          .then(res => {
-            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
-              , dataList = [];
-
-            this.dataColumn = _.map(this.dataColumn, val => {
-              let item = _.findWhere(res, {property: val._filed || val.key})
-              if (!val._hide && item) {
-                item._name = val.label;
-                dataList.push(item);
-              }
-
-              if (_.isObject(val) && _.isUndefined(val._sort)) {
-                val._sort = !!item && item.sortable === 1;
-              }
-              return val;
-            });
-
-            this.$refs.filterColumn.init(dataList, list);
-
-            return list;
-          });
-      },
       changeSort(key, type) {
         if (key !== this.currentSort.orderBy) {
           this.currentSort = this.$options.data().currentSort;
@@ -383,23 +353,21 @@
 
         this.resetFile();
         if (!this.hideFilterColumn && this.$refs.filterColumn && this.code && !_.isEmpty(val)) {
-          this.getConfig(false, val).then(res => {
-            let to = setTimeout(() => {
-              clearTimeout(to);
-              this.dataList = this.$refs.filterColumn.getFilterData(val, res);
-              type && this.filterColumn();
-
-              // this.updateTable()
-            }, 50);
-          })
-        } else {
-          let to = setTimeout(() => {
-            clearTimeout(to);
-            this.dataList = val;
+          this.$refs.filterColumn.update(false, val).then(res => {
+            // let to = setTimeout(() => {
+            //   clearTimeout(to);
+            this.dataList = this.$refs.filterColumn.getFilterData(val, res);
             type && this.filterColumn();
 
-            // this.updateTable()
-          }, 50);
+            // }, 50);
+          })
+        } else {
+          // let to = setTimeout(() => {
+          //   clearTimeout(to);
+          this.dataList = val;
+          type && this.filterColumn();
+
+          // }, 50);
         }
       },
       resetFile() {
@@ -422,6 +390,11 @@
           return val;
         }));
         this.changeCheck(this.dataList, this.checkedAll);
+      },
+      update() {
+        this.$refs.filterColumn.update().then(res => {
+          this.dataList = this.$refs.filterColumn.getFilterData(this.dataList, res);
+        });
       }
     },
     beforeDestroy() {
