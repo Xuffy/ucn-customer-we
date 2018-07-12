@@ -206,7 +206,7 @@ export default {
   },
   created() {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
