@@ -53,7 +53,6 @@
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.delete }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button @click="toCreateInquire" v-authorize="'INQUIRY:DETAIL:CREATE_INQUIRY'">{{ $i.common.createInquiry }}</el-button>
             <el-button>{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
             <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.delete }}</el-button>
@@ -171,8 +170,9 @@ export default {
     }
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
@@ -199,11 +199,8 @@ export default {
       this.newTabData = data;
     }
   },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
-  },
   methods: {
-    ...mapActions(['setDraft', 'setRecycleBin', 'setDic']),
+    ...mapActions(['setMenuLink', 'setDic']),
     deleteInquiry() {
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
         confirmButtonText: this.$i.common.confirm,

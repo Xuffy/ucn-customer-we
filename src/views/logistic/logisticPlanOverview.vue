@@ -1,8 +1,5 @@
 <template>
   <div class="logistic-plan-overview">
-    <router-link to="/logistic/archivePlan">archivePlan</router-link>
-    <router-link to="/logistic/archiveDraft">archiveDraft</router-link>
-    <router-link to="/logistic/archiveLoadingList">archiveLoadingList</router-link>
     <div class="hd-top">{{ headerText[pageType] }}</div>
     <div class="status">
       <div class="btn-wrap">
@@ -22,21 +19,13 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="download">{{ $i.logistic.download }}</el-button>
           <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <!-- <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
         <div v-if="pageType === 'draft'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="download">{{ $i.logistic.download }}</el-button>
           <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <!-- <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-          <el-button type="danger" :disabled="!selectCount.length" @click.stop="deleteData">{{ $i.logistic.delete }}</el-button> -->
         </div>
-        <!-- <div v-if="pageType === 'archive'">
-          <el-button>{{ $i.logistic.download }}({{ selectCount.length || $i.logistic.all }})</el-button>
-          <el-button>{{ $i.logistic.recover }}({{ selectCount.length || $i.logistic.all }})</el-button>
-        </div> -->
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -45,7 +34,6 @@
         </el-radio-group>
       </div>
     </div>
-    <!-- :buttons="viewBy === 'plan' ? [{label: 'detail', type: 'detail'}] : null" -->
     <v-table
       :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
@@ -209,22 +197,48 @@
       }
     },
     mounted() {
-      this.setMenuLink({
+      let menuList = [{
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
         label: this.$i.common.log
-      });
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
+      }];
+      this.setMenuLink(menuList);
       this.fetchData();
       // this.getContainerType() 接手注释
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setMenuLink']),
+      ...mapActions(['setMenuLink']),
       initPage(){
         this.pageParams = {
           pn: 1,
           ps: 10
         };
+      },
+      download(){
+        console.log({lgStatus, ...this.pageParams})
+        const url = this.urlObj[this.pageType][this.viewBy].url
+        const db = this.urlObj[this.pageType][this.viewBy].db
+        const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
+        this.pageType === 'draft' && (this.pageParams.planStatus = 1)
+        this.pageType === 'plan' && (this.pageParams.planStatus = 2)
+        let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
+        console.log({lgStatus, ...this.pageParams})
+        return
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams})
       },
       changeSort(arr){
         this.pageParams.sorts = arr.sorts;
@@ -241,9 +255,9 @@
         this.fetchDataList()
       },
       deleteData() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
@@ -252,7 +266,7 @@
             this.selectCount = []
             this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: this.$i.logistic.operationSuccess
             })
           })
         })

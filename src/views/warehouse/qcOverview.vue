@@ -128,8 +128,10 @@
                 })
             },
             download() {
-                console.log('下载')
-
+                let orderNos=_.pluck(_.pluck(this.selectList, "qcOrderNo"),'value');
+                let params=this.$depthClone(this.params);
+                params.qcOrderNos=orderNos;
+                this.$fetch.export_task('QC_ORDER',params);
             },
             changeQcStatus(){
                 this.params.pn = 1;
@@ -141,6 +143,7 @@
                 if(e){
                     Object.assign(this.params,e);
                 }
+                this.selectList=[];
                 this.$ajax.post(this.$apis.post_qc_page, this.params)
                     .then(res => {
                         this.loading = false;

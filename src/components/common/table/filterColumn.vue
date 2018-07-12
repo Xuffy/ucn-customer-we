@@ -3,7 +3,7 @@
     <el-popover
       :width="200"
       v-model="visible"
-      @after-leave="getConfig()"
+      @after-leave="update()"
       placement="bottom-end"
       trigger="click">
       <i slot="reference" class="iconfont icon-shezhi"></i>
@@ -71,6 +71,35 @@
     mounted() {
     },
     methods: {
+      update(isUpdate = false, data = []) {
+
+        if (!_.isEmpty(data)) {
+          this.columns = _.values(data[0]);
+        }
+
+        return this.$ajax.get(this.$apis.GRIDFAVORITE_PARTWITHSETTING, {bizCode: this.code}, {cache: !isUpdate})
+          .then(res => {
+            let list = _.pluck(_.where(res, {isChecked: 1}), 'property')
+              , dataList = [];
+
+            this.columns = _.map(this.columns, val => {
+              let item = _.findWhere(res, {property: val._filed || val.key})
+              if (!val._hide && item) {
+                item._name = val.label;
+                dataList.push(item);
+              }
+
+              if (_.isObject(val) && _.isUndefined(val._sort)) {
+                val._sort = !!item && item.sortable === 1;
+              }
+              return val;
+            });
+
+            this.init(dataList, list);
+
+            return list;
+          });
+      },
       init(data, checkList) {
         this.dataList[0].children = data;
 
@@ -103,15 +132,13 @@
         this.$ajax.post(this.$apis.GRIDFAVORITE_UPDATE, params)
           .then(res => {
             this.visible = false;
-            this.getConfig(true).then(data => {
-              this.$emit('change', data);
-            });
+            this.update(true).then(data => this.$emit('change', data));
           })
           .finally(() => this.loading = false);
       },
       cancel() {
         this.visible = false;
-        this.getConfig();
+        this.update();
       }
     }
   }

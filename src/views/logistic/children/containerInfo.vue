@@ -31,7 +31,7 @@
           <template slot-scope="scope">
             <div v-if="edit" style="display:flex;">
               <label class="reqiuredStar"></label>
-              <el-select v-model="scope.row.containerType" placeholder="请选择" @change="ContainerInfoLight('containerType',scope.row.containerType,scope.$index)">
+              <el-select v-model="scope.row.containerType" :placeholder="$i.logistic.placeholder" @change="ContainerInfoLight('containerType',scope.row.containerType,scope.$index)">
                 <el-option v-for="item in containerType" :key="item.id" :label="item.name" :value="item.code"/>
               </el-select>
             </div>

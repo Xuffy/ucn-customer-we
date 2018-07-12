@@ -18,10 +18,10 @@ import compareList from '@/views/product/compareList';
 import containerInfo from '@/views/logistic/children/containerInfo';
 import dropDownSingle from './common/fnCompon/dropDownSingle';
 import VAddQuickLink from './common/addQuickLink/index';
-import paymentTable from '@/views/warehouse/paymentTable';
 import VHistory from '@/views/negotiation/children/history';
 import addNewInqury from '@/views/negotiation/children/addNewInqury';
 import overviewPage from './common/overviewPage/index';
+import VProduct from './common/overviewPage/addProduct';
 
 export {
   VImage,
@@ -42,8 +42,8 @@ export {
   compareList,
   containerInfo,
   dropDownSingle,
-  paymentTable,
   VHistory,
   addNewInqury,
-  overviewPage
+  overviewPage,
+  VProduct
 }

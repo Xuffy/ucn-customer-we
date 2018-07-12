@@ -73,28 +73,26 @@ export default {
     'v-pagination': VPagination
   },
   created() {
+    let type = this.$route.params.type;
+    if (type !== 'compare' && type !== 'inquiry') {
+      this.$router.push({name: 'negotiationInquiry'});
+      return;
+    }
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
     switch (this.$route.params.type) {
       case 'inquiry':
         this.title = this.$i.common.inquiryDraft;
         break;
     }
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache').then(data => {
       this.setDic(codeUtils.convertDicValueType(data));
       this.getList();
     });
   },
   methods: {
-    ...mapActions([
-      'setDic',
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink', 'setDic']),
     handleSizeChange(val) {
       this.postParams.pn = val;
       this.getList();
@@ -157,11 +155,10 @@ export default {
       this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
         ids: this.checkedArg,
         action: type
-      })
-        .then(res => {
-          this.getInquiryList();
-          this.checkedArg = [];
-        });
+      }).then(res => {
+        this.getInquiryList();
+        this.checkedArg = [];
+      });
     },
     submit() { // 提交草稿
       switch (this.$route.params.type) {

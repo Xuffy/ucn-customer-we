@@ -55,7 +55,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
+      <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
         >
         <div slot="header" class="product-header" v-if="edit">
@@ -85,7 +85,10 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"></v-history-modify>
+    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
+      code="ulogistics_PlanDetail"
+      @closed="$refs.productInfo.update()"
+    ></v-history-modify>
   </div>
 </template>
 <script>
@@ -277,14 +280,28 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
+      }];
+      this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
-      this.registerRoutes()
       this.getDictionary()
       this.basicInfoArr = _.map(this.$depthClone(this.$db.logistic.basicInfoObj), (value, key) => {
         return value;
@@ -297,7 +314,7 @@
       })
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       //初始化页面数据
       pageInit(){
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
@@ -373,16 +390,6 @@
           this.showAddProductDialog = true;
           this.ProductFromOrderRes = res.datas;
           this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
-        })
-      },
-      registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
         })
       },
       getDetails() {
@@ -581,7 +588,7 @@
               this.productModifyList = this.$getDB(this.$db.logistic.productInfo,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
-                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm') 
+                el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm');
                 return el;
               }));
               this.$refs.HM.init(this.productModifyList,[],false);
@@ -721,7 +728,7 @@
         if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
-          return 
+          return
         };
         const currrentProduct = data[0]
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
@@ -924,7 +931,7 @@
         }
         //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
         if(!this.isContainerInfoLight){
-          this.oldPlanObject.containerDetail.forEach(el =>{
+          this.oldPlanObject.fee&&this.oldPlanObject.containerDetail.forEach(el =>{
             el.fieldDisplay = null;
           })
         }

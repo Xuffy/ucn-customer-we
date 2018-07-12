@@ -334,32 +334,29 @@
         </el-dialog>
 
         <el-dialog
+                custom-class="ucn-dialog-center"
                 :title="$i.order.addProduct"
+                :close-on-click-modal="false"
                 :visible.sync="productTableDialogVisible"
-                width="70%"
-                top="2vh">
+                width="70%">
             <el-tabs v-model="activeTab" type="card" @tab-click="handleClick">
                 <el-tab-pane :label="$i.order.fromNewSearch" name="product">
                     <v-product
-                            :disabledLine="disabledProductLine"
-                            :forceUpdateNumber="updateProduct"
-                            :hideBtn="true"
-                            :isInModify="true"
-                            :type="type1"
-                            @handleOK="handleProductOk"
-                            @handleCancel="handleCancel"></v-product>
+                            ref="addProduct"
+                            queryType="product"
+                            :form-column="$db.product.overview"
+                            :disabledLine="disableProductLine"
+                            @sure="handleSure"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
                 <el-tab-pane :label="$i.order.fromBookmark" name="bookmark">
                     <v-product
-                            :disablePostCustomerBookmark="true"
-                            :disablePostCustomerCreate="true"
-                            :disabledLine="disabledProductLine"
-                            :forceUpdateNumber="updateBookmark"
-                            :hideBtn="true"
-                            :isInModify="true"
-                            @handleOK="handleProductOk"
-                            @handleCancel="handleCancel"
-                            :type="type2"></v-product>
+                            ref="addBookmark"
+                            queryType="bookmark"
+                            :form-column="$db.product.overview"
+                            :disabledLine="disableProductLine"
+                            @sure="handleSure"
+                            @cancel="handleCancel"></v-product>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -769,8 +766,7 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
-    import VProduct from '@/views/product/addProduct';
+    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify,overviewPage,VProduct} from '@/components/index'
     import { mapActions } from 'vuex'
 
     export default {
@@ -780,8 +776,9 @@
             page:VPagination,
             selectSearch,
             VUpload,
-            VProduct,
-            VHistoryModify
+            VHistoryModify,
+            overviewPage,
+            VProduct
         },
         data(){
             return{
@@ -850,6 +847,7 @@
                 /**
                  * 弹出框data配置
                  * */
+                disableProductLine:[],
                 pageData:{},
                 loadingTable:false,
                 tableDataList:[],
@@ -1345,11 +1343,24 @@
                 this.selectProductInfoTable=e;
             },
             addProduct(){
-                this.disabledProductLine=this.$copyArr(this.productTableData);
-                // this.disabledProductLine=_.uniq(_.pluck(_.pluck(this.productTableData, 'skuId'), 'value'));
+                this.disableProductLine=[];
+                if(this.productTableData.length>0){
+                    _.map(this.productTableData,v=>{
+                        if(!v._remark){
+                            this.disableProductLine.push(v.skuId.value);
+                        }
+                    })
+                }
                 this.productTableDialogVisible=true;
                 this.activeTab='product';
-                this.updateProduct=Math.random();
+                this.$nextTick(()=>{
+                    if(this.$refs.addProduct){
+                        this.$refs.addProduct.getData();
+                    }
+                    if(this.$refs.addBookmark){
+                        this.$refs.addBookmark.getData();
+                    }
+                })
             },
             removeProduct(){
                 this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
@@ -1379,15 +1390,16 @@
             },
             handleClick(tab){
                 if(tab.index==='0'){
-                    this.updateProduct=Math.random();
+                    this.$refs.addProduct.getData();
                 }else if(tab.index==='1'){
-                    this.updateBookmark=Math.random();
+                    this.$refs.addBookmark.getData();
                 }
             },
-            handleProductOk(e){
+            handleSure(e,type){
                 this.loadingProductTable=true;
                 this.productTableDialogVisible=false;
-                this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
+                let ids=_.pluck(_.pluck(e,type==='product'?'id':'skuId'),'value');
+                this.$ajax.post(this.$apis.ORDER_SKUS,ids).then(res=>{
                     let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
                         if(item._remark){
                             item.label.value=this.$i.order.remarks;
@@ -1405,45 +1417,18 @@
                             item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
                             item.skuSample._value=item.skuSample.value?'YES':'NO';
                             item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            /**
-                             * 后续处理
-                             * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
-                            // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                            item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}) || {}).name;
+                            item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
+                            item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
+                            item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
+                            item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
+                            item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
+                            item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
                         }
                     });
                     _.map(data,v=>{
                         this.productTableData.push(v);
                     });
-                    this.orderForm.totalQty=0;
-                    this.orderForm.skuQty=0;
-                    this.orderForm.totalSkuPrice=0;
-                    this.orderForm.totalOuterCartonQty=0;
-                    this.orderForm.totalGrossWeight=0;
-                    this.orderForm.totalNetWeight=0;
-                    this.orderForm.totalVolume=0;
-                    _.map(this.productTableData,v=>{
-                        if(!v._remark){
-                            this.orderForm.totalQty+=v.skuQty.value;
-                            this.orderForm.skuQty++;
-                            this.orderForm.totalSkuPrice+=v.skuPrice.value;
-                            if(v.skuOuterCartonQty.value!==null && v.skuQty.value!==null){
-                                this.orderForm.totalOuterCartonQty+=Math.floor(v.skuQty.value/v.skuOuterCartonQty.value);
-                            }
-                            this.orderForm.totalGrossWeight+=v.skuOuterCartonRoughWeight.value;
-                            this.orderForm.totalNetWeight+=v.skuOuterCartonNetWeight.value;
-                            this.orderForm.totalVolume+=v.skuOuterCartonVolume.value;
-                        }
-                    })
-
                 }).finally(err=>{
                     this.loadingProductTable=false;
                 });
@@ -1690,7 +1675,7 @@
                             skuOuterCartonUnit: '',
                             skuOuterCartonVolume: null,
                             skuOuterCartonWidth: null,
-                            skuPic: '',
+                            skuPictures: '',
                             skuPkgMethodPic: '',
                             skuPrice: null,
                             skuProductionDates: null,
@@ -1713,7 +1698,7 @@
                             skuSampleQty: null,
                             skuShippingMarks: '',
                             skuSpecialTransportRequire: '',
-                            skuStatus: '',
+                            skuStatus:'',
                             skuSupplierCode: '',
                             skuSupplierCompanyId: null,
                             skuSupplierId: null,
@@ -1743,7 +1728,7 @@
                             version: null,
                         };
                         obj.skuId=v.skuId;
-                        obj.skuPic=v.skuPic;
+                        obj.skuPictures=v.skuPictures;
                         obj.skuNameEn=v.skuNameEn;
                         obj.skuNameCn=v.skuNameCn;
                         obj.skuDescCn =v.skuDescCn;
@@ -1827,7 +1812,7 @@
                         obj.skuComments=v.skuComments;
                         obj.skuBarCode=v.skuBarcode;
                         obj.skuSaleStatus=v.skuStatus;
-                        obj.skuStatus=1;
+                        obj.skuStatus='TBC';
                         obj.skuQuotationNo=v.quotationNo;
                         obj.skuSysCode=v.skuSysCode;
                         arr.push(obj);
@@ -1853,13 +1838,11 @@
                             item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
                             item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                            /**
-                             * 后续处理
-                             * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
+                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
+                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
+                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
@@ -1966,21 +1949,24 @@
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.orderForm.incoterm==='2'){
+                }
+                else if(this.orderForm.incoterm==='2'){
                     //exw
                     if(obj.skuExwPrice.value && obj.skuQty.value){
                         obj.skuPrice.value=Number((obj.skuExwPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.orderForm.incoterm==='3'){
+                }
+                else if(this.orderForm.incoterm==='3'){
                     //cif
                     if(obj.skuCifPrice.value && obj.skuQty.value){
                         obj.skuPrice.value=Number((obj.skuCifPrice.value*obj.skuQty.value).toFixed(8));
                     }else{
                         obj.skuPrice.value=0;
                     }
-                }else if(this.orderForm.incoterm==='4'){
+                }
+                else if(this.orderForm.incoterm==='4'){
                     //ddu
                     if(obj.skuDduPrice.value && obj.skuQty.value){
                         obj.skuPrice.value=Number((obj.skuDduPrice.value*obj.skuQty.value).toFixed(8));

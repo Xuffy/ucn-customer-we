@@ -185,7 +185,7 @@
     },
     watch: {},
     created() {
-      this.changeTab();
+      this.changeTab(null, this.$route.query.type);
     },
     methods: {
       getImportData() {
@@ -226,7 +226,8 @@
         this.$ajax.get(this.$apis.EXPORTFILE_EXECUTE, {taskNo: id})
           .then(() => this.getExportData());
       },
-      changeTab(paging) {
+      changeTab(paging, type) {
+        this.tabActive = type ? type : this.tabActive;
         switch (this.tabActive) {
           case 'import':
             if (paging) {
