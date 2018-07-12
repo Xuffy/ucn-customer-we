@@ -59,7 +59,7 @@ export default {
   },
   created() {
     this.getList();
-    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {

@@ -78,7 +78,7 @@ export default {
       this.$router.push({name: 'negotiationInquiry'});
       return;
     }
-    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     switch (this.$route.params.type) {
