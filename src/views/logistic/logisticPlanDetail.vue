@@ -529,9 +529,9 @@
       },
       deleteContainer() {
         if (!this.selectionContainer.length) return
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.oldPlanObject.rmContainerDetail = this.selectionContainer.map((item) => {
@@ -540,7 +540,7 @@
           this.containerInfo = _.difference(this.containerInfo, this.selectionContainer);
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: this.$i.logistic.operationSuccess
           })
         })
       },
@@ -797,7 +797,7 @@
           id: this.planId
         }).then(res => {
           this.$message({
-            message: '取消成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -814,7 +814,7 @@
           ids: [this.planId]
         }).then(res => {
           this.$message({
-            message: '取消成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -937,7 +937,7 @@
         }
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
-            message: '发送成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
