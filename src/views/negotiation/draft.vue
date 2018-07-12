@@ -21,6 +21,7 @@
             </div>
         </div>
         <v-table
+            code="inquiry_list"
             :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
@@ -72,28 +73,26 @@ export default {
     'v-pagination': VPagination
   },
   created() {
+    let type = this.$route.params.type;
+    if (type !== 'compare' || type !== 'inquiry') {
+      this.$router.push({name: 'negotiationInquiry'});
+      return;
+    }
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
     switch (this.$route.params.type) {
       case 'inquiry':
         this.title = this.$i.common.inquiryDraft;
         break;
     }
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache').then(data => {
       this.setDic(codeUtils.convertDicValueType(data));
       this.getList();
     });
   },
   methods: {
-    ...mapActions([
-      'setDic',
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink', 'setDic']),
     handleSizeChange(val) {
       this.postParams.pn = val;
       this.getList();

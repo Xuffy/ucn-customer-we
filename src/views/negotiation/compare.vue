@@ -27,6 +27,7 @@
             </div>
         </div>
         <v-table
+            code='inquiry_list'
             :height="455"
             :data="tabData"
             :loading="tabLoad"
@@ -98,22 +99,11 @@ export default {
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
     this.getDirData().then(this.upData, this.upData);
-    // this.setRecycleBin({
-    //   name: 'negotiationRecycleBin',
-    //   params: {
-    //     type: 'compare'
-    //   },
-    //   show: false
-    // });
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions([
-      'setRecycleBin',
-      'setDic'
-    ]),
+    ...mapActions(['setMenuLink']),
     upData() {
       let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
       this.getListByIds().then(this.getCompareList).then(datas => {

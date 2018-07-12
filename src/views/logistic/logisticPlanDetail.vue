@@ -56,31 +56,31 @@
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
-        @change-checked="selectProduct">
+        @change-checked="selectProduct"
+        >
         <div slot="header" class="product-header" v-if="edit">
-          <!-- <el-button type="primary" size="mini" @click.stop="getSupplierIds">{{ $i.logistic.addProduct }}</el-button> -->
-          <el-button type="primary" size="mini" @click.stop="showAddProductDialog = true">{{ $i.logistic.addProduct }}</el-button>
+          <el-button type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
           <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
-    <!-- <el-dialog :title="negotiate" :visible.sync="showProductDialog" :close-on-click-modal="false" :close-on-press-escape="false"
-      @close="closeModify(0)">
-      <product-modify ref="productModifyComponents" :containerType="selectArr.containerType" @productModifyfun="productModifyfun"
-        :tableData.sync="productModifyList" :productInfoModifyStatus="productInfoModifyStatus" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeModify(0)">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="closeModify(1)">{{ $i.logistic.confirm }}</el-button>
-      </div>
-    </el-dialog> -->
-    <el-dialog width="70%" :title="$i.logistic.addProductFromOrder" v-if="showAddProductDialog" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
+    <el-dialog width="70%" :visible.sync="showAddProductDialog" :close-on-click-modal="false"
       :close-on-press-escape="false">
-      
-      <!-- <add-product ref="addProduct" :basicInfoArr="basicInfoArr" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeAddProduct(0)">{{ $i.logistic.cancel }}</el-button>
-        <el-button type="primary" @click="closeAddProduct(1)">{{ $i.logistic.confirm }}</el-button>
-      </div> -->
+      <overviewPage
+        :title="$i.logistic.addProductFromOrder"
+        :tableData="ProductFromOrder"
+        :form-column="$db.logistic.addProductFromOrderFilter"
+        :tableButtons="[{label: 'Detail', type: 1}]"
+        @change-checked="changeChecked"
+        @tableBtnClick="ProductFromOrderDetail"
+        @search="getSupplierIds"
+        tableCode="ulogistics_PlanDetail"
+      >
+        <div slot=footerBtn>
+          <el-button @click="showAddProductDialog = false">{{ $i.logistic.cancel }}</el-button>
+          <el-button type="primary" @click="closeAddProduct">{{ $i.logistic.confirm }}</el-button>
+        </div>
+      </overviewPage>
     </el-dialog>
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
@@ -93,7 +93,8 @@
     containerInfo,
     selectSearch,
     VTable,
-    VHistoryModify
+    VHistoryModify,
+    overviewPage
   } from '@/components/index';
   import {
     mapActions,
@@ -113,7 +114,6 @@
     name: 'logisticPlanDetail',
     data() {
       return {
-        testval:[],
         planId: '',
         fieldDisplay: null,
         deliveredEdit: false,
@@ -204,7 +204,9 @@
         pageName: '',
         prodFieldDisplay: {},
         CustomerName: '',
-        isContainerInfoLight:false
+        isContainerInfoLight:false,
+        ProductFromOrder:[],
+        ProductFromOrderRes:[],
       }
     },
     components: {
@@ -220,7 +222,7 @@
       addProduct,
       messageBoard,
       VHistoryModify,
-      product
+      overviewPage
     },
     computed: {
       productListTotal() {
@@ -275,11 +277,28 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      }];
+      if(this.pageType=="loadingList"){
+        menuList.push({
+          path: '/logistic/archiveLoadingList',
+          label: this.$i.logistic.archiveLoadingList
+        })
+      }
+      this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
       this.registerRoutes()
@@ -295,7 +314,7 @@
       })
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       //初始化页面数据
       pageInit(){
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
@@ -346,21 +365,32 @@
           }
         })
       },
-      addProductFun(){
-        return this.getSupplierIds();
-      },
-      async getSupplierIds() {
+      getSupplierIds(arg) {
+        let pageParams = {
+          pn: 1,
+          ps: 10,
+          skuSupplierIds:[]
+        }
+        if(arg!=0){
+          const {pn, ps} = pageParams
+          pageParams = {pn, ps, ...arg}
+        }
         let url = this.$route.name == 'loadingListDetail' ? 'logistics_order_getSupplierIds' : 'logistics_plan_getSupplierIds';
-        let pageParams = {};
-        await this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
+        this.$ajax.get(this.$apis[url],{logisticsNo:this.basicInfoArr[0].value}).then(res => {
           pageParams.skuSupplierIds = res.supplierIds;
           pageParams.customerId = res.customerId;
-          return pageParams
+          this.addProductFromOrder(pageParams);
         })
+      },
+      ProductFromOrderDetail(e){
+        window.open(`${window.location.origin}#/product/sourcingDetail?id=${e.skuId.value}`);
+      },
+      addProductFromOrder(pageParams){
         this.$ajax.post(this.$apis.get_order_list_with_page, pageParams).then(res=>{
-          this.testval = res;
-        });
-        return this.$ajax.post(this.$apis.get_order_list_with_page, pageParams)
+          this.showAddProductDialog = true;
+          this.ProductFromOrderRes = res.datas;
+          this.ProductFromOrder = this.$getDB(this.$db.logistic.dbBasicInfoObj,res.datas);
+        })
       },
       registerRoutes() {
         this.$store.commit('SETDRAFT', {
@@ -639,9 +669,16 @@
           this.getPaymentList(res.orderNo);
         }
       },
-      closeAddProduct(arr) {
-        arr = [this.testval.datas[0]];
-        //还带有调整 会传入 多个情况的下表数组  循环匹配
+      changeChecked(arr){
+        this.ProductFromOrderChecked = arr;
+      },
+      closeAddProduct() {
+        let CheckedIdArr =  this.ProductFromOrderChecked.map(el => {
+          return el.id.value;
+        })
+        let arr = CheckedIdArr.map(el=>{
+          return _.findWhere(this.ProductFromOrderRes,{id:el})
+        });
         this.showAddProductDialog = false
         const selectArrData = this.$depthClone(arr);
         if (!arr.length || !selectArrData.length) return

@@ -9,6 +9,7 @@
             <select-search :options="options" @inputEnter="searchEnter" />
         </div>
         <v-table
+            :code="$route.params.type === 'inquiry' ? 'inquiry_list' : null"
             :data="tabData"
             :loading="tabLoad"
             @change-checked="changeChecked"
@@ -41,13 +42,17 @@ export default {
     'select-search': selectSearch,
     'v-table': VTable
   },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+  created() {
+    let type = this.$route.params.type;
+    if (type !== 'compare' || type !== 'inquiry') {
+      this.$router.push({name: 'negotiationInquiry'});
+      return;
+    }
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions([
-      'setDic'
-    ]),
+    ...mapActions(['setMenuLink', 'setDic']),
     getInquiryList() { // 获取inquirylist
       this.$ajax.post(this.$apis.POST_INQIIRY_LIST, this.bodyData).then(res => {
         this.pageTotal = res.tc;

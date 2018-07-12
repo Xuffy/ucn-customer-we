@@ -1,8 +1,5 @@
 <template>
   <div class="logistic-plan-overview">
-    <router-link to="/logistic/archivePlan">archivePlan</router-link>
-    <router-link to="/logistic/archiveDraft">archiveDraft</router-link>
-    <router-link to="/logistic/archiveLoadingList">archiveLoadingList</router-link>
     <div class="hd-top">{{ headerText[pageType] }}</div>
     <div class="status">
       <div class="btn-wrap">
@@ -55,6 +52,7 @@
       :loading="tableLoading"
       :height="height"
       ref="tab"
+      @change-sort="changeSort"
     />
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
@@ -208,28 +206,42 @@
       }
     },
     mounted() {
-      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
-      this.fetchData()
-      this.registerRoutes()
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      }];
+      if(this.pageType=="loadingList"){
+        menuList.push({
+          path: '/logistic/archiveLoadingList',
+          label: this.$i.logistic.archiveLoadingList
+        })
+      }
+      this.setMenuLink(menuList);
+      this.fetchData();
       // this.getContainerType() 接手注释
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       initPage(){
         this.pageParams = {
           pn: 1,
           ps: 10
         };
       },
-      registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
-        })
+      changeSort(arr){
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
       },
       fetchData() {
         if (this.pageType === 'plan') {
