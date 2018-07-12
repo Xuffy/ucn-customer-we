@@ -785,14 +785,12 @@
 </template>
 
 <script>
-    import imgHandler from './imgHandler'
     import {dropDownSingle,VUpload} from '@/components/index'
     import {mapActions} from 'vuex'
 
     export default {
         name: "manually-add",
         components:{
-            imgHandler,
             dropDown:dropDownSingle,
             VUpload
         },

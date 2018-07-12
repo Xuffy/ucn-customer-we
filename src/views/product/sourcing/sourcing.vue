@@ -211,7 +211,7 @@
             },
             download(){
                 let ids=_.pluck(_.pluck(this.selectList,"id"),'value');
-                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',ids);
+                this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
             },
 
             getUnit(){
