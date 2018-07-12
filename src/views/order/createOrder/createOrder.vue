@@ -1409,13 +1409,12 @@
                             item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
                             item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
+                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
                             /**
                              * 后续处理
                              * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
                             // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
@@ -1853,13 +1852,13 @@
                             item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
                             item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
                             item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
+                            // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
                             item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
                             item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
                             /**
                              * 后续处理
                              * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
+                            // item.skuCategoryId._value=item.skuCategoryName.value;
                             item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
                         }
                     });
