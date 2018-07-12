@@ -19,12 +19,12 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button @click="download">{{ $i.logistic.download }}</el-button>
+          <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
           <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button>
         </div>
         <div v-if="pageType === 'draft'">
-          <el-button @click="download">{{ $i.logistic.download }}</el-button>
-          <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}({{ selectCount.length || $i.logistic.all }})</el-button>
+          <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
+          <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
         </div>
       </div>
       <div class="view-by-btn">
@@ -45,7 +45,7 @@
       ref="tab"
       @change-sort="changeSort"
     />
-    <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
+    <v-pagination :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
 </template>
 <script>
@@ -171,7 +171,8 @@
               url: this.$apis.get_sku_list,
               db: this.$db.logistic.sku
             }
-          }
+          },
+          downloadIds:[]
         }
       }
     },
@@ -229,16 +230,13 @@
         };
       },
       download(){
-        console.log({lgStatus, ...this.pageParams})
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
         this.pageType === 'draft' && (this.pageParams.planStatus = 1)
         this.pageType === 'plan' && (this.pageParams.planStatus = 2)
         let code = this.pageType=="loadingList" ? 'LOGISTICS_ORDER' : 'LOGISTICS_PLAN'
-        console.log({lgStatus, ...this.pageParams})
-        return
-        this.$fetch.export_task(code,{lgStatus, ...this.pageParams})
+        this.$fetch.export_task(code,{lgStatus, ...this.pageParams,ids:this.downloadIds})
       },
       changeSort(arr){
         this.pageParams.sorts = arr.sorts;
@@ -273,6 +271,9 @@
       },
       changeChecked(arr) {
         this.selectCount = arr
+        this.downloadIds = arr.map(el => {
+          return el.id.value
+        })
       },
       action(e) {
         if(this.pageType == 'loadingList'){
@@ -320,11 +321,9 @@
               return val
             })
           })
-          this.pageParams = {
-            pn: res.pn,
-            ps: res.ps,
-            tc: res.tc
-          }
+          this.$set(this.pageParams,'pn',res.pn);
+          this.$set(this.pageParams,'ps',res.ps);
+          this.$set(this.pageParams,'tc',res.tc);
           this.tableLoading = false
         })
       },
