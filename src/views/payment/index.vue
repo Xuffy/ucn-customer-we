@@ -312,7 +312,7 @@
                 // console.log(res)
                 this.$message({
                   type: 'success',
-                  message: '催促成功!'
+                  message: this.$i.payment.urgedSuccess
                 });
               }).catch((res) => {
 
@@ -320,9 +320,9 @@
             },
             setButtons(item){
               // disabled:true/false   10 付款 20 退款
-                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: 'Urging Payment', type: '1'
-                },{label: 'Detail', type: '2'}];
-                 return [{label: 'Detail', type: '2'}];
+                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1'
+                },{label: this.$i.payment.detail, type: '2'}];
+                 return [{label: this.$i.payment.detail, type: '2'}];
             },
             handleSizeChange(val) {
                 this.params.ps = val;

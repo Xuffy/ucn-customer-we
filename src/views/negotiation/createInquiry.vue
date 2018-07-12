@@ -97,7 +97,7 @@
                 resize="none"
                 :disabled="item.disabled"/>
               <span v-else-if="item.type === 'Number'" style="display:flxe;">
-                <el-input v-model="fromArg[item.key]" :min="0" :max="100"
+                <v-input-number v-model="fromArg[item.key]" :min="0" :max="100"
                     controls-position="right" size="mini" :controls="false"
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
@@ -158,7 +158,7 @@
   </div>
 </template>
 <script>
-import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
+import {selectSearch, VTable, VUpload, VHistoryModify, VInputNumber} from '@/components/index';
 import product from '@/views/product/addProduct';
 import {mapActions} from 'vuex';
 import codeUtils from '@/lib/code-utils';
@@ -202,7 +202,8 @@ export default {
     'v-table': VTable,
     'v-product': product,
     VUpload,
-    VHistoryModify
+    VHistoryModify,
+    VInputNumber
   },
   created() {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});

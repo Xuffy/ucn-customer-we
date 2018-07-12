@@ -85,7 +85,7 @@
     <messageBoard v-if="!isCopy&&pageTypeCurr.slice(-6) == 'Detail'" module="logistic" :code="pageTypeCurr" :id="logisticsNo"></messageBoard>
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
-    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext" 
+    <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
       code="ulogistics_PlanDetail"
       @closed="$refs.productInfo.update()"
     ></v-history-modify>
@@ -730,7 +730,7 @@
         if (!data.length) {
           this.productModifyList = [];
           this.showProductDialog = false;
-          return 
+          return
         };
         const currrentProduct = data[0]
         this.$set(this.productList, this.modefiyProductIndex, currrentProduct)
