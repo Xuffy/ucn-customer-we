@@ -6,7 +6,7 @@ export default {
       LOGIN_URL: 'http://dev.auth.ucnscm.cn',
       // LOGIN_URL: 'http://192.168.51.138:8070',
       LJ: '//192.168.51.208:11001',
-      BASE_CS:'//192.168.51.33:11001',
+      // BASE_CS:'//192.168.51.33:11001',
 
 
       BASE_URL: '//192.168.51.208:11001', // 采购端

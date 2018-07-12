@@ -169,7 +169,7 @@
               })
             },
           download(){
-                
+
           },
         },
         created() {
