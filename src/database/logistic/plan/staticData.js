@@ -569,3 +569,16 @@ export const dbProductInfo = {
     }
   }
 }
+
+
+export const addProductFromOrderFilter = {
+  "orderNo": {
+    _isDefaultShow:true
+  },
+  "skuCode": {
+    _isDefaultShow:true
+  },
+  "skuNameEn": {
+    _isDefaultShow:true
+  }
+}

@@ -27,6 +27,7 @@
             </div>
         </div>
         <v-table
+            code='inquiry_list'
             :height="455"
             :data="tabData"
             :loading="tabLoad"

@@ -106,7 +106,7 @@
                         params: {
                             type: 'modify',
                             isModify: true,
-                            compareId: e.id.value,
+                            id: e.id.value,
                             compareName: e.name.value
                         },
                     });
@@ -116,7 +116,7 @@
                         url: '/supplier/compareDetail/{type}',
                         params: {
                             type: 'read',
-                            compareId: e.id.value,
+                            id: e.id.value,
                             compareName: e.name.value
                         },
 

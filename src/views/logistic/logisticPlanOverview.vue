@@ -55,6 +55,7 @@
       :loading="tableLoading"
       :height="height"
       ref="tab"
+      @change-sort="changeSort"
     />
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
@@ -208,28 +209,26 @@
       }
     },
     mounted() {
-      this.setLog({query:{code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'}});
-      this.fetchData()
-      this.registerRoutes()
+      this.setMenuLink({
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      });
+      this.fetchData();
       // this.getContainerType() 接手注释
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setDraft', 'setRecycleBin', 'setMenuLink']),
       initPage(){
         this.pageParams = {
           pn: 1,
           ps: 10
         };
       },
-      registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
-        })
+      changeSort(arr){
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
       },
       fetchData() {
         if (this.pageType === 'plan') {

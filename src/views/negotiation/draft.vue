@@ -21,6 +21,7 @@
             </div>
         </div>
         <v-table
+            code="inquiry_list"
             :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
