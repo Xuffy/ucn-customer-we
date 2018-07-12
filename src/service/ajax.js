@@ -260,7 +260,7 @@ axios.interceptors.response.use(
     // 缓存设置
     resCache = sessionStore.get('request_cache') || [];
 
-    if (config.cache) {
+    if (!_.isUndefined(config.cache)) {
       let rcList = [], id = md5(config.url + config.data);
 
       rcList = _.filter(resCache, val => {

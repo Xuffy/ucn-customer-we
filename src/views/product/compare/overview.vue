@@ -3,8 +3,10 @@
         <div class="title">
             <span>{{$i.product.compareOverview}}</span>
         </div>
-
-
+       <div class="status">
+         <el-button>{{$i.button.download}}</el-button>
+         <el-button v-authorize="'PRODUCT:COMPARE_OVERVIEW:RECYCLE_BIN'" type="danger" @click="deleteCompare">{{$i.button.remove}}</el-button>
+       </div>
         <v-table
                 :height="500"
                 v-loading="loadingTable"
@@ -265,9 +267,9 @@
         .speTable{
             margin-top: 10px;
         }
-
-
-
+    }
+    .status{
+      margin-top: 20px;
     }
 
 </style>
