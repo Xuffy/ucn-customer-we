@@ -1743,7 +1743,7 @@
                             version: null,
                         };
                         obj.skuId=v.skuId;
-                        obj.skuPic=v.skuPic;
+                        obj.skuPictures=v.skuPictures;
                         obj.skuNameEn=v.skuNameEn;
                         obj.skuNameCn=v.skuNameCn;
                         obj.skuDescCn =v.skuDescCn;
