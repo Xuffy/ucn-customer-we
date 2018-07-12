@@ -109,12 +109,12 @@ export default {
   },
   created() {
     this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
-    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.getBaseData().then(this.gettabData, this.gettabData);
   },
   methods: {
-    ...mapActions(['setMenuLink']),
+    ...mapActions(['setMenuLink', 'setDic']),
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
