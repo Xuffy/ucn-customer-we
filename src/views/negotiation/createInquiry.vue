@@ -204,8 +204,9 @@ export default {
     VHistoryModify
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
       let data = res[0];
@@ -226,10 +227,7 @@ export default {
     }).then(this.initFromParams);
   },
   methods: {
-    ...mapActions([
-      'setDraft',
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink']),
     getBaseData() {
       let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true});
       let getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL);

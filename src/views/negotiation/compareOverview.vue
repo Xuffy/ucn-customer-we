@@ -59,21 +59,11 @@ export default {
   },
   created() {
     this.getList();
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'compare'
-      },
-      show: false
-    });
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions([
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink']),
     getList() { // 获取Compare 列表
       this.tabLoad = true;
       this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
