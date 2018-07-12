@@ -74,8 +74,7 @@
         },
         methods: {
               ...mapActions([
-                // 'setRecycleBin'
-                'setLog'
+                'setMenuLink'
             ]),
             inputEnter(keyWord) {
                 if (!keyWord.keyType) return this.$message({
@@ -160,6 +159,7 @@
               }).then(() => {
                 this.$ajax.post(this.$apis.post_supplier_deleteCompare, this.selectedNumber)
                   .then(res => {
+                    this.selectedNumber = [];
                     this.$message({
                       type: 'success',
                       message: '删除成功!'
@@ -170,15 +170,23 @@
             },
         },
         created() {
-            this.get_data()
-            //  this.setRecycleBin({
-            //     name: 'compareRecycleBin',
-            //     show: true
-            // });
+            this.get_data();
         },
-        mounted(){
-          this.setLog({query:{code:'PRUCHASE_SUPPLIER'}});
-        },
+        mounted() {
+          this.setMenuLink([
+            {
+              path: '',
+              query: {code: 'PRUCHASE_SUPPLIER'},
+              type: 10,
+              label: this.$i.common.log
+            },
+            {
+              path: 'compareArchive',
+              type: 20,
+              label: this.$i.common.archiveSupplier
+            },
+          ]);
+        }
     }
 
 </script>
