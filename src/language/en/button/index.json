@@ -9,5 +9,6 @@
   "submit": "submit",
   "save": "Save",
   "download":"Download",
-  "remove": "Remove"
+  "remove": "Remove",
+  "recover": "Recover"
 }
