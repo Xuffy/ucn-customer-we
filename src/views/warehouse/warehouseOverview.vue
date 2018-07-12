@@ -159,16 +159,9 @@
                 this.selectList=e;
             },
             download(){
-                let ids;
-                if(this.selectList.length===0){
-                    ids=[];
-                }
-                else{
-                    ids=_.pluck(_.pluck(this.selectList,'id'),'value');
-                }
+                let ids=_.pluck(_.pluck(this.selectList,'id'),'value');
                 let params=this.$depthClone(this.warehouseConfig);
                 params.inboundSkuIds=ids;
-                return console.log(params,'params')
                 this.$fetch.export_task('WAREHOUES',params);
             },
 
