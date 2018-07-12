@@ -26,7 +26,10 @@ export default {
         type: 'String',
         showType:'input',
         isDefaultShow:true,               //是否是默认显示
-        belongPage:'sellerProductOverview'
+        belongPage:'sellerProductOverview',
+      _rules: {
+        length: 45
+      }
     },
     readilyAvailable: {
         key: 'readilyAvailable',

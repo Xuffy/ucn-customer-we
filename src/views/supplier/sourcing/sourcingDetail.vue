@@ -45,7 +45,9 @@
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.createInquiry}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_ORDER'" @click='createOrder'>{{$i.common.createOrder}}</el-button>
                     <el-button v-authorize="'SUPPLIER:DETAIL:ADD_COMPARE'" @click='addCompare'>{{$i.common.addToCompare}}</el-button>
-                    <el-button v-authorize="'SUPPLIER:DETAIL:CREATE_INQUIRY'" @click='supplierProducts'>{{$i.common.supplierProducts}}</el-button>
+                  <router-link :to="{ name:'productSourcingOverview', params: {supplierName: basicDate.name}}">
+                    <el-button v-authorize="'SUPPLIER:DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
+                  </router-link>
                     <el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
                 </div>
 

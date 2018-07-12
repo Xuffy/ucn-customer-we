@@ -9,6 +9,7 @@
             <select-search :options="options" @inputEnter="searchEnter" />
         </div>
         <v-table
+            :code="$route.params.type === 'inquiry' ? 'inquiry_list' : null"
             :data="tabData"
             :loading="tabLoad"
             @change-checked="changeChecked"

@@ -291,6 +291,9 @@
                         this.loading = false
                         this.tabData = this.$getDB(this.$db.supplier.overviewtable, res.datas, e => {
 
+                          let country;
+                          country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
+                          e.country._value = country.name || '';
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm ,'incoterm',e,true).name;
                           return e;
