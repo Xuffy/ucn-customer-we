@@ -1827,7 +1827,7 @@
                         obj.skuComments=v.skuComments;
                         obj.skuBarCode=v.skuBarcode;
                         obj.skuSaleStatus=v.skuStatus;
-                        obj.skuStatus=1;
+                        obj.skuStatus='TBC';
                         obj.skuQuotationNo=v.quotationNo;
                         obj.skuSysCode=v.skuSysCode;
                         arr.push(obj);
