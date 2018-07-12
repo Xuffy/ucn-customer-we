@@ -648,7 +648,7 @@
                     this.selectProductTableData = [];
                     this.$message({
                         type: "success",
-                        message: "Delete Success!"
+                        message: this.$i.warehouse.deleteSuccess
                     });
                 }).catch(() => {
 

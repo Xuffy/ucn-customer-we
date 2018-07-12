@@ -44,12 +44,48 @@ export default {
   },
   created() {
     let type = this.$route.params.type;
-    if (type !== 'compare' || type !== 'inquiry') {
+    if (type !== 'compare' && type !== 'inquiry') {
       this.$router.push({name: 'negotiationInquiry'});
       return;
     }
-    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.recycleBin});
+    switch (type) {
+      case 'inquiry':
+        this.options = [{
+          id: 'supplierName',
+          label: this.$i.inquiry.supplierName,
+          operator: 'like'
+        }, {
+          id: 'inquiryNo',
+          label: this.$i.inquiry.InquiryNo,
+          operator: 'like'
+        }, {
+          id: 'quotationNo',
+          label: this.$i.inquiry.quotationNo,
+          operator: 'like'
+        }];
+        this.title = this.$i.common.inquiryRecycleBin;
+        this.bodyData.recycleCustomer = 1;
+        break;
+      case 'compare':
+        this.options = [{
+          id: 'compareName',
+          label: this.$i.inquiry.compareName,
+          operator: 'like'
+        }, {
+          id: 'quotationNoLike',
+          label: this.$i.inquiry.compareItems
+        }];
+        this.title = this.$i.common.archive;
+        this.bodyData.recycle = 1;
+        // recycleSupplier
+        break;
+    }
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
+    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
+      .then(data => this.setDic(data))
+      .then(this.getList);
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
@@ -168,44 +204,6 @@ export default {
         this.checkedData = [];
       });
     }
-  },
-  created() {
-    switch (this.$route.params.type) {
-      case 'inquiry':
-        this.options = [{
-          id: 'supplierName',
-          label: this.$i.inquiry.supplierName,
-          operator: 'like'
-        }, {
-          id: 'inquiryNo',
-          label: this.$i.inquiry.InquiryNo,
-          operator: 'like'
-        }, {
-          id: 'quotationNo',
-          label: this.$i.inquiry.quotationNo,
-          operator: 'like'
-        }];
-        this.title = this.$i.common.inquiryRecycleBin;
-        this.bodyData.recycleCustomer = 1;
-        break;
-      case 'compare':
-        this.options = [{
-          id: 'compareName',
-          label: this.$i.inquiry.compareName,
-          operator: 'like'
-        }, {
-          id: 'quotationNoLike',
-          label: this.$i.inquiry.compareItems
-        }];
-        this.title = this.$i.common.compareRecycleBin;
-        this.bodyData.recycle = 1;
-        // recycleSupplier
-        break;
-    }
-
-    this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache')
-      .then(data => this.setDic(data))
-      .then(this.getList);
   }
 };
 </script>

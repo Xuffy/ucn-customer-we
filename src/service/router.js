@@ -500,7 +500,7 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          importTask: false,
+          importTask: true,
           name: $i.router.logisticPlanOverview
         },
         component: () => import('../views/logistic/logisticPlanOverview')

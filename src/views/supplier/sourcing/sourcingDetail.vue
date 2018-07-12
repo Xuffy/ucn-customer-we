@@ -131,7 +131,6 @@
 
 <script>
     import VCompareList from '../../product/compareList'
-    import VRemark from '../../product/addlineTable'
     import VAttachment from '../attachment'
     import {
         VTable,VUpload,VImage
@@ -142,7 +141,6 @@
         components: {
             VTable,
             VCompareList,
-            VRemark,
             VAttachment,
             VUpload,
             VImage

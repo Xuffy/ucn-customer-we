@@ -522,7 +522,7 @@
         <div class="title">
             {{$i.order.productInfoBig}}
         </div>
-        <v-table
+        <v-table ref="table"
                 :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
@@ -656,9 +656,6 @@
                             @inputEnter="searchInquiry"
                             v-model="searchId"
                             :options="searchOptions"></select-search>
-                    <!--<div class="btns">-->
-                    <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                    <!--</div>-->
                 </template>
             </v-table>
             <page
@@ -696,6 +693,8 @@
         </el-dialog>
 
         <v-history-modify
+          code="uorder_sku_list"
+          @closed="$refs.table.update()"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
