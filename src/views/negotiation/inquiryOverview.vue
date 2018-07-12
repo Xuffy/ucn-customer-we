@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       checkedData: [],
-      pazeSize: [30, 40, 50, 100],
+      pazeSize: [50, 100, 200],
       searchLoad: false,
       options: [{
         id: 'supplierName',
@@ -108,19 +108,13 @@ export default {
     }
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.recycleBin});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.getBaseData().then(this.gettabData, this.gettabData);
   },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
-  },
   methods: {
-    ...mapActions([
-      'setDraft',
-      'setRecycleBin',
-      'setDic'
-    ]),
+    ...mapActions(['setMenuLink']),
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
