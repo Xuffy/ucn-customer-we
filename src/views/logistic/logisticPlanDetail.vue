@@ -841,7 +841,7 @@
         // this.oldPlanObject.product = this.restoreArr(this.removeProductList)
         this.oldPlanObject.product = this.productList.map((item, i) => {
           return _.mapObject(item, (v, k) => {
-            if (v.type == 'text') {
+            if (v.typeSlef == 'text') {
               return v.value;
             } else {
               return null;
