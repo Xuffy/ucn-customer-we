@@ -9,7 +9,7 @@
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: 'Detail', type: 1}]"
+                :tableButtons="[{label: $i.product.detail, type: 1}]"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
