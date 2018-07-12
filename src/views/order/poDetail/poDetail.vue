@@ -1624,7 +1624,7 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                }).finally(err => {
+                }).finally(() => {
                     this.loadingProductTable = false;
                 });
             },
