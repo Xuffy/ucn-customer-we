@@ -168,6 +168,9 @@
                   })
               })
             },
+          download(){
+                
+          },
         },
         created() {
             this.get_data();
