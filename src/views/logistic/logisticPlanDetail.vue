@@ -210,6 +210,7 @@
         isContainerInfoLight:false,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
+        planStatus:2,
       }
     },
     components: {
@@ -396,6 +397,7 @@
         let url = this.pageTypeCurr == "loadingListDetail" ? this.$apis.get_order_details : this.$apis.get_plan_details
         this.$ajax.get(`${url}?id=${this.$route.query.id || ''}&logisticsNo=${this.$route.query.code || '' }`).then(res => {
           this.planId = res.id;
+          this.planStatus = res.planStatus;
           if (!this.isCopy) {
             this.fieldDisplay = res.fieldDisplay;
           }
@@ -780,6 +782,9 @@
           case 'cancelLoadingList':
             this.cancelLoadingList();
             break;
+          case 'download':
+            this.download();
+            break;
           default:
             break;
         }
@@ -835,6 +840,15 @@
           this.createdPlanData()
           this.createdPaymentData()
         }
+      },
+      download(){
+        let code;
+        if(this.pageTypeCurr=="loadingListDetail"){
+          code = 'LOGISTICS_ORDER';         
+        }else{
+          code = 'LOGISTICS_PLAN';
+        }
+        this.$fetch.export_task(code,{ids:[this.planId],planStatus:this.planStatus})
       },
       restoreObj(obj) {
         return _.mapObject(obj, v => (v = v.value))
