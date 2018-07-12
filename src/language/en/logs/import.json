@@ -22,5 +22,6 @@
   "inOperating": "In Operating...",
   "retry": "Retry",
   "exportDownload": "Download",
-  "refreshTask": "刷新任务"
+  "refreshTask": "刷新任务",
+  "exportSuccess": "导出任务正在执行，是否到任务中心查看？"
 }
