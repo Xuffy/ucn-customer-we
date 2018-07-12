@@ -7,7 +7,7 @@
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'" @click.stop="$emit('switchEdit','placeLogisticsPlan')">{{ $i.logistic.placeLogisticsPlan }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr=='loadingListDetail'&&fieldDisplay" @click.stop="$emit('switchEdit','read')">{{ $i.logistic.read }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr=='loadingListDetail'&&logisticsStatus!=4" @click.stop="$emit('switchEdit','cancelLoadingList')">{{ $i.logistic.cancelLoadingList}}</el-button>
-      <el-button size="mini" type="primary">{{ $i.logistic.download }}</el-button>
+      <el-button size="mini" type="primary" @click.stop="$emit('switchEdit','download')">{{ $i.logistic.download }}</el-button>
       <el-button size="mini" type="primary" v-if="pageTypeCurr!='loadingListDetail'&&logisticsStatus!=5" @click.stop="$emit('switchEdit','cancel')">{{ $i.logistic.cancel }}</el-button>
     </div>
     <div v-else>

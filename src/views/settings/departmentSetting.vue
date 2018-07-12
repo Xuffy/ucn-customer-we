@@ -423,7 +423,6 @@
       this.getUnit();
     },
     mounted() {
-      this.setLog({query: {code: 'departmentSetting'}});
     },
     watch: {
       searchDepartment(val) {
@@ -437,7 +436,6 @@
       },
     },
     methods: {
-      ...mapActions(['setLog']),
       pageSizeChange(val) {
         this.userListPage.ps = val;
         this.getDepartmentUser();
