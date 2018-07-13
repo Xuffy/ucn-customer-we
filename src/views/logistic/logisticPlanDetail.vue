@@ -106,12 +106,9 @@
   import attachment from '@/components/common/upload/index';
   import messageBoard from '@/components/common/messageBoard/index';
   import formList from '@/views/logistic/children/formList'
-  import oneLine from '@/views/logistic/children/oneLine'
   import feeInfo from '@/views/logistic/children/feeInfo'
   import payment from '@/views/logistic/children/payment'
   import btns from '@/views/logistic/children/btns'
-  import productModify from '@/views/logistic/children/productModify'
-  import addProduct from '@/views/logistic/children/addProduct'
 
   export default {
     name: 'logisticPlanDetail',
@@ -243,13 +240,10 @@
       formList,
       containerInfo,
       attachment,
-      oneLine,
       VTable,
       feeInfo,
       payment,
       btns,
-      productModify,
-      addProduct,
       messageBoard,
       VHistoryModify,
       overviewPage

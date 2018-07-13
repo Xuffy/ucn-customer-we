@@ -19,12 +19,12 @@
     <div class="btn-wrap">
       <div class="fn btn">
         <div v-if="pageType === 'plan'">
-          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD'" @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
+          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
           <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
           <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:CREATE'" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
         </div>
         <div v-if="pageType === 'loadingList'">
-          <el-button v-authorize="'LOADING_LIST:OVERVIEW:DOWNLOAD'" @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
+          <el-button v-authorize="'LOADING_LIST:OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
           <el-button v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
         </div>
         <div v-if="pageType === 'draft'">
@@ -305,8 +305,9 @@
         this.$router.push('/logistic/placeLogisticPlan')
       },
       sendArchive(){
-        this.$ajax.get(this.$apis.get_container_type).then(res => {
-          this.containerType = res
+        let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;
+        this.$ajax.post(url,{ids:this.downloadIds}).then(res => {
+          this.fetchDataList();
         })
       },
       fetchDataList(arg) {

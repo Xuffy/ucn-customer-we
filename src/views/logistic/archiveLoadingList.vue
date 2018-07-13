@@ -3,7 +3,7 @@
     <div class="hd-top">{{ $i.logistic.archive }}/{{ $i.logistic.loadingListOverview }}</div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+        <el-button @click="sendRecover" v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -91,7 +91,8 @@
               db: this.$db.logistic.sku
             }
           }
-        }
+        },
+        downloadIds:[]
       }
     },
     components: {
@@ -170,7 +171,10 @@
         })
       },
       changeChecked(arr) {
-        this.selectCount = arr
+        this.selectCount = arr;
+        this.downloadIds = arr.map(el => {
+          return el.id.value
+        })
       },
       searchFn(obj) {
         const {
@@ -191,6 +195,11 @@
       pageChange(e) {
         this.pageParams.pn = e
         this.fetchDataList()
+      },
+      sendRecover(){
+        this.$ajax.post(this.$apis.logistics_order_recover,{ids:this.downloadIds}).then(res => {
+          this.fetchDataList();
+        })
       },
       fetchDataList(arg) {
         if (arg) {
