@@ -47,9 +47,12 @@
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
-               <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
-<!--                 <el-button :disabled='!selectedData.length>0'>{{$i.common.downloadSelected}}({{selectedNumber.length}})</el-button>-->
+                  <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
                   <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                 <el-button @click="download"  v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'">
+                   {{$i.common.download}}
+                   ({{selectedNumber.length===0?$i.product.all:selectedNumber.length}})
+                 </el-button>
 
               </div>
               <div>
@@ -356,7 +359,16 @@
             this.params.operatorFilters=operatorFilters||[];
             this.params.sorts=sorts||[];
             this.get_data();
-          }
+          },
+          download(){
+            let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+            if(ids.length>0){
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
+            }else{
+              let params=this.$depthClone(this.params);
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_PARAMS',params);
+            }
+          },
 
         },
         created() {

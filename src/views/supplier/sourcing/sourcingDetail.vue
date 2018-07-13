@@ -49,6 +49,9 @@
                     <el-button v-authorize="'SUPPLIER:DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
                   </router-link>
                     <el-button v-authorize="'SUPPLIER:DETAIL:ADD_BOOKMARK'" @click='addToBookmark'>{{$i.common.addToBookmark}}</el-button>
+                  <el-button v-authorize="'SUPPLIER:DETAIL:DOWNLOAD'" @click="download">
+                    {{$i.common.download}}
+                  </el-button>
                 </div>
 
                 <div class="btns" v-else>
@@ -565,6 +568,11 @@
             }).catch(err=>{
               console.log(err)
             });
+          },
+          //download
+          download(){
+            let ids=_.pluck(_.pluck(this.basicDate,"id"),'value');
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
           },
         },
         created() {
