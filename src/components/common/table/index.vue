@@ -80,7 +80,7 @@
                        :src="getImage(cItem._value || cItem.value)"
                        height="30px"
                        width="30px"
-                       @click="$refs.tableViewPicture.show(cItem._value || cItem.value)"></v-image>
+                       @click="setViewPicture(cItem._value || cItem.value)"></v-image>
 
               <el-popover
                 v-else-if="cItem._upload && !item._remark"
@@ -138,7 +138,6 @@
       <slot name="footer"></slot>
     </div>
 
-    <v-view-picture ref="tableViewPicture"></v-view-picture>
   </div>
 </template>
 
@@ -168,13 +167,13 @@
 
   import VFilterValue from './filterValue'
   import VFilterColumn from './filterColumn'
-  import VViewPicture from '../viewPicture/index'
   import VUpload from '../upload/index'
   import VImage from '../image/index'
+  import {mapActions, mapState} from 'vuex';
 
   export default {
     name: 'VTable',
-    components: {VFilterValue, VViewPicture, VImage, VFilterColumn, VUpload},
+    components: {VFilterValue, VImage, VFilterColumn, VUpload},
     props: {
       data: {
         type: Array,
@@ -255,6 +254,7 @@
       this.interval = setInterval(this.updateTable, 300);
     },
     methods: {
+      ...mapActions(['setViewPicture']),
       changeSort(key, type) {
         if (key !== this.currentSort.orderBy) {
           this.currentSort = this.$options.data().currentSort;

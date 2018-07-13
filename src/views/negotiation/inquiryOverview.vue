@@ -29,7 +29,7 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus" @change="gettabData"  size="mini">
+                <el-radio-group v-model="viewByStatus" @change="viewByChange"  size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -43,6 +43,7 @@
             :height="450"
             @action="action"
             @change-checked="changeChecked"
+            @change-sort="onListSortChange"
             :loading="tabLoad"
             ref="tab"
         />
@@ -157,6 +158,14 @@ export default {
         this.searchLoad = false;
         this.tabLoad = false;
       });
+    },
+    viewByChange() {
+      this.params.sorts = null;
+      this.gettabData();
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.gettabData();
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');

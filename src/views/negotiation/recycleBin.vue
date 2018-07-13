@@ -12,6 +12,7 @@
             :code="$route.params.type === 'inquiry' ? 'inquiry_list' : null"
             :data="tabData"
             :loading="tabLoad"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="350"
             :page-total="pageTotal"
@@ -151,6 +152,10 @@ export default {
         arr.push(item.id.value);
       });
       this.checkedArg = arr;
+    },
+    onListSortChange(args) {
+      this.bodyData.sorts = args.sorts;
+      this.getList();
     },
     getList() {
       switch (this.$route.params.type) {

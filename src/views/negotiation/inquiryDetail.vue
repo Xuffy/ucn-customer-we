@@ -19,6 +19,7 @@
                 :height="450"
                 :data.sync="newTabData"
                 :selection="false"
+                :disabledSort="true"
                 :buttons="basicInfoBtn"
                 :loading="tableLoad"
                 :rowspan="2"
@@ -41,6 +42,8 @@
               :buttons="productInfoBtn"
               :loading="tableLoad"
               :height="450"
+              :disabledSort="true"
+              :totalRow="productTotalRow"
               @action="producInfoAction"
               @change-checked="changeChecked"
               :rowspan="2"
@@ -86,7 +89,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
     <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
   </div>
 </template>
@@ -167,6 +170,30 @@ export default {
         }
       });
       return json;
+    },
+    productTotalRow() {
+      let obj = {};
+      if (this.newProductTabData.length <= 0) {
+        return false;
+      }
+
+      _.map(this.newProductTabData, v => {
+        if(v._remark) return;
+        _.mapObject(v, (item, key) => {
+          if (item._hide) return;
+          if (item._totalRow && !isNaN(item.value)) {
+            obj[key] = {
+              value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+            };
+          } else {
+            obj[key] = {
+              value: ''
+            };
+          }
+        });
+      });
+
+      return [obj];
     }
   },
   created() {
@@ -359,7 +386,9 @@ export default {
       return options;
     },
     beforeSave(data) {
-      if (this.idType === 'basicInfo') return true;
+      if (this.idType === 'basicInfo') {
+        return true;
+      }
       if (Array.isArray(data)) {
         for (let item of data) {
           if (!item._remark && item.skuReadilyAvailable.value === 1 && (isNaN(item.skuAvailableQty.value) || item.skuAvailableQty.value < 1)) {
@@ -378,7 +407,7 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.originValue) {
+          if (o._isModified === true) {
             changedFields[field] = '1';
           }
         });
@@ -443,24 +472,32 @@ export default {
       });
     },
     basicInfoAction(data, type) {
-      if (['histoty', 'modify'].indexOf(type) === -1) return;
+      if (['histoty', 'modify'].indexOf(type) === -1) {
+        return;
+      }
       // basic info 按钮操作
       this.idType = 'basicInfo';
       this.historyColumn = this.$db.inquiry.basicInfo;
       this.fnBasicInfoHistoty(data, 'basicInfo', {type, data: data.id.value});
-      if (type === 'modify') this.onSwitch = true;
+      if (type === 'modify') {
+        this.onSwitch = true;
+      }
     },
     producInfoAction(data, type) {
       if (type === 'detail') {
         this.$router.push({path: '/product/sourcingDetail', query: {id: data.skuId.value}});
         return;
       }
-      if (['histoty', 'modify'].indexOf(type) === -1) return;
+      if (['histoty', 'modify'].indexOf(type) === -1) {
+        return;
+      }
       // Produc info 按钮操作
       this.idType = 'producInfo';
       this.historyColumn = this.$db.inquiry.productInfo;
       this.fnBasicInfoHistoty(data, 'productInfo', {type, data: data.skuId.value});
-      if (type === 'modify') this.onSwitch = true;
+      if (type === 'modify') {
+        this.onSwitch = true;
+      }
     },
     // 获取选中的单 集合
     changeChecked(item) {
@@ -532,7 +569,9 @@ export default {
         }
         Object.keys(item).forEach(field => {
           let val = item[field];
-          if (excludeColumns.indexOf(field) > -1) return;
+          if (excludeColumns.indexOf(field) > -1) {
+            return;
+          }
           o[field] = val.value;
         });
         list.push(o);

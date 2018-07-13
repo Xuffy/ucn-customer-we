@@ -18,13 +18,19 @@
     </div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <div v-if="pageType === 'plan' || pageType === 'loadingList'">
-          <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
-          <el-button @click.stop="addNew" v-if="pageType != 'loadingList'">{{ $i.logistic.placeLogisticPlan }}</el-button>
+        <div v-if="pageType === 'plan'">
+          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:CREATE'" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+        </div>
+        <div v-if="pageType === 'loadingList'">
+          <el-button v-authorize="'LOADING_LIST:OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+          <el-button v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
         </div>
         <div v-if="pageType === 'draft'">
-          <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button>
-          <el-button @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
+          <!-- <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button> -->
+          <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+          <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW:SEND'" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
         </div>
       </div>
       <div class="view-by-btn">
@@ -297,6 +303,12 @@
       },
       addNew() {
         this.$router.push('/logistic/placeLogisticPlan')
+      },
+      sendArchive(){
+        let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;
+        this.$ajax.post(url,{ids:this.downloadIds}).then(res => {
+          this.fetchDataList();
+        })
       },
       fetchDataList(arg) {
         if(arg){

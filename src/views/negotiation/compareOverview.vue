@@ -15,6 +15,7 @@
             :loading="tabLoad"
             :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="455"/>
         <v-pagination
@@ -75,7 +76,13 @@ export default {
           });
           this.bodyData.tc = res.tc;
           this.tabData = this.$getDB(this.$db.inquiry.compare, data);
+        }, () => {
+          this.tabLoad = false;
         });
+    },
+    onListSortChange(args) {
+      this.bodyData.sorts = args.sorts;
+      this.getList();
     },
     action(item, type) { // 操作表单 action
       let types = '';

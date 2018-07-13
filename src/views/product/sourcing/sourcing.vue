@@ -9,7 +9,7 @@
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: $i.product.detail, type: 1}]"
+                :tableButtons="[{label: $i.product.detailBig, type: 1}]"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
@@ -128,7 +128,12 @@
                 });
             },
             btnClick(e){
-                console.log(e,'eee')
+                this.$windowOpen({
+                    url:'/product/sourcingDetail',
+                    params:{
+                        id:e.id.value
+                    }
+                })
             },
             changeSort(e){
                 console.log(e,'val')
