@@ -86,7 +86,7 @@
           :isInquiry="true">
       </v-product>
     </el-dialog>
-    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
+    <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
     <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
   </div>
 </template>
@@ -378,7 +378,7 @@ export default {
           if (['fieldDisplay', 'fieldRemarkDisplay', 'status', 'entryDt', 'updateDt'].indexOf(field) > -1) {
             return;
           }
-          if (o.value !== o.originValue) {
+          if (o._isModified === true) {
             changedFields[field] = '1';
           }
         });
