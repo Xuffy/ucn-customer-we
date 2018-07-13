@@ -22,6 +22,7 @@
                          v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
                          :prop="item.key"
+                         :cell-style="item._style || {}"
                          :label="item.label">
 
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
