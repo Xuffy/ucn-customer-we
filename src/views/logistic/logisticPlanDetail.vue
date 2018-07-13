@@ -48,7 +48,7 @@
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment ref="payment" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
+      <payment ref="payment" v-authorize="auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
         @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
         :currencyCode="oldPlanObject.currency" />
     </div>
@@ -59,8 +59,8 @@
         @change-checked="selectProduct"
         >
         <div slot="header" class="product-header" v-if="edit">
-          <el-button type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
-          <el-button type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <el-button v-authorize="auth[pageTypeCurr].PRODUCT_INFO_ADD||''" type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
+          <el-button v-authorize="auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
@@ -172,6 +172,22 @@
           skuIncoterm: 'ITM',
           ShipmentStatus: 'SKU_LOGISTICS_STATUS'
         },
+        auth:{
+          logisticPlanDetail: {
+            payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
+            PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
+            PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
+          },
+          loadingListDetail: {
+            payment:'LOADING_LIST:DETAIL:PAYMENT'
+          },
+          logisticDraftDetail: {
+
+          },
+          placeLogisticPlan: {
+
+          },
+        },
         configUrl: {
           placeLogisticPlan: {
             saveAsDraft: {
@@ -191,6 +207,11 @@
             send: {
               api: this.$apis.update_logistic_plan,
               path: '/plan'
+            },
+            auth:{
+              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
+              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
+              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
             }
           },
           planDraftDetail: {
@@ -201,7 +222,12 @@
             send: {
               api: this.$apis.send_draft_logistic_plan,
               path: '/plan'
-            }
+            },
+            auth:{
+              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
+              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
+              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
+            } 
           }
         },
         pageName: '',
@@ -384,7 +410,7 @@
         })
       },
       ProductFromOrderDetail(e){
-        window.open(`${window.location.origin}#/product/sourcingDetail?id=${e.skuId.value}`);
+        this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
       },
       addProductFromOrder(pageParams){
         this.$ajax.post(this.$apis.get_order_list_with_page, pageParams).then(res=>{
@@ -531,9 +557,9 @@
       },
       deleteContainer() {
         if (!this.selectionContainer.length) return
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+          confirmButtonText: this.$i.logistic.confirm,
+          cancelButtonText: this.$i.logistic.cancel,
           type: 'warning'
         }).then(() => {
           this.oldPlanObject.rmContainerDetail = this.selectionContainer.map((item) => {
@@ -542,7 +568,7 @@
           this.containerInfo = _.difference(this.containerInfo, this.selectionContainer);
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: this.$i.logistic.operationSuccess
           })
         })
       },
@@ -569,7 +595,7 @@
       },
       action(e, status, i) {
         if (status == 3) {
-          return window.open(`${window.location.origin}#/product/sourcingDetail?id=${ e.skuId.value }`);
+          return this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
         }
         this.negotiate = this.productbButtons[status - 1].label;
         this.productInfoModifyStatus = status
@@ -802,7 +828,7 @@
           id: this.planId
         }).then(res => {
           this.$message({
-            message: '取消成功，正在跳转...',
+            message: this.$i.logistic.operationSuccess,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -812,14 +838,14 @@
         })
       },
       copyPlan() {
-        window.open(`${window.location.origin}#/logistic/placeLogisticPlan?id=${this.planId}&copy=copy`);
+        this.$windowOpen({url:'/logistic/placeLogisticPlan',params:{id:this.planId,copy:'copy'}})
       },
       cancelLoadingList() {
         this.$ajax.post(this.$apis.logistics_order_cancelByIds, {
           ids: [this.planId]
         }).then(res => {
           this.$message({
-            message: '取消成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {
@@ -951,7 +977,7 @@
         }
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
-            message: '发送成功，正在跳转...',
+            message: this.$i.logistic.jumping,
             type: 'success',
             duration: 3000,
             onClose: () => {

@@ -3,7 +3,7 @@
     <div class="hd-top">{{ $i.logistic.archive }}/{{ $i.logistic.draftOverview }}</div>
     <div class="btn-wrap">
       <div class="fn btn">
-        <el-button>{{ $i.logistic.recover }}({{selectCount.length}})</el-button>
+        <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
       </div>
       <div class="view-by-btn">
         <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -116,32 +116,36 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageType && this.pageType == "loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = [{
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      },{
+        path: '/logistic/draft',
+        label: this.$i.common.draft
+      },{
+        path: '/logistic/archivePlan',
+        label: this.$i.logistic.archivePlan
+      },{
+        path: '/logistic/archiveDraft',
+        label: this.$i.logistic.archiveDraft
+      },
+      {
+        path: '/logistic/archiveLoadingList',
+        label: this.$i.logistic.archiveLoadingList
+      }];
+      this.setMenuLink(menuList);
       this.fetchData()
-      this.registerRoutes()
       // this.getContainerType() 接手注释
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       initPage() {
         this.pageParams = {
           pn: 1,
           ps: 10
         };
-      },
-      registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
-        })
       },
       fetchData() {
         this.initPage();
@@ -197,12 +201,11 @@
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true
         const lgStatus = this.fillterVal === 'all' ? [] : [this.fillterVal]
-
-        this.pageType === 'draft' && (this.pageParams.planStatus = 1)
-        this.pageType === 'plan' && (this.pageParams.planStatus = 2)
+        this.pageParams.planStatus = 1;
         this.$ajax.post(url, {
           lgStatus,
-          ...this.pageParams
+          ...this.pageParams,
+          archive:1
         }).then(res => {
           if (!res) return (this.tableLoading = false)
           this.tabData = this.$getDB(db, res.datas, item => {
