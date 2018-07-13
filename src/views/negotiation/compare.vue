@@ -20,17 +20,18 @@
             </div>
             <div>
                 <span>{{ $i.common.compareBy }}&nbsp;</span>
-                <el-radio-group v-model="compareBy" @change="upData" size="mini">
+                <el-radio-group v-model="compareBy" @change="compareByChange" size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
         <v-table
-            code='inquiry_list'
+            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry_sku_list'"
             :height="455"
             :data="tabData"
             :loading="tabLoad"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :buttons="[{label: 'detail', type: 'detail'}]"
             @action="action"/>
@@ -98,18 +99,20 @@ export default {
       this.compareInfo.id = this.$route.query.id;
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
-    this.getDirData().then(this.upData, this.upData);
+    this.getDirData().then(this.getData, this.getData);
     this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
     this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
-    upData() {
+    getData() {
       let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
       this.getListByIds().then(this.getCompareList).then(datas => {
         if (!datas) return;
         this.bakData = this.$getDB(column, datas, item => this.$filterDic(item));
         this.renderTabdata();
+        this.tabLoad = false;
+      }, () => {
         this.tabLoad = false;
       });
     },
@@ -146,7 +149,7 @@ export default {
           this.argDisabled = [];
           this.disableds = [];
           if (this.$route.params.type === 'only') {
-            this.upData();
+            this.getData();
             this.compareType = 'only';
             return;
           }
@@ -227,6 +230,14 @@ export default {
         return Promise.resolve();
       }
     },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.getData();
+    },
+    compareByChange() {
+      this.params.sorts = null;
+      this.getData();
+    },
     changeChecked(item) {
       this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
@@ -277,12 +288,12 @@ export default {
     },
     handleSizeChange(val) {
       this.params.pn = val;
-      this.upData();
+      this.getData();
     },
     pageSizeChange(val) {
       this.params.pn = 1;
       this.params.ps = val;
-      this.upData();
+      this.getData();
     }
   }
 };

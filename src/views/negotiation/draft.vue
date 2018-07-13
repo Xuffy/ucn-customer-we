@@ -14,7 +14,7 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="postParams.viewType" @change="getList"  size="mini">
+                <el-radio-group v-model="postParams.viewType" @change="viewByChange"  size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -26,6 +26,7 @@
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="450"
             :page-total="pageTotal"/>
@@ -117,6 +118,14 @@ export default {
         this.searchLoad = false;
         this.checkedArg = [];
       });
+    },
+    onListSortChange(args) {
+      this.postParams.sorts = args.sorts;
+      this.getList();
+    },
+    viewByChange() {
+      this.postParams.sorts = null;
+      this.getList();
     },
     searchEnter(val, operatorFilters) { // 搜索框
       this.postParams.operatorFilters = operatorFilters;
