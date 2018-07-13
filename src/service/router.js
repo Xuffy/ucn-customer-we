@@ -489,7 +489,10 @@ export const routerMap = [
   {
     path: '/logistic',
     name: 'logistic',
-    meta: {name: $i.router.logistic},
+    meta: {
+      name: $i.router.logistic,
+      auth: ['LOGISTICS']
+    },
     component: Layout,
     redirect: '/logistic/plan',
     children: [
@@ -501,7 +504,8 @@ export const routerMap = [
           recycleBin: false,
           log: true,
           importTask: true,
-          name: $i.router.logisticPlanOverview
+          name: $i.router.logisticPlanOverview,
+          auth: ['LOGISTICS:PLAN_OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
@@ -512,8 +516,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: true,
-          importTask: false,
-          name: $i.router.logisticLoadingListOverview
+          importTask: true,
+          name: $i.router.logisticLoadingListOverview,
+          auth: ['LOADING_LIST:OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
@@ -526,7 +531,8 @@ export const routerMap = [
           recycleBin: false,
           log: true,
           importTask: false,
-          name: $i.router.logisticLoadingDraft
+          name: $i.router.logisticLoadingDraft,
+          auth: ['LOGISTICS:PLAN_DRAFT_OVERVIEW']
         },
         component: () => import('../views/logistic/logisticPlanOverview')
       },
@@ -603,8 +609,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: false,
-          importTask: false,
-          name: $i.router.logisticPlaceDetail
+          importTask: true,
+          name: $i.router.logisticPlaceDetail,
+          auth: ['LOGISTICS:PLAN_DETAIL']
         },
         component: () => import('../views/logistic/logisticPlanDetail')
       },
@@ -616,8 +623,9 @@ export const routerMap = [
           draft: '/logistic/draft',
           recycleBin: false,
           log: false,
-          importTask: false,
-          name: $i.router.logisticLoadingList
+          importTask: true,
+          name: $i.router.logisticLoadingList,
+          auth: ['LOADING_LIST:DETAIL']
         },
         component: () => import('../views/logistic/logisticPlanDetail')
       },
