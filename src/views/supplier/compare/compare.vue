@@ -19,7 +19,10 @@
                 <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
+               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'" @click="download">
+                  {{$i.common.download}}
+                </el-button>
             </span>
             <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
             <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
@@ -33,7 +36,8 @@
           @action="btnClick"
           @change-checked="changeChecked"
           @change-sort="sort"
-          @filter-value="tableFilterValue"></v-table>
+          @filter-value="tableFilterValue"
+          :height="500"></v-table>
 
         <div class="footBtn">
             <div v-if="$route.query.type==='new'">
@@ -313,7 +317,7 @@
               }
             },
 
-            //新增product
+            //新增
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
@@ -322,36 +326,46 @@
 
             },
 
-            //删除product
+            //删除
             deleteProduct(){
                 this.$confirm('确定删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.selectList.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',true);
-                                this.$set(m,'_checked',false);
-                            }
-                        })
-                    });
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
-                    this.$nextTick(()=>{
-                        this.disableDelete=true;
-                        this.disabledLine=[];
-                        this.tableDataList.forEach(v=>{
-                            if(!v._disabled){
-                                this.disabledLine.push(v);
-                            }
-                        });
-                    });
+                  console.log(this.selectNumber)
+                  this.$ajax.post(this.$apis.post_supplier_deleteCompareDetails, this.selectNumber)
+                    .then(res => {
+                      console.log(res)
+                      this.$message({
+                          type: 'success',
+                          message: '删除成功!'
+                      });
+
+                    })
+                    // this.selectList.forEach(v=>{
+                    //     let id=_.findWhere(v,{key:'id'}).value;
+                    //     this.tableDataList.forEach(m=>{
+                    //         let newId=_.findWhere(m,{key:'id'}).value;
+                    //         if(id===newId){
+                    //             this.$set(m,'_disabled',true);
+                    //             this.$set(m,'_checked',false);
+                    //         }
+                    //     })
+                    // });
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: '删除成功!'
+                    // });
+                    // this.$nextTick(()=>{
+                    //     this.disableDelete=true;
+                    //     this.disabledLine=[];
+                    //     this.tableDataList.forEach(v=>{
+                    //         if(!v._disabled){
+                    //             this.disabledLine.push(v);
+                    //         }
+                    //     });
+                    // });
                 }).catch(() => {
 
                 });
@@ -528,6 +542,11 @@
             this.params.sorts =  item.sorts;
             this.getList();
           },
+          download(){
+            let ids = this.$route.query.id;
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_IDS',{ids:ids});
+          },
+
         },
         created(){
             this.getCodePart();
