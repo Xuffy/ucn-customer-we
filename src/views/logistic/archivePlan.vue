@@ -17,7 +17,8 @@
         </div>
       </div>
     </div>
-    <v-table :code="urlObj[pageType][viewBy].setTheField" :data="tabData" @change-checked="changeChecked" :loading="tableLoading" :height="height" ref="tab" />
+    <v-table :code="urlObj[pageType][viewBy].setTheField" 
+    :data="tabData" @change-checked="changeChecked" :loading="tableLoading" :height="height" ref="tab" @change-sort="changeSort"/>
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
   </div>
 </template>
@@ -146,6 +147,10 @@
           pn: 1,
           ps: 10
         };
+      },
+      changeSort(arr){
+        this.pageParams.sorts = arr.sorts;
+        this.fetchDataList();
       },
       fetchData() {
         this.initPage();
