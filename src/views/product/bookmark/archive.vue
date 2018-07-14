@@ -1,12 +1,12 @@
 <template>
     <div>
         <overview-page
-                :title="$i.product.bookmark"
+                :title="$i.product.bookmarkArchive"
                 :label-width="labelWidth"
                 :form-column="$db.product.overview"
                 :tableData="productData"
                 :pageData="pageData"
-                :tableButtons="[{label: $i.product.detailBig, type: 1}]"
+                :tableButtons="null"
                 :loadingTable="loadingTable"
                 tableCode="udata_purchase_sku_overview"
                 @search="getData"
@@ -15,38 +15,15 @@
                 @change-checked="changeChecked">
             <template slot="btns">
                 <el-button
-                        @click="createInquiry"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_INQUIRY'">
-                    {{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                <el-button
-                        @click="createOrder"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:CREATE_ORDER'">
-                    {{$i.product.createOrder}}({{selectList.length}})</el-button>
-                <el-button
-                        @click="compareProducts"
-                        :disabled="selectList.length<2"
+                        @click="recover"
+                        :loading="isRecovering"
+                        :disabled="selectList.length===0"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:COMPARE'">
-                    {{$i.product.compare}}({{selectList.length}})</el-button>
-                <el-button
-                        @click="addProduct"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:ADD_PRODUCT'">
-                    {{$i.product.addNewProductEn}}</el-button>
-                <el-button @click="manuallyAddProduct"
-                           v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD'">
-                    {{$i.product.manuallyAdd}}</el-button>
-                <el-button
-                        @click="()=>$refs.importCategory.show()"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:UPLOAD'">
-                    {{$i.button.upload}}</el-button>
+                    {{$i.product.recover}}({{selectList.length}})</el-button>
                 <el-button
                         @click="download"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">
                     {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})</el-button>
-                <el-button
-                        type="danger"
-                        :disabled="selectList.length<1"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'" @click="deleteBookmark">
-                    {{$i.button.remove}}</el-button>
             </template>
             <v-pagination slot="pagination"
                           @change="val=>{getData({pn:val})}"
@@ -105,7 +82,7 @@
     import {mapActions} from 'vuex'
 
     export default {
-        name:"bookmark",
+        name:"archive",
         components:{
             overviewPage,
             VPagination,
@@ -125,7 +102,7 @@
                 queryConfig:{
                     pn:1,
                     ps:50,
-                    recycle: false,
+                    recycle: true,
                 },
                 disabledCompare:true,
                 disabledOrderList:[],
@@ -138,6 +115,7 @@
                  * */
                 disabledDownload:true,
                 loadingAddBookmark:false,
+                isRecovering:false,
 
 
                 /**
@@ -217,82 +195,24 @@
             /**
              * 按钮事件
              * */
-            createInquiry(){
-                if (this.selectList.length === 0) {
-                    this.$windowOpen({
-                        url: '/negotiation/createInquiry',
+            recover(){
+                let params=[];
+                _.map(this.selectList,v=>{
+                    params.push({
+                        id:v.id.value,
+                        name:v.nameEn.value
                     })
-                } else {
-                    let skus=_.pluck(_.pluck(this.selectList, "skuId"), "value").join(',');
-                    let supplierCodes=_.pluck(_.pluck(this.selectList, "supplierCode"), "value").join(',');
-                    this.$windowOpen({
-                        url: '/negotiation/createInquiry',
-                        params: {
-                            skus: skus,
-                            supplierCodes: supplierCodes
-                        }
-                    })
-                }
-            },
-            createOrder(){
-                if (this.selectList.length === 0) {
-                    this.$windowOpen({
-                        url: '/order/create',
-                    })
-                } else {
-                    this.disabledOrderList=[];
-                    _.map(this.selectList,v=>{
-                        if(v.customerCreate.value){
-                            this.disabledOrderList.push(v);
-                        }
-                    });
-                    if(this.disabledOrderList.length>0){
-                        return this.dialogFormVisible=true;
-                    }
-
-                    let supplierList =_.uniq( _.pluck(_.pluck(this.selectList,'supplierCode'),'value'));
-                    if (supplierList.length > 1) {
-                        return this.$message({
-                            message: this.$i.product.notAddDifferentSupplierProduct,
-                            type: 'warning'
-                        });
-                    }
-                    let ids = _.pluck(_.pluck(this.selectList,'skuId'),'value').join(',');
-                    this.$windowOpen({
-                        url: '/order/create',
-                        params: {
-                            type: 'product',
-                            ids: ids,
-                            supplierCode: supplierList[0]
-                        },
-                    })
-                }
-            },
-            compareProducts(){
-                if(this.selectList.length>100){
-                    return this.$message({
-                        message: this.$i.product.compareRecordMustLessThan100,
+                })
+                // let ids=_.pluck(_.pluck(this.selectList,'id'),'value');
+                this.isRecovering=true;
+                this.$ajax.post(this.$apis.recover_buyerProductBookmark,params).then(res=>{
+                    this.getData();
+                    this.$message({
+                        message: this.$i.product.recoverSuccess,
                         type: 'success'
                     });
-                }
-                let id = _.pluck(_.pluck(this.selectList,'skuId'),'value').join(',');
-                this.$windowOpen({
-                    url: '/product/compareDetail/new',
-                    params: {
-                        id: id,
-                    }
-                });
-            },
-            addProduct(){
-                this.disableProductLine = _.pluck(_.pluck(this.productData,'skuId'),'value');
-                this.addProductDialogVisible=true;
-                if(this.$refs.addProduct){
-                    this.$refs.addProduct.getData();
-                }
-            },
-            manuallyAddProduct(){
-                this.$windowOpen({
-                    url:'/product/bookmarkManuallyAdd'
+                }).finally(()=>{
+                    this.isRecovering=false;
                 });
             },
             download(){
@@ -313,24 +233,17 @@
                     cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
-                    let params=[];
-                    _.map(this.selectList,v=>{
-                        params.push({
-                            id:v.id.value,
-                            name:v.nameEn.value
-                        })
-                    });
                     this.loadingTable=true;
-                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,params).then(res=>{
+                    let id=_.pluck(_.pluck(this.selectList,'id'),'value');
+                    this.$ajax.post(this.$apis.delete_buyerProductBookmark,id).then(res=>{
                         this.selectList=[];
                         this.$message({
                             type: 'success',
                             message: this.$i.product.deleteSuccess
                         });
                         this.getData();
-                    }).finally(()=>{
-                        this.loadingTable=false;
                     });
+
                 }).finally(() => {
 
                 });
@@ -397,11 +310,6 @@
                 query: {code: 'PRODUCT'},
                 type: 10,
                 label: this.$i.common.log
-            });
-            this.setMenuLink({
-                path: '/product/bookmarkArchive',
-                type: 20,
-                label: this.$i.common.archive
             });
         },
         watch:{

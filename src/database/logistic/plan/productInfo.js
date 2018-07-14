@@ -17,12 +17,6 @@ export default {
     typeSlef: 'text',
     _hide: true
   },
-  "containerId": {
-    type: 'String',
-    _disabled: true,
-    typeSlef: 'text',
-    _hide: true
-  },
   "skuSupplierId": {
     type: 'String',
     _disabled: true,
@@ -173,6 +167,12 @@ export default {
     type: 'String',
     _disabled: true,
     typeSlef: 'text'
+  },
+  "containerId": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text',
+    _hide: true
   },
   "containerType": {
     type: 'String',

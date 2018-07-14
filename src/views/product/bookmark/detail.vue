@@ -504,7 +504,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             /**
              * 中间按钮组事件
              * */
@@ -952,7 +952,17 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/product/recycleBin',
+                type: 20,
+                label: this.$i.common.archive
+            });
         },
     }
 </script>

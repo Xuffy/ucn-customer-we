@@ -5,7 +5,8 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
+                <el-col
+                        :class="{speCol:v.type!=='textarea' && v.type!=='attachment',isModify:v._isModified}"
                         v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'"
                         :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8"
                         :xl="v.fullLine?24:8">
@@ -13,6 +14,7 @@
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
                                 <el-input
+                                        @change="handleChange(v.key)"
                                         :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || disabledLcNo || !isModify"
@@ -20,6 +22,7 @@
                             </div>
                             <div v-else>
                                 <el-input
+                                        @change="handleChange(v.key)"
                                         :placeholder="v.isQuotationNo?(isModify?$i.order.pleaseCreate:''):(isModify?$i.order.pleaseInput:'')"
                                         class="speInput"
                                         :disabled="v.disabled || v.disableDetail || !isModify"
@@ -42,6 +45,7 @@
                         <div v-else-if="v.type==='select'">
                             <div v-if="v.isSupplier">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -57,6 +61,7 @@
                             </div>
                             <div v-else-if="v.isIncoterm">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -72,6 +77,7 @@
                             </div>
                             <div v-else-if="v.isCurrency">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -88,7 +94,7 @@
                             <div v-else-if="v.isPayment">
                                 <el-select
                                         class="speInput"
-                                        @change="changePayment"
+                                        @change="changePayment(orderForm[v.key],v.key)"
                                         v-model="orderForm[v.key]"
                                         filterable
                                         :disabled="!isModify"
@@ -103,6 +109,7 @@
                             </div>
                             <div v-else-if="v.isCountry">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -118,6 +125,7 @@
                             </div>
                             <div v-else-if="v.isTransport">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         v-model="orderForm[v.key]"
                                         filterable
@@ -133,6 +141,7 @@
                             </div>
                             <div v-else-if="v.isStatus">
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         class="speInput"
                                         :disabled="v.disableDetail || !isModify"
                                         v-model="orderForm[v.key]"
@@ -147,6 +156,7 @@
                             </div>
                             <div v-else>
                                 <el-select
+                                        @change="handleChange(v.key)"
                                         :placeholder="isModify?$i.order.pleaseChoose:''"
                                         :disabled="v.disabled || !isModify"
                                         class="speInput"
@@ -162,6 +172,7 @@
                         </div>
                         <div v-else-if="v.type==='number'">
                             <el-input-number
+                                    @change="handleChange(v.key)"
                                     :placeholder="isModify?$i.order.pleaseInput:''"
                                     :disabled="v.disabled || !isModify"
                                     class="speInput speNumber"
@@ -172,6 +183,7 @@
                         </div>
                         <div v-else-if="v.type==='textarea'">
                             <el-input
+                                    @change="handleChange(v.key)"
                                     :disabled="v.disabled || !isModify"
                                     class="speInput"
                                     type="textarea"
@@ -236,6 +248,8 @@
                     label="Me">
                 <template slot-scope="scope">
                     <el-date-picker
+                            :class="{'high-light':scope.row.fieldUpdate && scope.row.fieldUpdate.customer===''}"
+                            @change="handleResponsibilityChange(scope.row,'customer')"
                             v-model="scope.row.customer"
                             :editable="false"
                             align="right"
@@ -251,6 +265,7 @@
                     label="Supplier">
                 <template slot-scope="scope">
                     <el-date-picker
+                            @change="handleResponsibilityChange(scope.row,'supplier')"
                             v-model="scope.row.supplier"
                             align="right"
                             :editable="false"
@@ -265,6 +280,7 @@
                     label="Remark">
                 <template slot-scope="scope">
                     <el-input
+                            @change="handleResponsibilityChange(scope.row,'remark')"
                             :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
                             :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
                             v-model="scope.row.remark"
@@ -278,6 +294,7 @@
                     label="Actual Date">
                 <template slot-scope="scope">
                     <el-date-picker
+                            @change="handleResponsibilityChange(scope.row,'actualDt')"
                             v-model="scope.row.actualDt"
                             align="right"
                             type="date"
@@ -525,6 +542,7 @@
         <v-table ref="table"
                 :totalRow="totalRow"
                 code="uorder_sku_list"
+                 native-sort
                 :height="500"
                 :data.sync="productTableData"
                 :buttons="handleShowBtn"
@@ -1284,19 +1302,7 @@
                 disableClickApplyPay: false,
                 allowHandlePay: false,       //是否可以操作payment模块
                 loadingPaymentTable: false,
-                paymentData: [
-                    // {
-                    //     no:res,
-                    //     name:'',
-                    //     planPayDt:'',
-                    //     planPayAmount:'',
-                    //     actualPayDt:'',
-                    //     actualPayAmount:'',
-                    //     currencyCode:this.qcDetail.exchangeCurrencyDictCode,
-                    //     status:10,
-                    //     isNew:true
-                    // }
-                ],
+                paymentData: [],
                 copyList: [],
                 disableClickDunning: false,
 
@@ -1639,6 +1645,25 @@
                     orderNo: this.$route.query.orderNo || this.$route.query.code
                 }).then(res => {
                     this.orderForm = res;
+
+                    /**
+                     * 高亮处理
+                     * */
+                    _.map(this.orderForm.fieldUpdate,(v,k)=>{
+                        this.$db.order.orderDetail[k]._isModified=true;
+                    });
+                    this.orderForm.fieldUpdate={};
+
+
+                    _.map(this.orderForm.responsibilityList,v=>{
+                        v.fieldUpdate={};
+                    });
+
+
+                    _.map(this.orderForm.skuList,v=>{
+                        v.fieldUpdate={};
+                    });
+
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
                     _.map(this.supplierOption, v => {
@@ -1716,7 +1741,6 @@
                      * 获取payment数据
                      * */
                     this.getPaymentData();
-
                 }).finally(err => {
                     this.loadingPage = false;
                     this.disableClickCancelModify = false;
@@ -1736,7 +1760,6 @@
                     this.loadingPaymentTable = false;
                 });
             },
-            //就是保存
             send() {
                 let params = Object.assign({}, this.orderForm);
                 _.map(this.supplierOption, v => {
@@ -1747,31 +1770,6 @@
                         params.supplierCompanyId = v.companyId;
                     }
                 });
-                params.skuList = this.dataFilter(this.productTableData);
-                let rightCode = true;
-                _.map(params.skuList, v => {
-                    if (v.skuSupplierCode !== params.supplierCode) {
-                        rightCode = false;
-                    }
-                    v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
-                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
-                    _.map(picKey, item => {
-                        if (_.isArray(v[item])) {
-                            v[item] = (v[item][0] ? v[item][0] : null);
-                        } else if (_.isString(v[item])) {
-                            let key = this.$getOssKey(v[item], true);
-                            v[item] = key[0];
-                        }
-                    });
-                });
-                if (!rightCode) {
-                    return this.$message({
-                        message: this.$i.order.supplierNotTheSame,
-                        type: "warning"
-                    });
-                }
-                params.attachments = this.$refs.upload[0].getFiles();
                 let orderSkuUpdateList = [];
                 _.map(this.productTableData, item => {
                     let isModify = false, isModifyStatus = false;
@@ -1801,9 +1799,45 @@
                             });
                         }
                     }
+                    if(!item._remark){
+                        _.map(item,(v,k)=>{
+                            if(v._isModified){
+                                if(!item.fieldUpdate){
+                                    item.fieldUpdate.value={};
+                                }
+                                item.fieldUpdate.value[k]='';
+                            }
+                        })
+                    }
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
-                // return console.log(params.fieldUpdate,'fieldUpdate')
+                params.skuList = this.dataFilter(this.productTableData);
+                let rightCode = true;
+                _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
+                    }
+                    v.skuSample = v.skuSample === "1" ? true : false;
+                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
+                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
+                        } else if (_.isString(v[item])) {
+                            let key = this.$getOssKey(v[item], true);
+                            v[item] = key[0];
+                        }
+                    });
+                });
+                if (!rightCode) {
+                    return this.$message({
+                        message: this.$i.order.supplierNotTheSame,
+                        type: "warning"
+                    });
+                }
+                params.attachments = this.$refs.upload[0].getFiles();
+                // console.log(this.productTableData,'productTableData')
+                // return console.log(this.$depthClone(params.skuList),'fieldUpdate')
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1836,9 +1870,7 @@
                     this.disableClickSaveDraft = false;
                 });
             },
-            //获取订单号(先手动生成一个)
             getOrderNo() {
-                // this.orderForm.orderNo=this.$route.query.orderId;
                 this.getSupplier();
             },
             //获取供应商
@@ -1873,7 +1905,7 @@
                     this.loadingTable = false;
                 });
             },
-            changePayment(e) {
+            changePayment(e,key) {
                 if (!e) {
                     return;
                 }
@@ -1884,21 +1916,34 @@
                 } else {
                     this.disabledLcNo = false;
                 }
+                if(key){
+                    if (!this.orderForm.fieldUpdate) {
+                        this.orderForm.fieldUpdate = {};
+                    }
+                    this.orderForm.fieldUpdate[key] = "";
+                }
             },
 
             /**
              * basic info事件
              * */
             handleChange(key) {
-                // console.log(key,'???')
-                // console.log(this.orderForm.fieldUpdate,'fieldUpdate')
                 if (!this.orderForm.fieldUpdate) {
                     this.orderForm.fieldUpdate = {};
                 }
                 this.orderForm.fieldUpdate[key] = "";
-
             },
 
+            /**
+             * responsibility事件
+             * */
+            handleResponsibilityChange(data,key){
+                console.log(data,'data')
+                if(!data.fieldUpdate){
+                    data.fieldUpdate={};
+                }
+                data.fieldUpdate[key]='';
+            },
 
             /**
              * product info事件
@@ -2022,7 +2067,6 @@
                     this.$refs.addBookmark.getData();
                 }
             },
-
             handleSure(e, type) {
                 this.loadingProductTable = true;
                 this.productTableDialogVisible = false;
@@ -2071,7 +2115,6 @@
             handleCancel() {
                 this.productTableDialogVisible = false;
             },
-
             saveNegotiate(e) {
                 _.map(this.productTableData, (v, k) => {
                     _.map(e, m => {
@@ -2972,6 +3015,13 @@
         line-height: 32px;
         color: #666666;
         margin-top: 10px;
+    }
+
+    .isModify >>> input{
+        background-color: yellow !important;
+    }
+    .high-light >>> input{
+        background-color: yellow !important;
     }
 
     .second-title {

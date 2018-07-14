@@ -95,7 +95,7 @@
 
               <div v-else
                    :style="{color:cItem._color || '','min-width':cItem._width || '80px'}"
-                   v-text="cItem._value || cItem.value"></div>
+                   v-text="cItem._value || cItem.value || '--'"></div>
             </td>
             <!--操作按钮显示-->
             <td v-if="buttons && (index % rowspan === 0)" :rowspan="rowspan">
@@ -216,6 +216,10 @@
         type: Boolean,
         default: false,
       },
+      nativeSort: {
+        type: [Boolean, String],
+        default: false,
+      },
       disabledSort: {
         type: Boolean,
         default: false,
@@ -256,6 +260,7 @@
     methods: {
       ...mapActions(['setViewPicture']),
       changeSort(key, type) {
+        let params = {sorts: []};
         if (key !== this.currentSort.orderBy) {
           this.currentSort = this.$options.data().currentSort;
         }
@@ -269,7 +274,45 @@
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
-        this.$emit('change-sort', {sorts: this.currentSort.orderType ? [this.currentSort] : []});
+        params.sorts = this.currentSort.orderType ? [this.currentSort] : [];
+
+        this.$emit('change-sort', params);
+      },
+      setSort(data) {
+        let sortData = [], newData = [], key
+          , sorts = this.currentSort;
+
+        if (_.isEmpty(sorts) || !this.nativeSort) {
+          return false;
+        }
+
+        if (!this.currentSort.orderType && data) {
+          return this.dataList = data;
+        }
+
+        key = _.isString(this.nativeSort) ? this.nativeSort : 'id';
+
+
+        _.map(this.dataList, val => {
+          if (_.isEmpty(val._remark)) {
+            sortData.push(_.mapObject(val, v => {
+              return v._value || v.value;
+            }))
+          }
+        });
+
+        sortData = _.sortBy(sortData, sorts.orderBy);
+
+        sortData = sorts.orderType === 'desc' ? sortData.reverse() : sortData;
+
+        _.map(sortData, val => {
+          _.map(this.dataList, v => {
+            if (val[key] && v[key].value === val[key]) {
+              newData.push(v);
+            }
+          });
+        });
+        this.dataList = newData;
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
@@ -358,6 +401,7 @@
             //   clearTimeout(to);
             this.dataList = this.$refs.filterColumn.getFilterData(val, res);
             type && this.filterColumn();
+            this.$nextTick(() => this.setSort())
 
             // }, 50);
           })
@@ -365,6 +409,7 @@
           // let to = setTimeout(() => {
           //   clearTimeout(to);
           this.dataList = val;
+          // this.setSort();
           type && this.filterColumn();
 
           // }, 50);
@@ -554,6 +599,10 @@
   .ucn-table tbody td {
     padding: 10px;
     border-right: 1px solid #FFFFFF;
+  }
+
+  .ucn-table tbody tr:hover {
+    background-color: #fbfbfb;
   }
 
   .ucn-table tbody td .img {

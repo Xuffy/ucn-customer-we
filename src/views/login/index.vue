@@ -24,7 +24,7 @@
       let params = Qs.stringify({
         type: config.CLIENT_TYPE,
         language: config.LANGUAGE,
-        redirect: Base64.encode(`${window.location.origin}/static/authorize/index.html`)
+        redirect: Base64.encodeURI(`${window.location.origin}/static/authorize/index.html`)
       });
       let redirectUrl = `?${params}`;
       this.$message.closeAll();
