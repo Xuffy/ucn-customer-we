@@ -60,5 +60,7 @@
   "addNewProduct": "Add New Product",
   "qcDetail": "Detail",
   "customer": "Customer",
-  "archive":"Archive"
+  "archive":"Archive",
+  "bookmarkArchive":"Bookmark Archive",
+  "compareArchive":"Compare Archive"
 }

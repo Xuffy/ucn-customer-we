@@ -116,6 +116,8 @@
     import product from '../addProduct'
     import { mapActions } from 'vuex'
 
+    let copySameData,copyLightData;
+
 
     export default {
         name: "compare",
@@ -171,7 +173,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             getList() {
                 if(this.$route.params.type==='new'){
                     //表示是新建detail还未保存
@@ -181,9 +183,7 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    this.loadingTable=true;
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
-                        console.log(res,'res')
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                             e.status._value=e.status.value?_.findWhere(this.statusOption,{code:String(e.status.value)}).name:'';
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
@@ -196,9 +196,8 @@
                         });
                         this.changeHighlight(true);
                         this.hasLoading=true;
-                        this.loadingTable=false;
                         this.disabledLine=this.tableDataList;
-                    }).catch(err=>{
+                    }).finally(()=>{
                         this.loadingTable=false;
                     });
                 }
@@ -230,8 +229,8 @@
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
-                    }).catch(err=>{
-
+                    }).finally(err=>{
+                        this.loadingTable=false;
                     });
                 }
             },
@@ -280,13 +279,9 @@
             changeChecked(e){
                 this.selectList=e;
             },
-
-            //编辑单子
             modifyCompare(){
                 this.isModify=true;
             },
-
-            //取消编辑
             cancelModify(){
                 this.disableClickCancel=true;
                 this.loadingTable=true;
@@ -335,7 +330,6 @@
                     this.loadingTable=false;
                 });
             },
-
             createInquiry(){
                 if(this.selectList.length===0){
                     this.$windowOpen({
@@ -370,8 +364,6 @@
                     })
                 }
             },
-
-            //勾选的商品创建order
             createOrder(){
                 this.disabledOrderList=[];
                 _.map(this.selectList,v=>{
@@ -397,7 +389,6 @@
                                 type: 'warning'
                             });
                         }
-
                         let ids='';
                         this.selectList.forEach(v=>{
                             ids+=(v.skuId.value+',');
@@ -412,72 +403,11 @@
                         })
                     }
                 }
-
-
-
-                // let supplierList=[];
-                // let allow=true;
-                // _.map(this.selectList,v=>{
-                //     if(v.customerCreate.value){
-                //         allow=false;
-                //     }
-                //     supplierList.push(v.supplierCode.value);
-                // });
-                // if(!allow){
-                //     return this.$message({
-                //         message: this.$i.product.customerProductCanNotAddToOrder,
-                //         type: 'warning'
-                //     });
-                // }
-                // if(_.uniq(supplierList).length>1){
-                //     return this.$message({
-                //         message: this.$i.product.notAddDifferentSupplierProduct,
-                //         type: 'warning'
-                //     });
-                // }
-                //
-                // this.disabledOrderList=[];
-                // this.selectList.forEach(v=>{
-                //     //如果customerCreate值为true,那么就代表是用户自己创建的不能添加到order
-                //     if(v.customerCreate.value){
-                //         this.disabledOrderList.push(v);
-                //     }
-                // });
-                // if(this.disabledOrderList.length>0){
-                //     this.dialogFormVisible=true;
-                // }else{
-                //     if(this.selectList.length===0){
-                //         this.$windowOpen({
-                //             url:'/order/create',
-                //         })
-                //     }else{
-                //         let ids='';
-                //         this.selectList.forEach(v=>{
-                //             if(this.$route.params.type==='modify'){
-                //                 ids+=(v.skuId.value+',');
-                //             }else if(this.$route.params.type==='new'){
-                //                 ids+=(v.id.value+',');
-                //             }
-                //         });
-                //         this.$windowOpen({
-                //             url:'/order/create',
-                //             params:{
-                //                 type:'product',
-                //                 ids:ids,
-                //                 supplierCode:this.selectList[0].supplierCode.value
-                //             },
-                //         })
-                //     }
-                // }
             },
-
-            //新增product
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
             },
-
-            //删除product
             deleteProduct(){
                 this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
                     confirmButtonText: this.$i.product.sure,
@@ -596,8 +526,6 @@
             handleCancel(){
                 this.addProductDialogVisible=false;
             },
-
-            //保存该compare list
             saveCompare(){
                 if(!this.compareName){
                     this.$message({
@@ -645,8 +573,6 @@
                     this.disabledSaveCompare=false;
                 });
             },
-
-            //删除该compare
             deleteCompare(){
                 this.$confirm('确认删除该compare?', '提示', {
                     confirmButtonText: '确定',
@@ -670,8 +596,6 @@
 
                 });
             },
-
-            //保存修改
             saveModify(){
                 if(!this.compareName){
                     this.$message({
@@ -717,7 +641,6 @@
                     this.disableClickSaveModify=false;
                 });
             },
-
             handleClick(e){
                 e.isActive=!e.isActive;
                 this.keylist.forEach(v=>{
@@ -726,7 +649,6 @@
                     }
                 });
             },
-
             handleCategory(data){
                 _.map(data,item=>{
                     if(item.children.length===0){
@@ -736,9 +658,9 @@
                     }
                 });
             },
-
         },
         created(){
+            this.loadingTable=true;
             const codeAjax=this.$ajax.post(this.$apis.get_partUnit,['SKU_SALE_STATUS','WT_UNIT','ED_UNIT','VE_UNIT','LH_UNIT','SKU_UNIT'],{cache:true});
             const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
             const sysCategoryAjax=this.$ajax.get(this.$apis.get_buyer_sys_category,{});
@@ -772,7 +694,17 @@
             })
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+            // this.setMenuLink({
+            //     path: '/logs/index',
+            //     query: {code: 'PRODUCT'},
+            //     type: 10,
+            //     label: this.$i.common.log
+            // });
+            // this.setMenuLink({
+            //     path: '/product/compareArchive',
+            //     type: 20,
+            //     label: this.$i.common.archive
+            // });
         },
         watch:{
             selectList(n){
