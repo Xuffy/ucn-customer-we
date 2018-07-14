@@ -34,6 +34,9 @@
                   <router-link :to="{ name:'productSourcingOverview', params: {supplierName: basicDate.name}}">
                     <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:PRODUCT'" >{{$i.common.supplierProducts}}</el-button>
                   </router-link>
+                  <el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DOWNLOAD'" @click="download">
+                    {{$i.common.download}}
+                  </el-button>
 
                 <!--<el-button v-authorize="'SUPPLIER:BOOKMARK_DETAIL:DELETE'" @click='remove' type='danger'>{{$i.common.delete}}</el-button>-->
 
@@ -545,6 +548,10 @@
               }).catch(err=>{
               });
             })
+          },
+          download(){
+            let ids=_.pluck(_.pluck(this.basicDate,"id"),'value');
+            this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_IDS',{ids:ids});
           },
         },
         created() {

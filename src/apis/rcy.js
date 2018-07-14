@@ -35,7 +35,7 @@ export default {
     post_supplier_addCompare: ['/purchase/supplier/compare','BASE_CS',  'BASE_URL'],
     post_supplier_listCompare: ['/purchase/supplier/listCompare','BASE_CS', 'BASE_URL'],
     post_supplier_listCompareDetails: ['/purchase/supplier/listCompareDetails','BASE_CS', 'BASE_URL'],
-    post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetails','BASE_CS', 'BASE_URL'],
+    post_supplier_deleteCompareDetails: ['/purchase/supplier/deleteCompareDetail','BASE_CS', 'BASE_URL'],
     post_supplier_deleteCompare: ['/purchase/supplier/deleteCompare','BASE_CS', 'BASE_URL'],
     post_supplier_recoverCompare: ['/purchase/supplier/recoverCompare','BASE_CS', 'BASE_URL'],
     post_deleteBookmarks: ['/purchase/supplier/batchDeleteBookmark','BASE_CS', 'BASE_URL'],
