@@ -216,6 +216,10 @@
         type: Boolean,
         default: false,
       },
+      nativeSort: {
+        type: Boolean,
+        default: false,
+      },
       disabledSort: {
         type: Boolean,
         default: false,
@@ -256,6 +260,7 @@
     methods: {
       ...mapActions(['setViewPicture']),
       changeSort(key, type) {
+        let params = {sorts: []};
         if (key !== this.currentSort.orderBy) {
           this.currentSort = this.$options.data().currentSort;
         }
@@ -269,7 +274,20 @@
         } else {
           this.currentSort.orderType = this.currentSort.orderType === 'asc' ? 'desc' : 'asc';
         }
-        this.$emit('change-sort', {sorts: this.currentSort.orderType ? [this.currentSort] : []});
+        params.sorts = this.currentSort.orderType ? [this.currentSort] : [];
+
+        this.nativeSort ? this.setDataSort(params) : this.$emit('change-sort', params);
+      },
+      setDataSort({sorts}) {
+        let sortData = [];
+        sorts = sorts[0];
+        if (_.isEmpty(sorts)) {
+          return false;
+        }
+        this.dataList.sort((a, b) => {
+          console.log(a, b, sorts)
+        })
+        console.log(this.dataList)
       },
       onFilterColumn(checked) {
         this.$emit('update:data', this.$refs.tableFilter.getFilterColumn(this.dataList, checked));
