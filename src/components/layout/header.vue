@@ -428,10 +428,8 @@
   }
 
   .icon-menu i {
-    font-size: 20px;
-    color: #eeeeee;
-    margin-right: 10px;
-    cursor: pointer;
+
+
   }
 </style>
 <style>
