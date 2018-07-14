@@ -761,15 +761,11 @@
           })
           .then(res => {
             this.$message.success(this.$i.setting.invitationSuccess);
-          }).finally(err => {
-          this.inviteUserLoading = false;
-        });
+          }).finally(() => this.inviteUserLoading = false);
       },
       getUnit() {
         this.$ajax.post(this.$apis.get_partUnit, ['LANGUAGE'], {cache: true})
-          .then(res => {
-            this.languageOption = res[0].codes;
-          });
+          .then(res => this.languageOption = res[0].codes);
       },
       savePrivilege() {
         let nodes = [], dataNodes

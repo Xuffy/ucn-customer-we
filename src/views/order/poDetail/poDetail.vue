@@ -542,6 +542,7 @@
         <v-table ref="table"
                 :totalRow="totalRow"
                 code="uorder_sku_list"
+                 native-sort
                 :height="500"
                 :data.sync="productTableData"
                 :buttons="handleShowBtn"
