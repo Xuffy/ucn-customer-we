@@ -96,5 +96,7 @@
   "sysCategory":"System Category",
   "bookmark":"Bookmark",
   "all":"All",
-  "detailBig":"Detail"
+  "detailBig":"Detail",
+  "bookmarkArchive":"Bookmark Archive",
+  "compareArchive":"Compare Archive"
 }

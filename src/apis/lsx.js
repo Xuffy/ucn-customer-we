@@ -56,7 +56,7 @@ export default {
   get_buyerRemarkList: ['/purchase/sku/listSkuRemark/{id}', 'BASE_URL'],
   add_buyerProductRemark: ['/purchase/sku/remark', 'BASE_URL'],
   update_buyerProductRemark: ['/purchase/sku/remark/{id}', 'BASE_URL'],
-  delete_buyerProductBookmark: ['/purchase/sku/deleteBookmark', 'BASE_URL'],
+  delete_buyerProductBookmark: ['/purchase/sku/deleteBookmark','BASE_URL'],
   add_customerSku: ['/purchase/sku/addCustomerSku', 'BASE_URL'],
   get_compareList: ['/purchase/sku/listCompare', 'BASE_URL'],
   get_skuListByIds: ['/purchase/sku/listSkuByIds','BASE_URL'],
@@ -70,6 +70,7 @@ export default {
   delete_buyerProductRemark: ['/purchase/sku/deleteSkuRemark/{id}', 'BASE_URL'],
   recover_buyerProductBookmark: ['/purchase/sku/recoverBookmark', 'BASE_URL'],
   get_buyerProductTradeList: ['/purchase/sku/history', 'BASE_URL'],
+  RECOVER_COMPARE:['/purchase/sku/recoverCompare','BASE_URL'],
 
 
   /**

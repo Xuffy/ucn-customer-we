@@ -1,24 +1,23 @@
 <template>
     <div class="compare-overview">
         <div class="title">
-            <span>{{$i.product.compareOverview}}</span>
+            <span>{{$i.product.compareArchive}}</span>
         </div>
-       <!--<div class="status">-->
-         <!--<el-button>{{$i.button.download}}</el-button>-->
-         <!--<el-button v-authorize="'PRODUCT:COMPARE_OVERVIEW:RECYCLE_BIN'" type="danger" @click="deleteCompare">{{$i.button.remove}}</el-button>-->
-       <!--</div>-->
+        <!--<div class="status">-->
+        <!--<el-button>{{$i.button.download}}</el-button>-->
+        <!--<el-button v-authorize="'PRODUCT:COMPARE_OVERVIEW:RECYCLE_BIN'" type="danger" @click="deleteCompare">{{$i.button.remove}}</el-button>-->
+        <!--</div>-->
         <v-table
                 :height="500"
                 v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"
-                :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
                 @action="btnClick"
                 @change-checked="changeChecked">
             <template slot="header">
                 <div class="btns">
                     <el-button @click="download">{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="deleteCompare" :disabled="disableDelete" :loading="disableClickDeleteBtn" type="danger">{{$i.product.delete}}</el-button>
+                    <el-button @click="recover" :disabled="disableDelete" :loading="disableClickDeleteBtn">{{$i.product.recover}}</el-button>
                     <select-search
                             v-model="searchValue"
                             :options="searchOptions"
@@ -43,7 +42,7 @@
     import { mapActions } from 'vuex'
 
     export default {
-        name: '',
+        name: 'archive',
         components: {
             dropDown,
             selectSearch,
@@ -75,16 +74,9 @@
                 queryParam:{
                     name: '',
                     compareItem:'',
-                    // operatorFilters: [
-                    //     {
-                    //         columnName: "",
-                    //         operator: "",
-                    //         property: "",
-                    //     }
-                    // ],
                     pn: 1,
                     ps: 50,
-                    recycle: false,
+                    recycle: true,
                     sorts: [
                         {
                             orderBy: 'updateDt',
@@ -185,27 +177,14 @@
                     this.$fetch.export_task('SKU_PURCHASE_EXPORT_COMPARE_PARAMS',params);
                 }
             },
-            deleteCompare(){
-                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
-                    confirmButtonText: this.$i.product.sure,
-                    cancelButtonText: this.$i.product.cancel,
-                    type: 'warning'
-                }).then(() => {
-                    this.disableClickDeleteBtn=true;
-                    let id=_.pluck(_.pluck(this.selectList,'id'),'value');
-                    this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
-                        this.getList();
-                        this.$message({
-                            type: 'success',
-                            message: this.$i.product.deleteSuccess
-                        });
-                    }).finally(()=>{
-                        this.disableClickDeleteBtn=false;
-                    });
-
-                }).catch(() => {
-
-                });
+            recover(){
+                this.disableClickDeleteBtn=true;
+                let ids=_.pluck(_.pluck(this.selectList,'id'),'value');
+                this.$ajax.post(this.$apis.RECOVER_COMPARE,ids).then(res=>{
+                    this.getList();
+                }).finally(()=>{
+                    this.disableClickDeleteBtn=false;
+                })
             },
             /**
              * 分页操作
@@ -233,11 +212,6 @@
                 query: {code: 'PRODUCT'},
                 type: 10,
                 label: this.$i.common.log
-            });
-            this.setMenuLink({
-                path: '/product/compareArchive',
-                type: 20,
-                label: this.$i.common.archive
             });
         },
         watch:{
@@ -274,7 +248,7 @@
         }
     }
     .status{
-      margin-top: 20px;
+        margin-top: 20px;
     }
 
 </style>

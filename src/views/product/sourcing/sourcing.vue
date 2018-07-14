@@ -44,6 +44,7 @@
 </template>
 <script>
     import {overviewPage,VPagination} from '@/components/index'
+    import {mapActions} from 'vuex'
     export default {
         name:"sourcing",
         components:{
@@ -85,6 +86,7 @@
             }
         },
         methods:{
+            ...mapActions(['setMenuLink']),
             /**
              * 表格事件
              * */
@@ -195,7 +197,7 @@
                 }
                 let id = _.pluck(_.pluck(this.selectList,'id'),'value').join(',');
                 this.$windowOpen({
-                    url: 'product/compareDetail/new',
+                    url: '/product/compareDetail/new',
                     params: {
                         id: id,
                     }
@@ -253,6 +255,14 @@
         },
         created(){
             this.getUnit();
+        },
+        mounted(){
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

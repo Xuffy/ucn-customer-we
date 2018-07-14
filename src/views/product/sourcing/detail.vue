@@ -452,7 +452,7 @@
             }
         },
         methods:{
-            ...mapActions(['setLog']),
+            ...mapActions(['setMenuLink']),
             handleClick(){
                 //切换tab页
             },
@@ -805,7 +805,12 @@
             this.getUnit();
         },
         mounted(){
-            this.setLog({query:{code:'PRODUCT'}});
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                label: this.$i.common.log
+            });
         },
     }
 </script>

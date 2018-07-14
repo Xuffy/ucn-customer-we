@@ -103,16 +103,16 @@ export const routerMap = [
         component: () => import('../views/product/bookmark/manuallyAdd'),
       },
       {
-        path: 'recycleBin',
-        name: 'productBookmarkRecycleBin',
+        path: 'bookmarkArchive',
+        name: 'productBookmarkArchive',
         hidden: true,
         meta: {
           // draft: false,
           // recycleBin: true,
           // log: true,
-          name: $i.router.productBookmarkRecycleBin
+          name: $i.router.bookmarkArchive
         },
-        component: () => import('../views/product/bookmark/recycleBin'),
+        component: () => import('../views/product/bookmark/archive'),
       },
 
       {
@@ -131,24 +131,18 @@ export const routerMap = [
         name: 'productCompareDetail',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
           name: $i.router.productCompareDetail
         },
         component: () => import('../views/product/compare/compare'),
       },
       {
-        path: 'compareRecycleBin',
+        path: 'compareArchive',
         name: 'productCompareRecycleBin',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
           name: $i.router.productCompareRecycleBin
         },
-        component: () => import('../views/product/compare/recycleBin'),
+        component: () => import('../views/product/compare/archive'),
       },
     ]
   },
