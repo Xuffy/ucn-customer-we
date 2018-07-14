@@ -3,9 +3,10 @@
         <h3 class="hd">{{$i.supplier.compareOverview}}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button :disabled='!selectedData.length>0'
-                 @click='downloadSelected'
-                 >{{$i.common.download}}({{selectedNumber.length}})</el-button>
+                <el-button
+                 @click='download'
+                 v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DOWNLOAD'"
+                 >{{$i.common.download}} ({{selectedNumber.length ===0 ? $i.product.all : selectedNumber.length}})</el-button>
 
                 <el-button type="danger" v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DELETE'" :disabled='!selectedData.length>0'
                 @click='remove'
@@ -142,15 +143,6 @@
                     this.loading = false;
                   })
             },
-            downloadSelected() {
-                this.$ajax.post(this.$apis.post_supplier_listCompareDetails)
-                    .then(res => {
-                        console.log(res.datas)
-                    })
-                    .catch((res) => {
-
-                    });
-            },
             remove() {
               this.$confirm('确定删除?', '提示', {
                 confirmButtonText: '确定',
@@ -169,7 +161,13 @@
               })
             },
           download(){
-
+            let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+            if(ids.length>0){
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_IDS',{ids:ids});
+            }else{
+              let params=this.$depthClone(this.params);
+              this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_PARAMS',params);
+            }
           },
         },
         created() {

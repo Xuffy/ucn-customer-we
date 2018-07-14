@@ -575,19 +575,6 @@ export const routerMap = [
         },
         component: () => import('../views/logistic/archiveLoadingList')
       },
-      // {
-      //   path: 'archive',
-      //   name: 'overviewArchive',
-      //   hidden: true,
-      //   meta: {
-      //     draft: '/logistic/draft',
-      //     recycleBin: false,
-      //     log: true,
-      //     importTask: false,
-      //     name: $i.router.logisticLoadingArchive
-      //   },
-      //   component: () => import('../views/logistic/logisticPlanOverview')
-      // },
       {
         path: 'placeLogisticPlan',
         name: 'placeLogisticPlan',

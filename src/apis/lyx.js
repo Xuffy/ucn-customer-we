@@ -36,5 +36,9 @@ export default {
   logistics_order_cancelByIds: ['/logistics/order/cancelByIds', 'LJ','BASE_URL'],
   logistics_plan_getSupplierIds: ['/logistics/plan/getSupplierIds','LJ', 'BASE_URL'],
   logistics_order_getSupplierIds: ['/logistics/order/getSupplierIds','LJ', 'BASE_URL'],
-  logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft','LJ', 'BASE_URL']
+  logistics_plan_batchSendDraft: ['/logistics/plan/batchSendDraft','LJ', 'BASE_URL'],
+  logistics_plan_archive: ['/logistics/plan/archive','LJ', 'BASE_URL'],
+  logistics_order_archive: ['/logistics/order/archive','LJ', 'BASE_URL'],
+  logistics_plan_recover: ['/logistics/plan/recover','LJ', 'BASE_URL'],
+  logistics_order_recover: ['/logistics/order/recover','LJ', 'BASE_URL'],
 }

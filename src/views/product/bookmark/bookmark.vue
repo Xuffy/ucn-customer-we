@@ -267,9 +267,11 @@
                     this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
                 }else{
                     let params=this.$depthClone(this.queryConfig);
+                    console.log(params)
                     if(_.isArray(params.country)){
                         params.country=params.country.join(',');
                     }
+                  console.log(params)
                     this.$fetch.export_task('SKU_PURCHASE_EXPORT_BOOKMARK_PARAMS',params);
                 }
             },
