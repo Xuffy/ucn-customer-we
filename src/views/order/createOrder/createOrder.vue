@@ -196,83 +196,85 @@
         <div class="title">
             {{$i.order.responsibility}}
         </div>
-        <el-table
-                :data="orderForm.responsibilityList"
-                style="width: 100%">
-            <el-table-column
-                    prop="type"
-                    label="Type">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="customer"
-                    align="center"
-                    label="Me">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            v-model="scope.row.customer"
-                            :editable="false"
-                            align="right"
-                            type="date"
-                            :disabled="true"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="supplier"
-                    align="center"
-                    label="Supplier">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            v-model="scope.row.supplier"
-                            align="right"
-                            :editable="false"
-                            type="date"
-                            :disabled="true"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="Remark"
-                    align="center"
-                    label="Remark">
-                <template slot-scope="scope">
-                    <el-input
-                            :disabled="true"
-                            :placeholder="$i.order.pleaseInput"
-                            v-model="scope.row.remark"
-                            clearable>
-                    </el-input>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="actualDate"
-                    align="center"
-                    label="Actual Date">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            v-model="scope.row.actualDt"
-                            align="right"
-                            type="date"
-                            :editable="false"
-                            :disabled="true"
-                            :placeholder="$i.order.pleaseChoose"
-                            :picker-options="pickerOptions1">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-        </el-table>
+        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+            <el-table
+                    :data="orderForm.responsibilityList"
+                    style="width: 100%">
+                <el-table-column
+                        prop="type"
+                        label="Type">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.type==='0' || scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
+                        <span v-if="scope.row.type==='1' || scope.row.type===1">{{$i.order.labelDesignDate}}</span>
+                        <span v-if="scope.row.type==='2' || scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
+                        <span v-if="scope.row.type==='3' || scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
+                        <span v-if="scope.row.type==='4' || scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
+                        <span v-if="scope.row.type==='5' || scope.row.type===5">{{$i.order.otherResponsibility}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="customer"
+                        align="center"
+                        label="Me">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-model="scope.row.customer"
+                                :editable="false"
+                                align="right"
+                                type="date"
+                                :disabled="true"
+                                :placeholder="$i.order.pleaseChoose"
+                                :picker-options="pickerOptions1">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="supplier"
+                        align="center"
+                        label="Supplier">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-model="scope.row.supplier"
+                                align="right"
+                                :editable="false"
+                                type="date"
+                                :disabled="true"
+                                :placeholder="$i.order.pleaseChoose"
+                                :picker-options="pickerOptions1">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="Remark"
+                        align="center"
+                        label="Remark">
+                    <template slot-scope="scope">
+                        <el-input
+                                :disabled="true"
+                                :placeholder="$i.order.pleaseInput"
+                                v-model="scope.row.remark"
+                                clearable>
+                        </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="actualDate"
+                        align="center"
+                        label="Actual Date">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                v-model="scope.row.actualDt"
+                                align="right"
+                                type="date"
+                                :editable="false"
+                                :disabled="true"
+                                :placeholder="$i.order.pleaseChoose"
+                                :picker-options="pickerOptions1">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
 
         <div class="title">
             {{$i.order.productInfoBig}}
@@ -290,16 +292,34 @@
                 :total-row="tableTotal">
             <template slot="header">
                 <div class="btns">
-                    <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
-                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
+                            @click="addProduct">{{$i.order.addProduct}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
+                            @click="removeProduct"
+                            :disabled="selectProductInfoTable.length===0"
+                            type="danger">{{$i.order.remove}}</el-button>
                 </div>
             </template>
         </v-table>
 
         <div class="footBtn">
-            <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-            <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
-            <el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
+            <el-button
+                    :disabled="loadingPage"
+                    :loading="disableClickSend"
+                    @click="send"
+                    type="primary">{{$i.order.send}}</el-button>
+            <el-button
+                    v-authorize="'ORDER:DETAIL:DRAFT'"
+                    :disabled="loadingPage"
+                    :loading="disableClickSaveDraft"
+                    @click="saveAsDraft"
+                    type="primary">{{$i.order.saveAsDraft}}</el-button>
+            <el-button
+                    :disabled="loadingPage"
+                    type="primary"
+                    @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
 
         <el-dialog

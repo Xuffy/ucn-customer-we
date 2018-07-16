@@ -27,8 +27,17 @@
                 style='marginTop:10px'>
             <template slot="header">
                 <div>
-                    <el-button v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'" :loading="disableClickSend" :disabled="selectedList.length===0" @click="send">{{$i.order.send}}</el-button>
-                    <el-button :loading="disableClickDelete" type='danger' :disabled='selectedList.length===0' @click='deleteOrder' v-authorize="'ORDER:DRAFT_OVERVIEW:DELETE'">{{($i.order.archive)}}</el-button>
+                    <el-button
+                            v-authorize="'ORDER:DRAFT_OVERVIEW:SEND'"
+                            :loading="disableClickSend"
+                            :disabled="selectedList.length===0"
+                            @click="send">{{$i.order.send}}</el-button>
+                    <el-button
+                            :loading="disableClickDelete"
+                            type='danger'
+                            :disabled='selectedList.length===0'
+                            @click='deleteOrder'
+                            v-authorize="'ORDER:DRAFT_OVERVIEW:ARCHIVE'">{{($i.order.archive)}}</el-button>
                     <div class="speHead">
                         <div class="viewBy">
                             <span>{{$i.order.viewBy}}</span>

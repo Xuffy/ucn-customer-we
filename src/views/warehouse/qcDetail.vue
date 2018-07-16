@@ -142,7 +142,7 @@
         <div class="second-title">
             {{$i.warehouse.payment}}
         </div>
-        <div class="payment-table">
+        <div class="payment-table" v-authorize="'QC:ORDER_DETAIL:PAYMENT'">
             <el-button @click="addPayment" :loading="disableClickAdd" class="payment-btn" :disabled="disableAdd" type="primary">{{$i.warehouse.add}}</el-button>
             <el-table
                     v-loading='loadingPaymentTable'
@@ -241,7 +241,11 @@
                         width="150">
                     <template slot-scope="scope">
                         <div v-if="scope.row.status===-1">
-                            <el-button @click="restore(scope.row)" type="text" size="small">{{$i.warehouse.restore}}</el-button>
+                            <el-button
+                                    v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                    @click="restore(scope.row)"
+                                    type="text"
+                                    size="small">{{$i.warehouse.restore}}</el-button>
                         </div>
                         <div v-else>
                             <div v-if="scope.row.isNew">
@@ -253,15 +257,22 @@
                                 <el-button @click="cancelModify(scope.row)" type="text" size="small">{{$i.warehouse.cancel}}</el-button>
                             </div>
                             <div v-else>
-                                <el-button @click="modify(scope.row)" type="text" size="small">{{$i.warehouse.modify}}</el-button>
-                                <el-button @click="invalid(scope.row)" type="text" size="small">{{$i.warehouse.invalid}}</el-button>
+                                <el-button
+                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                        @click="modify(scope.row)"
+                                        type="text"
+                                        size="small">{{$i.warehouse.modify}}</el-button>
+                                <el-button
+                                        v-authorize="'QC:ORDER_DETAIL:PAYMENT_ACTION'"
+                                        @click="invalid(scope.row)"
+                                        type="text"
+                                        size="small">{{$i.warehouse.invalid}}</el-button>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-
         <div class="second-title">
             {{$i.warehouse.productInfo}}
         </div>
@@ -277,15 +288,30 @@
                     :totalRow="totalRow">
                 <template slot="header">
                     <div class="btn-group">
-                        <el-button :disabled="selectList.length===0" type="primary" @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
-                        <el-button @click="restartQc" :disabled="disableClickRestart" type="primary">{{$i.warehouse.restartQc}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="primary" @click="rework">{{$i.warehouse.rework}}</el-button>
-                        <el-button :disabled="selectList.length===0" type="danger" @click="returnProduct">{{$i.warehouse.return}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_CONFIRM_SKU'"
+                                :disabled="selectList.length===0"
+                                type="primary"
+                                @click="confirm">{{$i.warehouse.confirmSKU}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                @click="restartQc"
+                                :disabled="disableClickRestart"
+                                type="primary">{{$i.warehouse.restartQc}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RESTART_QC'"
+                                :disabled="selectList.length===0"
+                                type="primary"
+                                @click="rework">{{$i.warehouse.rework}}</el-button>
+                        <el-button
+                                v-authorize="'QC:ORDER_DETAIL:PRODUCT_RETURN'"
+                                :disabled="selectList.length===0"
+                                type="danger"
+                                @click="returnProduct">{{$i.warehouse.return}}</el-button>
                     </div>
                 </template>
             </v-table>
         </div>
-
         <div class="summary">
             <div class="second-title">
                 {{$i.warehouse.summary}}
@@ -405,12 +431,10 @@
                 </el-row>
             </el-form>
         </div>
-
         <div class="footBtn">
             <el-button :disabled="loadingData" type="primary" @click="download">{{$i.warehouse.download}}</el-button>
             <el-button @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
         </div>
-
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>
     </div>
 </template>

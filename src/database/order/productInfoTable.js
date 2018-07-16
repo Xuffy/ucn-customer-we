@@ -34,7 +34,7 @@ export default {
         }
     },
     skuNameEn:{
-        _disabled:true
+        _disabled:true,
     },
     skuNameCn:{
         _slot:'skuNameCn',
