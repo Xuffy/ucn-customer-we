@@ -17,17 +17,25 @@
                 @change-sort="val=>{getData(val)}"
                 @change-checked="changeChecked">
             <template slot="btns">
-                <el-button @click="createInquiry">
+                <el-button
+                        v-authorize="'PRODUCT:OVERVIEW:CREATE_INQUIRY'"
+                        @click="createInquiry">
                     {{`${$i.product.createInquiry}(${selectList.length})`}}</el-button>
-                <el-button @click="createOrder">
+                <el-button
+                        v-authorize="'PRODUCT:OVERVIEW:CREATE_ORDER'"
+                        @click="createOrder">
                     {{`${$i.product.createOrder}(${selectList.length})`}}</el-button>
-                <el-button @click="compareProducts"
-                           :disabled="selectList.length<2">
+                <el-button
+                        v-authorize="'PRODUCT:OVERVIEW:COMPARE'"
+                        @click="compareProducts"
+                        :disabled="selectList.length<2">
                     {{`${$i.product.compare}(${selectList.length})`}}
                 </el-button>
-                <el-button @click="addToBookmark"
-                           :loading="loadingAddBookmark"
-                           :disabled="selectList.length===0">
+                <el-button
+                        v-authorize="'PRODUCT:OVERVIEW:ADD_BOOKMARK'"
+                        @click="addToBookmark"
+                        :loading="loadingAddBookmark"
+                        :disabled="selectList.length===0">
                     {{`${$i.product.addToBookmark}(${selectList.length})`}}
                 </el-button>
                 <el-button v-authorize="'PRODUCT:OVERVIEW:DOWNLOAD'"

@@ -35,10 +35,10 @@
                 <div class="fn">
                     <div class="btn-wrap">
                         <el-button
-                                v-authorize="'WAREHOUSE:QC_ORDER_OVERVIEW:CREATE'"
+                                v-authorize="'QC:ORDER_OVERVIEW:CREATE'"
                                 @click="createQcOrder">{{ $i.warehouse.create }}</el-button>
                         <el-button
-                                v-authorize="'WAREHOUSE:QC_ORDER_OVERVIEW:DOWNLOAD'"
+                                v-authorize="'QC:ORDER_OVERVIEW:DOWNLOAD'"
                                 @click='download'>
                             {{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})
                         </el-button>

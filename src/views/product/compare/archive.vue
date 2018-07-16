@@ -16,8 +16,16 @@
                 @change-checked="changeChecked">
             <template slot="header">
                 <div class="btns">
-                    <el-button @click="download">{{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
-                    <el-button @click="recover" :disabled="disableDelete" :loading="disableClickDeleteBtn">{{$i.product.recover}}</el-button>
+                    <el-button
+                            @click="download"
+                            v-authorize="'PRODUCT:COMPARE_ARCHIVE:DOWNLOAD'">
+                        {{$i.product.download+' ('+downloadBtnInfo+')'}}</el-button>
+                    <el-button
+                            @click="recover"
+                            :disabled="disableDelete"
+                            :loading="disableClickDeleteBtn"
+                            v-authorize="'PRODUCT:COMPARE_ARCHIVE:RECOVER'">
+                        {{$i.product.recover}}</el-button>
                     <select-search
                             v-model="searchValue"
                             :options="searchOptions"
