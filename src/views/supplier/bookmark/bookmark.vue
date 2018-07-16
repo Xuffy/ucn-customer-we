@@ -306,16 +306,31 @@
             },
             //..........remove
             remove() {
-                this.$ajax.post(this.$apis.post_batchDeleteBookmark, {
-                  id:'',
-                  name: ''
-                })
-                .then(res => {
-                    this.get_data()
-                })
-                .catch((res) => {
-
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.sure,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                let params=[];
+                _.map(this.selectedData,v=>{
+                  params.push({
+                    id:v.id.value,
+                    name:v.name.value
+                  })
                 });
+                this.disableClickDeleteBtn = true;
+                this.$ajax.post(this.$apis.post_batchDeleteBookmark, this.selectNumber).then(res => {
+                  this.disableClickDeleteBtn = false;
+                  this.selectNumber =[];
+                  this.getData();
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.common.deleteTheSuccess
+                  });
+                }).finally(() => {
+                  this.disableClickDeleteBtn = false;
+                });
+              })
             },
             getCategoryId() {
                 this.$ajax.get(this.$apis.getCategory, {}).then(res => {
