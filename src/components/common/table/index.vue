@@ -292,9 +292,8 @@
 
         key = _.isString(this.nativeSort) ? this.nativeSort : 'id';
 
-
         _.map(this.dataList, val => {
-          if (_.isEmpty(val._remark) || this.rowspan === 1) {
+          if (_.isEmpty(val._remark)) {
             sortData.push(_.mapObject(val, v => {
               return v._value || v.value;
             }))

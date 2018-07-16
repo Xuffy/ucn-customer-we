@@ -111,8 +111,8 @@
       ...mapActions(['setViewPicture']),
       sendMessage() {
         let files = this.$refs.fileUpload.getFiles() || []
-          // , user=this.$
-          , sender=[null]
+          , {partnerType, companyId, tenantId, userId} = this.$localStore.get('user')
+          , sender = [null, 'purchasers', 'suppliers', 'servicers']
           , params;
         if (!this.messageContent && _.isEmpty(files)) {
           return this.$message.warning(this.$i.common.content);
@@ -129,6 +129,7 @@
 
         if (this.arguments) {
           params = _.extend(params, this.arguments);
+          params[sender[partnerType]] = {companyId, tenantId, userId};
         }
 
         this.$ajax.post(this.$apis.CHATMESSAGE_ADD, params).then(data => {
