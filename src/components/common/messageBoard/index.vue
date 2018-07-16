@@ -70,6 +70,9 @@
       readonly: {
         type: Boolean,
         default: false
+      },
+      arguments: {
+        type: Object
       }
     },
     data() {
@@ -107,20 +110,28 @@
     methods: {
       ...mapActions(['setViewPicture']),
       sendMessage() {
-        let files = this.$refs.fileUpload.getFiles() || [];
+        let files = this.$refs.fileUpload.getFiles() || []
+          // , user=this.$
+          , sender=[null]
+          , params;
         if (!this.messageContent && _.isEmpty(files)) {
           return this.$message.warning(this.$i.common.content);
         }
 
         this.submitLoading = true;
-
-        this.$ajax.post(this.$apis.CHATMESSAGE_ADD, {
+        params = {
           moduleCode: this.module,
           bizCode: this.code,
           bizNo: this.id,
           content: this.messageContent,
           picPaths: files
-        }).then(data => {
+        };
+
+        if (this.arguments) {
+          params = _.extend(params, this.arguments);
+        }
+
+        this.$ajax.post(this.$apis.CHATMESSAGE_ADD, params).then(data => {
           this.messageContent = '';
           this.getMessage();
           this.$refs.fileUpload.reset();

@@ -294,7 +294,7 @@
 
 
         _.map(this.dataList, val => {
-          if (_.isEmpty(val._remark)) {
+          if (_.isEmpty(val._remark) || this.rowspan === 1) {
             sortData.push(_.mapObject(val, v => {
               return v._value || v.value;
             }))
