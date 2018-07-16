@@ -14,7 +14,7 @@
             </div>
                <div class="select-wrap">
                    <selectSearch :options='options' @inputEnter='inputEnter'
-                   v-model='selectSearch'
+                    v-model='selectSearch'
                      ></selectSearch>
                 <div>
 

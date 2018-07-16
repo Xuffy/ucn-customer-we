@@ -28,7 +28,7 @@
           <template slot="header">
             <div class="btns">
             <span v-show="$route.query.type !== 'archive'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
