@@ -57,6 +57,8 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
+        native-sort
+        @change-sort="$refs.productInfo.setSort(productList)"
         >
         <div slot="header" class="product-header" v-if="edit">
           <el-button v-authorize="auth[pageTypeCurr].PRODUCT_INFO_ADD||''" type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
@@ -709,25 +711,25 @@
           sliceStr = sliceStr.slice(0, 1) + sliceStr.slice(1 - sliceStr.length).toLowerCase();
           a.id = null
           a.vId = +new Date()
-          a.blSkuName = ''
-          a.hsCode = ''
-          a.currency = ''
-          a.toShipCartonQty = ''
-          a.toShipQty = ''
-          a.reportElement = ''
-          a.factorySkuCode = ''
+          a.blSkuName = null
+          a.hsCode = null
+          a.currency = null
+          a.toShipCartonQty = null
+          a.toShipQty = null
+          a.reportElement = null
+          a.factorySkuCode = null
           a.unitExportPrice = a['sku' + sliceStr + 'Price']
           a.totalExportPrice = a.skuPrice || 0;
           a.currency = a['sku' + sliceStr + 'Currency'];
-          a.containerNo = '';
-          a.containerType = '';
-          a.containerId = '';
-          a.fieldDisplay = '';
-          a.totalContainerQty = '';
-          a.totalContainerVolume = '';
-          a.totalContainerNetWeight = '';
-          a.totalContainerOuterCartonsQty = '';
-          a.shipmentStatus = '';
+          a.containerNo = null
+          a.containerType = null
+          a.containerId = null
+          a.fieldDisplay = null;
+          a.totalContainerQty = null
+          a.totalContainerVolume = null
+          a.totalContainerNetWeight = null
+          a.totalContainerOuterCartonsQty = null
+          a.shipmentStatus = null
           !this.modifyProductArray.includes(a) && this.modifyProductArray.push(a)
         })
         this.productList = [...this.$getDB(this.$db.logistic.productInfo, selectArrData), ...this.productList]
@@ -803,7 +805,13 @@
             this.conformPlan();
             break;
           case 'cancel':
-            this.cancelPlan();
+            this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+              confirmButtonText: this.$i.logistic.confirm,
+              cancelButtonText: this.$i.logistic.cancel,
+              type: 'warning'
+            }).then(() => {
+              this.cancelPlan();
+            })
             break;
           case 'copy':
             this.copyPlan();
@@ -812,7 +820,13 @@
             this.$router.push('/logistic/placeLogisticPlan');
             break;
           case 'cancelLoadingList':
-            this.cancelLoadingList();
+            this.$confirm(this.$i.logistic.isConfirmPeration, this.$i.logistic.tips, {
+              confirmButtonText: this.$i.logistic.confirm,
+              cancelButtonText: this.$i.logistic.cancel,
+              type: 'warning'
+            }).then(() => {
+              this.cancelLoadingList();
+            })
             break;
           case 'download':
             this.download();
@@ -970,7 +984,7 @@
         if (this.$validateForm(obj || this.oldPlanObject, this.$db.logistic.transportInfoObj)) {
           return;
         }
-        if(this.oldPlanObject.containerDetail.map(el => {
+        if(this.oldPlanObject.containerDetail&&this.oldPlanObject.containerDetail.map(el => {
           return this.$validateForm(el, this.$db.logistic.dbcontainerInfo);
         }).some(el=> el)){
           return
@@ -1020,10 +1034,11 @@
       containerInfo:{
         handler: function (val) {
           val.forEach(el=>{
-            this.productList.forEach(item=>{
+            this.productList = this.productList.map(item=>{
               if(el.id==item.containerId.value){
                 item.containerType.value = el.containerType;
               }
+              return item
             })
           })
         },
