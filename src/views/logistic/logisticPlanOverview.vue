@@ -350,10 +350,7 @@
         })
       },
       batchSendDraft(){
-        let ids = this.selectCount.map(item=>{
-          return item.id.value;
-        })
-        this.$ajax.post(this.$apis.logistics_plan_batchSendDraft,{ids:ids}).then(res => {
+        this.$ajax.post(this.$apis.logistics_plan_batchSendDraft,{ids:this.downloadIds}).then(res => {
           this.selectCount = [];
           this.fetchData();
         })
