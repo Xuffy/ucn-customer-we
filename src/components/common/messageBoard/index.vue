@@ -129,7 +129,7 @@
 
         if (this.arguments) {
           params = _.extend(params, this.arguments);
-          params[sender[partnerType]] = {companyId, tenantId, userId};
+          params[sender[partnerType]] = [{companyId, tenantId, userId}];
         }
 
         this.$ajax.post(this.$apis.CHATMESSAGE_ADD, params).then(data => {
