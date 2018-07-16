@@ -432,7 +432,11 @@
             </el-form>
         </div>
         <div class="footBtn">
-            <el-button :disabled="loadingData" type="primary" @click="download">{{$i.warehouse.download}}</el-button>
+            <el-button
+                    v-authorize="'QC:ORDER_DETAIL:DOWNLOAD'"
+                    :disabled="loadingData"
+                    type="primary"
+                    @click="download">{{$i.warehouse.download}}</el-button>
             <el-button @click="cancel" type="danger">{{$i.warehouse.exit}}</el-button>
         </div>
         <v-message-board module="warehouse" code="qcDetail" :id="$route.query.id"></v-message-board>

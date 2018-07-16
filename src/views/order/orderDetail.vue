@@ -548,24 +548,25 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table ref="table"
-                :totalRow="totalRow"
-                code="uorder_sku_list"
-                native-sort="skuSysCode"
+                 :totalRow="totalRow"
+                 code="uorder_sku_list"
+                 native-sort="skuSysCode"
                  @change-sort="$refs.table.setSort(productTableData)"
-                :height="500"
-                :data.sync="productTableData"
-                :buttons="handleShowBtn"
-                @action="productInfoAction"
-                :loading='loadingProductTable'
-                @change-checked="changeProductChecked"
-                :rowspan="2"
-                :total-row="tableTotal">
+                 :height="500"
+                 :data.sync="productTableData"
+                 :buttons="handleShowBtn"
+                 @action="productInfoAction"
+                 :loading='loadingProductTable'
+                 @change-checked="changeProductChecked"
+                 :rowspan="2"
+                 :total-row="tableTotal">
             <template slot="header">
                 <div class="btns">
                     <el-button
                             v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
                             :disabled="!isModify"
-                            @click="addProduct">{{$i.order.addProduct}}</el-button>
+                            @click="addProduct">{{$i.order.addProduct}}
+                    </el-button>
                     <el-button
                             v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
                             @click="removeProduct"
@@ -730,8 +731,8 @@
         </el-dialog>
 
         <v-history-modify
-          code="uorder_sku_list"
-          @closed="$refs.table.update()"
+                code="uorder_sku_list"
+                @closed="$refs.table.update()"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -1667,17 +1668,17 @@
                     /**
                      * 高亮处理
                      * */
-                    _.map(this.$db.order.orderDetail,v=>{
-                        v._isModified=false;
+                    _.map(this.$db.order.orderDetail, v => {
+                        v._isModified = false;
                     });
-                    _.map(this.orderForm.fieldUpdate,(v,k)=>{
-                        this.$db.order.orderDetail[k]._isModified=true;
+                    _.map(this.orderForm.fieldUpdate, (v, k) => {
+                        this.$db.order.orderDetail[k]._isModified = true;
                     });
-                    this.orderForm.fieldUpdate={};
+                    this.orderForm.fieldUpdate = {};
 
-                    _.map(this.orderForm.responsibilityList,v=>{
-                        v.fieldUpdates=v.fieldUpdate;
-                        v.fieldUpdate={};
+                    _.map(this.orderForm.responsibilityList, v => {
+                        v.fieldUpdates = v.fieldUpdate;
+                        v.fieldUpdate = {};
                     });
 
                     this.initialData = this.$depthClone(this.orderForm);
@@ -1726,14 +1727,14 @@
                     _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    _.map(this.productTableData,v=>{
-                        if(v.fieldUpdate.value){
-                            _.map(v.fieldUpdate.value,(value,key)=>{
-                                if(key!=='skuPictures'){
-                                    v[key]._style={'backgroundColor':'yellow'};
+                    _.map(this.productTableData, v => {
+                        if (v.fieldUpdate.value) {
+                            _.map(v.fieldUpdate.value, (value, key) => {
+                                if (key !== "skuPictures") {
+                                    v[key]._style = { "backgroundColor": "yellow" };
                                 }
                             });
-                            v.fieldUpdate.value={};
+                            v.fieldUpdate.value = {};
                         }
                     });
                     this.markImportant = this.orderForm.importantCustomer;
@@ -1824,19 +1825,19 @@
                             });
                         }
                     }
-                    if(!item._remark){
-                        _.map(item,(v,k)=>{
-                            if(v._isModified){
-                                if(!item.fieldUpdate.value){
-                                    item.fieldUpdate.value={};
+                    if (!item._remark) {
+                        _.map(item, (v, k) => {
+                            if (v._isModified) {
+                                if (!item.fieldUpdate.value) {
+                                    item.fieldUpdate.value = {};
                                 }
-                                item.fieldUpdate.value[k]='';
+                                item.fieldUpdate.value[k] = "";
                             }
-                        })
+                        });
                     }
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
-                console.log()
+                console.log();
                 params.skuList = this.dataFilter(this.productTableData);
                 let rightCode = true;
                 _.map(params.skuList, v => {
@@ -1862,7 +1863,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                return console.log(this.$depthClone(params.skuList),'params.skuList')
+                return console.log(this.$depthClone(params.skuList), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1930,7 +1931,7 @@
                     this.loadingTable = false;
                 });
             },
-            changePayment(e,key) {
+            changePayment(e, key) {
                 if (!e) {
                     return;
                 }
@@ -1941,7 +1942,7 @@
                 } else {
                     this.disabledLcNo = false;
                 }
-                if(key){
+                if (key) {
                     if (!this.orderForm.fieldUpdate) {
                         this.orderForm.fieldUpdate = {};
                     }
@@ -1962,11 +1963,11 @@
             /**
              * responsibility事件
              * */
-            handleResponsibilityChange(data,key){
-                if(!data.fieldUpdate){
-                    data.fieldUpdate={};
+            handleResponsibilityChange(data, key) {
+                if (!data.fieldUpdate) {
+                    data.fieldUpdate = {};
                 }
-                data.fieldUpdate[key]='';
+                data.fieldUpdate[key] = "";
             },
 
             /**
@@ -2553,7 +2554,7 @@
                 });
             },
             downloadOrder() {
-                this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
+                this.$fetch.export_task("EXPORT_ORDER", { ids: [this.orderForm.id] });
             },
             cancelOrder() {
                 this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
@@ -3040,10 +3041,11 @@
         margin-top: 10px;
     }
 
-    .isModify >>> input{
+    .isModify >>> input {
         background-color: yellow !important;
     }
-    .high-light >>> input{
+
+    .high-light >>> input {
         background-color: yellow !important;
     }
 

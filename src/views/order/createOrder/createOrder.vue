@@ -280,6 +280,9 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table
+                ref="table"
+                native-sort="skuSysCode"
+                @change-sort="$refs.table.setSort(productTableData)"
                 :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
@@ -382,6 +385,8 @@
         </el-dialog>
 
         <v-history-modify
+                code="uorder_sku_list"
+                @closed="$refs.table.update()"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
