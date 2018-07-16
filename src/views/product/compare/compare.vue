@@ -15,19 +15,45 @@
         </div>
         <div class="btns" v-show="hasLoading">
             <span v-if="$route.params.type==='new'">
-                <el-button @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                <el-button @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
-                <el-button @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
-                <el-button @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_INQUIRY'"
+                        @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_ORDER'"
+                        @click="createOrder">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
+                        @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
+                        @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <span v-if="$route.params.type==='modify'">
-                <el-button v-if="!isModify" @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
-                <el-button @click="createOrder" v-if="!isModify">{{$i.product.createOrder}}({{selectList.length}})</el-button>
-
-                <el-button v-if="!isModify" @click="modifyCompare">Modify</el-button>
-
-                <el-button v-if="isModify" @click="addNewProduct" :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
-                <el-button v-if="isModify" @click="deleteProduct" :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
+                <el-button
+                        v-if="!isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_INQUIRY'"
+                        @click="createInquiry">{{$i.product.createInquiry}}({{selectList.length}})</el-button>
+                <el-button
+                        v-if="!isModify"
+                        @click="createOrder"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:CREATE_ORDER'">{{$i.product.createOrder}}({{selectList.length}})</el-button>
+                <el-button
+                        v-if="!isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DOWNLOAD'"
+                        @click="download">{{$i.product.download}}</el-button>
+                <el-button
+                        v-if="!isModify"
+                        @click="modifyCompare">{{$i.product.modify}}</el-button>
+                <el-button
+                        v-if="isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:ADD_NEW'"
+                        @click="addNewProduct"
+                        :disabled="tableDataList.length>=100">{{$i.product.addNew}}</el-button>
+                <el-button
+                        v-if="isModify"
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:DELETE'"
+                        @click="deleteProduct"
+                        :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
             <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
             <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
@@ -45,9 +71,14 @@
                 <el-button @click="saveCompare" :loading="disabledSaveCompare" type="primary">{{$i.product.saveTheCompare}}</el-button>
             </div>
             <div v-if="$route.params.type==='modify'">
-                <!--<el-button v-if="!isModify" @click="deleteCompare" :loading="disabledSaveCompare" :disabled="allowDeleteCompare" type="danger">{{$i.product.deleteTheCompare}}</el-button>-->
-                <el-button @click="saveModify" :loading="disableClickSaveModify" :disabled="allowBottomClick" type="primary" v-if="isModify">Save</el-button>
-                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">Cancel</el-button>
+                <el-button
+                        v-authorize="'PRODUCT:COMPARE_DETAIL:SAVE'"
+                        @click="saveModify"
+                        :loading="disableClickSaveModify"
+                        :disabled="allowBottomClick"
+                        type="primary"
+                        v-if="isModify">{{$i.product.save}}</el-button>
+                <el-button :disabled="allowBottomClick" :loading="disableClickCancel" @click="cancelModify" v-if="isModify">{{$i.product.cancel}}</el-button>
             </div>
         </div>
 
@@ -404,6 +435,9 @@
                     }
                 }
             },
+            download(){
+                this.$fetch.export_task('SKU_PURCHASE_EXPORT_COMPARE_IDS',{ids:[this.$route.query.compareId]});
+            },
             addNewProduct(){
                 this.addProductDialogVisible=true;
                 this.forceUpdateNumber=Math.random();
@@ -694,17 +728,17 @@
             })
         },
         mounted(){
-            // this.setMenuLink({
-            //     path: '/logs/index',
-            //     query: {code: 'PRODUCT'},
-            //     type: 10,
-            //     label: this.$i.common.log
-            // });
-            // this.setMenuLink({
-            //     path: '/product/compareArchive',
-            //     type: 20,
-            //     label: this.$i.common.archive
-            // });
+            this.setMenuLink({
+                path: '/logs/index',
+                query: {code: 'PRODUCT'},
+                type: 10,
+                label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/product/compareArchive',
+                type: 20,
+                label: this.$i.common.archive
+            });
         },
         watch:{
             selectList(n){

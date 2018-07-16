@@ -393,7 +393,7 @@ export const routerMap = [
           // log: true,
           name: $i.router.orderDetail
         },
-        component: () => import('../views/order/poDetail/poDetail.vue')
+        component: () => import('../views/order/orderDetail.vue')
       },
 
       {
@@ -552,7 +552,8 @@ export const routerMap = [
           recycleBin: false,
           log: true,
           importTask: false,
-          name: $i.router.archive
+          name: $i.router.archive,
+          auth: ['LOGISTICS:DRAFT_ARCHIVE']
         },
         component: () => import('../views/logistic/archiveDraft')
       },

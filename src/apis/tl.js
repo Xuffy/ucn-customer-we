@@ -30,6 +30,7 @@ export default {
   POST_INQUIRY_ACTION: ['/inquiry/action', 'BASE_URL'], // inquiry操作
   GET_INQIIRY_DETAIL: ['/inquiry', 'BASE_URL'], //获取inquiry详情
   GET_INQIIRY_DETAIL_BY_CODE: ['/inquiry/detail', 'BASE_URL'], //获取inquiry详情
+  GET_INQIIRY_DETAIL_LIST: ['/inquiry/{id}/details', 'BASE_URL'], //获取inquiry详情列表
   POST_INQUIRY_SAVE: ['/inquiry/save', 'BASE_URL'], // 提交
   POST_INQUIRY_SKUS: ['/inquiry/skus', 'BASE_URL'], // sku 转换接口
   POST_INQUIRY_COMPARE_DELETE: ['/inquiry/compare/delete', 'BASE_URL'],
