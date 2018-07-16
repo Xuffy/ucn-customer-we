@@ -25,36 +25,14 @@
                     <el-radio-button label="20">{{$i.common.qcOrder}}</el-radio-button>
                   </el-radio-group>
                 </div>
-                <div class="Date">
-                  <span class="text1" >{{$i.payment.orderCreateDate}} : </span>
-                  <el-date-picker
-                    v-model="date"
-                    type="daterange"
-                    align="right"
-                    unlink-panels
-                    :range-separator="$i.element.to"
-                    :start-placeholder="$i.element.startDate"
-                    :end-placeholder="$i.element.endDate"
-                    value-format="timestamp"
-                    :picker-options="dateOptions">
-                  </el-date-picker>
-                </div>
-                <div class="search">
-                  <select-search
-                    v-model="searchId"
-                    class="search"
-                    :options=options
-                    @inputEnter="inputEnter"
-                    :searchLoad="searchLoad">
-                  </select-search>
-                </div>
               </div>
             </div>
             <br>
             <!-- ref="tab" @action="action"  @page-change="pageChange" -->
             <div class="main">
-                <v-table :data="tableDataList"
-                 code="ledger"
+                <v-table
+                :data="tableDataList"
+                code="ledger"
                 :totalRow="totalRow"
                 :loading="tabLoad"
                 :buttons="setButtons"
@@ -63,7 +41,38 @@
                 :height="500"
                 @filter-value="onFilterValue"
                 @change-sort="sort"
-                ></v-table>
+                >
+                  <template slot="header">
+                    <div style="overflow: hidden">
+                      <el-button style="float: left" @click="downloadPayment" v-authorize="'PAYMENT:DOWNLOAD'">
+                        {{$i.common.download}}
+                      </el-button>
+                      <div class="Date">
+                        <span class="text1" >{{$i.payment.orderCreateDate}} : </span>
+                        <el-date-picker
+                          v-model="date"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          :range-separator="$i.element.to"
+                          :start-placeholder="$i.element.startDate"
+                          :end-placeholder="$i.element.endDate"
+                          value-format="timestamp"
+                          :picker-options="dateOptions">
+                        </el-date-picker>
+                      </div>
+                      <div class="search">
+                        <select-search
+                          v-model="searchId"
+                          class="search"
+                          :options=options
+                          @inputEnter="inputEnter"
+                          :searchLoad="searchLoad">
+                        </select-search>
+                      </div>
+                    </div>
+                  </template>
+                </v-table>
                <page
                 :page-data="pageData"
                 @change="handleSizeChange"
@@ -226,14 +235,6 @@
                     if (Number(item.orderType.value) >= 10 && Number(item.orderType.value)<= 30) {
                       item.orderType._value = statusType[Number(item.orderType.value)]
                     }
-                    // item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    // item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
-                    let currency;
-                    currency = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-                    item.currencyCode._value = currency.name || '';
-
-                    item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
                     _.mapObject(item, val => {
                       val.type === 'textDate' && val.value && (val.value = this.$dateFormat(val.value, 'yyyy-mm-dd'))
                       return val
@@ -242,16 +243,7 @@
                   });
 
 
-                  this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas, item => {
-                    // item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    // item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
-                    let currencyCode;
-                    currencyCode = _.findWhere(this.currency, {code: item.currencyCode.value}) || {};
-                    item.currencyCode._value = currencyCode.name || '';
-                     return item;
-                    item.waitPayment.value = Number((Number(item.planPayAmount.value)-Number(item.actualPayAmount.value)).toFixed(8));
-                    item.waitReceipt.value = Number((Number(item.planReceiveAmount.value)-Number(item.actualReceiveAmount.value)).toFixed(8));
-                  });
+                  this.totalRow = this.$getDB(this.$db.payment.table, res.statisticalDatas)
                   this.pageData=res;
                 })
                 .catch((res) => {
@@ -309,7 +301,6 @@
               }
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
               .then(res => {
-                // console.log(res)
                 this.$message({
                   type: 'success',
                   message: this.$i.payment.urgedSuccess
@@ -317,6 +308,7 @@
               }).catch((res) => {
 
               });
+
             },
             setButtons(item){
               // disabled:true/false   10 付款 20 退款
@@ -331,6 +323,11 @@
           sort(item){
             this.params.sorts =  item.sorts;
             this.getList();
+          },
+          downloadPayment(){
+              let params=this.$depthClone(this.params);
+              cosnole.log(params)
+              this.$fetch.export_task('EXPORT_LEDGER',params);
           },
 
         },
@@ -377,12 +374,12 @@
     }
     .Date{
       float: left;
+      margin-left: 20%;
     }
-    .View{
-      float: left;
-    }
+
     .search{
       float: right;
+      margin-right: 10px;
     }
 
 </style>

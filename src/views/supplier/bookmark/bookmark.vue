@@ -40,25 +40,6 @@
             <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
             <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
         </div>
-<!--      搜索结果  -->
-            <div>
-             <div class="btnline">
-
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
-                  <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
-                  <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
-                 <el-button @click="download"  v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'">
-                   {{$i.common.download}}
-                   ({{selectedNumber.length===0?$i.product.all:selectedNumber.length}})
-                 </el-button>
-
-              </div>
-              <div>
-
-              </div>
-        </div>
 <!--        表格-->
              <v-table
                 code="udata_pruchase_supplier_bookmark_overview"
@@ -70,22 +51,38 @@
                 :loading='loading'
                 @filter-value="tableFilterValue"
                 @change-sort="sort"
-                style='marginTop:10px'/>
+                style='marginTop:10px'>
+               <template slot="header">
+                 <div class="btnline">
+
+                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_INQUIRY'"  @click='createInquiry'>{{$i.common.creatInquiry}}({{selectedNumber.length}})</el-button>
+                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:CREATE_ORDER'"  @click='createOrder'  :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectedNumber.length}})</el-button>
+                   <el-button v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectedNumber.length}})</el-button>
+                   <el-button  @click='addNewProduct'>{{$i.common.addSupplier}}</el-button>
+                   <el-button :disabled='!selectedData.length>0' v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DELETE'" @click='remove' type='danger'>{{$i.common.remove}}({{selectedNumber.length}})</el-button>
+                   <el-button @click="download"  v-authorize="'SUPPLIER:BOOKMARK_OVERVIEW:DOWNLOAD'">
+                     {{$i.common.download}}
+                     ({{selectedNumber.length===0?$i.product.all:selectedNumber.length}})
+                   </el-button>
+
+                 </div>
+               </template>
+             </v-table>
             <page
               :page-data="pageData"
               @change="handleSizeChange"
               :page-sizes="[50,100,200,500]"
               @size-change="pageSizeChange"></page>
 
-      <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
-        <VSupplier
-          @handleOkClick='handleOkClick'
-          :isButton=false
-          :disabledLine="disabledLine"
-          @handleCancel="handleCancel"
-        >
-        </VSupplier>
-      </el-dialog>
+            <el-dialog title="Add Supplier" :visible.sync="addProductDialogVisible" width="80%">
+              <VSupplier
+                @handleOkClick='handleOkClick'
+                :isButton=false
+                :disabledLine="disabledLine"
+                @handleCancel="handleCancel"
+              >
+              </VSupplier>
+            </el-dialog>
 
     </div>
 
@@ -149,7 +146,6 @@
         },
         methods: {
               ...mapActions([
-                // 'setRecycleBin',
                 'setMenuLink'
             ]),
             //获取字典
@@ -310,13 +306,31 @@
             },
             //..........remove
             remove() {
-                this.$ajax.post(this.$apis.post_deleteBookmarks, this.selectedNumber)
-                    .then(res => {
-                        this.get_data()
-                    })
-                    .catch((res) => {
-
-                    });
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.sure,
+                cancelButtonText: this.$i.common.cancel,
+                type: 'warning'
+              }).then(() => {
+                let params=[];
+                _.map(this.selectedData,v=>{
+                  params.push({
+                    id:v.id.value,
+                    name:v.name.value
+                  })
+                });
+                this.disableClickDeleteBtn = true;
+                this.$ajax.post(this.$apis.post_batchDeleteBookmark, this.selectNumber).then(res => {
+                  this.disableClickDeleteBtn = false;
+                  this.selectNumber =[];
+                  this.getData();
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.common.deleteTheSuccess
+                  });
+                }).finally(() => {
+                  this.disableClickDeleteBtn = false;
+                });
+              })
             },
             getCategoryId() {
                 this.$ajax.get(this.$apis.getCategory, {}).then(res => {
@@ -461,13 +475,8 @@
     .btnline {
         margin-top: 20px;
         width: 100%;
-        border-top: 1px solid black;
     }
 
-    .btnline .el-button {
-        margin-right: 8px;
-        margin-top: 20px;
-    }
 
     .el-select {
         max-width: 200px

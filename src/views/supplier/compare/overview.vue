@@ -12,9 +12,9 @@
                 @click='remove'
                 >{{$i.common.remove}}({{selectedNumber.length}})</el-button>
             </div>
-       <div class="select-wrap">
+               <div class="select-wrap">
                    <selectSearch :options='options' @inputEnter='inputEnter'
-                   v-model='selectSearch'
+                    v-model='selectSearch'
                      ></selectSearch>
                 <div>
 
