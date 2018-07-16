@@ -1,85 +1,81 @@
 <template>
     <div class="SupplierSourcing">
-            <div class="title">
-             {{$i.supplier.supplierSourcing}}
-        </div>
+      <div class="title">
+       {{$i.supplier.supplierSourcing}}
+      </div>
 <!--        搜索条件-->
-          <div style='marginTop:20px;'>
-            <el-form ref="params" :model="params" label-width="200px" size="mini">
-              <el-row>
-                <el-col :xs="24" :sm="12" :md="8" :lg="8"
-                        v-for='(v,index) in $db.supplier.overview'
-                        :key="index+'j'">
-                  <el-form-item class="speWidth" :prop="v.key"  :label="v.label + ':' ">
-                    <div v-if="v.type==='input'">
-                      <el-input
-                        size="mini"
-                        :placeholder="$i.common.inputkeyWordToSearch"
-                        v-model="params[v.key]">
-                      </el-input>
-                    </div>
-                    <div v-if="v.type==='select'">
-                      {{params[v.country]}}
-                      <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
-                        <el-option
-                          size="mini"
-                          v-for="item in options[v.key]"
-                          :key="item.code"
-                          :label="item.name"
-                          :value="item.code">
-                        </el-option>
-                      </el-select>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
+      <div style='marginTop:20px;'>
+        <el-form ref="params" :model="params" label-width="200px" size="mini">
+          <el-row>
+            <el-col :xs="24" :sm="12" :md="8" :lg="8"
+                    v-for='(v,index) in $db.supplier.overview'
+                    :key="index+'j'">
+              <el-form-item class="speWidth" :prop="v.key"  :label="v.label + ':' ">
+                <div v-if="v.type==='input'">
+                  <el-input
+                    size="mini"
+                    :placeholder="$i.common.inputkeyWordToSearch"
+                    v-model="params[v.key]">
+                  </el-input>
+                </div>
+                <div v-if="v.type==='select'">
+                  {{params[v.country]}}
+                  <el-select class="speWidth" v-model="params[v.key]" :placeholder="$i.common.inputSearch">
+                    <el-option
+                      size="mini"
+                      v-for="item in options[v.key]"
+                      :key="item.code"
+                      :label="item.name"
+                      :value="item.code">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
 
-            <div class="btn-group">
-            <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
-            <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
-        </div>
-<!--      搜索结果  -->
-            <div v-show='isButton'>
-             <div class="btnline">
-<!--                  <el-button :disabled='!selectedData.length>0'>{{$i._baseText.downloadSelected}}({{selectNumber.length}})</el-button>-->
+      <div class="btn-group">
+        <el-button @click="search" type="primary" class="search" >{{$i.common.search}}</el-button>
+        <el-button @click="clear('params')">{{$i.common.clear}}</el-button>
+      </div>
 
-                 <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-                  <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
-                  <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
-                    {{$i.common.download}}
-                   ({{selectNumber.length===0?$i.product.all:selectNumber.length}})
-                  </el-button>
-
-              </div>
-              <div>
-
-              </div>
-        </div>
 <!--        表格-->
-             <v-table
-                    code="udata_pruchase_supplier_overview"
-                    :height=500
-                    :loading='loading'
-                    :data="tabData"
-                    :buttons="[{label: 'Detail', type: 1}]"
-                    @action="detail"
-                    @change-checked='checked'
-                    @filter-value="tableFilterValue"
-                    @change-sort="sort"
-                    style='marginTop:10px'/>
-            <page
-              :page-data="pageData"
-              @change="handleSizeChange"
-              @size-change="pageSizeChange"
-              :page-sizes="[50,100,200,500]"></page>
-            <div v-show='!isButton'  style='display:flex; justify-content: center'>
-                <el-button  type="primary"  @click='emitData'>{{$i.common.ok}}</el-button>
-                <el-button @click="cancelData">{{$i.common.cancel}}</el-button>
-            </div>
+       <v-table
+              code="udata_pruchase_supplier_overview"
+              :height=500
+              :loading='loading'
+              :data="tabData"
+              :buttons="[{label: 'Detail', type: 1}]"
+              @action="detail"
+              @change-checked='checked'
+              @filter-value="tableFilterValue"
+              @change-sort="sort">
+         <template slot="header">
+           <div v-show='isButton'>
+             <div class="btnline">
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
+               <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
+                 {{$i.common.download}}
+                 ({{selectNumber.length===0?$i.product.all:selectNumber.length}})
+               </el-button>
+             </div>
+           </div>
+         </template>
+       </v-table>
+      <page
+        :page-data="pageData"
+        @change="handleSizeChange"
+        @size-change="pageSizeChange"
+        :page-sizes="[50,100,200,500]"></page>
+      <div v-show='!isButton'  style='display:flex; justify-content: center'>
+          <el-button  type="primary"  @click='emitData'>{{$i.common.ok}}</el-button>
+          <el-button @click="cancelData">{{$i.common.cancel}}</el-button>
+      </div>
 
     </div>
 </template>
@@ -488,12 +484,11 @@
     .btnline {
         margin-top: 20px;
         width: 100%;
-        border-top: 1px solid black;
     }
 
     .btnline .el-button {
-        margin-right: 8px;
-        margin-top: 20px;
+        /*margin-right: 8px;*/
+        /*margin-top: 20px;*/
     }
 
     .el-select {
