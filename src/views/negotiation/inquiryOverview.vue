@@ -24,7 +24,7 @@
                 <el-button @click="toCompare" :class="{'is-disabled':checkedIds.length < 2}" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedIds.length >= 1 ? checkedIds.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
