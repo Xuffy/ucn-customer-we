@@ -89,7 +89,7 @@
       </v-product>
     </el-dialog>
     <v-history-modify :code="idType === 'basicInfo' ? 'inquiry_list' : 'inquiry'" @save="save" :beforeSave="beforeSave" ref="HM"></v-history-modify>
-    <v-message-board module="inquiry" code="inquiryDetail" :id="$route.query.id+''"></v-message-board>
+    <v-message-board v-if="chatParams" module="inquiry" code="inquiryDetail" :id="chatParams.bizNo" :arguments="chatParams"></v-message-board>
   </div>
 </template>
 <script>
@@ -152,7 +152,8 @@ export default {
         pn: 1,
         operatorFilters: [],
         sorts: []
-      }
+      },
+      chatParams: null
     };
   },
   components: {
@@ -333,6 +334,16 @@ export default {
       }
       promise.then(res => {
         this.id = res.id;
+        this.chatParams = {
+          bizNo: res.quotationNo,
+          dataAuthCode: 'BIZ_INQUIRY',
+          funcAuthCode: '',
+          suppliers: [{
+            userId: res.supplierUserId,
+            companyId: res.supplierCompanyId,
+            tenantId: res.supplierTenantId
+          }]
+        };
         this.tableLoad = false;
         // Basic Info
         this.tabData = this.newTabData = this.$getDB(
