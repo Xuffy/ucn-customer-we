@@ -205,6 +205,7 @@
                 path: '/logs/index',
                 query: {code: 'WAREHOUSE'},
                 type: 10,
+                auth:'WAREHOUSE:LOG',
                 label: this.$i.common.log
             });
         },

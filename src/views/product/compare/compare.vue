@@ -732,11 +732,13 @@
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/product/compareArchive',
                 type: 20,
+                auth:'PRODUCT:COMPARE_DETAIL:DELETE',
                 label: this.$i.common.archive
             });
         },

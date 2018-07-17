@@ -396,11 +396,13 @@
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/product/bookmarkArchive',
                 type: 20,
+                auth:'PRODUCT:BOOKMARK_OVERVIEW:DELETE',
                 label: this.$i.common.archive
             });
         },

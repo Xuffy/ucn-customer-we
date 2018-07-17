@@ -214,11 +214,6 @@
             send: {
               api: this.$apis.update_logistic_plan,
               path: '/plan'
-            },
-            auth:{
-              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
-              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
-              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
             }
           },
           planDraftDetail: {
@@ -229,12 +224,7 @@
             send: {
               api: this.$apis.send_draft_logistic_plan,
               path: '/plan'
-            },
-            auth:{
-              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
-              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
-              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
-            } 
+            }
           }
         },
         pageName: '',
@@ -316,22 +306,44 @@
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
+        auth: (()=>{ 
+          let code = null;
+          if(this.pageTypeCurr=="logisticPlanDetail"){
+            code = 'LOGISTICS:LOG';
+          }else if(this.pageTypeCurr=="loadingListDetail"){
+            code = 'LOADING_LIST:LOG';
+          }else if(this.pageTypeCurr=="loadingListDetail"){
+            code = 'LOGISTICS:LOG';
+          }
+          return code
+        })(),
         label: this.$i.common.log
-      },{
-        path: '/logistic/draft',
-        label: this.$i.common.draft
-      },{
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        auth: 'LOGISTICS:DRAFT_ARCHIVE',
-        label: this.$i.logistic.archiveDraft
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
       }];
+      if(this.pageTypeCurr=="logisticPlanDetail"){
+        menuList.push(
+          {
+            path: '/logistic/archivePlan',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archivePlan
+          }
+        )
+      }else if(this.pageTypeCurr=="loadingListDetail"){
+        menuList.push(
+          {
+            path: '/logistic/archiveLoadingList',
+            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveLoadingList
+          }
+        )
+      }else if(this.pageTypeCurr=="logisticDraftDetail"){
+        menuList.push(
+          {
+            path: '/logistic/archiveDraft',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveDraft
+          }
+        )
+      }
       this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
