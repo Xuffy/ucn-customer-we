@@ -214,11 +214,6 @@
             send: {
               api: this.$apis.update_logistic_plan,
               path: '/plan'
-            },
-            auth:{
-              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
-              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
-              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
             }
           },
           planDraftDetail: {
@@ -229,12 +224,7 @@
             send: {
               api: this.$apis.send_draft_logistic_plan,
               path: '/plan'
-            },
-            auth:{
-              payment:'LOGISTICS:PLAN_DETAIL:PAYMENT',
-              PRODUCT_INFO_ADD:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_ADD',
-              PRODUCT_INFO_DELETE:'LOGISTICS:PLAN_DETAIL:PRODUCT_INFO_DELETE'
-            } 
+            }
           }
         },
         pageName: '',
@@ -322,14 +312,16 @@
         label: this.$i.common.draft
       },{
         path: '/logistic/archivePlan',
+        auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
         label: this.$i.logistic.archivePlan
       },{
         path: '/logistic/archiveDraft',
-        auth: 'LOGISTICS:DRAFT_ARCHIVE',
+        auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
         label: this.$i.logistic.archiveDraft
       },
       {
         path: '/logistic/archiveLoadingList',
+        auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
         label: this.$i.logistic.archiveLoadingList
       }];
       this.setMenuLink(menuList);
