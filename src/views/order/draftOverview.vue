@@ -355,16 +355,19 @@
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },

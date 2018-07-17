@@ -280,6 +280,9 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table
+                ref="table"
+                native-sort="skuSysCode"
+                @change-sort="$refs.table.setSort(productTableData)"
                 :totalRow="totalRow"
                 code="uorder_sku_list"
                 :height="500"
@@ -382,6 +385,8 @@
         </el-dialog>
 
         <v-history-modify
+                code="uorder_sku_list"
+                @closed="$refs.table.update()"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -2020,21 +2025,22 @@
             this.getOrderNo();
         },
         mounted(){
-            // this.setLog({query:{code:'BIZ_ORDER'}});
             this.setMenuLink({
                 path: '/order/draft',
-                // query: {code: ''},
                 type: 10,
+                auth:'ORDER:DETAIL:DRAFT',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },

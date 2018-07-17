@@ -4,7 +4,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})` }}</el-button>
-                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="searchEnter" />
         </div>

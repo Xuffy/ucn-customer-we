@@ -102,6 +102,7 @@
               <div style="white-space: nowrap;">
                 <span class="button"
                       v-for="aItem in (typeof buttons === 'function' ? buttons(item) : buttons)"
+                      v-authorize="aItem.auth"
                       :class="{disabled:aItem.disabled || item._disabled}"
                       @click="(!aItem.disabled && !item._disabled) && $emit('action',item,aItem.type, index)">
                   {{aItem.label || aItem}}</span>

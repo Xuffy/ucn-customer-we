@@ -823,6 +823,7 @@
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
         },
