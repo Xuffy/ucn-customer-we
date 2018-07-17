@@ -3,16 +3,12 @@
         <div class="title">
             <span>{{$i.product.compareOverview}}</span>
         </div>
-       <!--<div class="status">-->
-         <!--<el-button>{{$i.button.download}}</el-button>-->
-         <!--<el-button v-authorize="'PRODUCT:COMPARE_OVERVIEW:RECYCLE_BIN'" type="danger" @click="deleteCompare">{{$i.button.remove}}</el-button>-->
-       <!--</div>-->
         <v-table
                 :height="500"
                 v-loading="loadingTable"
                 class="speTable"
                 :data="tableDataList"
-                :buttons="[{label:'Modify',type:1},{label: 'Detail', type: 2}]"
+                :buttons="[{label:$i.product.modify,type:1,auth:'PRODUCT:COMPARE_OVERVIEW:MODIFY'},{label: $i.product.detailBig, type: 2}]"
                 @action="btnClick"
                 @change-checked="changeChecked">
             <template slot="header">
@@ -239,11 +235,13 @@
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/product/compareArchive',
                 type: 20,
+                auth:'PRODUCT:COMPARE_OVERVIEW:DELETE',
                 label: this.$i.common.archive
             });
         },

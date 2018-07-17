@@ -339,21 +339,23 @@
         created() {
             this.getUnit();
             this.setMenuLink({
-                path: '/order/draft',
-                // query: {code: ''},
-                type: 10,
-                label: this.$i.common.draft
-            });
-            this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'ORDER'},
-                type: 20,
+                type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/draft',
+                type: 20,
+                auth:'',
+                label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 query: {code: 'ORDER'},
                 type: 30,
+                auth:'',
                 label: this.$i.order.archiveDraft
             });
         },

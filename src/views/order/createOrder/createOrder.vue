@@ -2025,21 +2025,22 @@
             this.getOrderNo();
         },
         mounted(){
-            // this.setLog({query:{code:'BIZ_ORDER'}});
             this.setMenuLink({
                 path: '/order/draft',
-                // query: {code: ''},
                 type: 10,
+                auth:'ORDER:DETAIL:DRAFT',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },

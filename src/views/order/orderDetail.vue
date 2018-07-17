@@ -1863,7 +1863,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                return console.log(this.$depthClone(params.skuList), "params.skuList");
+                // return console.log(this.$depthClone(params.skuList), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -3000,24 +3000,27 @@
         mounted() {
             this.setMenuLink({
                 path: "/order/draft",
-                // query: {code: ''},
                 type: 10,
+                auth:'ORDER:DETAIL:DRAFT',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: "/logs/index",
                 query: { code: "ORDER" },
                 type: 20,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: "/order/archiveOrder",
                 type: 30,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: "/order/archiveDraft",
                 type: 40,
+                auth:'ORDER:DETAIL:ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },
