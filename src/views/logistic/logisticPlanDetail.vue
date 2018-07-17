@@ -187,13 +187,7 @@
           },
           loadingListDetail: {
             payment:'LOADING_LIST:DETAIL:PAYMENT'
-          },
-          logisticDraftDetail: {
-
-          },
-          placeLogisticPlan: {
-
-          },
+          }
         },
         configUrl: {
           placeLogisticPlan: {
