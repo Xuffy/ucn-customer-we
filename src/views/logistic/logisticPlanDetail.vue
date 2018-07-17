@@ -57,7 +57,7 @@
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
       <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
-        native-sort
+        native-sort="orderNo"
         @change-sort="$refs.productInfo.setSort(productList)"
         >
         <div slot="header" class="product-header" v-if="edit">
@@ -325,6 +325,7 @@
         label: this.$i.logistic.archivePlan
       },{
         path: '/logistic/archiveDraft',
+        auth: 'LOGISTICS:DRAFT_ARCHIVE',
         label: this.$i.logistic.archiveDraft
       },
       {
@@ -611,7 +612,7 @@
         this.getProductHistory(e.id ? (e.argID ? e.argID.value : e.id.value) : null, status, i)
       },
       getProductHistory(productId, status, i) {
-        const currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
+        let currentProduct = JSON.parse(JSON.stringify(this.productList[i]))
         let url = this.pageTypeCurr == 'loadingListDetail' ? 'get_product_order_history' : 'get_product_history';
         if(productId){
           if(status==1){
@@ -619,7 +620,7 @@
             this.$refs.HM.init(this.productModifyList,[]);
           }else{
             this.$ajax.get(`${this.$apis[url]}?productId=${productId}`).then(res => {
-              this.productModifyList = this.$getDB(this.$db.logistic.productInfo,res.history.map(el => {
+              this.productModifyList = this.$getDB(this.$db.logistic.productModify,res.history.map(el => {
                 let ShipmentStatusItem = this.selectArr.ShipmentStatus && this.selectArr.ShipmentStatus.find(item => item.code == el.shipmentStatus)
                 el.shipmentStatus = ShipmentStatusItem ? ShipmentStatusItem.name : '';
                 el.entryDt = this.$dateFormat(el.entryDt, 'yyyy-mm-dd hh:mm');

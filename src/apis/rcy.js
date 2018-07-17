@@ -46,6 +46,8 @@ export default {
     post_purchase_supplier_remark: ['/purchase/supplier/remark','BASE_CS', 'BASE_URL'],
     post_purchase_supplier_remark_id: ['/purchase/supplier/remark','BASE_CS', 'BASE_URL'],
     post_purchase_supplier_deleteRemark_id: ['/purchase/supplier/deleteRemark/{id}','BASE_CS', 'BASE_URL'],
+    post_batchDeleteBookmark:['/purchase/supplier/batchDeleteBookmark','BASE_CS', 'BASE_URL'],
+    post_batchRecoverBookmark:['/purchase/supplier/batchRecoverBookmark','BASE_CS', 'BASE_URL'],
 
     //customer
     post_getCustomerList: ['/supply/overview', 'BASE_URL'],

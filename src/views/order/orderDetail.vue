@@ -7,8 +7,13 @@
             <el-row>
                 <el-col
                         :class="{speCol:v.type!=='textarea' && v.type!=='attachment',isModify:v._isModified}"
-                        v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && v.type!=='supplierNo'"
-                        :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8"
+                        v-for="v in $db.order.orderDetail"
+                        v-if="v.belong==='basicInfo' && v.type!=='supplierNo'"
+                        :key="v.key"
+                        :xs="24"
+                        :sm="v.fullLine?24:12"
+                        :md="v.fullLine?24:12"
+                        :lg="v.fullLine?24:8"
                         :xl="v.fullLine?24:8">
                     <el-form-item :prop="v.key" :label="v.label">
                         <div v-if="v.type==='input'">
@@ -203,7 +208,6 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.order.exchangeRate}}
         </div>
@@ -223,93 +227,97 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <div class="title">
             {{$i.order.responsibility}}
         </div>
-        <el-table
-                :data="orderForm.responsibilityList"
-                style="width: 100%">
-            <el-table-column
-                    prop="type"
-                    label="Type">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
-                    <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
-                    <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
-                    <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
-                    <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="customer"
-                    align="center"
-                    label="Me">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            :class="{'high-light':scope.row.fieldUpdate && scope.row.fieldUpdate.customer===''}"
-                            @change="handleResponsibilityChange(scope.row,'customer')"
-                            v-model="scope.row.customer"
-                            :editable="false"
-                            align="right"
-                            type="date"
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="supplier"
-                    align="center"
-                    label="Supplier">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            @change="handleResponsibilityChange(scope.row,'supplier')"
-                            v-model="scope.row.supplier"
-                            align="right"
-                            :editable="false"
-                            type="date"
-                            :disabled="true">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="Remark"
-                    align="center"
-                    label="Remark">
-                <template slot-scope="scope">
-                    <el-input
-                            @change="handleResponsibilityChange(scope.row,'remark')"
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
-                            v-model="scope.row.remark"
-                            clearable>
-                    </el-input>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    prop="actualDate"
-                    align="center"
-                    label="Actual Date">
-                <template slot-scope="scope">
-                    <el-date-picker
-                            @change="handleResponsibilityChange(scope.row,'actualDt')"
-                            v-model="scope.row.actualDt"
-                            align="right"
-                            type="date"
-                            :editable="false"
-                            :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
-                            :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
-                    </el-date-picker>
-                </template>
-            </el-table-column>
-        </el-table>
+        <div v-authorize="'ORDER:DETAIL:RESPONSIBILITY'">
+            <el-table
+                    :data="orderForm.responsibilityList"
+                    style="width: 100%">
+                <el-table-column
+                        prop="type"
+                        label="Type">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.type===0">{{$i.order.needLabelDesignInfoDate}}</span>
+                        <span v-if="scope.row.type===1">{{$i.order.labelDesignDate}}</span>
+                        <span v-if="scope.row.type===2">{{$i.order.designNeedConfirmDate}}</span>
+                        <span v-if="scope.row.type===3">{{$i.order.receiveSampleDate}}</span>
+                        <span v-if="scope.row.type===4">{{$i.order.sampleNeedConfirmDate}}</span>
+                        <span v-if="scope.row.type===5">{{$i.order.otherResponsibility}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="customer"
+                        align="center"
+                        label="Me">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates.customer===''}"
+                                @change="handleResponsibilityChange(scope.row,'customer')"
+                                v-model="scope.row.customer"
+                                :editable="false"
+                                align="right"
+                                type="date"
+                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="supplier"
+                        align="center"
+                        label="Supplier">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates.supplier===''}"
+                                @change="handleResponsibilityChange(scope.row,'supplier')"
+                                v-model="scope.row.supplier"
+                                align="right"
+                                :editable="false"
+                                type="date"
+                                :disabled="true">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="Remark"
+                        align="center"
+                        label="Remark">
+                    <template slot-scope="scope">
+                        <el-input
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates.remark===''}"
+                                @change="handleResponsibilityChange(scope.row,'remark')"
+                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseInput:''"
+                                v-model="scope.row.remark"
+                                clearable>
+                        </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="actualDate"
+                        align="center"
+                        label="Actual Date">
+                    <template slot-scope="scope">
+                        <el-date-picker
+                                :class="{'high-light':scope.row && scope.row.fieldUpdates.actualDt===''}"
+                                @change="handleResponsibilityChange(scope.row,'actualDt')"
+                                v-model="scope.row.actualDt"
+                                align="right"
+                                type="date"
+                                :editable="false"
+                                :disabled="scope.row.type===1 || scope.row.type===3 || !isModify"
+                                :placeholder="scope.row.type!==1 && scope.row.type!==3 && isModify?$i.order.pleaseChoose:''">
+                        </el-date-picker>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
 
         <div class="title">
             {{$i.order.payment}}
         </div>
-        <div class="payment-table">
+        <div class="payment-table" v-authorize="'ORDER:DETAIL:PAYMENT'">
             <el-button
                     v-authorize="'ORDER:DETAIL:PAYMENT_APPLY'"
                     :disabled="disableApplyPay || !allowHandlePay ||loadingPaymentTable"
@@ -540,22 +548,30 @@
             {{$i.order.productInfoBig}}
         </div>
         <v-table ref="table"
-                :totalRow="totalRow"
-                code="uorder_sku_list"
-                 native-sort
-                :height="500"
-                :data.sync="productTableData"
-                :buttons="handleShowBtn"
-                @action="productInfoAction"
-                :loading='loadingProductTable'
-                @change-checked="changeProductChecked"
-                :rowspan="2"
-                :total-row="tableTotal">
+                 :totalRow="totalRow"
+                 code="uorder_sku_list"
+                 native-sort="skuSysCode"
+                 @change-sort="$refs.table.setSort(productTableData)"
+                 :height="500"
+                 :data.sync="productTableData"
+                 :buttons="handleShowBtn"
+                 @action="productInfoAction"
+                 :loading='loadingProductTable'
+                 @change-checked="changeProductChecked"
+                 :rowspan="2"
+                 :total-row="tableTotal">
             <template slot="header">
                 <div class="btns">
-                    <el-button :disabled="!isModify" @click="addProduct">{{$i.order.addProduct}}</el-button>
-                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0 || !isModify"
-                               type="danger">{{$i.order.remove}}
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_ADD'"
+                            :disabled="!isModify"
+                            @click="addProduct">{{$i.order.addProduct}}
+                    </el-button>
+                    <el-button
+                            v-authorize="'ORDER:DETAIL:PRODUCT_INFO_DELETE'"
+                            @click="removeProduct"
+                            :disabled="selectProductInfoTable.length===0 || !isModify"
+                            type="danger">{{$i.order.remove}}
                     </el-button>
                 </div>
             </template>
@@ -613,7 +629,11 @@
 
         <div class="footBtn">
             <div v-if="isModify">
-                <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">
+                <el-button
+                        :disabled="loadingPage"
+                        :loading="disableClickSend"
+                        @click="send"
+                        type="primary">
                     {{$i.order.send}}
                 </el-button>
                 <el-button :loading="disableClickCancelModify" @click="cancelModify" type="danger">{{$i.order.exit}}
@@ -711,8 +731,8 @@
         </el-dialog>
 
         <v-history-modify
-          code="uorder_sku_list"
-          @closed="$refs.table.update()"
+                code="uorder_sku_list"
+                @closed="$refs.table.update()"
                 @save="saveNegotiate"
                 ref="HM">
             <!--<div slot="skuPic" slot-scope="{data}">-->
@@ -1306,7 +1326,6 @@
                 copyList: [],
                 disableClickDunning: false,
 
-
                 /**
                  * 弹出框data配置
                  * */
@@ -1649,19 +1668,17 @@
                     /**
                      * 高亮处理
                      * */
-                    _.map(this.orderForm.fieldUpdate,(v,k)=>{
-                        this.$db.order.orderDetail[k]._isModified=true;
+                    _.map(this.$db.order.orderDetail, v => {
+                        v._isModified = false;
                     });
-                    this.orderForm.fieldUpdate={};
-
-
-                    _.map(this.orderForm.responsibilityList,v=>{
-                        v.fieldUpdate={};
+                    _.map(this.orderForm.fieldUpdate, (v, k) => {
+                        this.$db.order.orderDetail[k]._isModified = true;
                     });
+                    this.orderForm.fieldUpdate = {};
 
-
-                    _.map(this.orderForm.skuList,v=>{
-                        v.fieldUpdate={};
+                    _.map(this.orderForm.responsibilityList, v => {
+                        v.fieldUpdates = v.fieldUpdate;
+                        v.fieldUpdate = {};
                     });
 
                     this.initialData = this.$depthClone(this.orderForm);
@@ -1704,12 +1721,21 @@
                             }
                             item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory ? this.$change(this.quarantineTypeOption, "skuInspectQuarantineCategory", item, true).name : "";
                             item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
-
                         }
                     });
                     this.productTableData = [];
                     _.map(data, v => {
                         this.productTableData.push(v);
+                    });
+                    _.map(this.productTableData, v => {
+                        if (v.fieldUpdate.value) {
+                            _.map(v.fieldUpdate.value, (value, key) => {
+                                if (key !== "skuPictures") {
+                                    v[key]._style = { "backgroundColor": "yellow" };
+                                }
+                            });
+                            v.fieldUpdate.value = {};
+                        }
                     });
                     this.markImportant = this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
@@ -1799,18 +1825,19 @@
                             });
                         }
                     }
-                    if(!item._remark){
-                        _.map(item,(v,k)=>{
-                            if(v._isModified){
-                                if(!item.fieldUpdate){
-                                    item.fieldUpdate.value={};
+                    if (!item._remark) {
+                        _.map(item, (v, k) => {
+                            if (v._isModified) {
+                                if (!item.fieldUpdate.value) {
+                                    item.fieldUpdate.value = {};
                                 }
-                                item.fieldUpdate.value[k]='';
+                                item.fieldUpdate.value[k] = "";
                             }
-                        })
+                        });
                     }
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
+                console.log();
                 params.skuList = this.dataFilter(this.productTableData);
                 let rightCode = true;
                 _.map(params.skuList, v => {
@@ -1836,8 +1863,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // console.log(this.productTableData,'productTableData')
-                // return console.log(this.$depthClone(params.skuList),'fieldUpdate')
+                return console.log(this.$depthClone(params.skuList), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1905,7 +1931,7 @@
                     this.loadingTable = false;
                 });
             },
-            changePayment(e,key) {
+            changePayment(e, key) {
                 if (!e) {
                     return;
                 }
@@ -1916,7 +1942,7 @@
                 } else {
                     this.disabledLcNo = false;
                 }
-                if(key){
+                if (key) {
                     if (!this.orderForm.fieldUpdate) {
                         this.orderForm.fieldUpdate = {};
                     }
@@ -1937,12 +1963,11 @@
             /**
              * responsibility事件
              * */
-            handleResponsibilityChange(data,key){
-                console.log(data,'data')
-                if(!data.fieldUpdate){
-                    data.fieldUpdate={};
+            handleResponsibilityChange(data, key) {
+                if (!data.fieldUpdate) {
+                    data.fieldUpdate = {};
                 }
-                data.fieldUpdate[key]='';
+                data.fieldUpdate[key] = "";
             },
 
             /**
@@ -1977,7 +2002,6 @@
                             arr.push(v);
                         }
                     });
-                    console.log(this.$depthClone(arr), "arr");
                     this.chooseProduct = this.$refs.HM.init(arr, []);
                 }
                 else if (type === "detail") {
@@ -2530,7 +2554,7 @@
                 });
             },
             downloadOrder() {
-                this.$fetch.export_task('EXPORT_ORDER',{ids:[this.orderForm.id]});
+                this.$fetch.export_task("EXPORT_ORDER", { ids: [this.orderForm.id] });
             },
             cancelOrder() {
                 this.$confirm(this.$i.order.sureCancel, this.$i.order.prompt, {
@@ -3017,10 +3041,11 @@
         margin-top: 10px;
     }
 
-    .isModify >>> input{
+    .isModify >>> input {
         background-color: yellow !important;
     }
-    .high-light >>> input{
+
+    .high-light >>> input {
         background-color: yellow !important;
     }
 

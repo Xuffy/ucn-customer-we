@@ -1,26 +1,30 @@
 <template>
   <div class="logistic-plan-overview">
     <div class="hd-top">{{ $i.logistic.archive }}/{{ $i.logistic.draftOverview }}</div>
-    <div class="btn-wrap">
-      <div class="fn btn">
-        <el-button @click="sendRecover" v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
-      </div>
-      <div class="view-by-btn">
-        <span>{{ $i.logistic.viewBy }}&nbsp;</span>
-        <el-radio-group v-model="viewBy" size="mini">
-          <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
-        </el-radio-group>
-        <div class="status">
-          <div class="select-search-wrap">
-            <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch" />
-          </div>
-        </div>
+    <div class="status">
+      <div class="btn-wrap"></div>
+      <div class="select-search-wrap">
+        <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch" />
       </div>
     </div>
     <v-table :code="urlObj[pageType][viewBy].setTheField" 
       :data="tabData" @change-checked="changeChecked" :loading="tableLoading"
       :height="height" ref="tab"
-      @change-sort="changeSort"/>
+      @change-sort="changeSort">
+       <div slot="header">
+         <div class="btn-wrap">
+            <div class="fn btn">
+              <el-button @click="sendRecover" v-authorize="'LOGISTICS:DRAFT_ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+            </div>
+            <div class="view-by-btn">
+              <span>{{ $i.logistic.viewBy }}&nbsp;</span>
+              <el-radio-group v-model="viewBy" size="mini">
+                <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
+       </div>
+    </v-table>
     <v-pagination :page-data.sync="pageParams" @size-change="sizeChange" @change="pageChange" />
   </div>
 </template>
@@ -132,6 +136,7 @@
         label: this.$i.logistic.archivePlan
       },{
         path: '/logistic/archiveDraft',
+        auth: 'LOGISTICS:DRAFT_ARCHIVE',
         label: this.$i.logistic.archiveDraft
       },
       {
@@ -234,6 +239,7 @@
               return val
             })
           })
+          this.selectCount = [];
           this.pageParams = {
             pn: res.pn,
             ps: res.ps,
@@ -254,72 +260,73 @@
 <style lang="less" scoped>
   .logistic-plan-overview {
 
-    .hd-top {
-      font-size: 18px;
-      color: #666;
-      height: 50px;
-      line-height: 50px;
-      border-bottom: 1px solid #ccc;
-      padding: 0 15px;
-    }
+  .hd-top {
+    font-size: 18px;
+    color: #666;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #ccc;
+    padding: 0 15px;
+  }
 
-    .btn-wrap {
-      padding: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .view-by-btn {
-        display: flex;
-        align-items: center;
+  .btn-wrap {
+    padding: 0 25px 5px 0;
+    display: flex;
+    justify-content: space-between;
 
-        span {
-          font-size: 14px;
-          color: #999;
-        }
+  .view-by-btn {
+    display: flex;
+    align-items: center;
 
-        button {
-          padding: 3px 5px;
-        }
+  span {
+    font-size: 14px;
+    color: #999;
+  }
 
-      }
-    }
-    .status {
-      display: flex;
-      height: 60px;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 15px;
-      box-sizing: border-box;
+  button {
+    padding: 3px 5px;
+  }
 
-      .btn-wrap {
-        display: flex;
-        align-items: center;
+  }
+  }
+  .status {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    box-sizing: border-box;
 
-        span {
-          font-size: 14px;
-          margin-right: 10px;
-        }
+  .btn-wrap {
+    display: flex;
+    align-items: center;
 
-        button {
-          padding: 2px 5px;
-          cursor: pointer;
-          transition: all .5s ease;
-        }
+  span {
+    font-size: 14px;
+    margin-right: 10px;
+  }
 
-      }
-      .select-wrap {
-        display: flex;
-        align-items: center;
+  button {
+    padding: 2px 5px;
+    cursor: pointer;
+    transition: all .5s ease;
+  }
 
-        .select {
-          width: 110px;
-          margin-right: 5px;
+  }
+  .select-wrap {
+    display: flex;
+    align-items: center;
 
-          input {}
+  .select {
+    width: 110px;
+    margin-right: 5px;
 
-        }
-      }
-    }
+  input {
+  }
+
+  }
+  }
+  }
   }
 
 </style>

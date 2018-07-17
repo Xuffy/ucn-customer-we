@@ -16,30 +16,6 @@
         <select-search :options="options" @inputEnter="searchFn" v-model="selectSearch"/>
       </div>
     </div>
-    <div class="btn-wrap">
-      <div class="fn btn">
-        <div v-if="pageType === 'plan'">
-          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
-          <el-button v-authorize="'LOGISTICS:PLAN_OVERVIEW:CREATE'" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
-        </div>
-        <div v-if="pageType === 'loadingList'">
-          <el-button v-authorize="'LOADING_LIST:OVERVIEW:DOWNLOAD'" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-          <el-button v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
-        </div>
-        <div v-if="pageType === 'draft'">
-          <!-- <el-button @click="download" :disabled="selectCount.length<=0">{{ $i.logistic.download }}</el-button> -->
-          <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW:ARCHIVE'" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
-          <el-button v-authorize="'LOGISTICS:PLAN_DRAFT_OVERVIEW:SEND'" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
-        </div>
-      </div>
-      <div class="view-by-btn">
-        <span>{{ $i.logistic.viewBy }}&nbsp;</span>
-        <el-radio-group v-model="viewBy" size="mini">
-          <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
-        </el-radio-group>
-      </div>
-    </div>
     <v-table
       :code="urlObj[pageType][viewBy].setTheField"
       :data="tabData"
@@ -50,7 +26,33 @@
       :height="height"
       ref="tab"
       @change-sort="changeSort"
-    />
+    >
+      <div slot="header">
+        <div class="btn-wrap">
+          <div class="fn btn">
+            <div v-if="pageType === 'plan'">
+              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType].CREATE||''" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+            </div>
+            <div v-if="pageType === 'loadingList'">
+              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+            </div>
+            <div v-if="pageType === 'draft'">
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType].SEND||''" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
+            </div>
+          </div>
+          <div class="view-by-btn">
+            <span>{{ $i.logistic.viewBy }}&nbsp;</span>
+            <el-radio-group v-model="viewBy" size="mini">
+              <el-radio-button v-for="a in urlObj[pageType]" :key="a.key" :label="a.label">{{ a.text }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+      </div>
+    </v-table>
     <v-pagination :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
 </template>
@@ -87,6 +89,21 @@
             label: this.$i.logistic.orderNo
           }
         ],
+        auth:{
+          plan: {
+            DOWNLOAD :'LOGISTICS:PLAN_OVERVIEW:DOWNLOAD',
+            ARCHIVE  : 'LOGISTICS:PLAN_OVERVIEW:ARCHIVE',
+            CREATE  : 'LOGISTICS:PLAN_OVERVIEW:CREATE'
+          },
+          loadingList: {
+            DOWNLOAD:'LOADING_LIST:OVERVIEW:DOWNLOAD',
+            ARCHIVE:'LOADING_LIST:OVERVIEW:ARCHIVE'
+          },
+          draft: {
+            ARCHIVE:'LOGISTICS:PLAN_DRAFT_OVERVIEW:ARCHIVE',
+            SEND:'LOGISTICS:PLAN_DRAFT_OVERVIEW:SEND'
+          }
+        },
         headerText: {
           plan: this.$i.logistic.logisticsPlanOverview,
           loadingList: this.$i.logistic.loadingListOverview,
@@ -217,6 +234,7 @@
         label: this.$i.logistic.archivePlan
       },{
         path: '/logistic/archiveDraft',
+        auth: 'LOGISTICS:DRAFT_ARCHIVE',
         label: this.$i.logistic.archiveDraft
       },
       {
@@ -307,6 +325,7 @@
       sendArchive(){
         let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;
         this.$ajax.post(url,{ids:this.downloadIds}).then(res => {
+          this.selectCount = [];
           this.fetchDataList();
         })
       },
@@ -333,6 +352,7 @@
               return val
             })
           })
+          this.selectCount = [];
           this.$set(this.pageParams,'pn',res.pn);
           this.$set(this.pageParams,'ps',res.ps);
           this.$set(this.pageParams,'tc',res.tc);
@@ -371,7 +391,7 @@
   }
 
   .btn-wrap {
-    padding: 10px;
+    padding: 0 25px 5px 0;
     display: flex;
     justify-content: space-between;
 
