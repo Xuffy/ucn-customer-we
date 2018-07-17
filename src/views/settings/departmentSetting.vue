@@ -771,11 +771,15 @@
         let nodes = [], dataNodes
           , params = {resourceCodes: [], domainCodes: []};
 
-        nodes = this.$refs.privilegeTree.getCheckedNodes(true);
+        nodes = this.$refs.privilegeTree.getHalfCheckedNodes().concat(this.$refs.privilegeTree.getCheckedNodes(true));
         dataNodes = this.$refs.privilegeTree.getNode('dataAll');
         this.loadingPrivilege = true;
 
-        _.map(nodes, val => !_.isUndefined(val.type) && params.resourceCodes.push(val.code))
+        _.map(nodes, val => {
+          if (!_.isUndefined(val.type)) {
+            params.resourceCodes.push(val.code)
+          }
+        })
 
         _.map(dataNodes.childNodes, value => {
           let checked = _.where(value.childNodes, {checked: true})

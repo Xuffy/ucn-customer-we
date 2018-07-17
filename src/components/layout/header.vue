@@ -135,7 +135,6 @@
     watch: {
       $route() {
         this.updateMenuActive();
-        // this.getMessage();
       },
       'message.show'(val) {
         val && this.getMessage();
@@ -428,8 +427,10 @@
   }
 
   .icon-menu i {
-
-
+    font-size: 20px;
+    color: #eeeeee;
+    margin-right: 10px;
+    cursor: pointer;
   }
 </style>
 <style>
