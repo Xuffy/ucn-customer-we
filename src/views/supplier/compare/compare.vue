@@ -14,19 +14,6 @@
                     clearable>
             </el-input>
         </div>
-        <div class="btns">
-            <span v-show="$route.query.type !== 'archive'">
-                <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
-               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'" @click="download">
-                  {{$i.common.download}}
-                </el-button>
-            </span>
-            <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
-        </div>
 
         <v-table
           code="udata_pruchase_supplier_compare_detail_overview"
@@ -37,7 +24,24 @@
           @change-checked="changeChecked"
           @change-sort="sort"
           @filter-value="tableFilterValue"
-          :height="500"></v-table>
+          :height="500">
+          <template slot="header">
+            <div class="btns">
+            <span v-show="$route.query.type !== 'archive'">
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
+              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
+               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'" @click="download">
+                  {{$i.common.download}}
+                </el-button>
+            </span>
+              <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+              <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            </div>
+          </template>
+
+        </v-table>
 
         <div class="footBtn">
             <div v-if="$route.query.type==='new'">

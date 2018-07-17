@@ -25,7 +25,11 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button :loading="disableClickRecover" :disabled="selectedList.length===0" @click='recover'>{{($i.order.recover)}}</el-button>
+                        <el-button
+                                v-authorize="'ORDER:DRAFT_ARCHIVE:RECOVER'"
+                                :loading="disableClickRecover"
+                                :disabled="selectedList.length===0"
+                                @click='recover'>{{($i.order.recover)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -335,21 +339,23 @@
         created() {
             this.getUnit();
             this.setMenuLink({
-                path: '/order/draft',
-                // query: {code: ''},
-                type: 10,
-                label: this.$i.common.draft
-            });
-            this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'ORDER'},
-                type: 20,
+                type: 10,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
+            });
+            this.setMenuLink({
+                path: '/order/draft',
+                type: 20,
+                auth:'',
+                label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 query: {code: 'ORDER'},
                 type: 30,
+                auth:'',
                 label: this.$i.order.archiveDraft
             });
         },

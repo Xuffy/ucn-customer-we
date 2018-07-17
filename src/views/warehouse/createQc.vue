@@ -142,8 +142,15 @@
         </div>
         <div class="product-info">
             <div class="btns">
-                <el-button type="primary" @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
-                <el-button type="danger" :disabled="disableRemoveProduct" @click="removeProduct">{{$i.warehouse.remove}}
+                <el-button
+                        v-authorize="'QC:ORDER_DETAIL:PRODUCT_INFO_ADD'"
+                        type="primary"
+                        @click="addProduct">{{$i.warehouse.addProduct}}</el-button>
+                <el-button
+                        v-authorize="'QC:ORDER_DETAIL:PRODUCT_INFO_DELETE'"
+                        type="danger"
+                        :disabled="disableRemoveProduct"
+                        @click="removeProduct">{{$i.warehouse.remove}}
                 </el-button>
             </div>
 

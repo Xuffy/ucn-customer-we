@@ -3,7 +3,8 @@
     <h3 class="hd">{{$i.supplier.compareOverview}}</h3>
     <div class="status">
       <div class="btn-wrap">
-        <el-button @click="postSupplierRecoverCompare" :disabled="!selectedNumber.length>0">{{$i.button.recover}}</el-button>
+        <el-button @click="postSupplierRecoverCompare" :disabled="!selectedNumber.length>0"
+          v-authorize="'SUPPLIER:COMPARE_ARCHIVE:RECOVER'">{{$i.button.recover}}</el-button>
       </div>
       <div class="select-wrap">
         <selectSearch :options='options' @inputEnter='inputEnter'

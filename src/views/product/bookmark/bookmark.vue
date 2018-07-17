@@ -45,7 +45,7 @@
                 <el-button
                         type="danger"
                         :disabled="selectList.length<1"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:RECYCLE_BIN'" @click="deleteBookmark">
+                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DELETE'" @click="deleteBookmark">
                     {{$i.button.remove}}</el-button>
             </template>
             <v-pagination slot="pagination"

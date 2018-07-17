@@ -38,10 +38,27 @@
             <template slot="header">
                 <div class="fn">
                     <div class="btn-wrap">
-                        <el-button @click='createOrder' v-authorize="'ORDER:OVERVIEW:CREATE'">{{($i.order.createOrder)}}</el-button>
-                        <el-button :disabled='disableFinish' :loading="disableClickFinish" @click='finish' v-authorize="'ORDER:OVERVIEW:SHIPPED'">{{$i.order.shipped}}({{selectedList.length}})</el-button>
-                        <el-button v-authorize="'ORDER:OVERVIEW:DOWNLOAD'" @click="downloadOrder">{{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
-                        <el-button type='danger' :loading="disableClickDelete" :disabled='disableDelete' @click='deleteOrder' v-authorize="'ORDER:OVERVIEW:DELETE'">{{($i.common.archive)}}</el-button>
+                        <el-button
+                                @click='createOrder'
+                                v-authorize="'ORDER:OVERVIEW:CREATE'">
+                            {{($i.order.createOrder)}}</el-button>
+                        <el-button
+                                :disabled='disableFinish'
+                                :loading="disableClickFinish"
+                                @click='finish'
+                                v-authorize="'ORDER:OVERVIEW:SHIPPED'">
+                            {{$i.order.shipped}}({{selectedList.length}})</el-button>
+                        <el-button
+                                v-authorize="'ORDER:OVERVIEW:DOWNLOAD'"
+                                @click="downloadOrder">
+                            {{$i.order.download}}({{selectedList.length===0?$i.order.all:selectedList.length}})</el-button>
+                        <el-button
+                                type='danger'
+                                :loading="disableClickDelete"
+                                :disabled='disableDelete'
+                                @click='deleteOrder'
+                                v-authorize="'ORDER:OVERVIEW:ARCHIVE'">
+                            {{($i.common.archive)}}</el-button>
                     </div>
                     <div class="viewBy">
                         <span>{{$i.order.viewBy}}</span>
@@ -353,24 +370,27 @@
             this.getUnit();
             this.setMenuLink({
                 path: '/order/draft',
-                // query: {code: ''},
                 type: 10,
+                auth:'ORDER:OVERVIEW:DRAFT',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 20,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 30,
+                auth:'ORDER:OVERVIEW:ARCHIVE',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 40,
+                auth:'ORDER:OVERVIEW:ARCHIVE',
                 label: this.$i.order.archiveDraft
             });
         },

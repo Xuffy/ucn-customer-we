@@ -18,11 +18,11 @@
                         @click="recover"
                         :loading="isRecovering"
                         :disabled="selectList.length===0"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:COMPARE'">
+                        v-authorize="'PRODUCT:ARCHIVEE:RECOVER'">
                     {{$i.product.recover}}({{selectList.length}})</el-button>
                 <el-button
                         @click="download"
-                        v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">
+                        v-authorize="'PRODUCT:ARCHIVE:DOWNLOAD'">
                     {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})</el-button>
             </template>
             <v-pagination slot="pagination"
