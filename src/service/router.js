@@ -41,16 +41,17 @@ export const routerMap = [
   {
     path: '/product',
     component: Layout,
-    meta: {name: $i.router.product},
+    meta: {
+        name: $i.router.product,
+        auth:'PRODUCT'
+    },
     redirect: '/product/sourcing',
     children: [
       {
         path: 'sourcing',
         name: 'productSourcingOverview',
         meta: {
-          // draft: false,
-          // recycleBin: false,
-          // log: true,
+            auth:'PRODUCT:OVERVIEW',
           name: $i.router.productSourcingOverview
         },
         component: () => import('../views/product/sourcing/sourcing'),
@@ -60,9 +61,7 @@ export const routerMap = [
         name: 'productSourcingDetail',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: false,
-          // log: true,
+            auth:'PRODUCT:DETAIL',
           name: $i.router.productSourcingDetail
         },
         component: () => import('../views/product/sourcing/detail'),
@@ -71,9 +70,7 @@ export const routerMap = [
         path: 'bookmark',
         name: 'productBookmarkOverview',
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:BOOKMARK_OVERVIEW',
           name: $i.router.productBookmarkOverview
         },
         component: () => import('../views/product/bookmark/bookmark'),
@@ -83,9 +80,7 @@ export const routerMap = [
         name: 'productBookmarkDetail',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: false,
+            auth:'PRODUCT:BOOKMARK_DETAIL',
           name: $i.router.productBookmarkDetail
         },
         component: () => import('../views/product/bookmark/detail'),
@@ -95,9 +90,7 @@ export const routerMap = [
         name: 'productBookmarkManuallyAdd',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD',
           name: $i.router.productBookmarkManuallyAdd
         },
         component: () => import('../views/product/bookmark/manuallyAdd'),
@@ -107,9 +100,7 @@ export const routerMap = [
         name: 'productBookmarkArchive',
         hidden: true,
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
+          auth:'PRODUCT:ARCHIVE',
           name: $i.router.bookmarkArchive
         },
         component: () => import('../views/product/bookmark/archive'),
@@ -119,9 +110,7 @@ export const routerMap = [
         path: 'compare',
         name: 'productCompareOverview',
         meta: {
-          // draft: false,
-          // recycleBin: true,
-          // log: true,
+            auth:'PRODUCT:COMPARE_OVERVIEW',
           name: $i.router.productCompareOverview
         },
         component: () => import('../views/product/compare/overview'),
@@ -131,6 +120,7 @@ export const routerMap = [
         name: 'productCompareDetail',
         hidden: true,
         meta: {
+            auth:'PRODUCT:COMPARE_DETAIL',
           name: $i.router.productCompareDetail
         },
         component: () => import('../views/product/compare/compare'),
@@ -140,6 +130,7 @@ export const routerMap = [
         name: 'productCompareRecycleBin',
         hidden: true,
         meta: {
+            auth:'PRODUCT:COMPARE_ARCHIVE',
           name: $i.router.productCompareRecycleBin
         },
         component: () => import('../views/product/compare/archive'),
@@ -359,16 +350,17 @@ export const routerMap = [
     path: '/order',
     component: Layout,
     redirect: '/order/overview',
-    meta: {name: $i.router.order},
+    meta: {
+        name: $i.router.order,
+        auth:'ORDER',
+    },
     noDropdown: true,
     children: [
       {
         path: 'overview',
         name: 'order',
         meta: {
-          // draft: '/order/draft',
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:OVERVIEW',
           name: $i.router.orderOverview
         },
         component: () => import('../views/order/overView.vue')
@@ -377,9 +369,7 @@ export const routerMap = [
         path: 'create',
         name: 'orderCreate',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:OVERVIEW:CREATE',
           name: $i.router.orderCreate
         },
         component: () => import('../views/order/createOrder/createOrder.vue')
@@ -388,9 +378,7 @@ export const routerMap = [
         path: 'detail',
         name: 'Order Detail',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:DETAIL',
           name: $i.router.orderDetail
         },
         component: () => import('../views/order/orderDetail.vue')
@@ -400,9 +388,7 @@ export const routerMap = [
         path: 'draft',
         name: 'orderDraft',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'ORDER:DRAFT_OVERVIEW',
           name: $i.router.orderDraft
         },
         component: () => import('../views/order/draftOverview.vue')
@@ -410,6 +396,7 @@ export const routerMap = [
         path: 'archiveOrder',
         name: 'orderArchiveOrder',
         meta: {
+            auth:'ORDER:DRAFT_ARCHIVE',
           name: $i.router.orderRecycleBin
         },
         component: () => import('../views/order/archiveOrder.vue')
@@ -418,6 +405,7 @@ export const routerMap = [
             path: 'archiveDraft',
             name: 'orderArchiveDraft',
             meta: {
+                auth:'ORDER:DRAFT_ARCHIVE',
                 name: $i.router.orderRecycleBin
             },
             component: () => import('../views/order/archiveDraft.vue')
@@ -429,16 +417,17 @@ export const routerMap = [
     component: Layout,
     redirect: '/warehouse/overview',
     name: 'Warehouse',
-    meta: {name: $i.router.warehouse},
+    meta: {
+        auth:'WAREHOUSE',
+        name: $i.router.warehouse
+    },
     noDropdown: false,
     children: [
       {
         path: 'overview',
         name: 'Warehouse Overview',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'WAREHOUSE:OVERVIEW',
           name: $i.router.warehouseOverview
         },
         component: () => import('../views/warehouse/warehouseOverview.vue'),
@@ -447,9 +436,7 @@ export const routerMap = [
         path: 'qcOverview',
         name: 'warehouseQc',
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+            auth:'QC:ORDER_OVERVIEW',
           name: $i.router.warehouseQcOverview
         },
         component: () => import('../views/warehouse/qcOverview.vue'),
@@ -459,9 +446,7 @@ export const routerMap = [
         name: 'warehouseQcOrderDetail',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'QC:ORDER_DETAIL',
           name: $i.router.warehouseQcOrderDetail
         },
         component: () => import('../views/warehouse/qcDetail.vue'),
@@ -471,9 +456,7 @@ export const routerMap = [
         name: 'warehouseCreateQcOrder',
         hidden: true,
         meta: {
-          // draft: true,
-          // recycleBin: true,
-          // log: true,
+          auth:'QC:ORDER_OVERVIEW:CREATE',
           name: $i.router.warehouseCreateQcOrder
         },
         component: () => import('../views/warehouse/createQc.vue'),

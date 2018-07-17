@@ -178,12 +178,6 @@ export default {
         loadingListDetail: {
           PAYMENT_APPLY:'LOADING_LIST:DETAIL:PAYMENT_APPLY',
           PAYMENT_ACTION:'LOADING_LIST:DETAIL:PAYMENT_ACTION'
-        },
-        logisticDraftDetail: {
-
-        },
-        placeLogisticPlan: {
-
         }
       },
     }
@@ -194,7 +188,7 @@ export default {
     },
     pageTypeCurr() {
       return this.$route.name;
-    },
+    }
   },
   methods: {
     querySearch(queryString, cb) {

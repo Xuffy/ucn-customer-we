@@ -44,12 +44,6 @@ export default {
           READ:'LOADING_LIST:DETAIL:READ',
           DOWNLOAD:'LOADING_LIST:DETAIL:DOWNLOAD',
           CANCEL_LOADINGLIST:'LOADING_LIST:DETAIL:CANCEL'
-        },
-        logisticDraftDetail: {
-
-        },
-        placeLogisticPlan: {
-
         }
       },
     }
