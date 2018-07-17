@@ -90,7 +90,7 @@ export const routerMap = [
         name: 'productBookmarkManuallyAdd',
         hidden: true,
         meta: {
-          auth:'',
+          auth:'PRODUCT:BOOKMARK_OVERVIEW:MANUALLY_ADD',
           name: $i.router.productBookmarkManuallyAdd
         },
         component: () => import('../views/product/bookmark/manuallyAdd'),
@@ -369,7 +369,7 @@ export const routerMap = [
         path: 'create',
         name: 'orderCreate',
         meta: {
-          auth:'',
+          auth:'ORDER:OVERVIEW:CREATE',
           name: $i.router.orderCreate
         },
         component: () => import('../views/order/createOrder/createOrder.vue')
@@ -456,7 +456,7 @@ export const routerMap = [
         name: 'warehouseCreateQcOrder',
         hidden: true,
         meta: {
-          auth:'',
+          auth:'QC:ORDER_OVERVIEW:CREATE',
           name: $i.router.warehouseCreateQcOrder
         },
         component: () => import('../views/warehouse/createQc.vue'),
