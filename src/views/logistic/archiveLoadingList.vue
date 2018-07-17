@@ -14,7 +14,7 @@
       <div slot="header">
         <div class="btn-wrap">
           <div class="fn btn">
-            <el-button @click="sendRecover" v-authorize="'LOADING_LIST:OVERVIEW:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
+            <el-button @click="sendRecover" v-authorize="'LOADING_LIST:ARCHIVE:RECOVER'" :disabled="selectCount.length<=0">{{ $i.logistic.recover }}</el-button>
           </div>
           <div class="view-by-btn">
             <span>{{ $i.logistic.viewBy }}&nbsp;</span>
@@ -123,27 +123,27 @@
       }
     },
     mounted() {
-      let menuList = [{
-        path: '',
-        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
-        type: 100,
-        label: this.$i.common.log
-      },{
-        path: '/logistic/draft',
-        label: this.$i.common.draft
-      },{
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        auth: 'LOGISTICS:DRAFT_ARCHIVE',
-        label: this.$i.logistic.archiveDraft
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
-      }];
-      this.setMenuLink(menuList);
+      // let menuList = [{
+      //   path: '',
+      //   query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+      //   type: 100,
+      //   label: this.$i.common.log
+      // },{
+      //   path: '/logistic/draft',
+      //   label: this.$i.common.draft
+      // },{
+      //   path: '/logistic/archivePlan',
+      //   label: this.$i.logistic.archivePlan
+      // },{
+      //   path: '/logistic/archiveDraft',
+      //   auth: 'LOGISTICS:DRAFT_ARCHIVE',
+      //   label: this.$i.logistic.archiveDraft
+      // },
+      // {
+      //   path: '/logistic/archiveLoadingList',
+      //   label: this.$i.logistic.archiveLoadingList
+      // }];
+      // this.setMenuLink(menuList);
       this.fetchData()
       // this.getContainerType() 接手注释
     },
