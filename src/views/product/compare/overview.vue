@@ -241,7 +241,7 @@
             this.setMenuLink({
                 path: '/product/compareArchive',
                 type: 20,
-                auth:'PRODUCT:COMPARE_OVERVIEW:DELETE',
+                auth:'PRODUCT:COMPARE_ARCHIVE',
                 label: this.$i.common.archive
             });
         },

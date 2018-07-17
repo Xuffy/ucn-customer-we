@@ -348,14 +348,14 @@
             this.setMenuLink({
                 path: '/order/draft',
                 type: 20,
-                auth:'',
+                auth:'ORDER:DRAFT_OVERVIEW',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 query: {code: 'ORDER'},
                 type: 30,
-                auth:'',
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveDraft
             });
         },
