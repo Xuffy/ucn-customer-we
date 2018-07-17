@@ -361,13 +361,13 @@
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE',
+                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
-                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE',
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveDraft
             });
         },

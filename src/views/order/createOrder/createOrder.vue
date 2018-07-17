@@ -2028,19 +2028,19 @@
             this.setMenuLink({
                 path: '/order/draft',
                 type: 10,
-                auth:'ORDER:DETAIL:DRAFT',
+                auth:'ORDER:DRAFT_OVERVIEW',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 20,
-                auth:'ORDER:DETAIL:ARCHIVE',
+                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveOrder
             });
             this.setMenuLink({
                 path: '/order/archiveDraft',
                 type: 30,
-                auth:'ORDER:DETAIL:ARCHIVE',
+                auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveDraft
             });
         },

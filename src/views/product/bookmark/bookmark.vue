@@ -402,7 +402,7 @@
             this.setMenuLink({
                 path: '/product/bookmarkArchive',
                 type: 20,
-                auth:'PRODUCT:BOOKMARK_OVERVIEW:DELETE',
+                auth:'PRODUCT:ARCHIVE',
                 label: this.$i.common.archive
             });
         },
