@@ -209,16 +209,13 @@
         },
         created(){
             this.getList();
-            // this.setRecycleBin({
-            //     name: 'compareRecycleBin',
-            //     show: true
-            // });
         },
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
         },

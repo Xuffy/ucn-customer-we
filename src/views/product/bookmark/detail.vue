@@ -1013,11 +1013,13 @@
                 path: "/logs/index",
                 query: { code: "PRODUCT" },
                 type: 10,
+                auth:'PRODUCT:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
-                path: "/product/recycleBin",
+                path: "/product/bookmarkArchive",
                 type: 20,
+                auth:'PRODUCT:BOOKMARK_DETAIL:DELETE',
                 label: this.$i.common.archive
             });
         }
