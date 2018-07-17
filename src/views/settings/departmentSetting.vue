@@ -847,7 +847,6 @@
             return {name: val.bizDomainName, code: val.bizDomainCode, children: users};
           });
 
-          console.log(list)
           this.privilegeData[1].children = list;
         });
       }

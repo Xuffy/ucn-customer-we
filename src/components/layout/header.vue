@@ -230,7 +230,7 @@
       changeLanguage({type}) {
         if (this.$localStore.get('language') !== type) {
           this.$localStore.set('language', type);
-          window.history.go(0);
+          this.clearData();
         }
       }
     },
