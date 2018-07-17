@@ -225,22 +225,48 @@
         path: '',
         query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
         type: 100,
+        auth: (()=>{ 
+          let code = null;
+          if(this.pageType=="plan"){
+            code = 'LOGISTICS:LOG';
+          }else if(this.pageType=="loadingList"){
+            code = 'LOADING_LIST:LOG';
+          }else if(this.pageType=="draft"){
+            code = 'LOGISTICS:LOG';
+          }
+          return code
+        })(),
         label: this.$i.common.log
       },{
         path: '/logistic/draft',
+        auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
         label: this.$i.common.draft
-      },{
-        path: '/logistic/archivePlan',
-        label: this.$i.logistic.archivePlan
-      },{
-        path: '/logistic/archiveDraft',
-        auth: 'LOGISTICS:DRAFT_ARCHIVE',
-        label: this.$i.logistic.archiveDraft
-      },
-      {
-        path: '/logistic/archiveLoadingList',
-        label: this.$i.logistic.archiveLoadingList
       }];
+      if(this.pageType=="plan"){
+        menuList.push(
+          {
+            path: '/logistic/archivePlan',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archivePlan
+          }
+        )
+      }else if(this.pageType=="loadingList"){
+        menuList.push(
+          {
+            path: '/logistic/archiveLoadingList',
+            auth: 'LOADING_LIST:DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveLoadingList
+          }
+        )
+      }else if(this.pageType=="draft"){
+        menuList.push(
+          {
+            path: '/logistic/archiveDraft',
+            auth: 'LOGISTICS:PLAN_DETAIL:ARCHIVE',
+            label: this.$i.logistic.archiveDraft
+          }
+        )
+      }
       this.setMenuLink(menuList);
       this.fetchData();
       // this.getContainerType() 接手注释
