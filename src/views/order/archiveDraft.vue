@@ -341,19 +341,21 @@
             this.getUnit();
             this.setMenuLink({
                 path: '/order/draft',
-                // query: {code: ''},
                 type: 10,
+                auth:'ORDER:DRAFT_OVERVIEW',
                 label: this.$i.common.draft
             });
             this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'ORDER'},
                 type: 20,
+                auth:'ORDER:LOG',
                 label: this.$i.common.log
             });
             this.setMenuLink({
                 path: '/order/archiveOrder',
                 type: 30,
+                auth:'ORDER:OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveOrder
             });
         },
