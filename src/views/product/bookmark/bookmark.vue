@@ -40,6 +40,7 @@
                     {{$i.button.upload}}</el-button>
                 <el-button
                         @click="download"
+                        :disabled="productData.length===0"
                         v-authorize="'PRODUCT:BOOKMARK_OVERVIEW:DOWNLOAD'">
                     {{$i.button.download}}({{selectList.length===0?$i.product.all:selectList.length}})</el-button>
                 <el-button

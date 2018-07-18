@@ -55,13 +55,16 @@
                         @click="deleteProduct"
                         :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
         <v-table
+                ref="table"
+                native-sort="id"
+                @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
-                v-loading="loadingTable"
+                v-loading="loadingTable"g
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
@@ -181,16 +184,11 @@
                 allowBottomClick:true,          //是否禁止点击底部操作按钮
                 disableClickCancel:false,
                 disableClickSaveModify:false,
-
                 isChangeData:false,             //是否在最原始的基础上modify过数据
-
                 isHideTheSame:false,
                 isHighlight:true,
-
-                copySameData:[],
-                copyLightData:[],
+                initialData:[],
                 categoryList:[],
-
 
                 /**
                  * 字典配置
@@ -225,7 +223,8 @@
                             e.yearListed.value=e.yearListed.value?this.$dateFormat(e.yearListed.value,'yyyy-mm'):'';
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                     }).finally(()=>{
@@ -240,9 +239,8 @@
                     }
                     let params={
                         id: Number(this.$route.query.compareId),
-                        pn: 1,
-                        ps: 100,
-                        recycle: false,
+                        pn:1,
+                        ps:100
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -255,7 +253,8 @@
                             e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -291,21 +290,15 @@
                     })
                 }
             },
-            changeHideTheSame(e){
-                if(e){
-                    this.copySameData=this.$depthClone(this.tableDataList);
-                    this.$table.setHideSame(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copySameData);
+            changeStatus(){
+                let data=this.$depthClone(this.initialData);
+                if(this.isHideTheSame){
+                    data = this.$table.setHideSame(data);
                 }
-            },
-            changeHighlight(e){
-                if(e){
-                    this.copyLightData=this.$depthClone(this.tableDataList);
-                    this.$table.setHighlight(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copyLightData);
+                if(this.isHighlight){
+                    data = this.$table.setHighlight(data);
                 }
+                this.tableDataList=data;
             },
             changeChecked(e){
                 this.selectList=e;
@@ -319,24 +312,9 @@
                 this.compareName=this.$route.query.compareName;
                 let params={
                     id: Number(this.$route.query.compareId),
-                    // operatorFilters: [
-                    //     {
-                    //         "columnName": "string",
-                    //         "operator": "string",
-                    //         "property": "string",
-                    //         "resultMapId": "string",
-                    //         "value": {}
-                    //     }
-                    // ],
                     pn: 1,
                     ps: 100,
                     recycle: false,
-                    // sorts: [
-                    //     {
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //     }
-                    // ]
                 };
                 this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -448,19 +426,28 @@
                     cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
-                    this.selectList.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',true);
-                                this.$set(m,'_checked',false);
+                    let ids=_.uniq(_.pluck(_.pluck(this.selectList, 'id'), 'value'));
+                    let arr=[],initalData=[];
+                    _.map(this.tableDataList,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                arr.push(v);
                             }
-                        })
+                        });
                     });
+                    _.map(this.initialData,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                initalData.push(v);
+                            }
+                        });
+                    })
+                    this.tableDataList=_.difference(this.tableDataList, arr);
+                    this.initialData=_.difference(this.initialData, initalData);
+
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.product.deleteSuccess
                     });
                     this.$nextTick(()=>{
                         this.disableDelete=true;
@@ -489,7 +476,8 @@
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'warning'
                     });
-                }else{
+                }
+                else{
                     //现在跑出来的东西只是一个productId数组
                     if(this.$route.params.type==='new'){
                         //在新建状态的情况下，直接拿id重新请求获取表格数据
@@ -504,15 +492,16 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 return e;
                             });
-                            if(this.isHideTheSame){
-                                this.changeHideTheSame(true);
-                            }
-                            if(this.isHighlight){
-                                this.changeHighlight(true);
-                            }
-
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.disabledLine=this.tableDataList;
                             this.loadingTable=false;
@@ -523,7 +512,6 @@
                     else if(this.$route.params.type==='modify'){
                         //modify状态下，要把拿出来的数据先进行对比，对比之后没有的再请求接口塞进去
                         //如果丢出来的数据的id有table里面产品的id，则把这个id对于的商品从置灰还原
-                        console.log(this.tableDataList,'table')
                         let ids=[];
                         this.tableDataList.forEach(v=>{
                             if(!v._disabled){
@@ -541,9 +529,17 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 e.skuId.value=e.id.value;       //把id的值给skuId
                                 return e;
                             });
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.isChangeData=true;
                             this.disabledLine=this.tableDataList;
@@ -551,8 +547,6 @@
                         }).catch(err=>{
                             this.loadingTable=false;
                         });
-
-                        console.log(ids,'ids')
                     }
                 }
                 this.addProductDialogVisible=false;
@@ -608,9 +602,9 @@
                 });
             },
             deleteCompare(){
-                this.$confirm('确认删除该compare?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
@@ -619,7 +613,7 @@
                     this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.product.deleteSuccess
                         });
                         this.disabledSaveCompare=false;
                         this.$router.push('/product/compare');

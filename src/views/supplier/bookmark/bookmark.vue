@@ -398,7 +398,8 @@
             path: '',
             query: {code: 'PRUCHASE_SUPPLIER'},
             type: 100,
-            label: this.$i.common.log
+            label: this.$i.common.log,
+            auth:'SUPPLIER:LOG'
           });
         },
         watch: {
