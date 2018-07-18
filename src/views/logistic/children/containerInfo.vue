@@ -12,12 +12,12 @@
         :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
         <el-table-column type="index" width="50" align="center"/>
-        <el-table-column :label="$i.logistic.containerNo" width="140" align="center">
+        <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
           <template slot-scope="scope">
             <span>{{ scope.row.containerNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$i.logistic.sealNo" width="120" align="center">
+        <el-table-column :label="$i.logistic.sealNo" width="120" align="center" prop="sealNo">
           <template slot-scope="scope">
             <span>{{ scope.row.sealNo }}</span>
           </template>

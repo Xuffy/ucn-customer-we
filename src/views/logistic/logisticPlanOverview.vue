@@ -37,7 +37,7 @@
             </div>
             <div v-if="pageType === 'loadingList'">
               <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'draft'">
               <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>

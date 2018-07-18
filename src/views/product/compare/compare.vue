@@ -55,8 +55,8 @@
                         @click="deleteProduct"
                         :disabled="disableDelete" type="danger">{{$i.product.delete}}</el-button>
             </span>
-            <el-checkbox @change="changeHideTheSame" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
-            <el-checkbox @change="changeHighlight" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
+            <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
         <v-table
                 code="udata_purchase_sku_compare_list_detail"
@@ -181,16 +181,11 @@
                 allowBottomClick:true,          //是否禁止点击底部操作按钮
                 disableClickCancel:false,
                 disableClickSaveModify:false,
-
                 isChangeData:false,             //是否在最原始的基础上modify过数据
-
                 isHideTheSame:false,
                 isHighlight:true,
-
-                copySameData:[],
-                copyLightData:[],
+                initialData:[],
                 categoryList:[],
-
 
                 /**
                  * 字典配置
@@ -225,7 +220,8 @@
                             e.yearListed.value=e.yearListed.value?this.$dateFormat(e.yearListed.value,'yyyy-mm'):'';
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                     }).finally(()=>{
@@ -255,7 +251,8 @@
                             e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });
-                        this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
+                        this.changeStatus();
                         this.hasLoading=true;
                         this.disabledLine=this.tableDataList;
                         this.allowDeleteCompare=false;
@@ -291,21 +288,15 @@
                     })
                 }
             },
-            changeHideTheSame(e){
-                if(e){
-                    this.copySameData=this.$depthClone(this.tableDataList);
-                    this.$table.setHideSame(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copySameData);
+            changeStatus(){
+                let data=this.$depthClone(this.initialData);
+                if(this.isHideTheSame){
+                    data = this.$table.setHideSame(data);
                 }
-            },
-            changeHighlight(e){
-                if(e){
-                    this.copyLightData=this.$depthClone(this.tableDataList);
-                    this.$table.setHighlight(this.tableDataList);
-                }else{
-                    this.tableDataList=this.$depthClone(this.copyLightData);
+                if(this.isHighlight){
+                    data = this.$table.setHighlight(data);
                 }
+                this.tableDataList=data;
             },
             changeChecked(e){
                 this.selectList=e;
@@ -319,24 +310,9 @@
                 this.compareName=this.$route.query.compareName;
                 let params={
                     id: Number(this.$route.query.compareId),
-                    // operatorFilters: [
-                    //     {
-                    //         "columnName": "string",
-                    //         "operator": "string",
-                    //         "property": "string",
-                    //         "resultMapId": "string",
-                    //         "value": {}
-                    //     }
-                    // ],
                     pn: 1,
                     ps: 100,
                     recycle: false,
-                    // sorts: [
-                    //     {
-                    //         orderBy: "string",
-                    //         orderType: "string",
-                    //     }
-                    // ]
                 };
                 this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -460,7 +436,7 @@
                     });
                     this.$message({
                         type: 'success',
-                        message: '删除成功!'
+                        message: this.$i.product.deleteSuccess
                     });
                     this.$nextTick(()=>{
                         this.disableDelete=true;
@@ -489,7 +465,8 @@
                         message: this.$i.product.compareRecordMustLessThan100,
                         type: 'warning'
                     });
-                }else{
+                }
+                else{
                     //现在跑出来的东西只是一个productId数组
                     if(this.$route.params.type==='new'){
                         //在新建状态的情况下，直接拿id重新请求获取表格数据
@@ -608,9 +585,9 @@
                 });
             },
             deleteCompare(){
-                this.$confirm('确认删除该compare?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$i.product.sureDelete, this.$i.product.prompt, {
+                    confirmButtonText: this.$i.product.sure,
+                    cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
@@ -619,7 +596,7 @@
                     this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.product.deleteSuccess
                         });
                         this.disabledSaveCompare=false;
                         this.$router.push('/product/compare');
