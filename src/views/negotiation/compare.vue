@@ -166,15 +166,12 @@ export default {
     action(item, type) {
       switch (type) {
         case 'detail':
-          this.detail(item);
+          this.$router.push({
+            path: '/negotiation/inquiryDetail',
+            query: {id: this.compareBy === 0 ? item.id.value : item.inquiryId.value}
+          });
           break;
       }
-    },
-    detail(item) {
-      this.$router.push({
-        path: '/negotiation/inquiryDetail',
-        query: {id: item.id.value}
-      });
     },
     getDirData() {
       return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(res));

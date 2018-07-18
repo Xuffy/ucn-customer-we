@@ -40,7 +40,6 @@
               <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
             </div>
           </template>
-
         </v-table>
 
         <div class="footBtn">
@@ -80,7 +79,7 @@
 </template>
 
 <script>
-    import VTable from '@/components/common/table/index'
+    import {VTable} from '@/components/index'
     import product from '../../product/addProduct'
     import VSupplier from '../sourcing/sourcing'
 
@@ -88,9 +87,9 @@
     export default {
         name: "compare",
         components:{
-            VTable,
-            product,
-            VSupplier
+          VTable,
+          product,
+          VSupplier
         },
         data(){
             return{
@@ -549,8 +548,7 @@
           download(){
             let ids = this.$route.query.id;
             this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_IDS',{ids:ids});
-          },
-
+          }
         },
         created(){
             this.getCodePart();

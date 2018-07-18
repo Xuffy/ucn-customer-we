@@ -31,6 +31,11 @@
             @action="detail"
             @change-checked='checked'
             style='marginTop:10px'/>
+          <page
+            :page-data="pageData"
+            @change="handleSizeChange"
+            :page-sizes="[50,100,200]"
+            @size-change="pageSizeChange"></page>
     </div>
 </template>
 <script>
@@ -61,10 +66,13 @@
                     name: "",
                     productName: '',  //sku name EN
                     recycle: false,
+                    pn: 1,
+                    ps: 50,
                 },
                 tabData: [],
                 selectedData: [],
-                selectedNumber: []
+                selectedNumber: [],
+                pageData:{},
             }
         },
         components: {
@@ -138,6 +146,7 @@
                             return val
                           })
                         });
+                       this.pageData=res;
                     })
                   .catch((res) => {
                     this.loading = false;
@@ -169,6 +178,14 @@
               this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_PARAMS',params);
             }
           },
+          handleSizeChange(val) {
+            this.params.pn = val;
+            this.get_data();
+          },
+          pageSizeChange(val) {
+            this.params.ps = val;
+            this.get_data();
+          },
         },
         created() {
             this.get_data();
@@ -179,12 +196,14 @@
               path: '',
               query: {code: 'PRUCHASE_SUPPLIER'},
               type: 10,
-              label: this.$i.common.log
+              label: this.$i.common.log,
+              auth: 'SUPPLIER:LOG'
             },
             {
               path: 'compareArchive',
               type: 20,
-              label: this.$i.common.archiveSupplier
+              label: this.$i.common.archiveSupplier,
+              auth:'SUPPLIER:COMPARE_ARCHIVE'
             },
           ]);
         }
