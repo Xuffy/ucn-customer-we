@@ -59,6 +59,9 @@
             <el-checkbox @change="changeStatus" v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
         </div>
         <v-table
+                ref="table"
+                native-sort="id"
+                @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
                 v-loading="loadingTable"
