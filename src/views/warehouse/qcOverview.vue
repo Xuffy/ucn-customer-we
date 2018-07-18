@@ -75,6 +75,9 @@
                     {
                         id: 1,
                         label: 'QC Order No'
+                    }, {
+                        id: 2,
+                        label: '订单号'
                     }
                 ],
                 pageData: {},
@@ -146,11 +149,13 @@
                 this.selectList=[];
                 this.$ajax.post(this.$apis.post_qc_page, this.params)
                     .then(res => {
+                        console.log(res.datas)
                         this.loading = false;
                         this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas, e => {
                             e.qcMethodDictCode.value = this.$change(this.qcMethodsOption, 'qcMethodDictCode', e).name;
                             return e;
                         });
+                        console.log(this.tabData)
                         this.pageData = res;
                     })
                     .catch((res) => {
