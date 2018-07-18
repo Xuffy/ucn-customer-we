@@ -4,7 +4,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button type="primary" @click="submit" :disabled="checkedArg.length <= 0">{{ `${$i.common.submit}(${checkedArg.length})` }}</el-button>
-                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="deleteList" :disabled="checkedArg.length <= 0">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="searchEnter" />
         </div>
@@ -14,7 +14,7 @@
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="postParams.viewType" @change="getList"  size="mini">
+                <el-radio-group v-model="postParams.viewType" @change="viewByChange"  size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -26,6 +26,7 @@
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="450"
             :page-total="pageTotal"/>
@@ -73,28 +74,26 @@ export default {
     'v-pagination': VPagination
   },
   created() {
+    let type = this.$route.params.type;
+    if (type !== 'compare' && type !== 'inquiry') {
+      this.$router.push({name: 'negotiationInquiry'});
+      return;
+    }
+    this.setMenuLink({path: '/negotiation/recycleBin/' + type, label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
+
     switch (this.$route.params.type) {
       case 'inquiry':
         this.title = this.$i.common.inquiryDraft;
         break;
     }
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'inquiry'
-      },
-      show: true
-    });
     this.$ajax.post(this.$apis.POST_CODE_PART, ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'], 'cache').then(data => {
       this.setDic(codeUtils.convertDicValueType(data));
       this.getList();
     });
   },
   methods: {
-    ...mapActions([
-      'setDic',
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink', 'setDic']),
     handleSizeChange(val) {
       this.postParams.pn = val;
       this.getList();
@@ -119,6 +118,14 @@ export default {
         this.searchLoad = false;
         this.checkedArg = [];
       });
+    },
+    onListSortChange(args) {
+      this.postParams.sorts = args.sorts;
+      this.getList();
+    },
+    viewByChange() {
+      this.postParams.sorts = null;
+      this.getList();
     },
     searchEnter(val, operatorFilters) { // 搜索框
       this.postParams.operatorFilters = operatorFilters;
@@ -157,11 +164,10 @@ export default {
       this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
         ids: this.checkedArg,
         action: type
-      })
-        .then(res => {
-          this.getInquiryList();
-          this.checkedArg = [];
-        });
+      }).then(res => {
+        this.getInquiryList();
+        this.checkedArg = [];
+      });
     },
     submit() { // 提交草稿
       switch (this.$route.params.type) {
