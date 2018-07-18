@@ -5,7 +5,10 @@
         </div>
         <el-form ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}" v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key" :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8" :xl="v.fullLine?24:8">
+                <el-col :class="{speCol:v.type!=='textarea' && v.type!=='attachment'}"
+                        v-for="v in $db.order.orderDetail" v-if="v.belong==='basicInfo' && !v.createHide" :key="v.key"
+                        :xs="24" :sm="v.fullLine?24:12" :md="v.fullLine?24:12" :lg="v.fullLine?24:8"
+                        :xl="v.fullLine?24:8">
                     <el-form-item :label="v.label" :required="v._rules?v._rules.required:false">
                         <div v-if="v.type==='input'">
                             <div v-if="v.key==='lcNo'">
@@ -179,7 +182,8 @@
         </div>
         <el-form :modal="orderForm" ref="basicInfo" class="speForm" label-width="250px" :label-position="labelPosition">
             <el-row>
-                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
+                <el-col class="speCol" v-for="v in orderForm.exchangeRateList" :key="v.currency" :xs="24" :sm="12"
+                        :md="12" :lg="8" :xl="8">
                     <el-form-item :label="$i.order[v.currency]">
                         <el-input-number
                                 :disabled="true"
@@ -291,21 +295,27 @@
             <template slot="header">
                 <div class="btns">
                     <el-button @click="addProduct">{{$i.order.addProduct}}</el-button>
-                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">{{$i.order.remove}}</el-button>
+                    <el-button @click="removeProduct" :disabled="selectProductInfoTable.length===0" type="danger">
+                        {{$i.order.remove}}
+                    </el-button>
                 </div>
             </template>
         </v-table>
 
         <div class="footBtn">
-            <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">{{$i.order.send}}</el-button>
-            <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">{{$i.order.saveAsDraft}}</el-button>
+            <el-button :disabled="loadingPage" :loading="disableClickSend" @click="send" type="primary">
+                {{$i.order.send}}
+            </el-button>
+            <el-button :disabled="loadingPage" :loading="disableClickSaveDraft" @click="saveAsDraft" type="primary">
+                {{$i.order.saveAsDraft}}
+            </el-button>
             <el-button :disabled="loadingPage" type="primary" @click="quickCreate">{{$i.order.quickCreate}}</el-button>
         </div>
 
         <el-dialog
-            title=""
-            :visible.sync="quickCreateDialogVisible"
-            width="70%">
+                title=""
+                :visible.sync="quickCreateDialogVisible"
+                width="70%">
             <v-table
                     :selection="false"
                     :height="400"
@@ -517,17 +527,17 @@
                 </el-option>
             </el-select>
             <!--<el-select-->
-                    <!--slot="skuStatus"-->
-                    <!--v-model="data._value"-->
-                    <!--slot-scope="{data}"-->
-                    <!--clearable-->
-                    <!--:placeholder="$i.order.pleaseChoose">-->
-                <!--<el-option-->
-                        <!--v-for="item in skuStatusOption"-->
-                        <!--:key="item.id"-->
-                        <!--:label="item.name"-->
-                        <!--:value="item.name">-->
-                <!--</el-option>-->
+            <!--slot="skuStatus"-->
+            <!--v-model="data._value"-->
+            <!--slot-scope="{data}"-->
+            <!--clearable-->
+            <!--:placeholder="$i.order.pleaseChoose">-->
+            <!--<el-option-->
+            <!--v-for="item in skuStatusOption"-->
+            <!--:key="item.id"-->
+            <!--:label="item.name"-->
+            <!--:value="item.name">-->
+            <!--</el-option>-->
             <!--</el-select>-->
 
             <el-input-number
@@ -769,124 +779,124 @@
 
 <script>
 
-    import {VTable,VPagination,selectSearch,VUpload,VHistoryModify} from '@/components/index'
-    import VProduct from '@/views/product/addProduct';
-    import { mapActions } from 'vuex'
+    import { VTable, VPagination, selectSearch, VUpload, VHistoryModify } from "@/components/index";
+    import VProduct from "@/views/product/addProduct";
+    import { mapActions } from "vuex";
 
     export default {
         name: "createOrder",
-        components:{
+        components: {
             VTable,
-            page:VPagination,
+            page: VPagination,
             selectSearch,
             VUpload,
             VProduct,
             VHistoryModify
         },
-        data(){
-            return{
-                options:[],
+        data() {
+            return {
+                options: [],
                 /**
                  * 字典配置
                  * */
-                currencyOption:[],
-                supplierOption:[],
-                incotermOption:[],
-                paymentOption:[],
-                paymentStatusOption:[],
-                transportOption:[],
-                skuUnitOption:[],
-                lengthOption:[],
-                weightOption:[],
-                volumeOption:[],
-                expirationDateOption:[],
-                isNeedSampleOption:[],
-                countryOption:[],
-                quarantineTypeOption:[],
-                skuStatusOption:[],
-                skuSaleStatusOption:[],
-                inquiryStatusOption:[],
-                skuStatusTotalOption:[],
+                currencyOption: [],
+                supplierOption: [],
+                incotermOption: [],
+                paymentOption: [],
+                paymentStatusOption: [],
+                transportOption: [],
+                skuUnitOption: [],
+                lengthOption: [],
+                weightOption: [],
+                volumeOption: [],
+                expirationDateOption: [],
+                isNeedSampleOption: [],
+                countryOption: [],
+                quarantineTypeOption: [],
+                skuStatusOption: [],
+                skuSaleStatusOption: [],
+                inquiryStatusOption: [],
+                skuStatusTotalOption: [],
 
                 /**
                  * 页面基础配置
                  * */
-                supplierNo:'',
-                rules:{},
-                disabledLcNo:true,
-                allowQuery:0,
-                loadingPage:false,
-                disableClickSend:false,
-                disableClickSaveDraft:false,
-                labelPosition:'right',
+                supplierNo: "",
+                rules: {},
+                disabledLcNo: true,
+                allowQuery: 0,
+                loadingPage: false,
+                disableClickSend: false,
+                disableClickSaveDraft: false,
+                labelPosition: "right",
                 pickerOptions1: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
-                    },
+                    }
                 },
-                quickCreateDialogVisible:false,
-                tableData:[],
-                selectSearch:'',
-                productInfoBtn:[
+                quickCreateDialogVisible: false,
+                tableData: [],
+                selectSearch: "",
+                productInfoBtn: [
                     {
-                        label: 'Negotiate',
-                        type: 'negotiate'
+                        label: "Negotiate",
+                        type: "negotiate"
                     },
                     {
-                        label: 'Detail',
-                        type: 'detail'
+                        label: "Detail",
+                        type: "detail"
                     }
                 ],
-                loadingProductTable:false,
-                tableTotal:[],
-                activeTab:'product',
-                selectProductInfoTable:[],
-                disabledProductLine:[],
-                queryNo:0,
-                category:[],
-                inquiryId:'',           //存储选择的入库单id
-                chooseProduct:[],
+                loadingProductTable: false,
+                tableTotal: [],
+                activeTab: "product",
+                selectProductInfoTable: [],
+                disabledProductLine: [],
+                queryNo: 0,
+                category: [],
+                inquiryId: "",           //存储选择的入库单id
+                chooseProduct: [],
 
                 /**
                  * 弹出框data配置
                  * */
-                pageData:{},
-                loadingTable:false,
-                tableDataList:[],
-                searchOptions:[
+                pageData: {},
+                loadingTable: false,
+                tableDataList: [],
+                searchOptions: [
                     {
-                        label:'inquiryNo',
-                        id:1
-                    },
+                        label: "inquiryNo",
+                        id: 1
+                    }
                 ],
-                searchId:1,
-                inquiryConfig:{
-                    inquiryNo: '',
+                searchId: 1,
+                inquiryConfig: {
+                    inquiryNo: "",
                     operatorFilters: [],
                     pn: 1,
                     ps: 50,
                     sorts: [],
-                    status:99
+                    status: 99
                 },
 
                 /**
                  * 选择产品弹出框data
                  * */
-                productTableDialogVisible:false,
-                type1:'product',
-                type2:'bookmark',
-                updateProduct:0,
-                updateBookmark:0,
-                productTableData:[],
+                productTableDialogVisible: false,
+                type1: "product",
+                type2: "bookmark",
+                updateProduct: 0,
+                updateBookmark: 0,
+                productTableData: [],
 
                 /**
                  * 提交的数据
                  * */
-                orderForm:{
-                    supplierCompanyId:'',
+                orderForm: {
+                    supplierCompanyId: "",
                     actDeliveryDt: "",
                     attachments: [],
-                    basicFlag:false,     //basicInfo是否修改
+                    basicFlag: false,     //basicInfo是否修改
                     currency: "",
                     customerAgreementDt: "",
                     customerAgreementNo: "",
@@ -904,27 +914,27 @@
                     // entryDt: "2018-06-01T01:37:58.742Z",
                     exchangeRateList: [
                         {
-                            currency: "CNYUSD",
+                            currency: "CNYUSD"
                             // exchangeRate: '124'
                         },
                         {
-                            currency: "CNYEUR",
+                            currency: "CNYEUR"
                             // exchangeRate: ''
                         },
                         {
-                            currency: "USDEUR",
+                            currency: "USDEUR"
                             // exchangeRate: ''
                         },
                         {
-                            currency: "USDCNY",
+                            currency: "USDCNY"
                             // exchangeRate: ''
                         },
                         {
-                            currency: "EURCNY",
+                            currency: "EURCNY"
                             // exchangeRate: ''
                         },
                         {
-                            currency: "EURUSD",
+                            currency: "EURUSD"
                             // exchangeRate: ''
                         }
                     ],
@@ -940,67 +950,67 @@
                     },
                     // importantCustomer: true,
                     // importantSupplier: true,
-                    incoterm: '',
+                    incoterm: "",
                     incotermArea: "",
                     lcNo: "",
                     orderNo: "",
                     payment: "",
                     paymentDays: 0,
-                    productFlag:false,
+                    productFlag: false,
                     // paymentRemark: "",
                     // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
-                    responsibilityFlag:false,
+                    responsibilityFlag: false,
                     responsibilityList: [
                         {
-                            type: '0',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
+                            type: "0",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
                         },
                         {
-                            type: '1',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
+                            type: "1",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
                         },
                         {
-                            type: '2',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
+                            type: "2",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
                         },
                         {
-                            type: '3',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
+                            type: "3",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
                         },
                         {
-                            type: '4',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
+                            type: "4",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
                         },
                         {
-                            type: '5',
-                            customer: '',
-                            supplier: '',
-                            remark: '',
-                            actualDt: '',
-                            orderNo:''
-                        },
+                            type: "5",
+                            customer: "",
+                            supplier: "",
+                            remark: "",
+                            actualDt: "",
+                            orderNo: ""
+                        }
                     ],
                     skuList: [],
                     // skuQty: 0,
@@ -1011,450 +1021,452 @@
                     supplierName: "",
                     supplierOrderNo: "",
                     // timeZone: "",
-                    transport: '1',
-                },
-            }
+                    transport: "1"
+                }
+            };
         },
-        computed:{
-            totalRow(){
-                let obj={};
-                if(this.productTableData.length<=0){
+        computed: {
+            totalRow() {
+                let obj = {};
+                if (this.productTableData.length <= 0) {
                     return;
-                };
-                _.map(this.productTableData,v=>{
-                    _.mapObject(v,(item,key)=>{
-                        if(item._calculate){
-                            obj[key]={
-                                value: Number(item.value)  + (Number(obj[key] ? obj[key].value : 0) || 0),
-                            };
-                        }else{
+                }
+                ;
+                _.map(this.productTableData, v => {
+                    _.mapObject(v, (item, key) => {
+                        if (item._calculate) {
                             obj[key] = {
-                                value: ''
+                                value: Number(item.value) + (Number(obj[key] ? obj[key].value : 0) || 0)
+                            };
+                        } else {
+                            obj[key] = {
+                                value: ""
                             };
                         }
-                    })
+                    });
                 });
 
                 return [obj];
             }
         },
-        methods:{
-            ...mapActions(['setLog','setRecycleBin','setDraft']),
+        methods: {
+            ...mapActions(["setLog", "setRecycleBin", "setDraft"]),
             //就是保存
-            send(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
-                    return;
-                }
-                let params=Object.assign({},this.orderForm);
-                _.map(this.supplierOption,v=>{
-                    if(params.supplierName===v.id){
-                        params.supplierName=v.name;
-                        params.supplierCode=v.code;
-                        params.supplierId=v.id;
-                        params.supplierCompanyId=v.companyId;
+            send() {
+                // if (this.$validateForm(this.orderForm, this.$db.order.orderDetail)) {
+                //     return;
+                // }
+                let params = Object.assign({}, this.orderForm);
+                _.map(this.supplierOption, v => {
+                    if (params.supplierName === v.id) {
+                        params.supplierName = v.name;
+                        params.supplierCode = v.code;
+                        params.supplierId = v.id;
+                        params.supplierCompanyId = v.companyId;
                     }
                 });
-                params.skuList=this.dataFilter(this.productTableData);
+                params.skuList = this.dataFilter(this.productTableData);
                 // return console.log(params.skuList,'params.skuList')
-                let rightCode=true;
-                _.map(params.skuList,v=>{
-                    if(v.skuSupplierCode!==params.supplierCode){
-                        rightCode=false;
+                let rightCode = true;
+                _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
                     }
                     v.skuSample = v.skuSample === "1" ? true : false;
-                    v.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory?_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code:'';
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
-                    _.map(picKey,item=>{
-                        if(_.isArray(v[item])){
-                            v[item]=(v[item][0]?v[item][0]:null);
-                        }else if(_.isString(v[item])){
-                            let key=this.$getOssKey(v[item],true);
-                            v[item]=key[0];
+                    v.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory ? _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code : "";
+                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
+                        } else if (_.isString(v[item]) && v[item]) {
+                            let key = this.$getOssKey(v[item], true);
+                            v[item] = key[0];
                         }
-                    })
+                    });
                 });
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
+                if (!rightCode) {
                     return this.$message({
                         message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
+                        type: "warning"
                     });
                 }
-                params.attachments=this.$refs.upload[0].getFiles();
-                this.disableClickSend=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE,params).then(res=>{
-                    this.$router.push('/order/overview');
-                }).finally(err=>{
-                    this.disableClickSend=false;
+                params.attachments = this.$refs.upload[0].getFiles();
+                return;
+                this.disableClickSend = true;
+                this.$ajax.post(this.$apis.ORDER_SAVE, params).then(res => {
+                    this.$router.push("/order/overview");
+                }).finally(err => {
+                    this.disableClickSend = false;
                 });
             },
-            saveAsDraft(){
-                if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
+            saveAsDraft() {
+                if (this.$validateForm(this.orderForm, this.$db.order.orderDetail)) {
                     return;
                 }
-                let params=Object.assign({},this.orderForm);
-                _.map(this.supplierOption,v=>{
-                    if(params.supplierName===v.id){
-                        params.supplierName=v.name;
-                        params.supplierCode=v.code;
-                        params.supplierId=v.id;
-                        params.supplierCompanyId=v.companyId;
+                let params = Object.assign({}, this.orderForm);
+                _.map(this.supplierOption, v => {
+                    if (params.supplierName === v.id) {
+                        params.supplierName = v.name;
+                        params.supplierCode = v.code;
+                        params.supplierId = v.id;
+                        params.supplierCompanyId = v.companyId;
                     }
                 });
-                params.skuList=this.dataFilter(this.productTableData);
-                params.attachments=this.$refs.upload[0].getFiles();
-                params.draftCustomer=true;
-                let rightCode=true;
-                _.map(params.skuList,v=>{
-                    if(v.skuSupplierCode!==params.supplierCode){
-                        rightCode=false;
+                params.skuList = this.dataFilter(this.productTableData);
+                params.attachments = this.$refs.upload[0].getFiles();
+                params.draftCustomer = true;
+                let rightCode = true;
+                _.map(params.skuList, v => {
+                    if (v.skuSupplierCode !== params.supplierCode) {
+                        rightCode = false;
                     }
-                    if(v.skuSample==='1'){
-                        v.skuSample=true;
-                    }else if(v.skuSample==='0'){
-                        v.skuSample=false;
+                    if (v.skuSample === "1") {
+                        v.skuSample = true;
+                    } else if (v.skuSample === "0") {
+                        v.skuSample = false;
                     }
-                    if(v.skuInspectQuarantineCategory){
-                        v.skuInspectQuarantineCategory=_.findWhere(this.quarantineTypeOption,{code:v.skuInspectQuarantineCategory}).code;
+                    if (v.skuInspectQuarantineCategory) {
+                        v.skuInspectQuarantineCategory = _.findWhere(this.quarantineTypeOption, { code: v.skuInspectQuarantineCategory }).code;
                     }
-                    let picKey=['skuLabelPic','skuPkgMethodPic','skuInnerCartonPic','skuOuterCartonPic','skuAdditionalOne','skuAdditionalTwo','skuAdditionalThree','skuAdditionalFour'];
-                    _.map(picKey,item=>{
-                        if(_.isArray(v[item])){
-                            v[item]=(v[item][0]?v[item][0]:null);
-                        }else if(_.isString(v[item])){
-                            let key=this.$getOssKey(v[item],true);
-                            v[item]=key[0];
+                    let picKey = ["skuLabelPic", "skuPkgMethodPic", "skuInnerCartonPic", "skuOuterCartonPic", "skuAdditionalOne", "skuAdditionalTwo", "skuAdditionalThree", "skuAdditionalFour"];
+                    _.map(picKey, item => {
+                        if (_.isArray(v[item])) {
+                            v[item] = (v[item][0] ? v[item][0] : null);
+                        } else if (_.isString(v[item])) {
+                            let key = this.$getOssKey(v[item], true);
+                            v[item] = key[0];
                         }
-                    })
+                    });
                 });
 
                 //如果选的产品和上面选的供应商不一致，要给出提示
-                if(!rightCode){
+                if (!rightCode) {
                     return this.$message({
                         message: this.$i.order.supplierNotTheSame,
-                        type: 'warning'
+                        type: "warning"
                     });
                 }
-                this.disableClickSaveDraft=true;
-                this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT,params).then(res=>{
-                    this.$router.push('/order/draft');
-                }).finally(err=>{
-                    this.disableClickSaveDraft=false;
+                this.disableClickSaveDraft = true;
+                this.$ajax.post(this.$apis.ORDER_SAVE_DRAFT, params).then(res => {
+                    this.$router.push("/order/draft");
+                }).finally(err => {
+                    this.disableClickSaveDraft = false;
                 });
             },
-            getDetail(e){
-                this.loadingPage=true;
-                this.$ajax.post(this.$apis.ORDER_DETAIL,{
-                    orderId:this.$route.query.orderId,
-                }).then(res=>{
-                    this.orderForm=res;
-                    _.map(this.supplierOption,v=>{
-                        if(v.code===res.supplierCode){
-                            this.orderForm.supplierName=v.id;
+            getDetail(e) {
+                this.loadingPage = true;
+                this.$ajax.post(this.$apis.ORDER_DETAIL, {
+                    orderId: this.$route.query.orderId
+                }).then(res => {
+                    this.orderForm = res;
+                    _.map(this.supplierOption, v => {
+                        if (v.code === res.supplierCode) {
+                            this.orderForm.supplierName = v.id;
                         }
                     });
                     this.changePayment(res.payment);
-                    let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res.skuList, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+                    let data = this.$getDB(this.$db.order.productInfoTableCreate, this.$refs.HM.getFilterData(res.skuList, "skuSysCode"), item => {
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                            item.skuPictures._image = false;
+                            item.skuLabelPic._image = false;
+                            item.skuPkgMethodPic._image = false;
+                            item.skuInnerCartonPic._image = false;
+                            item.skuOuterCartonPic._image = false;
+                            item.skuAdditionalOne._image = false;
+                            item.skuAdditionalTwo._image = false;
+                            item.skuAdditionalThree._image = false;
+                            item.skuAdditionalFour._image = false;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                            item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = item.skuUnit.value ? _.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }).name : "";
+                            item.skuUnitWeight._value = item.skuUnitWeight.value ? _.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }).name : "";
+                            item.skuUnitLength._value = item.skuUnitLength.value ? _.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }).name : "";
+                            item.skuExpireUnit._value = item.skuExpireUnit.value ? _.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }).name : "";
+                            item.skuStatus._value = item.skuStatus.value ? _.findWhere(this.skuStatusTotalOption, { code: String(item.skuStatus.value) }).name : "";
+                            item.skuUnitVolume._value = item.skuUnitVolume.value ? _.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }).name : "";
+                            item.skuSaleStatus._value = item.skuSaleStatus.value ? _.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }).name : "";
                             /**
                              * 后续处理
                              * */
-                            item.skuCategoryId._value=item.skuCategoryName.value;
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                            item.skuCategoryId._value = item.skuCategoryName.value;
+                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
                         }
                     });
-                    this.productTableData=[];
-                    _.map(data,v=>{
+                    this.productTableData = [];
+                    _.map(data, v => {
                         this.productTableData.push(v);
                     });
 
-                    this.markImportant=this.orderForm.importantCustomer;
+                    this.markImportant = this.orderForm.importantCustomer;
                     //判断底部按钮能不能点
-                    if(res.status!=='2' && res.status!=='3' && res.status!=='4'){
-                        this.disableModify=true;
-                    }else{
-                        this.disableModify=false;
+                    if (res.status !== "2" && res.status !== "3" && res.status !== "4") {
+                        this.disableModify = true;
+                    } else {
+                        this.disableModify = false;
                     }
-                    if(res.status!=='2'){
-                        this.disableConfirm=true;
-                    }else{
-                        this.disableConfirm=false;
+                    if (res.status !== "2") {
+                        this.disableConfirm = true;
+                    } else {
+                        this.disableConfirm = false;
                     }
-                    if(res.status==='5'){
-                        this.hasCancelOrder=true;
-                    }else{
-                        this.hasCancelOrder=false;
+                    if (res.status === "5") {
+                        this.hasCancelOrder = true;
+                    } else {
+                        this.hasCancelOrder = false;
                     }
-                }).finally(err=>{
-                    this.loadingPage=false;
-                    this.disableClickCancelModify=false;
-                    if(e){
-                        this.isModify=false;
+                }).finally(err => {
+                    this.loadingPage = false;
+                    this.disableClickCancelModify = false;
+                    if (e) {
+                        this.isModify = false;
                     }
                 });
             },
 
             //获取订单号(先手动生成一个)
-            getOrderNo(){
+            getOrderNo() {
                 //带了id表示是从draft页面过来的
-                if(this.$route.query.orderId){
+                if (this.$route.query.orderId) {
                     // this.orderForm.orderNo=this.$route.query.orderId;
                     this.getSupplier();
-                }else{
+                } else {
 
                     // this.orderForm.orderNo='1241241245125125152135';
                     // this.getSupplier();
 
-                    this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res=>{
-                        this.orderForm.orderNo=res;
+                    this.$ajax.post(this.$apis.ORDER_GETORDERNO).then(res => {
+                        this.orderForm.orderNo = res;
                         this.getSupplier();
-                    }).catch(err=>{
-                        this.loadingPage=false;
+                    }).catch(err => {
+                        this.loadingPage = false;
                     });
                 }
             },
-            changePayment(e){
-                if(!e){
+            changePayment(e) {
+                if (!e) {
                     return;
                 }
-                let name=_.findWhere(this.paymentOption,{code:e}).name;
-                if(name!=='L/C'){
-                    this.disabledLcNo=true;
-                    this.orderForm.lcNo='';
-                }else{
-                    this.disabledLcNo=false;
+                let name = _.findWhere(this.paymentOption, { code: e }).name;
+                if (name !== "L/C") {
+                    this.disabledLcNo = true;
+                    this.orderForm.lcNo = "";
+                } else {
+                    this.disabledLcNo = false;
                 }
             },
 
             //获取供应商
-            getSupplier(){
-                this.loadingPage=true;
-                this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME,{
-                    name:''
-                }).then(res=>{
-                    this.supplierOption=res;
-                    if(this.$route.query.supplierCode){
-                        _.map(this.supplierOption,v=>{
-                            if(v.code===this.$route.query.supplierCode){
-                                this.orderForm.supplierName=v.id;
+            getSupplier() {
+                this.loadingPage = true;
+                this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME, {
+                    name: ""
+                }).then(res => {
+                    this.supplierOption = res;
+                    if (this.$route.query.supplierCode) {
+                        _.map(this.supplierOption, v => {
+                            if (v.code === this.$route.query.supplierCode) {
+                                this.orderForm.supplierName = v.id;
                             }
                         });
                     }
                     this.getUnit();
-                    }).catch(err=>{
-                        this.loadingPage=false;
-                    })
-            },
-            quickCreate(){
-                this.quickCreateDialogVisible=true;
-                this.getInquiryData();
-            },
-            getInquiryData(){
-                this.loadingTable=true;
-                this.$ajax.post(this.$apis.INQUIERY_LIST,this.inquiryConfig).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas,item=>{
-                        item.incoterm.value=this.$change(this.incotermOption,'incoterm',item).name;
-                        item.status.value=this.$change(this.inquiryStatusOption,'status',item,true).name;
-                        if(item.id.value===this.inquiryId){
-                            this.$set(item,'_disabled',true)
-                        }
-                        if(item.orderNo.value){
-                            this.$set(item,'_disabled',true)
-                        }
-                    });
-                    this.pageData=res;
-                }).finally(err=>{
-                    this.loadingTable=false;
+                }).catch(err => {
+                    this.loadingPage = false;
                 });
             },
-            handleChangeSupplier(data){
-                this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
+            quickCreate() {
+                this.quickCreateDialogVisible = true;
+                this.getInquiryData();
+            },
+            getInquiryData() {
+                this.loadingTable = true;
+                this.$ajax.post(this.$apis.INQUIERY_LIST, this.inquiryConfig).then(res => {
+                    this.tableDataList = this.$getDB(this.$db.order.inquiryOverview, res.datas, item => {
+                        item.incoterm.value = this.$change(this.incotermOption, "incoterm", item).name;
+                        item.status.value = this.$change(this.inquiryStatusOption, "status", item, true).name;
+                        if (item.id.value === this.inquiryId) {
+                            this.$set(item, "_disabled", true);
+                        }
+                        if (item.orderNo.value) {
+                            this.$set(item, "_disabled", true);
+                        }
+                    });
+                    this.pageData = res;
+                }).finally(err => {
+                    this.loadingTable = false;
+                });
+            },
+            handleChangeSupplier(data) {
+                this.supplierNo = _.findWhere(this.supplierOption, { id: data }).code;
             },
 
             /**
              * product info事件
              * */
-            productInfoAction(e,type){
-                if(type==='negotiate'){
-                    let arr=[];
-                    _.map(this.productTableData,v=>{
-                        if(Number(v.skuSysCode.value)===Number(e.skuSysCode.value)){
-                            if(!v._remark){
-                                this.handlePriceBlur({},v);
+            productInfoAction(e, type) {
+                if (type === "negotiate") {
+                    let arr = [];
+                    _.map(this.productTableData, v => {
+                        if (Number(v.skuSysCode.value) === Number(e.skuSysCode.value)) {
+                            if (!v._remark) {
+                                this.handlePriceBlur({}, v);
                             }
                             arr.push(v);
                         }
                     });
-                    if(this.$refs.uploadSkuLabelPic){
+                    if (this.$refs.uploadSkuLabelPic) {
                         this.$refs.uploadSkuLabelPic.reset();
                     }
-                    if(this.$refs.uploadSkuPkgMethodPic){
+                    if (this.$refs.uploadSkuPkgMethodPic) {
                         this.$refs.uploadSkuPkgMethodPic.reset();
                     }
-                    if(this.$refs.uploadSkuInnerCartonPic){
+                    if (this.$refs.uploadSkuInnerCartonPic) {
                         this.$refs.uploadSkuInnerCartonPic.reset();
                     }
-                    if(this.$refs.uploadSkuOuterCartonPic){
+                    if (this.$refs.uploadSkuOuterCartonPic) {
                         this.$refs.uploadSkuOuterCartonPic.reset();
                     }
-                    if(this.$refs.skuAdditionalOne){
+                    if (this.$refs.skuAdditionalOne) {
                         this.$refs.skuAdditionalOne.reset();
                     }
-                    if(this.$refs.uploadSkuAdditionalTwo){
+                    if (this.$refs.uploadSkuAdditionalTwo) {
                         this.$refs.uploadSkuAdditionalTwo.reset();
                     }
-                    if(this.$refs.uploadSkuAdditionalThree){
+                    if (this.$refs.uploadSkuAdditionalThree) {
                         this.$refs.uploadSkuAdditionalThree.reset();
                     }
-                    if(this.$refs.uploadSkuAdditionalFour){
+                    if (this.$refs.uploadSkuAdditionalFour) {
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
-                    this.chooseProduct=this.$refs.HM.init(arr, []);
-                }else if(type==='detail'){
+                    this.chooseProduct = this.$refs.HM.init(arr, []);
+                } else if (type === "detail") {
                     this.$windowOpen({
-                        url:'/product/sourcingDetail',
-                        params:{
-                            id:e.skuId.value
+                        url: "/product/sourcingDetail",
+                        params: {
+                            id: e.skuId.value
                         }
-                    })
+                    });
                 }
             },
-            changeProductChecked(e){
-                this.selectProductInfoTable=e;
+            changeProductChecked(e) {
+                this.selectProductInfoTable = e;
             },
-            addProduct(){
-                this.disabledProductLine=this.$copyArr(this.productTableData);
+            addProduct() {
+                this.disabledProductLine = this.$copyArr(this.productTableData);
                 // this.disabledProductLine=_.uniq(_.pluck(_.pluck(this.productTableData, 'skuId'), 'value'));
-                this.productTableDialogVisible=true;
-                this.activeTab='product';
-                this.updateProduct=Math.random();
+                this.productTableDialogVisible = true;
+                this.activeTab = "product";
+                this.updateProduct = Math.random();
             },
-            removeProduct(){
+            removeProduct() {
                 this.$confirm(this.$i.order.sureDelete, this.$i.order.prompt, {
                     confirmButtonText: this.$i.order.sure,
                     cancelButtonText: this.$i.order.cancel,
-                    type: 'warning'
+                    type: "warning"
                 }).then(() => {
-                    let sysCodes=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuSysCode'), 'value'));
-                    console.log(this.selectProductInfoTable,'this.selectProductInfoTable')
-                    let arr=[];
-                    _.map(this.productTableData,v=>{
-                        _.map(sysCodes,m=>{
-                            if(v.skuSysCode.value===m){
+                    let sysCodes = _.uniq(_.pluck(_.pluck(this.selectProductInfoTable, "skuSysCode"), "value"));
+                    console.log(this.selectProductInfoTable, "this.selectProductInfoTable");
+                    let arr = [];
+                    _.map(this.productTableData, v => {
+                        _.map(sysCodes, m => {
+                            if (v.skuSysCode.value === m) {
                                 arr.push(v);
                             }
                         });
                     });
-                    this.productTableData=_.difference(this.productTableData, arr);
-                    this.selectProductInfoTable=[];
+                    this.productTableData = _.difference(this.productTableData, arr);
+                    this.selectProductInfoTable = [];
                     this.$message({
-                        type: 'success',
+                        type: "success",
                         message: this.$i.order.deleteSuccess
                     });
                 }).catch(() => {
 
                 });
             },
-            handleClick(tab){
-                if(tab.index==='0'){
-                    this.updateProduct=Math.random();
-                }else if(tab.index==='1'){
-                    this.updateBookmark=Math.random();
+            handleClick(tab) {
+                if (tab.index === "0") {
+                    this.updateProduct = Math.random();
+                } else if (tab.index === "1") {
+                    this.updateBookmark = Math.random();
                 }
             },
-            handleProductOk(e){
-                this.loadingProductTable=true;
-                this.productTableDialogVisible=false;
-                this.$ajax.post(this.$apis.ORDER_SKUS,e).then(res=>{
-                    let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+            handleProductOk(e) {
+                this.loadingProductTable = true;
+                this.productTableDialogVisible = false;
+                this.$ajax.post(this.$apis.ORDER_SKUS, e).then(res => {
+                    let data = this.$getDB(this.$db.order.productInfoTableCreate, this.$refs.HM.getFilterData(res, "skuSysCode"), item => {
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                            item.skuPictures._image = false;
+                            item.skuLabelPic._image = false;
+                            item.skuPkgMethodPic._image = false;
+                            item.skuInnerCartonPic._image = false;
+                            item.skuOuterCartonPic._image = false;
+                            item.skuAdditionalOne._image = false;
+                            item.skuAdditionalTwo._image = false;
+                            item.skuAdditionalThree._image = false;
+                            item.skuAdditionalFour._image = false;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=(_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)})||{}).name;
-                            item.skuUnitWeight._value=(_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}) || {}).name;
-                            item.skuUnitLength._value=(_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}) || {}).name;
-                            item.skuExpireUnit._value=(_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}) || {}).name;
-                            item.skuUnitVolume._value=(_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}) || {}).name;
-                            item.skuSaleStatus._value=(_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}) || {}).name;
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = (_.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }) || {}).name;
+                            item.skuUnitWeight._value = (_.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }) || {}).name;
+                            item.skuUnitLength._value = (_.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }) || {}).name;
+                            item.skuExpireUnit._value = (_.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }) || {}).name;
+                            item.skuUnitVolume._value = (_.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }) || {}).name;
+                            item.skuSaleStatus._value = (_.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }) || {}).name;
                             /**
                              * 后续处理
                              * */
-                            item.skuInspectQuarantineCategory._value=(_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}) || {}).name;
+                            item.skuInspectQuarantineCategory._value = (_.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }) || {}).name;
                         }
                     });
-                    _.map(data,v=>{
+                    _.map(data, v => {
                         this.productTableData.push(v);
                     });
-                    this.orderForm.totalQty=0;
-                    this.orderForm.skuQty=0;
-                    this.orderForm.totalSkuPrice=0;
-                    this.orderForm.totalOuterCartonQty=0;
-                    this.orderForm.totalGrossWeight=0;
-                    this.orderForm.totalNetWeight=0;
-                    this.orderForm.totalVolume=0;
-                    _.map(this.productTableData,v=>{
-                        if(!v._remark){
-                            this.orderForm.totalQty+=v.skuQty.value;
+                    this.orderForm.totalQty = 0;
+                    this.orderForm.skuQty = 0;
+                    this.orderForm.totalSkuPrice = 0;
+                    this.orderForm.totalOuterCartonQty = 0;
+                    this.orderForm.totalGrossWeight = 0;
+                    this.orderForm.totalNetWeight = 0;
+                    this.orderForm.totalVolume = 0;
+                    _.map(this.productTableData, v => {
+                        if (!v._remark) {
+                            this.orderForm.totalQty += v.skuQty.value;
                             this.orderForm.skuQty++;
-                            this.orderForm.totalSkuPrice+=v.skuPrice.value;
-                            if(v.skuOuterCartonQty.value!==null && v.skuQty.value!==null){
-                                this.orderForm.totalOuterCartonQty+=Math.floor(v.skuQty.value/v.skuOuterCartonQty.value);
+                            this.orderForm.totalSkuPrice += v.skuPrice.value;
+                            if (v.skuOuterCartonQty.value !== null && v.skuQty.value !== null) {
+                                this.orderForm.totalOuterCartonQty += Math.floor(v.skuQty.value / v.skuOuterCartonQty.value);
                             }
-                            this.orderForm.totalGrossWeight+=v.skuOuterCartonRoughWeight.value;
-                            this.orderForm.totalNetWeight+=v.skuOuterCartonNetWeight.value;
-                            this.orderForm.totalVolume+=v.skuOuterCartonVolume.value;
+                            this.orderForm.totalGrossWeight += v.skuOuterCartonRoughWeight.value;
+                            this.orderForm.totalNetWeight += v.skuOuterCartonNetWeight.value;
+                            this.orderForm.totalVolume += v.skuOuterCartonVolume.value;
                         }
-                    })
+                    });
 
-                }).finally(err=>{
-                    this.loadingProductTable=false;
+                }).finally(err => {
+                    this.loadingProductTable = false;
                 });
             },
-            handleCancel(){
-                this.productTableDialogVisible=false;
+            handleCancel() {
+                this.productTableDialogVisible = false;
             },
-            saveNegotiate(e){
-                _.map(this.productTableData,(v,k)=>{
-                    _.map(e,m=>{
-                        if(m.skuSysCode.value===v.skuSysCode.value && m.label.value===v.label.value){
-                            this.productTableData.splice(k,1,m)
+            saveNegotiate(e) {
+                _.map(this.productTableData, (v, k) => {
+                    _.map(e, m => {
+                        if (m.skuSysCode.value === v.skuSysCode.value && m.label.value === v.label.value) {
+                            this.productTableData.splice(k, 1, m);
                         }
-                    })
+                    });
                 });
             },
             dataFilter(data) {
@@ -1472,43 +1484,44 @@
                     else {
                         json = {};
                         for (let k in item) {
-                            if (json[k] === 'fieldRemark') {
+                            if (json[k] === "fieldRemark") {
                                 json[k] = jsons;
                             }
                             else {
-                                if(item[k]._value){
-                                    if(item[k].key==='skuUnit'){
-                                        json[k]=_.findWhere(this.skuUnitOption,{name:item[k]._value}).code;
+                                if (item[k]._value) {
+                                    if (item[k].key === "skuUnit") {
+                                        json[k] = _.findWhere(this.skuUnitOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuUnitWeight'){
-                                        json[k]=_.findWhere(this.weightOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuUnitWeight") {
+                                        json[k] = _.findWhere(this.weightOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuUnitLength'){
-                                        json[k]=_.findWhere(this.lengthOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuUnitLength") {
+                                        json[k] = _.findWhere(this.lengthOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuUnitVolume'){
-                                        json[k]=_.findWhere(this.volumeOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuUnitVolume") {
+                                        json[k] = _.findWhere(this.volumeOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuExpireUnit'){
-                                        json[k]=_.findWhere(this.expirationDateOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuExpireUnit") {
+                                        json[k] = _.findWhere(this.expirationDateOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuStatus'){
-                                        json[k]=_.findWhere(this.skuStatusTotalOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuStatus") {
+                                        json[k] = _.findWhere(this.skuStatusTotalOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuSample'){
-                                        json[k]=_.findWhere(this.isNeedSampleOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuSample") {
+                                        json[k] = _.findWhere(this.isNeedSampleOption, { name: item[k]._value }).code;
                                     }
-                                    else if(item[k].key==='skuInspectQuarantineCategory'){
-                                        json[k]=_.findWhere(this.quarantineTypeOption,{name:item[k]._value}).code;
+                                    else if (item[k].key === "skuInspectQuarantineCategory") {
+                                        json[k] = _.findWhere(this.quarantineTypeOption, { name: item[k]._value }).code;
                                     }
-                                    else{
+                                    else {
                                         json[k] = item[k].value;
                                     }
-                                }else{
+                                } else {
                                     json[k] = item[k].value;
                                 }
                             }
-                        };
+                        }
+                        ;
                         arr.push(json);
                     }
                 });
@@ -1518,110 +1531,112 @@
             /**
              * quick create弹出框事件
              * */
-            searchInquiry(e){
-                if(!e.id){return this.$message({
-                    message: this.$i.order.pleaseChooseType,
-                    type: 'warning'
-                });}
-                this.inquiryConfig.inquiryNo=e.value;
+            searchInquiry(e) {
+                if (!e.id) {
+                    return this.$message({
+                        message: this.$i.order.pleaseChooseType,
+                        type: "warning"
+                    });
+                }
+                this.inquiryConfig.inquiryNo = e.value;
                 this.getInquiryData();
             },
-            changeChecked(){
-                console.log(1)
+            changeChecked() {
+                console.log(1);
             },
-            btnClick(e){
-                this.inquiryId=e.id.value;
-                this.quickCreateDialogVisible=false;
-                this.loadingProductTable=true;
-                this.loadingPage=true;
-                this.$ajax.get(this.$apis.INQUIRY_ID,{
-                    id:e.id.value
-                }).then(res=>{
+            btnClick(e) {
+                this.inquiryId = e.id.value;
+                this.quickCreateDialogVisible = false;
+                this.loadingProductTable = true;
+                this.loadingPage = true;
+                this.$ajax.get(this.$apis.INQUIRY_ID, {
+                    id: e.id.value
+                }).then(res => {
                     //带入inquiry信息
-                    this.orderForm.quotationNo=res.quotationNo;
-                    this.orderForm.supplierName=res.supplierId;
-                    this.orderForm.incoterm=res.incoterm;
-                    this.orderForm.payment=res.paymentMethod;
+                    this.orderForm.quotationNo = res.quotationNo;
+                    this.orderForm.supplierName = res.supplierId;
+                    this.orderForm.incoterm = res.incoterm;
+                    this.orderForm.payment = res.paymentMethod;
                     this.changePayment(this.orderForm.payment);
-                    this.orderForm.departureCountry=res.departureCountry;
-                    this.orderForm.departurePort=res.departurePort;
-                    this.orderForm.destinationCountry=res.destinationCountry;
-                    this.orderForm.destinationPort=res.destinationPort;
-                    this.orderForm.remark=res.remark;
-                    this.orderForm.currency=res.currency;
-                    this.orderForm.destCountry=res.destinationCountry;
-                    this.orderForm.destPort=res.destinationPort;
+                    this.orderForm.departureCountry = res.departureCountry;
+                    this.orderForm.departurePort = res.departurePort;
+                    this.orderForm.destinationCountry = res.destinationCountry;
+                    this.orderForm.destinationPort = res.destinationPort;
+                    this.orderForm.remark = res.remark;
+                    this.orderForm.currency = res.currency;
+                    this.orderForm.destCountry = res.destinationCountry;
+                    this.orderForm.destPort = res.destinationPort;
 
-                    this.supplierNo=_.findWhere(this.supplierOption,{id:res.supplierId}).code;
+                    this.supplierNo = _.findWhere(this.supplierOption, { id: res.supplierId }).code;
 
-                    this.productTableData=[];
-                    let arr=[];
-                    _.map(res.details,v=>{
-                        let obj={
-                            bookmarkId: '',
+                    this.productTableData = [];
+                    let arr = [];
+                    _.map(res.details, v => {
+                        let obj = {
+                            bookmarkId: "",
                             companyId: null,
-                            entryDt: '',
+                            entryDt: "",
                             entryId: null,
-                            entryName: '',
+                            entryName: "",
                             fieldRemark: {},
                             fieldUpdate: {},
-                            fieldsRemark: '',
-                            fieldsUpdate: '',
+                            fieldsRemark: "",
+                            fieldsUpdate: "",
                             id: null,
                             orderId: null,
-                            orderNo: '',
+                            orderNo: "",
                             ownerId: null,
-                            skuAdditionalFour: '',
-                            skuAdditionalOne: '',
-                            skuAdditionalThree: '',
-                            skuAdditionalTwo: '',
+                            skuAdditionalFour: "",
+                            skuAdditionalOne: "",
+                            skuAdditionalThree: "",
+                            skuAdditionalTwo: "",
                             skuAdjustPackage: true,
                             skuApplicableAge: null,
                             skuAvailableQty: null,
-                            skuBarCode: '',
-                            skuBrand: '',
-                            skuBrandRelated: '',
-                            skuBrandRemark: '',
-                            skuCategoryFour: '',
+                            skuBarCode: "",
+                            skuBrand: "",
+                            skuBrandRelated: "",
+                            skuBrandRemark: "",
+                            skuCategoryFour: "",
                             skuCategoryId: null,
-                            skuCategoryOne: '',
-                            skuCategoryThree: '',
-                            skuCategoryTwo: '',
-                            skuCertificat: '',
-                            skuCifCurrency: '',
-                            skuCifPort: '',
+                            skuCategoryOne: "",
+                            skuCategoryThree: "",
+                            skuCategoryTwo: "",
+                            skuCertificat: "",
+                            skuCifCurrency: "",
+                            skuCifPort: "",
                             skuCifPrice: null,
-                            skuCode: '',
-                            skuColourCn: '',
-                            skuColourEn: '',
-                            skuComments: '',
-                            skuCommodityInspectionCn: '',
-                            skuCommodityInspectionEn: '',
+                            skuCode: "",
+                            skuColourCn: "",
+                            skuColourEn: "",
+                            skuComments: "",
+                            skuCommodityInspectionCn: "",
+                            skuCommodityInspectionEn: "",
                             skuCustomerCreate: true,
-                            skuCustomerSkuCode: '',
-                            skuCustomsCode: '',
-                            skuCustomsNameCn: '',
-                            skuCustomsNameEn: '',
-                            skuDduCurrency: '',
-                            skuDduPort: '',
+                            skuCustomerSkuCode: "",
+                            skuCustomsCode: "",
+                            skuCustomsNameCn: "",
+                            skuCustomsNameEn: "",
+                            skuDduCurrency: "",
+                            skuDduPort: "",
                             skuDduPrice: null,
-                            skuDeclareElement: '',
+                            skuDeclareElement: "",
                             skuDeliveredQty: null,
                             skuDeliveryDates: null,
                             skuDepartureDt: null,
-                            skuDescCn: '',
-                            skuDescCustomer: '',
-                            skuDescEn: '',
-                            skuDesign: '',
+                            skuDescCn: "",
+                            skuDescCustomer: "",
+                            skuDescEn: "",
+                            skuDesign: "",
                             skuDisplayBoxQty: null,
                             skuExpireDates: null,
                             skuExpireUnit: null,
-                            skuExwCurrency: '',
+                            skuExwCurrency: "",
                             skuExwPrice: null,
-                            skuFobCurrency: '',
-                            skuFobPort: '',
+                            skuFobCurrency: "",
+                            skuFobPort: "",
                             skuFobPrice: null,
-                            skuFormation: '',
+                            skuFormation: "",
                             skuGp20SkuQty: null,
                             skuGp40SkuQty: null,
                             skuGrossWeight: null,
@@ -1629,97 +1644,97 @@
                             skuHq40SkuQty: null,
                             skuId: null,
                             skuInboundQty: null,
-                            skuIncoterm: '',
-                            skuIncotermArea: '',
-                            skuInnerCartonDesc: '',
+                            skuIncoterm: "",
+                            skuIncotermArea: "",
+                            skuInnerCartonDesc: "",
                             skuInnerCartonHeight: null,
                             skuInnerCartonLength: null,
-                            skuInnerCartonMethodCn: '',
-                            skuInnerCartonMethodEn: '',
+                            skuInnerCartonMethodCn: "",
+                            skuInnerCartonMethodEn: "",
                             skuInnerCartonOuterNum: null,
-                            skuInnerCartonPic: '',
+                            skuInnerCartonPic: "",
                             skuInnerCartonQty: null,
                             skuInnerCartonRoughWeight: null,
-                            skuInnerCartonUnit: '',
+                            skuInnerCartonUnit: "",
                             skuInnerCartonVolume: null,
                             skuInnerCartonWeightNet: null,
                             skuInnerCartonWidth: null,
-                            skuInnerPackBarCode: '',
-                            skuInnerPackCode: '',
-                            skuInnerPackLabel: '',
-                            skuInspectQuarantineCategory: '',
+                            skuInnerPackBarCode: "",
+                            skuInnerPackCode: "",
+                            skuInnerPackLabel: "",
+                            skuInspectQuarantineCategory: "",
                             skuInventory: null,
-                            skuInventoryCostMethod: '',
-                            skuLabel: '',
-                            skuLabelDesc: '',
-                            skuLabelPic: '',
+                            skuInventoryCostMethod: "",
+                            skuLabel: "",
+                            skuLabelDesc: "",
+                            skuLabelPic: "",
                             skuLength: null,
-                            skuLengthWidthHeight: '',
-                            skuMainSaleArea: '',
-                            skuMainSaleCountry: '',
-                            skuMaterialCn: '',
-                            skuMaterialEn: '',
-                            skuMethodPkgCn: '',
-                            skuMethodPkgEn: '',
+                            skuLengthWidthHeight: "",
+                            skuMainSaleArea: "",
+                            skuMainSaleCountry: "",
+                            skuMaterialCn: "",
+                            skuMaterialEn: "",
+                            skuMethodPkgCn: "",
+                            skuMethodPkgEn: "",
                             skuMinInventory: null,
                             skuMinOrderQty: null,
                             skuModifyStatus: null,
-                            skuNameCn: '',
-                            skuNameCustomer: '',
-                            skuNameEn: '',
+                            skuNameCn: "",
+                            skuNameCustomer: "",
+                            skuNameEn: "",
                             skuNetWeight: null,
-                            skuNoneSellCountry: '',
+                            skuNoneSellCountry: "",
                             skuOem: true,
-                            skuOrigin: '',
-                            skuOtherPackInfoCn: '',
-                            skuOtherPackInfoEn: '',
-                            skuOuterCartonBarCode: '',
-                            skuOuterCartonCode: '',
-                            skuOuterCartonDesc: '',
+                            skuOrigin: "",
+                            skuOtherPackInfoCn: "",
+                            skuOtherPackInfoEn: "",
+                            skuOuterCartonBarCode: "",
+                            skuOuterCartonCode: "",
+                            skuOuterCartonDesc: "",
                             skuOuterCartonHeight: null,
                             skuOuterCartonLength: null,
-                            skuOuterCartonMethodCn: '',
-                            skuOuterCartonMethodEn: '',
+                            skuOuterCartonMethodCn: "",
+                            skuOuterCartonMethodEn: "",
                             skuOuterCartonNetWeight: null,
-                            skuOuterCartonPic: '',
+                            skuOuterCartonPic: "",
                             skuOuterCartonQty: null,
                             skuOuterCartonRoughWeight: null,
-                            skuOuterCartonUnit: '',
+                            skuOuterCartonUnit: "",
                             skuOuterCartonVolume: null,
                             skuOuterCartonWidth: null,
-                            skuPictures: '',
-                            skuPkgMethodPic: '',
+                            skuPictures: "",
+                            skuPkgMethodPic: "",
                             skuPrice: null,
                             skuProductionDates: null,
                             skuQty: null,
                             skuQtyPerTray: null,
                             skuQualifiedQty: null,
-                            skuQualityStander: '',
-                            skuQuotationNo: '',
+                            skuQualityStander: "",
+                            skuQuotationNo: "",
                             skuRateValueAddedTax: null,
                             skuReadilyAvailable: true,
                             skuRecycle: true,
                             skuRefunQty: null,
-                            skuRemarkOne: '',
-                            skuRemarkThree: '',
-                            skuRemarkTwo: '',
+                            skuRemarkOne: "",
+                            skuRemarkThree: "",
+                            skuRemarkTwo: "",
                             skuSafeInventory: null,
                             skuSaleStatus: null,
                             skuSample: true,
                             skuSamplePrice: null,
                             skuSampleQty: null,
-                            skuShippingMarks: '',
-                            skuSpecialTransportRequire: '',
-                            skuStatus: '',
-                            skuSupplierCode: '',
+                            skuShippingMarks: "",
+                            skuSpecialTransportRequire: "",
+                            skuStatus: "",
+                            skuSupplierCode: "",
                             skuSupplierCompanyId: null,
                             skuSupplierId: null,
-                            skuSupplierName: '',
+                            skuSupplierName: "",
                             skuSupplierTenantId: null,
-                            skuSysCode: '',
+                            skuSysCode: "",
                             skuTaxRefundRate: null,
-                            skuTradeMarkCn: '',
-                            skuTradeMarkEn: '',
+                            skuTradeMarkCn: "",
+                            skuTradeMarkEn: "",
                             skuTryDimension: null,
                             skuUndeliveredQty: null,
                             skuUnit: null,
@@ -1729,220 +1744,220 @@
                             skuUntestedQty: null,
                             skuUseDisplayBox: true,
                             skuVolume: null,
-                            skuWarehourceDefault: '',
+                            skuWarehourceDefault: "",
                             skuWidth: null,
-                            skuYearListed: '',
+                            skuYearListed: "",
                             tenantId: null,
-                            timeZone: '',
-                            updateDt: '',
+                            timeZone: "",
+                            updateDt: "",
                             updateId: null,
-                            updateName: '',
-                            version: null,
+                            updateName: "",
+                            version: null
                         };
-                        obj.skuId=v.skuId;
-                        obj.skuPictures=v.skuPictures;
-                        obj.skuNameEn=v.skuNameEn;
-                        obj.skuNameCn=v.skuNameCn;
-                        obj.skuDescCn =v.skuDescCn;
-                        obj.skuDescEn=v.skuDescEn;
-                        obj.skuDescCustomer=v.skuDescCustomer;
-                        obj.skuNameCustomer=v.skuNameCustomer;
-                        obj.skuCustomerSkuCode=v.skuCustomerSkuCode;
-                        obj.skuCode=v.skuCode;
-                        obj.skuSupplierName=v.skuSupplierName;
-                        obj.skuSupplierCode=v.skuSupplierCode;
-                        obj.skuFobCurrency=v.skuFobCurrency;
-                        obj.skuFobPrice=v.skuFobPrice;
-                        obj.skuFobPort=v.skuFobPort;
-                        obj.skuExwCurrency=v.skuExwCurrency;
-                        obj.skuExwPrice=v.skuExwPrice;
-                        obj.skuCifCurrency=v.skuCifCurrency;
-                        obj.skuCifPrice=v.skuCifPrice;
-                        obj.skuCifPort=v.skuCifArea;
-                        obj.skuDduCurrency=v.skuDduCurrency;
-                        obj.skuDduPrice=v.skuDduPrice;
-                        obj.skuDduPort=v.skuDduArea;
-                        obj.skuUnit=v.skuUnit;
-                        obj.skuMaterialCn=v.skuMaterialCn;
-                        obj.skuMaterialEn=v.skuMaterialEn;
-                        obj.skuRateValueAddedTax=v.skuRateValueAddedTax;
-                        obj.skuTaxRefundRate=v.skuTaxRefundRate;
-                        obj.skuColourCn=v.skuColourCn;
-                        obj.skuColourEn=v.skuColourEn;
-                        obj.skuMinOrderQty=v.skuMinOrderQty;
-                        obj.skuDeliveryDates=v.skuDeliveryDates;
-                        obj.skuDesign=v.skuDesign;
-                        obj.skuCategoryId=v.skuCategoryId;
-                        obj.skuCustomsCode=v.skuCustomsCode;
-                        obj.skuCustomsNameCn=v.skuCustomsNameCn;
-                        obj.skuCustomsNameEn=v.skuCustomsNameEn;
-                        obj.skuTradeMarkCn=v.skuTradeMarkCn;
-                        obj.skuTradeMarkEn=v.skuTradeMarkEn;
-                        obj.skuCommodityInspectionCn=v.skuCommodityInspectionCn;
-                        obj.skuCommodityInspectionEn=v.skuCommodityInspectionEn;
-                        obj.skuDeclareElement=v.skuDeclareElement;
-                        obj.skuOrigin=v.skuOrigin;
-                        obj.skuInspectQuarantineCategory=v.skuInspectQuarantineCategory;
-                        obj.skuUnitLength=v.skuUnitLength;
-                        obj.skuUnitWidth=v.skuUnitWidth;
-                        obj.skuUnitVolumn=v.skuUnitVolumn;
-                        obj.skuLength=v.skuLength;
-                        obj.skuWidth=v.skuWidth;
-                        obj.skuHeight=v.skuHeight;
-                        obj.skuNetWeight=v.skuNetWeight;
-                        obj.skuGrossWeight=v.skuGrossWeight;
-                        obj.skuVolume=v.skuVolume;
-                        obj.skuMethodPkgCn=v.skuMethodPkgCn;
-                        obj.skuMethodPkgEn=v.skuMethodPkgEn;
-                        obj.skuInnerCartonUnit=v.skuInnerCartonUnit;
-                        obj.skuInnerCartonQty=v.skuInnerCartonQty;
-                        obj.skuInnerCartonLength=v.skuInnerCartonLength;
-                        obj.skuInnerCartonWidth=v.skuInnerCartonWidth;
-                        obj.skuInnerCartonHeight=v.skuInnerCartonHeight;
-                        obj.skuInnerCartonWeightNet=v.skuInnerCartonWeightNet;
-                        obj.skuInnerCartonRoughWeight=v.skuInnerCartonRoughWeight;
-                        obj.skuInnerCartonVolume=v.skuInnerCartonVolume;
-                        obj.skuInnerCartonDesc=v.skuInnerCartonDesc;
-                        obj.skuInnerCartonMethodCn=v.skuInnerCartonMethodCn;
-                        obj.skuInnerCartonMethodEn=v.skuInnerCartonMethodEn;
-                        obj.skuOuterCartonUnit=v.skuOuterCartonUnit;
-                        obj.skuOuterCartonDesc=v.skuOuterCartonDesc;
-                        obj.skuOuterCartonQty=v.skuOuterCartonQty;
-                        obj.skuOuterCartonLength=v.skuOuterCartonLength;
-                        obj.skuOuterCartonWidth=v.skuOuterCartonWidth;
-                        obj.skuOuterCartonHeight=v.skuOuterCartonHeight;
-                        obj.skuInnerCartonOuterNum=v.skuInnerCartonOuterNum;
-                        obj.skuOuterCartonNetWeight=v.skuOuterCartonNetWeight;
-                        obj.skuOuterCartonRoughWeight=v.skuOuterCartonRoughWeight;
-                        obj.skuOuterCartonVolume=v.skuOuterCartonVolume;
-                        obj.skuOuterCartonMethodCn=v.skuOuterCartonMethodCn;
-                        obj.skuOuterCartonMethodEn=v.skuOuterCartonMethodEn;
-                        obj.skuBrand=v.skuBrand;
-                        obj.skuApplicableAge=v.skuApplicableAge;
-                        obj.skuExpireDates=v.skuExpireDates;
-                        obj.skuExpireUnit=v.skuExpireUnit;
-                        obj.skuComments=v.skuComments;
-                        obj.skuBarCode=v.skuBarcode;
-                        obj.skuSaleStatus=v.skuStatus;
-                        obj.skuStatus='TBC';
-                        obj.skuQuotationNo=v.quotationNo;
-                        obj.skuSysCode=v.skuSysCode;
+                        obj.skuId = v.skuId;
+                        obj.skuPictures = v.skuPictures;
+                        obj.skuNameEn = v.skuNameEn;
+                        obj.skuNameCn = v.skuNameCn;
+                        obj.skuDescCn = v.skuDescCn;
+                        obj.skuDescEn = v.skuDescEn;
+                        obj.skuDescCustomer = v.skuDescCustomer;
+                        obj.skuNameCustomer = v.skuNameCustomer;
+                        obj.skuCustomerSkuCode = v.skuCustomerSkuCode;
+                        obj.skuCode = v.skuCode;
+                        obj.skuSupplierName = v.skuSupplierName;
+                        obj.skuSupplierCode = v.skuSupplierCode;
+                        obj.skuFobCurrency = v.skuFobCurrency;
+                        obj.skuFobPrice = v.skuFobPrice;
+                        obj.skuFobPort = v.skuFobPort;
+                        obj.skuExwCurrency = v.skuExwCurrency;
+                        obj.skuExwPrice = v.skuExwPrice;
+                        obj.skuCifCurrency = v.skuCifCurrency;
+                        obj.skuCifPrice = v.skuCifPrice;
+                        obj.skuCifPort = v.skuCifArea;
+                        obj.skuDduCurrency = v.skuDduCurrency;
+                        obj.skuDduPrice = v.skuDduPrice;
+                        obj.skuDduPort = v.skuDduArea;
+                        obj.skuUnit = v.skuUnit;
+                        obj.skuMaterialCn = v.skuMaterialCn;
+                        obj.skuMaterialEn = v.skuMaterialEn;
+                        obj.skuRateValueAddedTax = v.skuRateValueAddedTax;
+                        obj.skuTaxRefundRate = v.skuTaxRefundRate;
+                        obj.skuColourCn = v.skuColourCn;
+                        obj.skuColourEn = v.skuColourEn;
+                        obj.skuMinOrderQty = v.skuMinOrderQty;
+                        obj.skuDeliveryDates = v.skuDeliveryDates;
+                        obj.skuDesign = v.skuDesign;
+                        obj.skuCategoryId = v.skuCategoryId;
+                        obj.skuCustomsCode = v.skuCustomsCode;
+                        obj.skuCustomsNameCn = v.skuCustomsNameCn;
+                        obj.skuCustomsNameEn = v.skuCustomsNameEn;
+                        obj.skuTradeMarkCn = v.skuTradeMarkCn;
+                        obj.skuTradeMarkEn = v.skuTradeMarkEn;
+                        obj.skuCommodityInspectionCn = v.skuCommodityInspectionCn;
+                        obj.skuCommodityInspectionEn = v.skuCommodityInspectionEn;
+                        obj.skuDeclareElement = v.skuDeclareElement;
+                        obj.skuOrigin = v.skuOrigin;
+                        obj.skuInspectQuarantineCategory = v.skuInspectQuarantineCategory;
+                        obj.skuUnitLength = v.skuUnitLength;
+                        obj.skuUnitWidth = v.skuUnitWidth;
+                        obj.skuUnitVolumn = v.skuUnitVolumn;
+                        obj.skuLength = v.skuLength;
+                        obj.skuWidth = v.skuWidth;
+                        obj.skuHeight = v.skuHeight;
+                        obj.skuNetWeight = v.skuNetWeight;
+                        obj.skuGrossWeight = v.skuGrossWeight;
+                        obj.skuVolume = v.skuVolume;
+                        obj.skuMethodPkgCn = v.skuMethodPkgCn;
+                        obj.skuMethodPkgEn = v.skuMethodPkgEn;
+                        obj.skuInnerCartonUnit = v.skuInnerCartonUnit;
+                        obj.skuInnerCartonQty = v.skuInnerCartonQty;
+                        obj.skuInnerCartonLength = v.skuInnerCartonLength;
+                        obj.skuInnerCartonWidth = v.skuInnerCartonWidth;
+                        obj.skuInnerCartonHeight = v.skuInnerCartonHeight;
+                        obj.skuInnerCartonWeightNet = v.skuInnerCartonWeightNet;
+                        obj.skuInnerCartonRoughWeight = v.skuInnerCartonRoughWeight;
+                        obj.skuInnerCartonVolume = v.skuInnerCartonVolume;
+                        obj.skuInnerCartonDesc = v.skuInnerCartonDesc;
+                        obj.skuInnerCartonMethodCn = v.skuInnerCartonMethodCn;
+                        obj.skuInnerCartonMethodEn = v.skuInnerCartonMethodEn;
+                        obj.skuOuterCartonUnit = v.skuOuterCartonUnit;
+                        obj.skuOuterCartonDesc = v.skuOuterCartonDesc;
+                        obj.skuOuterCartonQty = v.skuOuterCartonQty;
+                        obj.skuOuterCartonLength = v.skuOuterCartonLength;
+                        obj.skuOuterCartonWidth = v.skuOuterCartonWidth;
+                        obj.skuOuterCartonHeight = v.skuOuterCartonHeight;
+                        obj.skuInnerCartonOuterNum = v.skuInnerCartonOuterNum;
+                        obj.skuOuterCartonNetWeight = v.skuOuterCartonNetWeight;
+                        obj.skuOuterCartonRoughWeight = v.skuOuterCartonRoughWeight;
+                        obj.skuOuterCartonVolume = v.skuOuterCartonVolume;
+                        obj.skuOuterCartonMethodCn = v.skuOuterCartonMethodCn;
+                        obj.skuOuterCartonMethodEn = v.skuOuterCartonMethodEn;
+                        obj.skuBrand = v.skuBrand;
+                        obj.skuApplicableAge = v.skuApplicableAge;
+                        obj.skuExpireDates = v.skuExpireDates;
+                        obj.skuExpireUnit = v.skuExpireUnit;
+                        obj.skuComments = v.skuComments;
+                        obj.skuBarCode = v.skuBarcode;
+                        obj.skuSaleStatus = v.skuStatus;
+                        obj.skuStatus = "TBC";
+                        obj.skuQuotationNo = v.quotationNo;
+                        obj.skuSysCode = v.skuSysCode;
                         arr.push(obj);
                     });
-                    let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(arr, 'skuSysCode'),item=>{
-                        if(item._remark){
-                            item.label.value=this.$i.order.remarks;
-                            item.skuPictures._image=false;
-                            item.skuLabelPic._image=false;
-                            item.skuPkgMethodPic._image=false;
-                            item.skuInnerCartonPic._image=false;
-                            item.skuOuterCartonPic._image=false;
-                            item.skuAdditionalOne._image=false;
-                            item.skuAdditionalTwo._image=false;
-                            item.skuAdditionalThree._image=false;
-                            item.skuAdditionalFour._image=false;
+                    let data = this.$getDB(this.$db.order.productInfoTableCreate, this.$refs.HM.getFilterData(arr, "skuSysCode"), item => {
+                        if (item._remark) {
+                            item.label.value = this.$i.order.remarks;
+                            item.skuPictures._image = false;
+                            item.skuLabelPic._image = false;
+                            item.skuPkgMethodPic._image = false;
+                            item.skuInnerCartonPic._image = false;
+                            item.skuOuterCartonPic._image = false;
+                            item.skuAdditionalOne._image = false;
+                            item.skuAdditionalTwo._image = false;
+                            item.skuAdditionalThree._image = false;
+                            item.skuAdditionalFour._image = false;
                         }
-                        else{
-                            item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                            item.skuSample._value=item.skuSample.value?'YES':'NO';
-                            item.skuSample.value=item.skuSample.value?'1':'0';
-                            item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                            item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                            item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                            item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
+                        else {
+                            item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                            item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                            item.skuSample.value = item.skuSample.value ? "1" : "0";
+                            item.skuUnit._value = item.skuUnit.value ? _.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }).name : "";
+                            item.skuUnitWeight._value = item.skuUnitWeight.value ? _.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }).name : "";
+                            item.skuUnitLength._value = item.skuUnitLength.value ? _.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }).name : "";
+                            item.skuExpireUnit._value = item.skuExpireUnit.value ? _.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }).name : "";
                             // item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                            item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                            item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                            item.skuUnitVolume._value = item.skuUnitVolume.value ? _.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }).name : "";
+                            item.skuSaleStatus._value = item.skuSaleStatus.value ? _.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }).name : "";
                             /**
                              * 后续处理
                              * */
                             // item.skuCategoryId._value=item.skuCategoryName.value;
-                            item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                            item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
                         }
                     });
-                    _.map(data,v=>{
+                    _.map(data, v => {
                         this.productTableData.push(v);
-                    })
-                }).finally(err=>{
-                    this.loadingProductTable=false;
-                    this.loadingPage=false;
+                    });
+                }).finally(err => {
+                    this.loadingProductTable = false;
+                    this.loadingPage = false;
                 });
             },
-            getUnit(){
+            getUnit() {
                 //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
-                        this.currencyOption=res;
-                        this.queryNo++;
-                    }).finally(err=> {
+                this.$ajax.get(this.$apis.CURRENCY_ALL, {}, { cache: true }).then(res => {
+                    this.currencyOption = res;
+                    this.queryNo++;
+                }).finally(err => {
 
                     }
                 );
 
                 //获取国家
-                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
+                this.$ajax.get(this.$apis.COUNTRY_ALL, {}, { cache: true }).then(res => {
+                    this.countryOption = res;
                     this.queryNo++;
-                }).finally(err=>{
+                }).finally(err => {
 
                 });
 
                 //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
+                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY, {}, { cache: true }).then(res => {
                     this.queryNo++;
-                    _.map(this.orderForm.exchangeRateList,v=>{
-                        _.map(res,m=>{
-                            if(v.currency===m.symbol){
-                                v.exchangeRate=m.price;
+                    _.map(this.orderForm.exchangeRateList, v => {
+                        _.map(res, m => {
+                            if (v.currency === m.symbol) {
+                                v.exchangeRate = m.price;
                             }
-                        })
-                    })
-                }).finally(err=>{
+                        });
+                    });
+                }).finally(err => {
 
                 });
 
-                this.skuStatusOption=[
+                this.skuStatusOption = [
                     {
-                        code:'3',
-                        name:'PROCESS'
+                        code: "3",
+                        name: "PROCESS"
                     },
                     {
-                        code:'5',
-                        name:'CANCLED'
-                    },
+                        code: "5",
+                        name: "CANCLED"
+                    }
                 ];
 
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS','INQUIRY_STATUS','SKU_STATUS'],{cache:true}).then(res=>{
+                this.$ajax.post(this.$apis.get_partUnit, ["PMT", "ITM", "MD_TN", "SKU_UNIT", "LH_UNIT", "VE_UNIT", "WT_UNIT", "ED_UNIT", "NS_IS", "QUARANTINE_TYPE", "SKU_SALE_STATUS", "INQUIRY_STATUS", "SKU_STATUS"], { cache: true }).then(res => {
                     this.queryNo++;
-                    res.forEach(v=>{
-                        if(v.code==='ITM'){
-                            this.incotermOption=v.codes;
-                        }else if(v.code==='PMT'){
-                            this.paymentOption=v.codes;
-                        }else if(v.code==='MD_TN'){
-                            this.transportOption=v.codes;
-                        }else if(v.code==='SKU_UNIT'){
-                            this.skuUnitOption=v.codes;
-                        }else if(v.code==='LH_UNIT'){
-                            this.lengthOption=v.codes;
-                        }else if(v.code==='WT_UNIT'){
-                            this.weightOption=v.codes;
-                        }else if(v.code==='VE_UNIT'){
-                            this.volumeOption=v.codes;
-                        }else if(v.code==='ED_UNIT'){
-                            this.expirationDateOption=v.codes;
-                        }else if(v.code==='NS_IS'){
-                            this.isNeedSampleOption=v.codes;
-                        }else if(v.code==='QUARANTINE_TYPE'){
-                            this.quarantineTypeOption=v.codes;
-                        }else if(v.code==='SKU_SALE_STATUS'){
-                            this.skuSaleStatusOption=v.codes;
-                        }else if(v.code==='INQUIRY_STATUS'){
-                            this.inquiryStatusOption=v.codes;
-                        }else if(v.code==='SKU_STATUS'){
-                            this.skuStatusTotalOption=v.codes;
+                    res.forEach(v => {
+                        if (v.code === "ITM") {
+                            this.incotermOption = v.codes;
+                        } else if (v.code === "PMT") {
+                            this.paymentOption = v.codes;
+                        } else if (v.code === "MD_TN") {
+                            this.transportOption = v.codes;
+                        } else if (v.code === "SKU_UNIT") {
+                            this.skuUnitOption = v.codes;
+                        } else if (v.code === "LH_UNIT") {
+                            this.lengthOption = v.codes;
+                        } else if (v.code === "WT_UNIT") {
+                            this.weightOption = v.codes;
+                        } else if (v.code === "VE_UNIT") {
+                            this.volumeOption = v.codes;
+                        } else if (v.code === "ED_UNIT") {
+                            this.expirationDateOption = v.codes;
+                        } else if (v.code === "NS_IS") {
+                            this.isNeedSampleOption = v.codes;
+                        } else if (v.code === "QUARANTINE_TYPE") {
+                            this.quarantineTypeOption = v.codes;
+                        } else if (v.code === "SKU_SALE_STATUS") {
+                            this.skuSaleStatusOption = v.codes;
+                        } else if (v.code === "INQUIRY_STATUS") {
+                            this.inquiryStatusOption = v.codes;
+                        } else if (v.code === "SKU_STATUS") {
+                            this.skuStatusTotalOption = v.codes;
                         }
-                    })
-                }).finally(err=>{
+                    });
+                }).finally(err => {
 
                 });
 
@@ -1952,37 +1967,39 @@
             /**
              * history插槽事件
              * */
-            handlePriceBlur(e,item){
-                if(!this.orderForm.incoterm){return;}
+            handlePriceBlur(e, item) {
+                if (!this.orderForm.incoterm) {
+                    return;
+                }
                 let obj;
-                obj=item?item:this.chooseProduct[0];
-                if(this.orderForm.incoterm==='1'){
+                obj = item ? item : this.chooseProduct[0];
+                if (this.orderForm.incoterm === "1") {
                     //fob
-                    if(obj.skuFobPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuFobPrice.value*obj.skuQty.value).toFixed(8));
-                    }else{
-                        obj.skuPrice.value=0;
+                    if (obj.skuFobPrice.value && obj.skuQty.value) {
+                        obj.skuPrice.value = Number((obj.skuFobPrice.value * obj.skuQty.value).toFixed(8));
+                    } else {
+                        obj.skuPrice.value = 0;
                     }
-                }else if(this.orderForm.incoterm==='2'){
+                } else if (this.orderForm.incoterm === "2") {
                     //exw
-                    if(obj.skuExwPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuExwPrice.value*obj.skuQty.value).toFixed(8));
-                    }else{
-                        obj.skuPrice.value=0;
+                    if (obj.skuExwPrice.value && obj.skuQty.value) {
+                        obj.skuPrice.value = Number((obj.skuExwPrice.value * obj.skuQty.value).toFixed(8));
+                    } else {
+                        obj.skuPrice.value = 0;
                     }
-                }else if(this.orderForm.incoterm==='3'){
+                } else if (this.orderForm.incoterm === "3") {
                     //cif
-                    if(obj.skuCifPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuCifPrice.value*obj.skuQty.value).toFixed(8));
-                    }else{
-                        obj.skuPrice.value=0;
+                    if (obj.skuCifPrice.value && obj.skuQty.value) {
+                        obj.skuPrice.value = Number((obj.skuCifPrice.value * obj.skuQty.value).toFixed(8));
+                    } else {
+                        obj.skuPrice.value = 0;
                     }
-                }else if(this.orderForm.incoterm==='4'){
+                } else if (this.orderForm.incoterm === "4") {
                     //ddu
-                    if(obj.skuDduPrice.value && obj.skuQty.value){
-                        obj.skuPrice.value=Number((obj.skuDduPrice.value*obj.skuQty.value).toFixed(8));
-                    }else{
-                        obj.skuPrice.value=0;
+                    if (obj.skuDduPrice.value && obj.skuQty.value) {
+                        obj.skuPrice.value = Number((obj.skuDduPrice.value * obj.skuQty.value).toFixed(8));
+                    } else {
+                        obj.skuPrice.value = 0;
                     }
                 }
             },
@@ -1990,129 +2007,138 @@
             /**
              * 搜索框事件
              * */
-            inputEnter(e){
-                console.log(e)
+            inputEnter(e) {
+                console.log(e);
             },
 
             /**
              * 分页操作
              * */
-            changePage(e){
-                this.inquiryConfig.pn=e;
+            changePage(e) {
+                this.inquiryConfig.pn = e;
                 this.getInquiryData();
             },
-            changeSize(e){
-                this.inquiryConfig.ps=e;
+            changeSize(e) {
+                this.inquiryConfig.ps = e;
                 this.getInquiryData();
-            },
+            }
         },
 
-        created(){
+        created() {
             this.getOrderNo();
         },
-        mounted(){
+        mounted() {
             // this.setLog({query:{code:'BIZ_ORDER'}});
             this.setDraft({
-                name: 'orderDraft',
+                name: "orderDraft",
                 show: true
             });
         },
-        watch:{
-            queryNo(n){
-                if(n===4){
-                    if(this.$route.query.orderId){
+        watch: {
+            queryNo(n) {
+                if (n === 4) {
+                    if (this.$route.query.orderId) {
                         this.getDetail();
-                    }else if(this.$route.query.ids && this.$route.query.ids.length>0){
-                        let ids=this.$route.query.ids;
-                        ids=ids.slice(0,ids.length-1);
-                        this.loadingProductTable=true;
-                        this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
-                            let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                                if(item._remark){
-                                    item.label.value=this.$i.order.remarks;
-                                    item.skuPictures._image=false;
-                                    item.skuLabelPic._image=false;
-                                    item.skuPkgMethodPic._image=false;
-                                    item.skuInnerCartonPic._image=false;
-                                    item.skuOuterCartonPic._image=false;
-                                    item.skuAdditionalOne._image=false;
-                                    item.skuAdditionalTwo._image=false;
-                                    item.skuAdditionalThree._image=false;
-                                    item.skuAdditionalFour._image=false;
+                    } else if (this.$route.query.ids && this.$route.query.ids.length > 0) {
+                        let ids = this.$route.query.ids;
+                        ids = ids.slice(0, ids.length - 1);
+                        this.loadingProductTable = true;
+                        this.$ajax.post(this.$apis.ORDER_SKUS, ids.split(",")).then(res => {
+                            let data = this.$getDB(this.$db.order.productInfoTableCreate, this.$refs.HM.getFilterData(res, "skuSysCode"), item => {
+                                if (item._remark) {
+                                    item.label.value = this.$i.order.remarks;
+                                    item.skuPictures._image = false;
+                                    item.skuLabelPic._image = false;
+                                    item.skuPkgMethodPic._image = false;
+                                    item.skuInnerCartonPic._image = false;
+                                    item.skuOuterCartonPic._image = false;
+                                    item.skuAdditionalOne._image = false;
+                                    item.skuAdditionalTwo._image = false;
+                                    item.skuAdditionalThree._image = false;
+                                    item.skuAdditionalFour._image = false;
                                 }
-                                else{
-                                    item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                                    item.skuSample._value=item.skuSample.value?'YES':'NO';
-                                    item.skuSample.value=item.skuSample.value?'1':'0';
-                                    item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                                    item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                                    item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                                    item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                                    item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                                    item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                                    item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                                else {
+                                    item.label.value = this.$dateFormat(item.entryDt.value, "yyyy-mm-dd");
+                                    item.skuSample._value = item.skuSample.value ? "YES" : "NO";
+                                    item.skuSample.value = item.skuSample.value ? "1" : "0";
+                                    item.skuUnit._value = item.skuUnit.value ? _.findWhere(this.skuUnitOption, { code: String(item.skuUnit.value) }).name : "";
+                                    item.skuUnitWeight._value = item.skuUnitWeight.value ? _.findWhere(this.weightOption, { code: String(item.skuUnitWeight.value) }).name : "";
+                                    item.skuUnitLength._value = item.skuUnitLength.value ? _.findWhere(this.lengthOption, { code: String(item.skuUnitLength.value) }).name : "";
+                                    item.skuExpireUnit._value = item.skuExpireUnit.value ? _.findWhere(this.expirationDateOption, { code: String(item.skuExpireUnit.value) }).name : "";
+                                    item.skuStatus._value = item.skuStatus.value ? _.findWhere(this.skuStatusTotalOption, { code: String(item.skuStatus.value) }).name : "";
+                                    item.skuUnitVolume._value = item.skuUnitVolume.value ? _.findWhere(this.volumeOption, { code: String(item.skuUnitVolume.value) }).name : "";
+                                    item.skuSaleStatus._value = item.skuSaleStatus.value ? _.findWhere(this.skuSaleStatusOption, { code: String(item.skuSaleStatus.value) }).name : "";
                                     /**
                                      * 后续处理
                                      * */
                                     // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                                    item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                                    item.skuInspectQuarantineCategory._value = item.skuInspectQuarantineCategory.value ? _.findWhere(this.quarantineTypeOption, { code: item.skuInspectQuarantineCategory.value }).name : "";
                                 }
                             });
-                            _.map(data,v=>{
+                            _.map(data, v => {
                                 this.productTableData.push(v);
                             });
-                        }).finally(err=>{
-                            this.loadingProductTable=false;
-                            this.loadingPage=false;
+                        }).finally(err => {
+                            this.loadingProductTable = false;
+                            this.loadingPage = false;
                         });
-                    }else{
-                        this.loadingPage=false;
+                    } else {
+                        this.loadingPage = false;
                     }
                 }
-            },
-        },
-    }
+            }
+        }
+    };
 </script>
 
 <style scoped>
-    .title{
+    .title {
         font-weight: bold;
         font-size: 18px;
         height: 32px;
         line-height: 32px;
-        color:#666666;
+        color: #666666;
         margin-top: 10px;
     }
-    .speCol{
+
+    .speCol {
         height: 47px;
     }
-    .speInput{
+
+    .speInput {
         width: 80%;
     }
-    .speNumber >>> input{
+
+    .speNumber >>> input {
         text-align: left;
     }
-    .spx{
+
+    .spx {
         width: 100%;
     }
-    .speSearch{
+
+    .speSearch {
         float: right;
         margin-right: 70px;
     }
-    .summaryInput{
+
+    .summaryInput {
         width: 80%;
     }
-    .summaryInput >>> input{
+
+    .summaryInput >>> input {
         text-align: left;
     }
-    .second-title{
+
+    .second-title {
         font-weight: bold;
         font-size: 18px;
-        color:#666666;
+        color: #666666;
         padding: 10px 0;
         margin-top: 20px;
     }
-    .footBtn{
+
+    .footBtn {
         border-top: 1px solid #e0e0e0;
         height: 40px;
         line-height: 40px;
@@ -2122,6 +2148,6 @@
         bottom: 0;
         width: 100%;
         text-align: left;
-        z-index:5;
+        z-index: 5;
     }
 </style>
