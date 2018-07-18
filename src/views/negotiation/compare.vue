@@ -10,9 +10,9 @@
         </div>
         <div class="fn">
             <div class="box-l">
-                <el-button type="primary" @click="compareType  = 'modify'" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
+                <el-button type="primary" @click="showModify" v-show="compareType  === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
                 <el-button @click="addNewCopare" v-if="compareType  !== 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:ADD_NEW'">{{ $i.common.addNew }}</el-button>
-                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})` }}</el-button>
+                <el-button type="danger" v-if="compareType  !== 'only'" @click="deleteCompareItem" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ `${$i.common.archive}(${checkedArg.length})` }}</el-button>
                 <div style="margin-left: 20px;">
                   <el-checkbox v-model="hideSame" @change="renderTabdata" size="mini">{{ $i.common.hideTheSame }}</el-checkbox>
                   <el-checkbox v-model="highLight" @change="renderTabdata" size="mini">{{ $i.common.highlightTheDifferent }}</el-checkbox>
@@ -20,17 +20,18 @@
             </div>
             <div>
                 <span>{{ $i.common.compareBy }}&nbsp;</span>
-                <el-radio-group v-model="compareBy" @change="upData" size="mini">
+                <el-radio-group v-model="compareBy" @change="compareByChange" size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
             </div>
         </div>
         <v-table
-            code='inquiry_list'
+            :code="compareBy === 0 ? 'inquiry_list' : 'inquiry_sku_list'"
             :height="455"
             :data="tabData"
             :loading="tabLoad"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :buttons="[{label: 'detail', type: 'detail'}]"
             @action="action"/>
@@ -43,7 +44,7 @@
             @page-size-change="pageSizeChange"
             :page-sizes="[100]"/>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'new'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.saveTheCompare }}</el-button>
-        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.deleteTheCompare }}</el-button>
+        <el-button style="margin-top:10px;" type="danger" @click="deleteCompare" v-show="compareType === 'only'" v-authorize="'INQUIRY:COMPARE_DETAIL:DELETE'">{{ $i.common.archive }}</el-button>
         <el-button style="margin-top:10px;" type="primary" @click="onSubmit()" v-show="compareType === 'modify'" v-authorize="'INQUIRY:COMPARE_DETAIL:SAVE'">{{ $i.common.save }}</el-button>
         <el-button style="margin-top:10px;" type="info" @click="cancel" v-show="compareType === 'modify'">{{ $i.common.cancel }}</el-button>
         <add-new-inqury
@@ -98,37 +99,36 @@ export default {
       this.compareInfo.id = this.$route.query.id;
     }
     this.compareType = this.$route.params.type ? this.$route.params.type : '';
-    this.getDirData().then(this.upData, this.upData);
-    // this.setRecycleBin({
-    //   name: 'negotiationRecycleBin',
-    //   params: {
-    //     type: 'compare'
-    //   },
-    //   show: false
-    // });
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+    this.getDirData().then(this.getData, this.getData);
+    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions([
-      'setRecycleBin',
-      'setDic'
-    ]),
-    upData() {
+    ...mapActions(['setMenuLink', 'setDic']),
+    getData() {
       let column = this.compareBy === 0 ? this.$db.inquiry.viewByInqury : this.$db.inquiry.viewBySKU;
       this.getListByIds().then(this.getCompareList).then(datas => {
         if (!datas) return;
         this.bakData = this.$getDB(column, datas, item => this.$filterDic(item));
         this.renderTabdata();
         this.tabLoad = false;
+      }, () => {
+        this.tabLoad = false;
       });
     },
+    showModify() {
+      this.compareType = 'modify';
+      this.compareInfo._compareName = this.compareInfo.compareName;
+    },
     cancel() {
-      this.tabData.forEach((items, index) => {
-        delete items._disabled;
-        this.$set(this.tabData, index, items);
-      });
+      if (Array.isArray(this.argDisabled)) {
+        let idKey = this.compareBy === 0 ? 'id' : 'inquiryId';
+        this.bakData = this.bakData.filter(i => !this.argDisabled.includes(i[idKey].value));
+        this.argDisabled = [];
+        this.compareInfo.compareName = this.compareInfo._compareName;
+        delete this.compareInfo._compareName;
+        this.renderTabdata();
+      }
       this.compareType = 'only';
     },
     onSubmit(type) { // 保存Compare
@@ -149,7 +149,7 @@ export default {
           this.argDisabled = [];
           this.disableds = [];
           if (this.$route.params.type === 'only') {
-            this.upData();
+            this.getData();
             this.compareType = 'only';
             return;
           }
@@ -166,15 +166,12 @@ export default {
     action(item, type) {
       switch (type) {
         case 'detail':
-          this.detail(item);
+          this.$router.push({
+            path: '/negotiation/inquiryDetail',
+            query: {id: this.compareBy === 0 ? item.id.value : item.inquiryId.value}
+          });
           break;
       }
-    },
-    detail(item) {
-      this.$router.push({
-        path: '/negotiation/inquiryDetail',
-        query: {id: item.id.value}
-      });
     },
     getDirData() {
       return this.$ajax.post(this.$apis.POST_CODE_PART, this.dirCodes, 'cache').then(res => this.setDic(res));
@@ -230,6 +227,14 @@ export default {
         return Promise.resolve();
       }
     },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.getData();
+    },
+    compareByChange() {
+      this.params.sorts = null;
+      this.getData();
+    },
     changeChecked(item) {
       this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
@@ -268,7 +273,7 @@ export default {
         url = this.$apis.POST_INQIIRY_LIST_SKU;
         column = this.$db.inquiry.viewBySKU;
       }
-      this.$ajax.post(url, {recycleCustomer: 0, ps: 200, ids: arg}).then(res => {
+      this.$ajax.post(url, {recycleCustomer: 0, ps: 100, ids: arg}).then(res => {
         this.argDisabled = this.argDisabled.concat(arg);
         this.disableds = this.disableds.filter(i => this.argDisabled.indexOf(i) < 0);
 
@@ -280,12 +285,12 @@ export default {
     },
     handleSizeChange(val) {
       this.params.pn = val;
-      this.upData();
+      this.getData();
     },
     pageSizeChange(val) {
       this.params.pn = 1;
       this.params.ps = val;
-      this.upData();
+      this.getData();
     }
   }
 };

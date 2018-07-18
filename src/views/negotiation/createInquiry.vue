@@ -97,7 +97,7 @@
                 resize="none"
                 :disabled="item.disabled"/>
               <span v-else-if="item.type === 'Number'" style="display:flxe;">
-                <el-input v-model="fromArg[item.key]" :min="0" :max="100"
+                <v-input-number v-model="fromArg[item.key]" :min="0" :max="100"
                     controls-position="right" size="mini" :controls="false"
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
@@ -158,7 +158,7 @@
   </div>
 </template>
 <script>
-import {selectSearch, VTable, VUpload, VHistoryModify} from '@/components/index';
+import {selectSearch, VTable, VUpload, VHistoryModify, VInputNumber} from '@/components/index';
 import product from '@/views/product/addProduct';
 import {mapActions} from 'vuex';
 import codeUtils from '@/lib/code-utils';
@@ -202,11 +202,13 @@ export default {
     'v-table': VTable,
     'v-product': product,
     VUpload,
-    VHistoryModify
+    VHistoryModify,
+    VInputNumber
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
 
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this), this.getSuppliers('')]).then(res => {
       let data = res[0];
@@ -227,10 +229,7 @@ export default {
     }).then(this.initFromParams);
   },
   methods: {
-    ...mapActions([
-      'setDraft',
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink']),
     getBaseData() {
       let getCodes = this.$ajax.post(this.$apis.POST_CODE_PART, ['PMT', 'ITM', 'EL_IS', 'MD_TN'], {cache: true});
       let getCurrencies = this.$ajax.get(this.$apis.GET_CURRENCY_ALL);
