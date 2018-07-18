@@ -20,7 +20,8 @@
   "draft": "LS_DRAFT",
   "lsPlan": "LS_PLAN",
   "urgedSuccess": "催促成功",
-  "urgingPaymentTime": "间隔一分钟才能再次催款"
+  "urgingPaymentTime": "间隔一分钟才能再次催款",
+  "clickNumber": "每天催款为三次"
 
 
 }
