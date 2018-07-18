@@ -157,6 +157,7 @@
         productModifyList: [],
         paymentList: [],
         containerInfo: [],
+        containerinfoMatch: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -484,7 +485,8 @@
         if (!this.isCopy) {
           this.logisticsNo = res.logisticsNo
         }
-        this.containerInfo = res.containerDetail || []
+        this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
+        this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
         let feeListb = false;
         _.mapObject(res.fee, (v, k) => {
           if (v != null) {
@@ -939,6 +941,13 @@
         this.transportInfoArr.forEach(a => {
           this.$set(this.transportInfoObj, a.key, a.value)
         })
+
+        this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        });
 
         this.basicInfoObj.remark = this.remark
         _.mapObject(this.basicInfoObj, (value, key) => {

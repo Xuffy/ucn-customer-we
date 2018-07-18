@@ -182,32 +182,7 @@ export default {
         });
 
         return sums;
-    },
-    // tailBtn(str) {
-    //   if(str === 'ok') {
-    //     if(!this.containerSelect) return this.$message({
-    //       message: '请选择货柜类型',
-    //       type: 'warning'
-    //     });
-    //     if(!this.containerNo) return this.$message({
-    //       message: '请填写货柜数量',
-    //       type: 'warning'
-    //     });
-    //     this.$emit('tailBtnOk', {
-    //       Product: this.containerSelect,
-    //       containerAmount: this.containerNo
-    //     });
-    //     this.containerSelect = '';
-    //     this.containerNo = '';
-    //   } else {
-    //     this.$emit('tailBtnCancel');
-    //   }
-    //   return this.isActive = false
-    // },
-    // tabSplite(index) {
-    //   if(this.tableData.length <= 1) this.tabAppend();
-    //   this.$emit('tabSplite', index)
-    // }
+    }
   },
 }
 </script>
