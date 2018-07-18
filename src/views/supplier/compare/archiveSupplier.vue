@@ -151,9 +151,9 @@
           })
       },
       postSupplierRecoverCompare(){
-        this.$confirm('确定恢复?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$confirm(this.$i.common.sureRecover, this.$i.common.prompt, {
+          confirmButtonText: this.$i.common.confirm,
+          cancelButtonText: this.$i.common.cancel,
           type: 'warning'
         }).then(() => {
           this.$ajax.post(this.$apis.post_supplier_recoverCompare, this.selectedNumber)
@@ -161,7 +161,7 @@
               this.selectedNumber = [];
               this.$message({
                 type: 'success',
-                message: '恢复成功!'
+                message: this.$i.common.recoverSuccess
               });
               this.get_data();
             })
