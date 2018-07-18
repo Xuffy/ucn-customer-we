@@ -95,6 +95,7 @@
         data(){
             return{
                 // flag:true,
+                timestamp:0,
                 pageTotal:0,
                 searchLoad: false,
                 viewByStatus:'',
@@ -294,26 +295,31 @@
               }
             },
             urgingPayment(item) {
+              // (this.timestamp) || (this.timestamp = new Date().getTime())
               // ① 催款，此操作会给对应付款人发一条提示付款的信息，在对方的workbench显示；
               // ④ 催款限制：每天能点三次，超过次数后禁用；每次点击间隔一分钟才能再次点击，其间按钮为禁用
-              if (this.$auth(item)){
-                console.log(this.$auth(item))
+              if(item.timestamp.value === ''){
+                item.timestamp.value = new Date().getTime();
+              }else if (((new Date().getTime()-item.timestamp.value)/1000)<=60){
+                this.$message({
+                  type: 'warning',
+                  message: '间隔一分钟才能再次催款'
+                });
+                return false
               }
               this.$ajax.post(`${this.$apis.post_payment_dunning}/${item.paymentId.value}?version=${item.version.value}`)
-              .then(res => {
-                this.$message({
-                  type: 'success',
-                  message: this.$i.payment.urgedSuccess
-                });
-              }).catch((res) => {
+                .then(res => {
+                  this.$message({
+                    type: 'success',
+                    message: this.$i.payment.urgedSuccess
+                  });
+                }).catch((res) => {
 
               });
-
             },
             setButtons(item){
               // disabled:true/false   10 付款 20 退款
-                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1'
-                },{label: this.$i.payment.detail, type: '2'}];
+                if(_.findWhere(item, {'key': 'type'}).value === 20 && _.findWhere(item, {'key': 'planReceiveAmount'}).value !== _.findWhere(item, {'key': 'actualReceiveAmount'}).value) return [{label: this.$i.payment.urgingPayment, type: '1',auth:'PAYMENT:URGING'},{label: this.$i.payment.detail, type: '2'}];
                  return [{label: this.$i.payment.detail, type: '2'}];
             },
             handleSizeChange(val) {
@@ -326,7 +332,6 @@
           },
           downloadPayment(){
               let params=this.$depthClone(this.params);
-              cosnole.log(params)
               this.$fetch.export_task('EXPORT_LEDGER',params);
           },
 

@@ -1090,7 +1090,7 @@
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
-                        }else if(_.isString(v[item])){
+                        }else if(_.isString(v[item]) && v[item]){
                             let key=this.$getOssKey(v[item],true);
                             v[item]=key[0];
                         }
@@ -1394,7 +1394,6 @@
                     type: 'warning'
                 }).then(() => {
                     let sysCodes=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuSysCode'), 'value'));
-                    console.log(this.selectProductInfoTable,'this.selectProductInfoTable')
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         _.map(sysCodes,m=>{
