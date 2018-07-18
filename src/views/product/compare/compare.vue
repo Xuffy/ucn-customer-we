@@ -64,7 +64,7 @@
                 @change-sort="$refs.table.setSort(tableDataList)"
                 code="udata_purchase_sku_compare_list_detail"
                 :height="500"
-                v-loading="loadingTable"
+                v-loading="loadingTable"g
                 :data="tableDataList"
                 :buttons="[{label: 'Detail', type: 1}]"
                 @action="btnClick"
