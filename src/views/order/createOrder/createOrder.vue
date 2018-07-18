@@ -1092,7 +1092,6 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                return;
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_SAVE, params).then(res => {
                     this.$router.push("/order/overview");
