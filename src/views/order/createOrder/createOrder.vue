@@ -1394,7 +1394,6 @@
                     type: 'warning'
                 }).then(() => {
                     let sysCodes=_.uniq(_.pluck(_.pluck(this.selectProductInfoTable, 'skuSysCode'), 'value'));
-                    console.log(this.selectProductInfoTable,'this.selectProductInfoTable')
                     let arr=[];
                     _.map(this.productTableData,v=>{
                         _.map(sysCodes,m=>{

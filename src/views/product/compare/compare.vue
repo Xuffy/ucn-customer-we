@@ -236,9 +236,8 @@
                     }
                     let params={
                         id: Number(this.$route.query.compareId),
-                        pn: 1,
-                        ps: 100,
-                        recycle: false,
+                        pn:1,
+                        ps:100
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
@@ -424,16 +423,25 @@
                     cancelButtonText: this.$i.product.cancel,
                     type: 'warning'
                 }).then(() => {
-                    this.selectList.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
-                        this.tableDataList.forEach(m=>{
-                            let newId=_.findWhere(m,{key:'id'}).value;
-                            if(id===newId){
-                                this.$set(m,'_disabled',true);
-                                this.$set(m,'_checked',false);
+                    let ids=_.uniq(_.pluck(_.pluck(this.selectList, 'id'), 'value'));
+                    let arr=[],initalData=[];
+                    _.map(this.tableDataList,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                arr.push(v);
                             }
-                        })
+                        });
                     });
+                    _.map(this.initialData,v=>{
+                        _.map(ids,m=>{
+                            if(v.id.value===m){
+                                initalData.push(v);
+                            }
+                        });
+                    })
+                    this.tableDataList=_.difference(this.tableDataList, arr);
+                    this.initialData=_.difference(this.initialData, initalData);
+
                     this.$message({
                         type: 'success',
                         message: this.$i.product.deleteSuccess
@@ -481,15 +489,16 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 return e;
                             });
-                            if(this.isHideTheSame){
-                                this.changeHideTheSame(true);
-                            }
-                            if(this.isHighlight){
-                                this.changeHighlight(true);
-                            }
-
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.disabledLine=this.tableDataList;
                             this.loadingTable=false;
@@ -500,7 +509,6 @@
                     else if(this.$route.params.type==='modify'){
                         //modify状态下，要把拿出来的数据先进行对比，对比之后没有的再请求接口塞进去
                         //如果丢出来的数据的id有table里面产品的id，则把这个id对于的商品从置灰还原
-                        console.log(this.tableDataList,'table')
                         let ids=[];
                         this.tableDataList.forEach(v=>{
                             if(!v._disabled){
@@ -518,9 +526,17 @@
                         this.$ajax.post(this.$apis.get_skuListByIds,ids).then(res=>{
                             this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
                                 e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
+                                e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
+                                e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
+                                e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
+                                e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
+                                e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                                e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                                 e.skuId.value=e.id.value;       //把id的值给skuId
                                 return e;
                             });
+                            this.initialData=this.$depthClone(this.tableDataList);
+                            this.changeStatus();
                             this.hasLoading=true;
                             this.isChangeData=true;
                             this.disabledLine=this.tableDataList;
@@ -528,8 +544,6 @@
                         }).catch(err=>{
                             this.loadingTable=false;
                         });
-
-                        console.log(ids,'ids')
                     }
                 }
                 this.addProductDialogVisible=false;
