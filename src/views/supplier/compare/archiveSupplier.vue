@@ -5,6 +5,10 @@
       <div class="btn-wrap">
         <el-button @click="postSupplierRecoverCompare" :disabled="!selectedNumber.length>0"
           v-authorize="'SUPPLIER:COMPARE_ARCHIVE:RECOVER'">{{$i.button.recover}}</el-button>
+        <el-button
+          @click='download'
+          v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DOWNLOAD'"
+        >{{$i.common.download}} ({{selectedNumber.length ===0 ? $i.product.all : selectedNumber.length}})</el-button>
       </div>
       <div class="select-wrap">
         <selectSearch :options='options' @inputEnter='inputEnter'
@@ -25,6 +29,11 @@
       @action="detail"
       @change-checked='checked'
       style='marginTop:10px'/>
+    <page
+      :page-data="pageData"
+      @change="handleSizeChange"
+      :page-sizes="[50,100,200]"
+      @size-change="pageSizeChange"></page>
   </div>
 </template>
 <script>
@@ -55,10 +64,13 @@
           name: "",
           productName: '',  //sku name EN
           recycle: true,
+          pn: 1,
+          ps: 50,
         },
         tabData: [],
         selectedData: [],
-        selectedNumber: []
+        selectedNumber: [],
+        pageData:{},
       }
     },
     components: {
@@ -132,6 +144,7 @@
                 return val
               })
             });
+            this.pageData=res;
           })
           .catch((res) => {
             this.loading = false;
@@ -153,7 +166,24 @@
               this.get_data();
             })
         })
-      }
+      },
+      download(){
+        let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
+        if(ids.length>0){
+          this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_IDS',{ids:ids});
+        }else{
+          let params=this.$depthClone(this.params);
+          this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_PARAMS',params);
+        }
+      },
+      handleSizeChange(val) {
+        this.params.pn = val;
+        this.get_data();
+      },
+      pageSizeChange(val) {
+        this.params.ps = val;
+        this.get_data();
+      },
     },
     created() {
       this.get_data();
