@@ -1675,12 +1675,10 @@
                         this.$db.order.orderDetail[k]._isModified = true;
                     });
                     this.orderForm.fieldUpdate = {};
-
                     _.map(this.orderForm.responsibilityList, v => {
                         v.fieldUpdates = v.fieldUpdate;
                         v.fieldUpdate = {};
                     });
-
                     this.initialData = this.$depthClone(this.orderForm);
                     this.savedIncoterm = Object.assign({}, res).incoterm;
                     _.map(this.supplierOption, v => {
