@@ -5,13 +5,13 @@
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="matchData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
         :row-class-name="tableRowClassName">
         <el-table-column type="selection" width="100" align="center" :selectable='checkboxInit' class-name="checkbox-no-margin" v-if="edit"/>
-        <el-table-column type="index" width="50" align="center"/>
+        <el-table-column type="index" width="100" align="center"/>
         <el-table-column :label="$i.logistic.containerNo" width="140" align="center" prop="containerNo">
           <template slot-scope="scope">
             <span>{{ scope.row.containerNo }}</span>
@@ -84,7 +84,7 @@ export default {
     return {
       containerNo: '',
       containerSelect: '',
-      ContainerInfoLightObj:{}
+      ContainerInfoLightArr:[]
     }
   },
   props: {
@@ -100,6 +100,12 @@ export default {
         return []
       }
     },
+    matchData: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     containerType: {
       type: Array,
       default: () => {
@@ -107,11 +113,30 @@ export default {
       }
     }
   },
+  computed:{
+    returnData(){
+      let arr = this.$depthClone(this.tableData).map(el=> {el.fieldDisplay={}; return el } );
+      return arr;
+    }
+  },
   methods: {
-    //高亮
-    ContainerInfoLight(key,v,index){
-      this.ContainerInfoLightObj[key] = v;
-      this.$emit('ContainerInfoLight',this.ContainerInfoLightObj,index);
+    //高亮  有点问题  先修改一个值 在修改一个值  然后返回修改第一个值  就高亮不行
+    ContainerInfoLight(key,v,index,scope){
+      this.returnData[index].fieldDisplay[key] = v;
+      this.returnData[index][key] = v;
+      if(this.tableData[index][key]==v){
+        delete this.returnData[index].fieldDisplay[key];
+      }
+      let cloneReturnData = this.$depthClone(this.returnData[index]);
+      let cloneTableData = this.$depthClone(this.tableData[index]);
+      delete cloneReturnData.isModify
+      delete cloneTableData.isModify
+      if(_.isEqual(cloneReturnData, cloneTableData)){
+        this.returnData[index].isModify = false;
+      }else{
+        this.returnData[index].isModify = true;
+      }
+      this.$emit('ContainerInfoLight',this.returnData);
     },
     lightHight({row, column, rowIndex, columnIndex}){
       if(column.property&&row.fieldDisplay){
@@ -182,32 +207,7 @@ export default {
         });
 
         return sums;
-    },
-    // tailBtn(str) {
-    //   if(str === 'ok') {
-    //     if(!this.containerSelect) return this.$message({
-    //       message: '请选择货柜类型',
-    //       type: 'warning'
-    //     });
-    //     if(!this.containerNo) return this.$message({
-    //       message: '请填写货柜数量',
-    //       type: 'warning'
-    //     });
-    //     this.$emit('tailBtnOk', {
-    //       Product: this.containerSelect,
-    //       containerAmount: this.containerNo
-    //     });
-    //     this.containerSelect = '';
-    //     this.containerNo = '';
-    //   } else {
-    //     this.$emit('tailBtnCancel');
-    //   }
-    //   return this.isActive = false
-    // },
-    // tabSplite(index) {
-    //   if(this.tableData.length <= 1) this.tabAppend();
-    //   this.$emit('tabSplite', index)
-    // }
+    }
   },
 }
 </script>

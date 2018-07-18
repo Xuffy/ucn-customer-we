@@ -32,7 +32,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
-      <container-info :tableData.sync="containerInfo" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer"
+      <container-info :matchData="containerinfoMatch" :tableData="containerInfo" :ExchangeRateInfoArr="ExchangeRateInfoArr" @arrayAppend="arrayAppend" @handleSelectionChange="handleSelectionContainer"
         @deleteContainer="deleteContainer" :edit="edit" :containerType="selectArr.containerType" :currencyCode="oldPlanObject.currency"
         @ContainerInfoLight="ContainerInfoLight"
       />
@@ -157,6 +157,7 @@
         productModifyList: [],
         paymentList: [],
         containerInfo: [],
+        containerinfoMatch: [],
         paymentSum: {},
         selectArr: {
           containerType: [],
@@ -224,7 +225,6 @@
         pageName: '',
         prodFieldDisplay: {},
         CustomerName: '',
-        isContainerInfoLight:false,
         ProductFromOrder:[],
         ProductFromOrderRes:[],
         planStatus:2,
@@ -484,7 +484,8 @@
         if (!this.isCopy) {
           this.logisticsNo = res.logisticsNo
         }
-        this.containerInfo = res.containerDetail || []
+        this.containerInfo = (res.containerDetail || []).map(el=>{el.isModify=false;return el});
+        this.containerinfoMatch = this.$depthClone(res.containerDetail || []).map(el=>{el.isModify=false;return el});
         let feeListb = false;
         _.mapObject(res.fee, (v, k) => {
           if (v != null) {
@@ -924,21 +925,30 @@
         })
         this.oldPlanObject.fieldDisplay = obj;
       },
-      ContainerInfoLight(data,index){
-        this.isContainerInfoLight = true;
-        this.containerInfo[index].fieldDisplay=this.$depthClone(data);
-        this.oldPlanObject.containerDetail =  this.containerInfo;
+      ContainerInfoLight(data){
+        this.oldPlanObject.containerDetail =  this.$depthClone(data).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        });
       },
       sendData(keyString) {
         let url = this.configUrl[this.pageName][keyString].api;
         this.basicInfoArr.forEach(a => {
-          // this.$set(this.basicInfoObj, a.key, a.type=='date' ? ao.value : a.value)
           this.$set(this.basicInfoObj, a.key, a.value);
         })
 
         this.transportInfoArr.forEach(a => {
           this.$set(this.transportInfoObj, a.key, a.value)
         })
+
+        this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
+          if(!el.isModify&&'fieldDisplay' in el){
+            el.fieldDisplay = {};
+          }
+          return el;
+        });
 
         this.basicInfoObj.remark = this.remark
         _.mapObject(this.basicInfoObj, (value, key) => {
@@ -996,12 +1006,6 @@
         }).some(el=> el)){
           return
         }
-        //判断 Container Info 是否修改过高亮 以便不传后台返回的修改值
-        if(!this.isContainerInfoLight){
-          this.oldPlanObject.fee&&this.oldPlanObject.containerDetail.forEach(el =>{
-            el.fieldDisplay = null;
-          })
-        }
         this.$ajax.post(url, obj || this.oldPlanObject).then(res => {
           this.$message({
             message: this.$i.logistic.jumping,
@@ -1053,7 +1057,6 @@
       }
     }
   }
-8365380501769216
 </script>
 <style lang="less" scoped>
   .place-logistic-plan {

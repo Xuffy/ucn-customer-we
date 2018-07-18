@@ -154,7 +154,7 @@
         :type="radio"
         :isInquiry="true"></v-product>
     </el-dialog>
-    <v-history-modify @save="save" :beforeSave="beforeSave" ref="HM"/>
+    <v-history-modify code="inquiry" @save="save" :beforeSave="beforeSave" ref="HM"/>
   </div>
 </template>
 <script>
