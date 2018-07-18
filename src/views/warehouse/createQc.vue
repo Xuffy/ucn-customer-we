@@ -224,8 +224,11 @@
             <el-button @click="cancel" type="danger">{{$i.warehouse.cancel}}</el-button>
         </div>
 
-        <el-dialog width="70%" :title="$i.warehouse.addProduct" :visible.sync="productDialogVisible"
-                   custom-class="ucn-dialog-center">
+        <el-dialog
+                width="70%"
+                :title="$i.warehouse.addProduct"
+                :visible.sync="productDialogVisible"
+                custom-class="ucn-dialog-center">
             <el-form ref="qcOrder" :model="productDialogConfig" label-width="120px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
@@ -271,8 +274,11 @@
                 </el-row>
             </el-form>
             <div class="btn-group">
-                <el-button type="primary" @click="search" :loading="loadingProductDialogTable"
-                           :disabled="loadingProductDialogTable">Search
+                <el-button
+                        type="primary"
+                        @click="search"
+                        :loading="loadingProductDialogTable"
+                        :disabled="loadingProductDialogTable">Search
                 </el-button>
                 <el-button @click="clear" :disabled="loadingProductDialogTable">Clear</el-button>
             </div>
@@ -282,13 +288,8 @@
                     :data="productDialogTableData"
                     :buttons="[{label: 'Detail', type: 1}]"
                     @action="btnClick"
-                    @change-checked="changeProductDialogChecked"></v-table>
-            <!--<page-->
-            <!--@size-change="changeSize"-->
-            <!--@change="changePage"-->
-            <!--:page-sizes="[50,100,200,500]"-->
-            <!--:page-data="pageData"></page>-->
-
+                    @change-checked="changeProductDialogChecked">
+            </v-table>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
                 <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">Cancel
@@ -343,12 +344,6 @@
                     pn: 1,
                     ps: 50,
                     orderNo: ""
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ],
                 },
                 qcOrderConfig: {
                     attachments: [],
@@ -356,14 +351,7 @@
                     exchangeCurrencyDictId: "",
                     factoryAddress: "",
                     factoryContactPhone: "",
-                    qcOrderDetailCreateParams: [
-                        // {
-                        //     expectQcQty: 0,
-                        //     inboundSkuId: 0,
-                        //     samplingRate: "",
-                        //     unqualifiedProcessingMode: ""
-                        // }
-                    ],
+                    qcOrderDetailCreateParams: [],
                     remark: "",
                     serviceName: "",
                     serviceProviderId: 0,
@@ -398,12 +386,6 @@
                     skuBarCode: "",
                     skuCode: "",
                     skuNameEn: ""
-                    // sorts: [
-                    //     {
-                    //         orderBy: "",
-                    //         orderType: "",
-                    //     }
-                    // ],
                 },
                 qcOrderBasic: {},
 
@@ -413,7 +395,6 @@
                 summaryData: {
                     skuQuantity: ""
                 },
-
 
                 /**
                  * 字典数据
@@ -430,9 +411,6 @@
             };
         },
         methods: {
-            changeChecked() {
-
-            },
             submit() {
                 if (this.$validateForm(this.qcOrderConfig, this.$db.warehouse.qcOrderDetailBasicInfo)) {
                     return;
@@ -538,37 +516,35 @@
             /**
              * 弹出框事件
              * */
-            search() {
-                this.$refs.qcOrder.validate((valid) => {
-                    if (valid) {
-                        this.loadingProductDialogTable = true;
-                        this.$ajax.post(this.$apis.get_qcProductData, this.productDialogConfig).then(res => {
-                            this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res, e => {
-                                if (!e.canCreateQc.value) {
-                                    this.$set(e, "_disabled", true);
-                                }
-                            });
-                            this.pageData = res;
-                            this.productTableData.forEach(v => {
-                                this.productDialogTableData.forEach(m => {
-                                    if (v.id === m.id.value) {
-                                        this.$set(m, "_checked", true);
-                                        this.$set(m, "_disabled", true);
-                                    }
-                                });
-                            });
-                            this.productDialogTableData.forEach(v => {
-                                if (v.id.value === 0) {
-                                    this.$set(v, "_disabled", true);
-                                }
-                            });
-                            this.loadingProductDialogTable = false;
-                            this.selectProductList = [];
-                        }).catch(err => {
-                            this.loadingProductDialogTable = false;
+            getDialogProductData(){
+                this.loadingProductDialogTable = true;
+                this.$ajax.post(this.$apis.get_qcProductData, this.productDialogConfig).then(res => {
+                    this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res, e => {
+                        if (!e.canCreateQc.value) {
+                            this.$set(e, "_disabled", true);
+                        }
+                    });
+                    this.pageData = res;
+                    this.productTableData.forEach(v => {
+                        this.productDialogTableData.forEach(m => {
+                            if (v.id === m.id.value) {
+                                this.$set(m, "_checked", true);
+                                this.$set(m, "_disabled", true);
+                            }
                         });
-                    }
+                    });
+                    this.productDialogTableData.forEach(v => {
+                        if (v.id.value === 0) {
+                            this.$set(v, "_disabled", true);
+                        }
+                    });
+                    this.selectProductList = [];
+                }).finally(() => {
+                    this.loadingProductDialogTable = false;
                 });
+            },
+            search() {
+                this.getDialogProductData();
             },
             clear() {
                 this.productDialogConfig.orderNo = "";
@@ -623,27 +599,7 @@
             addProduct() {
                 this.productDialogTableData = [];
                 this.productDialogVisible = true;
-                // this.loadingProductDialogTable=true;
-                // this.$ajax.post(this.$apis.get_qcProductData,this.productDialogConfig).then(res=>{
-                //     this.productDialogTableData = this.$getDB(this.$db.warehouse.createQcProductDialog, res);
-                //     this.productTableData.forEach(v=>{
-                //         this.productDialogTableData.forEach(m=>{
-                //             if(v.id===m.id.value){
-                //                 this.$set(m,'_checked',true);
-                //                 this.$set(m,'_disabled',true);
-                //             }
-                //         })
-                //     });
-                //     this.productDialogTableData.forEach(v=>{
-                //         if(v.id.value===0){
-                //             this.$set(v,'_disabled',true);
-                //         }
-                //     });
-                //     console.log(this.productDialogTableData,'this.productDialogTableData')
-                //     this.loadingProductDialogTable=false;
-                // }).catch(err=>{
-                //     this.loadingProductDialogTable=false;
-                // });
+                this.getDialogProductData();
             },
             removeProduct() {
                 this.$confirm(this.$i.warehouse.sureDelete, this.$i.warehouse.prompt, {
