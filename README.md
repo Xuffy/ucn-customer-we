@@ -33,7 +33,7 @@ npm run pro
 
 > [webpack](http://webpack.github.io/docs/)
 
-> [iview](https://www.iviewui.com/)
+> [element-ui](http://element.eleme.io/#/zh-CN)
 
 > [store.js](https://github.com/marcuswestin/store.js)
 
