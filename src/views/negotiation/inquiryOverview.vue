@@ -24,12 +24,12 @@
                 <el-button @click="toCompare" :class="{'is-disabled':checkedIds.length < 2}" v-authorize="'INQUIRY:OVERVIEW:COMPARE'">{{ $i.common.compare }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button @click="$windowOpen({url:'/negotiation/createInquiry'})" v-authorize="'INQUIRY:OVERVIEW:CREATE_INQUIRY'">{{ $i.common.createNewInquiry }}</el-button>
                 <el-button @click="cancelInquiry" v-authorize="'INQUIRY:OVERVIEW:CANCEL_INQUIRY'" :disabled="!checkedData.length||params.status+'' === '1'||params.status+'' === '99'||params.status === null">{{ $i.common.cancelTheInquiry }}<span>({{ checkedIds.length }})</span></el-button>
-                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.delete }}<span>({{ checkedIds.length }})</span></el-button>
+                <el-button @click="deleteInquiry" type="danger" v-authorize="'INQUIRY:OVERVIEW:DELETE'" :disabled="!checkedData.length||params.status+'' === '21'||params.status+'' === '22'||params.status === null">{{ $i.common.archive }}<span>({{ checkedIds.length }})</span></el-button>
                 <el-button :disabled="!tabData.length" v-authorize="'INQUIRY:OVERVIEW:DOWNLOAD'">{{ `${$i.common.download}(${checkedIds.length >= 1 ? checkedIds.length : 'all'})` }}</el-button>
             </div>
             <div class="viewBy">
                 <span>{{ $i.common.viewBy }}&nbsp;</span>
-                <el-radio-group v-model="viewByStatus" @change="gettabData"  size="mini">
+                <el-radio-group v-model="viewByStatus" @change="viewByChange"  size="mini">
                     <el-radio-button :label="0">{{$i.common.inquiry}}</el-radio-button>
                     <el-radio-button :label="1" >{{$i.common.SKU}}</el-radio-button>
                 </el-radio-group>
@@ -43,6 +43,7 @@
             :height="450"
             @action="action"
             @change-checked="changeChecked"
+            @change-sort="onListSortChange"
             :loading="tabLoad"
             ref="tab"
         />
@@ -67,7 +68,7 @@ export default {
   data() {
     return {
       checkedData: [],
-      pazeSize: [30, 40, 50, 100],
+      pazeSize: [50, 100, 200],
       searchLoad: false,
       options: [{
         id: 'supplierName',
@@ -108,19 +109,13 @@ export default {
     }
   },
   created() {
-    this.setDraft({name: 'negotiationDraft', params: {type: 'inquiry'}, show: true});
-    this.setRecycleBin({name: 'negotiationRecycleBin', params: {type: 'inquiry'}, show: false});
+    this.setMenuLink({path: '/negotiation/draft/inquiry', label: this.$i.common.draft});
+    this.setMenuLink({path: '/negotiation/recycleBin/inquiry', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
     this.getBaseData().then(this.gettabData, this.gettabData);
   },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
-  },
   methods: {
-    ...mapActions([
-      'setDraft',
-      'setRecycleBin',
-      'setDic'
-    ]),
+    ...mapActions(['setMenuLink', 'setDic']),
     inputEnter(val, operatorFilters) {
       this.params.operatorFilters = operatorFilters;
       this.searchLoad = true;
@@ -163,6 +158,14 @@ export default {
         this.searchLoad = false;
         this.tabLoad = false;
       });
+    },
+    viewByChange() {
+      this.params.sorts = null;
+      this.gettabData();
+    },
+    onListSortChange(args) {
+      this.params.sorts = args.sorts;
+      this.gettabData();
     },
     cancelInquiry() { // 取消询价单
       this.ajaxInqueryAction('cancel');

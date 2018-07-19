@@ -4,7 +4,7 @@
         <div class="status">
             <div class="btn-wrap">
                 <el-button :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedArg.length>0?checkedArg.length:'all'})` }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.delete}(${checkedArg.length})`}}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="inputEnter"/>
         </div>
@@ -15,6 +15,7 @@
             :loading="tabLoad"
             :buttons="[{label: $i.common.modify, type: 'modify'}, {label: $i.common.detail, type: 'detail'}]"
             @action="action"
+            @change-sort="onListSortChange"
             @change-checked="changeChecked"
             :height="455"/>
         <v-pagination
@@ -59,21 +60,11 @@ export default {
   },
   created() {
     this.getList();
-    this.setRecycleBin({
-      name: 'negotiationRecycleBin',
-      params: {
-        type: 'compare'
-      },
-      show: false
-    });
-  },
-  mounted() {
-    this.$store.dispatch('setLog', {query: {code: 'INQUIRY'}});
+    this.setMenuLink({path: '/negotiation/recycleBin/compare', label: this.$i.common.archive});
+    this.setMenuLink({path: '/logs/index', query: {code: 'inquiry'}, label: this.$i.common.log});
   },
   methods: {
-    ...mapActions([
-      'setRecycleBin'
-    ]),
+    ...mapActions(['setMenuLink']),
     getList() { // 获取Compare 列表
       this.tabLoad = true;
       this.$ajax.post(this.$apis.POST_INQIIRY_COMPARE_LIST, this.bodyData)
@@ -85,7 +76,13 @@ export default {
           });
           this.bodyData.tc = res.tc;
           this.tabData = this.$getDB(this.$db.inquiry.compare, data);
+        }, () => {
+          this.tabLoad = false;
         });
+    },
+    onListSortChange(args) {
+      this.bodyData.sorts = args.sorts;
+      this.getList();
     },
     action(item, type) { // 操作表单 action
       let types = '';
