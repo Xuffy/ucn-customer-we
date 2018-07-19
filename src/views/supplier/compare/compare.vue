@@ -6,12 +6,12 @@
         <div class="name">
             <span>Compare Name</span>
             <el-input
-                    :disabled="$route.params.type==='modify' && !isModify"
-                    size="mini"
-                    class="compare-name"
-                    placeholder="please input"
-                    v-model="compareName"
-                    clearable>
+              :disabled="$route.params.type==='modify' && !isModify"
+              size="mini"
+              class="compare-name"
+              placeholder="please input"
+              v-model="compareName"
+              clearable>
             </el-input>
         </div>
 
@@ -27,15 +27,47 @@
           :height="500">
           <template slot="header">
             <div class="btns">
-            <span v-show="$route.query.type !== 'archive'">
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'" @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"  @click="createOrder" :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.product.createOrder}}({{selectNumber.length}})</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'" @click="addNewProduct">{{$i.product.addNew}}</el-button>
-              <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'" @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
-               <el-button v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'" @click="download">
-                  {{$i.common.download}}
-                </el-button>
-            </span>
+              {{$route.params.type}}
+                <span v-if="$route.params.type==='new'">
+                    <el-button
+                       v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'"
+                       @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"
+                      @click="createOrder"
+                      :class="(selectedData.length>1)?'disabledBtn':'' ">
+                      {{$i.product.createOrder}}({{selectNumber.length}})</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
+                      @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                    <el-button
+                      v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                      @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
+                </span>
+              <span v-if="$route.params.type==='modify'">
+                 <el-button
+                   v-if="!isModify"
+                   v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_INQUIRY'"
+                   @click='createInquiry'>{{$i.product.createInquiry}}({{selectNumber.length}})</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:CREATE_ORDER'"
+                    @click="createOrder"
+                    :class="(selectedData.length>1)?'disabledBtn':'' ">
+                    {{$i.product.createOrder}}({{selectNumber.length}})</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:ADD_NEW'"
+                    @click="addNewProduct">{{$i.product.addNew}}</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                    @click="deleteProduct"  type="danger">{{$i.common.remove}}</el-button>
+                  <el-button
+                    v-if="!isModify"
+                    v-authorize="'SUPPLIER:COMPARE_DETAIL:DOWNLOAD'"
+                    @click="download"> {{$i.common.download}} </el-button>
+              </span>
               <el-checkbox  v-model="isHideTheSame">{{$i.product.hideTheSame}}</el-checkbox>
               <el-checkbox  v-model="isHighlight">{{$i.product.highlightTheDifferent}}</el-checkbox>
             </div>
@@ -173,6 +205,7 @@
                           return e;
                         });
                         this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
                         this.disabledLine=this.tableDataList;
                         this.loading = false;
                     }).catch(err=>{
@@ -194,6 +227,7 @@
                           return e;
                         });
                         this.changeHighlight(true);
+                        this.initialData=this.$depthClone(this.tableDataList);
                         this.disabledLine=this.tableDataList;
                         this.loading = false;
                         this.allowDeleteCompare=false;
@@ -210,6 +244,7 @@
                       return e;
                     });
                     this.changeHighlight(true);
+                    this.initialData=this.$depthClone(this.tableDataList);
                     this.disabledLine=this.tableDataList;
                     this.loading = false;
                     this.allowDeleteCompare=false;
@@ -229,6 +264,7 @@
                       return e;
                     });
                     this.changeHighlight(true);
+                    this.initialData=this.$depthClone(this.tableDataList);
                     this.disabledLine=this.tableDataList;
                     this.loading = false;
                     this.allowDeleteCompare=false;
