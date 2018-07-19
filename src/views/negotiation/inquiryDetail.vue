@@ -55,7 +55,7 @@
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button>{{ $i.common.download }}</el-button>
+            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
             <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.archive }}</el-button>
           </div>
@@ -369,6 +369,11 @@ export default {
       if(!this.id) return;
       let url = this.$apis.parse(this.$apis.GET_INQIIRY_DETAIL_LIST, {id: this.id});
       this.$ajax.post(url, this.params).then(this.showDetails);
+    },
+    exportDatas() {
+      if (this.id) {
+        this.$fetch.export_task('INQUIRY_ORDER', {'draft': 0, 'recycleCustomer': false, 'id': this.id});
+      }
     },
     onListSortChange(args) {
       this.params.sorts = args.sorts;
