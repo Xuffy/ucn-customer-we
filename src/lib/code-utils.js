@@ -49,8 +49,13 @@ const codeUtils = {
     }
     return codelist;
   },
-  isUndefinedOrNull(value) {
-    return typeof value === 'undefined' || value === null;
+  isUndefinedOrNull() {
+    for (let arg of arguments) {
+      if (typeof arg === 'undefined' || arg === null) {
+        return true;
+      }
+    }
+    return false;
   },
   getInquiryDicCodes(vm) {
     const postCodes = vm.$ajax.post(
