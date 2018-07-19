@@ -291,7 +291,7 @@
                     @change-checked="changeProductDialogChecked">
             </v-table>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">{{$i.warehouse.add}}</el-button>
+                <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">{{ $i.warehouse.add }}</el-button>
                 <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">{{$i.warehouse.cancel}}
                 </el-button>
             </div>
