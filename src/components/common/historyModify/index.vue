@@ -69,7 +69,6 @@
                 <!--文本输入-->
                 <el-input v-if="row[item.key].type === 'String' || row._remark" clearable
                           @change="() => row[item.key]._isModified = true"
-                          :placeholder="row._remark ? $i.setting.remark :''"
                           v-model="row[item.key].value" size="mini"></el-input>
 
                 <!--数字输入-->
@@ -218,11 +217,11 @@
         this.showDialog = true;
         this.isModify = isModify;
 
-        this.$nextTick(() => {
-          this.$refs.filterColumn.update(false, dataList).then(res => {
-            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
-          });
-        })
+          this.$nextTick(() => {
+            this.$refs.filterColumn.update(false, dataList).then(res => {
+              this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+            });
+          })
         return dataList;
 
       },

@@ -1,6 +1,7 @@
 <template>
   <div class="filter-column">
     <el-popover
+      :width="200"
       v-model="visible"
       @after-leave="update()"
       placement="bottom-end"
