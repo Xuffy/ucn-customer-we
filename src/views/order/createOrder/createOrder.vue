@@ -523,7 +523,7 @@
             </el-select>
             <el-select
                     slot="skuInspectQuarantineCategory"
-                    v-model="data.value"
+                    v-model="data._value"
                     slot-scope="{data}"
                     clearable
                     :placeholder="$i.order.pleaseChoose">
@@ -1016,11 +1016,16 @@
         },
         computed:{
             totalRow(){
-                let obj={};
+                let obj={},arr=[];
                 if(this.productTableData.length<=0){
                     return;
                 };
-                _.map(this.productTableData,v=>{
+                _.map(this.productTableData, v => {
+                    if (!v._remark) {
+                        arr.push(v);
+                    }
+                });
+                _.map(arr,v=>{
                     _.mapObject(v,(item,key)=>{
                         if(item._calculate){
                             obj[key]={
@@ -1376,6 +1381,7 @@
                     if(this.$refs.uploadSkuAdditionalFour){
                         this.$refs.uploadSkuAdditionalFour.reset();
                     }
+                    console.log(arr,'arr')
                     this.chooseProduct=this.$refs.HM.init(arr, []);
                 }else if(type==='detail'){
                     this.$windowOpen({

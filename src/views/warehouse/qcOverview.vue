@@ -90,6 +90,7 @@
                     orderNo: "",
                     qcOrderNo: "",
                     qcStatusDictCode: "",
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 tabData: [],
                 selectList: [],
@@ -188,7 +189,6 @@
 
                 });
             },
-
         },
         created() {
             this.getUnit();
