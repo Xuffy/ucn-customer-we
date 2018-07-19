@@ -102,7 +102,7 @@
                     style="width:100%; padding-right:10px;"/>
                 <i style="position:absolute; right:5px; top:50%;transform: translate(0, -50%); font-size:12px;">%</i>
               </span>
-              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachment" ref="UPLOAD"></v-upload>
+              <v-upload v-else-if="item.type === 'attachment'" :limit="20" :list="fromArg.attachments" ref="UPLOAD"></v-upload>
             </el-form-item>
           </el-col>
         </el-row>
