@@ -55,14 +55,21 @@
          <template slot="header">
            <div v-show='isButton'>
              <div class="btnline">
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'"
+                          @click='createInquiry'>
+                      {{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'"
+                          @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">
+                      {{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'"
+                          @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>
+                      {{$i.common.compare}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'"
+                          @click='addToBookmark' :disabled='!(selectedData.length)>0'>
+                      {{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
                <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
-                 {{$i.common.download}}
-                 ({{selectNumber.length===0?$i.product.all:selectNumber.length}})
-               </el-button>
+                      {{$i.common.download}}
+                      ({{selectNumber.length===0?$i.product.all:selectNumber.length}})</el-button>
              </div>
            </div>
          </template>
@@ -384,7 +391,6 @@
         created() {
             this.getCodePart();
             this.getCountryAll();
-            this.getCategoryId();
         },
         mounted(){
           this.setMenuLink({

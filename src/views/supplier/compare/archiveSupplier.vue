@@ -174,7 +174,7 @@
         }else{
           let params=this.$depthClone(this.params);
           this.$fetch.export_task('UDATA_PURCHASE_EXPORT_SUPPLIER_COMPARE_PARAMS',params);
-        }
+      }
       },
       handleSizeChange(val) {
         this.params.pn = val;

@@ -16,9 +16,9 @@
                              <el-col
                                v-for='(item,index) in $db.supplier.detail'
                                :key='index'
-                               :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                               :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                              >
-                               <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                               <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
                                  {{basicDate[item.key]}}
                                </el-form-item>
                              </el-col>
