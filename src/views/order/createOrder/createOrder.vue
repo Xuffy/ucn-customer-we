@@ -1053,9 +1053,9 @@
             ...mapActions(["setLog", "setRecycleBin", "setDraft"]),
             //就是保存
             send() {
-                // if (this.$validateForm(this.orderForm, this.$db.order.orderDetail)) {
-                //     return;
-                // }
+                if (this.$validateForm(this.orderForm, this.$db.order.orderDetail)) {
+                    return;
+                }
                 let params = Object.assign({}, this.orderForm);
                 _.map(this.supplierOption, v => {
                     if (params.supplierName === v.id) {
