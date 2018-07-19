@@ -148,7 +148,7 @@ export default {
       }
       this.$ajax.post(url, this.params).then(res => {
         this.checkedData = [];
-        res.tc ? this.params.tc = res.tc : this.params.tc = this.params.tc;
+        this.params.tc = res.tc;
         this.tabData = this.$getDB(column, res.datas, (item) => {
           this.$filterDic(item);
         });

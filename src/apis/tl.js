@@ -20,6 +20,7 @@ export default {
   GET_PURCHASE_ADD_APPING_CATEGORY: ['/purchase/category/mapping/{id}', 'BASE_URL'], // 添加我的分类
   POST_PURCHASE_CATEGORY_DELETE: ['/purchase/category/delete', 'BASE_URL'], //删除我的分类
   POST_PURCHASE_UPDATE_CATEGORY: ['/purchase/category/{id}', 'BASE_URL'], //更新我的分类
+  POST_MY_CUSTOM: ['/purchase/customer/getCustom', 'BASE_URL'], // 获取我的汇率（仅采购商）
   /**
    * inquiry
    */
