@@ -326,7 +326,6 @@
         </div>
 
         <el-dialog
-            title=""
             :visible.sync="quickCreateDialogVisible"
             width="70%">
             <v-table
@@ -344,9 +343,6 @@
                             @inputEnter="searchInquiry"
                             v-model="searchId"
                             :options="searchOptions"></select-search>
-                    <!--<div class="btns">-->
-                    <!--<el-button>{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>-->
-                    <!--</div>-->
                 </template>
             </v-table>
             <page
@@ -913,8 +909,6 @@
                     currency: "",
                     customerAgreementDt: "",
                     customerAgreementNo: "",
-                    // customerName: "string",
-                    // customerNo: "string",
                     customerOrderNo: "",
                     deliveredQty: 0,
                     deliveryDt: "",
@@ -923,8 +917,6 @@
                     destCountry: "",
                     destPort: "",
                     draftCustomer: false,       //saveAsDraft的时候为true
-                    // draftSupplier: true,
-                    // entryDt: "2018-06-01T01:37:58.742Z",
                     exchangeRateList: [
                         {
                             currency: "CNYUSD",
@@ -951,18 +943,8 @@
                             // exchangeRate: ''
                         }
                     ],
-                    fieldRemark: {
-                        // additionalProp1: "string",
-                        // additionalProp2: "string",
-                        // additionalProp3: "string"
-                    },
-                    fieldUpdate: {
-                        // additionalProp1: "string",
-                        // additionalProp2: "string",
-                        // additionalProp3: "string"
-                    },
-                    // importantCustomer: true,
-                    // importantSupplier: true,
+                    fieldRemark: {},
+                    fieldUpdate: {},
                     incoterm: '',
                     incotermArea: "",
                     lcNo: "",
@@ -970,8 +952,6 @@
                     payment: "",
                     paymentDays: 0,
                     productFlag:false,
-                    // paymentRemark: "",
-                    // paymentStatus: "",
                     quotationNo: "",
                     remark: "",
                     responsibilityFlag:false,
@@ -1026,14 +1006,10 @@
                         },
                     ],
                     skuList: [],
-                    // skuQty: 0,
-                    // skuSupplierName: "",
-                    // status: "",
                     supplierCode: "",
                     supplierId: 0,
                     supplierName: "",
                     supplierOrderNo: "",
-                    // timeZone: "",
                     transport: '1',
                 },
             }
@@ -1063,7 +1039,6 @@
         },
         methods:{
             ...mapActions(['setMenuLink']),
-            //就是保存
             send(){
                 if(this.$validateForm(this.orderForm, this.$db.order.orderDetail)){
                     return;
@@ -1238,8 +1213,6 @@
                     }
                 });
             },
-
-            //获取订单号(先手动生成一个)
             getOrderNo(){
                 //带了id表示是从draft页面过来的
                 if(this.$route.query.orderId){
@@ -1270,8 +1243,6 @@
                     this.disabledLcNo=false;
                 }
             },
-
-            //获取供应商
             getSupplier(){
                 this.loadingPage=true;
                 this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME,{
@@ -1314,6 +1285,57 @@
             },
             handleChangeSupplier(data){
                 this.supplierNo=_.findWhere(this.supplierOption,{id:data}).code;
+            },
+            getInitialData(){
+                if(this.$route.query.orderId){
+                    this.getDetail();
+                }
+                else if(this.$route.query.ids && this.$route.query.ids.length>0){
+                    let ids=this.$route.query.ids;
+                    this.loadingProductTable=true;
+                    this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
+                        let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
+                            if(item._remark){
+                                item.label.value=this.$i.order.remarks;
+                                item.skuPictures._image=false;
+                                item.skuLabelPic._image=false;
+                                item.skuPkgMethodPic._image=false;
+                                item.skuInnerCartonPic._image=false;
+                                item.skuOuterCartonPic._image=false;
+                                item.skuAdditionalOne._image=false;
+                                item.skuAdditionalTwo._image=false;
+                                item.skuAdditionalThree._image=false;
+                                item.skuAdditionalFour._image=false;
+                            }
+                            else{
+                                item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
+                                item.skuSample._value=item.skuSample.value?'YES':'NO';
+                                item.skuSample.value=item.skuSample.value?'1':'0';
+                                item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
+                                item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
+                                item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
+                                item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
+                                item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
+                                item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
+                                item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
+                                /**
+                                 * 后续处理
+                                 * */
+                                // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
+                                item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
+                            }
+                        });
+                        _.map(data,v=>{
+                            this.productTableData.push(v);
+                        });
+                    }).finally(err=>{
+                        this.loadingProductTable=false;
+                        this.loadingPage=false;
+                    });
+                }
+                else{
+                    this.loadingPage=false;
+                }
             },
 
             /**
@@ -1550,6 +1572,7 @@
                     id:e.id.value
                 }).then(res=>{
                     //带入inquiry信息
+                    this.orderForm.attachments=res.attachments;
                     this.orderForm.quotationNo=res.quotationNo;
                     this.orderForm.supplierName=res.supplierId;
                     this.orderForm.incoterm=res.incoterm;
@@ -1563,9 +1586,7 @@
                     this.orderForm.currency=res.currency;
                     this.orderForm.destCountry=res.destinationCountry;
                     this.orderForm.destPort=res.destinationPort;
-
                     this.supplierNo=_.findWhere(this.supplierOption,{id:res.supplierId}).code;
-
                     this.productTableData=[];
                     let arr=[];
                     _.map(res.details,v=>{
@@ -1879,37 +1900,6 @@
                 });
             },
             getUnit(){
-                //获取币种
-                this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true}).then(res=>{
-                        this.currencyOption=res;
-                        this.queryNo++;
-                    }).finally(err=> {
-
-                    }
-                );
-
-                //获取国家
-                this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true}).then(res=>{
-                    this.countryOption=res;
-                    this.queryNo++;
-                }).finally(err=>{
-
-                });
-
-                //获取汇率
-                this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true}).then(res=>{
-                    this.queryNo++;
-                    _.map(this.orderForm.exchangeRateList,v=>{
-                        _.map(res,m=>{
-                            if(v.currency===m.symbol){
-                                v.exchangeRate=m.price;
-                            }
-                        })
-                    })
-                }).finally(err=>{
-
-                });
-
                 this.skuStatusOption=[
                     {
                         code:'3',
@@ -1920,10 +1910,21 @@
                         name:'CANCLED'
                     },
                 ];
-
-                this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS','INQUIRY_STATUS','SKU_STATUS'],{cache:true}).then(res=>{
-                    this.queryNo++;
-                    res.forEach(v=>{
+                const currency=this.$ajax.get(this.$apis.CURRENCY_ALL,{},{cache:true});
+                const country=this.$ajax.get(this.$apis.COUNTRY_ALL,{},{cache:true});
+                const exchange=this.$ajax.get(this.$apis.CUSTOMERCURRENCYEXCHANGERATE_QUERY,{},{cache:true});
+                const partUnit=this.$ajax.post(this.$apis.get_partUnit,['PMT','ITM','MD_TN','SKU_UNIT','LH_UNIT','VE_UNIT','WT_UNIT','ED_UNIT','NS_IS','QUARANTINE_TYPE','SKU_SALE_STATUS','INQUIRY_STATUS','SKU_STATUS'],{cache:true});
+                this.$ajax.all([currency,country,exchange,partUnit]).then(res=>{
+                    this.currencyOption=res[0];
+                    this.countryOption=res[1];
+                    _.map(this.orderForm.exchangeRateList,v=>{
+                        _.map(res[2],m=>{
+                            if(v.currency===m.symbol){
+                                v.exchangeRate=m.price;
+                            }
+                        })
+                    });
+                    res[3].forEach(v=>{
                         if(v.code==='ITM'){
                             this.incotermOption=v.codes;
                         }else if(v.code==='PMT'){
@@ -1952,11 +1953,10 @@
                             this.skuStatusTotalOption=v.codes;
                         }
                     })
-                }).finally(err=>{
+                    this.getInitialData();
+                }).finally(()=>{
 
                 });
-
-
             },
 
             /**
@@ -2042,59 +2042,6 @@
                 auth:'ORDER:DRAFT_OVERVIEW:ARCHIVE_LINK',
                 label: this.$i.order.archiveDraft
             });
-        },
-        watch:{
-            queryNo(n){
-                if(n===4){
-                    if(this.$route.query.orderId){
-                        this.getDetail();
-                    }else if(this.$route.query.ids && this.$route.query.ids.length>0){
-                        let ids=this.$route.query.ids;
-                        this.loadingProductTable=true;
-                        this.$ajax.post(this.$apis.ORDER_SKUS,ids.split(',')).then(res=>{
-                            let data=this.$getDB(this.$db.order.productInfoTableCreate,this.$refs.HM.getFilterData(res, 'skuSysCode'),item=>{
-                                if(item._remark){
-                                    item.label.value=this.$i.order.remarks;
-                                    item.skuPictures._image=false;
-                                    item.skuLabelPic._image=false;
-                                    item.skuPkgMethodPic._image=false;
-                                    item.skuInnerCartonPic._image=false;
-                                    item.skuOuterCartonPic._image=false;
-                                    item.skuAdditionalOne._image=false;
-                                    item.skuAdditionalTwo._image=false;
-                                    item.skuAdditionalThree._image=false;
-                                    item.skuAdditionalFour._image=false;
-                                }
-                                else{
-                                    item.label.value=this.$dateFormat(item.entryDt.value,'yyyy-mm-dd');
-                                    item.skuSample._value=item.skuSample.value?'YES':'NO';
-                                    item.skuSample.value=item.skuSample.value?'1':'0';
-                                    item.skuUnit._value=item.skuUnit.value?_.findWhere(this.skuUnitOption,{code:String(item.skuUnit.value)}).name:'';
-                                    item.skuUnitWeight._value=item.skuUnitWeight.value?_.findWhere(this.weightOption,{code:String(item.skuUnitWeight.value)}).name:'';
-                                    item.skuUnitLength._value=item.skuUnitLength.value?_.findWhere(this.lengthOption,{code:String(item.skuUnitLength.value)}).name:'';
-                                    item.skuExpireUnit._value=item.skuExpireUnit.value?_.findWhere(this.expirationDateOption,{code:String(item.skuExpireUnit.value)}).name:'';
-                                    item.skuStatus._value=item.skuStatus.value?_.findWhere(this.skuStatusTotalOption,{code:String(item.skuStatus.value)}).name:'';
-                                    item.skuUnitVolume._value=item.skuUnitVolume.value?_.findWhere(this.volumeOption,{code:String(item.skuUnitVolume.value)}).name:'';
-                                    item.skuSaleStatus._value=item.skuSaleStatus.value?_.findWhere(this.skuSaleStatusOption,{code:String(item.skuSaleStatus.value)}).name:'';
-                                    /**
-                                     * 后续处理
-                                     * */
-                                    // item.skuCategoryId._value=item.skuCategoryId.value?_.findWhere(this.category,{id:item.skuCategoryId.value}).name:'';
-                                    item.skuInspectQuarantineCategory._value=item.skuInspectQuarantineCategory.value?_.findWhere(this.quarantineTypeOption,{code:item.skuInspectQuarantineCategory.value}).name:'';
-                                }
-                            });
-                            _.map(data,v=>{
-                                this.productTableData.push(v);
-                            });
-                        }).finally(err=>{
-                            this.loadingProductTable=false;
-                            this.loadingPage=false;
-                        });
-                    }else{
-                        this.loadingPage=false;
-                    }
-                }
-            },
         },
     }
 </script>
