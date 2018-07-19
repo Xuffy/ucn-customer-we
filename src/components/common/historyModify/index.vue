@@ -42,7 +42,7 @@
                   placement="bottom"
                   width="300"
                   trigger="click">
-                  <v-upload @change="val => {changeUploadFile(val,row[item.key])}"
+                  <v-upload @change="(val,type) => {changeUploadFile(val,row[item.key],type)}"
                             :limit="row[item.key]._upload.limit || 5"
                             :ref="item.key + 'Upload'"
                             :only-image="row[item.key]._image"
@@ -249,9 +249,9 @@
         });
         return list;
       },
-      changeUploadFile(val, item) {
+      changeUploadFile(val, item, type) {
         this.$set(item._upload, 'list', val);
-        this.$set(item, '_isModified', true);
+        !type && this.$set(item, '_isModified', true);
       },
       closeDialog() {
         if (this.modified) {
