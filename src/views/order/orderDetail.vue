@@ -1453,6 +1453,7 @@
                         arr.push(v);
                     }
                 });
+                console.log(arr,'arr')
                 let sameCurrency = true;
                 if (this.orderForm.incoterm === "1") {
                     let size = new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
