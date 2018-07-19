@@ -48,7 +48,7 @@
     <div v-if="pageTypeCurr.slice(-6) == 'Detail'">
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.paymentTitle }}</div>
-      <payment ref="payment" v-authorize="auth[pageTypeCurr].payment||''" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
+      <payment ref="payment" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].payment||'')" :tableData.sync="paymentList" :ExchangeRateInfoArr="ExchangeRateInfoArr" :edit="edit" :paymentSum="paymentSum"
         @addPayment="addPayment" @savePayment="savePayment" :selectArr="selectArr" @updatePaymentWithView="updatePaymentWithView"
         :currencyCode="oldPlanObject.currency" />
     </div>
@@ -61,8 +61,8 @@
         @change-sort="$refs.productInfo.setSort(productList)"
         >
         <div slot="header" class="product-header" v-if="edit">
-          <el-button v-authorize="auth[pageTypeCurr].PRODUCT_INFO_ADD||''" type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
-          <el-button v-authorize="auth[pageTypeCurr].PRODUCT_INFO_DELETE||''" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
+          <el-button v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PRODUCT_INFO_ADD||'')" type="primary" size="mini" @click.stop="getSupplierIds(0)">{{ $i.logistic.addProduct }}</el-button>
+          <el-button v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PRODUCT_INFO_DELETE||'')" type="danger" size="mini" @click.stop="removeProduct">{{ $i.logistic.remove }}</el-button>
         </div>
       </v-table>
     </div>
@@ -228,6 +228,7 @@
         ProductFromOrder:[],
         ProductFromOrderRes:[],
         planStatus:2,
+        initData:null
       }
     },
     components: {
@@ -351,6 +352,9 @@
       this.transportInfoArr = _.map(this.$db.logistic.transportInfoObj, (value, key) => {
         return value;
       })
+      if(this.pageTypeCurr == 'logisticDraftDetail'){
+        this.edit = true;
+      }
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -441,6 +445,7 @@
             this.fieldDisplay = res.fieldDisplay;
           }
           this.createdPlanData(res)
+          this.initData = res; //用来初始化数据
           this.logisticsStatus = res.logisticsStatus;
           this.matchRate(res.currencyExchangeRate);
           this.attachmentList = res.attachment;
@@ -462,7 +467,7 @@
           });
         })
       },
-      createdPlanData(res = this.oldPlanObject) {
+      createdPlanData(res = this.initData) {
         this.oldPlanObject = JSON.parse(JSON.stringify(res))
         const stringArray = [
           'payment',
@@ -589,8 +594,8 @@
       computeType(key) {
         return basicInfoInput.includes(key) ? 'input' : basicInfoDate.includes(key) ? 'date' : 'selector'
       },
-      arrayAppend(arrKey) {
-        this[arrKey].push({
+      arrayAppend() {
+        this.containerInfo.push({
           exchangeCurrency: this.basicInfoArr.find(a => a.key === 'exchangeCurrency').value,
           containerNo: "",
           containerType: null,
@@ -798,15 +803,12 @@
         switch (arg) {
           case 'edit':
             this.edit = !this.edit;
-            // this.pageName = 'planDetail';
             break;
           case 'DeliveredEdit':
             this.deliveredEdit = true;
-            // this.pageName = 'planDetail';
             break;
           case 'DeliveredEditExit':
             this.deliveredEdit = false;
-            // this.pageName = 'planDetail';
             break;
           case 'confirm':
           case 'read':
@@ -883,7 +885,7 @@
         })
       },
       toExit() {
-        if (this.pageTypeCurr == 'placeLogisticPlan') {
+        if (this.pageTypeCurr == 'placeLogisticPlan'||this.pageTypeCurr == 'logisticDraftDetail') {
           if (this.isCopy) {
             this.$router.push('/logistic/plan')
           } else {
@@ -926,12 +928,7 @@
         this.oldPlanObject.fieldDisplay = obj;
       },
       ContainerInfoLight(data){
-        this.oldPlanObject.containerDetail =  this.$depthClone(data).map(el=>{
-          if(!el.isModify&&'fieldDisplay' in el){
-            el.fieldDisplay = {};
-          }
-          return el;
-        });
+        this.oldPlanObject.containerDetail = data;
       },
       sendData(keyString) {
         let url = this.configUrl[this.pageName][keyString].api;
@@ -943,7 +940,7 @@
           this.$set(this.transportInfoObj, a.key, a.value)
         })
 
-        this.oldPlanObject.containerDetail =  this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
+        this.oldPlanObject.containerDetail =  this.oldPlanObject.containerDetail&&this.$depthClone(this.oldPlanObject.containerDetail).map(el=>{
           if(!el.isModify&&'fieldDisplay' in el){
             el.fieldDisplay = {};
           }
@@ -1042,7 +1039,7 @@
       }
     },
     watch:{
-      containerInfo:{
+      containerinfoMatch:{
         handler: function (val) {
           val.forEach(el=>{
             this.productList = this.productList.map(item=>{

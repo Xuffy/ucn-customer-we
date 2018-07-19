@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="btn-wraps" v-if="edit">
-      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend', 'containerInfo')">{{ $i.logistic.add }}</el-button>
+      <el-button type="primary" size="mini" @click.stop="$emit('arrayAppend')">{{ $i.logistic.add }}</el-button>
       <el-button type="danger" size="mini" @click.stop="$emit('deleteContainer')">{{ $i.logistic.delete }}</el-button>
     </div>
     <div class="tab-wrap">
-      <el-table :cell-class-name="lightHight" :data="matchData" ref="table" border style="width: 100%; margin-top: 20px" 
+      <el-table :cell-class-name="lightHight" :data="tableData" ref="table" border style="width: 100%; margin-top: 20px" 
         show-summary 
         :summary-method="summaryMethod"
         @selection-change="handleSelectionChange" 
@@ -115,23 +115,23 @@ export default {
   },
   computed:{
     returnData(){
-      let arr = this.$depthClone(this.tableData).map(el=> {el.fieldDisplay={}; return el } );
+      let arr = this.$depthClone(this.matchData).map(el=> {el.fieldDisplay={}; return el } );
       return arr;
     }
   },
   methods: {
-    //高亮  有点问题  先修改一个值 在修改一个值  然后返回修改第一个值  就高亮不行
+    //高亮 
     ContainerInfoLight(key,v,index,scope){
       this.returnData[index].fieldDisplay[key] = v;
       this.returnData[index][key] = v;
-      if(this.tableData[index][key]==v){
+      if(this.matchData[index][key]==v){
         delete this.returnData[index].fieldDisplay[key];
       }
       let cloneReturnData = this.$depthClone(this.returnData[index]);
-      let cloneTableData = this.$depthClone(this.tableData[index]);
+      let cloneMatchData = this.$depthClone(this.matchData[index]);
       delete cloneReturnData.isModify
-      delete cloneTableData.isModify
-      if(_.isEqual(cloneReturnData, cloneTableData)){
+      delete cloneMatchData.isModify
+      if(_.isEqual(cloneReturnData, cloneMatchData)){
         this.returnData[index].isModify = false;
       }else{
         this.returnData[index].isModify = true;

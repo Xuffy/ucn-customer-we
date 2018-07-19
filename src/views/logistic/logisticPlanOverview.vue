@@ -31,17 +31,17 @@
         <div class="btn-wrap">
           <div class="fn btn">
             <div v-if="pageType === 'plan'">
-              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
-              <el-button v-authorize="auth[pageType].CREATE||''" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==5)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].CREATE||''" @click.stop="addNew">{{ $i.logistic.placeLogisticPlan }}</el-button>
             </div>
             <div v-if="pageType === 'loadingList'">
-              <el-button v-authorize="auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].DOWNLOAD||''" @click="download">{{ $i.logistic.download }}({{selectCount.length||$i.logistic.all}})</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="!(selectCount.length>0&&fillterVal==4)">{{ $i.logistic.archive }}</el-button>
             </div>
             <div v-if="pageType === 'draft'">
-              <el-button v-authorize="auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
-              <el-button v-authorize="auth[pageType].SEND||''" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].ARCHIVE||''" @click="sendArchive" :disabled="selectCount.length<=0">{{ $i.logistic.archive }}</el-button>
+              <el-button v-authorize="auth[pageType]&&auth[pageType].SEND||''" @click="batchSendDraft" :disabled="selectCount.length<=0">{{ $i.logistic.send }}</el-button>
             </div>
           </div>
           <div class="view-by-btn">
@@ -53,7 +53,7 @@
         </div>
       </div>
     </v-table>
-    <v-pagination :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
+    <v-pagination :pageSizes="[50,100,200]" :page-data="pageParams" @size-change="sizeChange" @change="pageChange"/>
   </div>
 </template>
 <script>
@@ -327,9 +327,9 @@
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}})
+          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}});
         }else{
-          this.$router.push({path: `/logistic/${this.jumpPage[this.pageType]}`, query: {id: e.id.value}})
+          this.$windowOpen({url:`/logistic/${this.jumpPage[this.pageType]}`,params:{id: e.id.value}});
         }
       },
       searchFn(obj) {
@@ -346,7 +346,7 @@
         this.fetchDataList()
       },
       addNew() {
-        this.$router.push('/logistic/placeLogisticPlan')
+        this.$windowOpen({url:`/logistic/placeLogisticPlan`});
       },
       sendArchive(){
         let url = this.pageType=="loadingList" ? this.$apis.logistics_order_archive : this.$apis.logistics_plan_archive;
