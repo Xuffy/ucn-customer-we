@@ -269,14 +269,15 @@
       }
     },
     mounted() {
-      this.setLog({
-        query: {
-          code: this.pageTypeCurr && this.pageTypeCurr == "loadingListDetail" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'
-        }
-      });
+      let menuList = {
+        path: '',
+        query: {code: this.pageType&&this.pageType=="loadingList" ? 'BIZ_LOGISTIC_ORDER' : 'BIZ_LOGISTIC_PLAN'},
+        type: 100,
+        label: this.$i.common.log
+      };
+      this.setMenuLink(menuList);
       const arr = this.$route.fullPath.split('/')
       this.pageName = arr[arr.length - 1].split('?')[0]
-      this.registerRoutes()
       this.getDictionary()
       this.basicInfoArr = _.map(this.$db.logistic.basicInfoObj, (value, key) => {
         return value;
@@ -289,7 +290,7 @@
       })
     },
     methods: {
-      ...mapActions(['setDraft', 'setRecycleBin', 'setLog']),
+      ...mapActions(['setMenuLink']),
       //初始化页面数据
       pageInit(){
         if (this.pageTypeCurr.slice(-6) == 'Detail') {
@@ -344,16 +345,6 @@
         this.showAddProductDialog = true;
         this.$nextTick(() => {
           this.$refs.addProduct.getSupplierIds();
-        })
-      },
-      registerRoutes() {
-        this.$store.commit('SETDRAFT', {
-          name: 'overviewDraft',
-          show: true
-        })
-        this.$store.commit('SETRECYCLEBIN', {
-          name: 'overviewArchive',
-          show: true
         })
       },
       getDetails() {
@@ -908,7 +899,7 @@
     watch:{
       containerInfo:{
         handler: function (val, oldVal) {
-          console.log(val)
+    
         },
         deep: true
       }

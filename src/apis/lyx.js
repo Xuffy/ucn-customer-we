@@ -14,7 +14,7 @@ export default {
   get_payment_list: ['/payment/list/', 'LJ','BASE_URL'],
   get_product_history: ['/logistics/plan/getProductHistory', 'LJ','BASE_URL'],
   get_product_order_history: ['/logistics/order/getProductHistory', 'LJ','BASE_URL'],
-  get_order_list_with_page: ['/order/skuAllPage','LJ', 'BASE_URL'],
+  get_order_list_with_page: ['/order/skuListPage','LJ', 'BASE_URL'],
   get_loading_list_plan: ['/logistics/order/pageByPlanNo','LJ', 'BASE_URL'],
   get_loading_list_unit: ['/logistics/order/pageByUnit','LJ', 'BASE_URL'],
   get_loading_list_sku: ['/logistics/order/pageBySkuCode','LJ', 'BASE_URL'],
