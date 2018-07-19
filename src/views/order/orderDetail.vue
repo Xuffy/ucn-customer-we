@@ -1453,6 +1453,7 @@
                         arr.push(v);
                     }
                 });
+                console.log(arr,'arr')
                 let sameCurrency = true;
                 if (this.orderForm.incoterm === "1") {
                     let size = new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
@@ -1897,7 +1898,6 @@
             getOrderNo() {
                 this.getSupplier();
             },
-            //获取供应商
             getSupplier() {
                 this.loadingPage = true;
                 this.$ajax.get(this.$apis.PURCHASE_SUPPLIER_LIST_SUPPLIER_BY_NAME, {
@@ -1974,7 +1974,7 @@
             handleShowBtn(item) {
                 let config;
                 if (this.isModify) {
-                    if (item.skuStatus.value === "4") {
+                    if (item.skuStatus.value === "SHIPPED") {
                         config = this.productNotModifyBtn;
                     } else {
                         config = this.productInfoBtn;

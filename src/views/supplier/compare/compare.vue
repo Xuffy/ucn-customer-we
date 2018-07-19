@@ -331,10 +331,10 @@
 
             //删除
             deleteProduct(){
-                this.$confirm('确定删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
                 }).then(() => {
                   console.log(this.selectNumber)
                   this.$ajax.post(this.$apis.post_supplier_deleteCompareDetails, this.selectNumber)
@@ -342,7 +342,7 @@
                       console.log(res)
                       this.$message({
                           type: 'success',
-                          message: '删除成功!'
+                          message: this.$i.common.deleteTheSuccess
                       });
 
                     })
@@ -384,7 +384,7 @@
                 });
                 if(totalLen+e.length>100){
                     this.$message({
-                        message: '不能超过100条',
+                        message: this.$i.common.noLength,
                         type: 'warning'
                     });
                 }else{
@@ -483,10 +483,10 @@
             },
             //删除该compare
             deleteCompare(){
-                this.$confirm('确认删除该compare?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
+              this.$confirm(this.$i.common.sureDeleteToCompare, this.$i.common.prompt, {
+                  confirmButtonText: this.$i.common.confirm,
+                  cancelButtonText: this.$i.common.cancel,
+                  type: 'warning'
                 }).then(() => {
                     this.disabledSaveCompare=true;
                     let id=[];
@@ -494,7 +494,7 @@
                     this.$ajax.post(this.$apis.post_supplier_deleteCompare,id).then(res=>{
                         this.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: this.$i.common.deleteTheSuccess
                         });
                         this.disabledSaveCompare=false;
                         this.$router.push({

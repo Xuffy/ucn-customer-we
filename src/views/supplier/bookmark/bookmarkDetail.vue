@@ -7,7 +7,7 @@
             <div class="detail">
                  <el-form  label-width="190px">
                      <el-row>
-                       <el-col :span="4">
+                       <el-col :span="4"  class="img-box">
                          <v-image :src="basicDate.logo" style="height: 184px;"/>
                        </el-col>
                        <el-col :span="20">
@@ -673,5 +673,8 @@
       height: 200px;
       line-height: 200px;
     }
+  .img-box{
+    height: 184px;background-color: #f9f9f9;
+  }
 
 </style>

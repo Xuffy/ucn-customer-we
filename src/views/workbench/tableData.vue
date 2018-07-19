@@ -39,6 +39,7 @@
                  :buttons="['detail']"
                  hideFilterColumn
                  hideFilterValue
+                 disabled-sort
                  @action="goDetail"
                  :height="250">
         </v-table>

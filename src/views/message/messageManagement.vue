@@ -147,7 +147,7 @@
             this.$ajax.post(url, this.params)
             .then(res => {
               this.$message({
-                message: this.$i.common.modifySuccess,
+                message: this.$i.common.addSuccess,
                 type: 'success',
               });
               this.params = {}

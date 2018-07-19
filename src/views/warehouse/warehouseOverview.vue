@@ -24,7 +24,7 @@
                         :height="500"
                         :loading="loadingTable"
                         :data="tableDataList"
-                        :buttons="[{label: 'Detail', type: 1}]"
+                        :buttons="[{label: $i.warehouse.detail, type: 1}]"
                         @change-sort="val=>{getWarehouseData(val)}"
                         @change-checked="changeChecked"
                         @action="btnClick">
@@ -32,7 +32,7 @@
                         <div class="btns">
                             <el-button
                                     v-authorize="'WAREHOUSE:DOWNLOAD'"
-                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:'All'}})</el-button>
+                                    @click="download">{{$i.warehouse.download}}({{selectList.length?selectList.length:$i.warehouse.all}})</el-button>
                         </div>
                     </template>
                 </v-table>
@@ -82,19 +82,20 @@
                     ps: 50,
                     skuCode: "",
                     skuInventoryStatusDictCode: "",
+                    sorts:[{orderBy:"entryDt",orderType:"desc"}]
                 },
                 searchId:1,
                 searchOptions:[
                     {
-                        label:'orderNo',
+                        label:this.$i.warehouse.orderNo,
                         id:1
                     },
                     {
-                        label:'skuCode',
+                        label:this.$i.warehouse.skuCode,
                         id:2
                     },
                     {
-                        label:'inboundNo',
+                        label:this.$i.warehouse.inboundNo,
                         id:3
                     },
                 ]

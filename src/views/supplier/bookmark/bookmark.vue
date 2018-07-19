@@ -159,11 +159,11 @@
             },
             handleSizeChange(val) {
               this.params.pn = val;
-              this.get_data();
+              this.getData();
             },
             pageSizeChange(val) {
               this.params.ps = val;
-              this.get_data();
+              this.getData();
             },
             //切换body的收缩展开状态
             switchDisplay() {
@@ -179,7 +179,7 @@
             search() {
               this.selectedNumber = [];
               this.selectedData = [];
-              this.get_data()
+              this.getData()
             },
             //....跳入createInquiry
             createInquiry() {
@@ -272,7 +272,7 @@
             getCountryAll(){
               this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
                 this.countryOption = res
-                this.get_data();
+                this.getData();
               }).catch(err=>{
                 console.log(err)
               });
@@ -280,9 +280,9 @@
             //...............sort
             sort(item){
               this.params.sorts =  item.sorts;
-              this.get_data();
+              this.getData();
             },
-            get_data() {
+            getData() {
                 this.loading = true;
                 this.$ajax.post(this.$apis.post_supplier_listbookmark, this.params)
                     .then(res => {
@@ -311,6 +311,7 @@
                 cancelButtonText: this.$i.common.cancel,
                 type: 'warning'
               }).then(() => {
+
                 let params=[];
                 _.map(this.selectedData,v=>{
                   params.push({
@@ -319,14 +320,14 @@
                   })
                 });
                 this.disableClickDeleteBtn = true;
-                this.$ajax.post(this.$apis.post_batchDeleteBookmark, this.selectNumber).then(res => {
-                  this.disableClickDeleteBtn = false;
-                  this.selectNumber =[];
-                  this.getData();
+                this.$ajax.post(this.$apis.post_batchDeleteBookmark, params).then(res => {
                   this.$message({
                     type: 'success',
                     message: this.$i.common.deleteTheSuccess
                   });
+                  this.selectedNumber = [];
+                  this.disableClickDeleteBtn = false;
+                  this.getData();
                 }).finally(() => {
                   this.disableClickDeleteBtn = false;
                 });
@@ -357,7 +358,7 @@
                   message: this.$i.common.addSuccess,
                   type: 'success',
                 })
-                this.get_data();
+                this.getData();
               }).catch(err=>{
 
               });
@@ -372,7 +373,7 @@
             let {operatorFilters,sorts}=val;
             this.params.operatorFilters=operatorFilters||[];
             this.params.sorts=sorts||[];
-            this.get_data();
+            this.getData();
           },
           download(){
             let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
