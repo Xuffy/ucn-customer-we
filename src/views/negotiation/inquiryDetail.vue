@@ -242,7 +242,7 @@ export default {
       }).then(() => {
         this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
           action: 'delete',
-          ids: [this.$route.query.id]
+          ids: [this.id]
         }).then(() => {
           this.$router.push('/negotiation/inquiry');
         });
@@ -541,9 +541,11 @@ export default {
     },
     // 接受单
     ajaxInqueryAction(type) {
-      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(() => {
-        this.$router.push('/negotiation/inquiry');
-      });
+      if (this.id) {
+        this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: [this.id]}).then(() => {
+          this.$router.push('/negotiation/inquiry');
+        });
+      }
     },
     // 删除product 某个单
     removeProduct() {
