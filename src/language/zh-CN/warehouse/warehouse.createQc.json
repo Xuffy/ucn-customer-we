@@ -40,5 +40,6 @@
   "volumeOfSubQualityProducts": "不合格产品净重",
   "grossWeightOfSubQualityProducts": "不合格产品毛重",
   "skuQuantity": "SKU款式数",
-  "exit": "取消"
+  "exit": "取消",
+  "skuQcResult":"哇哈哈"
 }

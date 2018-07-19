@@ -15,13 +15,12 @@
                             default-expand-all
                             ref="tree"
                             :empty-text="emptyText"
-                            :data="list"
+                            :data="copyList"
                             node-key="id"
                             :props="defaultProps"
                             :expand-on-click-node="expandOnClickNode"
                             @node-click="getChecked"
-                            :filter-node-method="filterNode"
-                    >
+                            :filter-node-method="filterNode">
                     </el-tree>
                 </div>
             </div>
@@ -30,10 +29,9 @@
                 :placeholder="checkInputBoxPl"
                 v-popover:popover5
                 v-model="val[defaultProps.label]"
-                suffix-icon="el-icon-arrow-down"
                 :size="size"
-                readonly
-        >
+                readonly>
+            <i @click="clearData" slot="suffix" class="el-input__icon el-icon-date"></i>
         </el-input>
     </div>
 </template>
@@ -57,7 +55,8 @@
                 data:[],
                 visible: false,
                 filterText: '',
-                val: ''
+                val: '',
+                copyList:[],
             };
         },
         props: {
@@ -120,8 +119,11 @@
             },
             value(val) {
                 if(!val) return this.val = '';
-                this.setInput(this.list, this.value);
-            }
+                this.setInput(this.$depthClone(this.list), this.value);
+            },
+            list(n){
+                this.copyList=this.$depthClone(n);
+            },
         },
         mounted() {
             this.setInput(this.list, this.value);
@@ -143,7 +145,11 @@
             filterNode(value, data) {
                 if (!value) return true;
                 return data[this.defaultProps.label].indexOf(value) !== -1;
-            }
+            },
+            clearData(){
+                this.selectedList=[];
+                this.val[this.defaultProps.label]='';
+            },
         }
     };
 </script>
