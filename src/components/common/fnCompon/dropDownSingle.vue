@@ -31,7 +31,7 @@
                 v-model="val[defaultProps.label]"
                 :size="size"
                 readonly>
-            <i @click="clearData" slot="suffix" class="el-input__icon el-icon-date"></i>
+            <i @click="clearData" slot="suffix" class="el-icon-arrow-down"></i>
         </el-input>
     </div>
 </template>
@@ -118,7 +118,7 @@
                 this.$emit('input', val.id);
             },
             value(val) {
-                if(!val) return this.val = '';
+                if(!val) return this.val = {};
                 this.setInput(this.$depthClone(this.list), this.value);
             },
             list(n){
@@ -148,7 +148,7 @@
             },
             clearData(){
                 this.selectedList=[];
-                this.val[this.defaultProps.label]='';
+                this.val[this.defaultProps.label]=null;
             },
         }
     };
