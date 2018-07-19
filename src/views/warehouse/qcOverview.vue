@@ -27,7 +27,7 @@
                 :height="500"
                 :data="tabData"
                 :loading='loading'
-                :buttons="[{label: 'Detail', type: 1}]"
+                :buttons="[{label: $i.warehouse.detail, type: 1}]"
                 @action="onAction"
                 @change-sort="val=>{getQcOrderList(val)}"
                 @change-checked='checked'>
@@ -40,7 +40,7 @@
                         <el-button
                                 v-authorize="'QC:ORDER_OVERVIEW:DOWNLOAD'"
                                 @click='download'>
-                            {{($i.warehouse.download)}}({{selectList.length?selectList.length:'All'}})
+                            {{($i.warehouse.download)}}({{selectList.length?selectList.length:$i.warehouse.all}})
                         </el-button>
                     </div>
                 </div>
@@ -74,10 +74,10 @@
                 options: [
                     {
                         id: 1,
-                        label: 'QC Order No'
+                        label: this.$i.warehouse.QCOrderNo
                     }, {
                         id: 2,
-                        label: '订单号'
+                        label: this.$i.warehouse.orderNo
                     }
                 ],
                 pageData: {},
@@ -87,6 +87,7 @@
                 params: {
                     pn: 1,
                     ps: 50,
+                    orderNo: "",
                     qcOrderNo: "",
                     qcStatusDictCode: "",
                 },
@@ -118,7 +119,11 @@
                     type: 'warning'
                 });
                 if (val.id === 1) {
-                    this.params.qcOrderNo = val.value
+                    this.params.qcOrderNo = val.value ? val.value : ""
+                    this.params.orderNo = ""
+                } else {
+                    this.params.orderNo = val.value ? val.value : ""
+                    this.params.qcOrderNo = ""
                 }
                 this.getQcOrderList()
             },
@@ -149,13 +154,11 @@
                 this.selectList=[];
                 this.$ajax.post(this.$apis.post_qc_page, this.params)
                     .then(res => {
-                        console.log(res.datas)
                         this.loading = false;
                         this.tabData = this.$getDB(this.$db.warehouse.qcOrderTable, res.datas, e => {
                             e.qcMethodDictCode.value = this.$change(this.qcMethodsOption, 'qcMethodDictCode', e).name;
                             return e;
                         });
-                        console.log(this.tabData)
                         this.pageData = res;
                     })
                     .catch((res) => {

@@ -174,10 +174,10 @@
                         v-for="v in $db.warehouse.createQcProductTable"
                         :key="v.key"
                         :prop="v.key"
-                        :label="v.key"
+                        :label="$i.warehouse[v.key]"
                         align="center"
                         :class-name="v.key === 'expectQcQty' ? 'ucn-table-required' : ''"
-                        width="180">
+                        width="240">
                     <template slot-scope="scope">
                         <div v-if="v.showType==='qc'">
                             {{v.value}}
@@ -208,10 +208,10 @@
                 <el-table-column
                         align="center"
                         fixed="right"
-                        label="Action"
-                        width="100">
+                        :label="$i.warehouse.action"
+                        width="80">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">Detail</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$i.warehouse.detail}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -232,7 +232,7 @@
             <el-form ref="qcOrder" :model="productDialogConfig" label-width="120px">
                 <el-row class="speZone">
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="orderNo" label="Order No">
+                        <el-form-item prop="orderNo" :label="$i.warehouse.orderNo">
                             <el-input
                                     class="dialogInput"
                                     size="mini"
@@ -242,7 +242,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="skuCode" label="SKU Code">
+                        <el-form-item prop="skuCode" :label="$i.warehouse.inboundNo">
                             <el-input
                                     class="dialogInput"
                                     size="mini"
@@ -252,7 +252,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="skuBarCode" label="SKU Bar Code">
+                        <el-form-item prop="skuBarCode" :label="$i.warehouse.skuBarCode">
                             <el-input
                                     class="dialogInput"
                                     size="mini"
@@ -262,7 +262,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col class="speCol" :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item prop="skuNameEn" label="SKU Name EN">
+                        <el-form-item prop="skuNameEn" :label="$i.warehouse.skuNameEn">
                             <el-input
                                     class="dialogInput"
                                     size="mini"
@@ -278,21 +278,21 @@
                         type="primary"
                         @click="search"
                         :loading="loadingProductDialogTable"
-                        :disabled="loadingProductDialogTable">Search
+                        :disabled="loadingProductDialogTable">{{$i.warehouse.search}}
                 </el-button>
-                <el-button @click="clear" :disabled="loadingProductDialogTable">Clear</el-button>
+                <el-button @click="clear" :disabled="loadingProductDialogTable">{{$i.warehouse.clear}}</el-button>
             </div>
             <v-table
                     code="uwarehouse_qc_order_detail"
                     v-loading="loadingProductDialogTable"
                     :data="productDialogTableData"
-                    :buttons="[{label: 'Detail', type: 1}]"
+                    :buttons="[{label: $i.warehouse.detail, type: 1}]"
                     @action="btnClick"
                     @change-checked="changeProductDialogChecked">
             </v-table>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">OK</el-button>
-                <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">Cancel
+                <el-button type="primary" :disabled="loadingProductDialogTable" @click="postProduct">{{ $i.warehouse.add }}</el-button>
+                <el-button :disabled="loadingProductDialogTable" @click="productDialogVisible = false">{{$i.warehouse.cancel}}
                 </el-button>
             </div>
         </el-dialog>
