@@ -14,6 +14,8 @@
                     <el-col v-for="v in formColumn" :key="v.key" v-if="v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
                         <el-form-item :prop="v.key" :label="v.label">
                             <div v-if="v.type==='dropdown'">
+                                {{formData[v.key]}}
+                                {{v.key}}
                                 <drop-down-single
                                         class="speLine"
                                         v-model="formData[v.key]"
@@ -280,23 +282,17 @@
                 })
             },
             getUnit(codes){
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res,'单位')
-                // });
-                // this.$ajax.get(this.$apis.get_country).then(res=>{
-                //     console.log(res,'国家')
-                // });
                 const unitAjax=this.$ajax.post(this.$apis.get_partUnit,codes,{cache:true});
                 const countryAjax=this.$ajax.get(this.$apis.get_country,{},{cache:true});
                 return this.$ajax.all([unitAjax,countryAjax]);
             },
-
 
             /**
              *  一些事件
              * */
             search(){
                 this.disabledSearch=true;
+                console.log(this.formData,'this.formData')
                 this.$emit('search',this.$depthClone(this.formData));
             },
             clear(){
