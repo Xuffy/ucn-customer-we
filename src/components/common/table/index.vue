@@ -42,7 +42,7 @@
                 @click="changeSort(item.key)">
               <div>
                 {{item.label}}
-                <div class="sort-box" v-if="!disabledSort || !item._sort">
+                <div class="sort-box" v-if="!disabledSort || item._sort">
                   <i class="el-icon-caret-top"
                      :class="{active:currentSort.orderType === 'asc' && currentSort.orderBy === item.key}"
                      @click.stop="changeSort(item.key,'asc')"></i>

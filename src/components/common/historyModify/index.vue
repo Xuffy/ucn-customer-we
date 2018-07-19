@@ -19,9 +19,10 @@
         :cell-style="setCellStyle"
         :span-method="objectSpanMethod"
         border>
-        <el-table-column v-for="item in dataColumn" :key="item.id"
+        <el-table-column v-for="(item,columnIndex) in dataColumn" :key="item.id"
                          v-if="(!item._hide && !item._hidden) || item._title"
                          min-width="200px"
+                         :fixed="!!item._title"
                          :prop="item.key"
                          :label="item.label">
           <template slot-scope="{ row }" v-if="row[item.key] && !row[item.key]._hide">
@@ -217,11 +218,11 @@
         this.showDialog = true;
         this.isModify = isModify;
 
-          this.$nextTick(() => {
-            this.$refs.filterColumn.update(false, dataList).then(res => {
-              this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
-            });
-          })
+        this.$nextTick(() => {
+          this.$refs.filterColumn.update(false, dataList).then(res => {
+            this.dataList = this.$refs.filterColumn.getFilterData(dataList, res);
+          });
+        })
         return dataList;
 
       },
