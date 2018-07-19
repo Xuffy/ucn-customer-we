@@ -2,7 +2,6 @@ export default {
     qcOrderNo:{
         type:'input',
         disabled:true,
-        isSysGen:true
     },
     qcTypeDictCode:{
         type:'select',
@@ -15,11 +14,9 @@ export default {
     },
     factoryAddress:{
         type:'input',
-        disabled:true
     },
     factoryContactPhone:{
         type:'input',
-        disabled:true,
         _rules:{
             required:true
         }
