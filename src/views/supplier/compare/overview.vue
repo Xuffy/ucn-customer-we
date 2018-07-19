@@ -153,9 +153,9 @@
                   })
             },
             remove() {
-              this.$confirm('确定删除?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
+              this.$confirm(this.$i.common.sureDelete, this.$i.common.prompt, {
+                confirmButtonText: this.$i.common.confirm,
+                cancelButtonText: this.$i.common.cancel,
                 type: 'warning'
               }).then(() => {
                 this.$ajax.post(this.$apis.post_supplier_deleteCompare, this.selectedNumber)
@@ -163,7 +163,7 @@
                     this.selectedNumber = [];
                     this.$message({
                       type: 'success',
-                      message: '删除成功!'
+                      message: this.$i.common.deleteTheSuccess
                     });
                     this.get_data();
                   })
