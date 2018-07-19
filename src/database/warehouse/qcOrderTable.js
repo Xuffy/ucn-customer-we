@@ -6,6 +6,7 @@ export default {
         key: 'qcOrderNo'
     },
     orderNo: {
+        
     },
     qcStatus: {
         key: 'qcStatusDictCode'
