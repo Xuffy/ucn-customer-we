@@ -289,7 +289,7 @@
              *  一些事件
              * */
             search(){
-                // this.disabledSearch=true;
+                this.disabledSearch=true;
                 this.$emit('search',this.$depthClone(this.formData));
             },
             clear(){

@@ -26,12 +26,15 @@
             </div>
         </el-popover>
         <el-input
+                @mouseover.native="handleMouseover"
+                @mouseleave.native="handleMouseLeave"
                 :placeholder="checkInputBoxPl"
                 v-popover:popover5
                 v-model="val[defaultProps.label]"
                 :size="size"
                 readonly>
-            <i @click="clearData" slot="suffix" class="el-icon-arrow-down"></i>
+            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down"></i>
+            <i v-else @click="clearData" slot="suffix" class="el-icon-error"></i>
         </el-input>
     </div>
 </template>
@@ -55,8 +58,9 @@
                 data:[],
                 visible: false,
                 filterText: '',
-                val: '',
+                val: {},
                 copyList:[],
+                showIcon:true
             };
         },
         props: {
@@ -148,7 +152,13 @@
             },
             clearData(){
                 this.selectedList=[];
-                this.val[this.defaultProps.label]=null;
+                this.val[this.defaultProps.label]='';
+            },
+            handleMouseover(){
+                this.showIcon=false;
+            },
+            handleMouseLeave(){
+                this.showIcon=true;
             },
         }
     };
