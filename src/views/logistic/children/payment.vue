@@ -1,8 +1,8 @@
 <template>
   <div class="payment">
-    <el-button v-authorize="auth[pageTypeCurr].PAYMENT_APPLY||''" type="primary" :disabled="addPaymentBtn" size="mini" @click.stop="$emit('addPayment');addPaymentBtn=true;">{{ $i.logistic.applyForPayment }}</el-button>
+    <el-button v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_APPLY||'')" type="primary" :disabled="addPaymentBtn" size="mini" @click.stop="$emit('addPayment');addPaymentBtn=true;">{{ $i.logistic.applyForPayment }}</el-button>
     <el-table ref="table" :row-class-name="tableRowClassName" :data="tableData" border style="width: 100%; margin-top: 20px" show-summary :summary-method="summaryMethod">
-      <el-table-column type="index" width="50" align="center"/>
+      <el-table-column type="index" width="100" align="center"/>
       <el-table-column :label="$i.logistic.paymentNo" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.no }}</span>
@@ -75,16 +75,16 @@
             <el-button size="mini" type="primary" @click.stop="$emit('deletePaymentList', scope.$index)">取消</el-button>
           </div> -->
           <div v-if="scope.row.status === -1">
-            <el-button size="mini" v-authorize="auth[pageTypeCurr].PAYMENT_ACTION||''" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment,$i.logistic.recover)">{{ $i.logistic.recover}}</el-button>
+            <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchStatus(scope.$index, $apis.recover_plan_payment,$i.logistic.recover)">{{ $i.logistic.recover}}</el-button>
           </div>
           <div v-if="scope.row.status === 20 || scope.row.status === 40">
             <div v-if="scope.row.edit">
-              <el-button size="mini" v-authorize="auth[pageTypeCurr].PAYMENT_ACTION||''" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
-              <el-button size="mini" v-authorize="auth[pageTypeCurr].PAYMENT_ACTION||''" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="$emit('savePayment', scope.$index)">{{ $i.logistic.save }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="cancelPaymentModify(scope.$index)">{{ $i.logistic.cancel }}</el-button>
             </div>
             <div v-else>
-              <el-button size="mini" v-authorize="auth[pageTypeCurr].PAYMENT_ACTION||''" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
-              <el-button size="mini" v-authorize="auth[pageTypeCurr].PAYMENT_ACTION||''" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment,$i.logistic.invalid)">{{ $i.logistic.invalid }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchModify(scope.$index)">{{ $i.logistic.modify }}</el-button>
+              <el-button size="mini" v-authorize="auth[pageTypeCurr]&&(auth[pageTypeCurr].PAYMENT_ACTION||'')" type="primary" @click.stop="switchStatus(scope.$index, $apis.abandon_plan_payment,$i.logistic.invalid)">{{ $i.logistic.invalid }}</el-button>
             </div>
           </div>
         </template>
