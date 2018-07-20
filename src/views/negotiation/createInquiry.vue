@@ -194,7 +194,8 @@ export default {
 
       tabColumn: '', // tab top
       tabData: [], // tab Data
-      textarea: ''
+      textarea: '',
+      initDetailIds: []
     }
   },
   components: {
@@ -315,6 +316,7 @@ export default {
             item.entryDt = null;
             item.updateDt = null;
             item.updateName = null;
+            this.initDetailIds.push(item.id);
           }
         }
         this.fromArg = res;
@@ -418,6 +420,9 @@ export default {
         }
       }
 
+      let ids = postData.details.filter(i => i.id).map(i => i.id);
+      postData.deleteDetailIds = this.initDetailIds.filter(i => !ids.includes(i));
+
       this.$ajax.post(this.$apis.POST_INQUIRY_SAVE, postData).then(() => {
         if (!this.fromArg.draft) {
           this.$router.push('/negotiation/inquiry')
@@ -474,7 +479,7 @@ export default {
       return arr;
     },
     changeChecked(item) {
-      this.checkedSkuIds = [...new Set(item.map(i => i.skuId.value))];
+      this.checkedSkuIds = [...new Set(item.filter(i => !i._remark).map(i => i.skuId.value))];
     },
     getList(ids) {
       if (!Array.isArray(ids) || !ids.length) {

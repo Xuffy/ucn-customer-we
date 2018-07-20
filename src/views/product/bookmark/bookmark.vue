@@ -98,7 +98,7 @@
             </div>
         </el-dialog>
 
-        <v-import-template ref="importCategory" code="PRODUCT_PURCHASE" biz-code="PRODUCT_PURCHASE"></v-import-template>
+        <v-import-template ref="importCategory" code="BIZ_SKU_PURCHASE_IMPORT" biz-code="BIZ_SKU_PURCHASE_IMPORT"></v-import-template>
     </div>
 </template>
 <script>

@@ -228,6 +228,12 @@
             },
             //........compare
             compare() {
+              // if(this.selectList.length>100){
+              //   return this.$message({
+              //     message: this.$i.product.compareRecordMustLessThan100,
+              //     type: 'success'
+              //   });
+              // }
                 let id = '';
                 this.selectedData.forEach((v, k) => {
                     let item = _.findWhere(v, {
@@ -240,9 +246,8 @@
                     }
                 });
                 this.$windowOpen({
-                    url: '/supplier/compareDetail/{type}',
+                    url: '/supplier/compareDetail/new',
                     params: {
-                        type: 'new',
                         id: id,
                     }
                 });
@@ -326,7 +331,7 @@
                       if (this.disabledLine.length > 0) {
                         this.disabledLine.forEach(v => {
                           let id = _.findWhere(v, {
-                            key: 'id'
+                            key: 'supplierId'
                           }).value;
                           this.tabData.forEach(m => {
                             let newId = _.findWhere(m, {

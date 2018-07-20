@@ -311,7 +311,6 @@
                 cancelButtonText: this.$i.common.cancel,
                 type: 'warning'
               }).then(() => {
-
                 let params=[];
                 _.map(this.selectedData,v=>{
                   params.push({

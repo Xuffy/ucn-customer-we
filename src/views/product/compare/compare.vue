@@ -238,12 +238,13 @@
                         this.isModify=true;
                     }
                     let params={
-                        id: Number(this.$route.query.compareId),
+                        id: this.$route.query.compareId,
                         pn:1,
                         ps:100
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                            console.log(e,'e')
                             e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
                             e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
                             e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
@@ -725,7 +726,7 @@
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'PRODUCT'},
+                query: {code: 'PURCHASE_SKU'},
                 type: 10,
                 auth:'PRODUCT:LOG',
                 label: this.$i.common.log
