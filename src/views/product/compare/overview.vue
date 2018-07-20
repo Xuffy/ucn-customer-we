@@ -195,8 +195,15 @@
                     type: 'warning'
                 }).then(() => {
                     this.disableClickDeleteBtn=true;
-                    let id=_.pluck(_.pluck(this.selectList,'id'),'value');
-                    this.$ajax.post(this.$apis.delete_buyerProductCompare,id).then(res=>{
+                    // let id=_.pluck(_.pluck(this.selectList,'id'),'value');
+                    let params=[];
+                    _.map(this.selectList,v=>{
+                      params.push({
+                        id:v.id.value,
+                        name:v.name.value
+                      })
+                    });
+                    this.$ajax.post(this.$apis.delete_buyerProductCompare,params).then(res=>{
                         this.getList();
                         this.$message({
                             type: 'success',
@@ -233,7 +240,7 @@
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'PRODUCT'},
+                query: {code: 'PURCHASE_SKU'},
                 type: 10,
                 auth:'PRODUCT:LOG',
                 label: this.$i.common.log

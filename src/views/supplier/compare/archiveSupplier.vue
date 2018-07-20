@@ -184,8 +184,15 @@
           type: 'warning'
         }).then(() => {
           this.disableClickDeleteBtn=true;
-          let id=_.pluck(_.pluck(this.selectList,'id'),'value');
-          this.$ajax.post(this.$apis.post_supplier_recoverCompare, id)
+          let params=[];
+          _.map(this.selectList,v=>{
+            params.push({
+              id:v.id.value,
+              name:v.name.value
+            })
+          });
+          // let id=_.pluck(_.pluck(this.selectList,'id'),'value');
+          this.$ajax.post(this.$apis.post_supplier_recoverCompare, params)
             .then(res => {
               this.disableClickDeleteBtn=false;
               this.$message({
