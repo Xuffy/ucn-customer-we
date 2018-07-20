@@ -41,6 +41,7 @@
                       @click="addNewProduct">{{$i.product.addNew}}</el-button>
                     <el-button
                       v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                      :disabled="!selectList.length>0"
                       @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                 </span>
               <span v-if="$route.params.type==='modify'">
@@ -63,6 +64,7 @@
                     @click="addNewProduct">{{$i.product.addNew}}</el-button>
                   <el-button
                     v-if="isModify"
+                    :disabled="!selectList.length>0"
                     v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                     @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                   <el-button
@@ -544,7 +546,7 @@
               if(n.length>0 && (len-n.length)>=2){
                   this.disableDelete=false;
               }else{
-                  this.disableDelete=true;
+                 this.disableDelete=true;
               }
           },
 
