@@ -67,10 +67,7 @@
         height:500,
         tableLoading: false,
         ls_plan: [],
-        pageParams: {
-          pn: 1,
-          ps: 10
-        },
+        pageParams: null,
         selectCount: [],
         fillterVal: 'all',
         tabData: [],
@@ -276,7 +273,7 @@
       initPage(){
         this.pageParams = {
           pn: 1,
-          ps: 10
+          ps: 50
         };
       },
       download(){
