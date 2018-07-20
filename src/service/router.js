@@ -156,7 +156,7 @@ export const routerMap = [
           name: $i.router.supplierOverview,
           auth: ['SUPPLIER:OVERVIEW']
         },
-        component: () => import ('../views/supplier/sourcing/sourcing.vue'),
+        component: () => import ('../views/supplier/sourcing/sourcing.vue')
       },
       {
         path: 'bookmark',

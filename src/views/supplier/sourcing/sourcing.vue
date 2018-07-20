@@ -228,6 +228,12 @@
             },
             //........compare
             compare() {
+              // if(this.selectList.length>100){
+              //   return this.$message({
+              //     message: this.$i.product.compareRecordMustLessThan100,
+              //     type: 'success'
+              //   });
+              // }
                 let id = '';
                 this.selectedData.forEach((v, k) => {
                     let item = _.findWhere(v, {
@@ -240,9 +246,8 @@
                     }
                 });
                 this.$windowOpen({
-                    url: '/supplier/compareDetail/{type}',
+                    url: '/supplier/compareDetail/new',
                     params: {
-                        type: 'new',
                         id: id,
                     }
                 });
@@ -333,6 +338,8 @@
                               key: 'id'
                             }).value;
                             if (id === newId) {
+                              console.log(m)
+                              console.log(1)
                               m._disabled = true;
                               m._checked = true;
                             }

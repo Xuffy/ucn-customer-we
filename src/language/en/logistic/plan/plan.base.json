@@ -228,5 +228,7 @@
   "isConfirmPeration" : "Confirm Operation？",
   "operationSuccess" : "Success！",
   "operationFailed" : "Failed！",
-  "jumping" : "Jumping..."
+  "jumping" : "Jumping...",
+  "skuQty" : "Purchase QTY",
+  "skuCartonQty" : "Purchase QTY of Outer Carton"
 }

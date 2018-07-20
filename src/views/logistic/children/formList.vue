@@ -16,8 +16,15 @@
 
             <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'selector'&&!($route.name =='logisticDraftDetail' && a.key =='logisticsStatus')">
               <el-select v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
-                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="'el-option-' + item.code"
+                <el-option :label="a.key=='exchangeCurrency' ? item.code : item.name" :value="Number(item.code) || item.code" v-for="item of selectArr[a.key]" :key="item.id"
                   v-if="selectArr[a.key]" />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item :required="a._rules&&a._rules.required" :show-message="false" :label="a.label+'：'" v-if="a.type === 'filterable'">
+              <el-select filterable v-model="a.value" :class="{ definedStyleClass : fieldDisplay&&fieldDisplay.hasOwnProperty(a.key)}" :placeholder="$i.logistic.placeholder" :disabled="a.disabled" @change="selectChange(a.value,a.key)">
+                <el-option :label="item.name" :value="Number(item.code) || item.code" v-for="item of selectArr.country" :key="item.id"
+                  v-if="selectArr.country" />
               </el-select>
             </el-form-item>
 
@@ -104,6 +111,7 @@
         if(key=='exchangeCurrency'){
           this.$emit('selectChange',value); 
         }
+        console.log(value)
         this.$set(this.hightLightModify,key,value);
         this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
       },
@@ -113,6 +121,10 @@
         if (a.type === 'selector' && this.selectArr[a.key]) {
           let obj = this.selectArr[a.key].find(item => item.code == a.value)
           return obj ? a.key=='exchangeCurrency' ? obj.code : obj.name : null
+        }
+        if(a.type === 'filterable' && this.selectArr.country){
+          let obj = this.selectArr.country.find(item => item.code == a.value)
+          return obj ? obj.name : null
         }
       }
     },

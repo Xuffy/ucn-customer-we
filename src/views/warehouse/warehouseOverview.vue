@@ -2,6 +2,13 @@
     <div class="inbound-overview">
         <div class="title">
             <span>{{$i.warehouse.warehouseOverview}}</span>
+            <select-search
+                    :width="200"
+                    style="float: right"
+                    class="search"
+                    @inputEnter="searchInbound"
+                    v-model="searchId"
+                    :options="searchOptions"></select-search>
         </div>
         <div class="body">
             <div class="head">
@@ -10,14 +17,8 @@
                     <el-radio-button label="">{{$i.warehouse.all}}</el-radio-button>
                     <el-radio-button v-for="v in warehouseStatusOption" :key="v.id" :label="v.code">{{v.name}}</el-radio-button>
                 </el-radio-group>
-                <select-search
-                        class="search"
-                        @inputEnter="searchInbound"
-                        v-model="searchId"
-                        :options="searchOptions"></select-search>
+
             </div>
-            <br>
-            <br>
             <div class="section">
                 <v-table
                         code="uwarehouse_overview"
@@ -217,6 +218,9 @@
 </script>
 
 <style scoped>
+    .body{
+        margin-top: 5px;
+    }
     .title{
         font-weight: bold;
         font-size: 18px;
