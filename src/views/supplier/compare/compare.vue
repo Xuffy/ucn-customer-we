@@ -41,6 +41,7 @@
                       @click="addNewProduct">{{$i.product.addNew}}</el-button>
                     <el-button
                       v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
+                      :disabled="!selectList.length>0"
                       @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                 </span>
               <span v-if="$route.params.type==='modify'">
@@ -63,6 +64,7 @@
                     @click="addNewProduct">{{$i.product.addNew}}</el-button>
                   <el-button
                     v-if="isModify"
+                    :disabled="!selectList.length>0"
                     v-authorize="'SUPPLIER:COMPARE_DETAIL:DELETE'"
                     @click="deleteCompare"  type="danger">{{$i.common.remove}}</el-button>
                   <el-button
@@ -86,11 +88,13 @@
             </div>
             <div v-if="$route.params.type==='modify'">
                 <el-button
+                  v-if="isModify"
                   :disabled="allowBottomClick"
                   type="primary"
                   @click='saveCompare'
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                   <el-button
+                    v-if="isModify"
                     :disabled="allowBottomClick"
                     @click="cancelModify" >Cancel</el-button>
             </div>
@@ -407,7 +411,7 @@
                     });
                 });
                 if (this.$route.params.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.id}`,params).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
                       let compareId=res;
                       this.$router.push({
                         name:'supplierCompareDetail',
@@ -544,7 +548,7 @@
               if(n.length>0 && (len-n.length)>=2){
                   this.disableDelete=false;
               }else{
-                  this.disableDelete=true;
+                 this.disableDelete=true;
               }
           },
 
