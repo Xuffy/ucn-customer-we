@@ -429,7 +429,6 @@
           this.addProductFromOrder();
         })
       },
-
       
       ProductFromOrderDetail(e){
         this.$windowOpen({url:'/product/sourcingDetail',params:{id:e.skuId.value}})
