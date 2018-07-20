@@ -39,7 +39,7 @@
             :code="viewByStatus ? 'inquiry_sku_list': 'inquiry_list'"
             hide-filter-value
             :data="tabData"
-            :buttons="[{label: 'detail', type: 'detail'}]"
+            :buttons="[{label: $i.common.detail, type: 'detail'}]"
             :height="450"
             @action="action"
             @change-checked="changeChecked"
