@@ -200,7 +200,6 @@
                     });
                     let time=new Date();
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
-                    console.log(id)
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
@@ -352,7 +351,7 @@
                     });
                 }else{
                     e.forEach(v=>{
-                        let id=_.findWhere(v,{key:'id'}).value;
+                        let id=_.findWhere(v,{key:'supplierId'}).value;
                         let isIn=false;
                         this.tableDataList.forEach(m=>{
                             let newId=_.findWhere(m,{key:'id'}).value;
@@ -363,7 +362,6 @@
                         });
                         if(!isIn){
                             this.tableDataList.push(v);
-                            console.log(this.tableDataList)
                             this.initialData=this.$depthClone(this.tableDataList);
                             this.changeStatus();
 

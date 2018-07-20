@@ -331,15 +331,13 @@
                       if (this.disabledLine.length > 0) {
                         this.disabledLine.forEach(v => {
                           let id = _.findWhere(v, {
-                            key: 'id'
+                            key: 'supplierId'
                           }).value;
                           this.tabData.forEach(m => {
                             let newId = _.findWhere(m, {
                               key: 'id'
                             }).value;
                             if (id === newId) {
-                              console.log(m)
-                              console.log(1)
                               m._disabled = true;
                               m._checked = true;
                             }
