@@ -182,30 +182,32 @@
                 });
             },
             onAction(item) {
-                this.$windowOpen({
-                    url: '/order/create',
-                    params: {
-                        orderId: item.id.value
+                this.$ajax.post(this.$apis.ORDER_DETAIL,{
+                    orderId:item.id.value
+                }).then(res=>{
+                    if(res.draftCustomer){
+                        this.$windowOpen({
+                            url: '/order/create',
+                            params: {
+                                orderId: item.id.value
+                            }
+                        });
+                    }else{
+                        this.$alert(this.$i.order.orderHasBeenSent, this.$i.order.prompt, {
+                            confirmButtonText: this.$i.order.sure,
+                            callback: action => {
+                                this.getData();
+                            }
+                        });
                     }
-                });
-            },
-            createOrder() {
-                this.$windowOpen({
-                    url: '/order/create'
-                });
+                })
+
             },
             selectChange(val) {
                 this.keyType = val;
             },
             checked(item) {
                 this.selectedList = item;
-            },
-            changeStatus() {
-                if (this.params.view === '1') {
-                    this.getData();
-                } else {
-                    this.getData();
-                }
             },
             changeView() {
                 this.disableFinish=true;
@@ -231,37 +233,6 @@
                     this.getData()
                 }
             },
-            finish() {
-                let ids=[];
-                _.map(this.selectedList,v=>{
-                    ids.push(v.id.value);
-                });
-                this.$ajax.post(this.$apis.ORDER_FINISH, {
-                    draftCustomer: false,
-                    draftSupplier: false,
-                    ids:ids,
-                    recycleCustomer: false,
-                    recycleSupplier: false,
-                })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            download() {
-                this.$ajax.post(this.$apis.download_order, {
-                    ids: this.selectedNumber
-                })
-                    .then((res) => {
-                        console.log(res)
-                    })
-                    .catch((res) => {
-                        console.log(res)
-                    });
-            },
-            //get_orderlist数据
             getData(e) {
                 this.loading = true;
                 let url='',query='';
