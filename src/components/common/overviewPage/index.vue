@@ -230,7 +230,6 @@
                 if(param){
                     Object.assign(this.formData,param);
                 }
-                this.formData.supplierNameLike='123';
                 if(allDefault){
                     this.showAdvancedBtn=false;
                 }else{
