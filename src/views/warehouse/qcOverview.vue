@@ -122,6 +122,7 @@
                 if (val.id === 1) {
                     this.params.qcOrderNo = val.value ? val.value : "";
                     this.params.orderNo = "";
+                    
                 } else {
                     this.params.orderNo = val.value ? val.value : "";
                     this.params.qcOrderNo = "";
