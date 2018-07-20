@@ -111,6 +111,7 @@ export default {
       } else {
         column = this.$db.inquiry.viewBySKU;
       }
+      column.supplierName._sort = false;
       this.$ajax.post(url, this.postParams).then(res => {
         this.postParams.tc = res.tc;
         this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
@@ -120,6 +121,9 @@ export default {
       });
     },
     onListSortChange(args) {
+      if (args.sorts.map(s => s.orderBy).includes('supplierName')) {
+        return;
+      }
       this.postParams.sorts = args.sorts;
       this.getList();
     },
