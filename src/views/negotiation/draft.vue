@@ -141,17 +141,7 @@ export default {
       });
     },
     changeChecked(item) { // 选中的list
-      let arr = [];
-      if (this.viewByStatus === 0) {
-        item.forEach(item => {
-          arr.push(item.id.value);
-        });
-      } else {
-        item.forEach(item => {
-          arr.push(item.inquiryId.value);
-        });
-      }
-      this.checkedArg = arr;
+      this.checkedArg = [...new Set(item.map(i => i.id.value))];
     },
     getList() {
       switch (this.$route.params.type) {

@@ -99,7 +99,10 @@
              * 表格事件
              * */
             getData(query){
-                Object.assign(this.queryConfig,query);
+                if(query && !query.categoryId){
+                    query.categoryId=null;
+                }
+                _.extend(this.queryConfig,query);
                 let params=this.$depthClone(this.queryConfig);
                 if(_.isArray(params.country)){
                     params.country=params.country.join(',');
@@ -219,7 +222,6 @@
                         message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
-                    this.getData();
                 }).finally(() => {
                     this.loadingAddBookmark = false;
                 });

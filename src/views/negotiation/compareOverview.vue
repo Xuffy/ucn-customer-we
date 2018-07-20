@@ -3,8 +3,8 @@
         <h3 class="hd">{{ $i.common.compareOverview }}</h3>
         <div class="status">
             <div class="btn-wrap">
-                <el-button :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedArg.length>0?checkedArg.length:'all'})` }}</el-button>
-                <el-button type="danger" @click="compareDelete" :disabled="checkedArg.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.archive}(${checkedArg.length})`}}</el-button>
+                <el-button @click="exportDatas" :disabled="tabData.length<=0">{{ `${$i.common.download}(${checkedIds.length>0?checkedIds.length:'all'})` }}</el-button>
+                <el-button type="danger" @click="compareDelete" :disabled="checkedIds.length <= 0" v-authorize="'INQUIRY:COMPARE_OVERVIEW:DELETE'">{{ `${$i.common.archive}(${checkedIds.length})`}}</el-button>
             </div>
             <select-search :options="options" @inputEnter="inputEnter"/>
         </div>
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       pageTotal: 0,
-      checkedArg: [],
+      checkedIds: [],
       tabData: [],
       options: [{
         id: 'compareName',
@@ -102,11 +102,7 @@ export default {
       });
     },
     changeChecked(item) { // 选中的compare
-      let arr = [];
-      item.forEach(item => {
-        arr.push(item.id.value);
-      });
-      this.checkedArg = arr;
+      this.checkedIds = item.map(i => i.id.value);
     },
     compareDelete() { // 删除compare
       this.$confirm(this.$i.common.confirmDeletion, this.$i.common.prompt, {
@@ -114,9 +110,9 @@ export default {
         cancelButtonText: this.$i.common.cancel,
         type: 'warning'
       }).then(() => {
-        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedArg).then(res => {
+        this.$ajax.post(this.$apis.POST_INQUIRY_COMPARE_DELETE, this.checkedIds).then(res => {
           this.getList();
-          this.checkedArg = [];
+          this.checkedIds = [];
         });
       });
     },
@@ -128,6 +124,15 @@ export default {
         this.bodyData.operatorFilters = operatorFilters;
       }
       this.getList();
+    },
+    exportDatas() {
+      let params = this.$depthClone(this.bodyData);
+      if (this.checkedIds.length) {
+        params.ids = this.checkedIds;
+      } else {
+        delete params.ids;
+      }
+      this.$fetch.export_task('INQUIRY_COMPARE', params);
     },
     handleSizeChange(val) {
       this.bodyData.pn = val;

@@ -9,7 +9,7 @@
                  <el-form  label-width="190px">
                     <el-row>
                       <el-row>
-                        <el-col :span="4">
+                        <el-col :span="4" class="img-box">
                           <v-image :src="basicDate.logo" style="height: 184px;"/>
                         </el-col>
                         <el-col :span="20">
@@ -18,9 +18,9 @@
                               <el-col
                                 v-for='(item,index) in $db.supplier.detail'
                                 :key='index'
-                                :xs="24" :sm="item.fullLine?24:8" :md="item.fullLine?24:8" :lg="item.fullLine?24:8" :xl="item.fullLine?24:8"
+                                :xs="24" :sm="item.fullLine?24:24" :md="item.fullLine?24:12" :lg="item.fullLine?24:12" :xl="item.fullLine?24:8"
                               >
-                                <el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">
+                                <el-form-item label-width="190px" :prop="item.key" :label="item.label+' :'">
                                   {{basicDate[item.key]}}
                                 </el-form-item>
                               </el-col>
@@ -28,17 +28,6 @@
                           </el-form>
                         </el-col>
                       </el-row>
-                        <!--<el-row class="right">-->
-                            <!--<el-col class="list" :xs="24" :sm="12" :md="8" :lg="8" :xl="8"-->
-                                   <!--v-for='(item,index) in $db.supplier.detail'-->
-                                   <!--:key='index'-->
-                                   <!--&gt;-->
-                                    <!--<el-form-item label-width="260px" :prop="item.key" :label="item.label+' :'">-->
-                                       <!--{{basicDate[item.key]}}-->
-                                    <!--</el-form-item>-->
-                            <!--</el-col>-->
-                        <!--</el-row>-->
-
                 </el-row>
                   </el-form>
                 <div class="btns" v-if="noEdit">
@@ -697,40 +686,8 @@
       height: 200px;
       line-height: 200px;
     }
-    /*
-    .attchment {
-        display: flex;
-        justify-content: flex-start;
-        height: 400px;
+    .img-box{
+      height: 184px;background-color: #f9f9f9;
     }
-
-    .attchment_item {
-        width: 180px;
-        height: 60px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        border: 1px solid #BEBEBE;
-        border-radius: 3px;
-        margin-left: 20px;
-    }
-
-    .attchment_item_content {
-        width: 180px;
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
-    }
-
-    .attchment_item p {
-        font-size: 14px;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .attchment_item i {
-        font-size: 40px;
-    }
-*/
 
 </style>

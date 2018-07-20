@@ -12,7 +12,7 @@
             <el-form :label-width="`${labelWidth}px`">
                 <el-row>
                     <el-col v-for="v in formColumn" :key="v.key" v-if="v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :prop="v.key" :label="v.label">
+                        <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
                                         class="speLine"
@@ -47,7 +47,7 @@
             <el-form :model="formData" ref="formData" class="body" :class="{hide:hideBody}" :label-width="`${labelWidth}px`">
                 <el-row>
                     <el-col class="search-item" v-for="v in formColumn" :key="v.key" v-if="!v._isDefaultShow"  :xs="24" :sm="12" :md="12" :lg="8" :xl="8">
-                        <el-form-item :prop="v.key" :label="v.label">
+                        <el-form-item :prop="v.key" :label="`${v.label} :`">
                             <div v-if="v.type==='dropdown'">
                                 <drop-down-single
                                         class="speLine"

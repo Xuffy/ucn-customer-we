@@ -15,25 +15,26 @@
                             default-expand-all
                             ref="tree"
                             :empty-text="emptyText"
-                            :data="list"
+                            :data="copyList"
                             node-key="id"
                             :props="defaultProps"
                             :expand-on-click-node="expandOnClickNode"
                             @node-click="getChecked"
-                            :filter-node-method="filterNode"
-                    >
+                            :filter-node-method="filterNode">
                     </el-tree>
                 </div>
             </div>
         </el-popover>
         <el-input
+                @mouseover.native="handleMouseover"
+                @mouseleave.native="handleMouseLeave"
                 :placeholder="checkInputBoxPl"
                 v-popover:popover5
                 v-model="val[defaultProps.label]"
-                suffix-icon="el-icon-arrow-down"
                 :size="size"
-                readonly
-        >
+                readonly>
+            <i v-if="showIcon" slot="suffix" class="el-icon-arrow-down"></i>
+            <i v-else @click="clearData" slot="suffix" class="el-icon-error"></i>
         </el-input>
     </div>
 </template>
@@ -57,7 +58,9 @@
                 data:[],
                 visible: false,
                 filterText: '',
-                val: ''
+                val: {},
+                copyList:[],
+                showIcon:true
             };
         },
         props: {
@@ -119,9 +122,12 @@
                 this.$emit('input', val.id);
             },
             value(val) {
-                if(!val) return this.val = '';
-                this.setInput(this.list, this.value);
-            }
+                if(!val) return this.val = {};
+                this.setInput(this.$depthClone(this.list), this.value);
+            },
+            list(n){
+                this.copyList=this.$depthClone(n);
+            },
         },
         mounted() {
             this.setInput(this.list, this.value);
@@ -143,7 +149,17 @@
             filterNode(value, data) {
                 if (!value) return true;
                 return data[this.defaultProps.label].indexOf(value) !== -1;
-            }
+            },
+            clearData(){
+                this.selectedList=[];
+                this.val[this.defaultProps.label]='';
+            },
+            handleMouseover(){
+                this.showIcon=false;
+            },
+            handleMouseLeave(){
+                this.showIcon=true;
+            },
         }
     };
 </script>

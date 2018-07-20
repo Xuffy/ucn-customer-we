@@ -307,37 +307,38 @@
                 this.isModify=true;
             },
             cancelModify(){
-                this.disableClickCancel=true;
-                this.loadingTable=true;
-                this.compareName=this.$route.query.compareName;
-                let params={
-                    id: Number(this.$route.query.compareId),
-                    pn: 1,
-                    ps: 100,
-                    recycle: false,
-                };
-                this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
-                    this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                        if(e.status.value===1){
-                            e.status.value='上架';
-                        }else if(e.status.value===0){
-                            e.status.value='下架';
-                        }
-                        return e;
-                    });
-                    this.hasLoading=true;
-                    this.disabledLine=this.tableDataList;
-                    this.allowDeleteCompare=false;
-                    this.allowBottomClick=false;
-
-                    //额外操作
-                    this.isModify=false;
-                    this.disableClickCancel=false;
-                    this.loadingTable=false;
-                }).catch(err=>{
-                    this.disableClickCancel=false;
-                    this.loadingTable=false;
-                });
+                // this.disableClickCancel=true;
+                // this.loadingTable=true;
+                // this.compareName=this.$route.query.compareName;
+                // let params={
+                //     id: Number(this.$route.query.compareId),
+                //     pn: 1,
+                //     ps: 100,
+                //     recycle: false,
+                // };
+                this.getList();
+                // this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
+                //     this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
+                //         if(e.status.value===1){
+                //             e.status.value='上架';
+                //         }else if(e.status.value===0){
+                //             e.status.value='下架';
+                //         }
+                //         return e;
+                //     });
+                //     this.hasLoading=true;
+                //     this.disabledLine=this.tableDataList;
+                //     this.allowDeleteCompare=false;
+                //     this.allowBottomClick=false;
+                //
+                //     //额外操作
+                //     this.isModify=false;
+                //     this.disableClickCancel=false;
+                //     this.loadingTable=false;
+                // }).catch(err=>{
+                //     this.disableClickCancel=false;
+                //     this.loadingTable=false;
+                // });
             },
             createInquiry(){
                 if(this.selectList.length===0){

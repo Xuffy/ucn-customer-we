@@ -582,16 +582,15 @@
                             e._disabled=true;
                         }
                         e.deliveryDate._value=this.$dateFormat(e.deliveryDate.value,'yyyy-mm-dd');
-                        e.skuUnitDictCode._value=e.skuUnitDictCode.value?_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}).name:'';
-                        e.volumeUnitDictCode._value=e.volumeUnitDictCode.value?_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}).name:'';
-                        e.weightUnitDictCode._value=e.weightUnitDictCode.value?_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}).name:'';
-                        e.lengthUnitDictCode._value=e.lengthUnitDictCode.value?_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}).name:'';
-
-                        e.skuBarCodeResultDictCode._value=e.skuBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}).name:'';
-                        e.innerPackingBarCodeResultDictCode._value=e.innerPackingBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}).name:'';
-                        e.skuLabelResultDictCode._value=e.skuLabelResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}).name:'';
-                        e.outerCartonBarCodeResultDictCode._value=e.outerCartonBarCodeResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}).name:'';
-                        e.shippingMarkResultDictCode._value=e.shippingMarkResultDictCode.value?_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}).name:'';
+                        e.skuUnitDictCode._value=(_.findWhere(this.skuUnitOption,{code:e.skuUnitDictCode.value}) || {}).name;
+                        e.volumeUnitDictCode._value=(_.findWhere(this.volumeOption,{code:e.volumeUnitDictCode.value}) || {}).name;
+                        e.weightUnitDictCode._value=(_.findWhere(this.weightOption,{code:e.weightUnitDictCode.value}) || {}).name;
+                        e.lengthUnitDictCode._value=(_.findWhere(this.lengthOption,{code:e.lengthUnitDictCode.value}) || {}).name;
+                        e.skuBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuBarCodeResultDictCode.value}) || {}).name;
+                        e.innerPackingBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.innerPackingBarCodeResultDictCode.value}) || {}).name;
+                        e.skuLabelResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.skuLabelResultDictCode.value}) || {}).name;
+                        e.outerCartonBarCodeResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.outerCartonBarCodeResultDictCode.value}) || {}).name;
+                        e.shippingMarkResultDictCode._value=(_.findWhere(this.pbCodeOption,{code:e.shippingMarkResultDictCode.value}) || {}).name;
                         return e;
                     });
                     let diffData=[];

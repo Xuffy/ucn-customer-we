@@ -8,10 +8,6 @@
         <div class="basic-info">
           <div class="basesic-hd">
             <h5>{{ $i.common.basicInfo }}</h5>
-            <!-- <el-checkbox-group v-model="ChildrenCheckList">
-                <el-checkbox :label="0">{{ $i.common.hideTheSame }}</el-checkbox>
-                <el-checkbox :label="1">{{ $i.common.highlightTheDifferent }}</el-checkbox>
-            </el-checkbox-group> -->
           </div>
           <div class="tab-msg-wrap">
             <v-table
@@ -55,7 +51,7 @@
             <el-button @click="$router.push({'path': '/negotiation/createInquiry', query: {'id': $route.query.id, 'from': 'copy'}})" v-authorize="'INQUIRY:DETAIL:COPY'">{{ $i.common.copy }}</el-button>
             <!-- <el-button type="danger" @click="deleteInquiry" :disabled="tabData[0].status.originValue + ''!=='99'||tabData[0].status.originValue+''!=='1'" v-authorize="'INQUIRY:DETAIL:DELETE'">{{ $i.common.archive }}</el-button> -->
             <el-button @click="statusModify = true" :disabled="tabData[0].status.originValue !== 22" v-authorize="'INQUIRY:DETAIL:MODIFY'">{{ $i.common.modify }}</el-button>
-            <el-button>{{ $i.common.download }}</el-button>
+            <el-button @click="exportDatas">{{ $i.common.download }}</el-button>
             <el-button type="warning" v-authorize="'INQUIRY:DETAIL:CANCEL_INQUIRY'" @click="ajaxInqueryAction('cancel')" :disabled="![21, 22].includes(tabData[0].status.originValue)">{{ $i.common.cancel }}</el-button>
             <el-button type="danger" @click="ajaxInqueryAction('delete')" :disabled="tabData[0].status.originValue !== 1">{{ $i.common.archive }}</el-button>
           </div>
@@ -94,14 +90,8 @@
 </template>
 <script>
 /**
- * @param ChildrenCheckList Basic Info 多选框选中值
- * @param keyWord search框 值
- * @param value 下拉框选中的值
  * @param options 下拉框原始数据
- * @param list 留言板list
- * @param submit 留言 Events
  * @param switchStatus 留言板状态
- * @param boardSwitch 留言板开关 Events
  */
 import {
   VMessageBoard,
@@ -121,7 +111,6 @@ export default {
     return {
       disabledLine: [],
       trig: 0,
-      disabledTabData: [],
       id: null,
       compareLists: false,
       tabData: [],
@@ -130,21 +119,13 @@ export default {
       newProductTabData: [],
       tableLoad: true,
       checkedAll: '',
-      msgTableType: false,
       historyColumn: {},
-      msgTitle: '',
-      historyData: [],
       radio: 'product',
       oSwitch: false, // VHistory 组件开关状态
       statusModify: false,
       newSearchDialogVisible: false,
       compareConfig: [],
-      ChildrenCheckList: [],
-      keyWord: '',
-      value: '',
       switchStatus: false,
-      list: [],
-      tableColumn: '',
       deleteDetailIds: [],
       idType: '',
       params: {
@@ -153,7 +134,8 @@ export default {
         operatorFilters: [],
         sorts: []
       },
-      chatParams: null
+      chatParams: null,
+      custom: null
     };
   },
   components: {
@@ -210,6 +192,9 @@ export default {
     if (this.$localStore.get('$in_quiryCompare')) {
       this.compareConfig = this.$localStore.get('$in_quiryCompare');
     }
+    this.$ajax.post(this.$apis.POST_MY_CUSTOM).then(res => {
+      this.custom = res;
+    });
     Promise.all([codeUtils.getInquiryDicCodes(this), codeUtils.getCotegories(this)]).then(res => {
       let data = res[0];
       if (res[1]) {
@@ -217,20 +202,6 @@ export default {
       }
       this.setDic(data);
     }).then(this.getInquiryDetail, this.getInquiryDetail);
-  },
-  watch: {
-    ChildrenCheckList(val) {
-      let data = this.tabData;
-      val.forEach(item => {
-        if (item === 0) {
-          data = this.$table.setHideSame(this.tabData);
-        }
-        if (item === 1) {
-          data = this.$table.setHighlight(this.tabData);
-        }
-      });
-      this.newTabData = data;
-    }
   },
   methods: {
     ...mapActions(['setMenuLink', 'setDic']),
@@ -242,7 +213,7 @@ export default {
       }).then(() => {
         this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {
           action: 'delete',
-          ids: [this.$route.query.id]
+          ids: [this.id]
         }).then(() => {
           this.$router.push('/negotiation/inquiry');
         });
@@ -369,6 +340,11 @@ export default {
       if(!this.id) return;
       let url = this.$apis.parse(this.$apis.GET_INQIIRY_DETAIL_LIST, {id: this.id});
       this.$ajax.post(url, this.params).then(this.showDetails);
+    },
+    exportDatas() {
+      if (this.id) {
+        this.$fetch.export_task('INQUIRY_ORDER', {'draft': 0, 'recycleCustomer': false, 'id': this.id});
+      }
     },
     onListSortChange(args) {
       this.params.sorts = args.sorts;
@@ -526,6 +502,38 @@ export default {
         this.onSwitch = true;
       }
     },
+    computePrice(item, field) {
+      if (item._remark || !this.custom || !['skuExwPrice', 'skuFobPrice', 'skuCifPrice', 'skuOuterCartonQty', 'skuOuterCartonVolume'].includes(field)) {
+        return;
+      }
+      let outerCartonQty = item.skuOuterCartonQty.value; // 外箱产品数量
+      let outerCartonVolume = item.skuOuterCartonVolume.value; // 外箱体积
+      let exchangeRate = this.custom.exchangeRate; // 汇率
+      if (field === 'skuExwPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let exwPrice = item.skuExwPrice.value;
+        if (!codeUtils.isUndefinedOrNull(exwPrice, outerCartonVolume, outerCartonQty, exchangeRate)) {
+          let fob = exwPrice + 6500 / 68 * outerCartonVolume / outerCartonQty / exchangeRate * 1.05;
+          item.skuRefFobPrice.value = Number(fob.toFixed(8));
+        }
+      }
+      if (field === 'skuFobPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let fobPrice = item.skuFobPrice.value;
+        let oceanFreight = this.custom.oceanFreightUSD40HC; // 海运费
+        let insuranceExpenses = this.custom.insuranceExpensesUSD40HC; // 保险费
+        if (!codeUtils.isUndefinedOrNull(fobPrice, outerCartonQty, outerCartonVolume, oceanFreight, insuranceExpenses)) {
+          let cif = fobPrice + (oceanFreight + insuranceExpenses) / 68 * outerCartonVolume / outerCartonQty;
+          item.skuRefCifPrice.value = Number(cif.toFixed(8));
+        }
+      }
+      if (field === 'skuCifPrice' || field === 'skuOuterCartonQty' || field === 'skuOuterCartonVolume') {
+        let cifPrice = item.skuCifPrice.value;
+        let portWarehouse = this.custom.portWarehousePrice40HC; // 港口到仓库运费
+        if (!codeUtils.isUndefinedOrNull(cifPrice, outerCartonQty, outerCartonVolume, portWarehouse)) {
+          let ddu = cifPrice + portWarehouse / 68 * outerCartonVolume / outerCartonQty / this.exchangeRate;
+          item.skuRefDduPrice.value = Number(ddu.toFixed(8));
+        }
+      }
+    },
     // 获取选中的单 集合
     changeChecked(item) {
       this.checkedAll = item.filter(i => !i._remark);
@@ -536,9 +544,11 @@ export default {
     },
     // 接受单
     ajaxInqueryAction(type) {
-      this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: [this.$route.query.id]}).then(() => {
-        this.$router.push('/negotiation/inquiry');
-      });
+      if (this.id) {
+        this.$ajax.post(this.$apis.POST_INQUIRY_ACTION, {action: type, ids: [this.id]}).then(() => {
+          this.$router.push('/negotiation/inquiry');
+        });
+      }
     },
     // 删除product 某个单
     removeProduct() {

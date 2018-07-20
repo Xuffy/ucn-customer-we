@@ -55,14 +55,21 @@
          <template slot="header">
            <div v-show='isButton'>
              <div class="btnline">
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'" @click='createInquiry'>{{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'" @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">{{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'" @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>{{$i.common.compare}}({{selectNumber.length}})</el-button>
-               <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'" @click='addToBookmark' :disabled='!(selectedData.length)>0'>{{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_INQUIRY'"
+                          @click='createInquiry'>
+                      {{$i.common.creatInquiry}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:CREATE_ORDER'"
+                          @click='createOrder' :class="(selectedData.length>1)?'disabledBtn':'' ">
+                      {{$i.common.creatOrder}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:COMPARE'"
+                          @click='compare' :disabled='!(selectedData.length>1) || (selectedData.length>=100)'>
+                      {{$i.common.compare}}({{selectNumber.length}})</el-button>
+               <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'"
+                          @click='addToBookmark' :disabled='!(selectedData.length)>0'>
+                      {{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
                <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
-                 {{$i.common.download}}
-                 ({{selectNumber.length===0?$i.product.all:selectNumber.length}})
-               </el-button>
+                      {{$i.common.download}}
+                      ({{selectNumber.length===0?$i.product.all:selectNumber.length}})</el-button>
              </div>
            </div>
          </template>
@@ -115,7 +122,6 @@
                 btnInfo: 'Show the Advance',
                 loading: false,
                 pageTotal: "",
-                endpn: "",
                 params: {
                     // description: "",
                     name: '',
@@ -148,11 +154,11 @@
             ]),
             handleSizeChange(val) {
               this.params.pn = val;
-              this.get_data();
+              this.getData();
             },
             pageSizeChange(val) {
               this.params.ps = val;
-              this.get_data();
+              this.getData();
             },
             //切换body的收缩展开状态
             switchDisplay() {
@@ -162,7 +168,6 @@
             //清除填写的表格数据
             clear(name) {
                 this.$refs[name].resetFields();
-
             },
             //当作为主键时
             emitData() {
@@ -170,7 +175,7 @@
             },
             //搜查
             search() {
-                this.get_data();
+                this.getData();
                 this.selectNumber = [];
                 this.selectedData = [];
             },
@@ -275,7 +280,7 @@
           //...............sort
           sort(item){
                this.params.sorts =  item.sorts;
-               this.get_data();
+               this.getData();
           },
           //获取字典
           getCodePart(){
@@ -290,13 +295,13 @@
           getCountryAll(){
             this.$ajax.get(this.$apis.GET_COUNTRY_ALL).then(res=>{
               this.countryOption = res
-              this.get_data();
+              this.getData();
             }).catch(err=>{
               console.log(err)
             });
           },
           //.....拿数据
-          get_data() {
+          getData() {
               this.loading = true
               this.$ajax.post(this.$apis.get_listSupplier, this.params)
                   .then(res => {
@@ -370,7 +375,7 @@
               let {operatorFilters,sorts}=val;
               this.params.operatorFilters=operatorFilters||[];
               this.params.sorts=sorts||[];
-              this.get_data();
+              this.getData();
             },
             download(){
               let ids=_.pluck(_.pluck(this.selectedData,"id"),'value');
@@ -386,11 +391,6 @@
         created() {
             this.getCodePart();
             this.getCountryAll();
-            this.getCategoryId();
-            // this.setRecycleBin({
-            //     name: 'bookmarkRecycleBin',
-            //     show: true
-            // });
         },
         mounted(){
           this.setMenuLink({

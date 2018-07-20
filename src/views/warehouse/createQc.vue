@@ -15,7 +15,7 @@
                                       :required="v.isServiceName?true:(v._rules?v._rules.required:false)">
                             <div v-if="v.type==='input'">
                                 <el-input
-                                        :disabled="v.isSysGen || v.isServiceFill"
+                                        :disabled="v.disabled || v.isServiceFill"
                                         :placeholder="v.isSysGen?$i.warehouse.systemGeneration:(v.isServiceFill?$i.warehouse.serviceFill:$i.warehouse.pleaseInput)"
                                         v-model="qcOrderConfig[v.key]">
                                 </el-input>
@@ -411,6 +411,33 @@
             };
         },
         methods: {
+
+            getQcNo(){
+                this.loadingData=true;
+                this.$ajax.post(this.$apis.GET_WAREHOUSE_NO,{
+                    type:'qc_order_no'
+                }).then(res=>{
+                    this.qcOrderConfig.qcOrderNo=res.content;
+                    this.getService();
+                    this.getUnit();
+                    if (this.$route.query.ids) {
+                        this.productConfig.orderNo = this.$route.query.orderNo;
+                        this.productConfig.ids = this.$route.query.ids.split(",");
+                        this.loadingProductTable = true;
+                        this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
+                            res.forEach(v => {
+                                if (v.id !== 0) {
+                                    this.productTableData.push(v);
+                                }
+                            });
+                        }).finally(err => {
+                            this.loadingProductTable = false;
+                        });
+                    }
+                }).catch(err=>{
+                    this.loadingData=false;
+                })
+            },
             submit() {
                 if (this.$validateForm(this.qcOrderConfig, this.$db.warehouse.qcOrderDetailBasicInfo)) {
                     return;
@@ -572,7 +599,7 @@
 
                 this.productDialogVisible = false;
                 if (this.productConfig.ids.length !== 0) {
-                    this.productConfig.orderNo = this.productDialogTableData[0].orderNo.value;
+                    this.productConfig.orderNo = '';
                     this.loadingProductTable = true;
                     this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
                         this.loadingProductTable = false;
@@ -711,22 +738,7 @@
             }
         },
         created() {
-            this.getService();
-            this.getUnit();
-            if (this.$route.query.ids) {
-                this.productConfig.orderNo = this.$route.query.orderNo;
-                this.productConfig.ids = this.$route.query.ids.split(",");
-                this.loadingProductTable = true;
-                this.$ajax.post(this.$apis.get_qcProductData, this.productConfig).then(res => {
-                    res.forEach(v => {
-                        if (v.id !== 0) {
-                            this.productTableData.push(v);
-                        }
-                    });
-                }).finally(err => {
-                    this.loadingProductTable = false;
-                });
-            }
+            this.getQcNo();
         },
         mounted() {
             this.loadingData = true;

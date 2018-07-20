@@ -14,43 +14,43 @@ export default{
     inboundSkuId:{
         _hide:true
     },
-    SKUQCResult: {
+    skuQcResultDictCode: {
         key: 'skuQcResultDictCode',
         type: 'String'
     },
-    SKUInventoryStatus:{
+    skuInventoryStatusDictCode:{
         key: 'skuInventoryStatusDictCode',
         type: 'String'
     },
-    SKUCode: {
+    skuCode: {
         key: 'skuCode',
         type: 'String'
     },
-    custermerSKUCode: {    
+    customerSkuCode: {
         key: 'customerSkuCode',
         type: 'String'
     },
-    factorySKUCode: {
+    factorySkuCode: {
         key: 'factorySkuCode',
         type: 'String'
     },
-    SKUNameCN: {
+    skuNameCn: {
         key: 'skuNameCn',
         type: 'String'
     },
-    brand: {
+    skuBrand: {
         key: 'skuBrand',
         type: 'String'
     },
-    productDesign: {
+    skuDesign: {
         key: 'skuDesign',
         type: 'String'
     },
-    packingMethodCN: {
+    packingMethodCn: {
         key: 'packingMethodCn',
         type: 'String'
     },
-    packingMethodOfInnerCartonCN: {
+    innerCartonPackingMethodCn: {
         key: 'innerCartonPackingMethodCn',
         type: 'String'
     },
@@ -62,15 +62,15 @@ export default{
         key: 'skuUnitDictCode',
         type: 'String'
     },
-    unitLength: {
+    lengthUnitDictCode: {
         key: 'lengthUnitDictCode',
         type: 'String'
     },
-    unitVolume: {
+    volumeUnitDictCode: {
         key: 'volumeUnitDictCode',
         type: 'String'
     },
-    unitWeight: {
+    weightUnitDictCode: {
         key: 'weightUnitDictCode',
         type: 'String'
     },
@@ -83,7 +83,7 @@ export default{
         type: 'Number',
         _calculate:true
     },
-    expectQCQTY: {
+    expectQcQty: {
         key: 'expectQcQty',
         type: 'Number',
         _calculate:true
@@ -96,35 +96,35 @@ export default{
         key: 'unqualifiedProcessingMode',
         type: 'String'
     },
-    totalOuterCartonQuantity: {
+    outerCartonTotalQty: {
         key: 'outerCartonTotalQty',
         type: 'Number'
     },
-    SKULength: {
+    skuLength: {
         key: 'skuLength',
         type: 'Number'
     },
-    SKUWidth: {
+    skuWidth: {
         key: 'skuWidth',
         type: 'Number'
     },
-    SKUHeigh: {
+    skuHeight: {
         key: 'skuHeight',
         type: 'Number'
     },
-    SKUNetWeight:{
+    skuNetWeight:{
         key: 'skuNetWeight',
         type: 'Number'
     },
-    SKUQuantityOfOuterCarton:{
+    outerCartonSkuQty:{
         key: 'outerCartonSkuQty',
         type: 'Number'
     },
-    actQuantityOuterCarton:{
+    actOuterCartonSkuQty:{
         key: 'actOuterCartonSkuQty',
         type: 'Number'
     },
-    quantityOfInnerBoxOuterCarton:{
+    outerCartonInnerBoxQty:{
         key: 'outerCartonInnerBoxQty',
         type: 'Number'
     },
@@ -132,7 +132,7 @@ export default{
         key: 'actOuterCartonInnerBoxQty',
         type: 'Number'
     },
-    SKUQuantityOfInnerCarton:{
+    innerCartonSkuQty:{
         key: 'innerCartonSkuQty',
         type: 'Number'
     },
@@ -251,7 +251,7 @@ export default{
         key: 'unqualifiedType',
         type: 'String',
     },
-    SKUBarCode:{
+    skuBarCode:{
         key: 'skuBarCode',
         type: 'String'
     },
@@ -259,7 +259,7 @@ export default{
         key: 'skuBarCodeResultDictCode',
         type: 'String'
     },
-    SKULabel:{
+    skuLabel:{
         key: 'skuLabel',
         type: 'String'
     },
@@ -283,7 +283,7 @@ export default{
         key: 'outerCartonBarCodeResultDictCode',
         type: 'String'
     },
-    shippingMarks:{
+    shippingMark:{
         key: 'shippingMark',
         type: 'String'
     },
@@ -291,7 +291,7 @@ export default{
         key: 'shippingMarkResultDictCode',
         type: 'String'
     },
-    QCPic:{
+    qcPics:{
         key: 'qcPics',
         type: 'String',
         _image:true
