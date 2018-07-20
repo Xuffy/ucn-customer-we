@@ -67,10 +67,7 @@
         height:500,
         tableLoading: false,
         ls_plan: [],
-        pageParams: {
-          pn: 1,
-          ps: 10
-        },
+        pageParams: null,
         selectCount: [],
         fillterVal: 'all',
         tabData: [],
@@ -206,8 +203,7 @@
     },
     watch: {
       viewBy(newVal) {
-        this.selectCount = []
-        this.initPage();
+        // this.initPage();
         this.fetchDataList()
       },
       pageType() {
@@ -276,7 +272,7 @@
       initPage(){
         this.pageParams = {
           pn: 1,
-          ps: 10
+          ps: 50
         };
       },
       download(){
@@ -310,8 +306,8 @@
         }).then(() => {
           this.$ajax.post(this.$apis.delete_by_ids, {ids: this.selectCount.map(a => a.id.value)}).then(res => {
             this.initPage();
-            this.fetchDataList()
             this.selectCount = []
+            this.fetchDataList()
             this.$message({
               type: 'success',
               message: this.$i.logistic.operationSuccess
@@ -327,7 +323,7 @@
       },
       action(e) {
         if(this.pageType == 'loadingList'){
-          this.$router.push({path: `/logistic/loadingListDetail`, query: {id: e.id.value}});
+          this.$windowOpen({url:`/logistic/loadingListDetail`,params:{id: e.id.value}});
         }else{
           this.$windowOpen({url:`/logistic/${this.jumpPage[this.pageType]}`,params:{id: e.id.value}});
         }
@@ -356,9 +352,9 @@
         })
       },
       fetchDataList(arg) {
-        if(arg){
-         this.initPage();
-        }
+        // if(arg){
+        //  this.initPage();
+        // }
         const url = this.urlObj[this.pageType][this.viewBy].url
         const db = this.urlObj[this.pageType][this.viewBy].db
         this.tableLoading = true

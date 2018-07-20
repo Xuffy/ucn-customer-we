@@ -814,6 +814,7 @@
                             this.$set(v,'actualPayAmount',obj.actualPayAmount);
                         }
                     });
+                    this.$set(e,'status',res.status)
                     this.$set(e,'isModify',false);
                     this.$set(e,'version',res.version);
                     this.loadingPaymentTable=false;

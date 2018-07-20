@@ -328,6 +328,16 @@ export const dbBasicInfoObj ={
     _disabled: true,
     typeSlef: 'text'
   },
+  "skuQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "containerNo": {
     type: 'String',
     _disabled: true,
@@ -487,7 +497,7 @@ export const transportInfoObj = {
     value: null
   },
   departureCountry: {
-    type: 'input',
+    type: 'filterable',
     value: null
   },
   departurePort: {
@@ -498,7 +508,7 @@ export const transportInfoObj = {
     }
   },
   destinationCountry: {
-    type: 'input',
+    type: 'filterable',
     value: null
   },
   destinationPort: {

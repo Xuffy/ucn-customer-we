@@ -21,7 +21,7 @@
             </div>
         </div>
         <v-table
-            code="inquiry_list"
+            :code="postParams.viewType === 0 ? 'inquiry_list' : 'inquiry_sku_list'"
             :data="tabData"
             :loading="tabLoad"
             :buttons="[{label: 'Detail', type: 'detail'}]"
@@ -111,8 +111,9 @@ export default {
       } else {
         column = this.$db.inquiry.viewBySKU;
       }
+      column.supplierName._sort = false;
       this.$ajax.post(url, this.postParams).then(res => {
-        res.tc ? this.postParams.tc = res.tc : this.postParams.tc = this.postParams.tc;
+        this.postParams.tc = res.tc;
         this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
         this.tabLoad = false;
         this.searchLoad = false;
@@ -120,6 +121,9 @@ export default {
       });
     },
     onListSortChange(args) {
+      if (args.sorts.map(s => s.orderBy).includes('supplierName')) {
+        return;
+      }
       this.postParams.sorts = args.sorts;
       this.getList();
     },

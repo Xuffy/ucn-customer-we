@@ -120,13 +120,13 @@
                     type: 'warning'
                 });
                 if (val.id === 1) {
-                    this.params.qcOrderNo = val.value ? val.value : ""
-                    this.params.orderNo = ""
+                    this.params.qcOrderNo = val.value ? val.value : "";
+                    this.params.orderNo = "";
                 } else {
-                    this.params.orderNo = val.value ? val.value : ""
-                    this.params.qcOrderNo = ""
+                    this.params.orderNo = val.value ? val.value : "";
+                    this.params.qcOrderNo = "";
                 }
-                this.getQcOrderList()
+                this.getQcOrderList();
             },
             onAction(item, type) {
                 this.$windowOpen({
