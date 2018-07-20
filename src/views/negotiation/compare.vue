@@ -52,6 +52,7 @@
             @addInquiry="addCopare"
             :arg-disabled="argDisabled"
             :compareId="compareInfo.id || null"
+            :title="addNewTitle"
             :disableds="disableds"/>
     </div>
 </template>
@@ -62,6 +63,7 @@ export default {
   name: 'compareOverview',
   data() {
     return {
+      addNewTitle:null,
       dirCodes: ['INQUIRY_STATUS', 'CY_UNIT', 'ITM'],
       addInquiryIds: null,
       pageTotal: 0,
@@ -239,6 +241,7 @@ export default {
       this.checkedArg = item.map(i => i[this.compareBy ? 'inquiryId' : 'id']);
     },
     addNewCopare() {
+      this.addNewTitle = this.$i.inquiry.addNewTitle;
       this.showAddListDialog = true;
     },
     deleteCompareItem() {
