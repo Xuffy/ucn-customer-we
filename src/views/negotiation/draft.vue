@@ -112,7 +112,7 @@ export default {
         column = this.$db.inquiry.viewBySKU;
       }
       this.$ajax.post(url, this.postParams).then(res => {
-        res.tc ? this.postParams.tc = res.tc : this.postParams.tc = this.postParams.tc;
+        this.postParams.tc = res.tc;
         this.tabData = this.$getDB(column, res.datas, item => this.$filterDic(item));
         this.tabLoad = false;
         this.searchLoad = false;
