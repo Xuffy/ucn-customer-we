@@ -88,11 +88,13 @@
             </div>
             <div v-if="$route.params.type==='modify'">
                 <el-button
+                  v-if="isModify"
                   :disabled="allowBottomClick"
                   type="primary"
                   @click='saveCompare'
                   v-authorize="'SUPPLIER:COMPARE_DETAIL:SAVE'">Save</el-button>
                   <el-button
+                    v-if="isModify"
                     :disabled="allowBottomClick"
                     @click="cancelModify" >Cancel</el-button>
             </div>
@@ -409,7 +411,7 @@
                     });
                 });
                 if (this.$route.params.type==='modify'){
-                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.id}`,params).then(res=>{
+                    this.$ajax.post(`${this.$apis.post_supplier_addCompare}/${this.$route.query.compareId}`,params).then(res=>{
                       let compareId=res;
                       this.$router.push({
                         name:'supplierCompareDetail',
