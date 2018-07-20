@@ -148,6 +148,7 @@
         this.dataList = _.compact(this.dataList);
       }
       this.getData();
+      // this.getDataNumber();
     },
     watch: {
       'search.type'() {
@@ -194,6 +195,11 @@
             return item;
           });
         }).finally(() => item.loading = false);
+      },
+      getDataNumber() {
+        this.$ajax.get(this.$apis.UTASK_COUNTBYTYPEANDMODULE).then(res => {
+          console.log(res,1)
+        });
       },
       goDetail(item) {
         let tab = this.dataList[this.tabIndex]

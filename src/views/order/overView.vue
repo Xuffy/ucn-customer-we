@@ -285,7 +285,6 @@
                 }
                 this.$ajax.post(url, this.params)
                     .then((res) => {
-                        this.loading = false;
                         this.tabData = this.$getDB(query, res.datas,e=>{
                             if(e.entryDt){
                                 e.entryDt.value=this.$dateFormat(e.entryDt.value,'yyyy-mm-dd');
@@ -331,15 +330,13 @@
                         this.pageData = res;
                         this.disableFinish=true;
                     })
-                    .catch((res) => {
+                    .finally(() => {
+                        this.selectedList=[];
                         this.loading = false
                     });
             },
             //获取字典
             getUnit() {
-                // this.$ajax.get(this.$apis.get_allUnit).then(res=>{
-                //     console.log(res)
-                // });
                 this.$ajax.post(this.$apis.get_partUnit, ['ORDER_STATUS', 'AE_IS','ITM','PMT'], {cache: true}).then(res => {
                     res.forEach(v => {
                         if (v.code === 'ORDER_STATUS') {

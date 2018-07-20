@@ -119,6 +119,7 @@ export default {
   abandon_qcPayment: ['/payment/abandon/{id}?version={version}', 'BASE_URL'],
   recover_qcPayment: ['/payment/recover/{id}?version={version}', 'BASE_URL'],
   RESTART_QC:['/qc/rework','BASE_URL'],
+    GET_WAREHOUSE_NO:['/warehouse/noGenerate/{type}','BASE_URL'],
 
   /**
    * service warehouse
