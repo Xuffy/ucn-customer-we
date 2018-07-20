@@ -111,7 +111,6 @@
         if(key=='exchangeCurrency'){
           this.$emit('selectChange',value); 
         }
-        console.log(value)
         this.$set(this.hightLightModify,key,value);
         this.$emit('hightLightModifyFun',this.hightLightModify,this.name);
       },
