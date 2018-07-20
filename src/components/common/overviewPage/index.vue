@@ -215,7 +215,7 @@
             }
         },
         methods:{
-            init(){
+            init(param){
                 //处理初始化数据
                 let queryCode=[];
                 let allDefault=true;
@@ -227,6 +227,10 @@
                         allDefault=false;
                     }
                 });
+                if(param){
+                    Object.assign(this.formData,param);
+                }
+                this.formData.supplierNameLike='123';
                 if(allDefault){
                     this.showAdvancedBtn=false;
                 }else{

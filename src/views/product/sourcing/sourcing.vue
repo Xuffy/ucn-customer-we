@@ -4,6 +4,7 @@
                 <!--:title="title"-->
                 <!--:type="type"></product>-->
         <overview-page
+                ref="page"
                 :title="title"
                 :label-width="labelWidth"
                 :form-column="$db.product.overview"
@@ -107,6 +108,9 @@
                 if(_.isArray(params.country)){
                     params.country=params.country.join(',');
                 }
+                if (this.$route.params.supplierName) {
+                    params.supplierNameLike = this.$route.params.supplierName;
+                }
                 this.loadingTable=true;
                 this.$ajax.post(this.$apis.get_buyerProductList, params).then(res => {
                     this.productData=this.$getDB(this.$db.product.indexTable, res.datas, (e) => {
@@ -141,12 +145,22 @@
                 });
             },
             btnClick(e){
-                this.$windowOpen({
-                    url:'/product/sourcingDetail',
-                    params:{
-                        id:e.id.value
-                    }
-                })
+                if(e.bookmarkId.value){
+                    this.$windowOpen({
+                        url:'/product/bookmarkDetail',
+                        params:{
+                            id:e.id.value,
+                            bookmarkId:e.bookmarkId.value
+                        }
+                    })
+                }else{
+                    this.$windowOpen({
+                        url:'/product/sourcingDetail',
+                        params:{
+                            id:e.id.value
+                        }
+                    })
+                }
             },
             changeSort(e){
                 console.log(e,'val')
@@ -222,6 +236,7 @@
                         message: this.$i.product.successfullyAdd,
                         type: 'success'
                     });
+                    this.getData();
                 }).finally(() => {
                     this.loadingAddBookmark = false;
                 });
@@ -230,7 +245,6 @@
                 let ids=_.pluck(_.pluck(this.selectList,"id"),'value');
                 this.$fetch.export_task('SKU_PURCHASE_EXPORT_IDS',{ids:ids});
             },
-
             getUnit(){
                 this.$ajax.post(this.$apis.get_partUnit, ['SKU_SALE_STATUS', 'WT_UNIT', 'ED_UNIT', 'VE_UNIT', 'LH_UNIT', 'SKU_UNIT'], {cache: true}).then(res => {
                     res.forEach(v => {
@@ -248,9 +262,6 @@
                             this.skuUnitOption = v.codes;
                         }
                     });
-                    if (this.$route.params.supplierName) {
-                        this.productForm.supplierNameLike = this.$route.params.supplierName;
-                    }
                     //国家
                     this.$ajax.get(this.$apis.get_country, {}, {cache: true}).then(res => {
                         this.countryOption = res;
@@ -267,6 +278,12 @@
             this.getUnit();
         },
         mounted(){
+            if (this.$route.params.supplierName) {
+                this.$refs.page.init({
+                    supplierNameLike:this.$route.params.supplierName
+                });
+            }
+
             this.setMenuLink({
                 path: '/logs/index',
                 query: {code: 'PRODUCT'},
