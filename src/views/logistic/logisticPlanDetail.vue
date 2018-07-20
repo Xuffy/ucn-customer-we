@@ -1,5 +1,6 @@
 <template>
   <div class="place-logistic-plan">
+    {{pageName}}
     <div class="hd-top" v-if="$route.name=='logisticPlanDetail'">{{ $i.logistic.logisticPlan + ' ' + logisticsNo}}</div>
     <div class="hd-top" v-if="$route.name=='placeLogisticPlan'">{{ $i.logistic.placeNewLogisticPlan }}</div>
     <div class="hd-top" v-if="$route.name=='loadingListDetail'">{{ $i.logistic.loadingList + ' ' + logisticsNo}}</div>
@@ -28,7 +29,7 @@
     <form-list :DeliveredEdit="deliveredEdit" :listData="ExchangeRateInfoArr" :edit="edit" :title="$i.logistic.ExchangeRateInfoTitle"
     />
     <form-list :DeliveredEdit="deliveredEdit" name="TransportInfo" :fieldDisplay="fieldDisplay" @hightLightModifyFun="hightLightModifyFun"
-      :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" />
+      :listData="transportInfoArr" :edit="edit" :title="$i.logistic.transportInfoTitle" :selectArr="selectArr"/>
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.containerInfoTitle }}</div>
@@ -55,7 +56,7 @@
     <div>
       <div class="hd"></div>
       <div class="hd active">{{ $i.logistic.productInfoTitle }}</div>
-      <v-table ref="productInfo" code="ulogistics_PlanDetail" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
+      <v-table ref="productInfo" :code="configUrl[pageName]&&configUrl[pageName].setTheField" :totalRow="productListTotal" :data.sync="productList" @action="action" :buttons="productbButtons"
         @change-checked="selectProduct"
         native-sort="orderNo"
         @change-sort="$refs.productInfo.setSort(productList)"
@@ -76,7 +77,7 @@
         @change-checked="changeChecked"
         @tableBtnClick="ProductFromOrderDetail"
         @search="getSupplierIds"
-        tableCode="ulogistics_PlanDetail"
+        :tableCode="configUrl[pageName]&&configUrl[pageName].setTheField"
         @change-sort="changeSort"
       >
         <v-pagination slot="pagination" :page-data="pageParams"/>
@@ -90,7 +91,7 @@
     <btns :fieldDisplay="fieldDisplay" :DeliveredEdit="deliveredEdit" :edit="edit" @switchEdit="switchEdit" @toExit="toExit"
       :logisticsStatus="logisticsStatus" @sendData="sendData" :isCopy="isCopy"/>
     <v-history-modify ref="HM" disabled-remark :beforeSave="closeModify" @save="closeModifyNext"
-      code="ulogistics_PlanDetail"
+      :code="configUrl[pageName]&&configUrl[pageName].setTheField"
       @closed="$refs.productInfo.update()"
     ></v-history-modify>
   </div>
@@ -199,7 +200,8 @@
             send: {
               api: this.$apis.send_logistic_plan,
               path: '/plan'
-            }
+            },
+            setTheField: 'ulogistics_PlanDetail'
           },
           planDetail: {
             saveAsDraft: {
@@ -209,7 +211,8 @@
             send: {
               api: this.$apis.update_logistic_plan,
               path: '/plan'
-            }
+            },
+            setTheField: 'ulogistics_PlanDetail'
           },
           planDraftDetail: {
             saveAsDraft: {
@@ -219,7 +222,12 @@
             send: {
               api: this.$apis.send_draft_logistic_plan,
               path: '/plan'
-            }
+            },
+            setTheField: 'ulogistics_PlanDetail'
+          },
+          loadingListDetail: {
+            send: this.$apis.update_logistic_plan,
+            setTheField: 'ulogistics_OrderDetail'
           }
         },
         pageName: '',
@@ -467,6 +475,12 @@
           });
         })
       },
+      //获取国家信息
+      countryAll(){
+        this.$ajax.get(`${this.$apis.country_all}`).then(res => {
+          this.$set(this.selectArr,'country',res);
+        })
+      },
       createdPlanData(res = this.initData) {
         this.oldPlanObject = JSON.parse(JSON.stringify(res))
         const stringArray = [
@@ -522,6 +536,7 @@
             }
           }
         })
+        this.countryAll();
       },
       createdPaymentData(res = this.oldPaymentObject) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))

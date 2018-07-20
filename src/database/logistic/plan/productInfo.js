@@ -163,6 +163,16 @@ export default {
     _disabled: true,
     typeSlef: 'text'
   },
+  "skuQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
+  "skuCartonQty": {
+    type: 'String',
+    _disabled: true,
+    typeSlef: 'text'
+  },
   "containerNo": {
     type: 'String',
     _disabled: true,
