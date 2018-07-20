@@ -336,6 +336,7 @@
                     class="payTable"
                     :data="paymentData"
                     border
+                    max-height="300px"
                     :summary-method="getSummaries"
                     show-summary
                     :row-class-name="tableRowClassName"
@@ -1453,7 +1454,6 @@
                         arr.push(v);
                     }
                 });
-                console.log(arr,'arr')
                 let sameCurrency = true;
                 if (this.orderForm.incoterm === "1") {
                     let size = new Set(arr.map(e => e.skuFobCurrency).map(e => e.value));
@@ -1862,7 +1862,7 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params.skuList), "params.skuList");
+                // return console.log(this.$depthClone(params), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
@@ -1962,6 +1962,7 @@
              * responsibility事件
              * */
             handleResponsibilityChange(data, key) {
+                this.orderForm.responsibilityFlag=true;
                 if (!data.fieldUpdate) {
                     data.fieldUpdate = {};
                 }
@@ -2017,7 +2018,6 @@
                         pn: 1,
                         ps: 50,
                         skuId: e.skuId.value,
-                        sorts: []
                     };
                     let data = _.filter(this.productTableData, (m) =>
                         m.skuSysCode.value === e.skuSysCode.value
@@ -2027,6 +2027,8 @@
                         _.map(res.datas, v => {
                             arr.push(JSON.parse(v.history));
                         });
+                        console.log(data,'data')
+                        console.log(arr,'arr')
                         this.$refs.HM.init(data, this.$getDB(this.$db.order.productInfoTable, this.$refs.HM.getFilterData(arr, "skuSysCode")), false);
                     }).finally(() => {
 
