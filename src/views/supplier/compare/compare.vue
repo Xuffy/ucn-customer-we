@@ -206,6 +206,7 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.post_listSupplierByIds,id).then(
                         res=>{
+                          this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res, e => {
                           let country;
                           country = _.findWhere(this.countryOption, {code: e.country.value}) || {};
@@ -218,7 +219,6 @@
                         this.initialData=this.$depthClone(this.tableDataList);
                         this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                     }).catch(err=>{
                         this.loading = false;
                     })
@@ -231,6 +231,7 @@
                     }
                     this.loading = true;
                     this.$ajax.post(this.$apis.post_supplier_listCompareDetails,this.params).then(res=>{
+                        this.loading = false;
                         this.tableDataList = this.$getDB(this.$db.supplier.compareDetail, res.datas,e=>{
                           e.type.value=this.$change(this.options.type,'type',e,true).name;
                           e.incoterm.value=this.$change(this.options.incoterm,'incoterm',e,true).name;
@@ -241,10 +242,12 @@
                         this.initialData=this.$depthClone(this.tableDataList);
                         this.changeStatus();
                         this.disabledLine=this.tableDataList;
-                        this.loading = false;
                         this.allowDeleteCompare=false;
                         this.allowBottomClick=false;
+                    }).catch(err=>{
+                      this.loading = false;
                     })
+
                 }
             },
 
@@ -260,13 +263,7 @@
 
             changeChecked(item){
               this.selectList=item;
-              // this.selectList=item;
-              // this.selectedData = item
-              // let number = []
-              // this.selectedData.forEach(item => {
-              //   number.push(item.id.value);
-              // });
-              // this.selectNumber = number
+
             },
 
             //编辑单子
@@ -419,7 +416,7 @@
                           type:'modify'
                         },
                         query:{
-                          id:compareId,
+                          compareId:compareId,
                           compareName:this.compareName
                         }
                       });
@@ -431,13 +428,14 @@
                   params.id = ''
                   this.$ajax.post(this.$apis.post_supplier_addCompare,params).then(res=>{
                     let compareId=res;
+
                     this.$router.push({
                       name:'supplierCompareDetail',
                       params:{
                         type:'modify'
                       },
                       query:{
-                        id:compareId,
+                        compareId:compareId,
                         compareName:this.compareName
                       }
                     });

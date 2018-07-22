@@ -15,7 +15,9 @@
         <div class="btns">
           <el-button
             @click="download"
-            v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DOWNLOAD'">{{$i.common.download+' ('+$i.button.all+')'}}</el-button>
+            v-authorize="'SUPPLIER:COMPARE_OVERVIEW:DOWNLOAD'"
+            :disabled="!(tableDataList.length)>0">
+            {{$i.common.download+' ('+$i.button.all+')'}}</el-button>
           <el-button
             @click="postSupplierRecoverCompare"
             :disabled="disableDelete"

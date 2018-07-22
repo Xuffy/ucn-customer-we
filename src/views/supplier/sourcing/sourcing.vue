@@ -67,9 +67,11 @@
                <el-button v-authorize="'SUPPLIER:OVERVIEW:ADD_BOOKMARK'"
                           @click='addToBookmark' :disabled='!(selectedData.length)>0'>
                       {{$i.common.addToBookmark}}({{selectNumber.length}})</el-button>
-               <el-button @click="download"  v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'">
+               <el-button @click="download"
+                          v-authorize="'SUPPLIER:OVERVIEW:DOWNLOAD'"
+                          :disabled="!(tabData.length)>0">
                       {{$i.common.download}}
-                      ({{selectNumber.length===0?$i.product.all:selectNumber.length}})</el-button>
+                      ({{selectNumber.length===0?$i.common.all:selectNumber.length}})</el-button>
              </div>
            </div>
          </template>
