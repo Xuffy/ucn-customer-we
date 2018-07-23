@@ -361,7 +361,8 @@
       })
       if(this.pageTypeCurr == 'logisticDraftDetail'){
         this.edit = true;
-      }
+      };
+      this.countryAll();
     },
     methods: {
       ...mapActions(['setMenuLink']),
@@ -536,7 +537,6 @@
             }
           }
         })
-        this.countryAll();
       },
       createdPaymentData(res = this.oldPaymentObject) {
         this.oldPaymentObject = JSON.parse(JSON.stringify(res))
