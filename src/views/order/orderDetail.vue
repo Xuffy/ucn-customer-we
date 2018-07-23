@@ -1816,7 +1816,6 @@
                         });
                     }
                     else{
-                        console.log(item,'item')
                         if(!item.fieldRemarkUpdate){
                             item.fieldRemarkUpdate={value:{}}
                         }
@@ -1828,9 +1827,8 @@
                     }
                 });
                 params.orderSkuUpdateList = orderSkuUpdateList;
-                console.log();
-                return console.log(this.$depthClone(this.productTableData), "params.skuList");
                 params.skuList = this.dataFilter(this.productTableData);
+                // return console.log(this.$depthClone(params.skuList), "params.skuList");
                 let rightCode = true;
                 _.map(params.skuList, v => {
                     if (v.skuSupplierCode !== params.supplierCode) {
@@ -2189,7 +2187,11 @@
                     jsons = {};
                     if (item._remark) { //拼装remark 数据
                         for (let k in item) {
-                            jsons[k] = item[k].value;
+                            if(k==='fieldRemarkUpdate'){
+                                json[k]=item[k].value;
+                            }else{
+                                jsons[k] = item[k].value;
+                            }
                         }
                         json.fieldRemark = jsons;
                     } else {
@@ -2226,7 +2228,9 @@
                                     else {
                                         json[k] = item[k].value;
                                     }
-                                } else {
+                                }
+                                else {
+                                    console.log(k,'key')
                                     json[k] = item[k].value;
                                 }
                             }
