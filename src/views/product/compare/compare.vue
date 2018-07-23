@@ -637,7 +637,7 @@
                 this.disableClickSaveModify=true;
                 let params={
                     compares: [],
-                    id: Number(this.$route.query.compareId),
+                    id: this.$route.query.compareId,
                     name: this.compareName
                 };
                 this.tableDataList.forEach(v=>{
