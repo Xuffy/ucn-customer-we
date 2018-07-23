@@ -268,6 +268,7 @@ export default {
         this.$message(this.$i.common.pleaseChooseGoods);
         return;
       }
+      this.pageTotal += arg.length;
       let url, column;
       if (this.compareBy === 0) {
         url = this.$apis.POST_INQIIRY_LIST;
