@@ -214,12 +214,12 @@
                     this.compareName=this.$dateFormat(time,'yyyymmdd')+Date.parse(time);
                     this.$ajax.post(this.$apis.get_skuListByIds,id).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res,(e)=>{
-                            e.status._value=e.status.value?_.findWhere(this.statusOption,{code:String(e.status.value)}).name:'';
-                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                            e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                            e.expireUnit._value = (_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                            e.unitLength._value = (_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                            e.unitVolume._value = (_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                            e.unitWeight._value = (_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                             e.yearListed.value=e.yearListed.value?this.$dateFormat(e.yearListed.value,'yyyy-mm'):'';
                             return e;
                         });
@@ -244,13 +244,12 @@
                     };
                     this.$ajax.post(this.$apis.get_buyerProductCompareDetail,params).then(res=>{
                         this.tableDataList = this.$getDB(this.$db.product.indexTable, res.datas,(e)=>{
-                            console.log(e,'e')
-                            e.status._value=_.findWhere(this.statusOption,{code:String(e.status.value)}).name;
-                            e.unit._value=e.unit.value?_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}).name:'';
-                            e.expireUnit._value = e.expireUnit.value?_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}).name:'';
-                            e.unitLength._value = e.unitLength.value?_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}).name:'';
-                            e.unitVolume._value = e.unitVolume.value?_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}).name:'';
-                            e.unitWeight._value = e.unitWeight.value?_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}).name:'';
+                            e.status._value=(_.findWhere(this.statusOption,{code:String(e.status.value)}) || {}).name;
+                            e.unit._value=(_.findWhere(this.skuUnitOption,{code:String(e.unit.value)}) || {}).name;
+                            e.expireUnit._value = (_.findWhere(this.dateOption,{code:String(e.expireUnit.value)}) || {}).name;
+                            e.unitLength._value = (_.findWhere(this.lengthOption,{code:String(e.unitLength.value)}) || {}).name;
+                            e.unitVolume._value = (_.findWhere(this.volumeOption,{code:String(e.unitVolume.value)}) || {}).name;
+                            e.unitWeight._value = (_.findWhere(this.weightOption,{code:String(e.unitWeight.value)}) || {}).name;
                             e.yearListed.value=this.$dateFormat(e.yearListed.value,'yyyy-mm');
                             return e;
                         });

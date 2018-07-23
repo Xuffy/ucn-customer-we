@@ -232,10 +232,6 @@
         },
         created(){
             this.getList();
-            // this.setRecycleBin({
-            //     name: 'compareRecycleBin',
-            //     show: true
-            // });
         },
         mounted(){
             this.setMenuLink({
