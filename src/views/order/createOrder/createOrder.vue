@@ -1124,7 +1124,7 @@
                     _.map(picKey,item=>{
                         if(_.isArray(v[item])){
                             v[item]=(v[item][0]?v[item][0]:null);
-                        }else if(_.isString(v[item])){
+                        }else if(_.isString(v[item]) && v[item]){
                             let key=this.$getOssKey(v[item],true);
                             v[item]=key[0];
                         }
