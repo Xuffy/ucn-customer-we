@@ -1777,6 +1777,7 @@
                     }
                 });
                 let orderSkuUpdateList = [];
+
                 _.map(this.productTableData, item => {
                     let isModify = false, isModifyStatus = false;
                     _.map(item, (val, index) => {
@@ -1813,20 +1814,22 @@
                                 item.fieldUpdate.value[k] = "";
                             }
                         });
-                    }else{
+                    }
+                    else{
+                        console.log(item,'item')
+                        if(!item.fieldRemarkUpdate){
+                            item.fieldRemarkUpdate={value:{}}
+                        }
                         _.map(item, (v, k) => {
                             if (v._isModified) {
-                                if (!item.fieldRemarkUpdate.value) {
-                                    item.fieldRemarkUpdate.value = {};
-                                }
                                 item.fieldRemarkUpdate.value[k] = "";
                             }
                         });
                     }
                 });
-                return console.log(this.$depthClone(params.skuList),'params')
                 params.orderSkuUpdateList = orderSkuUpdateList;
                 console.log();
+                return console.log(this.$depthClone(this.productTableData), "params.skuList");
                 params.skuList = this.dataFilter(this.productTableData);
                 let rightCode = true;
                 _.map(params.skuList, v => {
@@ -1852,7 +1855,6 @@
                     });
                 }
                 params.attachments = this.$refs.upload[0].getFiles();
-                // return console.log(this.$depthClone(params), "params.skuList");
                 this.disableClickSend = true;
                 this.$ajax.post(this.$apis.ORDER_UPDATE, params).then(res => {
                     this.isModify = false;
