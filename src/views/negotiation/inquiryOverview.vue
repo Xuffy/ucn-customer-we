@@ -36,7 +36,7 @@
             </div>
         </div>
         <v-table
-            :code="viewByStatus ? 'inquiry_sku_list': 'inquiry_list'"
+            :code="viewByStatus ? 'inquiry': 'inquiry_list'"
             hide-filter-value
             :data="tabData"
             :buttons="[{label: $i.common.detail, type: 'detail'}]"
