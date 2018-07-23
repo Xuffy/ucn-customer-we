@@ -240,7 +240,7 @@
         mounted(){
             this.setMenuLink({
                 path: '/logs/index',
-                query: {code: 'PURCHASE_SKU'},
+                query: {code: 'PURCHASE_SKU',bizCode:'BIZ_PURCHASE_SKU_COMPARE'},
                 type: 10,
                 auth:'PRODUCT:LOG',
                 label: this.$i.common.log
